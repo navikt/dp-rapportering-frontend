@@ -13,4 +13,4 @@ node_modules
 /.idea
 /.fleet
 
-.env.local
+.env
