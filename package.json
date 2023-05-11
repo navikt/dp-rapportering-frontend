@@ -12,6 +12,7 @@
     "@navikt/dp-auth": "^0.3.3",
     "@navikt/ds-css": "^2.1.7",
     "@navikt/ds-react": "^2.1.7",
+    "@navikt/nav-dekoratoren-moduler": "^2.0.1",
     "@remix-run/css-bundle": "^1.16.0",
     "@remix-run/express": "^1.16.0",
     "@remix-run/node": "^1.16.0",
