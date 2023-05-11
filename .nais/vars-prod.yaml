@@ -1,0 +1,2 @@
+ingress: "https://dagpenger.nav.no/rapportering"
+base_path: "/rapportering"
