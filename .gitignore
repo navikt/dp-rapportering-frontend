@@ -1,7 +1,16 @@
-.DS_Store
 node_modules
 
-/.cache
 /build
 /public/build
-.env
+/server/build
+
+.DS_Store
+
+/.cache
+
+#intellij
+*.iml
+/.idea
+/.fleet
+
+.env.local
