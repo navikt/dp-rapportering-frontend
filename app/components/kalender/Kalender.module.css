@@ -53,6 +53,7 @@
 
 .timeType {
   width: 50%;
+  cursor: pointer;
   padding: var(--a-spacing-2) var(--a-spacing-4);
   margin: 0 calc(var(--a-spacing-1) * -1) var(--a-spacing-2);
   background-color: var(--a-blue-200);
@@ -63,16 +64,32 @@
   background-color: var(--a-blue-200);
 }
 
+.fargekodeArbeid:hover {
+  background-color: var(--a-blue-300);
+}
+
 .fargekodeSyk {
   background-color: var(--a-orange-200);
+}
+
+.fargekodeSyk:hover {
+  background-color: var(--a-orange-300);
 }
 
 .fargekodeTiltak {
   background-color: var(--a-purple-200);
 }
 
+.fargekodeTiltak:hover {
+  background-color: var(--a-purple-300);
+}
+
 .fargekodeFravaerFerie {
   background-color: var(--a-green-200);
+}
+
+.fargekodeFravaerFerie:hover {
+  background-color: var(--a-green-300);
 }
 
 .knappKontainer {

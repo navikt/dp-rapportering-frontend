@@ -87,17 +87,31 @@ export function Kalender() {
             {modalHeaderTekst}
           </Heading>
           <div className={styles.timeTypeKontainer}>
-            <div className={classNames(styles.timeType, styles.fargekodeArbeid)}>Arbeid</div>
-            <div className={classNames(styles.timeType, styles.fargekodeSyk)}>Syk</div>
-            <div className={classNames(styles.timeType, styles.fargekodeTiltak)}>Tiltak</div>
-            <div className={classNames(styles.timeType, styles.fargekodeFravaerFerie)}>
+            <div role='button' className={classNames(styles.timeType, styles.fargekodeArbeid)}>
+              Arbeid
+            </div>
+            <div role='button' className={classNames(styles.timeType, styles.fargekodeSyk)}>
+              Syk
+            </div>
+            <div role='button' className={classNames(styles.timeType, styles.fargekodeTiltak)}>
+              Tiltak
+            </div>
+            <div
+              role='button'
+              className={classNames(styles.timeType, styles.fargekodeFravaerFerie)}
+            >
               Fravær / Ferie
             </div>
           </div>
 
           <div className={styles.knappKontainer}>
-            <RemixLink to='' as='Button' variant='tertiary-neutral'>
-              avbryt
+            <RemixLink
+              to=''
+              as='Button'
+              variant='tertiary-neutral'
+              onClick={() => setOpen((x) => !x)}
+            >
+              Avbryt
             </RemixLink>
             <RemixLink to='send-inn' as='Button' variant='primary'>
               Lagre

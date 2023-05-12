@@ -31,10 +31,34 @@
   margin: 0;
 }
 
-.syk {
+.fargekodeArbeid {
+  background-color: var(--a-blue-200);
+}
+
+.fargekodeArbeid:hover {
+  background-color: var(--a-blue-300);
+}
+
+.fargekodeSyk {
   background-color: var(--a-orange-200);
 }
 
-.arbeid {
-  background-color: var(--a-blue-200);
+.fargekodeSyk:hover {
+  background-color: var(--a-orange-300);
+}
+
+.fargekodeTiltak {
+  background-color: var(--a-purple-200);
+}
+
+.fargekodeTiltak:hover {
+  background-color: var(--a-purple-300);
+}
+
+.fargekodeFravaerFerie {
+  background-color: var(--a-green-200);
+}
+
+.fargekodeFravaerFerie:hover {
+  background-color: var(--a-green-300);
 }
