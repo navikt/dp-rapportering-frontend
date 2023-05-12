@@ -1,0 +1,42 @@
+.kalender {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-left: calc(var(--a-spacing-2) * -1);
+  width: calc(var(--a-spacing-4) + 100%);
+}
+
+.kalenderUkedag {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--a-spacing-4);
+  color: var(--a-gray-900);
+}
+
+.helg {
+  color: var(--a-gray-400);
+}
+
+.kalenderUkedag {
+  font-size: var(--a-font-size-small);
+}
+
+.kalenderDato {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--a-bg-subtle);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: var(--a-font-size-medium);
+  cursor: pointer;
+}
+
+.kalenderDato:hover {
+  background-color: var(--a-gray-200);
+}
+
+.kalenderDato p {
+  margin-left: 3px;
+}

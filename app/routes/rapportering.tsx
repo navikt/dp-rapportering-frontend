@@ -1,41 +1,64 @@
+import { Left, Right } from '@navikt/ds-icons';
+import { Heading } from '@navikt/ds-react';
+import { useState } from 'react';
+import { RemixLink } from '~/components/RemixLink';
+import { PeriodeKalender } from '~/components/periode-kalender/PeriodeKalender';
+import styles from './rapportering.module.css';
+import classNames from 'classnames';
+
 export function meta() {
   return [
     {
-      title: "Dagpenger rapportering",
-      description: "rapporteringløsning for dagpenger",
+      title: 'Dagpenger rapportering',
+      description: 'rapporteringløsning for dagpenger',
     },
   ];
 }
 
-export default function Index() {
+export default function Rapportering() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <main>
+      <div>
+        <Heading level='1' size='xlarge'>
+          Dagpengerapportering
+        </Heading>
+        <p>Uke 43 - 44 (24.10.22 - 06.11.22)</p>
+      </div>
+      <div>
+        <h2>Utfylling</h2>
+        <PeriodeKalender />
+      </div>
+
+      <div className={styles.periodeKontainer}>
+        <p>Sammenlagt for meldeperioden:</p>
+        <div className={classNames(styles.perioderData, styles.arbeid)}>
+          <p>
+            Arbeid
+            <span>34,5 timer</span>
+          </p>
+        </div>
+        <div className={classNames(styles.perioderData, styles.syk)}>
+          <p>
+            Syk
+            <span>2 dager</span>
+          </p>
+        </div>
+      </div>
+
+      <div className={styles.navigasjonKontainer}>
+        <RemixLink to='' as='Button' variant='secondary' icon={<Left />}>
+          Mine side
+        </RemixLink>
+        <RemixLink to='' as='Button' variant='primary' icon={<Right />} iconPosition='right'>
+          Neste steg
+        </RemixLink>
+      </div>
+
+      {/* <div className={styles.avbrytKnapp}>
+        <RemixLink to='' as='Button' variant='tertiary-neutral'>
+          Avbryt
+        </RemixLink>
+      </div> */}
+    </main>
   );
 }
