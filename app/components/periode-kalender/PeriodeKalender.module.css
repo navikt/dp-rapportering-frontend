@@ -40,3 +40,20 @@
 .kalenderDato p {
   margin-left: 3px;
 }
+
+@media screen and (min-width: 768px) {
+  .kalender {
+    margin-left: calc(var(--a-spacing-6) * -1);
+    width: calc(var(--a-spacing-12) + 100%);
+  }
+
+  .kalenderUkedag {
+    font-size: var(--a-font-size-medium);
+  }
+
+  .kalenderDato {
+    width: 60px;
+    height: 60px;
+    font-size: var(--a-font-size-large);
+  }
+}

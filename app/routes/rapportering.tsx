@@ -1,10 +1,9 @@
 import { Left, Right } from '@navikt/ds-icons';
 import { Heading } from '@navikt/ds-react';
-import { useState } from 'react';
+import classNames from 'classnames';
 import { RemixLink } from '~/components/RemixLink';
 import { PeriodeKalender } from '~/components/periode-kalender/PeriodeKalender';
 import styles from './rapportering.module.css';
-import classNames from 'classnames';
 
 export function meta() {
   return [
