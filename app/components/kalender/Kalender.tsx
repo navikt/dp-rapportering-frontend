@@ -62,16 +62,15 @@ export function Kalender() {
       <div className={styles.kalenderDatoKontainer}>
         {perioder.map((dato, index) => {
           return (
-            <div
+            <button
               className={classNames(styles.kalenderDato, {
                 [styles.helg]: helgIndex.includes(index),
               })}
               key={index}
-              role='button'
               onClick={() => aapneModal(dato, index)}
             >
               <p>{dato}</p>.
-            </div>
+            </button>
           );
         })}
       </div>
@@ -87,21 +86,16 @@ export function Kalender() {
             {modalHeaderTekst}
           </Heading>
           <div className={styles.timeTypeKontainer}>
-            <div role='button' className={classNames(styles.timeType, styles.fargekodeArbeid)}>
-              Arbeid
-            </div>
-            <div role='button' className={classNames(styles.timeType, styles.fargekodeSyk)}>
+            <button className={classNames(styles.timeType, styles.fargekodeArbeid)}>Arbeid</button>
+            <button role='button' className={classNames(styles.timeType, styles.fargekodeSyk)}>
               Syk
-            </div>
-            <div role='button' className={classNames(styles.timeType, styles.fargekodeTiltak)}>
+            </button>
+            <button role='button' className={classNames(styles.timeType, styles.fargekodeTiltak)}>
               Tiltak
-            </div>
-            <div
-              role='button'
-              className={classNames(styles.timeType, styles.fargekodeFravaerFerie)}
-            >
+            </button>
+            <button className={classNames(styles.timeType, styles.fargekodeFravaerFerie)}>
               Fravær / Ferie
-            </div>
+            </button>
           </div>
 
           <div className={styles.knappKontainer}>
