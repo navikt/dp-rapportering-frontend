@@ -15,7 +15,7 @@
 .rapporteringKontainer {
   max-width: var(--app-max-width);
   padding: var(--app-padding);
-  margin: var(--a-spacing-8) auto 0;
+  margin: var(--a-spacing-8) auto var(--a-spacing-24);
 }
 
 .registertMeldeperiodeKontainer {
