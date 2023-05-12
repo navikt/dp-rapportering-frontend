@@ -13,7 +13,7 @@ export function meta() {
 
 export default function Rapportering() {
   return (
-    <>
+    <div id='dp-rapportering-frontend'>
       <div className={styles.rapporteringHeader}>
         <div className={styles.rapporteringHeaderInnhold}>
           <Heading level='1' size='xlarge'>
@@ -26,6 +26,6 @@ export default function Rapportering() {
       <main className={styles.rapporteringKontainer}>
         <Outlet />
       </main>
-    </>
+    </div>
   );
 }
