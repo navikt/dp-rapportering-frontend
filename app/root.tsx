@@ -101,17 +101,15 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <div className='dp-rapportering-frontend'>
-          <Outlet />
-          <ScrollRestoration />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.env = ${JSON.stringify(env)}`,
-            }}
-          />
-          <Scripts />
-          <LiveReload />
-        </div>
+        <Outlet />
+        <ScrollRestoration />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.env = ${JSON.stringify(env)}`,
+          }}
+        />
+        <Scripts />
+        <LiveReload />
       </body>
     </html>
   );

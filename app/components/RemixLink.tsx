@@ -21,6 +21,7 @@ interface IProps extends LinkProps {
   variant?: TRemixLinkVariant;
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
+  disabled?: boolean;
 }
 
 export const RemixLink = forwardRef(RemixLinkComponent);
@@ -41,6 +42,7 @@ function RemixLinkComponent(
     variant = 'primary',
     iconPosition = 'left',
     icon,
+    disabled = false,
   } = props;
   const href = useHref(to);
   const handleClick = useLinkClickHandler(to, {
@@ -71,6 +73,7 @@ function RemixLinkComponent(
         icon={icon}
         iconPosition={iconPosition}
         as='a'
+        disabled={disabled}
       >
         {children}
       </Button>

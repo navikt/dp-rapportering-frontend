@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   margin-left: calc(var(--a-spacing-2) * -1);
+  margin-top: var(--a-spacing-8);
   width: calc(var(--a-spacing-4) + 100%);
 }
 
