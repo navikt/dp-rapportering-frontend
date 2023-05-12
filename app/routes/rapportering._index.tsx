@@ -1,9 +1,9 @@
 import { Left, Right } from '@navikt/ds-icons';
 import { Heading } from '@navikt/ds-react';
 import { RemixLink } from '~/components/RemixLink';
-import { PeriodeKalender } from '~/components/periode-kalender/PeriodeKalender';
 import { RegistertMeldeperiode } from '~/components/registrert-meldeperiode/RegistertMeldeperiode';
 import styles from './rapportering.module.css';
+import { Kalender } from '~/components/kalender/Kalender';
 
 export function meta() {
   return [
@@ -20,7 +20,7 @@ export default function Rapportering() {
       <Heading level='2' size='large' spacing>
         Utfylling
       </Heading>
-      <PeriodeKalender />
+      <Kalender />
 
       <div className={styles.registertMeldeperiodeKontainer}>
         <p>Sammenlagt for meldeperioden:</p>

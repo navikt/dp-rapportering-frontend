@@ -1,17 +1,21 @@
 .kalender {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  margin-left: calc(var(--a-spacing-2) * -1);
-  margin-top: var(--a-spacing-8);
-  width: calc(var(--a-spacing-4) + 100%);
+  margin-left: calc(var(--a-spacing-1) * -1);
+  width: calc(var(--a-spacing-2) + 100%);
 }
 
-.kalenderUkedag {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.kalenderUkedagKontainer {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   gap: var(--a-spacing-4);
-  color: var(--a-gray-900);
+  justify-items: center;
+  margin-bottom: var(--a-spacing-4);
+}
+
+.kalenderDatoKontainer {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--a-spacing-4);
+  justify-items: center;
 }
 
 .helg {
