@@ -5,6 +5,7 @@ import styles from './Kalender.module.css';
 import { RemixLink } from '../RemixLink';
 
 export function Kalender() {
+  const ukedager = ['man', 'tir', 'ons', 'tor', 'fre', 'lør', 'søn'];
   const perioder = [24, 25, 26, 27, 28, 29, 30, 31, 1, 2, 3, 4, 5, 6];
   const helgIndex = [5, 6, 12, 13];
 
@@ -51,13 +52,13 @@ export function Kalender() {
   return (
     <div className={styles.kalender}>
       <div className={styles.kalenderUkedagKontainer}>
-        <div className={styles.kalenderUkedag}>man</div>
-        <div className={styles.kalenderUkedag}>tir</div>
-        <div className={styles.kalenderUkedag}>ons</div>
-        <div className={styles.kalenderUkedag}>tor</div>
-        <div className={styles.kalenderUkedag}>fre</div>
-        <div className={styles.kalenderUkedag}>lør</div>
-        <div className={styles.kalenderUkedag}>søn</div>
+        {ukedager.map((ukedag, index) => {
+          return (
+            <div key={index} className={styles.kalenderUkedag}>
+              {ukedag}
+            </div>
+          );
+        })}
       </div>
       <div className={styles.kalenderDatoKontainer}>
         {perioder.map((dato, index) => {
