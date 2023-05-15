@@ -1,51 +1,30 @@
-import { Button, Heading, Modal } from "@navikt/ds-react";
+import { Button, Heading, Modal, TextField } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import { RemixLink } from "../RemixLink";
 
-import styles from "./Kalender.module.css";
-import { Form } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import { periodeMock } from "~/mocks/periodeMock";
+import { hentDatoFraDatoString, hentUkedagTekstMedDatoIndex } from "~/utils/dato.utils";
+import styles from "./Kalender.module.css";
+import { action } from "~/routes/rapportering._index";
 
 export function Kalender() {
+  const [valgtAktivitet, setValgtAktivitet] = useState<string | undefined>(undefined);
+
+  const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
+  const [modalHeaderTekst, setModalHeaderTekst] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const data = useActionData<typeof action>();
+
   const periode = periodeMock;
+  const [timer, setTimer] = useState(undefined); // Her skal være defult verdi til timer input
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];
-  const [valgtAktivitet, setValgtAktivitet] = useState<string | undefined>(undefined);
-  const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-
-  const [open, setOpen] = useState(false);
-  const [modalHeaderTekst, setModalHeaderTekst] = useState("");
 
   useEffect(() => {
     Modal.setAppElement("#dp-rapportering-frontend");
   }, []);
-
-  function hentUkedagTekstMedDatoIndex(index: number) {
-    switch (index) {
-      case 0:
-      case 7:
-        return "Mandag";
-      case 1:
-      case 8:
-        return "Tirsdag";
-      case 2:
-      case 9:
-        return "Onsdag";
-      case 3:
-      case 10:
-        return "Torsdag";
-      case 4:
-      case 11:
-        return "Fredag";
-      case 5:
-      case 12:
-        return "Lørdag";
-      case 6:
-      case 13:
-        return "Søndag";
-    }
-  }
 
   function aapneModal(dato: string, datoIndex: number) {
     setValgtAktivitet(undefined);
@@ -54,7 +33,7 @@ export function Kalender() {
     setOpen(true);
 
     const ukedag = hentUkedagTekstMedDatoIndex(datoIndex);
-    setModalHeaderTekst(`${ukedag} ${dato.split("-")[2]}`);
+    setModalHeaderTekst(`${ukedag} ${hentDatoFraDatoString(dato)}`);
   }
 
   return (
@@ -78,14 +57,14 @@ export function Kalender() {
               key={dag.dagIndex}
               onClick={() => aapneModal(dag.dato, dag.dagIndex)}
             >
-              <p>{dag.dato.split("-")[2]}</p>.
+              <p>{hentDatoFraDatoString(dag.dato)}</p>.
             </button>
           );
         })}
       </div>
       <Modal
         open={open}
-        aria-label="Modal demo"
+        aria-label="Rapporter aktivitet"
         onClose={() => setOpen((x) => !x)}
         aria-labelledby="modal-heading"
         className={styles.timerforingModal}
@@ -96,7 +75,7 @@ export function Kalender() {
           </Heading>
           <div className={styles.timeTypeKontainer}>
             <button
-              className={classNames(styles.timeType, styles.fargekodeArbeid)}
+              className={classNames(styles.timeType, styles.aktivitetTypeArbeid)}
               onClick={() => setValgtAktivitet("arbeid")}
               hidden={!!valgtAktivitet && valgtAktivitet !== "arbeid"}
             >
@@ -104,33 +83,51 @@ export function Kalender() {
             </button>
             <button
               role="button"
-              className={classNames(styles.timeType, styles.fargekodeSyk)}
+              className={classNames(styles.timeType, styles.aktivitetTypeSyk)}
               onClick={() => setValgtAktivitet("sykdom")}
               hidden={!!valgtAktivitet && valgtAktivitet !== "sykdom"}
             >
               Syk
             </button>
             <button
-              className={classNames(styles.timeType, styles.fargekodeFravaerFerie)}
+              className={classNames(styles.timeType, styles.aktivitetTypeFerie)}
               onClick={() => setValgtAktivitet("ferie")}
               hidden={!!valgtAktivitet && valgtAktivitet !== "ferie"}
             >
               Fravær / Ferie
             </button>
           </div>
-          <Form method={"POST"}>
-            <input type="text" hidden name="type" value={valgtAktivitet} />
-            <input type="text" hidden name="dato" value={valgtDato} />
-            <input type="text" hidden={!valgtAktivitet} inputMode="decimal" name="timer" />
+          <Form method="post">
+            <input
+              type="text"
+              hidden
+              name="type"
+              defaultValue={valgtAktivitet}
+              onChange={() => setValgtAktivitet(valgtAktivitet)}
+            />
+            <input
+              type="text"
+              hidden
+              name="dato"
+              defaultValue={valgtDato}
+              onChange={() => setValgtDato(valgtDato)}
+            />
+            {valgtAktivitet && (
+              <TextField
+                type="text"
+                label=""
+                inputMode="numeric"
+                name="timer"
+                defaultValue={timer}
+                // @ts-ignore
+                error={data?.fieldErrors?.timer}
+                onChange={(event) => setValgtDato(event.target.value)}
+              />
+            )}
             <div className={styles.knappKontainer}>
-              <RemixLink
-                to=""
-                as="Button"
-                variant="tertiary-neutral"
-                onClick={() => setOpen((x) => !x)}
-              >
+              <Button variant="tertiary-neutral" onClick={() => setOpen((x) => !x)}>
                 Avbryt
-              </RemixLink>
+              </Button>
               <Button type="submit">Lagre</Button>
             </div>
           </Form>

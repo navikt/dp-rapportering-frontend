@@ -1,48 +1,33 @@
-.rapporteringHeader {
-  border-bottom: 4px solid var(--a-green-400);
-}
-
-.rapporteringHeaderInnhold {
+.aktivitetOppsummeringKontainer {
   max-width: var(--app-max-width);
-  padding: var(--app-padding);
-  margin: 0 auto;
-}
-
-.rapporteringHeaderInnhold p {
-  margin-bottom: 0;
-}
-
-.rapporteringKontainer {
-  max-width: var(--app-max-width);
-  padding: var(--app-padding);
   margin: var(--a-spacing-8) auto 0;
 }
 
-.perioderData {
+.aktivitetOppsummeringData {
   padding: var(--a-spacing-2) var(--a-spacing-4);
   margin: 0 calc(var(--a-spacing-1) * -1) var(--a-spacing-2);
   background-color: var(--a-blue-200);
   border-radius: var(--a-spacing-6);
 }
 
-.perioderData p {
+.aktivitetOppsummeringData p {
   display: flex;
   justify-content: space-between;
   margin: 0;
 }
 
-.fargekodeArbeid {
+.aktivitetTypeArbeid {
   background-color: var(--a-blue-200);
 }
 
-.fargekodeSyk {
+.aktivitetTypeSyk {
   background-color: var(--a-orange-200);
 }
 
-.fargekodeTiltak {
+.aktivitetTypeTiltak {
   background-color: var(--a-purple-200);
 }
 
-.fargekodeFravaerFerie {
+.aktivitetTypeFerie {
   background-color: var(--a-green-200);
 }

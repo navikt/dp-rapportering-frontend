@@ -64,27 +64,27 @@
   border-radius: var(--a-spacing-6);
 }
 
-.fargekodeArbeid {
+.aktivitetTypeArbeid {
   background-color: var(--a-blue-200);
 }
 
-.fargekodeArbeid:hover {
+.aktivitetTypeArbeid:hover {
   background-color: var(--a-blue-300);
 }
 
-.fargekodeSyk {
+.aktivitetTypeSyk {
   background-color: var(--a-orange-200);
 }
 
-.fargekodeSyk:hover {
+.aktivitetTypeSyk:hover {
   background-color: var(--a-orange-300);
 }
 
-.fargekodeFravaerFerie {
+.aktivitetTypeFerie {
   background-color: var(--a-green-200);
 }
 
-.fargekodeFravaerFerie:hover {
+.aktivitetTypeFerie:hover {
   background-color: var(--a-green-300);
 }
 
