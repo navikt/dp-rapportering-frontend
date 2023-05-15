@@ -16,7 +16,7 @@ export function Kalender() {
     Modal.setAppElement('#dp-rapportering-frontend');
   }, []);
 
-  function hentDatoIndeksTilUkedag(index: number) {
+  function hentUkedagTekstMedDatoIndex(index: number) {
     switch (index) {
       case 0:
       case 7:
@@ -45,7 +45,7 @@ export function Kalender() {
   function aapneModal(dato: number, datoIndex: number) {
     setOpen(true);
 
-    const ukedag = hentDatoIndeksTilUkedag(datoIndex);
+    const ukedag = hentUkedagTekstMedDatoIndex(datoIndex);
     setModalHeaderTekst(`${ukedag} ${dato}`);
   }
 
