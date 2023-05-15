@@ -1,6 +1,6 @@
 .kalender {
-  margin-left: calc(var(--a-spacing-1) * -1);
-  width: calc(var(--a-spacing-2) + 100%);
+  margin-left: calc(var(--a-spacing-2) * -1);
+  width: calc(var(--a-spacing-4) + 100%);
 }
 
 .kalenderUkedagKontainer {
