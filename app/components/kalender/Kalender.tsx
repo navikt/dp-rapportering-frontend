@@ -10,15 +10,14 @@ import { action } from "~/routes/rapportering._index";
 
 export function Kalender() {
   const [valgtAktivitet, setValgtAktivitet] = useState<string | undefined>(undefined);
-
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
+  const [timer, setTimer] = useState<string | undefined>(undefined); // Her skal være defult verdi til timer input
   const [modalHeaderTekst, setModalHeaderTekst] = useState("");
   const [open, setOpen] = useState(false);
 
-  const data = useActionData<typeof action>();
+  const actionData = useActionData<typeof action>();
 
   const periode = periodeMock;
-  const [timer, setTimer] = useState(undefined); // Her skal være defult verdi til timer input
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];
 
@@ -112,15 +111,22 @@ export function Kalender() {
               defaultValue={valgtDato}
               onChange={() => setValgtDato(valgtDato)}
             />
+            {
+              //@ts-ignore
+              actionData?.fieldErrors?.type && (
+                //@ts-ignore
+                <p className="navds-error-message navds-label">{actionData?.fieldErrors?.type}</p>
+              )
+            }
             {valgtAktivitet && (
               <TextField
                 type="text"
                 label=""
                 inputMode="numeric"
                 name="timer"
-                defaultValue={timer}
+                defaultValue={timer?.replace(/\./g, ",")}
                 // @ts-ignore
-                error={data?.fieldErrors?.timer}
+                error={actionData?.fieldErrors?.timer}
                 onChange={(event) => setValgtDato(event.target.value)}
               />
             )}

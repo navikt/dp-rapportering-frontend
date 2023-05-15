@@ -28,7 +28,13 @@ export async function action({ request }: ActionArgs) {
 
   const { type, dato, timer } = inputVerdier.submittedData;
 
-  await lagreAktivitet({ type, dato, timer });
+  const aktivitet = {
+    type,
+    dato,
+    timer: timer.replace(/,/g, "."), // Backend tar imot punktum
+  };
+
+  await lagreAktivitet(aktivitet);
 
   return inputVerdier;
 }
