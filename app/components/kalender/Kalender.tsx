@@ -10,9 +10,9 @@ import { periodeMock } from "~/mocks/periodeMock";
 export function Kalender() {
   const periode = periodeMock;
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
-  const perioder = [24, 25, 26, 27, 28, 29, 30, 31, 1, 2, 3, 4, 5, 6];
   const helgIndex = [5, 6, 12, 13];
-  const [valgtAktivitet, setValgtAktivitet] = useState("");
+  const [valgtAktivitet, setValgtAktivitet] = useState<string | undefined>(undefined);
+  const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
 
   const [open, setOpen] = useState(false);
   const [modalHeaderTekst, setModalHeaderTekst] = useState("");
@@ -48,9 +48,13 @@ export function Kalender() {
   }
 
   function aapneModal(dato: string, datoIndex: number) {
+    setValgtAktivitet(undefined);
+    setValgtDato(dato);
+
     setOpen(true);
+
     const ukedag = hentUkedagTekstMedDatoIndex(datoIndex);
-    setModalHeaderTekst(`${ukedag} ${dato}`);
+    setModalHeaderTekst(`${ukedag} ${dato.split("-")[2]}`);
   }
 
   return (
@@ -65,16 +69,16 @@ export function Kalender() {
         })}
       </div>
       <div className={styles.kalenderDatoKontainer}>
-        {periode.dager.map((dag, index) => {
+        {periode.dager.map((dag) => {
           return (
             <button
               className={classNames(styles.kalenderDato, {
-                [styles.helg]: helgIndex.includes(index),
+                [styles.helg]: helgIndex.includes(dag.dagIndex),
               })}
-              key={index}
-              //onClick={() => aapneModal(dato, index)}
+              key={dag.dagIndex}
+              onClick={() => aapneModal(dag.dato, dag.dagIndex)}
             >
-              <p>{dag.dato}</p>.
+              <p>{dag.dato.split("-")[2]}</p>.
             </button>
           );
         })}
@@ -94,6 +98,7 @@ export function Kalender() {
             <button
               className={classNames(styles.timeType, styles.fargekodeArbeid)}
               onClick={() => setValgtAktivitet("arbeid")}
+              hidden={!!valgtAktivitet && valgtAktivitet !== "arbeid"}
             >
               Arbeid
             </button>
@@ -101,28 +106,22 @@ export function Kalender() {
               role="button"
               className={classNames(styles.timeType, styles.fargekodeSyk)}
               onClick={() => setValgtAktivitet("sykdom")}
+              hidden={!!valgtAktivitet && valgtAktivitet !== "sykdom"}
             >
               Syk
             </button>
             <button
-              className={classNames(
-                styles.timeType,
-                styles.fargekodeFravaerFerie
-              )}
+              className={classNames(styles.timeType, styles.fargekodeFravaerFerie)}
               onClick={() => setValgtAktivitet("ferie")}
+              hidden={!!valgtAktivitet && valgtAktivitet !== "ferie"}
             >
               Fravær / Ferie
             </button>
           </div>
           <Form method={"POST"}>
-            <input hidden name={"type"} value={valgtAktivitet} />
-            <input hidden name={"dato"} value={"2021"} />
-            <input
-              hidden={valgtAktivitet !== ""}
-              type={"text"}
-              inputMode={"decimal"}
-              name={"timer"}
-            ></input>
+            <input type="text" hidden name="type" value={valgtAktivitet} />
+            <input type="text" hidden name="dato" value={valgtDato} />
+            <input type="text" hidden={!valgtAktivitet} inputMode="decimal" name="timer" />
             <div className={styles.knappKontainer}>
               <RemixLink
                 to=""

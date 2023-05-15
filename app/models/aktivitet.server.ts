@@ -1,9 +1,11 @@
 import { getEnv } from "~/utils/env.utils";
 
-interface IAktivitet {
+export type TAktivitetType = "arbeid" | "sykdom" | "ferie";
+
+export interface IAktivitet {
   id?: string;
-  type: "arbeid" | "sykdom" | "ferie";
-  timer: number;
+  type: TAktivitetType;
+  timer: string;
   dato: string;
 }
 
@@ -22,9 +24,7 @@ export async function hentAktivitet(): Promise<IAktivitet> {
   return await response.json();
 }
 
-export async function lagreAktivitet(
-  aktivitet: IAktivitet
-): Promise<IAktivitet> {
+export async function lagreAktivitet(aktivitet: IAktivitet): Promise<IAktivitet> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/aktivitet`;
 
   const response = await fetch(url, {
