@@ -1,6 +1,8 @@
 import { Heading } from '@navikt/ds-react';
-import { Outlet } from '@remix-run/react';
+import { Outlet, useLoaderData } from '@remix-run/react';
 import styles from './rapportering.module.css';
+import { hentAktivitet } from '~/models/aktivitet.server';
+import { json } from '@remix-run/node';
 
 export function meta() {
   return [
@@ -11,7 +13,18 @@ export function meta() {
   ];
 }
 
+export async function loader() {
+  const aktivitet = await hentAktivitet();
+
+  return json({ aktivitet });
+  // return redirect('/rapportering');
+}
+
 export default function Rapportering() {
+  const { aktivitet } = useLoaderData();
+
+  console.log(aktivitet);
+
   return (
     <div id='dp-rapportering-frontend'>
       <div className={styles.rapporteringHeader}>

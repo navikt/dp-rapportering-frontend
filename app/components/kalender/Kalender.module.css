@@ -80,14 +80,6 @@
   background-color: var(--a-orange-300);
 }
 
-.fargekodeTiltak {
-  background-color: var(--a-purple-200);
-}
-
-.fargekodeTiltak:hover {
-  background-color: var(--a-purple-300);
-}
-
 .fargekodeFravaerFerie {
   background-color: var(--a-green-200);
 }

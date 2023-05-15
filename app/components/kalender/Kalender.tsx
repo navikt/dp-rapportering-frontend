@@ -1,8 +1,9 @@
 import { Heading, Modal } from '@navikt/ds-react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import styles from './Kalender.module.css';
 import { RemixLink } from '../RemixLink';
+
+import styles from './Kalender.module.css';
 
 export function Kalender() {
   const ukedager = ['man', 'tir', 'ons', 'tor', 'fre', 'lør', 'søn'];
@@ -90,9 +91,6 @@ export function Kalender() {
             <button className={classNames(styles.timeType, styles.fargekodeArbeid)}>Arbeid</button>
             <button role='button' className={classNames(styles.timeType, styles.fargekodeSyk)}>
               Syk
-            </button>
-            <button role='button' className={classNames(styles.timeType, styles.fargekodeTiltak)}>
-              Tiltak
             </button>
             <button className={classNames(styles.timeType, styles.fargekodeFravaerFerie)}>
               Fravær / Ferie
