@@ -12,6 +12,8 @@ export function Kalender(props: IProps) {
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];
 
+  const harNoenAktivitet = !!periode.dager.find((dager) => dager.aktiviteter.length > 0);
+
   return (
     <div className={styles.kalender}>
       <div className={styles.kalenderUkedagKontainer}>
@@ -23,12 +25,16 @@ export function Kalender(props: IProps) {
           );
         })}
       </div>
-      <div className={styles.kalenderDatoKontainer}>
+      <div
+        className={classNames(styles.kalenderDatoKontainer, {
+          [styles.harNoenAktivitet]: harNoenAktivitet,
+        })}
+      >
         {periode.dager.map((dag) => {
           const harAktivitet = dag.aktiviteter.length > 0;
 
           const timer = dag.aktiviteter.reduce((accumulator, current) => {
-            return accumulator + current.hours;
+            return accumulator + current.timer;
           }, 0);
 
           return (
