@@ -53,7 +53,7 @@ export function links() {
             sizes: "16x16",
             href: `${getEnv("BASE_PATH")}/favicon-16x16.png`,
           },
-          { rel: "manifest", href: `${getEnv("BASE_PATH")}/site.webmanifest` },
+          { rel: "manifest", href: `${getEnv("BASE_PATH")}/site.webmanifest.json` },
           {
             rel: "mask-icon",
             href: `${getEnv("BASE_PATH")}/safari-pinned-tab.svg`,
