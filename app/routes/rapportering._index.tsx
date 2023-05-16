@@ -1,12 +1,14 @@
 import { Left, Right } from "@navikt/ds-icons";
 import { Heading } from "@navikt/ds-react";
-import { ActionArgs } from "@remix-run/node";
+import { ActionArgs, json, redirect } from "@remix-run/node";
+import { validationError } from "remix-validated-form";
+import { AktivitetOppsummering } from "~/components/AktivitetOppsummering/AktivitetOppsummering";
 import { RemixLink } from "~/components/RemixLink";
 import { Kalender } from "~/components/kalender/Kalender";
-import { RegistertMeldeperiode } from "~/components/registrert-meldeperiode/RegistertMeldeperiode";
+// import { lagreAktivitet } from "~/models/aktivitet.server";
+import { validerSkjema } from "~/utils/validering.util";
 import styles from "./rapportering.module.css";
-import { IAktivitet, TAktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
-import invariant from "tiny-invariant";
+import { lagreAktivitet } from "~/models/aktivitet.server";
 
 export function meta() {
   return [
@@ -17,37 +19,24 @@ export function meta() {
   ];
 }
 
-function validerInput(input: FormDataEntryValue) {
-  if (typeof input !== "string") {
-    throw new Error("input er ikke en string");
+export async function action({ request }: ActionArgs) {
+  const inputVerdier = await validerSkjema.validate(await request.formData());
+
+  if (inputVerdier.error) {
+    return validationError(inputVerdier.error);
   }
 
-  return true;
-}
+  const { type, dato, timer } = inputVerdier.submittedData;
 
-export async function action({ request }: ActionArgs) {
-  const formData = await request.formData();
-  const type = formData.get("type");
-  const dato = formData.get("dato");
-  const timer = formData.get("timer");
-
-  invariant(type, "Type finnes ikke");
-  invariant(dato, "Dato finnes ikke");
-  invariant(timer, "Timer finnes ikke");
-
-  validerInput(type);
-  validerInput(dato);
-  validerInput(timer);
-
-  const aktivitet: IAktivitet = {
-    type: type as TAktivitetType,
-    timer: timer as string,
-    dato: dato as string,
+  const aktivitet = {
+    type,
+    dato,
+    timer: timer.replace(/,/g, "."), // Backend tar imot punktum
   };
 
-  const response = lagreAktivitet(aktivitet);
+  await lagreAktivitet(aktivitet);
 
-  return response;
+  return inputVerdier;
 }
 
 export default function Rapportering() {
@@ -60,14 +49,14 @@ export default function Rapportering() {
 
       <div className={styles.registertMeldeperiodeKontainer}>
         <p>Sammenlagt for meldeperioden:</p>
-        <RegistertMeldeperiode />
+        <AktivitetOppsummering />
       </div>
       <div className={styles.navigasjonKontainer}>
         <RemixLink to="" as="Button" variant="secondary" icon={<Left />}>
           Mine side
         </RemixLink>
         <RemixLink
-          to="send-inn"
+          to="/rapportering/send-inn"
           as="Button"
           variant="primary"
           icon={<Right />}
