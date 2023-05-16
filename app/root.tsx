@@ -14,7 +14,7 @@ import { cssBundleHref } from "@remix-run/css-bundle";
 import { getEnv } from "./utils/env.utils";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
 import { hentDekoratorHtml } from "./dekorator/dekorator.server";
-import { hentDekoratorReact } from "./dekorator/dekorator";
+import parse from "html-react-parser";
 
 import indexStyle from "~/index.css";
 
@@ -70,7 +70,6 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function App() {
   const { env, fragments } = useLoaderData<typeof loader>();
-  const Decorator = hentDekoratorReact(fragments);
 
   return (
     <html lang="en">
@@ -78,21 +77,25 @@ export default function App() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
-        <Decorator.Styles />
+        {parse(fragments.DECORATOR_STYLES, { trim: true })}
+        {/* Ikke legg parsing av dekoratør-html i egne komponenter. Det trigger rehydrering, 
+            som gjør at grensesnittet flimrer og alle assets lastes på nytt siden de har så mange side effects. 
+            Løsningen enn så lenge er å inline parsingen av HTML her i root. 
+         */}
         <Links />
       </head>
       <body>
-        <Decorator.Header />
+        {parse(fragments.DECORATOR_HEADER, { trim: true })}
         <Outlet />
         <ScrollRestoration />
-        <Decorator.Footer />
+        {parse(fragments.DECORATOR_FOOTER, { trim: true })}
         <script
           dangerouslySetInnerHTML={{
             __html: `window.env = ${JSON.stringify(env)}`,
           }}
         />
         <Scripts />
-        <Decorator.Scripts />
+        {parse(fragments.DECORATOR_SCRIPTS, { trim: true })}
         <LiveReload />
       </body>
     </html>
@@ -102,5 +105,7 @@ export default function App() {
 export function ErrorBoundary() {
   const error = useRouteError();
 
-  return <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />;
+  return (
+    <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />
+  );
 }
