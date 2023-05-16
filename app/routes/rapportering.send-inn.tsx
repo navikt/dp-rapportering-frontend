@@ -2,7 +2,7 @@ import { Left, Right } from "@navikt/ds-icons";
 import { RemixLink } from "~/components/RemixLink";
 import styles from "./rapportering.module.css";
 import { Checkbox, Heading, Ingress } from "@navikt/ds-react";
-import { AktivitetOppsummering } from "~/components/AktivitetOppsummering/AktivitetOppsummering";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 
 export function meta() {
   return [

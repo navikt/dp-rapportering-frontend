@@ -7,7 +7,7 @@ export interface IInputProps {
   verdi?: string;
 }
 
-export function TimerInput(props: IInputProps) {
+export function AktivitetTimerInput(props: IInputProps) {
   const { error, getInputProps } = useField(props.name);
   return (
     <TextField
