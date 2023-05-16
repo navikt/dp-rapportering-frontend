@@ -1,12 +1,12 @@
-import { Button, Heading, Modal, TextField } from "@navikt/ds-react";
+import { Button, Heading, Modal } from "@navikt/ds-react";
 import classNames from "classnames";
-import { Form } from "@remix-run/react";
 import { TAktivitetType } from "~/models/aktivitet.server";
 
-import styles from "./NyAktivitetModal.module.css";
 import { ValidatedForm } from "remix-validated-form";
 import { validerSkjema } from "~/utils/validering.util";
 import { AktivitetTimerInput } from "../AktivitetTimerInput";
+
+import styles from "./NyAktivitetModal.module.css";
 
 interface IProps {
   timer?: string;

@@ -8,7 +8,6 @@ interface IProps {
 }
 
 export function Kalender(props: IProps) {
-  // const actionData = useActionData<typeof action>();
   const periode = periodeMock;
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];

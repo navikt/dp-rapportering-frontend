@@ -37,7 +37,7 @@ export async function action({ request }: ActionArgs) {
     timer: timer.replace(/,/g, "."),
   };
 
-  await lagreAktivitet(aktivitet);
+  return await lagreAktivitet(aktivitet);
 }
 
 export default function Rapportering() {
