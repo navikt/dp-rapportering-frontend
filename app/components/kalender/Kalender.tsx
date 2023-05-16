@@ -25,16 +25,25 @@ export function Kalender(props: IProps) {
       </div>
       <div className={styles.kalenderDatoKontainer}>
         {periode.dager.map((dag) => {
+          const harAktivitet = dag.aktiviteter.length > 0;
+
+          const timer = dag.aktiviteter.reduce((accumulator, current) => {
+            return accumulator + current.hours;
+          }, 0);
+
           return (
-            <button
-              className={classNames(styles.kalenderDato, {
-                [styles.helg]: helgIndex.includes(dag.dagIndex),
-              })}
-              key={dag.dagIndex}
-              onClick={() => props.aapneModal(dag.dato, dag.dagIndex)}
-            >
-              <p>{hentDatoFraDatoString(dag.dato)}</p>.
-            </button>
+            <div key={dag.dagIndex} className={styles.kalenderDag}>
+              <button
+                className={classNames(styles.kalenderDato, {
+                  [styles.helg]: helgIndex.includes(dag.dagIndex),
+                  [styles.kalenderDatoMedAktivitet]: harAktivitet,
+                })}
+                onClick={() => props.aapneModal(dag.dato, dag.dagIndex)}
+              >
+                <p>{hentDatoFraDatoString(dag.dato)}</p>.
+              </button>
+              {harAktivitet && <div className={styles.kalenderDatoAktivitet}>{timer}t</div>}
+            </div>
           );
         })}
       </div>

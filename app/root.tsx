@@ -36,7 +36,6 @@ export function links() {
           { rel: "stylesheet", href: navStyles },
           { rel: "stylesheet", href: cssBundleHref },
           { rel: "stylesheet", href: indexStyle },
-
           {
             rel: "icon",
             type: "image/png",

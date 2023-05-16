@@ -14,7 +14,7 @@
 .kalenderDatoKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--a-spacing-4);
+  gap: var(--a-spacing-8) var(--a-spacing-4);
   justify-items: center;
 }
 
@@ -26,7 +26,12 @@
   font-size: var(--a-font-size-small);
 }
 
+.kalenderDag {
+  position: relative;
+}
+
 .kalenderDato {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,6 +42,7 @@
   font-size: var(--a-font-size-medium);
   cursor: pointer;
   border: 0;
+  z-index: 10;
 }
 
 .kalenderDato:hover {
@@ -45,6 +51,32 @@
 
 .kalenderDato p {
   margin-left: 3px;
+}
+
+.kalenderDatoMedAktivitet {
+  background-color: var(--a-blue-200);
+}
+
+.kalenderDatoMedAktivitet:hover {
+  background-color: var(--a-blue-300);
+}
+
+.kalenderDatoAktivitet {
+  position: absolute;
+  top: 15px;
+  left: 1px;
+  display: flex;
+  border-radius: 0 0 5px 5px;
+  padding-top: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--a-surface-selected);
+  width: 34px;
+  height: 40px;
+  font-size: var(--a-font-size-small);
+  color: var(--a-text-subtle);
+  cursor: pointer;
+  z-index: 0;
 }
 
 .timeTypeKontainer {
@@ -105,9 +137,23 @@
     font-size: var(--a-font-size-medium);
   }
 
+  .kalenderDatoKontainer {
+    gap: var(--a-spacing-10) var(--a-spacing-4);
+  }
+
   .kalenderDato {
     width: 60px;
     height: 60px;
     font-size: var(--a-font-size-large);
+  }
+
+  .kalenderDatoAktivitet {
+    top: 40px;
+    left: 3px;
+    border-radius: 0 0 10px 10px;
+    padding-top: 15px;
+    font-size: var(--a-font-size-medium);
+    width: 56px;
+    height: 50px;
   }
 }

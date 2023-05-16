@@ -11,7 +11,7 @@ export const periodeMock = {
         {
           id: 123,
           type: "Arbeid",
-          hours: 8,
+          hours: 7.5,
         },
       ],
     },
@@ -20,9 +20,9 @@ export const periodeMock = {
       dato: "2023-05-02", // kun for visningens skyld, det er farlig å generere datoer i frontend pga. tidssoner
       aktiviteter: [
         {
-          id: 123,
+          id: 124,
           type: "Arbeid",
-          hours: 8,
+          hours: 7.5,
         },
       ],
     },
@@ -31,9 +31,9 @@ export const periodeMock = {
       dato: "2023-05-03", // kun for visningens skyld, det er farlig å generere datoer i frontend pga. tidssoner
       aktiviteter: [
         {
-          id: 123,
+          id: 125,
           type: "Arbeid",
-          hours: 8,
+          hours: 4,
         },
       ],
     },
@@ -50,13 +50,7 @@ export const periodeMock = {
     {
       dagIndex: 5,
       dato: "2023-05-06", // kun for visningens skyld, det er farlig å generere datoer i frontend pga. tidssoner
-      aktiviteter: [
-        {
-          id: 123,
-          type: "Arbeid",
-          hours: 8,
-        },
-      ],
+      aktiviteter: [],
     },
     {
       dagIndex: 6,
@@ -66,13 +60,7 @@ export const periodeMock = {
     {
       dagIndex: 7,
       dato: "2023-05-08", // kun for visningens skyld, det er farlig å generere datoer i frontend pga. tidssoner
-      aktiviteter: [
-        {
-          id: 123,
-          type: "Arbeid",
-          hours: 8,
-        },
-      ],
+      aktiviteter: [],
     },
     {
       dagIndex: 8,
@@ -82,13 +70,7 @@ export const periodeMock = {
     {
       dagIndex: 9,
       dato: "2023-05-10", // kun for visningens skyld, det er farlig å generere datoer i frontend pga. tidssoner
-      aktiviteter: [
-        {
-          id: 123,
-          type: "Arbeid",
-          hours: 8,
-        },
-      ],
+      aktiviteter: [],
     },
     {
       dagIndex: 10,
@@ -103,13 +85,7 @@ export const periodeMock = {
     {
       dagIndex: 12,
       dato: "2023-05-13", // kun for visningens skyld, det er farlig å generere datoer i frontend pga. tidssoner
-      aktiviteter: [
-        {
-          id: 123,
-          type: "Arbeid",
-          hours: 8,
-        },
-      ],
+      aktiviteter: [],
     },
     {
       dagIndex: 13,
