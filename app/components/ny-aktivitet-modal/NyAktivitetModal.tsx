@@ -36,22 +36,22 @@ export function AktivitetModal(props: IProps) {
         <div className={styles.timeTypeKontainer}>
           <button
             className={classNames(styles.timeType, styles.aktivitetTypeArbeid)}
-            onClick={() => props.setValgtAktivitet("Arbeid")}
-            hidden={!!props.valgtAktivitet && props.valgtAktivitet !== "Arbeid"}
+            onClick={() => props.setValgtAktivitet("arbeid")}
+            hidden={!!props.valgtAktivitet && props.valgtAktivitet !== "arbeid"}
           >
             Arbeid
           </button>
           <button
             className={classNames(styles.timeType, styles.aktivitetTypeSyk)}
-            onClick={() => props.setValgtAktivitet("Sykdom")}
-            hidden={!!props.valgtAktivitet && props.valgtAktivitet !== "Sykdom"}
+            onClick={() => props.setValgtAktivitet("sykdom")}
+            hidden={!!props.valgtAktivitet && props.valgtAktivitet !== "sykdom"}
           >
             Syk
           </button>
           <button
             className={classNames(styles.timeType, styles.aktivitetTypeFerie)}
-            onClick={() => props.setValgtAktivitet("Ferie")}
-            hidden={!!props.valgtAktivitet && props.valgtAktivitet !== "Ferie"}
+            onClick={() => props.setValgtAktivitet("ferie")}
+            hidden={!!props.valgtAktivitet && props.valgtAktivitet !== "ferie"}
           >
             Fravær / Ferie
           </button>
