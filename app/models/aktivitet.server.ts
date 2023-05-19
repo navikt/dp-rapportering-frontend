@@ -1,6 +1,6 @@
 import { getEnv } from "~/utils/env.utils";
 
-export type TAktivitetType = "arbeid" | "sykdom" | "ferie";
+export type TAktivitetType = "Arbeid" | "Sykdom" | "Ferie";
 
 export interface IAktivitet {
   id?: string;

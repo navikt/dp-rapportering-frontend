@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const validerSkjema = withZod(
   z.object({
-    type: z.enum(["arbeid", "sykdom", "ferie"], {
+    type: z.enum(["Arbeid", "Sykdom", "Ferie"], {
       errorMap: () => ({ message: "Du må velge et aktivitet" }),
     }),
     dato: z.coerce.date({
