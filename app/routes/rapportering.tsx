@@ -2,7 +2,7 @@ import { Heading } from "@navikt/ds-react";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import styles from "./rapportering.module.css";
 import { json } from "@remix-run/node";
-import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 export function meta() {
   return [
@@ -14,16 +14,12 @@ export function meta() {
 }
 
 export async function loader() {
-  const rapporteringsperioder = await hentRapporteringsperioder();
+  const rapporteringsperiode = await hentSisteRapporteringsperiode();
 
-  return json({ rapporteringsperioder });
+  return json({ rapporteringsperiode });
 }
 
 export default function Rapportering() {
-  const { rapporteringsperioder } = useLoaderData<typeof loader>();
-
-  console.log("rapporteringsperioder", rapporteringsperioder);
-
   return (
     <div id="dp-rapportering-frontend">
       <div className={styles.rapporteringHeader}>

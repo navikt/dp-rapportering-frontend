@@ -1,19 +1,27 @@
 import classNames from "classnames";
-import { periodeMock } from "~/mocks/periodeMock";
 import { hentDatoFraDatoString } from "~/utils/dato.utils";
 
 import styles from "./Kalender.module.css";
+import { useRouteLoaderData } from "@remix-run/react";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 interface IProps {
   aapneModal: (dato: string, datoIndex: number) => void;
 }
 
 export function Kalender(props: IProps) {
-  const periode = periodeMock;
+  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
+    rapporteringsperiode: IRapporteringsperiode;
+  };
+
+  console.log(rapporteringsperiode);
+
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];
 
-  const harNoenAktivitet = !!periode.dager.find((dager) => dager.aktiviteter.length > 0);
+  // const harNoenAktivitet = !!rapporteringsperiode.dager.find(
+  //   (dager) => dager.aktiviteter.length > 0
+  // );
 
   return (
     <div className={styles.kalender}>
@@ -28,32 +36,33 @@ export function Kalender(props: IProps) {
       </div>
       <div
         className={classNames(styles.kalenderDatoKontainer, {
-          [styles.harNoenAktivitet]: harNoenAktivitet,
+          // [styles.harNoenAktivitet]: harNoenAktivitet,
         })}
       >
-        {periode.dager.map((dag) => {
-          const harAktivitet = dag.aktiviteter.length > 0;
+        {rapporteringsperiode.dager.map((dag) => {
+          console.log(dag);
+          // const harAktivitet = dag.aktiviteter.length > 0;
 
-          const timer = dag.aktiviteter.reduce((accumulator, current) => {
-            return accumulator + current.timer;
-          }, 0);
+          // const timer = dag.aktiviteter.reduce((accumulator, current) => {
+          //   return accumulator + current.timer;
+          // }, 0);
 
           return (
             <div key={dag.dagIndex} className={styles.kalenderDag}>
               <button
                 className={classNames(styles.kalenderDato, {
                   [styles.helg]: helgIndex.includes(dag.dagIndex),
-                  [styles.kalenderDatoMedAktivitet]: harAktivitet,
+                  // [styles.kalenderDatoMedAktivitet]: harAktivitet,
                 })}
                 onClick={() => props.aapneModal(dag.dato, dag.dagIndex)}
               >
                 <p>{hentDatoFraDatoString(dag.dato)}</p>.
               </button>
-              {harAktivitet && (
+              {/* {harAktivitet && (
                 <div className={styles.kalenderDatoAktivitet}>
                   {timer.toString().replace(/\./g, ",")}t
                 </div>
-              )}
+              )} */}
             </div>
           );
         })}

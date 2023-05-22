@@ -1,6 +1,5 @@
 import { getEnv } from "~/utils/env.utils";
-
-export type TAktivitetType = "Arbeid" | "Sykdom" | "Ferie";
+import { IAktivitet, TAktivitetType } from "./aktivitet.server";
 
 export interface IRapporteringsperiode {
   id: string;
@@ -17,22 +16,12 @@ interface IRapporteringsperiodeDag {
   muligeAktiviteter: TAktivitetType[];
 }
 
-export interface IAktivitet {
-  id?: string;
-  type: TAktivitetType;
-  timer: string;
-  dato: string;
-}
-
-export async function hentRapporteringsperioder(): Promise<
-  IRapporteringsperiode[]
-> {
+export async function hentSisteRapporteringsperiode(): Promise<IRapporteringsperiode> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
 
   const response = await fetch(url);
 
   const data = await response.json();
-  console.log(data);
 
   if (!response.ok) {
     throw new Response(`Feil ved kall til ${url}`, {
@@ -41,5 +30,5 @@ export async function hentRapporteringsperioder(): Promise<
     });
   }
 
-  return await data;
+  return data[0];
 }
