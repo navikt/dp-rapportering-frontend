@@ -1,5 +1,5 @@
 import { Left, Right } from "@navikt/ds-icons";
-import { Heading, Modal } from "@navikt/ds-react";
+import { Alert, Heading, Modal } from "@navikt/ds-react";
 import { ActionArgs } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { RemixLink } from "~/components/RemixLink";
@@ -12,6 +12,8 @@ import { hentDatoFraDatoString, hentUkedagTekstMedDatoIndex } from "~/utils/dato
 import { validerSkjema } from "~/utils/validering.util";
 
 import styles from "./rapportering.module.css";
+import { useRouteLoaderData } from "@remix-run/react";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 export function meta() {
   return [
@@ -41,6 +43,10 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function Rapportering() {
+  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
+    rapporteringsperiode: IRapporteringsperiode;
+  };
+
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | undefined>(undefined);
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [timer] = useState<string | undefined>(undefined);
@@ -66,6 +72,10 @@ export default function Rapportering() {
     setModalHeaderTekst("");
   }
 
+  if (!rapporteringsperiode) {
+    return <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>;
+  }
+
   return (
     <>
       <Heading level="2" size="large" spacing>
@@ -85,11 +95,11 @@ export default function Rapportering() {
         modalHeaderTekst={modalHeaderTekst}
         lukkModal={lukkModal}
       />
-
       <div className={styles.registertMeldeperiodeKontainer}>
         <p>Sammenlagt for meldeperioden:</p>
         <AktivitetOppsummering />
       </div>
+
       <div className={styles.navigasjonKontainer}>
         <RemixLink to="" as="Button" variant="secondary" icon={<Left />}>
           Mine side

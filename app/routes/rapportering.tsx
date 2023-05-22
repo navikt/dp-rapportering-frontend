@@ -14,7 +14,15 @@ export function meta() {
 }
 
 export async function loader() {
-  const rapporteringsperiode = await hentSisteRapporteringsperiode();
+  const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
+    "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  );
+
+  // Her må vi gjøre noe smartere
+  // Per nå får vi et object med atributter med null i verdi
+  const rapporteringsperiode = rapporteringsperiodeResponse.id
+    ? rapporteringsperiodeResponse
+    : null;
 
   return json({ rapporteringsperiode });
 }

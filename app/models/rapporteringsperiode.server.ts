@@ -16,12 +16,10 @@ interface IRapporteringsperiodeDag {
   muligeAktiviteter: TAktivitetType[];
 }
 
-export async function hentSisteRapporteringsperiode(): Promise<IRapporteringsperiode> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/`;
+export async function hentSisteRapporteringsperiode(id: string): Promise<IRapporteringsperiode> {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}`;
 
   const response = await fetch(url);
-
-  const data = await response.json();
 
   if (!response.ok) {
     throw new Response(`Feil ved kall til ${url}`, {
@@ -30,5 +28,5 @@ export async function hentSisteRapporteringsperiode(): Promise<IRapporteringsper
     });
   }
 
-  return data[0];
+  return await response.json();
 }
