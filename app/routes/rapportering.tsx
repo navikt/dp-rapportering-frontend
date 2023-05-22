@@ -1,8 +1,8 @@
 import { Heading } from "@navikt/ds-react";
-import { Outlet, useLoaderData } from "@remix-run/react";
-import styles from "./rapportering.module.css";
 import { json } from "@remix-run/node";
+import { Outlet } from "@remix-run/react";
 import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import styles from "./rapportering.module.css";
 
 export function meta() {
   return [

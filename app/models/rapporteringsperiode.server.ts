@@ -17,7 +17,7 @@ interface IRapporteringsperiodeDag {
 }
 
 export async function hentSisteRapporteringsperiode(): Promise<IRapporteringsperiode> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/`;
 
   const response = await fetch(url);
 

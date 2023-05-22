@@ -82,8 +82,32 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       {
         id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
         type: "Arbeid",
-        timer: 8,
+        timer: 5,
         dato: "2023-05-01",
+      },
+      {
+        id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9b",
+        type: "Arbeid",
+        timer: 7.5,
+        dato: "2023-05-02",
+      },
+      {
+        id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9c",
+        type: "Ferie",
+        timer: 7.5,
+        dato: "2023-05-03",
+      },
+      {
+        id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9d",
+        type: "Sykdom",
+        timer: 7.5,
+        dato: "2023-05-04",
+      },
+      {
+        id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
+        type: "Arbeid",
+        timer: 7.5,
+        dato: "2023-05-05",
       },
     ],
   },
