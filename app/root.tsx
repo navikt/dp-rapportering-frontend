@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node";
+import { LoaderArgs, json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -61,10 +61,13 @@ export function links() {
 export async function loader({ request }: LoaderArgs) {
   const fragments = await hentDekoratorHtml();
 
-  return {
-    env: {},
+  return json({
+    env: {
+      BASE_PATH: process.env.BASE_PATH,
+      DP_RAPPORTERING_URL: process.env.DP_RAPPORTERING_URL,
+    },
     fragments,
-  };
+  });
 }
 
 export default function App() {
