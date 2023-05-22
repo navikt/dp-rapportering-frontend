@@ -16,18 +16,14 @@
   margin: 0;
 }
 
-.aktivitetTypeArbeid {
+.arbeid {
   background-color: var(--a-blue-200);
 }
 
-.aktivitetTypeSyk {
+.syk {
   background-color: var(--a-orange-200);
 }
 
-.aktivitetTypeTiltak {
-  background-color: var(--a-purple-200);
-}
-
-.aktivitetTypeFerie {
+.ferie {
   background-color: var(--a-green-200);
 }

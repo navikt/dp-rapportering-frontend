@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { periodeMock } from "~/mocks/periodeMock";
 import { hentDatoFraDatoString } from "~/utils/dato.utils";
+
 import styles from "./Kalender.module.css";
 
 interface IProps {
@@ -48,7 +49,11 @@ export function Kalender(props: IProps) {
               >
                 <p>{hentDatoFraDatoString(dag.dato)}</p>.
               </button>
-              {harAktivitet && <div className={styles.kalenderDatoAktivitet}>{timer}t</div>}
+              {harAktivitet && (
+                <div className={styles.kalenderDatoAktivitet}>
+                  {timer.toString().replace(/\./g, ",")}t
+                </div>
+              )}
             </div>
           );
         })}

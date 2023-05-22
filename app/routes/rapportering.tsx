@@ -13,16 +13,16 @@ export function meta() {
   ];
 }
 
-// export async function loader() {
-//   const aktivitet = await hentAktivitet();
+export async function loader() {
+  const aktivitet = await hentAktivitet();
 
-//   return json({ aktivitet });
-// }
+  return json({ aktivitet });
+}
 
 export default function Rapportering() {
-  // const { aktivitet } = useLoaderData();
+  const { aktivitet } = useLoaderData();
 
-  // console.log(aktivitet);
+  console.log(aktivitet);
 
   return (
     <div id="dp-rapportering-frontend">
