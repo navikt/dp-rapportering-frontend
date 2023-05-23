@@ -7,7 +7,7 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import { useEffect, useState } from "react";
 import { AktivitetModal } from "~/components/ny-aktivitet-modal/NyAktivitetModal";
-import type { TAktivitetType} from "~/models/aktivitet.server";
+import type { TAktivitetType } from "~/models/aktivitet.server";
 import { lagreAktivitet } from "~/models/aktivitet.server";
 import {
   hentDatoFraDatoString,
@@ -101,6 +101,10 @@ export default function Rapportering() {
         setModalAapen={setModalAapen}
         modalHeaderTekst={modalHeaderTekst}
         lukkModal={lukkModal}
+        muligeAktiviteter={
+          rapporteringsperiode.dager.find((r) => r.dato === valgtDato)
+            ?.muligeAktiviteter || []
+        }
       />
       <div className={styles.registertMeldeperiodeKontainer}>
         <p>Sammenlagt for meldeperioden:</p>

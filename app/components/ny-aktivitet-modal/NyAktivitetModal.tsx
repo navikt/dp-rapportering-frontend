@@ -17,6 +17,7 @@ interface IProps {
   setModalAapen: any;
   modalHeaderTekst?: string;
   lukkModal: () => void;
+  muligeAktiviteter: TAktivitetType[];
 }
 
 export function AktivitetModal(props: IProps) {
@@ -33,27 +34,22 @@ export function AktivitetModal(props: IProps) {
           {props.modalHeaderTekst}
         </Heading>
         <div className={styles.timeTypeKontainer}>
-          <button
-            className={classNames(styles.timeType, styles.aktivitetTypeArbeid)}
-            onClick={() => props.setValgtAktivitet("Arbeid")}
-            hidden={!!props.valgtAktivitet && props.valgtAktivitet !== "Arbeid"}
-          >
-            Arbeid
-          </button>
-          <button
-            className={classNames(styles.timeType, styles.aktivitetTypeSyk)}
-            onClick={() => props.setValgtAktivitet("Sykdom")}
-            hidden={!!props.valgtAktivitet && props.valgtAktivitet !== "Sykdom"}
-          >
-            Syk
-          </button>
-          <button
-            className={classNames(styles.timeType, styles.aktivitetTypeFerie)}
-            onClick={() => props.setValgtAktivitet("Ferie")}
-            hidden={!!props.valgtAktivitet && props.valgtAktivitet !== "Ferie"}
-          >
-            Fravær / Ferie
-          </button>
+          {props.muligeAktiviteter &&
+            props.muligeAktiviteter.map((aktivitet) => (
+              <button
+                key={aktivitet}
+                className={classNames(
+                  styles.timeType,
+                  styles.aktivitetTypeArbeid
+                )}
+                onClick={() => props.setValgtAktivitet("Arbeid")}
+                hidden={
+                  !!props.valgtAktivitet && props.valgtAktivitet !== "Arbeid"
+                }
+              >
+                {aktivitet}
+              </button>
+            ))}
         </div>
         <ValidatedForm
           method="post"
