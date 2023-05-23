@@ -40,7 +40,7 @@ export function AktivitetOppsummering() {
       >
         <p>
           Syk
-          <span>{hentTotaltTimerStringMedAktivitetsType("Sykdom")} timer</span>
+          <span>{hentTotaltTimerStringMedAktivitetsType("Syk")} timer</span>
         </p>
       </div>
       <div
