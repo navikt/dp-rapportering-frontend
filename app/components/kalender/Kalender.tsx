@@ -5,6 +5,7 @@ import { hentDatoFraDatoString } from "~/utils/dato.utils";
 import { sorterOgStrukturerRapporteringsperiode } from "~/utils/rapporteringsperiode.utils";
 
 import styles from "./Kalender.module.css";
+import { useSanity } from "~/context/sanity-content";
 
 interface IProps {
   aapneModal: (dato: string, datoIndex: number) => void;
@@ -16,6 +17,13 @@ export function Kalender(props: IProps) {
   ) as {
     rapporteringsperiode: IRapporteringsperiode;
   };
+
+  const { getAppTekst } = useSanity();
+
+  console.log(
+    "hei",
+    getAppTekst("dokumentkrav.side-metadata.meta-beskrivelse")
+  );
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];
