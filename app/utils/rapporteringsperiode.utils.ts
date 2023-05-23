@@ -1,5 +1,5 @@
-import { IAktivitet, TAktivitetType } from "~/models/aktivitet.server";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { IAktivitet, TAktivitetType } from "~/models/aktivitet.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 export interface IStrukturertRapporteringsperiode {
   id: string;

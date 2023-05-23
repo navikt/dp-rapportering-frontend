@@ -1,6 +1,6 @@
 import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentDatoFraDatoString } from "~/utils/dato.utils";
 import { sorterOgStrukturerRapporteringsperiode } from "~/utils/rapporteringsperiode.utils";
 

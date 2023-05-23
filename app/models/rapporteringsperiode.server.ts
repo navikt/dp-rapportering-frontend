@@ -1,5 +1,5 @@
 import { getEnv } from "~/utils/env.utils";
-import { IAktivitet, TAktivitetType } from "./aktivitet.server";
+import type { IAktivitet, TAktivitetType } from "./aktivitet.server";
 
 export interface IRapporteringsperiode {
   id: string;

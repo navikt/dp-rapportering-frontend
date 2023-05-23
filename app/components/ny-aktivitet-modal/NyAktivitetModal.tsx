@@ -1,7 +1,6 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import classNames from "classnames";
-import { TAktivitetType } from "~/models/aktivitet.server";
-
+import type { TAktivitetType } from "~/models/aktivitet.server";
 import { ValidatedForm } from "remix-validated-form";
 import { validerSkjema } from "~/utils/validering.util";
 import { AktivitetTimerInput } from "../AktivitetTimerInput";
@@ -56,14 +55,34 @@ export function AktivitetModal(props: IProps) {
             Fravær / Ferie
           </button>
         </div>
-        <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validerSkjema}>
-          <input type="text" hidden name="type" defaultValue={props.valgtAktivitet} />
-          <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
+        <ValidatedForm
+          method="post"
+          key="lagre-ny-aktivitet"
+          validator={validerSkjema}
+        >
+          <input
+            type="text"
+            hidden
+            name="type"
+            defaultValue={props.valgtAktivitet}
+          />
+          <input
+            type="text"
+            hidden
+            name="dato"
+            defaultValue={props.valgtDato}
+          />
           {props.valgtAktivitet && (
-            <AktivitetTimerInput name="timer" verdi={props.timer?.replace(/\./g, ",")} />
+            <AktivitetTimerInput
+              name="timer"
+              verdi={props.timer?.replace(/\./g, ",")}
+            />
           )}
           <div className={styles.knappKontainer}>
-            <Button variant="tertiary-neutral" onClick={() => props.lukkModal()}>
+            <Button
+              variant="tertiary-neutral"
+              onClick={() => props.lukkModal()}
+            >
               Avbryt
             </Button>
             <Button type="submit">Lagre</Button>

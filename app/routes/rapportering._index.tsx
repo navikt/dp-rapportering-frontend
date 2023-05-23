@@ -1,19 +1,23 @@
 import { Left, Right } from "@navikt/ds-icons";
 import { Alert, Heading, Modal } from "@navikt/ds-react";
-import { ActionArgs } from "@remix-run/node";
+import type { ActionArgs } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { useEffect, useState } from "react";
 import { AktivitetModal } from "~/components/ny-aktivitet-modal/NyAktivitetModal";
-import { TAktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
-import { hentDatoFraDatoString, hentUkedagTekstMedDatoIndex } from "~/utils/dato.utils";
+import type { TAktivitetType} from "~/models/aktivitet.server";
+import { lagreAktivitet } from "~/models/aktivitet.server";
+import {
+  hentDatoFraDatoString,
+  hentUkedagTekstMedDatoIndex,
+} from "~/utils/dato.utils";
 import { validerSkjema } from "~/utils/validering.util";
 
 import styles from "./rapportering.module.css";
 import { useRouteLoaderData } from "@remix-run/react";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 export function meta() {
   return [
@@ -32,7 +36,6 @@ export async function action({ request }: ActionArgs) {
   }
 
   const { type, dato, timer } = inputVerdier.submittedData;
-
   const aktivitet = {
     type,
     dato,
@@ -43,11 +46,15 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function Rapportering() {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
+  const { rapporteringsperiode } = useRouteLoaderData(
+    "routes/rapportering"
+  ) as {
     rapporteringsperiode: IRapporteringsperiode;
   };
 
-  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | undefined>(undefined);
+  const [valgtAktivitet, setValgtAktivitet] = useState<
+    TAktivitetType | undefined
+  >(undefined);
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [timer] = useState<string | undefined>(undefined);
   const [modalHeaderTekst, setModalHeaderTekst] = useState("");

@@ -1,4 +1,4 @@
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
   {
