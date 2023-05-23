@@ -10,11 +10,11 @@ const infosideFields = `{
     body
   }`;
 
-const appTextsGroq = `* [_type=="apptekst" && __i18n_lang==$baseLang]{
+const appTextsGroq = `* [_type=="rapporteringAppText" && __i18n_lang==$baseLang]{
     ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${appTextsFields}, ${appTextsFields})
     }`;
 
-const infosiderGroq = `* [_type=="infopage"  && __i18n_lang==$baseLang]{
+const infosiderGroq = `* [_type=="rapporteringInfoText"  && __i18n_lang==$baseLang]{
     ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${infosideFields}, ${infosideFields})
     }`;
 
