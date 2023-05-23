@@ -39,9 +39,9 @@ export function AktivitetModal(props: IProps) {
               <button
                 key={aktivitet}
                 className={classNames(styles.timeType, styles[aktivitet])}
-                onClick={() => props.setValgtAktivitet("Arbeid")}
+                onClick={() => props.setValgtAktivitet(aktivitet)}
                 hidden={
-                  !!props.valgtAktivitet && props.valgtAktivitet !== "Arbeid"
+                  !!props.valgtAktivitet && props.valgtAktivitet !== aktivitet
                 }
               >
                 {aktivitet}

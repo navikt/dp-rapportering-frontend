@@ -59,10 +59,20 @@ export default function Rapportering() {
   const [timer] = useState<string | undefined>(undefined);
   const [modalHeaderTekst, setModalHeaderTekst] = useState("");
   const [modalAapen, setModalAapen] = useState(false);
+  const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>(
+    []
+  );
 
   useEffect(() => {
     Modal.setAppElement("#dp-rapportering-frontend");
   }, []);
+
+  useEffect(() => {
+    setMuligeAktiviteter(
+      rapporteringsperiode.dager.find((r) => r.dato === valgtDato)
+        ?.muligeAktiviteter || []
+    );
+  }, [rapporteringsperiode.dager, valgtDato]);
 
   function aapneModal(dato: string, datoIndex: number) {
     setValgtDato(dato);
@@ -101,10 +111,7 @@ export default function Rapportering() {
         setModalAapen={setModalAapen}
         modalHeaderTekst={modalHeaderTekst}
         lukkModal={lukkModal}
-        muligeAktiviteter={
-          rapporteringsperiode.dager.find((r) => r.dato === valgtDato)
-            ?.muligeAktiviteter || []
-        }
+        muligeAktiviteter={muligeAktiviteter}
       />
       <div className={styles.registertMeldeperiodeKontainer}>
         <p>Sammenlagt for meldeperioden:</p>
