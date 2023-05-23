@@ -1,4 +1,21 @@
-# Welcome to Remix!
+# dp-rapportering-frontend - Rapporteringsløsning for Dagpenger
+
+## Komme i gang
+
+Appen er basert på [Remix](https://remix.run/docs)
+
+```
+npm install
+npm run dev
+```
+
+Kopier `.env.example` og rename til `.env`.
+
+Sett `USE_MSW="false"` dersom du ikke får det til å kjøre.
+
+---
+
+## Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
 
