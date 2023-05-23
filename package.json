@@ -8,7 +8,9 @@
     "start": "ts-node ./server/server.ts",
     "typecheck": "tsc",
     "prepare": "husky install",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint-fix": "eslint . --fix --ext .ts,.tsx",
+    "validate": "npm run lint && tsc"
   },
   "dependencies": {
     "@navikt/dp-auth": "^0.3.3",
