@@ -10,22 +10,22 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       {
         dagIndex: 0,
         dato: "2023-05-01",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: ["Arbeid", "Syk"],
       },
       {
         dagIndex: 1,
         dato: "2023-05-02",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: ["Arbeid", "Ferie"],
       },
       {
         dagIndex: 2,
         dato: "2023-05-03",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: ["Syk"],
       },
       {
         dagIndex: 3,
         dato: "2023-05-04",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: ["Ferie", "Syk"],
       },
       {
         dagIndex: 4,
@@ -99,7 +99,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       },
       {
         id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9d",
-        type: "Sykdom",
+        type: "Syk",
         timer: 7.5,
         dato: "2023-05-04",
       },

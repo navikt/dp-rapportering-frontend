@@ -1,6 +1,6 @@
 import { getEnv } from "~/utils/env.utils";
 
-export type TAktivitetType = "Arbeid" | "Sykdom" | "Ferie";
+export type TAktivitetType = "Arbeid" | "Syk" | "Ferie";
 
 export interface IAktivitet {
   id?: string;
@@ -9,7 +9,9 @@ export interface IAktivitet {
   dato: string;
 }
 
-export async function lagreAktivitet(aktivitet: IAktivitet): Promise<IAktivitet> {
+export async function lagreAktivitet(
+  aktivitet: IAktivitet
+): Promise<IAktivitet> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/aktivitet`;
 
   const response = await fetch(url, {

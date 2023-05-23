@@ -38,10 +38,7 @@ export function AktivitetModal(props: IProps) {
             props.muligeAktiviteter.map((aktivitet) => (
               <button
                 key={aktivitet}
-                className={classNames(
-                  styles.timeType,
-                  styles.aktivitetTypeArbeid
-                )}
+                className={classNames(styles.timeType, styles[aktivitet])}
                 onClick={() => props.setValgtAktivitet("Arbeid")}
                 hidden={
                   !!props.valgtAktivitet && props.valgtAktivitet !== "Arbeid"

@@ -14,28 +14,22 @@
   background-color: var(--a-blue-200);
   border-radius: var(--a-spacing-6);
 }
-
-.aktivitetTypeArbeid {
+.Arbeid {
   background-color: var(--a-blue-200);
 }
-
-.aktivitetTypeArbeid:hover {
+.Arbeid:hover {
   background-color: var(--a-blue-300);
 }
-
-.aktivitetTypeSyk {
+.Syk {
   background-color: var(--a-orange-200);
 }
-
-.aktivitetTypeSyk:hover {
+.Syk:hover {
   background-color: var(--a-orange-300);
 }
-
-.aktivitetTypeFerie {
+.Ferie {
   background-color: var(--a-green-200);
 }
-
-.aktivitetTypeFerie:hover {
+.Ferie:hover {
   background-color: var(--a-green-300);
 }
 
