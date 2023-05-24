@@ -3,6 +3,7 @@ import styles from "./AktivitetOppsummering.module.css";
 import { useRouteLoaderData } from "@remix-run/react";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { TAktivitetType } from "~/models/aktivitet.server";
+import { ARBEID, FERIE, SYK } from "~/utils/constants";
 
 export function AktivitetOppsummering() {
   const { rapporteringsperiode } = useRouteLoaderData(
@@ -32,7 +33,7 @@ export function AktivitetOppsummering() {
       >
         <p>
           Arbeid
-          <span>{hentTotaltTimerStringMedAktivitetsType("Arbeid")} timer</span>
+          <span>{hentTotaltTimerStringMedAktivitetsType(ARBEID)} timer</span>
         </p>
       </div>
       <div
@@ -40,7 +41,7 @@ export function AktivitetOppsummering() {
       >
         <p>
           Syk
-          <span>{hentTotaltTimerStringMedAktivitetsType("Syk")} timer</span>
+          <span>{hentTotaltTimerStringMedAktivitetsType(SYK)} timer</span>
         </p>
       </div>
       <div
@@ -48,7 +49,7 @@ export function AktivitetOppsummering() {
       >
         <p>
           Fravær / Ferie
-          <span>{hentTotaltTimerStringMedAktivitetsType("Ferie")} timer</span>
+          <span>{hentTotaltTimerStringMedAktivitetsType(FERIE)} timer</span>
         </p>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { sorterOgStrukturerRapporteringsperiode } from "~/utils/rapporteringsper
 
 import styles from "./Kalender.module.css";
 import { useSanity } from "~/context/sanity-content";
+import { ARBEID, FERIE, SYK } from "~/utils/constants";
 
 interface IProps {
   aapneModal: (dato: string, datoIndex: number) => void;
@@ -64,11 +65,11 @@ export function Kalender(props: IProps) {
                   [styles.helg]: helgIndex.includes(dag.dagIndex),
                   [styles.kalenderDatoMedAktivitet]: harAktivitet,
                   [styles.arbeid]:
-                    harAktivitet && dag.aktiviteter[0].type === "Arbeid",
+                    harAktivitet && dag.aktiviteter[0].type === ARBEID,
                   [styles.sykdom]:
-                    harAktivitet && dag.aktiviteter[0].type === "Syk",
+                    harAktivitet && dag.aktiviteter[0].type === SYK,
                   [styles.ferie]:
-                    harAktivitet && dag.aktiviteter[0].type === "Ferie",
+                    harAktivitet && dag.aktiviteter[0].type === FERIE,
                 })}
                 onClick={() => props.aapneModal(dag.dato, dag.dagIndex)}
               >
@@ -78,11 +79,11 @@ export function Kalender(props: IProps) {
                 <div
                   className={classNames(styles.kalenderDatoAktivitet, {
                     [styles.timerArbeid]:
-                      harAktivitet && dag.aktiviteter[0].type === "Arbeid",
+                      harAktivitet && dag.aktiviteter[0].type === ARBEID,
                     [styles.timerSykdom]:
-                      harAktivitet && dag.aktiviteter[0].type === "Syk",
+                      harAktivitet && dag.aktiviteter[0].type === SYK,
                     [styles.timerFerie]:
-                      harAktivitet && dag.aktiviteter[0].type === "Ferie",
+                      harAktivitet && dag.aktiviteter[0].type === FERIE,
                   })}
                 >
                   {timer.toString().replace(/\./g, ",")}t

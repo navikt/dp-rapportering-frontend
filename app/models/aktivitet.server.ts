@@ -1,5 +1,6 @@
 import { getEnv } from "~/utils/env.utils";
 
+//kan ikke bruke konstanter som en type... så får ikke brukt constants.ts her
 export type TAktivitetType = "Arbeid" | "Syk" | "Ferie";
 
 export interface IAktivitet {

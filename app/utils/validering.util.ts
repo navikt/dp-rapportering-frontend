@@ -1,9 +1,10 @@
 import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
+import { ARBEID, FERIE, SYK } from "~/utils/constants";
 
 export const validerSkjema = withZod(
   z.object({
-    type: z.enum(["Arbeid", "Syk", "Ferie"], {
+    type: z.enum([ARBEID, SYK, FERIE], {
       errorMap: () => ({ message: "Du må velge et aktivitet" }),
     }),
     dato: z.coerce.date({
