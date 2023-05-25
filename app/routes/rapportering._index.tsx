@@ -1,6 +1,8 @@
 import { Left, Right } from "@navikt/ds-icons";
 import { Heading, Modal } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
+import { useRouteLoaderData } from "@remix-run/react";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { validationError } from "remix-validated-form";
 import { RemixLink } from "~/components/RemixLink";
@@ -9,11 +11,10 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { AktivitetModal } from "~/components/ny-aktivitet-modal/NyAktivitetModal";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { lagreAktivitet } from "~/models/aktivitet.server";
-import { hentDatoFraDatoString, hentUkedagTekstMedDatoIndex } from "~/utils/dato.utils";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import nbLocale from "date-fns/locale/nb";
 import { validerSkjema } from "~/utils/validering.util";
 
-import { useRouteLoaderData } from "@remix-run/react";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import styles from "./rapportering.module.css";
 
 export function meta() {
@@ -64,12 +65,11 @@ export default function Rapportering() {
     );
   }, [rapporteringsperiode.dager, valgtDato]);
 
-  function aapneModal(dato: string, datoIndex: number) {
+  function aapneModal(dato: string) {
     setValgtDato(dato);
     setModalAapen(true);
 
-    const ukedag = hentUkedagTekstMedDatoIndex(datoIndex);
-    setModalHeaderTekst(`${ukedag} ${hentDatoFraDatoString(dato)}`);
+    setModalHeaderTekst(`${format(new Date(dato), "EEEE d", { locale: nbLocale })}`);
   }
 
   function lukkModal() {

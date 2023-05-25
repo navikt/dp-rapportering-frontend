@@ -1,3 +1,7 @@
+.modalHeader {
+  text-transform: capitalize;
+}
+
 .timeTypeKontainer {
   display: flex;
   flex-direction: column;
