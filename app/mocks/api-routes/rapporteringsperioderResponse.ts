@@ -1,4 +1,5 @@
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { ARBEID, FERIE, SYK } from "~/utils/constants";
 
 export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
   {
@@ -10,102 +11,102 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       {
         dagIndex: 0,
         dato: "2023-05-01",
-        muligeAktiviteter: ["Arbeid", "Syk"],
+        muligeAktiviteter: [ARBEID, SYK],
       },
       {
         dagIndex: 1,
         dato: "2023-05-02",
-        muligeAktiviteter: ["Arbeid", "Ferie"],
+        muligeAktiviteter: [ARBEID, FERIE],
       },
       {
         dagIndex: 2,
         dato: "2023-05-03",
-        muligeAktiviteter: ["Syk"],
+        muligeAktiviteter: [SYK],
       },
       {
         dagIndex: 3,
         dato: "2023-05-04",
-        muligeAktiviteter: ["Ferie", "Syk"],
+        muligeAktiviteter: [FERIE, SYK],
       },
       {
         dagIndex: 4,
         dato: "2023-05-05",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
       {
         dagIndex: 5,
         dato: "2023-05-06",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
       {
         dagIndex: 6,
         dato: "2023-05-07",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
       {
         dagIndex: 7,
         dato: "2023-05-08",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
       {
         dagIndex: 8,
         dato: "2023-05-09",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
       {
         dagIndex: 9,
         dato: "2023-05-10",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
       {
         dagIndex: 10,
         dato: "2023-05-11",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
       {
         dagIndex: 11,
         dato: "2023-05-12",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
       {
         dagIndex: 12,
         dato: "2023-05-13",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
       {
         dagIndex: 13,
         dato: "2023-05-14",
-        muligeAktiviteter: ["Arbeid"],
+        muligeAktiviteter: [ARBEID],
       },
     ],
     aktiviteter: [
       {
         id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
-        type: "Arbeid",
+        type: ARBEID,
         timer: 5,
         dato: "2023-05-01",
       },
       {
         id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9b",
-        type: "Arbeid",
+        type: ARBEID,
         timer: 7.5,
         dato: "2023-05-02",
       },
       {
         id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9c",
-        type: "Ferie",
+        type: FERIE,
         timer: 7.5,
         dato: "2023-05-03",
       },
       {
         id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9d",
-        type: "Syk",
+        type: SYK,
         timer: 7.5,
         dato: "2023-05-04",
       },
       {
         id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
-        type: "Arbeid",
+        type: ARBEID,
         timer: 7.5,
         dato: "2023-05-05",
       },
