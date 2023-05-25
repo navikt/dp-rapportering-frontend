@@ -1,8 +1,11 @@
 import { Alert, Heading } from "@navikt/ds-react";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { format, getISOWeek, subDays } from "date-fns";
 import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  formaterPeriodeDato,
+  formaterPeriodeTilUkenummer,
+} from "~/utils/dato.utils";
 
 import styles from "./rapportering.module.css";
 
@@ -42,21 +45,6 @@ export default function Rapportering() {
 
   const { fraOgMed, tilOgMed } = rapporteringsperiode;
 
-  function hentPeriodeDato() {
-    const fom = format(new Date(fraOgMed), "dd.MM.yyyy");
-    const tom = format(new Date(tilOgMed), "dd.MM.yyyy");
-
-    return `(${fom} - ${tom})`;
-  }
-
-  function hentPeriodeUkenummer() {
-    const forsteDagIAndreUke = subDays(new Date(tilOgMed), 7);
-    const startUkenummer = getISOWeek(new Date(fraOgMed));
-    const sluttUkenummer = getISOWeek(new Date(forsteDagIAndreUke));
-
-    return `${startUkenummer} - ${sluttUkenummer}`;
-  }
-
   return (
     <div id="dp-rapportering-frontend">
       <div className={styles.rapporteringHeader}>
@@ -65,7 +53,8 @@ export default function Rapportering() {
             Dagpengerapportering
           </Heading>
           <p>
-            Uke {hentPeriodeUkenummer()} {hentPeriodeDato()}
+            Uke {formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)} (
+            {formaterPeriodeDato(fraOgMed, tilOgMed)})
           </p>
         </div>
       </div>
