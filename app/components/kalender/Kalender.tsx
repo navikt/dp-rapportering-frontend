@@ -8,7 +8,7 @@ import { sorterOgStrukturerRapporteringsperiode } from "~/utils/rapporteringsper
 import styles from "./Kalender.module.css";
 
 interface IProps {
-  aapneModal: (dato: string, datoIndex: number) => void;
+  aapneModal: (dato: string) => void;
 }
 
 export function Kalender(props: IProps) {
@@ -60,7 +60,7 @@ export function Kalender(props: IProps) {
                   [styles.sykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
                   [styles.ferie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
                 })}
-                onClick={() => props.aapneModal(dag.dato, dag.dagIndex)}
+                onClick={() => props.aapneModal(dag.dato)}
               >
                 <p>{format(new Date(dag.dato), "dd")}</p>.
               </button>
