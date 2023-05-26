@@ -14,6 +14,7 @@ import { lagreAktivitet } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import nbLocale from "date-fns/locale/nb";
 import { validerSkjema } from "~/utils/validering.util";
+import { useSanity } from "~/hooks/useSanity";
 
 import styles from "./rapportering.module.css";
 
@@ -54,6 +55,7 @@ export default function Rapportering() {
   const [modalHeaderTekst, setModalHeaderTekst] = useState("");
   const [modalAapen, setModalAapen] = useState(false);
   const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
+  const { hentAppTekstMedId } = useSanity();
 
   useEffect(() => {
     Modal.setAppElement("#dp-rapportering-frontend");
@@ -82,7 +84,7 @@ export default function Rapportering() {
   return (
     <>
       <Heading level="2" size="large" spacing>
-        Utfylling
+        {hentAppTekstMedId("rapportering-periode-tittel")}
       </Heading>
 
       <Kalender aapneModal={aapneModal} />

@@ -3,7 +3,6 @@ import classNames from "classnames";
 import { format } from "date-fns";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { sorterOgStrukturerRapporteringsperiode } from "~/utils/rapporteringsperiode.utils";
-import { useSanity } from "~/hooks/useSanity";
 
 import styles from "./Kalender.module.css";
 
@@ -15,9 +14,6 @@ export function Kalender(props: IProps) {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
     rapporteringsperiode: IRapporteringsperiode;
   };
-
-  const { hentAppTekstMedId } = useSanity();
-  console.log("Sanity tekst config: ", hentAppTekstMedId("rapportering-tekst"));
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];

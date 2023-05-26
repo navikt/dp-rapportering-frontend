@@ -5,6 +5,7 @@ import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.ser
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 import styles from "./rapportering.module.css";
+import { rapporteringsperioderResponse } from "~/mocks/api-routes/rapporteringsperioderResponse";
 
 export function meta() {
   return [
@@ -16,18 +17,18 @@ export function meta() {
 }
 
 export async function loader({ request }: LoaderArgs) {
-  const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
-    "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    request
-  );
+  // const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
+  //   "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  //   request
+  // );
 
   // Her må vi gjøre noe smartere
   // Per nå får vi et object med atributter med null i verdi
-  const rapporteringsperiode = rapporteringsperiodeResponse.id
-    ? rapporteringsperiodeResponse
-    : null;
+  // const rapporteringsperiode = rapporteringsperiodeResponse.id
+  //   ? rapporteringsperiodeResponse
+  //   : null;
 
-  return json({ rapporteringsperiode });
+  return json({ rapporteringsperiode: rapporteringsperioderResponse[0] });
 }
 
 export default function Rapportering() {
