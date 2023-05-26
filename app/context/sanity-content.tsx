@@ -1,31 +1,11 @@
-import { createContext, type PropsWithChildren, useContext } from "react";
+import { useOutletContext } from "@remix-run/react";
 import type { ISanityInfoside, ISanityTexts } from "~/sanity/sanity.types";
 
-export const SanityContext = createContext<ISanityTexts | undefined>(undefined);
-
-interface IProps {
-  initialState: ISanityTexts;
-}
-
-function SanityProvider(props: PropsWithChildren<IProps>) {
-  return (
-    <SanityContext.Provider value={props.initialState}>
-      {props.children}
-    </SanityContext.Provider>
-  );
-}
-
-function useSanity() {
-  const context = useContext(SanityContext);
-  if (context === undefined) {
-    throw new Error("useSanity must be used within a SanityProvider");
-  }
+export function useSanity() {
+  const context = useOutletContext<ISanityTexts>();
 
   function getAppTekst(textId: string): string {
-    return (
-      context?.apptekster.find((apptekst) => apptekst.textId === textId)
-        ?.valueText || textId
-    );
+    return context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
   }
 
   function getInfosideTekst(slug: string): ISanityInfoside | undefined {
@@ -39,5 +19,3 @@ function useSanity() {
     getInfosideTekst,
   };
 }
-
-export { SanityProvider, useSanity };
