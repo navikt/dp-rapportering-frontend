@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { format } from "date-fns";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { sorterOgStrukturerRapporteringsperiode } from "~/utils/rapporteringsperiode.utils";
-import { useSanity } from "~/context/sanity-content";
+import { useSanity } from "~/hooks/useSanity";
 
 import styles from "./Kalender.module.css";
 

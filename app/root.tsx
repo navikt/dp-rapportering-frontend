@@ -83,7 +83,7 @@ export async function loader() {
 }
 
 export default function App() {
-  const { env, fragments, sanityTexts } = useLoaderData<typeof loader>();
+  const { env, fragments } = useLoaderData<typeof loader>();
   return (
     <html lang="en">
       <head>
@@ -99,7 +99,7 @@ export default function App() {
       </head>
       <body>
         {parse(fragments.DECORATOR_HEADER, { trim: true })}
-        <Outlet context={sanityTexts} />
+        <Outlet />
         <ScrollRestoration />
         {parse(fragments.DECORATOR_FOOTER, { trim: true })}
         <script
