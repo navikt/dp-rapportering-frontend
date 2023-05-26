@@ -7,7 +7,7 @@ let getSession: GetSessionWithOboProvider;
 
 const audienceDPRapportering = `${getEnv("NAIS_CLUSTER_NAME")}:teamdagpenger:dp-rapportering`;
 
-if (getEnv("AUTH_PROVIDER") == "local") {
+if (getEnv("AUTH_PROVIDER") === "local") {
   const staticToken =
     getEnv("LOCAL_TOKEN") ||
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -23,4 +23,5 @@ if (getEnv("AUTH_PROVIDER") == "local") {
     oboProvider: withInMemoryCache(tokenX),
   });
 }
+
 export { getSession, audienceDPRapportering };
