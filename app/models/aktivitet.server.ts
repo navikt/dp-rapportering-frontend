@@ -1,4 +1,3 @@
-// import { v4 as uuidV4 } from "uuid";
 import { audienceDPRapportering, getSession } from "~/utils/auth.utils";
 import { getEnv } from "~/utils/env.utils";
 
@@ -21,16 +20,13 @@ export async function lagreAktivitet(aktivitet: IAktivitet, request: Request): P
   const url = `${getEnv("DP_RAPPORTERING_URL")}/aktivitet`;
 
   const onBehalfOfToken = await session.apiToken(audienceDPRapportering);
-  // const requestId = request.headers.get("x-request-id") || uuidV4();
-
-  console.log("onBehalfOfToken = ", onBehalfOfToken);
 
   const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Accept: "application/json",
       Authorization: `Bearer ${onBehalfOfToken}`,
-      // "X-Request-ID": requestId,
     },
     body: JSON.stringify({ aktivitet }),
   });
