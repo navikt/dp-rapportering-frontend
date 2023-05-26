@@ -1,5 +1,5 @@
 import { Alert, Heading } from "@navikt/ds-react";
-import { LoaderArgs, json } from "@remix-run/node";
+import { type LoaderArgs, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
@@ -27,7 +27,7 @@ export async function loader({ request }: LoaderArgs) {
     ? rapporteringsperiodeResponse
     : null;
 
-  return json({ rapporteringsperiode: null });
+  return json({ rapporteringsperiode });
 }
 
 export default function Rapportering() {
