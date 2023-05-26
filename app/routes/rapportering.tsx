@@ -1,11 +1,8 @@
 import { Alert, Heading } from "@navikt/ds-react";
-import { json } from "@remix-run/node";
+import { type LoaderArgs, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import {
-  formaterPeriodeDato,
-  formaterPeriodeTilUkenummer,
-} from "~/utils/dato.utils";
+import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 import styles from "./rapportering.module.css";
 
@@ -18,9 +15,10 @@ export function meta() {
   ];
 }
 
-export async function loader() {
+export async function loader({ request }: LoaderArgs) {
   const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
-    "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    request
   );
 
   // Her må vi gjøre noe smartere

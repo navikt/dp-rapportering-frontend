@@ -1,4 +1,5 @@
-import type { LoaderArgs } from "@remix-run/node";
+import navStyles from "@navikt/ds-css/dist/index.css";
+import { cssBundleHref } from "@remix-run/css-bundle";
 import { json } from "@remix-run/node";
 import {
   Links,
@@ -10,19 +11,16 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import navStyles from "@navikt/ds-css/dist/index.css";
-import { cssBundleHref } from "@remix-run/css-bundle";
-import { getEnv } from "./utils/env.utils";
+import { createClient } from "@sanity/client";
+import parse from "html-react-parser";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
 import { hentDekoratorHtml } from "./dekorator/dekorator.server";
-import parse from "html-react-parser";
-import { createClient } from "@sanity/client";
 import { sanityConfig } from "./sanity/sanity.config";
 import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanityTexts } from "./sanity/sanity.types";
+import { getEnv } from "./utils/env.utils";
 
 import indexStyle from "~/index.css";
-import { SanityProvider } from "./context/sanity-content";
 
 export const sanityClient = createClient(sanityConfig);
 
@@ -66,7 +64,7 @@ export function links() {
   ];
 }
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader() {
   const fragments = await hentDekoratorHtml();
 
   const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
@@ -85,7 +83,7 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function App() {
-  const { env, fragments, sanityTexts } = useLoaderData<typeof loader>();
+  const { env, fragments } = useLoaderData<typeof loader>();
   return (
     <html lang="en">
       <head>
@@ -100,20 +98,18 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <SanityProvider initialState={sanityTexts}>
-          {parse(fragments.DECORATOR_HEADER, { trim: true })}
-          <Outlet />
-          <ScrollRestoration />
-          {parse(fragments.DECORATOR_FOOTER, { trim: true })}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.env = ${JSON.stringify(env)}`,
-            }}
-          />
-          <Scripts />
-          {parse(fragments.DECORATOR_SCRIPTS, { trim: true })}
-          <LiveReload />
-        </SanityProvider>
+        {parse(fragments.DECORATOR_HEADER, { trim: true })}
+        <Outlet />
+        <ScrollRestoration />
+        {parse(fragments.DECORATOR_FOOTER, { trim: true })}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.env = ${JSON.stringify(env)}`,
+          }}
+        />
+        <Scripts />
+        {parse(fragments.DECORATOR_SCRIPTS, { trim: true })}
+        <LiveReload />
       </body>
     </html>
   );
@@ -122,7 +118,5 @@ export default function App() {
 export function ErrorBoundary() {
   const error = useRouteError();
 
-  return (
-    <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />
-  );
+  return <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />;
 }
