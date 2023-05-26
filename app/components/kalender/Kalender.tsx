@@ -16,8 +16,8 @@ export function Kalender(props: IProps) {
     rapporteringsperiode: IRapporteringsperiode;
   };
 
-  const { getAppTekst } = useSanity();
-  console.log("Sanity tekst config: ", getAppTekst("rapportering-tekst"));
+  const { hentAppTekstMedId } = useSanity();
+  console.log("Sanity tekst config: ", hentAppTekstMedId("rapportering-tekst"));
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];

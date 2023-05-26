@@ -6,20 +6,20 @@ export function useSanity() {
     sanityTexts: ISanityTexts;
   };
 
-  function getAppTekst(textId: string): string {
+  function hentAppTekstMedId(textId: string): string {
     return (
       sanityTexts?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId
     );
   }
 
-  function getInfosideTekst(slug: string): ISanityInfoside | undefined {
+  function hentInfosideTekstMedId(slug: string): ISanityInfoside | undefined {
     return sanityTexts?.infosider.find((side) => {
       return side.slug === slug;
     });
   }
 
   return {
-    getAppTekst,
-    getInfosideTekst,
+    hentAppTekstMedId,
+    hentInfosideTekstMedId,
   };
 }
