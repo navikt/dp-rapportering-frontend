@@ -28,7 +28,7 @@ export async function lagreAktivitet(aktivitet: IAktivitet, request: Request): P
       Accept: "application/json",
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
-    body: JSON.stringify({ aktivitet }),
+    body: JSON.stringify({ ...aktivitet }),
   });
 
   if (!response.ok) {
