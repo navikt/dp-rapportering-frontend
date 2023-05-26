@@ -1,5 +1,6 @@
-import { audienceDPRapportering, getSession } from "~/utils/auth.utils";
+import { getSession } from "~/utils/auth.utils";
 import { getEnv } from "~/utils/env.utils";
+import { getRapporteringOboToken } from "~/utils/obo-token.utils";
 
 export type TAktivitetType = "Arbeid" | "Syk" | "Ferie";
 
@@ -10,7 +11,10 @@ export interface IAktivitet {
   dato: string;
 }
 
-export async function lagreAktivitet(aktivitet: IAktivitet, request: Request): Promise<IAktivitet> {
+export async function lagreAktivitet(
+  aktivitet: IAktivitet,
+  request: Request
+): Promise<IAktivitet> {
   const session = await getSession(request);
 
   if (!session) {
@@ -19,7 +23,7 @@ export async function lagreAktivitet(aktivitet: IAktivitet, request: Request): P
 
   const url = `${getEnv("DP_RAPPORTERING_URL")}/aktivitet`;
 
-  const onBehalfOfToken = await session.apiToken(audienceDPRapportering);
+  const onBehalfOfToken = await getRapporteringOboToken(session);
 
   const response = await fetch(url, {
     method: "POST",

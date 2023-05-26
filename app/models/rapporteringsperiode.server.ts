@@ -1,6 +1,7 @@
-import { audienceDPRapportering, getSession } from "~/utils/auth.utils";
+import { getSession } from "~/utils/auth.utils";
 import { getEnv } from "~/utils/env.utils";
 import type { IAktivitet, TAktivitetType } from "./aktivitet.server";
+import { getRapporteringOboToken } from "~/utils/obo-token.utils";
 
 export interface IRapporteringsperiode {
   id: string;
@@ -29,7 +30,7 @@ export async function hentSisteRapporteringsperiode(
     throw new Error("Feil ved henting av sessjon");
   }
 
-  const onBehalfOfToken = await session.apiToken(audienceDPRapportering);
+  const onBehalfOfToken = await getRapporteringOboToken(session);
 
   const response = await fetch(url, {
     method: "GET",
