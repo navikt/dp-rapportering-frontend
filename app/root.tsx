@@ -87,20 +87,20 @@ export async function loader({ request }: LoaderArgs) {
 export default function App() {
   const { env, fragments, sanityTexts } = useLoaderData<typeof loader>();
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <Meta />
-        {parse(fragments.DECORATOR_STYLES, { trim: true })}
-        {/* Ikke legg parsing av dekoratør-html i egne komponenter. Det trigger rehydrering, 
+    <SanityProvider initialState={sanityTexts}>
+      <html lang="en">
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
+          <Meta />
+          {parse(fragments.DECORATOR_STYLES, { trim: true })}
+          {/* Ikke legg parsing av dekoratør-html i egne komponenter. Det trigger rehydrering, 
             som gjør at grensesnittet flimrer og alle assets lastes på nytt siden de har så mange side effects. 
             Løsningen enn så lenge er å inline parsingen av HTML her i root. 
          */}
-        <Links />
-      </head>
-      <body>
-        <SanityProvider initialState={sanityTexts}>
+          <Links />
+        </head>
+        <body>
           {parse(fragments.DECORATOR_HEADER, { trim: true })}
           <Outlet />
           <ScrollRestoration />
@@ -113,16 +113,14 @@ export default function App() {
           <Scripts />
           {parse(fragments.DECORATOR_SCRIPTS, { trim: true })}
           <LiveReload />
-        </SanityProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </SanityProvider>
   );
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
 
-  return (
-    <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />
-  );
+  return <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />;
 }

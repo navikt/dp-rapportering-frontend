@@ -37,7 +37,7 @@ export async function action({ request }: ActionArgs) {
   const aktivitet = {
     type,
     dato,
-    timer: timer.replace(/,/g, "."),
+    timer: parseInt(timer.replace(/,/g, ".")),
   };
 
   return await lagreAktivitet(aktivitet, request);

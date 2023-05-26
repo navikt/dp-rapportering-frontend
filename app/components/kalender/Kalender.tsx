@@ -16,9 +16,8 @@ export function Kalender(props: IProps) {
     rapporteringsperiode: IRapporteringsperiode;
   };
 
-  const { getAppTekst } = useSanity();
-
-  console.log("hei", getAppTekst("dokumentkrav.side-metadata.meta-beskrivelse"));
+  // const { getAppTekst } = useSanity();
+  // console.log("hei", getAppTekst("dokumentkrav.side-metadata.meta-beskrivelse"));
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];

@@ -21,7 +21,7 @@ export async function lagreAktivitet(aktivitet: IAktivitet, request: Request): P
 
   const onBehalfOfToken = await session.apiToken(audienceDPRapportering);
 
-  console.log(onBehalfOfToken);
+  console.log("onBehalfOfToken: ", onBehalfOfToken);
 
   const response = await fetch(url, {
     method: "POST",
