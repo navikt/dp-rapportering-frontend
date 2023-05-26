@@ -14,7 +14,7 @@ export async function lagreAktivitet(aktivitet: IAktivitet, request: Request): P
   const session = await getSession(request);
 
   if (!session) {
-    throw new Error(`Feil ved henting av sessjon`);
+    throw new Error("Feil ved henting av sessjon");
   }
 
   const url = `${getEnv("DP_RAPPORTERING_URL")}/aktivitet`;

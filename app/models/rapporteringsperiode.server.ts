@@ -26,7 +26,7 @@ export async function hentSisteRapporteringsperiode(
   const session = await getSession(request);
 
   if (!session) {
-    throw new Error(`Feil ved henting av sessjon`);
+    throw new Error("Feil ved henting av sessjon");
   }
 
   const onBehalfOfToken = await session.apiToken(audienceDPRapportering);
