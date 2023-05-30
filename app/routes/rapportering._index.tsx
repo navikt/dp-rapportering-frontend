@@ -45,16 +45,22 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function Rapportering() {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
+  const { rapporteringsperiode } = useRouteLoaderData(
+    "routes/rapportering"
+  ) as {
     rapporteringsperiode: IRapporteringsperiode;
   };
 
-  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | undefined>(undefined);
+  const [valgtAktivitet, setValgtAktivitet] = useState<
+    TAktivitetType | undefined
+  >(undefined);
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [timer] = useState<string | undefined>(undefined);
   const [modalHeaderTekst, setModalHeaderTekst] = useState("");
   const [modalAapen, setModalAapen] = useState(false);
-  const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
+  const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>(
+    []
+  );
   const { hentAppTekstMedId } = useSanity();
 
   useEffect(() => {
@@ -63,7 +69,8 @@ export default function Rapportering() {
 
   useEffect(() => {
     setMuligeAktiviteter(
-      rapporteringsperiode.dager.find((r) => r.dato === valgtDato)?.muligeAktiviteter || []
+      rapporteringsperiode.dager.find((r) => r.dato === valgtDato)
+        ?.muligeAktiviteter || []
     );
   }, [rapporteringsperiode.dager, valgtDato]);
 
@@ -71,7 +78,9 @@ export default function Rapportering() {
     setValgtDato(dato);
     setModalAapen(true);
 
-    setModalHeaderTekst(`${format(new Date(dato), "EEEE d", { locale: nbLocale })}`);
+    setModalHeaderTekst(
+      `${format(new Date(dato), "EEEE d", { locale: nbLocale })}`
+    );
   }
 
   function lukkModal() {

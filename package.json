@@ -11,7 +11,8 @@
     "lint": "eslint . --ext .ts,.tsx",
     "lint-fix": "eslint . --fix --ext .ts,.tsx",
     "validate": "npm run lint && tsc",
-    "test": "vitest"
+    "test": "vitest",
+    "format": "prettier --write app/ "
   },
   "dependencies": {
     "@navikt/dp-auth": "^0.3.3",
@@ -58,11 +59,14 @@
     "classnames": "^2.3.2",
     "dotenv": "^16.0.3",
     "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0",
     "jest-environment-jsdom": "^29.5.0",
     "msw": "^1.2.1",
     "nodemon": "^2.0.22",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.8",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4",
     "vitest": "^0.31.1"

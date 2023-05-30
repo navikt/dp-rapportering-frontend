@@ -30,7 +30,13 @@ export function AktivitetModal(props: IProps) {
       className={styles.timerforingModal}
     >
       <Modal.Content>
-        <Heading spacing level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
+        <Heading
+          spacing
+          level="1"
+          size="medium"
+          id="modal-heading"
+          className={styles.modalHeader}
+        >
           {props.modalHeaderTekst}
         </Heading>
         <div className={styles.timeTypeKontainer}>
@@ -40,20 +46,42 @@ export function AktivitetModal(props: IProps) {
                 key={aktivitet}
                 className={classNames(styles.timeType, styles[aktivitet])}
                 onClick={() => props.setValgtAktivitet(aktivitet)}
-                hidden={!!props.valgtAktivitet && props.valgtAktivitet !== aktivitet}
+                hidden={
+                  !!props.valgtAktivitet && props.valgtAktivitet !== aktivitet
+                }
               >
                 {aktivitet}
               </button>
             ))}
         </div>
-        <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validerSkjema}>
-          <input type="text" hidden name="type" defaultValue={props.valgtAktivitet} />
-          <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
+        <ValidatedForm
+          method="post"
+          key="lagre-ny-aktivitet"
+          validator={validerSkjema}
+        >
+          <input
+            type="text"
+            hidden
+            name="type"
+            defaultValue={props.valgtAktivitet}
+          />
+          <input
+            type="text"
+            hidden
+            name="dato"
+            defaultValue={props.valgtDato}
+          />
           {props.valgtAktivitet && (
-            <AktivitetTimerInput name="timer" verdi={props.timer?.replace(/\./g, ",")} />
+            <AktivitetTimerInput
+              name="timer"
+              verdi={props.timer?.replace(/\./g, ",")}
+            />
           )}
           <div className={styles.knappKontainer}>
-            <Button variant="tertiary-neutral" onClick={() => props.lukkModal()}>
+            <Button
+              variant="tertiary-neutral"
+              onClick={() => props.lukkModal()}
+            >
               Avbryt
             </Button>
             <Button type="submit">Lagre</Button>

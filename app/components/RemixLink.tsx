@@ -1,26 +1,26 @@
-import { Button, Link } from '@navikt/ds-react';
-import type { LinkProps } from '@remix-run/react';
-import { useHref } from '@remix-run/react';
-import type { PropsWithChildren, Ref } from 'react';
-import { forwardRef } from 'react';
-import { useLinkClickHandler } from 'react-router-dom';
+import { Button, Link } from "@navikt/ds-react";
+import type { LinkProps } from "@remix-run/react";
+import { useHref } from "@remix-run/react";
+import type { PropsWithChildren, Ref } from "react";
+import { forwardRef } from "react";
+import { useLinkClickHandler } from "react-router-dom";
 
-type TRemixLinkSize = 'small' | 'medium' | 'xsmall';
+type TRemixLinkSize = "small" | "medium" | "xsmall";
 type TRemixLinkVariant =
-  | 'secondary'
-  | 'primary'
-  | 'primary-neutral'
-  | 'secondary-neutral'
-  | 'tertiary'
-  | 'tertiary-neutral'
-  | 'danger';
+  | "secondary"
+  | "primary"
+  | "primary-neutral"
+  | "secondary-neutral"
+  | "tertiary"
+  | "tertiary-neutral"
+  | "danger";
 
 interface IProps extends LinkProps {
-  as: 'Link' | 'Button';
+  as: "Link" | "Button";
   size?: TRemixLinkSize;
   variant?: TRemixLinkVariant;
   icon?: React.ReactNode;
-  iconPosition?: 'left' | 'right';
+  iconPosition?: "left" | "right";
   disabled?: boolean;
 }
 
@@ -38,9 +38,9 @@ function RemixLinkComponent(
     to,
     as,
     children,
-    size = 'medium',
-    variant = 'primary',
-    iconPosition = 'left',
+    size = "medium",
+    variant = "primary",
+    iconPosition = "left",
     icon,
     disabled = false,
   } = props;
@@ -51,7 +51,7 @@ function RemixLinkComponent(
     target,
   });
 
-  if (as === 'Button') {
+  if (as === "Button") {
     return (
       <Button
         href={href}
@@ -72,7 +72,7 @@ function RemixLinkComponent(
         ref={ref}
         icon={icon}
         iconPosition={iconPosition}
-        as='a'
+        as="a"
         disabled={disabled}
       >
         {children}

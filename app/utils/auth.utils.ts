@@ -5,7 +5,9 @@ import { getEnv } from "./env.utils";
 
 let getSession: GetSessionWithOboProvider;
 
-const audienceDPRapportering = `${getEnv("NAIS_CLUSTER_NAME")}:teamdagpenger:dp-rapportering`;
+const audienceDPRapportering = `${getEnv(
+  "NAIS_CLUSTER_NAME"
+)}:teamdagpenger:dp-rapportering`;
 
 if (getEnv("AUTH_PROVIDER") === "local") {
   const staticToken =

@@ -10,7 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "64M"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
 spec:
-  image: {{image}}
+  image: { { image } }
   port: 3000
   liveness:
     path: "{{base_path}}/api/internal/isalive"
@@ -36,25 +36,25 @@ spec:
       cpu: 200m
       memory: 512Mi
   ingresses:
-    - {{ingress}}
+    - { { ingress } }
   env:
     - name: SELF_URL
-      value: {{ingress}}
+      value: { { ingress } }
     - name: BASE_PATH
-      value: {{base_path}}
+      value: { { base_path } }
     - name: DP_RAPPORTERING_URL
       value: http://dp-rapportering
     - name: DEKORATOR_URL
-      value: {{dekorator.url}}
+      value: { { dekorator.url } }
     - name: DEKORATOR_ENV
-      value: {{dekorator.env}}
+      value: { { dekorator.env } }
   accessPolicy:
     outbound:
       external:
         - host: rt6o382n.apicdn.sanity.io
         - host: www.nav.no
         - host: dekoratoren.dev.nav.no
-      rules: 
+      rules:
         - application: dp-rapportering
   idporten:
     enabled: true

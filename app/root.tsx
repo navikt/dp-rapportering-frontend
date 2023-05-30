@@ -118,5 +118,7 @@ export default function App() {
 export function ErrorBoundary() {
   const error = useRouteError();
 
-  return <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />;
+  return (
+    <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />
+  );
 }

@@ -2,7 +2,10 @@ import { Alert, Heading } from "@navikt/ds-react";
 import { type LoaderArgs, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import {
+  formaterPeriodeDato,
+  formaterPeriodeTilUkenummer,
+} from "~/utils/dato.utils";
 
 import styles from "./rapportering.module.css";
 

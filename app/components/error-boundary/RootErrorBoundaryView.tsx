@@ -1,7 +1,7 @@
-import { Alert, Heading } from '@navikt/ds-react';
-import { isRouteErrorResponse } from '@remix-run/react';
+import { Alert, Heading } from "@navikt/ds-react";
+import { isRouteErrorResponse } from "@remix-run/react";
 
-import styles from './RootErrorBoundaryView.module.css';
+import styles from "./RootErrorBoundaryView.module.css";
 
 interface IProps {
   meta: JSX.Element;
@@ -11,7 +11,7 @@ interface IProps {
 
 export function RootErrorBoundaryView({ meta, links, error }: IProps) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         {meta}
         {links}
@@ -31,8 +31,8 @@ export function ErrorMessageComponent({ error }: any) {
     const hasStatusText = error.statusText.length > 0;
 
     return (
-      <Alert variant='error'>
-        <Heading spacing size='medium' level='1'>
+      <Alert variant="error">
+        <Heading spacing size="medium" level="1">
           {error.status} Error {hasStatusText && `: ${error.statusText}`}
         </Heading>
         <p>{error.data}</p>
@@ -43,8 +43,8 @@ export function ErrorMessageComponent({ error }: any) {
   // Treffer Uncaught-exceptions, eks. feil ved import, throw new Error()
   if (error instanceof Error) {
     return (
-      <Alert className={styles.enableHorisontalScroll} variant='error'>
-        <Heading spacing size='medium' level='1'>
+      <Alert className={styles.enableHorisontalScroll} variant="error">
+        <Heading spacing size="medium" level="1">
           {error.message}
         </Heading>
         <p>{error.message}</p>
@@ -55,8 +55,8 @@ export function ErrorMessageComponent({ error }: any) {
   }
 
   return (
-    <Alert variant='error'>
-      <Heading spacing size='medium' level='1'>
+    <Alert variant="error">
+      <Heading spacing size="medium" level="1">
         Ukjent feil
       </Heading>
     </Alert>

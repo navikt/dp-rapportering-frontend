@@ -22,10 +22,11 @@ For å kjøre requester mot dp-rapportering må vi ha et token, generert med [wo
 Dette tokenet vil vare i en time før du må generere et nytt token.
 
 Eksempel på riktig config:
-````
+
+```
 IS_LOCALHOST="true"
 DP_RAPPORTERING_TOKEN="langStrengHerFraAccess_token"
-````
+```
 
 ## Welcome to Remix!
 
