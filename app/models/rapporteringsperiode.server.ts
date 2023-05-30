@@ -1,6 +1,7 @@
 import { getRapporteringOboToken, getSession } from "~/utils/auth.utils";
 import { getEnv } from "~/utils/env.utils";
 import type { IAktivitet, TAktivitetType } from "./aktivitet.server";
+import { logger } from "../../server/logger";
 
 export interface IRapporteringsperiode {
   id: string;
@@ -41,11 +42,14 @@ export async function hentSisteRapporteringsperiode(
   });
 
   if (!response.ok) {
+    logger.info("respons feilet: ", await response.json());
     throw new Response(`Feil ved kall til ${url}`, {
       status: response.status,
       statusText: response.statusText,
     });
   }
+  const respons = await response.json();
+  logger.info("respons ok: ", respons);
 
-  return await response.json();
+  return respons;
 }
