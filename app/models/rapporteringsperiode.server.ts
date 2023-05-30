@@ -42,7 +42,8 @@ export async function hentSisteRapporteringsperiode(
   });
 
   if (!response.ok) {
-    logger.info("respons feilet: ", await response.json());
+    const respons = await response.json();
+    logger.info("respons feilet: ", respons);
     throw new Response(`Feil ved kall til ${url}`, {
       status: response.status,
       statusText: response.statusText,
