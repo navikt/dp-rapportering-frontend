@@ -1,8 +1,11 @@
-import { Alert, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, Heading } from "@navikt/ds-react";
 import { type LoaderArgs, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import {
+  formaterPeriodeDato,
+  formaterPeriodeTilUkenummer,
+} from "~/utils/dato.utils";
 
 import styles from "./rapportering.module.css";
 
@@ -58,6 +61,16 @@ export default function Rapportering() {
       </div>
       <main className={styles.rapporteringKontainer}>
         <Outlet />
+        <Accordion>
+          <Accordion.Item>
+            <Accordion.Header>
+              (DEBUG) Rapporteringsperiode som json
+            </Accordion.Header>
+            <Accordion.Content>
+              <pre>${JSON.stringify(rapporteringsperiode, null, 2)}</pre>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
       </main>
     </div>
   );
