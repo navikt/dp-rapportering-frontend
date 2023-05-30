@@ -6,6 +6,7 @@ export async function hentDekoratorHtml() {
 
   const config: DecoratorFetchProps = {
     env: env ?? "prod",
+    serviceDiscovery: process.env.IS_LOCALHOST !== "true",
     params: {
       language: "nb",
       context: "privatperson",
