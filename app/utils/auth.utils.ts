@@ -1,4 +1,4 @@
-import { type GetSessionWithOboProvider, makeSession, SessionWithOboProvider } from "@navikt/dp-auth";
+import { makeSession, type GetSessionWithOboProvider, type SessionWithOboProvider } from "@navikt/dp-auth";
 import { idporten } from "@navikt/dp-auth/identity-providers";
 import { tokenX, withInMemoryCache } from "@navikt/dp-auth/obo-providers";
 import { getEnv } from "./env.utils";
