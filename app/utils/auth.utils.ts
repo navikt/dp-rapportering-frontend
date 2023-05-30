@@ -1,21 +1,14 @@
-import { type GetSessionWithOboProvider, makeSession } from "@navikt/dp-auth";
+import { makeSession, type GetSessionWithOboProvider, type SessionWithOboProvider } from "@navikt/dp-auth";
 import { idporten } from "@navikt/dp-auth/identity-providers";
 import { tokenX, withInMemoryCache } from "@navikt/dp-auth/obo-providers";
 import { getEnv } from "./env.utils";
 
-let getSession: GetSessionWithOboProvider;
+export let getSession: GetSessionWithOboProvider;
 
-const audienceDPRapportering = `${getEnv("NAIS_CLUSTER_NAME")}:teamdagpenger:dp-rapportering`;
-
-if (getEnv("AUTH_PROVIDER") === "local") {
-  const staticToken =
-    getEnv("LOCAL_TOKEN") ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+if (getEnv("IS_LOCALHOST") === "true") {
   getSession = makeSession({
-    identityProvider: async () => staticToken,
-    oboProvider: getEnv("LOCAL_TOKEN")
-      ? tokenX
-      : async (token: string, audience: string) => token + audience,
+    identityProvider: async () => getEnv("DP_RAPPORTERING_TOKEN"),
+    oboProvider: tokenX,
   });
 } else {
   getSession = makeSession({
@@ -24,4 +17,11 @@ if (getEnv("AUTH_PROVIDER") === "local") {
   });
 }
 
-export { getSession, audienceDPRapportering };
+export async function getRapporteringOboToken(session: SessionWithOboProvider) {
+  if (getEnv("IS_LOCALHOST") === "true" && getEnv("DP_RAPPORTERING_TOKEN")) {
+    return getEnv("DP_RAPPORTERING_TOKEN");
+  } else {
+    const audienceDPRapportering = `${getEnv("NAIS_CLUSTER_NAME")}:teamdagpenger:dp-rapportering`;
+    return session.apiToken(audienceDPRapportering);
+  }
+}

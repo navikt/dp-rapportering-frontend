@@ -1,6 +1,5 @@
-import { getSession } from "~/utils/auth.utils";
+import { getRapporteringOboToken, getSession } from "~/utils/auth.utils";
 import { getEnv } from "~/utils/env.utils";
-import { getRapporteringOboToken } from "~/utils/obo-token.utils";
 
 export type TAktivitetType = "Arbeid" | "Syk" | "Ferie";
 
@@ -11,10 +10,7 @@ export interface IAktivitet {
   dato: string;
 }
 
-export async function lagreAktivitet(
-  aktivitet: IAktivitet,
-  request: Request
-): Promise<IAktivitet> {
+export async function lagreAktivitet(aktivitet: IAktivitet, request: Request): Promise<IAktivitet> {
   const session = await getSession(request);
 
   if (!session) {
