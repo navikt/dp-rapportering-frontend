@@ -9,6 +9,7 @@ interface IEnv {
   DP_RAPPORTERING_URL: string;
   AUTH_PROVIDER: string;
   IS_LOCALHOST: string;
+  DP_RAPPORTERING_TOKEN: string;
   NAIS_CLUSTER_NAME: string;
   LOCAL_TOKEN: string;
   USE_MSW: string;
