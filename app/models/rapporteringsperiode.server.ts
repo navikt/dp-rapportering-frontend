@@ -1,7 +1,6 @@
-import { getSession } from "~/utils/auth.utils";
+import { getRapporteringOboToken, getSession } from "~/utils/auth.utils";
 import { getEnv } from "~/utils/env.utils";
 import type { IAktivitet, TAktivitetType } from "./aktivitet.server";
-import { getRapporteringOboToken } from "~/utils/obo-token.utils";
 
 export interface IRapporteringsperiode {
   id: string;
