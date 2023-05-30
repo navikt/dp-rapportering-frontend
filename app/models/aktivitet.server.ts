@@ -1,4 +1,4 @@
-import { getRapporteringOboToken, getSession } from "~/utils/auth.utils";
+import { getRapporteringOboToken, getSession } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
 
 export type TAktivitetType = "Arbeid" | "Syk" | "Ferie";
