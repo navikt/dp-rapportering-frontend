@@ -15,6 +15,18 @@ Sett `USE_MSW="false"` dersom du ikke får det til å kjøre.
 
 ---
 
+## Kjøre mot dev-APIer i localhost
+
+For å kjøre requester mot dp-rapportering må vi ha et token, generert med [wonderwalled-idporten](https://wonderwalled-idporten.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering). Logg på med testid. Hent ut verdien fra `access_token`, rediger `.env` og endre `DP_RAPPORTERING_TOKEN` til det nylig genererte tokenet. Env-variabelen `IS_LOCALHOST="true"` må også være satt.
+
+Dette tokenet vil vare i en time før du må generere et nytt token.
+
+Eksempel på riktig config:
+````
+IS_LOCALHOST="true"
+DP_RAPPORTERING_TOKEN="langStrengHerFraAccess_token"
+````
+
 ## Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
