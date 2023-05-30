@@ -7,7 +7,6 @@ export interface IStrukturertRapporteringsperiode {
   tilOgMed: string;
   status: string;
   dager: IStrukturertRapporteringsperiodeDag[];
-  aktiviteter: IAktivitet[];
 }
 
 interface IStrukturertRapporteringsperiodeDag {
@@ -25,7 +24,7 @@ export function sorterOgStrukturerRapporteringsperiode(
     dager: rapporteringsperiode.dager.sort((a, b) => a.dagIndex - b.dagIndex),
   };
 
-  const strukturertPeriode = {
+  const periodeMedGrupperteAktiviteter = {
     ...sortertPeriode,
     dager: sortertPeriode.dager.map((dag) => {
       const aktiviteter = rapporteringsperiode.aktiviteter.filter(
@@ -36,5 +35,7 @@ export function sorterOgStrukturerRapporteringsperiode(
     }),
   };
 
-  return strukturertPeriode;
+  const { aktiviteter, ...strukturertRapporteringsperiode } = periodeMedGrupperteAktiviteter;
+
+  return strukturertRapporteringsperiode;
 }
