@@ -5,8 +5,6 @@ import { getEnv } from "./env.utils";
 
 export let getSession: GetSessionWithOboProvider;
 
-export const audienceDPRapportering = `${getEnv("NAIS_CLUSTER_NAME")}:teamdagpenger:dp-rapportering`;
-
 if (getEnv("IS_LOCALHOST") === "true") {
   getSession = makeSession({
     identityProvider: async () => getEnv("DP_RAPPORTERING_TOKEN"),
@@ -23,6 +21,7 @@ export async function getRapporteringOboToken(session: SessionWithOboProvider) {
   if (getEnv("IS_LOCALHOST") === "true" && getEnv("DP_RAPPORTERING_TOKEN")) {
     return getEnv("DP_RAPPORTERING_TOKEN");
   } else {
-    return await session.apiToken(audienceDPRapportering);
+    const audienceDPRapportering = `${getEnv("NAIS_CLUSTER_NAME")}:teamdagpenger:dp-rapportering`;
+    return session.apiToken(audienceDPRapportering);
   }
 }
