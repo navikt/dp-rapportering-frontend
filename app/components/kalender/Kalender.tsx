@@ -11,9 +11,7 @@ interface IProps {
 }
 
 export function Kalender(props: IProps) {
-  const { rapporteringsperiode } = useRouteLoaderData(
-    "routes/rapportering"
-  ) as {
+  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
     rapporteringsperiode: IRapporteringsperiode;
   };
 
@@ -22,9 +20,7 @@ export function Kalender(props: IProps) {
 
   const periode = sorterOgStrukturerRapporteringsperiode(rapporteringsperiode);
 
-  const harNoenAktivitet = !!periode.dager.find(
-    (dager) => dager.aktiviteter.length > 0
-  );
+  const harNoenAktivitet = !!periode.dager.find((dager) => dager.aktiviteter.length > 0);
 
   return (
     <div className={styles.kalender}>
@@ -46,7 +42,7 @@ export function Kalender(props: IProps) {
           const harAktivitet = dag.aktiviteter.length > 0;
 
           const timer = dag.aktiviteter.reduce((accumulator, current) => {
-            return accumulator + current.timer;
+            return accumulator + (current.timer ? current.timer : 1); //quickfix for å vise hele dager på aktiviteter som ikke har timer i seg
           }, 0);
 
           return (
@@ -55,12 +51,9 @@ export function Kalender(props: IProps) {
                 className={classNames(styles.kalenderDato, {
                   [styles.helg]: helgIndex.includes(dag.dagIndex),
                   [styles.kalenderDatoMedAktivitet]: harAktivitet,
-                  [styles.arbeid]:
-                    harAktivitet && dag.aktiviteter[0].type === "Arbeid",
-                  [styles.sykdom]:
-                    harAktivitet && dag.aktiviteter[0].type === "Syk",
-                  [styles.ferie]:
-                    harAktivitet && dag.aktiviteter[0].type === "Ferie",
+                  [styles.arbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
+                  [styles.sykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
+                  [styles.ferie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
                 })}
                 onClick={() => props.aapneModal(dag.dato)}
               >
@@ -69,12 +62,9 @@ export function Kalender(props: IProps) {
               {harAktivitet && (
                 <div
                   className={classNames(styles.kalenderDatoAktivitet, {
-                    [styles.timerArbeid]:
-                      harAktivitet && dag.aktiviteter[0].type === "Arbeid",
-                    [styles.timerSykdom]:
-                      harAktivitet && dag.aktiviteter[0].type === "Syk",
-                    [styles.timerFerie]:
-                      harAktivitet && dag.aktiviteter[0].type === "Ferie",
+                    [styles.timerArbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
+                    [styles.timerSykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
+                    [styles.timerFerie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
                   })}
                 >
                   {timer.toString().replace(/\./g, ",")}t
