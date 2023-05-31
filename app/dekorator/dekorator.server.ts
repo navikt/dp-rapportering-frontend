@@ -6,7 +6,7 @@ export async function hentDekoratorHtml() {
 
   const config: DecoratorFetchProps = {
     env: env ?? "prod",
-    serviceDiscovery: process.env.IS_LOCALHOST !== "true",
+    serviceDiscovery: false, //process.env.IS_LOCALHOST !== "true", //virker som at den defaulter til true og slår på service discovery?
     params: {
       language: "nb",
       context: "privatperson",
