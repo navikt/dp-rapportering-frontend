@@ -42,7 +42,7 @@ export function Kalender(props: IProps) {
           const harAktivitet = dag.aktiviteter.length > 0;
 
           const timer = dag.aktiviteter.reduce((accumulator, current) => {
-            return accumulator + (current.timer ? current.timer : 1); //quickfix for å vise hele dager på aktiviteter som ikke har timer i seg
+            return accumulator + (current.timer ? current.timer : 0); //quickfix for å vise hele dager på aktiviteter som ikke har timer i seg
           }, 0);
 
           return (
@@ -67,7 +67,7 @@ export function Kalender(props: IProps) {
                     [styles.timerFerie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
                   })}
                 >
-                  {timer.toString().replace(/\./g, ",")}t
+                  {timer > 0 && timer.toString().replace(/\./g, ",") + "t"}
                 </div>
               )}
             </div>

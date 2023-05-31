@@ -32,13 +32,13 @@ export function AktivitetOppsummering() {
       <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
         <p>
           Syk
-          <span>{hentTotaltTimerStringMedAktivitetsType("Syk")} timer</span>
+          <span>{hentTotaltTimerStringMedAktivitetsType("Syk")} dager</span>
         </p>
       </div>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
         <p>
           Fravær / Ferie
-          <span>{hentTotaltTimerStringMedAktivitetsType("Ferie")} timer</span>
+          <span>{hentTotaltTimerStringMedAktivitetsType("Ferie")} dager</span>
         </p>
       </div>
     </div>
