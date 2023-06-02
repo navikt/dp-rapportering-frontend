@@ -1,4 +1,4 @@
-import { format, getISOWeek, subDays } from "date-fns";
+import { format, getISOWeek } from "date-fns";
 
 export function formaterPeriodeDato(fraOgMed: string, tilOgMed: string) {
   const fom = format(new Date(fraOgMed), "dd.MM.yyyy");
@@ -7,13 +7,9 @@ export function formaterPeriodeDato(fraOgMed: string, tilOgMed: string) {
   return `${fom} - ${tom}`;
 }
 
-export function formaterPeriodeTilUkenummer(
-  fraOgMed: string,
-  tilOgMed: string
-) {
-  const forsteDagIAndreUke = subDays(new Date(tilOgMed), 6);
+export function formaterPeriodeTilUkenummer(fraOgMed: string, tilOgMed: string) {
   const startUkenummer = getISOWeek(new Date(fraOgMed));
-  const sluttUkenummer = getISOWeek(new Date(forsteDagIAndreUke));
+  const sluttUkenummer = getISOWeek(new Date(tilOgMed));
 
   return `${startUkenummer} - ${sluttUkenummer}`;
 }
