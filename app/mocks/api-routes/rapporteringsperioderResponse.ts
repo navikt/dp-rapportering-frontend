@@ -16,13 +16,13 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
             type: "Arbeid",
-            timer: 5,
+            timer: "PT5H",
             dato: "2023-05-01",
           },
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
             type: "Arbeid",
-            timer: 5,
+            timer: "PT5H",
             dato: "2023-05-01",
           },
         ],
@@ -35,7 +35,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9b",
             type: "Arbeid",
-            timer: 7.5,
+            timer: "PT5H30M",
             dato: "2023-05-02",
           },
         ],
@@ -48,7 +48,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9c",
             type: "Ferie",
-            timer: 7.5,
+            timer: "PT7H30M",
             dato: "2023-05-03",
           },
         ],
@@ -61,7 +61,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9d",
             type: "Syk",
-            timer: 7.5,
+            timer: "PT7H30M",
             dato: "2023-05-04",
           },
         ],
@@ -74,7 +74,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
             type: "Arbeid",
-            timer: 7.5,
+            timer: "PT7H30M",
             dato: "2023-05-05",
           },
         ],

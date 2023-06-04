@@ -17,6 +17,7 @@ import { validerSkjema } from "~/utils/validering.util";
 import { useSanity } from "~/hooks/useSanity";
 
 import styles from "./rapportering.module.css";
+import { serialize } from "tinyduration";
 
 export function meta() {
   return [
@@ -34,33 +35,32 @@ export async function action({ request }: ActionArgs) {
     return validationError(inputVerdier.error);
   }
 
-  const { type, dato, timer } = inputVerdier.submittedData;
+  const { type, dato, timer: tid } = inputVerdier.submittedData;
+  const delt = tid.split(",");
+  const timer = delt[0] || 0;
+  const minutter = delt[1] || 0;
   const aktivitet = {
     type,
     dato,
-    timer: parseInt(timer.replace(/,/g, ".")),
+    timer: serialize({
+      hours: timer,
+      minutes: minutter * 6,
+    }),
   };
-
   return await lagreAktivitet(aktivitet, request);
 }
 
 export default function Rapportering() {
-  const { rapporteringsperiode } = useRouteLoaderData(
-    "routes/rapportering"
-  ) as {
+  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
     rapporteringsperiode: IRapporteringsperiode;
   };
 
-  const [valgtAktivitet, setValgtAktivitet] = useState<
-    TAktivitetType | undefined
-  >(undefined);
+  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | undefined>(undefined);
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [timer] = useState<string | undefined>(undefined);
   const [modalHeaderTekst, setModalHeaderTekst] = useState("");
   const [modalAapen, setModalAapen] = useState(false);
-  const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>(
-    []
-  );
+  const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
   const { hentAppTekstMedId } = useSanity();
 
   useEffect(() => {
@@ -69,8 +69,7 @@ export default function Rapportering() {
 
   useEffect(() => {
     setMuligeAktiviteter(
-      rapporteringsperiode.dager.find((r) => r.dato === valgtDato)
-        ?.muligeAktiviteter || []
+      rapporteringsperiode.dager.find((r) => r.dato === valgtDato)?.muligeAktiviteter || []
     );
   }, [rapporteringsperiode.dager, valgtDato]);
 
@@ -78,9 +77,7 @@ export default function Rapportering() {
     setValgtDato(dato);
     setModalAapen(true);
 
-    setModalHeaderTekst(
-      `${format(new Date(dato), "EEEE d", { locale: nbLocale })}`
-    );
+    setModalHeaderTekst(`${format(new Date(dato), "EEEE d", { locale: nbLocale })}`);
   }
 
   function lukkModal() {

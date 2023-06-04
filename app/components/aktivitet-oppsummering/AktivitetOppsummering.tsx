@@ -3,6 +3,7 @@ import styles from "./AktivitetOppsummering.module.css";
 import { useRouteLoaderData } from "@remix-run/react";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { TAktivitetType } from "~/models/aktivitet.server";
+import { periodeSomTimer } from "~/models/periodeSomTimer";
 
 export function AktivitetOppsummering() {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
@@ -15,7 +16,7 @@ export function AktivitetOppsummering() {
       .filter((aktivitet) => aktivitet.type === aktivitetType);
 
     const timer = filtertAktiviteter.reduce((accumulator, current) => {
-      return accumulator + current.timer;
+      return accumulator + periodeSomTimer(current.timer);
     }, 0);
 
     return timer.toString().replace(/\./g, ",");

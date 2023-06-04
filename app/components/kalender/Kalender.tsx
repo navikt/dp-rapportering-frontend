@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 import styles from "./Kalender.module.css";
+import { periodeSomTimer } from "~/models/periodeSomTimer";
 
 interface IProps {
   aapneModal: (dato: string) => void;
@@ -41,7 +42,7 @@ export function Kalender(props: IProps) {
           const harAktivitet = dag.aktiviteter.length > 0;
 
           const timer = dag.aktiviteter.reduce((accumulator, current) => {
-            return accumulator + current.timer;
+            return accumulator + periodeSomTimer(current.timer);
           }, 0);
 
           return (
