@@ -1,5 +1,5 @@
 import { Accordion, Alert, Heading } from "@navikt/ds-react";
-import { type LoaderArgs, json } from "@remix-run/node";
+import { json, type LoaderArgs } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
@@ -17,7 +17,7 @@ export function meta() {
 
 export async function loader({ request }: LoaderArgs) {
   const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
-    "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "gjeldende", // TODO: Dette bør vel helst være smartere 😅
     request
   );
 
@@ -26,6 +26,11 @@ export async function loader({ request }: LoaderArgs) {
   const rapporteringsperiode = rapporteringsperiodeResponse.id
     ? rapporteringsperiodeResponse
     : null;
+
+  // TODO: Fjern denne når det ikke er noe som leser av aktiviteter rett på rot lengre
+  if (rapporteringsperiode?.aktiviteter) {
+    rapporteringsperiode.aktiviteter = rapporteringsperiode?.dager.flatMap((d) => d.aktiviteter);
+  }
 
   return json({ rapporteringsperiode });
 }

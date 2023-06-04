@@ -15,6 +15,7 @@ interface IRapporteringsperiodeDag {
   dagIndex: number;
   dato: string;
   muligeAktiviteter: TAktivitetType[];
+  aktiviteter: IAktivitet[];
 }
 
 export async function hentSisteRapporteringsperiode(
