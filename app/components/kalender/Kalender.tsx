@@ -2,7 +2,6 @@ import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { format } from "date-fns";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { sorterOgStrukturerRapporteringsperiode } from "~/utils/rapporteringsperiode.utils";
 
 import styles from "./Kalender.module.css";
 
@@ -11,18 +10,14 @@ interface IProps {
 }
 
 export function Kalender(props: IProps) {
-  const { rapporteringsperiode } = useRouteLoaderData(
-    "routes/rapportering"
-  ) as {
+  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
     rapporteringsperiode: IRapporteringsperiode;
   };
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];
 
-  const periode = sorterOgStrukturerRapporteringsperiode(rapporteringsperiode);
-
-  const harNoenAktivitet = !!periode.dager.find(
+  const harNoenAktivitet = !!rapporteringsperiode.dager.find(
     (dager) => dager.aktiviteter.length > 0
   );
 
@@ -42,7 +37,7 @@ export function Kalender(props: IProps) {
           [styles.harNoenAktivitet]: harNoenAktivitet,
         })}
       >
-        {periode.dager.map((dag) => {
+        {rapporteringsperiode.dager.map((dag) => {
           const harAktivitet = dag.aktiviteter.length > 0;
 
           const timer = dag.aktiviteter.reduce((accumulator, current) => {
@@ -55,12 +50,9 @@ export function Kalender(props: IProps) {
                 className={classNames(styles.kalenderDato, {
                   [styles.helg]: helgIndex.includes(dag.dagIndex),
                   [styles.kalenderDatoMedAktivitet]: harAktivitet,
-                  [styles.arbeid]:
-                    harAktivitet && dag.aktiviteter[0].type === "Arbeid",
-                  [styles.sykdom]:
-                    harAktivitet && dag.aktiviteter[0].type === "Syk",
-                  [styles.ferie]:
-                    harAktivitet && dag.aktiviteter[0].type === "Ferie",
+                  [styles.arbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
+                  [styles.sykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
+                  [styles.ferie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
                 })}
                 onClick={() => props.aapneModal(dag.dato)}
               >
@@ -69,12 +61,9 @@ export function Kalender(props: IProps) {
               {harAktivitet && (
                 <div
                   className={classNames(styles.kalenderDatoAktivitet, {
-                    [styles.timerArbeid]:
-                      harAktivitet && dag.aktiviteter[0].type === "Arbeid",
-                    [styles.timerSykdom]:
-                      harAktivitet && dag.aktiviteter[0].type === "Syk",
-                    [styles.timerFerie]:
-                      harAktivitet && dag.aktiviteter[0].type === "Ferie",
+                    [styles.timerArbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
+                    [styles.timerSykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
+                    [styles.timerFerie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
                   })}
                 >
                   {timer.toString().replace(/\./g, ",")}t

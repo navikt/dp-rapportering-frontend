@@ -8,7 +8,6 @@ export interface IRapporteringsperiode {
   tilOgMed: string;
   status: string;
   dager: IRapporteringsperiodeDag[];
-  aktiviteter: IAktivitet[];
 }
 
 interface IRapporteringsperiodeDag {

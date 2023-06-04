@@ -134,6 +134,5 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [],
       },
     ],
-    aktiviteter: [], // TODO: Deprecated
   },
 ];

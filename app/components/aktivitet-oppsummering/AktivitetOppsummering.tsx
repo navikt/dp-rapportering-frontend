@@ -5,18 +5,14 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import type { TAktivitetType } from "~/models/aktivitet.server";
 
 export function AktivitetOppsummering() {
-  const { rapporteringsperiode } = useRouteLoaderData(
-    "routes/rapportering"
-  ) as {
+  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
     rapporteringsperiode: IRapporteringsperiode;
   };
 
-  function hentTotaltTimerStringMedAktivitetsType(
-    aktivitetType: TAktivitetType
-  ): string {
-    const filtertAktiviteter = rapporteringsperiode.aktiviteter.filter(
-      (aktivitet) => aktivitet.type === aktivitetType
-    );
+  function hentTotaltTimerStringMedAktivitetsType(aktivitetType: TAktivitetType): string {
+    const filtertAktiviteter = rapporteringsperiode.dager
+      .flatMap((d) => d.aktiviteter)
+      .filter((aktivitet) => aktivitet.type === aktivitetType);
 
     const timer = filtertAktiviteter.reduce((accumulator, current) => {
       return accumulator + current.timer;
@@ -27,25 +23,19 @@ export function AktivitetOppsummering() {
 
   return (
     <div className={styles.aktivitetOppsummeringKontainer}>
-      <div
-        className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}
-      >
+      <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
         <p>
           Arbeid
           <span>{hentTotaltTimerStringMedAktivitetsType("Arbeid")} timer</span>
         </p>
       </div>
-      <div
-        className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}
-      >
+      <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
         <p>
           Syk
           <span>{hentTotaltTimerStringMedAktivitetsType("Syk")} timer</span>
         </p>
       </div>
-      <div
-        className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}
-      >
+      <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
         <p>
           Fravær / Ferie
           <span>{hentTotaltTimerStringMedAktivitetsType("Ferie")} timer</span>

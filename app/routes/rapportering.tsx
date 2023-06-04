@@ -27,11 +27,6 @@ export async function loader({ request }: LoaderArgs) {
     ? rapporteringsperiodeResponse
     : null;
 
-  // TODO: Fjern denne når det ikke er noe som leser av aktiviteter rett på rot lengre
-  if (rapporteringsperiode?.aktiviteter) {
-    rapporteringsperiode.aktiviteter = rapporteringsperiode?.dager.flatMap((d) => d.aktiviteter);
-  }
-
   return json({ rapporteringsperiode });
 }
 
