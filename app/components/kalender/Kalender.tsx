@@ -42,7 +42,10 @@ export function Kalender(props: IProps) {
           const harAktivitet = dag.aktiviteter.length > 0;
 
           const timer = dag.aktiviteter.reduce((accumulator, current) => {
-            return accumulator + periodeSomTimer(current.timer);
+            if (current.timer) {
+              return accumulator + periodeSomTimer(current.timer);
+            }
+            return accumulator + 1;
           }, 0);
 
           return (
@@ -67,7 +70,11 @@ export function Kalender(props: IProps) {
                     [styles.timerFerie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
                   })}
                 >
-                  {timer.toString().replace(/\./g, ",")}t
+                  {dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid") && (
+                    <> {timer.toString().replace(/\./g, ",")}t</>
+                  )}
+                  {dag.aktiviteter.some((aktivitet) => aktivitet.type === "Syk") && <>Syk</>}
+                  {dag.aktiviteter.some((aktivitet) => aktivitet.type === "Ferie") && <>Ferie</>}
                 </div>
               )}
             </div>

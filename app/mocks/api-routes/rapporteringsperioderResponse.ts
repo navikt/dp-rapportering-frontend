@@ -48,7 +48,6 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9c",
             type: "Ferie",
-            timer: "PT7H30M",
             dato: "2023-05-03",
           },
         ],
@@ -61,7 +60,6 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9d",
             type: "Syk",
-            timer: "PT7H30M",
             dato: "2023-05-04",
           },
         ],
@@ -124,8 +122,14 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       {
         dagIndex: 12,
         dato: "2023-05-13",
-        muligeAktiviteter: ["Arbeid"],
-        aktiviteter: [],
+        muligeAktiviteter: ["Arbeid", "Syk"],
+        aktiviteter: [
+          {
+            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
+            type: "Syk",
+            dato: "2023-05-13",
+          },
+        ],
       },
       {
         dagIndex: 13,

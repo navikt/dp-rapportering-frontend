@@ -12,12 +12,13 @@ import type { TAktivitetType } from "~/models/aktivitet.server";
 import { lagreAktivitet } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import nbLocale from "date-fns/locale/nb";
-import { validerSkjema } from "~/utils/validering.util";
+import { aktivitetsvalideringArbeid, aktivitetsvalideringSykFerie } from "~/utils/validering.util";
 import { useSanity } from "~/hooks/useSanity";
 
 import styles from "./rapportering.module.css";
 import { serialize } from "tinyduration";
 import { AktivitetModal } from "~/components/ny-aktivitet-modal/NyAktivitetModal";
+import { withZod } from "@remix-validated-form/with-zod";
 
 export function meta() {
   return [
@@ -29,23 +30,36 @@ export function meta() {
 }
 
 export async function action({ request }: ActionArgs) {
-  const inputVerdier = await validerSkjema.validate(await request.formData());
+  const formdata = await request.formData();
+  const isArbeid = formdata.get("type") === "Arbeid";
+  const validator = isArbeid
+    ? withZod(aktivitetsvalideringArbeid)
+    : withZod(aktivitetsvalideringSykFerie);
+
+  const inputVerdier = await validator.validate(formdata);
 
   if (inputVerdier.error) {
     return validationError(inputVerdier.error);
   }
 
   const { rapporteringsperiodeId, type, dato, timer: tid } = inputVerdier.submittedData;
-  const delt = tid.split(",");
-  const timer = delt[0] || 0;
-  const minutter = delt[1] || 0;
+  if (isArbeid) {
+    const delt = tid.split(",");
+    const timer = delt[0] || 0;
+    const minutter = delt[1] || 0;
+    const aktivitet = {
+      type,
+      dato,
+      timer: serialize({
+        hours: timer,
+        minutes: minutter * 6,
+      }),
+    };
+    return await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
+  }
   const aktivitet = {
     type,
     dato,
-    timer: serialize({
-      hours: timer,
-      minutes: minutter * 6,
-    }),
   };
   return await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
 }

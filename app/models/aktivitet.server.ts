@@ -6,7 +6,7 @@ export type TAktivitetType = "Arbeid" | "Syk" | "Ferie";
 export interface IAktivitet {
   id?: string;
   type: TAktivitetType;
-  timer: string;
+  timer?: string;
   dato: string;
 }
 

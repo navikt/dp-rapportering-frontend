@@ -16,7 +16,10 @@ export function AktivitetOppsummering() {
       .filter((aktivitet) => aktivitet.type === aktivitetType);
 
     const timer = filtertAktiviteter.reduce((accumulator, current) => {
-      return accumulator + periodeSomTimer(current.timer);
+      if (current.timer) {
+        return accumulator + periodeSomTimer(current.timer);
+      }
+      return accumulator + 1;
     }, 0);
 
     return timer.toString().replace(/\./g, ",");
@@ -33,13 +36,13 @@ export function AktivitetOppsummering() {
       <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
         <p>
           Syk
-          <span>{hentTotaltTimerStringMedAktivitetsType("Syk")} timer</span>
+          <span>{hentTotaltTimerStringMedAktivitetsType("Syk")} dager</span>
         </p>
       </div>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
         <p>
           Fravær / Ferie
-          <span>{hentTotaltTimerStringMedAktivitetsType("Ferie")} timer</span>
+          <span>{hentTotaltTimerStringMedAktivitetsType("Ferie")} dager</span>
         </p>
       </div>
     </div>

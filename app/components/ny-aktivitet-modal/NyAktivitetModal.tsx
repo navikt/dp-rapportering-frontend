@@ -2,10 +2,11 @@ import { Button, Heading, Modal } from "@navikt/ds-react";
 import classNames from "classnames";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { ValidatedForm } from "remix-validated-form";
-import { validerSkjema } from "~/utils/validering.util";
 import { AktivitetTimerInput } from "../AktivitetTimerInput";
+import { aktivitetsvalideringArbeid, aktivitetsvalideringSykFerie } from "~/utils/validering.util";
 
 import styles from "./NyAktivitetModal.module.css";
+import { withZod } from "@remix-validated-form/with-zod";
 
 interface IProps {
   rapporteringsperiodeId: string;
@@ -22,6 +23,10 @@ interface IProps {
 }
 
 export function AktivitetModal(props: IProps) {
+  const validator =
+    props.valgtAktivitet === "Arbeid"
+      ? withZod(aktivitetsvalideringArbeid)
+      : withZod(aktivitetsvalideringSykFerie);
   return (
     <Modal
       aria-labelledby="modal-heading"
@@ -47,7 +52,7 @@ export function AktivitetModal(props: IProps) {
               </button>
             ))}
         </div>
-        <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validerSkjema}>
+        <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator}>
           <input
             type="text"
             hidden
@@ -56,7 +61,7 @@ export function AktivitetModal(props: IProps) {
           />
           <input type="text" hidden name="type" defaultValue={props.valgtAktivitet} />
           <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
-          {props.valgtAktivitet && (
+          {props.valgtAktivitet === "Arbeid" && (
             <AktivitetTimerInput name="timer" verdi={props.timer?.replace(/\./g, ",")} />
           )}
           <div className={styles.knappKontainer}>
