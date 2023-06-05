@@ -8,7 +8,6 @@ import { validationError } from "remix-validated-form";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { AktivitetModal } from "~/components/ny-aktivitet-modal/NyAktivitetModal";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { lagreAktivitet } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -18,6 +17,7 @@ import { useSanity } from "~/hooks/useSanity";
 
 import styles from "./rapportering.module.css";
 import { serialize } from "tinyduration";
+import { AktivitetModal } from "~/components/ny-aktivitet-modal/NyAktivitetModal";
 
 export function meta() {
   return [
@@ -35,7 +35,7 @@ export async function action({ request }: ActionArgs) {
     return validationError(inputVerdier.error);
   }
 
-  const { type, dato, timer: tid } = inputVerdier.submittedData;
+  const { rapporteringsperiodeId, type, dato, timer: tid } = inputVerdier.submittedData;
   const delt = tid.split(",");
   const timer = delt[0] || 0;
   const minutter = delt[1] || 0;
@@ -47,7 +47,7 @@ export async function action({ request }: ActionArgs) {
       minutes: minutter * 6,
     }),
   };
-  return await lagreAktivitet(aktivitet, request);
+  return await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
 }
 
 export default function Rapportering() {
@@ -96,6 +96,7 @@ export default function Rapportering() {
       <Kalender aapneModal={aapneModal} />
 
       <AktivitetModal
+        rapporteringsperiodeId={rapporteringsperiode.id}
         timer={timer}
         valgtDato={valgtDato}
         setValgtDato={setValgtDato}
