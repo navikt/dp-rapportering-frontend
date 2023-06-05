@@ -1,6 +1,7 @@
 import { getRapporteringOboToken, getSession } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
 import type { IAktivitet, TAktivitetType } from "./aktivitet.server";
+import { logger } from "../../server/logger";
 
 export interface IRapporteringsperiode {
   id: string;
@@ -41,6 +42,9 @@ export async function hentSisteRapporteringsperiode(
   });
 
   if (!response.ok) {
+    //kan fjernes når vi synes det logger for mye, kan hende dette brekker bygget også, vi får se :fingers_crossed:
+    logger.warn("feil ved kall til rapporteringsperiode", { statustext: response.statusText });
+
     throw new Response(`Feil ved kall til ${url}`, {
       status: response.status,
       statusText: response.statusText,
