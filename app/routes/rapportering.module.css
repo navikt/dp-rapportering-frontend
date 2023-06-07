@@ -33,7 +33,8 @@
   margin-top: var(--a-spacing-14);
 }
 
-.utbetalingsEstimat {
+.utbetalingsEstimat,
+.feilmelding {
   margin-top: var(--a-spacing-10);
 }
 
