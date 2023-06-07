@@ -2,32 +2,23 @@ import { Left, Right } from "@navikt/ds-icons";
 import { Heading, Modal } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { useRouteLoaderData } from "@remix-run/react";
-import { format } from "date-fns";
+import { withZod } from "@remix-validated-form/with-zod";
+import { format, isFriday, isPast, isToday } from "date-fns";
+import nbLocale from "date-fns/locale/nb";
 import { useEffect, useState } from "react";
 import { validationError } from "remix-validated-form";
+import { serialize } from "tinyduration";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
+import { AktivitetModal } from "~/components/ny-aktivitet-modal/NyAktivitetModal";
+import { useSanity } from "~/hooks/useSanity";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { lagreAktivitet } from "~/models/aktivitet.server";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import nbLocale from "date-fns/locale/nb";
 import { aktivitetsvalideringArbeid, aktivitetsvalideringSykFerie } from "~/utils/validering.util";
-import { useSanity } from "~/hooks/useSanity";
+import { IRapporteringLoader } from "./rapportering";
 
 import styles from "./rapportering.module.css";
-import { serialize } from "tinyduration";
-import { AktivitetModal } from "~/components/ny-aktivitet-modal/NyAktivitetModal";
-import { withZod } from "@remix-validated-form/with-zod";
-
-export function meta() {
-  return [
-    {
-      title: "Dagpenger rapportering",
-      description: "rapporteringløsning for dagpenger",
-    },
-  ];
-}
 
 export async function action({ request }: ActionArgs) {
   const formdata = await request.formData();
@@ -64,10 +55,8 @@ export async function action({ request }: ActionArgs) {
   return await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
 }
 
-export default function Rapportering() {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
-    rapporteringsperiode: IRapporteringsperiode;
-  };
+export default function RapporteringIndeksSide() {
+  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
 
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | undefined>(undefined);
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
@@ -101,6 +90,21 @@ export default function Rapportering() {
     setModalHeaderTekst("");
   }
 
+  // Vet ikke om det er slik det skal være, vi må finne ut av det
+  // Her burde det være en del av periode periode
+  // {   .... klarForGodkjenning: boolean;}
+  function kanGodkjenne(): boolean {
+    // Hente ut siste fredag fra gjeldende periode
+    const sisteFredag = rapporteringsperiode.dager
+      .filter((dag) => isFriday(new Date(dag.dato)))
+      .slice(-1)[0];
+
+    // Bruk den for å kunne navigere videre til send-inn siden
+    // const sisteFredag = rapporteringsperiode.dager.filter((dag) => isMonday(new Date(dag.dato)))[0];
+
+    return isToday(new Date(sisteFredag.dato)) || isPast(new Date(sisteFredag.dato));
+  }
+
   return (
     <>
       <Heading level="2" size="large" spacing>
@@ -132,7 +136,11 @@ export default function Rapportering() {
           Mine side
         </RemixLink>
         <RemixLink
-          to="/rapportering/send-inn"
+          to={
+            kanGodkjenne()
+              ? "/rapportering/send-inn"
+              : "/rapportering/gjeldende-periode-aktiviteter"
+          }
           as="Button"
           variant="primary"
           icon={<Right />}

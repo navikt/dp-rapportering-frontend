@@ -1,19 +1,13 @@
 import { Accordion, Alert, Heading } from "@navikt/ds-react";
 import { json, type LoaderArgs } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { hentSisteRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  hentSisteRapporteringsperiode,
+} from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 import styles from "./rapportering.module.css";
-
-export function meta() {
-  return [
-    {
-      title: "Dagpenger rapportering",
-      description: "rapporteringløsning for dagpenger",
-    },
-  ];
-}
 
 export async function loader({ request }: LoaderArgs) {
   const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
@@ -30,7 +24,11 @@ export async function loader({ request }: LoaderArgs) {
   return json({ rapporteringsperiode });
 }
 
-export default function Rapportering() {
+export interface IRapporteringLoader {
+  rapporteringsperiode: IRapporteringsperiode;
+}
+
+export default function RapporteringSide() {
   const { rapporteringsperiode } = useLoaderData<typeof loader>();
 
   if (!rapporteringsperiode) {

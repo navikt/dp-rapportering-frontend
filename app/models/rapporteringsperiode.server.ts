@@ -53,3 +53,24 @@ export async function hentSisteRapporteringsperiode(
 
   return await response.json();
 }
+
+export async function godkjennPeriode(id: string, request: Request): Promise<Response> {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}/godkjenn`;
+
+  const session = await getSession(request);
+
+  if (!session) {
+    throw new Error("Feil ved henting av sessjon");
+  }
+
+  const onBehalfOfToken = await getRapporteringOboToken(session);
+
+  return await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}

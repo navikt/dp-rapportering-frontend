@@ -29,11 +29,18 @@
   justify-content: space-between;
 }
 
-.avbrytKnapp {
-  padding: 0 var(--a-spacing-2);
-  margin-top: var(--a-spacing-6);
-}
-
 .debug {
   margin-top: var(--a-spacing-14);
+}
+
+.utbetalingsEstimat {
+  margin-top: var(--a-spacing-10);
+}
+
+.registertMeldeperiodeKontainer > p {
+  color: var(--a-text-subtle);
+}
+
+.klarteIkkeSendeInnFeilmelding {
+  margin-top: var(--a-spacing-12);
 }

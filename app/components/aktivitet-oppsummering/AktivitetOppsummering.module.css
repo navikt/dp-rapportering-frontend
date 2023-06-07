@@ -1,6 +1,6 @@
 .aktivitetOppsummeringKontainer {
   max-width: var(--app-max-width);
-  margin: var(--a-spacing-8) auto 0;
+  margin: var(--a-spacing-4) auto 0;
 }
 
 .aktivitetOppsummeringData {
