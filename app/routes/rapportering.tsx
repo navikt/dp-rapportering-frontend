@@ -58,7 +58,7 @@ export default function Rapportering() {
       </div>
       <main className={styles.rapporteringKontainer}>
         <Outlet />
-        <Accordion>
+        <Accordion className={styles.debug}>
           <Accordion.Item>
             <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
             <Accordion.Content>
