@@ -10,10 +10,12 @@ export function AktivitetOppsummering() {
     rapporteringsperiode: IRapporteringsperiode;
   };
 
-  function hentTotaltTimerStringMedAktivitetsType(aktivitetType: TAktivitetType): string {
-    const filtertAktiviteter = rapporteringsperiode.dager
-      .flatMap((d) => d.aktiviteter)
-      .filter((aktivitet) => aktivitet.type === aktivitetType);
+  const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
+
+  function hentTotaltArbeidstimerTekst(): string {
+    const filtertAktiviteter = flatMapAktiviteter.filter(
+      (aktivitet) => aktivitet.type === "Arbeid"
+    );
 
     const timer = filtertAktiviteter.reduce((accumulator, current) => {
       if (current.timer) {
@@ -22,7 +24,17 @@ export function AktivitetOppsummering() {
       return accumulator + 1;
     }, 0);
 
-    return timer.toString().replace(/\./g, ",");
+    const formattertTimer = timer.toString().replace(/\./g, ",");
+
+    return `${formattertTimer} ${timer > 1 ? "timer" : "time"}`;
+  }
+
+  function hentTotaltFravaerTekstMedType(aktivitetType: TAktivitetType): string {
+    const filtertAktiviteter = flatMapAktiviteter.filter(
+      (aktivitet) => aktivitet.type === aktivitetType
+    );
+
+    return `${filtertAktiviteter.length} ${filtertAktiviteter.length > 1 ? "dager" : "dag"}`;
   }
 
   return (
@@ -30,19 +42,19 @@ export function AktivitetOppsummering() {
       <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
         <p>
           Arbeid
-          <span>{hentTotaltTimerStringMedAktivitetsType("Arbeid")} timer</span>
+          <span>{hentTotaltArbeidstimerTekst()}</span>
         </p>
       </div>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
         <p>
           Syk
-          <span>{hentTotaltTimerStringMedAktivitetsType("Syk")} dager</span>
+          <span>{hentTotaltFravaerTekstMedType("Syk")}</span>
         </p>
       </div>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
         <p>
           Fravær / Ferie
-          <span>{hentTotaltTimerStringMedAktivitetsType("Ferie")} dager</span>
+          <span>{hentTotaltFravaerTekstMedType("Ferie")}</span>
         </p>
       </div>
     </div>
