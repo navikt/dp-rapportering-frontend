@@ -3,7 +3,7 @@ import styles from "./AktivitetOppsummering.module.css";
 import { useRouteLoaderData } from "@remix-run/react";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { TAktivitetType } from "~/models/aktivitet.server";
-import { periodeSomTimer } from "~/models/periodeSomTimer";
+import { periodeSomTimer } from "~/utils/periode.utils";
 
 export function AktivitetOppsummering() {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {

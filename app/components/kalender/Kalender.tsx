@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 import styles from "./Kalender.module.css";
-import { periodeSomTimer } from "~/models/periodeSomTimer";
+import { periodeSomTimer } from "~/utils/periode.utils";
 
 interface IProps {
   aapneModal: (dato: string) => void;
