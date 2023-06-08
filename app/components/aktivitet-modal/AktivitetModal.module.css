@@ -2,43 +2,10 @@
   text-transform: capitalize;
 }
 
-.timeTypeKontainer {
+.aktivitetKontainer {
   display: flex;
   flex-direction: column;
   margin-top: var(--a-spacing-6);
-}
-
-.timeType {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 0;
-  width: 100%;
-  min-width: 300px;
-  cursor: pointer;
-  padding: var(--a-spacing-2) var(--a-spacing-4);
-  margin: 0 calc(var(--a-spacing-1) * -1) var(--a-spacing-2);
-  background-color: var(--a-blue-200);
-  border-radius: var(--a-spacing-6);
-}
-
-.Arbeid {
-  background-color: var(--a-blue-200);
-}
-.Arbeid:hover {
-  background-color: var(--a-blue-300);
-}
-.Syk {
-  background-color: var(--a-orange-200);
-}
-.Syk:hover {
-  background-color: var(--a-orange-300);
-}
-.Ferie {
-  background-color: var(--a-green-200);
-}
-.Ferie:hover {
-  background-color: var(--a-green-300);
 }
 
 .knappKontainer {
@@ -64,11 +31,7 @@
     font-size: var(--a-font-size-large);
   }
 
-  .timeTypeKontainer {
+  .aktivitetKontainer {
     min-width: 450px;
-  }
-
-  .timeType {
-    width: 50%;
   }
 }

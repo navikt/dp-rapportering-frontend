@@ -2,8 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Heading, Modal } from "@navikt/ds-react";
 import { json, type ActionArgs } from "@remix-run/node";
 import { useRouteLoaderData } from "@remix-run/react";
-import { withZod } from "@remix-validated-form/with-zod";
-import { format, isFriday, isPast, isToday } from "date-fns";
+import { isFriday, isPast, isToday } from "date-fns";
 import { useEffect, useState } from "react";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
@@ -14,7 +13,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { useSanity } from "~/hooks/useSanity";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
-import { aktivitetsvalideringArbeid, aktivitetsvalideringSykFerie } from "~/utils/validering.util";
+import { validator } from "~/utils/validering.util";
 import { IRapporteringLoader } from "./rapportering";
 
 import styles from "./rapportering.module.css";
@@ -42,12 +41,7 @@ export async function action({ request }: ActionArgs) {
     }
 
     case "lagre": {
-      const isArbeid = formdata.get("type") === "Arbeid";
-      const validator = isArbeid
-        ? withZod(aktivitetsvalideringArbeid)
-        : withZod(aktivitetsvalideringSykFerie);
-
-      const inputVerdier = await validator.validate(formdata);
+      const inputVerdier = await validator("Arbeid").validate(formdata);
 
       if (inputVerdier.error) {
         return validationError(inputVerdier.error);
@@ -55,7 +49,7 @@ export async function action({ request }: ActionArgs) {
 
       const { rapporteringsperiodeId, type, dato, timer: tid } = inputVerdier.submittedData;
 
-      if (isArbeid) {
+      if (formdata.get("type") === "Arbeid") {
         const delt = tid.split(",");
         const timer = delt[0] || 0;
         const minutter = delt[1] || 0;

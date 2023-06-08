@@ -1,6 +1,8 @@
+import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
+import { TAktivitetType } from "~/models/aktivitet.server";
 
-export const aktivitetsvalideringArbeid = z.object({
+const aktivitetsvalideringArbeid = z.object({
   type: z.enum(["Arbeid", "Syk", "Ferie"], {
     errorMap: () => ({ message: "Du må velge et aktivitet" }),
   }),
@@ -13,4 +15,10 @@ export const aktivitetsvalideringArbeid = z.object({
     .regex(new RegExp("^\\d*(,)?\\d*$"), "Det må være et gyldig tall"), // Regex for å matche tall med komma seperator
 });
 
-export const aktivitetsvalideringSykFerie = aktivitetsvalideringArbeid.partial({ timer: true });
+const aktivitetsvalideringSykFerie = aktivitetsvalideringArbeid.partial({ timer: true });
+
+export function validator(aktivitetType: TAktivitetType) {
+  return aktivitetType === "Arbeid"
+    ? withZod(aktivitetsvalideringArbeid)
+    : withZod(aktivitetsvalideringSykFerie);
+}
