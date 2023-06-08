@@ -1,7 +1,7 @@
 import { Left, Right } from "@navikt/ds-icons";
 import { Heading, Modal } from "@navikt/ds-react";
-import type { ActionArgs } from "@remix-run/node";
-import { useRouteLoaderData } from "@remix-run/react";
+import { json, type ActionArgs } from "@remix-run/node";
+import { useActionData, useRouteLoaderData } from "@remix-run/react";
 import { withZod } from "@remix-validated-form/with-zod";
 import { format, isFriday, isPast, isToday } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
@@ -52,11 +52,15 @@ export async function action({ request }: ActionArgs) {
     type,
     dato,
   };
-  return await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
+
+  await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
+
+  return json({ aktivitetLagret: true });
 }
 
 export default function Rapportering() {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
+  const actionData = useActionData();
 
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | undefined>(undefined);
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
@@ -75,6 +79,12 @@ export default function Rapportering() {
       rapporteringsperiode.dager.find((r) => r.dato === valgtDato)?.muligeAktiviteter || []
     );
   }, [rapporteringsperiode.dager, valgtDato]);
+
+  useEffect(() => {
+    if (actionData) {
+      lukkModal();
+    }
+  }, [actionData]);
 
   function aapneModal(dato: string) {
     setValgtDato(dato);

@@ -23,7 +23,7 @@
 }
 
 .navigasjonKontainer {
-  margin-top: var(--a-spacing-20);
+  margin-top: var(--a-spacing-16);
   display: flex;
   gap: var(--a-spacing-2);
   justify-content: space-between;

@@ -14,11 +14,11 @@ export default function RapporteringSendt() {
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
-        <Heading level="2" size="xlarge">
-          Du har sendt inn rapportering din.
+        <Heading level="2" size="small">
+          Du har sendt inn rapporteringen til NAV.
         </Heading>
         <br />
-        <RemixLink to="" as="Button" variant="secondary" icon={<Left />}>
+        <RemixLink to="" as="Button" variant="primary" icon={<Left />}>
           Gå til Mine side
         </RemixLink>
       </main>
