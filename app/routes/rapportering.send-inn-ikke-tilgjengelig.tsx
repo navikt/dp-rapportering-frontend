@@ -9,7 +9,7 @@ import { IRapporteringLoader } from "./rapportering";
 
 import styles from "./rapportering.module.css";
 
-export default function GjeldendePeriodeAktiviteterSide() {
+export default function RapporteringSendInnIkkeTilgjengelig() {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
 
   function hentForstMuligInnsendingsDato() {

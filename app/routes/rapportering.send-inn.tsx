@@ -27,10 +27,10 @@ export async function action({ request }: ActionArgs) {
     return json({ error: "Klarte ikke sende timene dine til NAV, vennligst prøv igjen!" });
   }
 
-  return redirect("/rapportering/kvittering");
+  return redirect("/rapportering/sendt");
 }
 
-export default function SendInnSide() {
+export default function RapporteringSendInn() {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
   const actionData = useActionData<typeof action>();
 

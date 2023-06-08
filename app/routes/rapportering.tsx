@@ -28,7 +28,7 @@ export interface IRapporteringLoader {
   rapporteringsperiode: IRapporteringsperiode;
 }
 
-export default function RapporteringSide() {
+export default function Rapportering() {
   const { rapporteringsperiode } = useLoaderData<typeof loader>();
 
   if (!rapporteringsperiode) {

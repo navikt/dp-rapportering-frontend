@@ -66,7 +66,7 @@ export async function godkjennPeriode(id: string, request: Request): Promise<Res
   const onBehalfOfToken = await getRapporteringOboToken(session);
 
   return await fetch(url, {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

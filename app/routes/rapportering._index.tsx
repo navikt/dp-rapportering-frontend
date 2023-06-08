@@ -55,7 +55,7 @@ export async function action({ request }: ActionArgs) {
   return await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
 }
 
-export default function RapporteringIndeksSide() {
+export default function Rapportering() {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
 
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | undefined>(undefined);
@@ -91,7 +91,7 @@ export default function RapporteringIndeksSide() {
   }
 
   // Vet ikke om det er slik det skal være, vi må finne ut av det
-  // Her burde det være en del av periode periode
+  // Her burde det være en del av periode responsen fra backend
   // {   .... klarForGodkjenning: boolean;}
   function kanGodkjenne(): boolean {
     // Hente ut siste fredag fra gjeldende periode
@@ -99,9 +99,8 @@ export default function RapporteringIndeksSide() {
       .filter((dag) => isFriday(new Date(dag.dato)))
       .slice(-1)[0];
 
-    // Bruk den for å kunne navigere videre til send-inn siden
+    // Bruk f.eks denne om du ønsker å teste en annen dag. Eks første mandag i rapporteringsperioden
     // const sisteFredag = rapporteringsperiode.dager.filter((dag) => isMonday(new Date(dag.dato)))[0];
-
     return isToday(new Date(sisteFredag.dato)) || isPast(new Date(sisteFredag.dato));
   }
 
@@ -137,9 +136,8 @@ export default function RapporteringIndeksSide() {
         </RemixLink>
         <RemixLink
           to={
-            kanGodkjenne()
-              ? "/rapportering/send-inn"
-              : "/rapportering/gjeldende-periode-aktiviteter"
+            // kanGodkjenne() ? "/rapportering/send-inn" : "/rapportering/send-inn-ikke-tilgjengelig"
+            true ? "/rapportering/send-inn" : "/rapportering/send-inn-ikke-tilgjengelig"
           }
           as="Button"
           variant="primary"
