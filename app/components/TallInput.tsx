@@ -1,13 +1,13 @@
 import { TextField } from "@navikt/ds-react";
 import { useField } from "remix-validated-form";
 
-export interface IInputProps {
+export interface IProps {
   name: string;
   label?: string;
   verdi?: string;
 }
 
-export function AktivitetTimerInput(props: IInputProps) {
+export function TallInput(props: IProps) {
   const { error, getInputProps } = useField(props.name);
   return (
     <TextField

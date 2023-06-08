@@ -1,12 +1,12 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
-import classNames from "classnames";
-import type { TAktivitetType } from "~/models/aktivitet.server";
-import { ValidatedForm } from "remix-validated-form";
-import { AktivitetTimerInput } from "../AktivitetTimerInput";
-import { aktivitetsvalideringArbeid, aktivitetsvalideringSykFerie } from "~/utils/validering.util";
-
-import styles from "./NyAktivitetModal.module.css";
 import { withZod } from "@remix-validated-form/with-zod";
+import classNames from "classnames";
+import { ValidatedForm } from "remix-validated-form";
+import type { TAktivitetType } from "~/models/aktivitet.server";
+import { aktivitetsvalideringArbeid, aktivitetsvalideringSykFerie } from "~/utils/validering.util";
+import { TallInput } from "../TallInput";
+
+import styles from "./AktivitetModal.module.css";
 
 interface IProps {
   rapporteringsperiodeId: string;
@@ -62,7 +62,7 @@ export function AktivitetModal(props: IProps) {
           <input type="text" hidden name="type" defaultValue={props.valgtAktivitet} />
           <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
           {props.valgtAktivitet === "Arbeid" && (
-            <AktivitetTimerInput name="timer" verdi={props.timer?.replace(/\./g, ",")} />
+            <TallInput name="timer" verdi={props.timer?.replace(/\./g, ",")} />
           )}
           <div className={styles.knappKontainer}>
             <Button variant="tertiary-neutral" onClick={() => props.lukkModal()}>
