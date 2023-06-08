@@ -27,7 +27,7 @@ export async function action({ request }: ActionArgs) {
     return json({ error: "Klarte ikke sende timene dine til NAV, vennligst prøv igjen!" });
   }
 
-  return redirect("/rapportering/sendt");
+  return redirect("/rapportering-sendt");
 }
 
 export default function RapporteringSendInn() {
