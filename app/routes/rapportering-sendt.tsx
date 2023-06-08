@@ -1,7 +1,7 @@
-import { Alert, Heading } from "@navikt/ds-react";
-import styles from "./rapportering.module.css";
-import { RemixLink } from "~/components/RemixLink";
 import { Left } from "@navikt/ds-icons";
+import { Heading } from "@navikt/ds-react";
+import { RemixLink } from "~/components/RemixLink";
+import styles from "./rapportering.module.css";
 
 export default function RapporteringSendt() {
   return (
@@ -14,10 +14,12 @@ export default function RapporteringSendt() {
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
-        <Alert variant="success">Du har sendt inn din rapportering.</Alert>
+        <Heading level="2" size="xlarge">
+          Du har sendt inn rapportering din.
+        </Heading>
         <br />
         <RemixLink to="" as="Button" variant="secondary" icon={<Left />}>
-          Mine side
+          Gå til Mine side
         </RemixLink>
       </main>
     </div>
