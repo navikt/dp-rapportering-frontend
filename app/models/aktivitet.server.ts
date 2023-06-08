@@ -46,3 +46,30 @@ export async function lagreAktivitet(
 
   return await response.json();
 }
+
+export async function sletteAktivitet(
+  rapporteringsperiodeId: string,
+  aktivitetId: String,
+  request: Request
+): Promise<Response> {
+  const session = await getSession(request);
+
+  if (!session) {
+    throw new Error("Feil ved henting av sessjon");
+  }
+
+  const url = `${getEnv(
+    "DP_RAPPORTERING_URL"
+  )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet/${aktivitetId}`;
+
+  const onBehalfOfToken = await getRapporteringOboToken(session);
+
+  return await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}

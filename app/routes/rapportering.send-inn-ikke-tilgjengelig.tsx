@@ -1,4 +1,4 @@
-import { Left, Right } from "@navikt/ds-icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Checkbox, Heading, Ingress } from "@navikt/ds-react";
 import { useRouteLoaderData } from "@remix-run/react";
 import { format, isFriday } from "date-fns";
@@ -43,14 +43,19 @@ export default function RapporteringSendInnIkkeTilgjengelig() {
       </div>
 
       <div className={styles.navigasjonKontainer}>
-        <RemixLink to="/rapportering" as="Button" variant="secondary" icon={<Left />}>
+        <RemixLink
+          to="/rapportering"
+          as="Button"
+          variant="secondary"
+          icon={<ArrowLeftIcon fontSize="1.5rem" />}
+        >
           Forrige steg
         </RemixLink>
         <RemixLink
           to=""
           as="Button"
           variant="primary"
-          icon={<Right />}
+          icon={<ArrowRightIcon fontSize="1.5rem" />}
           iconPosition="right"
           disabled
         >
