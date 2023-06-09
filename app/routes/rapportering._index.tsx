@@ -78,9 +78,7 @@ export async function action({ request }: ActionArgs) {
 export default function Rapportering() {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
 
-  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | undefined>(undefined);
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-  const [timer] = useState<string | undefined>(undefined);
   const [modalAapen, setModalAapen] = useState(false);
   const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
   const { hentAppTekstMedId } = useSanity();
@@ -101,7 +99,6 @@ export default function Rapportering() {
   }
 
   function lukkModal() {
-    setValgtAktivitet(undefined);
     setValgtDato(undefined);
     setModalAapen(false);
   }
@@ -130,16 +127,13 @@ export default function Rapportering() {
 
       <AktivitetModal
         rapporteringsperiodeId={rapporteringsperiode.id}
-        timer={timer}
         valgtDato={valgtDato}
-        setValgtDato={setValgtDato}
-        valgtAktivitet={valgtAktivitet}
-        setValgtAktivitet={setValgtAktivitet}
         modalAapen={modalAapen}
         setModalAapen={setModalAapen}
         lukkModal={lukkModal}
         muligeAktiviteter={muligeAktiviteter}
       />
+
       <div className={styles.registertMeldeperiodeKontainer}>
         <p>Sammenlagt for meldeperioden:</p>
         <AktivitetOppsummering />

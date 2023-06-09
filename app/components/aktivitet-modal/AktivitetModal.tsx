@@ -13,14 +13,11 @@ import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 import { validator } from "~/utils/validering.util";
 
 import styles from "./AktivitetModal.module.css";
+import { useState } from "react";
 
 interface IProps {
   rapporteringsperiodeId: string;
-  timer?: string;
   valgtDato?: string;
-  setValgtDato: (dato: string) => void;
-  valgtAktivitet?: TAktivitetType;
-  setValgtAktivitet: (aktivitet: TAktivitetType) => void;
   modalAapen: boolean;
   setModalAapen: any;
   lukkModal: () => void;
@@ -29,7 +26,8 @@ interface IProps {
 
 export function AktivitetModal(props: IProps) {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
-  const dagMedAktivitet = rapporteringsperiode.dager.find((dag) => dag.dato === props.valgtDato);
+  const harAktivitet = rapporteringsperiode.dager.find((dag) => dag.dato === props.valgtDato);
+  const [valgAktivitet, setValgtAktivitet] = useState(harAktivitet?.aktiviteter[0]?.type || "");
 
   return (
     <Modal
@@ -43,8 +41,8 @@ export function AktivitetModal(props: IProps) {
           {props.valgtDato && format(new Date(props.valgtDato), "EEEE d", { locale: nbLocale })}
         </Heading>
 
-        {dagMedAktivitet &&
-          dagMedAktivitet.aktiviteter.map((aktivitet) => (
+        {harAktivitet &&
+          harAktivitet.aktiviteter.map((aktivitet) => (
             <Form key={aktivitet.id} method="post">
               <input
                 type="text"
@@ -67,11 +65,7 @@ export function AktivitetModal(props: IProps) {
             </Form>
           ))}
 
-        <ValidatedForm
-          method="post"
-          key="lagre-ny-aktivitet"
-          validator={validator(props.valgtAktivitet!)}
-        >
+        <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator(valgAktivitet)}>
           <input
             type="text"
             hidden
@@ -85,14 +79,18 @@ export function AktivitetModal(props: IProps) {
               <AktivitetRadio
                 name="type"
                 muligeAktiviteter={props.muligeAktiviteter}
-                verdi={props.valgtAktivitet!}
+                verdi={valgAktivitet}
+                onChange={(aktivitet: string) => setValgtAktivitet(aktivitet)}
               />
             )}
           </div>
 
-          {/* {props.valgtAktivitet === "Arbeid" && ( */}
-          <TallInput name="timer" verdi={props.timer?.replace(/\./g, ",")} />
-          {/* )} */}
+          {valgAktivitet === "Arbeid" && (
+            <TallInput
+              name="timer"
+              verdi={harAktivitet?.aktiviteter[0]?.timer?.replace(/\./g, ",")}
+            />
+          )}
 
           <div className={styles.knappKontainer}>
             <Button variant="tertiary-neutral" onClick={() => props.lukkModal()}>

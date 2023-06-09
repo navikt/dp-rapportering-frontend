@@ -11,23 +11,23 @@ export interface IProps {
   label?: string;
   verdi?: string;
   muligeAktiviteter: TAktivitetType[];
+  onChange: (aktivitet: string) => void;
 }
 
 export function AktivitetRadio(props: IProps) {
   const { error, getInputProps } = useField(props.name);
-  const [value, setValue] = useState(props.verdi || "");
 
-  const inputProps: any = getInputProps({
+  const inputProps: { type: string; value: string } = getInputProps({
     type: "radio",
-    value,
+    value: props.verdi || "",
   });
 
   return (
     <RadioGroup
       legend={props.label}
-      error={!value ? error : undefined}
+      error={!inputProps.value ? error : undefined}
       {...inputProps}
-      onChange={(verdi) => setValue(verdi)}
+      onChange={props.onChange}
     >
       {props.muligeAktiviteter.map((aktivitet) => (
         <Radio

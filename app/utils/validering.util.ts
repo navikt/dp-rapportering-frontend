@@ -17,7 +17,7 @@ const aktivitetsvalideringArbeid = z.object({
 
 const aktivitetsvalideringSykFerie = aktivitetsvalideringArbeid.partial({ timer: true });
 
-export function validator(aktivitetType: TAktivitetType) {
+export function validator(aktivitetType: TAktivitetType | string) {
   return aktivitetType === "Arbeid"
     ? withZod(aktivitetsvalideringArbeid)
     : withZod(aktivitetsvalideringSykFerie);
