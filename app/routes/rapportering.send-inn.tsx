@@ -24,10 +24,10 @@ export async function action({ request }: ActionArgs) {
       statustext: godkjennPeriodeResponse.statusText,
     });
 
-    return json({ error: "Noe har skjedd noe feil med innsending, prøv igjen." });
+    return json({ error: "Noe har skjedd noe teknisk feil med innsending, prøv igjen." });
   }
 
-  return redirect("/rapportering-sendt");
+  return redirect("/rapportering-innsendt");
 }
 
 export default function RapporteringSendInn() {

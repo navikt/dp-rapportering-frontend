@@ -1,6 +1,5 @@
 import { Heading } from "@navikt/ds-react";
 import { RemixLink } from "~/components/RemixLink";
-import { ArrowLeftIcon } from "@navikt/aksel-icons";
 
 import styles from "./rapportering.module.css";
 
@@ -19,7 +18,12 @@ export default function RapporteringSendt() {
           Du har sendt inn rapporteringen til NAV.
         </Heading>
         <br />
-        <RemixLink to="" as="Button" variant="primary" icon={<ArrowLeftIcon fontSize="1.5rem" />}>
+        <RemixLink
+          to=""
+          onClick={() => window.location.assign("https://www.nav.no/minside")}
+          as="Button"
+          variant="primary"
+        >
           Gå til Mine side
         </RemixLink>
       </main>
