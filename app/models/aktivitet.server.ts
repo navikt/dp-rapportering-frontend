@@ -14,7 +14,7 @@ export async function lagreAktivitet(
   rapporteringsperiodeId: string,
   aktivitet: IAktivitet,
   request: Request
-): Promise<IAktivitet> {
+): Promise<Response> {
   const session = await getSession(request);
 
   if (!session) {
@@ -27,7 +27,7 @@ export async function lagreAktivitet(
 
   const onBehalfOfToken = await getRapporteringOboToken(session);
 
-  const response = await fetch(url, {
+  return await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -36,15 +36,6 @@ export async function lagreAktivitet(
     },
     body: JSON.stringify({ ...aktivitet }),
   });
-
-  if (!response.ok) {
-    throw new Response(`Feil ved lagring av aktivitet til ${url}`, {
-      status: response.status,
-      statusText: response.statusText,
-    });
-  }
-
-  return await response.json();
 }
 
 export async function sletteAktivitet(

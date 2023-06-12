@@ -1,6 +1,6 @@
 import { TrashIcon } from "@navikt/aksel-icons";
-import { Button, Heading, Modal, Radio, RadioGroup } from "@navikt/ds-react";
-import { Form, useRouteLoaderData } from "@remix-run/react";
+import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
+import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { format } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
@@ -9,15 +9,16 @@ import { TallInput } from "~/components/TallInput";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { IRapporteringLoader } from "~/routes/rapportering";
 import { periodeSomTimer } from "~/utils/periode.utils";
-import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 import { validator } from "~/utils/validering.util";
+import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 
 import styles from "./AktivitetModal.module.css";
-import { useState } from "react";
 
 interface IProps {
   rapporteringsperiodeId: string;
   valgtDato?: string;
+  valgtAktivitet: string | TAktivitetType;
+  setValgtAktivitet: (aktivitet: string) => void;
   modalAapen: boolean;
   setModalAapen: any;
   lukkModal: () => void;
@@ -26,8 +27,11 @@ interface IProps {
 
 export function AktivitetModal(props: IProps) {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
-  const harAktivitet = rapporteringsperiode.dager.find((dag) => dag.dato === props.valgtDato);
-  const [valgAktivitet, setValgtAktivitet] = useState(harAktivitet?.aktiviteter[0]?.type || "");
+  const actionData = useActionData();
+
+  const valgteDatoHarNoenAktivitet = rapporteringsperiode.dager.find(
+    (dag) => dag.dato === props.valgtDato
+  );
 
   return (
     <Modal
@@ -41,8 +45,8 @@ export function AktivitetModal(props: IProps) {
           {props.valgtDato && format(new Date(props.valgtDato), "EEEE d", { locale: nbLocale })}
         </Heading>
 
-        {harAktivitet &&
-          harAktivitet.aktiviteter.map((aktivitet) => (
+        {valgteDatoHarNoenAktivitet &&
+          valgteDatoHarNoenAktivitet.aktiviteter.map((aktivitet) => (
             <Form key={aktivitet.id} method="post">
               <input
                 type="text"
@@ -55,7 +59,7 @@ export function AktivitetModal(props: IProps) {
                 type="submit"
                 name="submit"
                 value="slette"
-                className={classNames(styles.aktivitet, styles[aktivitet.type])}
+                className={classNames(styles.aktivitetMedSletting, styles[aktivitet.type])}
               >
                 <>
                   {aktivitet.type} {periodeSomTimer(aktivitet.timer!)} timer
@@ -65,7 +69,11 @@ export function AktivitetModal(props: IProps) {
             </Form>
           ))}
 
-        <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator(valgAktivitet)}>
+        <ValidatedForm
+          method="post"
+          key="lagre-ny-aktivitet"
+          validator={validator(props.valgtAktivitet)}
+        >
           <input
             type="text"
             hidden
@@ -79,17 +87,18 @@ export function AktivitetModal(props: IProps) {
               <AktivitetRadio
                 name="type"
                 muligeAktiviteter={props.muligeAktiviteter}
-                verdi={valgAktivitet}
-                onChange={(aktivitet: string) => setValgtAktivitet(aktivitet)}
+                verdi={props.valgtAktivitet}
+                onChange={(aktivitet: string) => props.setValgtAktivitet(aktivitet)}
               />
             )}
           </div>
 
-          {valgAktivitet === "Arbeid" && (
-            <TallInput
-              name="timer"
-              verdi={harAktivitet?.aktiviteter[0]?.timer?.replace(/\./g, ",")}
-            />
+          {props.valgtAktivitet === "Arbeid" && <TallInput name="timer" />}
+
+          {actionData?.error && (
+            <Alert variant="error" className={styles.feilmelding}>
+              {actionData.error}
+            </Alert>
           )}
 
           <div className={styles.knappKontainer}>

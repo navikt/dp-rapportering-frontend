@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Heading, Modal } from "@navikt/ds-react";
 import { json, type ActionArgs } from "@remix-run/node";
-import { useRouteLoaderData } from "@remix-run/react";
+import { useActionData, useRouteLoaderData } from "@remix-run/react";
 import { isFriday, isPast, isToday } from "date-fns";
 import { useEffect, useState } from "react";
 import { validationError } from "remix-validated-form";
@@ -34,14 +34,15 @@ export async function action({ request }: ActionArgs) {
       );
 
       if (!slettAktivitetResponse.ok) {
-        return json({ error: "Det har gått noe feil med sletting, prøv igjen" });
+        return json({ error: "Det har skjedd en feil ved sletting, prøv igjen" });
       }
 
       return {};
     }
 
     case "lagre": {
-      const inputVerdier = await validator("Arbeid").validate(formdata);
+      const aktivitType = formdata.get("type") as TAktivitetType;
+      const inputVerdier = await validator(aktivitType).validate(formdata);
 
       if (inputVerdier.error) {
         return validationError(inputVerdier.error);
@@ -49,11 +50,12 @@ export async function action({ request }: ActionArgs) {
 
       const { rapporteringsperiodeId, type, dato, timer: tid } = inputVerdier.submittedData;
 
-      if (formdata.get("type") === "Arbeid") {
+      function hentAktivitetArbeid() {
         const delt = tid.split(",");
         const timer = delt[0] || 0;
         const minutter = delt[1] || 0;
-        const aktivitet = {
+
+        return {
           type,
           dato,
           timer: serialize({
@@ -61,24 +63,36 @@ export async function action({ request }: ActionArgs) {
             minutes: minutter * 6,
           }),
         };
-
-        return await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
       }
 
-      const aktivitet = {
+      const andreAktivitet = {
         type,
         dato,
       };
 
-      await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
+      const aktivitetData = aktivitType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
+
+      const lagreAktivitetResponse = await lagreAktivitet(
+        rapporteringsperiodeId,
+        aktivitetData,
+        request
+      );
+
+      if (!lagreAktivitetResponse.ok) {
+        return json({ error: "Neon gikk feil med lagring av aktivitet, prøv igjen." });
+      }
+
+      return json({ lagret: true });
     }
   }
 }
 
 export default function Rapportering() {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
+  const actionData = useActionData();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
+  const [valgtAktivitet, setValgtAktivitet] = useState("");
   const [modalAapen, setModalAapen] = useState(false);
   const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
   const { hentAppTekstMedId } = useSanity();
@@ -93,12 +107,19 @@ export default function Rapportering() {
     );
   }, [rapporteringsperiode.dager, valgtDato]);
 
+  useEffect(() => {
+    if (actionData?.lagret) {
+      lukkModal();
+    }
+  }, [actionData]);
+
   function aapneModal(dato: string) {
     setValgtDato(dato);
     setModalAapen(true);
   }
 
   function lukkModal() {
+    setValgtAktivitet("");
     setValgtDato(undefined);
     setModalAapen(false);
   }
@@ -128,6 +149,8 @@ export default function Rapportering() {
       <AktivitetModal
         rapporteringsperiodeId={rapporteringsperiode.id}
         valgtDato={valgtDato}
+        valgtAktivitet={valgtAktivitet}
+        setValgtAktivitet={setValgtAktivitet}
         modalAapen={modalAapen}
         setModalAapen={setModalAapen}
         lukkModal={lukkModal}
