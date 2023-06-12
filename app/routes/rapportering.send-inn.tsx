@@ -27,7 +27,7 @@ export async function action({ request }: ActionArgs) {
     return json({ error: "Noe har skjedd noe feil med innsending, prøv igjen." });
   }
 
-  return redirect("/rapportering-sendt");
+  return redirect("/rapportering-innsendt");
 }
 
 export default function RapporteringSendInn() {
