@@ -18,7 +18,12 @@ export default function RapporteringSendt() {
           Du har sendt inn rapporteringen til NAV.
         </Heading>
         <br />
-        <RemixLink to="" as="Button" variant="primary" icon={<Left />}>
+        <RemixLink
+          to=""
+          onClick={() => window.location.assign("https://www.nav.no/minside")}
+          as="Button"
+          variant="primary"
+        >
           Gå til Mine side
         </RemixLink>
       </main>
