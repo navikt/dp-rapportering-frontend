@@ -18,7 +18,7 @@ interface IProps {
   rapporteringsperiodeId: string;
   valgtDato?: string;
   valgtAktivitet: string | TAktivitetType;
-  setValgtAktivitet: (aktivitet: string) => void;
+  setValgtAktivitet: (aktivitet: string | TAktivitetType) => void;
   modalAapen: boolean;
   setModalAapen: any;
   lukkModal: () => void;
@@ -29,7 +29,7 @@ export function AktivitetModal(props: IProps) {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
   const actionData = useActionData();
 
-  const valgteDatoHarNoenAktivitet = rapporteringsperiode.dager.find(
+  const valgteDatoHarAktivitet = rapporteringsperiode.dager.find(
     (dag) => dag.dato === props.valgtDato
   );
 
@@ -45,8 +45,8 @@ export function AktivitetModal(props: IProps) {
           {props.valgtDato && format(new Date(props.valgtDato), "EEEE d", { locale: nbLocale })}
         </Heading>
 
-        {valgteDatoHarNoenAktivitet &&
-          valgteDatoHarNoenAktivitet.aktiviteter.map((aktivitet) => (
+        {valgteDatoHarAktivitet &&
+          valgteDatoHarAktivitet.aktiviteter.map((aktivitet) => (
             <Form key={aktivitet.id} method="post">
               <input
                 type="text"
@@ -59,7 +59,7 @@ export function AktivitetModal(props: IProps) {
                 type="submit"
                 name="submit"
                 value="slette"
-                className={classNames(styles.aktivitetMedSletting, styles[aktivitet.type])}
+                className={classNames(styles.slettKnapp, styles[aktivitet.type])}
               >
                 <>
                   {aktivitet.type} {periodeSomTimer(aktivitet.timer!)} timer

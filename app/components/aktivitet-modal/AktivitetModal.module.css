@@ -15,7 +15,7 @@
   margin-top: var(--a-spacing-8);
 }
 
-.aktivitetMedSletting {
+.slettKnapp {
   display: flex;
   align-items: center;
   justify-content: space-between;

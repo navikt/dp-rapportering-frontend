@@ -34,7 +34,7 @@ export async function action({ request }: ActionArgs) {
       );
 
       if (!slettAktivitetResponse.ok) {
-        return json({ error: "Det har skjedd en feil ved sletting, prøv igjen" });
+        return json({ error: "Det har skjedd en feil ved sletting, prøv igjen." });
       }
 
       return {};
@@ -79,7 +79,7 @@ export async function action({ request }: ActionArgs) {
       );
 
       if (!lagreAktivitetResponse.ok) {
-        return json({ error: "Neon gikk feil med lagring av aktivitet, prøv igjen." });
+        return json({ error: "Noen gikk feil med lagring av aktivitet, prøv igjen." });
       }
 
       return json({ lagret: true });
