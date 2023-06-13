@@ -33,6 +33,18 @@ export function AktivitetModal(props: IProps) {
     (dag) => dag.dato === props.valgtDato
   );
 
+  function hentSlettKnappTekst() {
+    const aktivitet = valgteDatoHarAktivitet?.aktiviteter[0];
+
+    if (aktivitet?.type === "Arbeid") {
+      return `${aktivitet.type} ${periodeSomTimer(aktivitet.timer!)
+        .toString()
+        .replace(/\./g, ",")} timer`;
+    }
+
+    return `${aktivitet?.type}`;
+  }
+
   return (
     <Modal
       aria-labelledby="modal-heading"
@@ -61,9 +73,7 @@ export function AktivitetModal(props: IProps) {
                 value="slette"
                 className={classNames(styles.slettKnapp, styles[aktivitet.type])}
               >
-                <>
-                  {aktivitet.type} {periodeSomTimer(aktivitet.timer!)} timer
-                </>
+                {hentSlettKnappTekst()}
                 <TrashIcon title="a11y-title" fontSize="1.5rem" />
               </button>
             </Form>
