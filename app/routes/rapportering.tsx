@@ -20,8 +20,6 @@ export interface IRapporteringLoader {
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request);
 
-  console.log(session);
-
   // Utløpt sessjon
   if (session.expiresIn === 0) {
     return json({ rapporteringsperiode: null, session });
