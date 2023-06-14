@@ -9,7 +9,7 @@ import styles from "./SessjonModal.module.css";
 
 export function SessjonModal() {
   const { session } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
-  const [utloptOm, setUtloptOm] = useState<number | undefined>(session?.expiresIn || 5);
+  const [utlopesOm, setUtlopesOm] = useState<number | undefined>(session?.expiresIn || 5);
   const [utlopt, setUtlopt] = useState(false);
   const [laster, setLaster] = useState(false);
 
@@ -20,18 +20,18 @@ export function SessjonModal() {
   }, []);
 
   useEffect(() => {
-    if (!utloptOm) return;
+    if (!utlopesOm) return;
 
-    if (utloptOm === 1) {
+    if (utlopesOm === 1) {
       setUtlopt(true);
     }
 
     const intervalId = setInterval(() => {
-      setUtloptOm(utloptOm - 1);
+      setUtlopesOm(utlopesOm - 1);
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [utloptOm]);
+  }, [utlopesOm]);
 
   function navigerTilNavHjemmeside() {
     setLaster(true);
