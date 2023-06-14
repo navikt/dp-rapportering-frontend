@@ -9,7 +9,7 @@ import styles from "./SessjonModal.module.css";
 
 export function SessjonModal() {
   const { session } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
-  const [utlopesOm, setUtlopesOm] = useState<number | undefined>(session?.expiresIn || 5);
+  const [utlopesOm, setUtlopesOm] = useState<number | undefined>(session?.expiresIn || 1);
   const [utlopt, setUtlopt] = useState(false);
   const [laster, setLaster] = useState(false);
 

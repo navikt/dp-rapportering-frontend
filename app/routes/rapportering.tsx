@@ -15,10 +15,16 @@ import styles from "./rapportering.module.css";
 export interface IRapporteringLoader {
   rapporteringsperiode: IRapporteringsperiode;
   session: SessionWithOboProvider;
+  sessjonUtlopt: boolean;
 }
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request);
+
+  // Utløpt sessjon
+  if (session.expiresIn === 0) {
+    return json({ rapporteringsperiode: null, session, sessjonUtlopt: true });
+  }
 
   const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
     "gjeldende", // TODO: Dette bør vel helst være smartere 😅
@@ -35,17 +41,23 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function Rapportering() {
-  const { rapporteringsperiode } = useLoaderData<typeof loader>();
+  const { rapporteringsperiode, session } = useLoaderData<typeof loader>();
+  const sessjonUtlopt = session?.expiresIn === 0;
 
-  if (!rapporteringsperiode) {
+  function hentPeriodeTekst() {
+    if (!rapporteringsperiode) {
+      return <></>;
+    }
+
+    const { fraOgMed, tilOgMed } = rapporteringsperiode;
+
     return (
-      <main className={styles.rapporteringKontainer}>
-        <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>
-      </main>
+      <p>
+        Uke
+        {formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}({formaterPeriodeDato(fraOgMed, tilOgMed)})
+      </p>
     );
   }
-
-  const { fraOgMed, tilOgMed } = rapporteringsperiode;
 
   return (
     <div id="dp-rapportering-frontend">
@@ -54,14 +66,18 @@ export default function Rapportering() {
           <Heading level="1" size="xlarge">
             Dagpengerapportering
           </Heading>
-          <p>
-            Uke {formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)} (
-            {formaterPeriodeDato(fraOgMed, tilOgMed)})
-          </p>
+          {rapporteringsperiode && hentPeriodeTekst()}
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
-        <Outlet />
+        {sessjonUtlopt && <></>}
+        {!sessjonUtlopt && rapporteringsperiode && <Outlet />}
+        {sessjonUtlopt && !rapporteringsperiode && (
+          <main>
+            <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>
+          </main>
+        )}
+
         <Accordion className={styles.debug}>
           <Accordion.Item>
             <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
