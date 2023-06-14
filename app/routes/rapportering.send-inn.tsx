@@ -24,7 +24,7 @@ export async function action({ request }: ActionArgs) {
       statustext: godkjennPeriodeResponse.statusText,
     });
 
-    return json({ error: "Noe har skjedd noe teknisk feil med innsending, prøv igjen." });
+    return json({ error: "Det har skjedd noe feil med innsendingen din, prøv igjen." });
   }
 
   return redirect("/rapportering-innsendt");
