@@ -92,7 +92,7 @@ export default function Rapportering() {
   const actionData = useActionData();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-  const [valgtAktivitet, setValgtAktivitet] = useState("");
+  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
   const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
   const { hentAppTekstMedId } = useSanity();
