@@ -9,9 +9,9 @@ import styles from "./SessjonModal.module.css";
 
 export function SessjonModal() {
   const { session } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
-  const [expiresIn, setExpiresIn] = useState<number | undefined>(session?.expiresIn || 5);
-  const [modalAapen, setModalAapen] = useState(false);
-  const [isNagivating, setNavigating] = useState(false);
+  const [utloptOm, setUtloptOm] = useState<number | undefined>(session?.expiresIn || 5);
+  const [utlopt, setUtlopt] = useState(false);
+  const [laster, setLaster] = useState(false);
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -20,21 +20,21 @@ export function SessjonModal() {
   }, []);
 
   useEffect(() => {
-    if (!expiresIn) return;
+    if (!utloptOm) return;
 
-    if (expiresIn === 1) {
-      setModalAapen(true);
+    if (utloptOm === 1) {
+      setUtlopt(true);
     }
 
     const intervalId = setInterval(() => {
-      setExpiresIn(expiresIn - 1);
+      setUtloptOm(utloptOm - 1);
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [expiresIn]);
+  }, [utloptOm]);
 
   function navigerTilNavHjemmeside() {
-    setNavigating(true);
+    setLaster(true);
     window.location.replace("https://nav.no/");
   }
 
@@ -44,7 +44,7 @@ export function SessjonModal() {
       onClose={() => {
         return;
       }}
-      open={modalAapen}
+      open={utlopt}
       closeButton={false}
       shouldCloseOnOverlayClick={false}
     >
@@ -60,7 +60,7 @@ export function SessjonModal() {
           <Button variant={"primary"} onClick={() => window.location.reload()}>
             Login
           </Button>
-          <Button variant={"tertiary"} onClick={navigerTilNavHjemmeside} loading={isNagivating}>
+          <Button variant={"tertiary"} onClick={navigerTilNavHjemmeside} loading={laster}>
             Gå til forsiden
           </Button>
         </div>
