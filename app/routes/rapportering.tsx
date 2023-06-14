@@ -8,8 +8,18 @@ import {
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 import styles from "./rapportering.module.css";
+import { getSession } from "~/utils/auth.utils.server";
+import { SessjonModal } from "~/components/session-modal/SessjonModal";
+import { SessionWithOboProvider } from "@navikt/dp-auth/index/";
+
+export interface IRapporteringLoader {
+  rapporteringsperiode: IRapporteringsperiode;
+  session: SessionWithOboProvider;
+}
 
 export async function loader({ request }: LoaderArgs) {
+  const session = await getSession(request);
+
   const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
     "gjeldende", // TODO: Dette bør vel helst være smartere 😅
     request
@@ -21,11 +31,7 @@ export async function loader({ request }: LoaderArgs) {
     ? rapporteringsperiodeResponse
     : null;
 
-  return json({ rapporteringsperiode });
-}
-
-export interface IRapporteringLoader {
-  rapporteringsperiode: IRapporteringsperiode;
+  return json({ rapporteringsperiode, session });
 }
 
 export default function Rapportering() {
@@ -64,6 +70,7 @@ export default function Rapportering() {
             </Accordion.Content>
           </Accordion.Item>
         </Accordion>
+        <SessjonModal />
       </main>
     </div>
   );
