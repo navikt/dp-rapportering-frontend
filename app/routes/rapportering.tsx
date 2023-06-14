@@ -20,6 +20,8 @@ export interface IRapporteringLoader {
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request);
 
+  console.log(session);
+
   // Utløpt sessjon
   if (session.expiresIn === 0) {
     return json({ rapporteringsperiode: null, session });
@@ -70,7 +72,7 @@ export default function Rapportering() {
       </div>
       <main className={styles.rapporteringKontainer}>
         {!sessjonUtlopt && rapporteringsperiode && <Outlet />}
-        {sessjonUtlopt && !rapporteringsperiode && (
+        {!sessjonUtlopt && !rapporteringsperiode && (
           <main>
             <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>
           </main>
