@@ -8,7 +8,7 @@ import {
   hentSisteRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
 import { getSession } from "~/utils/auth.utils.server";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
 
 import styles from "./rapportering.module.css";
 
@@ -43,21 +43,6 @@ export default function Rapportering() {
   const { rapporteringsperiode, session } = useLoaderData<typeof loader>();
   const harSessjon = session?.expiresIn > 0;
 
-  function hentPeriodeTekst() {
-    if (!rapporteringsperiode) {
-      return <></>;
-    }
-
-    const { fraOgMed, tilOgMed } = rapporteringsperiode;
-
-    return (
-      <p>
-        Uke
-        {formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}({formaterPeriodeDato(fraOgMed, tilOgMed)})
-      </p>
-    );
-  }
-
   return (
     <div id="dp-rapportering-frontend">
       <div className={styles.rapporteringHeader}>
@@ -65,7 +50,9 @@ export default function Rapportering() {
           <Heading level="1" size="xlarge">
             Dagpengerapportering
           </Heading>
-          {rapporteringsperiode && hentPeriodeTekst()}
+          {rapporteringsperiode && (
+            <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
+          )}
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
