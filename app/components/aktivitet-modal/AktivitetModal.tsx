@@ -112,9 +112,6 @@ export function AktivitetModal(props: IProps) {
           )}
 
           <div className={styles.knappKontainer}>
-            <Button variant="tertiary-neutral" onClick={() => props.lukkModal()}>
-              Avbryt
-            </Button>
             <Button type="submit" name="submit" value="lagre">
               Lagre
             </Button>
