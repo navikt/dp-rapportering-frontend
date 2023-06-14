@@ -43,7 +43,7 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function Rapportering() {
   const { rapporteringsperiode, session } = useLoaderData<typeof loader>();
-  const sessjonUtlopt = session?.expiresIn === 0;
+  const harSessjon = session?.expiresIn > 0;
 
   function hentPeriodeTekst() {
     if (!rapporteringsperiode) {
@@ -71,8 +71,8 @@ export default function Rapportering() {
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
-        {!sessjonUtlopt && rapporteringsperiode && <Outlet />}
-        {!sessjonUtlopt && !rapporteringsperiode && (
+        {harSessjon && rapporteringsperiode && <Outlet />}
+        {harSessjon && !rapporteringsperiode && (
           <main>
             <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>
           </main>
