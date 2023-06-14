@@ -15,7 +15,6 @@ import styles from "./rapportering.module.css";
 export interface IRapporteringLoader {
   rapporteringsperiode: IRapporteringsperiode;
   session: SessionWithOboProvider;
-  sessjonUtlopt: boolean;
 }
 
 export async function loader({ request }: LoaderArgs) {
@@ -23,7 +22,7 @@ export async function loader({ request }: LoaderArgs) {
 
   // Utløpt sessjon
   if (session.expiresIn === 0) {
-    return json({ rapporteringsperiode: null, session, sessjonUtlopt: true });
+    return json({ rapporteringsperiode: null, session });
   }
 
   const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
@@ -70,7 +69,6 @@ export default function Rapportering() {
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
-        {sessjonUtlopt && <></>}
         {!sessjonUtlopt && rapporteringsperiode && <Outlet />}
         {sessjonUtlopt && !rapporteringsperiode && (
           <main>
