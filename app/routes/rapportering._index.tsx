@@ -34,8 +34,9 @@ export async function action({ request }: ActionArgs) {
   }
 
   const { rapporteringsperiodeId, type, dato, timer: tid } = inputVerdier.submittedData;
+
   if (isArbeid) {
-    const delt = tid.split(",");
+    const delt = tid.replace(/\./g, ",").split(",");
     const timer = delt[0] || 0;
     const minutter = delt[1] || 0;
     const aktivitet = {
@@ -46,6 +47,7 @@ export async function action({ request }: ActionArgs) {
         minutes: minutter * 6,
       }),
     };
+
     return await lagreAktivitet(rapporteringsperiodeId, aktivitet, request);
   }
   const aktivitet = {

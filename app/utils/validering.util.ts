@@ -8,7 +8,7 @@ export const aktivitetsvalideringArbeid = z.object({
     invalid_type_error: "Ugyldig dato",
   }),
   timer: z.preprocess(
-    (val) => String(val).replace(/,/g, "."),
+    (timer) => String(timer).replace(/,/g, "."),
     z.coerce
       .number({
         required_error: "Du må skrive et tall",
