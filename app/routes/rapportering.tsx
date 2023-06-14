@@ -1,16 +1,16 @@
+import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
 import { Accordion, Alert, Heading } from "@navikt/ds-react";
 import { json, type LoaderArgs } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
+import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import {
   IRapporteringsperiode,
   hentSisteRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
+import { getSession } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 import styles from "./rapportering.module.css";
-import { getSession } from "~/utils/auth.utils.server";
-import { SessjonModal } from "~/components/session-modal/SessjonModal";
-import { SessionWithOboProvider } from "@navikt/dp-auth/index/";
 
 export interface IRapporteringLoader {
   rapporteringsperiode: IRapporteringsperiode;
