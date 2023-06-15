@@ -1,7 +1,7 @@
 import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
 import { Accordion, Alert, Heading } from "@navikt/ds-react";
 import { json, type LoaderArgs } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet, ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import {
   IRapporteringsperiode,
@@ -15,15 +15,31 @@ import styles from "./rapportering.module.css";
 export interface IRapporteringLoader {
   rapporteringsperiode: IRapporteringsperiode;
   session: SessionWithOboProvider;
+  error: IError | null;
 }
+
+interface IError {
+  status: number;
+  statusText: string;
+}
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({
+  formAction,
+  defaultShouldRevalidate,
+}) => {
+  if (formAction === "/rapportering/send-inn") {
+    return false;
+  }
+
+  return defaultShouldRevalidate;
+};
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request);
 
-  // Utløpt sessjon
   // Denne gjelder bare lokalt, DEV og PROD håndteres av wonderwall
   if (session.expiresIn === 0) {
-    return json({ rapporteringsperiode: null, session });
+    return json({ rapporteringsperiode: null, session, error: null });
   }
 
   const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
@@ -31,17 +47,18 @@ export async function loader({ request }: LoaderArgs) {
     request
   );
 
-  // Her må vi gjøre noe smartere
-  // Per nå får vi et object med atributter med null i verdi
-  const rapporteringsperiode = rapporteringsperiodeResponse.id
-    ? rapporteringsperiodeResponse
-    : null;
+  if (!rapporteringsperiodeResponse.ok) {
+    const { status, statusText } = rapporteringsperiodeResponse;
+    return json({ rapporteringsperiode: null, session, error: { status, statusText } });
+  }
 
-  return json({ rapporteringsperiode, session });
+  const rapporteringsperiode = await rapporteringsperiodeResponse.json();
+
+  return json({ rapporteringsperiode, session, error: null });
 }
 
 export default function Rapportering() {
-  const { rapporteringsperiode, session } = useLoaderData<typeof loader>();
+  const { rapporteringsperiode, session, error } = useLoaderData<typeof loader>();
   const harSessjon = session?.expiresIn > 0;
 
   return (
@@ -57,13 +74,8 @@ export default function Rapportering() {
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
-        {harSessjon && rapporteringsperiode && <Outlet />}
-        {harSessjon && !rapporteringsperiode && (
-          <main>
-            <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>
-          </main>
-        )}
-
+        {error && <RapporteringError error={error} />}
+        {!error && harSessjon && rapporteringsperiode && <Outlet />}
         <Accordion className={styles.debug}>
           <Accordion.Item>
             <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
@@ -75,5 +87,25 @@ export default function Rapportering() {
         <SessjonModal />
       </main>
     </div>
+  );
+}
+
+interface IRapporteringError {
+  error: IError;
+}
+
+function RapporteringError({ error }: IRapporteringError) {
+  if (error.status === 404) {
+    return (
+      <main>
+        <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>
+      </main>
+    );
+  }
+
+  return (
+    <main>
+      <Alert variant="warning">Teknisk feil, prøv igjen senere</Alert>
+    </main>
   );
 }
