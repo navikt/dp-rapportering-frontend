@@ -1,78 +1,120 @@
-import { Button, Heading, Modal } from "@navikt/ds-react";
-import { withZod } from "@remix-validated-form/with-zod";
+import { TrashIcon } from "@navikt/aksel-icons";
+import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
+import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
+import { format } from "date-fns";
+import nbLocale from "date-fns/locale/nb";
 import { ValidatedForm } from "remix-validated-form";
+import { TallInput } from "~/components/TallInput";
 import type { TAktivitetType } from "~/models/aktivitet.server";
-import { aktivitetsvalideringArbeid, aktivitetsvalideringSykFerie } from "~/utils/validering.util";
-import { TallInput } from "../TallInput";
+import { IRapporteringLoader } from "~/routes/rapportering";
+import { periodeSomTimer } from "~/utils/periode.utils";
+import { validator } from "~/utils/validering.util";
+import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 
 import styles from "./AktivitetModal.module.css";
 
 interface IProps {
   rapporteringsperiodeId: string;
-  timer?: string;
   valgtDato?: string;
-  setValgtDato: (dato: string) => void;
-  valgtAktivitet?: TAktivitetType;
-  setValgtAktivitet: (aktivitet: TAktivitetType) => void;
+  valgtAktivitet: string | TAktivitetType;
+  setValgtAktivitet: (aktivitet: string | TAktivitetType) => void;
   modalAapen: boolean;
   setModalAapen: any;
-  modalHeaderTekst?: string;
   lukkModal: () => void;
   muligeAktiviteter: TAktivitetType[];
 }
 
 export function AktivitetModal(props: IProps) {
-  const validator =
-    props.valgtAktivitet === "Arbeid"
-      ? withZod(aktivitetsvalideringArbeid)
-      : withZod(aktivitetsvalideringSykFerie);
+  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
+  const actionData = useActionData();
+
+  const valgteDatoHarAktivitet = rapporteringsperiode.dager.find(
+    (dag) => dag.dato === props.valgtDato
+  );
+
+  function hentSlettKnappTekst() {
+    const aktivitet = valgteDatoHarAktivitet?.aktiviteter[0];
+
+    if (aktivitet?.type === "Arbeid") {
+      return `${aktivitet.type} ${periodeSomTimer(aktivitet.timer!)
+        .toString()
+        .replace(/\./g, ",")} timer`;
+    }
+
+    return `${aktivitet?.type}`;
+  }
+
   return (
     <Modal
       aria-labelledby="modal-heading"
       aria-label="Rapporter aktivitet"
       open={props.modalAapen}
       onClose={() => props.lukkModal()}
-      className={styles.timerforingModal}
     >
       <Modal.Content>
         <Heading spacing level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
-          {props.modalHeaderTekst}
+          {props.valgtDato && format(new Date(props.valgtDato), "EEEE d", { locale: nbLocale })}
         </Heading>
-        <div className={styles.timeTypeKontainer}>
-          {props.muligeAktiviteter &&
-            props.muligeAktiviteter.map((aktivitet) => (
+
+        {valgteDatoHarAktivitet &&
+          valgteDatoHarAktivitet.aktiviteter.map((aktivitet) => (
+            <Form key={aktivitet.id} method="post">
+              <input
+                type="text"
+                hidden
+                name="rapporteringsperiodeId"
+                defaultValue={props.rapporteringsperiodeId}
+              />
+              <input type="text" hidden name="aktivitetId" defaultValue={aktivitet.id} />
               <button
-                key={aktivitet}
-                className={classNames(styles.timeType, styles[aktivitet])}
-                onClick={() => props.setValgtAktivitet(aktivitet)}
-                hidden={!!props.valgtAktivitet && props.valgtAktivitet !== aktivitet}
+                type="submit"
+                name="submit"
+                value="slette"
+                className={classNames(styles.slettKnapp, styles[aktivitet.type])}
               >
-                {aktivitet}
+                {hentSlettKnappTekst()}
+                <TrashIcon title="a11y-title" fontSize="1.5rem" />
               </button>
-            ))}
-        </div>
-        <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator}>
+            </Form>
+          ))}
+
+        <ValidatedForm
+          method="post"
+          key="lagre-ny-aktivitet"
+          validator={validator(props.valgtAktivitet)}
+        >
           <input
             type="text"
             hidden
             name="rapporteringsperiodeId"
             defaultValue={props.rapporteringsperiodeId}
           />
-          <input type="text" hidden name="type" defaultValue={props.valgtAktivitet} />
           <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
-          {props.valgtAktivitet === "Arbeid" && (
-            <TallInput
-              label="Antall timer:"
-              name="timer"
-              verdi={props.timer?.replace(/\./g, ",")}
-            />
+
+          <div className={styles.aktivitetKontainer}>
+            {props.muligeAktiviteter && (
+              <AktivitetRadio
+                name="type"
+                muligeAktiviteter={props.muligeAktiviteter}
+                verdi={props.valgtAktivitet}
+                onChange={(aktivitet: string) => props.setValgtAktivitet(aktivitet)}
+              />
+            )}
+          </div>
+
+          {props.valgtAktivitet === "Arbeid" && <TallInput name="timer" label="Antall timer:" />}
+
+          {actionData?.error && (
+            <Alert variant="error" className={styles.feilmelding}>
+              {actionData.error}
+            </Alert>
           )}
+
           <div className={styles.knappKontainer}>
-            <Button variant="tertiary-neutral" onClick={() => props.lukkModal()}>
-              Avbryt
+            <Button type="submit" name="submit" value="lagre">
+              Lagre
             </Button>
-            <Button type="submit">Lagre</Button>
           </div>
         </ValidatedForm>
       </Modal.Content>

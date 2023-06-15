@@ -1,5 +1,6 @@
 import { Heading } from "@navikt/ds-react";
 import { RemixLink } from "~/components/RemixLink";
+
 import styles from "./rapportering.module.css";
 
 export default function RapporteringSendt() {

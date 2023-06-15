@@ -62,19 +62,15 @@ export function Kalender(props: IProps) {
               >
                 <p>{format(new Date(dag.dato), "dd")}</p>.
               </button>
-              {harAktivitet && (
+              {harAktivitet && dag.aktiviteter[0].type === "Arbeid" && (
                 <div
                   className={classNames(styles.kalenderDatoAktivitet, {
                     [styles.timerArbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
-                    [styles.timerSykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
-                    [styles.timerFerie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
                   })}
                 >
                   {dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid") && (
                     <> {timer.toString().replace(/\./g, ",")}t</>
                   )}
-                  {dag.aktiviteter.some((aktivitet) => aktivitet.type === "Syk") && <>Syk</>}
-                  {dag.aktiviteter.some((aktivitet) => aktivitet.type === "Ferie") && <>Ferie</>}
                 </div>
               )}
             </div>

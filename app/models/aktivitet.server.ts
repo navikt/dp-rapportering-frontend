@@ -14,7 +14,7 @@ export async function lagreAktivitet(
   rapporteringsperiodeId: string,
   aktivitet: IAktivitet,
   request: Request
-): Promise<IAktivitet> {
+): Promise<Response> {
   const session = await getSession(request);
 
   const url = `${getEnv(
@@ -23,7 +23,7 @@ export async function lagreAktivitet(
 
   const onBehalfOfToken = await getRapporteringOboToken(session);
 
-  const response = await fetch(url, {
+  return await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -32,13 +32,27 @@ export async function lagreAktivitet(
     },
     body: JSON.stringify({ ...aktivitet }),
   });
+}
 
-  if (!response.ok) {
-    throw new Response(`Feil ved lagring av aktivitet til ${url}`, {
-      status: response.status,
-      statusText: response.statusText,
-    });
-  }
+export async function sletteAktivitet(
+  rapporteringsperiodeId: string,
+  aktivitetId: String,
+  request: Request
+): Promise<Response> {
+  const session = await getSession(request);
 
-  return await response.json();
+  const url = `${getEnv(
+    "DP_RAPPORTERING_URL"
+  )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet/${aktivitetId}`;
+
+  const onBehalfOfToken = await getRapporteringOboToken(session);
+
+  return await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
 }

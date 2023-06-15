@@ -1,13 +1,13 @@
-import { Left, Right } from "@navikt/ds-icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, BodyShort, Button, Heading, ReadMore } from "@navikt/ds-react";
 import { ActionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
+import { logger } from "server/logger";
+import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { IRapporteringLoader } from "./rapportering";
-import invariant from "tiny-invariant";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
-import { logger } from "server/logger";
+import { IRapporteringLoader } from "./rapportering";
 
 import styles from "./rapportering.module.css";
 
@@ -72,10 +72,20 @@ export default function RapporteringSendInn() {
         />
 
         <div className={styles.navigasjonKontainer}>
-          <RemixLink to="/rapportering" as="Button" variant="secondary" icon={<Left />}>
+          <RemixLink
+            to="/rapportering"
+            as="Button"
+            variant="secondary"
+            icon={<ArrowLeftIcon fontSize="1.5rem" />}
+          >
             Forrige steg
           </RemixLink>
-          <Button type="submit" variant="primary" icon={<Right />} iconPosition="right">
+          <Button
+            type="submit"
+            variant="primary"
+            icon={<ArrowRightIcon fontSize="1.5rem" />}
+            iconPosition="right"
+          >
             Send til nav
           </Button>
         </div>
