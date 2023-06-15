@@ -9,10 +9,17 @@ const aktivitetsvalideringArbeid = z.object({
   dato: z.coerce.date({
     invalid_type_error: "Ugyldig dato",
   }),
-  timer: z
-    .string()
-    .nonempty({ message: "Du må skrive et tall" })
-    .regex(new RegExp("^\\d*(,)?\\d*$"), "Det må være et gyldig tall"), // Regex for å matche tall med komma seperator
+  timer: z.preprocess(
+    (timer) => String(timer).replace(/,/g, "."),
+    z.coerce
+      .number({
+        required_error: "Du må skrive et tall",
+        invalid_type_error: "Det må være et gyldig tall",
+      })
+      .positive({ message: "Det må være mellom 0,5 og 24 timer" })
+      .min(0.5, { message: "Det må være mer enn 0,5 timer" })
+      .max(24, { message: "Det må være mellom 0,5 og 24 timer" })
+  ),
 });
 
 const aktivitetsvalideringSykFerie = aktivitetsvalideringArbeid.partial({ timer: true });

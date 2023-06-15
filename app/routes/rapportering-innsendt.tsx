@@ -15,7 +15,7 @@ export default function RapporteringSendt() {
       </div>
       <main className={styles.rapporteringKontainer}>
         <Heading level="2" size="small">
-          Du har sendt inn rapporteringen til NAV.
+          Rapporteringen din er sendt inn til NAV.»
         </Heading>
         <br />
         <RemixLink

@@ -103,7 +103,7 @@ export function AktivitetModal(props: IProps) {
             )}
           </div>
 
-          {props.valgtAktivitet === "Arbeid" && <TallInput name="timer" />}
+          {props.valgtAktivitet === "Arbeid" && <TallInput name="timer" label="Antall timer:" />}
 
           {actionData?.error && (
             <Alert variant="error" className={styles.feilmelding}>
