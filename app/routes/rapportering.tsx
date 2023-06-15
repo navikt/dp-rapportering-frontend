@@ -21,6 +21,7 @@ export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request);
 
   // Utløpt sessjon
+  // Denne gjelder bare lokalt, DEV og PROD håndteres av wonderwall
   if (session.expiresIn === 0) {
     return json({ rapporteringsperiode: null, session });
   }
