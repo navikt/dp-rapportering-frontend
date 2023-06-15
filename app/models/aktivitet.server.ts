@@ -41,10 +41,6 @@ export async function sletteAktivitet(
 ): Promise<Response> {
   const session = await getSession(request);
 
-  if (!session) {
-    throw new Error("Feil ved henting av sessjon");
-  }
-
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"
   )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet/${aktivitetId}`;
