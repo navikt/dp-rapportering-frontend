@@ -1,7 +1,7 @@
 import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
 import { Accordion, Alert, Heading } from "@navikt/ds-react";
 import { json, type LoaderArgs } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet, ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import {
   IRapporteringsperiode,
@@ -22,6 +22,17 @@ interface IError {
   status: number;
   statusText: string;
 }
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({
+  formAction,
+  defaultShouldRevalidate,
+}) => {
+  if (formAction === "/rapportering/send-inn") {
+    return false;
+  }
+
+  return defaultShouldRevalidate;
+};
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request);
