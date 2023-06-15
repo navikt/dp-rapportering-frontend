@@ -77,6 +77,7 @@ export async function loader() {
     env: {
       BASE_PATH: process.env.BASE_PATH,
       DP_RAPPORTERING_URL: process.env.DP_RAPPORTERING_URL,
+      IS_LOCALHOST: process.env.IS_LOCALHOST,
     },
     fragments,
   });
@@ -118,7 +119,5 @@ export default function App() {
 export function ErrorBoundary() {
   const error = useRouteError();
 
-  return (
-    <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />
-  );
+  return <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />;
 }

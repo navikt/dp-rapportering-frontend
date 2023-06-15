@@ -26,10 +26,6 @@ export async function hentSisteRapporteringsperiode(
 
   const session = await getSession(request);
 
-  if (!session) {
-    throw new Error("Feil ved henting av sessjon");
-  }
-
   const onBehalfOfToken = await getRapporteringOboToken(session);
 
   const response = await fetch(url, {
@@ -58,10 +54,6 @@ export async function godkjennPeriode(id: string, request: Request): Promise<Res
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}/godkjenn`;
 
   const session = await getSession(request);
-
-  if (!session) {
-    throw new Error("Feil ved henting av sessjon");
-  }
 
   const onBehalfOfToken = await getRapporteringOboToken(session);
 

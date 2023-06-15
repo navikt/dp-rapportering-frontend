@@ -62,7 +62,11 @@ export function AktivitetModal(props: IProps) {
           <input type="text" hidden name="type" defaultValue={props.valgtAktivitet} />
           <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
           {props.valgtAktivitet === "Arbeid" && (
-            <TallInput name="timer" verdi={props.timer?.replace(/\./g, ",")} />
+            <TallInput
+              label="Antall timer:"
+              name="timer"
+              verdi={props.timer?.replace(/\./g, ",")}
+            />
           )}
           <div className={styles.knappKontainer}>
             <Button variant="tertiary-neutral" onClick={() => props.lukkModal()}>

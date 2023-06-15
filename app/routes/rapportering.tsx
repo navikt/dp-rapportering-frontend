@@ -1,15 +1,31 @@
+import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
 import { Accordion, Alert, Heading } from "@navikt/ds-react";
 import { json, type LoaderArgs } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
+import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import {
   IRapporteringsperiode,
   hentSisteRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { getSession } from "~/utils/auth.utils.server";
+import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
 
 import styles from "./rapportering.module.css";
 
+export interface IRapporteringLoader {
+  rapporteringsperiode: IRapporteringsperiode;
+  session: SessionWithOboProvider;
+}
+
 export async function loader({ request }: LoaderArgs) {
+  const session = await getSession(request);
+
+  // Utløpt sessjon
+  // Denne gjelder bare lokalt, DEV og PROD håndteres av wonderwall
+  if (session.expiresIn === 0) {
+    return json({ rapporteringsperiode: null, session });
+  }
+
   const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
     "gjeldende", // TODO: Dette bør vel helst være smartere 😅
     request
@@ -21,25 +37,12 @@ export async function loader({ request }: LoaderArgs) {
     ? rapporteringsperiodeResponse
     : null;
 
-  return json({ rapporteringsperiode });
-}
-
-export interface IRapporteringLoader {
-  rapporteringsperiode: IRapporteringsperiode;
+  return json({ rapporteringsperiode, session });
 }
 
 export default function Rapportering() {
-  const { rapporteringsperiode } = useLoaderData<typeof loader>();
-
-  if (!rapporteringsperiode) {
-    return (
-      <main className={styles.rapporteringKontainer}>
-        <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>
-      </main>
-    );
-  }
-
-  const { fraOgMed, tilOgMed } = rapporteringsperiode;
+  const { rapporteringsperiode, session } = useLoaderData<typeof loader>();
+  const harSessjon = session?.expiresIn > 0;
 
   return (
     <div id="dp-rapportering-frontend">
@@ -48,14 +51,19 @@ export default function Rapportering() {
           <Heading level="1" size="xlarge">
             Dagpengerapportering
           </Heading>
-          <p>
-            Uke {formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)} (
-            {formaterPeriodeDato(fraOgMed, tilOgMed)})
-          </p>
+          {rapporteringsperiode && (
+            <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
+          )}
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
-        <Outlet />
+        {harSessjon && rapporteringsperiode && <Outlet />}
+        {harSessjon && !rapporteringsperiode && (
+          <main>
+            <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>
+          </main>
+        )}
+
         <Accordion className={styles.debug}>
           <Accordion.Item>
             <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
@@ -64,6 +72,7 @@ export default function Rapportering() {
             </Accordion.Content>
           </Accordion.Item>
         </Accordion>
+        <SessjonModal />
       </main>
     </div>
   );
