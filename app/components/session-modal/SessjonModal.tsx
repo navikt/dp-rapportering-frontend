@@ -3,7 +3,7 @@ import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { IRapporteringLoader } from "~/routes/rapportering";
-import { DevelopmentKontainer } from "../DevelopmentKontainer";
+import { DevelopmentKontainer } from "../development-kontainer/DevelopmentKontainer";
 
 import styles from "./SessjonModal.module.css";
 

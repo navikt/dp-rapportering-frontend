@@ -9,7 +9,7 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { getSession } from "~/utils/auth.utils.server";
 import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
-import { DevelopmentKontainer } from "~/components/DevelopmentKontainer";
+import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
 
 import styles from "./rapportering.module.css";
 
