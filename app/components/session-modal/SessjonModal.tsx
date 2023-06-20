@@ -1,9 +1,9 @@
-import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
+import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useRouteLoaderData } from "@remix-run/react";
+import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { IRapporteringLoader } from "~/routes/rapportering";
-import classNames from "classnames";
-import { getEnv } from "~/utils/env.utils";
+import { DevelopmentKontainer } from "../DevelopmentKontainer";
 
 import styles from "./SessjonModal.module.css";
 
@@ -64,16 +64,14 @@ export function SessjonModal() {
             Gå til forsiden
           </Button>
         </div>
-        {getEnv("IS_LOCALHOST") === "true" && (
-          <Alert variant="info">
-            <a
-              target="_blank"
-              href="https://wonderwalled-idporten.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering"
-            >
-              Klikk på lenken for å hente ny token
-            </a>
-          </Alert>
-        )}
+        <DevelopmentKontainer>
+          <a
+            target="_blank"
+            href="https://wonderwalled-idporten.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering"
+          >
+            Klikk på lenken for å hente ny token
+          </a>
+        </DevelopmentKontainer>
       </Modal.Content>
     </Modal>
   );

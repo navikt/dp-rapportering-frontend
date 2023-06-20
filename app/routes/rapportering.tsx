@@ -9,6 +9,7 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { getSession } from "~/utils/auth.utils.server";
 import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
+import { DevelopmentKontainer } from "~/components/DevelopmentKontainer";
 
 import styles from "./rapportering.module.css";
 
@@ -76,14 +77,17 @@ export default function Rapportering() {
       <main className={styles.rapporteringKontainer}>
         {error && <RapporteringError error={error} />}
         {!error && harSessjon && rapporteringsperiode && <Outlet />}
-        <Accordion className={styles.debug}>
-          <Accordion.Item>
-            <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
-            <Accordion.Content>
-              <pre>${JSON.stringify(rapporteringsperiode, null, 2)}</pre>
-            </Accordion.Content>
-          </Accordion.Item>
-        </Accordion>
+
+        <DevelopmentKontainer>
+          <Accordion>
+            <Accordion.Item>
+              <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
+              <Accordion.Content>
+                <pre>${JSON.stringify(rapporteringsperiode, null, 2)}</pre>
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion>
+        </DevelopmentKontainer>
         <SessjonModal />
       </main>
     </div>

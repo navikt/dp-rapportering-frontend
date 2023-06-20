@@ -1,0 +1,14 @@
+.kontainer {
+  position: relative;
+  border: 1px solid var(--a-purple-500);
+  border-radius: 4px;
+  padding: var(--a-spacing-8) var(--a-spacing-4) var(--a-spacing-6);
+  background-color: var(--a-purple-100);
+  margin-top: var(--a-spacing-10);
+}
+
+.tag {
+  position: absolute;
+  top: -16px;
+  background-color: white;
+}

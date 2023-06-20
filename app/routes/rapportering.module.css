@@ -29,10 +29,6 @@
   justify-content: space-between;
 }
 
-.debug {
-  margin-top: var(--a-spacing-14);
-}
-
 .utbetalingsEstimat,
 .feilmelding {
   margin-top: var(--a-spacing-10);
