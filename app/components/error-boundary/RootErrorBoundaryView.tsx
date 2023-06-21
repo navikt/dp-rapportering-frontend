@@ -11,7 +11,7 @@ interface IProps {
 
 export function RootErrorBoundaryView({ meta, links, error }: IProps) {
   return (
-    <html lang="en">
+    <html lang="nb">
       <head>
         {meta}
         {links}
