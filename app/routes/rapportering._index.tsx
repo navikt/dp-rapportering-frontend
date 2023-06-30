@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Heading, Modal } from "@navikt/ds-react";
+import { Alert, Heading, Modal } from "@navikt/ds-react";
 import { json, type ActionArgs } from "@remix-run/node";
 import { useActionData, useRouteLoaderData } from "@remix-run/react";
 import { isFriday, isPast, isToday } from "date-fns";
@@ -14,7 +14,7 @@ import { useSanity } from "~/hooks/useSanity";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
 import { validator } from "~/utils/validering.util";
-import { IRapporteringLoader } from "./rapportering";
+import { type IRapporteringLoader } from "./rapportering";
 
 import styles from "./rapportering.module.css";
 
@@ -144,7 +144,13 @@ export default function Rapportering() {
         {hentAppTekstMedId("rapportering-periode-tittel")}
       </Heading>
 
-      <Kalender aapneModal={aapneModal} />
+      {rapporteringsperiode.status === "Godkjent" && (
+        <Alert variant="success" className="my-6">
+          Du har sendt inn meldekortet! Du trenger ikke gjøre noe mer :)
+        </Alert>
+      )}
+
+      <Kalender rapporteringsperiode={rapporteringsperiode} aapneModal={aapneModal} />
 
       <AktivitetModal
         rapporteringsperiodeId={rapporteringsperiode.id}

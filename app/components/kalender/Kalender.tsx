@@ -8,12 +8,11 @@ import { periodeSomTimer } from "~/utils/periode.utils";
 
 interface IProps {
   aapneModal: (dato: string) => void;
+  rapporteringsperiode: IRapporteringsperiode;
 }
 
 export function Kalender(props: IProps) {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
-    rapporteringsperiode: IRapporteringsperiode;
-  };
+  const { rapporteringsperiode, aapneModal } = props;
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];
@@ -58,7 +57,7 @@ export function Kalender(props: IProps) {
                   [styles.sykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
                   [styles.ferie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
                 })}
-                onClick={() => props.aapneModal(dag.dato)}
+                onClick={() => aapneModal(dag.dato)}
               >
                 <p>{format(new Date(dag.dato), "dd")}</p>.
               </button>

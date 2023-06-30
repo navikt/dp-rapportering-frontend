@@ -1,11 +1,12 @@
 import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
 import { Accordion, Alert, Heading } from "@navikt/ds-react";
 import { json, type LoaderArgs } from "@remix-run/node";
-import { Outlet, ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
+import { Outlet, type ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import {
-  IRapporteringsperiode,
-  hentSisteRapporteringsperiode,
+  type IRapporteringsperiode,
+  hentGjeldendePeriode,
+  hentAllePerioder,
 } from "~/models/rapporteringsperiode.server";
 import { getSession } from "~/utils/auth.utils.server";
 import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
@@ -15,6 +16,7 @@ import styles from "./rapportering.module.css";
 
 export interface IRapporteringLoader {
   rapporteringsperiode: IRapporteringsperiode;
+  allePerioder: IRapporteringsperiode[];
   session: SessionWithOboProvider;
   error: IError | null;
 }
@@ -43,17 +45,25 @@ export async function loader({ request }: LoaderArgs) {
     return json({ rapporteringsperiode: null, session, error: null });
   }
 
-  const rapporteringsperiodeResponse = await hentSisteRapporteringsperiode(
-    "gjeldende", // TODO: Dette bør vel helst være smartere 😅
-    request
-  );
+  let gjeldendePeriode = null;
+  let allePerioder = null;
+  let error = null;
 
-  if (!rapporteringsperiodeResponse.ok) {
-    const { status, statusText } = rapporteringsperiodeResponse;
-    return json({ rapporteringsperiode: null, session, error: { status, statusText } });
+  const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
+  const allePerioderResponse = await hentAllePerioder(request);
+
+  if (gjeldendePeriodeResponse.ok) {
+    gjeldendePeriode = await gjeldendePeriodeResponse.json();
   }
 
-  const rapporteringsperiode = await rapporteringsperiodeResponse.json();
+  if (allePerioderResponse.ok) {
+    allePerioder = await allePerioderResponse.json();
+  } else {
+    const { status, statusText } = allePerioderResponse;
+    error = { status, statusText };
+  }
+
+  const rapporteringsperiode = gjeldendePeriode || allePerioder[0];
 
   return json({ rapporteringsperiode, session, error: null });
 }

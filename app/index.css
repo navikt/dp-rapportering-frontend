@@ -13,3 +13,31 @@ body {
   padding: var(--app-padding);
   margin: 0 auto;
 }
+
+.my-12 {
+  margin: var(--a-spacing-12) 0;
+}
+
+.my-11 {
+  margin: var(--a-spacing-11) 0;
+}
+
+.my-10 {
+  margin: var(--a-spacing-10) 0;
+}
+
+.my-6 {
+  margin: var(--a-spacing-6) 0;
+}
+
+.my-4 {
+  margin: var(--a-spacing-4) 0;
+}
+
+.my-3 {
+  margin: var(--a-spacing-3) 0;
+}
+
+.my-2 {
+  margin: var(--a-spacing-2) 0;
+}
