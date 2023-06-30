@@ -65,7 +65,7 @@ export async function loader({ request }: LoaderArgs) {
 
   const rapporteringsperiode = gjeldendePeriode || allePerioder[0];
 
-  return json({ rapporteringsperiode, session, error: null });
+  return json({ rapporteringsperiode, session, error });
 }
 
 export default function Rapportering() {
