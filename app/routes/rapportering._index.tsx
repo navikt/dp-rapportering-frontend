@@ -1,20 +1,17 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Heading, Modal } from "@navikt/ds-react";
-import { json, type ActionArgs } from "@remix-run/node";
-import { useActionData, useRouteLoaderData } from "@remix-run/react";
+import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
+import { type ActionArgs } from "@remix-run/node";
+import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
 import { isFriday, isPast, isToday } from "date-fns";
 import { useEffect, useState } from "react";
-import { validationError } from "remix-validated-form";
-import { serialize } from "tinyduration";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { useSanity } from "~/hooks/useSanity";
-import type { TAktivitetType } from "~/models/aktivitet.server";
-import { lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
-import { validator } from "~/utils/validering.util";
 import { type IRapporteringLoader } from "./rapportering";
+import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
+import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 import styles from "./rapportering.module.css";
 
@@ -24,88 +21,28 @@ export async function action({ request }: ActionArgs) {
 
   switch (submitKnapp) {
     case "slette": {
-      const rapporteringsperiodeId = formdata.get("rapporteringsperiodeId") as string;
-      const aktivitetId = formdata.get("aktivitetId") as string;
-
-      const slettAktivitetResponse = await sletteAktivitet(
-        rapporteringsperiodeId,
-        aktivitetId,
-        request
-      );
-
-      if (!slettAktivitetResponse.ok) {
-        return json({ error: "Det har skjedd en feil ved sletting, prøv igjen." });
-      }
-
-      return {};
+      return await slettAktivitetAction(formdata, request);
     }
 
     case "lagre": {
-      const aktivitType = formdata.get("type") as TAktivitetType;
-      const inputVerdier = await validator(aktivitType).validate(formdata);
-
-      if (inputVerdier.error) {
-        return validationError(inputVerdier.error);
-      }
-
-      const { rapporteringsperiodeId, type, dato, timer: tid } = inputVerdier.submittedData;
-
-      function hentAktivitetArbeid() {
-        const delt = tid.replace(/\./g, ",").split(",");
-        const timer = delt[0] || 0;
-        const minutter = delt[1] || 0;
-
-        return {
-          type,
-          dato,
-          timer: serialize({
-            hours: timer,
-            minutes: minutter * 6,
-          }),
-        };
-      }
-
-      const andreAktivitet = {
-        type,
-        dato,
-      };
-
-      const aktivitetData = aktivitType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
-
-      const lagreAktivitetResponse = await lagreAktivitet(
-        rapporteringsperiodeId,
-        aktivitetData,
-        request
-      );
-
-      if (!lagreAktivitetResponse.ok) {
-        return json({ error: "Noen gikk feil med lagring av aktivitet, prøv igjen." });
-      }
-
-      return json({ lagret: true });
+      return await lagreAktivitetAction(formdata, request);
     }
   }
 }
 
 export default function Rapportering() {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
+  const { rapporteringsperiode, allePerioder } = useRouteLoaderData(
+    "routes/rapportering"
+  ) as IRapporteringLoader;
   const actionData = useActionData();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
-  const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
   const { hentAppTekstMedId } = useSanity();
 
   useEffect(() => {
     Modal.setAppElement("#dp-rapportering-frontend");
   }, []);
-
-  useEffect(() => {
-    setMuligeAktiviteter(
-      rapporteringsperiode.dager.find((r) => r.dato === valgtDato)?.muligeAktiviteter || []
-    );
-  }, [rapporteringsperiode.dager, valgtDato]);
 
   useEffect(() => {
     if (actionData?.lagret) {
@@ -119,7 +56,6 @@ export default function Rapportering() {
   }
 
   function lukkModal() {
-    setValgtAktivitet("");
     setValgtDato(undefined);
     setModalAapen(false);
   }
@@ -153,20 +89,13 @@ export default function Rapportering() {
       <Kalender rapporteringsperiode={rapporteringsperiode} aapneModal={aapneModal} />
 
       <AktivitetModal
-        rapporteringsperiodeId={rapporteringsperiode.id}
+        rapporteringsperiode={rapporteringsperiode}
         valgtDato={valgtDato}
-        valgtAktivitet={valgtAktivitet}
-        setValgtAktivitet={setValgtAktivitet}
         modalAapen={modalAapen}
-        setModalAapen={setModalAapen}
         lukkModal={lukkModal}
-        muligeAktiviteter={muligeAktiviteter}
       />
 
-      <div className={styles.registertMeldeperiodeKontainer}>
-        <p>Sammenlagt for meldeperioden:</p>
-        <AktivitetOppsummering />
-      </div>
+      <AktivitetOppsummering rapporteringsperiode={rapporteringsperiode} />
 
       <div className={styles.navigasjonKontainer}>
         <RemixLink to="" as="Button" variant="secondary" icon={<ArrowLeftIcon fontSize="1.5rem" />}>
@@ -185,6 +114,21 @@ export default function Rapportering() {
           Neste steg
         </RemixLink>
       </div>
+
+      <ul>
+        {allePerioder &&
+          allePerioder.map((periode: IRapporteringsperiode) => (
+            <li key={periode.id}>
+              {periode.fraOgMed} {periode.tilOgMed} - {periode.status} ({periode.id})
+              <Form method="post">
+                <input type="hidden" name="periode-id" value={periode.id}></input>
+                <Button type="submit" name="submit" value="start-korrigering">
+                  Korriger
+                </Button>
+              </Form>
+            </li>
+          ))}
+      </ul>
     </>
   );
 }

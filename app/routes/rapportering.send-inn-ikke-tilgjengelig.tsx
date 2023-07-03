@@ -5,7 +5,7 @@ import { format, isFriday } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { IRapporteringLoader } from "./rapportering";
+import { type IRapporteringLoader } from "./rapportering";
 
 import styles from "./rapportering.module.css";
 
@@ -39,7 +39,7 @@ export default function RapporteringSendInnIkkeTilgjengelig() {
         <Heading level="3" size="small">
           Dette er det du har registrert for meldeperioden:
         </Heading>
-        <AktivitetOppsummering />
+        <AktivitetOppsummering rapporteringsperiode={rapporteringsperiode} />
       </div>
 
       <div className={styles.navigasjonKontainer}>

@@ -1,3 +1,11 @@
+.registertMeldeperiodeKontainer {
+  margin-top: var(--a-spacing-10);
+}
+
+.registertMeldeperiodeKontainer > p {
+  color: var(--a-text-subtle);
+}
+
 .aktivitetOppsummeringKontainer {
   max-width: var(--app-max-width);
   margin: var(--a-spacing-4) auto 0;

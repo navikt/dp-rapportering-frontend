@@ -1,13 +1,13 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, BodyShort, Button, Heading, ReadMore } from "@navikt/ds-react";
-import { ActionArgs, json, redirect } from "@remix-run/node";
+import { type ActionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
 import { logger } from "server/logger";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
-import { IRapporteringLoader } from "./rapportering";
+import { type IRapporteringLoader } from "./rapportering";
 
 import styles from "./rapportering.module.css";
 
@@ -44,7 +44,7 @@ export default function RapporteringSendInn() {
         <Heading level="3" size="small">
           Dette er det du har registrert for meldeperioden:
         </Heading>
-        <AktivitetOppsummering />
+        <AktivitetOppsummering rapporteringsperiode={rapporteringsperiode} />
       </div>
 
       <div className={styles.utbetalingsEstimat}>

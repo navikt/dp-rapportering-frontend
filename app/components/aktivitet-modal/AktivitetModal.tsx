@@ -1,40 +1,38 @@
 import { TrashIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import classNames from "classnames";
 import { format } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
 import { ValidatedForm } from "remix-validated-form";
 import { TallInput } from "~/components/TallInput";
 import type { TAktivitetType } from "~/models/aktivitet.server";
-import { IRapporteringLoader } from "~/routes/rapportering";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 
 import styles from "./AktivitetModal.module.css";
+import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { useState } from "react";
 
 interface IProps {
-  rapporteringsperiodeId: string;
+  rapporteringsperiode: IRapporteringsperiode;
   valgtDato?: string;
-  valgtAktivitet: string | TAktivitetType;
-  setValgtAktivitet: (aktivitet: string | TAktivitetType) => void;
   modalAapen: boolean;
-  setModalAapen: any;
   lukkModal: () => void;
-  muligeAktiviteter: TAktivitetType[];
 }
 
 export function AktivitetModal(props: IProps) {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
+  const { rapporteringsperiode, valgtDato } = props;
   const actionData = useActionData();
+  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
 
-  const valgteDatoHarAktivitet = rapporteringsperiode.dager.find(
-    (dag) => dag.dato === props.valgtDato
+  const dag = rapporteringsperiode.dager.find(
+    (rapporteringsdag) => rapporteringsdag.dato === valgtDato
   );
 
   function hentSlettKnappTekst() {
-    const aktivitet = valgteDatoHarAktivitet?.aktiviteter[0];
+    const aktivitet = dag?.aktiviteter[0];
 
     if (aktivitet?.type === "Arbeid") {
       return `${aktivitet.type} ${periodeSomTimer(aktivitet.timer!)
@@ -54,17 +52,17 @@ export function AktivitetModal(props: IProps) {
     >
       <Modal.Content>
         <Heading spacing level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
-          {props.valgtDato && format(new Date(props.valgtDato), "EEEE d", { locale: nbLocale })}
+          {valgtDato && format(new Date(valgtDato), "EEEE d", { locale: nbLocale })}
         </Heading>
 
-        {valgteDatoHarAktivitet &&
-          valgteDatoHarAktivitet.aktiviteter.map((aktivitet) => (
+        {dag &&
+          dag.aktiviteter.map((aktivitet) => (
             <Form key={aktivitet.id} method="post">
               <input
                 type="text"
                 hidden
                 name="rapporteringsperiodeId"
-                defaultValue={props.rapporteringsperiodeId}
+                defaultValue={rapporteringsperiode.id}
               />
               <input type="text" hidden name="aktivitetId" defaultValue={aktivitet.id} />
               <button
@@ -79,31 +77,27 @@ export function AktivitetModal(props: IProps) {
             </Form>
           ))}
 
-        <ValidatedForm
-          method="post"
-          key="lagre-ny-aktivitet"
-          validator={validator(props.valgtAktivitet)}
-        >
+        <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator(valgtAktivitet)}>
           <input
             type="text"
             hidden
             name="rapporteringsperiodeId"
-            defaultValue={props.rapporteringsperiodeId}
+            defaultValue={rapporteringsperiode.id}
           />
-          <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
+          <input type="text" hidden name="dato" defaultValue={valgtDato} />
 
           <div className={styles.aktivitetKontainer}>
-            {props.muligeAktiviteter && (
+            {dag?.muligeAktiviteter && (
               <AktivitetRadio
                 name="type"
-                muligeAktiviteter={props.muligeAktiviteter}
-                verdi={props.valgtAktivitet}
-                onChange={(aktivitet: string) => props.setValgtAktivitet(aktivitet)}
+                muligeAktiviteter={dag.muligeAktiviteter}
+                verdi={valgtAktivitet}
+                onChange={(aktivitet: string) => setValgtAktivitet(aktivitet)}
               />
             )}
           </div>
 
-          {props.valgtAktivitet === "Arbeid" && <TallInput name="timer" label="Antall timer:" />}
+          {valgtAktivitet === "Arbeid" && <TallInput name="timer" label="Antall timer:" />}
 
           {actionData?.error && (
             <Alert variant="error" className={styles.feilmelding}>

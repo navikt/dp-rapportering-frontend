@@ -1,7 +1,7 @@
 import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
-import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
-import { ActionArgs, json, redirect, type LoaderArgs } from "@remix-run/node";
-import { Outlet, type ShouldRevalidateFunction, useLoaderData, Form } from "@remix-run/react";
+import { Accordion, Alert, Heading } from "@navikt/ds-react";
+import { type ActionArgs, json, redirect, type LoaderArgs } from "@remix-run/node";
+import { Outlet, type ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import {
   type IRapporteringsperiode,
@@ -90,7 +90,7 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function Rapportering() {
-  const { rapporteringsperiode, allePerioder, session, error } = useLoaderData<typeof loader>();
+  const { rapporteringsperiode, session, error } = useLoaderData<typeof loader>();
   const harSessjon = session?.expiresIn > 0;
 
   return (
@@ -119,21 +119,6 @@ export default function Rapportering() {
             </Accordion.Item>
           </Accordion>
         </DevelopmentKontainer>
-
-        <ul>
-          {allePerioder &&
-            allePerioder.map((periode: IRapporteringsperiode) => (
-              <li key={periode.id}>
-                {periode.fraOgMed} {periode.tilOgMed} - {periode.status} ({periode.id})
-                <Form method="post">
-                  <input type="hidden" name="periode-id" value={periode.id}></input>
-                  <Button type="submit" name="submit" value="start-korrigering">
-                    Korriger
-                  </Button>
-                </Form>
-              </li>
-            ))}
-        </ul>
         <SessjonModal />
       </main>
     </div>

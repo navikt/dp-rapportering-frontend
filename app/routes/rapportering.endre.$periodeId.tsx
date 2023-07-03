@@ -1,22 +1,15 @@
 import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
-import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
+import { Modal } from "@navikt/ds-react";
 import { type ActionArgs, json, type LoaderArgs } from "@remix-run/node";
-import { Outlet, type ShouldRevalidateFunction, useLoaderData, Form } from "@remix-run/react";
-import { SessjonModal } from "~/components/session-modal/SessjonModal";
-import {
-  type IRapporteringsperiode,
-  hentGjeldendePeriode,
-  hentAllePerioder,
-  startKorrigering,
-  hentEnPeriode,
-} from "~/models/rapporteringsperiode.server";
+import { type ShouldRevalidateFunction, useLoaderData, useActionData } from "@remix-run/react";
+import { type IRapporteringsperiode, hentEnPeriode } from "~/models/rapporteringsperiode.server";
 import { getSession } from "~/utils/auth.utils.server";
-import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
-import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
-
-import styles from "./rapportering.module.css";
 import invariant from "tiny-invariant";
 import { Kalender } from "~/components/kalender/Kalender";
+import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
+import { useEffect, useState } from "react";
+import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 
 export interface IRapporteringLoader {
   rapporteringsperiode: IRapporteringsperiode;
@@ -46,16 +39,16 @@ export async function action({ request }: ActionArgs) {
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
-    case "start-korrigering": {
-      const periodeId = formdata.get("periode-id") as string;
+    case "slette": {
+      return await slettAktivitetAction(formdata, request);
+    }
 
-      const korrigeringResponse = await startKorrigering(periodeId, request);
+    case "lagre": {
+      return await lagreAktivitetAction(formdata, request);
+    }
 
-      if (korrigeringResponse.ok) {
-        return {};
-      } else {
-        json({ error: "" });
-      }
+    case "godkjenne": {
+      // TODO: Skriv kode her
     }
   }
 }
@@ -80,36 +73,44 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 export default function Endre() {
-  const { rapporteringsperiode, session, error } = useLoaderData<typeof loader>();
-  const harSessjon = session?.expiresIn > 0;
+  const { rapporteringsperiode } = useLoaderData<typeof loader>();
+  const actionData = useActionData();
+
+  const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
+  const [modalAapen, setModalAapen] = useState(false);
+
+  useEffect(() => {
+    Modal.setAppElement("#dp-rapportering-frontend");
+  }, []);
+
+  useEffect(() => {
+    if (actionData?.lagret) {
+      lukkModal();
+    }
+  }, [actionData]);
 
   function aapneModal(dato: string) {
-    console.log("Noe skal skje :)");
+    setValgtDato(dato);
+    setModalAapen(true);
+  }
+
+  function lukkModal() {
+    setValgtDato(undefined);
+    setModalAapen(false);
   }
 
   return (
     <>
       <Kalender rapporteringsperiode={rapporteringsperiode} aapneModal={aapneModal} />
+
+      <AktivitetModal
+        rapporteringsperiode={rapporteringsperiode}
+        valgtDato={valgtDato}
+        modalAapen={modalAapen}
+        lukkModal={lukkModal}
+      />
+
+      <AktivitetOppsummering rapporteringsperiode={rapporteringsperiode} />
     </>
-  );
-}
-
-interface IRapporteringError {
-  error: IError;
-}
-
-function RapporteringError({ error }: IRapporteringError) {
-  if (error.status === 404) {
-    return (
-      <main>
-        <Alert variant="warning">Fant ikke rapporteringsperioder</Alert>
-      </main>
-    );
-  }
-
-  return (
-    <main>
-      <Alert variant="warning">Teknisk feil, prøv igjen senere</Alert>
-    </main>
   );
 }
