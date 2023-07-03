@@ -42,7 +42,7 @@ export async function loader({ request }: LoaderArgs) {
 
   // Denne gjelder bare lokalt, DEV og PROD håndteres av wonderwall
   if (session.expiresIn === 0) {
-    return json({ rapporteringsperiode: null, session, error: null });
+    return json({ rapporteringsperiode: null, allePerioder: null, session, error: null });
   }
 
   let gjeldendePeriode = null;
@@ -65,11 +65,13 @@ export async function loader({ request }: LoaderArgs) {
 
   const rapporteringsperiode = gjeldendePeriode || allePerioder[0];
 
-  return json({ rapporteringsperiode, session, error });
+  console.log(allePerioder);
+
+  return json({ rapporteringsperiode, allePerioder, session, error });
 }
 
 export default function Rapportering() {
-  const { rapporteringsperiode, session, error } = useLoaderData<typeof loader>();
+  const { rapporteringsperiode, allePerioder, session, error } = useLoaderData<typeof loader>();
   const harSessjon = session?.expiresIn > 0;
 
   return (
@@ -98,6 +100,15 @@ export default function Rapportering() {
             </Accordion.Item>
           </Accordion>
         </DevelopmentKontainer>
+
+        <ul>
+          {allePerioder &&
+            allePerioder.map((periode: IRapporteringsperiode) => (
+              <li>
+                {periode.fraOgMed} {periode.tilOgMed} - {periode.status}
+              </li>
+            ))}
+        </ul>
         <SessjonModal />
       </main>
     </div>
