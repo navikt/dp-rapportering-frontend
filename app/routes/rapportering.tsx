@@ -1,6 +1,6 @@
 import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
-import { ActionArgs, json, type LoaderArgs } from "@remix-run/node";
+import { ActionArgs, json, redirect, type LoaderArgs } from "@remix-run/node";
 import { Outlet, type ShouldRevalidateFunction, useLoaderData, Form } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import {
@@ -49,9 +49,10 @@ export async function action({ request }: ActionArgs) {
       const korrigeringResponse = await startKorrigering(periodeId, request);
 
       if (korrigeringResponse.ok) {
-        return {};
+        const korrigeringsperiode: IRapporteringsperiode = await korrigeringResponse.json();
+        return redirect(`/rapportering/endre/${korrigeringsperiode.id}`);
       } else {
-        json({ error: "" });
+        json({ korrigeringsfeil: true });
       }
     }
   }
@@ -84,8 +85,6 @@ export async function loader({ request }: LoaderArgs) {
   }
 
   const rapporteringsperiode = gjeldendePeriode || allePerioder[0];
-
-  console.log(allePerioder);
 
   return json({ rapporteringsperiode, allePerioder, session, error });
 }
@@ -124,11 +123,13 @@ export default function Rapportering() {
         <ul>
           {allePerioder &&
             allePerioder.map((periode: IRapporteringsperiode) => (
-              <li>
-                {periode.fraOgMed} {periode.tilOgMed} - {periode.status}
+              <li key={periode.id}>
+                {periode.fraOgMed} {periode.tilOgMed} - {periode.status} ({periode.id})
                 <Form method="post">
                   <input type="hidden" name="periode-id" value={periode.id}></input>
-                  <Button value="start-korrigering">Korriger</Button>
+                  <Button type="submit" name="submit" value="start-korrigering">
+                    Korriger
+                  </Button>
                 </Form>
               </li>
             ))}

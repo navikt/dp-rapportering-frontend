@@ -32,6 +32,21 @@ export async function hentGjeldendePeriode(request: Request): Promise<Response> 
   });
 }
 
+export async function hentEnPeriode(id: string, request: Request): Promise<Response> {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}`;
+  const session = await getSession(request);
+  const onBehalfOfToken = await getRapporteringOboToken(session);
+
+  return await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
+
 export async function hentAllePerioder(request: Request): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
   const session = await getSession(request);
