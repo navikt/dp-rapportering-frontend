@@ -1,12 +1,13 @@
 import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
-import { Accordion, Alert, Heading } from "@navikt/ds-react";
-import { json, type LoaderArgs } from "@remix-run/node";
-import { Outlet, type ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
+import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
+import { ActionArgs, json, type LoaderArgs } from "@remix-run/node";
+import { Outlet, type ShouldRevalidateFunction, useLoaderData, Form } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import {
   type IRapporteringsperiode,
   hentGjeldendePeriode,
   hentAllePerioder,
+  startKorrigering,
 } from "~/models/rapporteringsperiode.server";
 import { getSession } from "~/utils/auth.utils.server";
 import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
@@ -36,6 +37,25 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 
   return defaultShouldRevalidate;
 };
+
+export async function action({ request }: ActionArgs) {
+  const formdata = await request.formData();
+  const submitKnapp = formdata.get("submit");
+
+  switch (submitKnapp) {
+    case "start-korrigering": {
+      const periodeId = formdata.get("periode-id") as string;
+
+      const korrigeringResponse = await startKorrigering(periodeId, request);
+
+      if (korrigeringResponse.ok) {
+        return {};
+      } else {
+        json({ error: "" });
+      }
+    }
+  }
+}
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request);
@@ -106,6 +126,10 @@ export default function Rapportering() {
             allePerioder.map((periode: IRapporteringsperiode) => (
               <li>
                 {periode.fraOgMed} {periode.tilOgMed} - {periode.status}
+                <Form method="post">
+                  <input type="hidden" name="periode-id" value={periode.id}></input>
+                  <Button value="start-korrigering">Korriger</Button>
+                </Form>
               </li>
             ))}
         </ul>

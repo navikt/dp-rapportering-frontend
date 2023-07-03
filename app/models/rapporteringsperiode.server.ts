@@ -61,3 +61,18 @@ export async function godkjennPeriode(id: string, request: Request): Promise<Res
     },
   });
 }
+
+export async function startKorrigering(id: string, request: Request) {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}/korrigering`;
+  const session = await getSession(request);
+  const onBehalfOfToken = await getRapporteringOboToken(session);
+
+  return await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
