@@ -1,14 +1,14 @@
 import { Button, Heading } from "@navikt/ds-react";
-import { redirect, json, type ActionArgs } from "@remix-run/node";
+import { json, redirect, type ActionArgs } from "@remix-run/node";
 import { Form, useRouteLoaderData } from "@remix-run/react";
+import { RemixLink } from "~/components/RemixLink";
 import { Kalender } from "~/components/kalender/Kalender";
 import {
+  avgodkjennPeriode,
   startKorrigering,
   type IRapporteringsperiode,
-  godkjennPeriode,
 } from "~/models/rapporteringsperiode.server";
 import { type IRapporteringLoader } from "./rapportering";
-import { RemixLink } from "~/components/RemixLink";
 
 export async function action({ request }: ActionArgs) {
   const formdata = await request.formData();
@@ -31,7 +31,7 @@ export async function action({ request }: ActionArgs) {
     case "avgodkjenn": {
       const periodeId = formdata.get("periode-id") as string;
 
-      return await godkjennPeriode(periodeId, request);
+      return await avgodkjennPeriode(periodeId, request);
     }
   }
 }
