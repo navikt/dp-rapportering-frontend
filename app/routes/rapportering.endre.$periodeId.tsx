@@ -7,7 +7,11 @@ import invariant from "tiny-invariant";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { hentEnPeriode, type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  godkjennPeriode,
+  hentEnPeriode,
+  type IRapporteringsperiode,
+} from "~/models/rapporteringsperiode.server";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
 import { getSession } from "~/utils/auth.utils.server";
 
@@ -48,7 +52,9 @@ export async function action({ request }: ActionArgs) {
     }
 
     case "godkjenne": {
-      // TODO: Skriv kode her
+      const periodeId = formdata.get("periode-id") as string;
+
+      return await godkjennPeriode(periodeId, request);
     }
   }
 }
