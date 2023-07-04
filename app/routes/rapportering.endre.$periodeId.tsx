@@ -1,15 +1,15 @@
 import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
 import { Modal } from "@navikt/ds-react";
-import { type ActionArgs, json, type LoaderArgs } from "@remix-run/node";
-import { type ShouldRevalidateFunction, useLoaderData, useActionData } from "@remix-run/react";
-import { type IRapporteringsperiode, hentEnPeriode } from "~/models/rapporteringsperiode.server";
-import { getSession } from "~/utils/auth.utils.server";
-import invariant from "tiny-invariant";
-import { Kalender } from "~/components/kalender/Kalender";
-import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
+import { json, type ActionArgs, type LoaderArgs } from "@remix-run/node";
+import { useActionData, useLoaderData, type ShouldRevalidateFunction } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import invariant from "tiny-invariant";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { Kalender } from "~/components/kalender/Kalender";
+import { hentEnPeriode, type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
+import { getSession } from "~/utils/auth.utils.server";
 
 export interface IRapporteringLoader {
   rapporteringsperiode: IRapporteringsperiode;

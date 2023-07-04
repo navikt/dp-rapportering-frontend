@@ -68,7 +68,22 @@ export async function godkjennPeriode(id: string, request: Request): Promise<Res
   const onBehalfOfToken = await getRapporteringOboToken(session);
 
   return await fetch(url, {
-    method: "POST",
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
+
+export async function avgodkjennPeriode(id: string, request: Request): Promise<Response> {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}/avgodkjenn`;
+  const session = await getSession(request);
+  const onBehalfOfToken = await getRapporteringOboToken(session);
+
+  return await fetch(url, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
