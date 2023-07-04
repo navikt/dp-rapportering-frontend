@@ -1,10 +1,9 @@
 import { Button, Heading } from "@navikt/ds-react";
-import { redirect, type ActionArgs } from "@remix-run/node";
+import { redirect, json, type ActionArgs } from "@remix-run/node";
 import { Form, useRouteLoaderData } from "@remix-run/react";
 import { Kalender } from "~/components/kalender/Kalender";
 import { startKorrigering, type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { type IRapporteringLoader } from "./rapportering";
-import { json } from "express";
 import { RemixLink } from "~/components/RemixLink";
 
 export async function action({ request }: ActionArgs) {
@@ -21,7 +20,7 @@ export async function action({ request }: ActionArgs) {
         const korrigeringsperiode: IRapporteringsperiode = await korrigeringResponse.json();
         return redirect(`/rapportering/endre/${korrigeringsperiode.id}`);
       } else {
-        return json({ korrigeringsfeil: true });
+        json({ korrigeringsfeil: true });
       }
     }
 
