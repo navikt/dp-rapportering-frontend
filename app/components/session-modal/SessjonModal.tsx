@@ -53,7 +53,7 @@ export function SessjonModal() {
           Du må logge inn på nytt for å fortsette
         </Heading>
         <p>
-          Sesjonen din har utløpt, og du må logge inn med BankID på nytt for å fortsette. Alle
+          Sesjonen din har utløpt, og du må logge inn med IDPorten på nytt for å fortsette. Alle
           svarene dine i søknaden er lagret og du kan fortsette der du slapp.
         </p>
         <div className={styles.knappKontainer}>
