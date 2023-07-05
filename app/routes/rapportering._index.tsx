@@ -1,6 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { type ActionArgs } from "@remix-run/node";
+import { redirect, type ActionArgs, json } from "@remix-run/node";
 import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
 import { isFriday, isPast, isToday } from "date-fns";
 import { useEffect, useState } from "react";
@@ -11,7 +11,11 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { useSanity } from "~/hooks/useSanity";
 import { type IRapporteringLoader } from "./rapportering";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
-import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  startKorrigering,
+  type IRapporteringsperiode,
+  avgodkjennPeriode,
+} from "~/models/rapporteringsperiode.server";
 
 import styles from "./rapportering.module.css";
 
@@ -26,6 +30,28 @@ export async function action({ request }: ActionArgs) {
 
     case "lagre": {
       return await lagreAktivitetAction(formdata, request);
+    }
+
+    case "start-korrigering": {
+      const periodeId = formdata.get("periode-id") as string;
+
+      console.log("før korrigeringResponse");
+
+      const korrigeringResponse = await startKorrigering(periodeId, request);
+      console.log("etter korrigeringResponse", korrigeringResponse);
+
+      if (korrigeringResponse.ok) {
+        const korrigeringsperiode: IRapporteringsperiode = await korrigeringResponse.json();
+        return redirect(`/rapportering/endre/${korrigeringsperiode.id}`);
+      } else {
+        json({ korrigeringsfeil: true });
+      }
+    }
+
+    case "avgodkjenn": {
+      const periodeId = formdata.get("periode-id") as string;
+
+      return await avgodkjennPeriode(periodeId, request);
     }
   }
 }
@@ -122,9 +148,21 @@ export default function Rapportering() {
               {periode.fraOgMed} {periode.tilOgMed} - {periode.status} ({periode.id})
               <Form method="post">
                 <input type="hidden" name="periode-id" value={periode.id}></input>
-                <Button type="submit" name="submit" value="start-korrigering">
-                  Korriger
-                </Button>
+                {periode.status === "TilUtfylling" && (
+                  <RemixLink as="Button" to={`/rapportering/endre/${periode.id}`}>
+                    Fyll ut
+                  </RemixLink>
+                )}
+                {periode.status === "Godkjent" && (
+                  <Button type="submit" name="submit" value="avgodkjenn">
+                    Lås opp og rediger
+                  </Button>
+                )}
+                {periode.status === "Innsendt" && (
+                  <Button type="submit" name="submit" value="start-korrigering">
+                    Korriger
+                  </Button>
+                )}
               </Form>
             </li>
           ))}
