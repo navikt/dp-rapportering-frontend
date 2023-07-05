@@ -63,7 +63,13 @@ export async function lagreAktivitetAction(formdata: FormData, request: Request)
 
   if (lagreAktivitetResponse.ok) {
     return json({ lagret: true });
+  } else if (lagreAktivitetResponse.status === 500) {
+    return json({
+      error: `${lagreAktivitetResponse.status} ${lagreAktivitetResponse.statusText} - ${lagreAktivitetResponse.url}`,
+    });
   } else {
-    return json({ error: "Noen gikk feil med lagring av aktivitet, prøv igjen." });
+    return json({
+      error: "Noe gikk feil med lagring av aktivitet, prøv igjen.",
+    });
   }
 }
