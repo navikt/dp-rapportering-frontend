@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Heading, Modal } from "@navikt/ds-react";
 import { json, type ActionArgs } from "@remix-run/node";
-import { useActionData, useRouteLoaderData } from "@remix-run/react";
+import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
 import { isFriday, isPast, isToday } from "date-fns";
 import { useEffect, useState } from "react";
 import { validationError } from "remix-validated-form";
@@ -17,6 +17,7 @@ import { validator } from "~/utils/validering.util";
 import { type IRapporteringLoader } from "./rapportering";
 
 import styles from "./rapportering.module.css";
+import { avGodkjennPeriode } from "~/models/rapporteringsperiode.server";
 
 export async function action({ request }: ActionArgs) {
   const formdata = await request.formData();
@@ -35,6 +36,17 @@ export async function action({ request }: ActionArgs) {
 
       if (!slettAktivitetResponse.ok) {
         return json({ error: "Det har skjedd en feil ved sletting, prøv igjen." });
+      }
+
+      return {};
+    }
+    case "avgodkjenn": {
+      const rapporteringsperiodeId = formdata.get("rapporteringsperiodeId") as string;
+
+      const avGodkjennPeriodeResponse = await avGodkjennPeriode(rapporteringsperiodeId, request);
+
+      if (!avGodkjennPeriodeResponse.ok) {
+        return json({ error: "Det har skjedd en feil ved avgodkjenning, prøv igjen." });
       }
 
       return {};
@@ -146,7 +158,24 @@ export default function Rapportering() {
 
       {rapporteringsperiode.status === "Godkjent" && (
         <Alert variant="success" className="my-6">
-          Du har sendt inn meldekortet! Du trenger ikke gjøre noe mer :)
+          Du har sendt inn meldekortet! Du trenger ikke gjøre noe mer :) Hvis du ønsker å endre
+          informasjonen i meldekortet husk at du da må sende inn meldekortet på nytt.
+          <Form method="post">
+            <input
+              type="text"
+              hidden
+              name="rapporteringsperiodeId"
+              defaultValue={rapporteringsperiode.id}
+            />
+            {actionData?.error && (
+              <Alert variant="error" className={styles.feilmelding}>
+                {actionData.error}
+              </Alert>
+            )}
+            <button type="submit" name="submit" value="avgodkjenn">
+              Endre
+            </button>
+          </Form>
         </Alert>
       )}
 
