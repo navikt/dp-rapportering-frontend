@@ -2,13 +2,12 @@ import { Radio, RadioGroup } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useField } from "remix-validated-form";
 import { TAktivitetType } from "~/models/aktivitet.server";
-
-import { useState } from "react";
 import styles from "./AktivitetRadio.module.css";
 
 export interface IProps {
   name: string;
   label?: string;
+  description?: string;
   verdi?: string;
   muligeAktiviteter: TAktivitetType[];
   onChange: (aktivitet: string) => void;
@@ -28,13 +27,10 @@ export function AktivitetRadio(props: IProps) {
       error={!inputProps.value ? error : undefined}
       {...inputProps}
       onChange={props.onChange}
+      description={props.description}
     >
       {props.muligeAktiviteter.map((aktivitet) => (
-        <Radio
-          key={aktivitet}
-          className={classNames(styles.aktivitet, styles[aktivitet])}
-          value={aktivitet}
-        >
+        <Radio key={aktivitet} value={aktivitet}>
           {aktivitet}
         </Radio>
       ))}

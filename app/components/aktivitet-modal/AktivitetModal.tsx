@@ -67,56 +67,60 @@ export function AktivitetModal(props: IProps) {
                 defaultValue={props.rapporteringsperiodeId}
               />
               <input type="text" hidden name="aktivitetId" defaultValue={aktivitet.id} />
-              <button
-                type="submit"
-                name="submit"
-                value="slette"
-                className={classNames(styles.slettKnapp, styles[aktivitet.type])}
-              >
+              <div className={classNames(styles.slettKnapp, styles[aktivitet.type])}>
                 {hentSlettKnappTekst()}
-                <TrashIcon title="a11y-title" fontSize="1.5rem" />
-              </button>
+              </div>
+              <div className={styles.knappKontainer}>
+                <Button type="submit" name="submit" value="slette">
+                  Fjern registrering
+                </Button>
+              </div>
             </Form>
           ))}
+        {props.muligeAktiviteter.length > 0 && (
+          <ValidatedForm
+            method="post"
+            key="lagre-ny-aktivitet"
+            validator={validator(props.valgtAktivitet)}
+          >
+            <input
+              type="text"
+              hidden
+              name="rapporteringsperiodeId"
+              defaultValue={props.rapporteringsperiodeId}
+            />
+            <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
 
-        <ValidatedForm
-          method="post"
-          key="lagre-ny-aktivitet"
-          validator={validator(props.valgtAktivitet)}
-        >
-          <input
-            type="text"
-            hidden
-            name="rapporteringsperiodeId"
-            defaultValue={props.rapporteringsperiodeId}
-          />
-          <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
-
-          <div className={styles.aktivitetKontainer}>
-            {props.muligeAktiviteter && (
+            <div className={styles.aktivitetKontainer}>
               <AktivitetRadio
                 name="type"
                 muligeAktiviteter={props.muligeAktiviteter}
                 verdi={props.valgtAktivitet}
                 onChange={(aktivitet: string) => props.setValgtAktivitet(aktivitet)}
+                label="Hva vil du registrere"
               />
+            </div>
+
+            {props.valgtAktivitet === "Arbeid" && <TallInput name="timer" label="Antall timer:" />}
+
+            {actionData?.error && (
+              <Alert variant="error" className={styles.feilmelding}>
+                {actionData.error}
+              </Alert>
             )}
-          </div>
 
-          {props.valgtAktivitet === "Arbeid" && <TallInput name="timer" label="Antall timer:" />}
-
-          {actionData?.error && (
-            <Alert variant="error" className={styles.feilmelding}>
-              {actionData.error}
-            </Alert>
+            <div className={styles.knappKontainer}>
+              <Button type="submit" name="submit" value="lagre">
+                Lagre
+              </Button>
+            </div>
+          </ValidatedForm>
+        )}
+        {props.muligeAktiviteter.length === 0 &&
+          valgteDatoHarAktivitet &&
+          valgteDatoHarAktivitet.aktiviteter.length === 0 && (
+            <p>Denne dagen er ikke rapporteringspliktig, så du kan ikke legge inn aktiviteter.</p>
           )}
-
-          <div className={styles.knappKontainer}>
-            <Button type="submit" name="submit" value="lagre">
-              Lagre
-            </Button>
-          </div>
-        </ValidatedForm>
       </Modal.Content>
     </Modal>
   );

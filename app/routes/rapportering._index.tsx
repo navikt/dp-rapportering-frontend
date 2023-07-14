@@ -66,13 +66,14 @@ export async function action({ request }: ActionArgs) {
         const delt = tid.replace(/\./g, ",").split(",");
         const timer = delt[0] || 0;
         const minutter = delt[1] || 0;
+        const minutterFloat = parseFloat(`0.${minutter}`);
 
         return {
           type,
           dato,
           timer: serialize({
             hours: timer,
-            minutes: minutter * 6,
+            minutes: Math.round(minutterFloat * 60),
           }),
         };
       }
