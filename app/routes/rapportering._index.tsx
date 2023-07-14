@@ -168,7 +168,7 @@ export default function Rapportering() {
       {rapporteringsperiode.status === "Godkjent" && (
         <>
           <Heading level="2" size="large" spacing>
-            Tidligere utfylt meldekort
+            Tidligere rapportert periode
           </Heading>
           <Alert variant="success" className="my-6">
             Du har sendt inn meldekortet! Du trenger ikke gjøre noe mer :) Hvis du ønsker å endre
