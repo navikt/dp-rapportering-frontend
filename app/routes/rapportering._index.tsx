@@ -153,35 +153,44 @@ export default function Rapportering() {
 
   return (
     <>
-      <Heading level="2" size="large" spacing>
-        {hentAppTekstMedId("rapportering-periode-tittel")}
-      </Heading>
-      <p>
-        Klikk på dagen du ønsker å rapportere for. Du vil da få alternativer for jobb, sykdom,
-        fravær og ferie som er det du skal rapportere til NAV.
-      </p>
+      {rapporteringsperiode.status === "TilUtfylling" && (
+        <>
+          <Heading level="2" size="large" spacing>
+            {hentAppTekstMedId("rapportering-periode-tittel")}
+          </Heading>
+          <p>
+            Klikk på dagen du ønsker å rapportere for. Du vil da få alternativer for jobb, sykdom,
+            fravær og ferie som er det du skal rapportere til NAV.
+          </p>
+        </>
+      )}
 
       {rapporteringsperiode.status === "Godkjent" && (
-        <Alert variant="success" className="my-6">
-          Du har sendt inn meldekortet! Du trenger ikke gjøre noe mer :) Hvis du ønsker å endre
-          informasjonen i meldekortet husk at du da må sende inn meldekortet på nytt.
-          <Form method="post">
-            <input
-              type="text"
-              hidden
-              name="rapporteringsperiodeId"
-              defaultValue={rapporteringsperiode.id}
-            />
-            {actionData?.error && (
-              <Alert variant="error" className={styles.feilmelding}>
-                {actionData.error}
-              </Alert>
-            )}
-            <button type="submit" name="submit" value="avgodkjenn">
-              Endre
-            </button>
-          </Form>
-        </Alert>
+        <>
+          <Heading level="2" size="large" spacing>
+            Tidligere utfylt meldekort
+          </Heading>
+          <Alert variant="success" className="my-6">
+            Du har sendt inn meldekortet! Du trenger ikke gjøre noe mer :) Hvis du ønsker å endre
+            informasjonen i meldekortet husk at du da må sende inn meldekortet på nytt.
+            <Form method="post">
+              <input
+                type="text"
+                hidden
+                name="rapporteringsperiodeId"
+                defaultValue={rapporteringsperiode.id}
+              />
+              {actionData?.error && (
+                <Alert variant="error" className={styles.feilmelding}>
+                  {actionData.error}
+                </Alert>
+              )}
+              <button type="submit" name="submit" value="avgodkjenn">
+                Endre
+              </button>
+            </Form>
+          </Alert>
+        </>
       )}
 
       <Kalender rapporteringsperiode={rapporteringsperiode} aapneModal={aapneModal} />
