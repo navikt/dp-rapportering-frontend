@@ -38,25 +38,36 @@ export function AktivitetOppsummering() {
   }
 
   return (
-    <div className={styles.aktivitetOppsummeringKontainer}>
-      <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
+    <>
+      {flatMapAktiviteter.length < 1 && (
         <p>
-          Arbeid
-          <span>{hentTotaltArbeidstimerTekst()}</span>
+          Hvis du ikke har arbeidet, vært syk eller hatt fravær i perioden så trenger du ikke å
+          fylle ut noe for å sende inn rapporteringen.
         </p>
-      </div>
-      <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
-        <p>
-          Syk
-          <span>{hentTotaltFravaerTekstMedType("Syk")}</span>
-        </p>
-      </div>
-      <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
-        <p>
-          Fravær / Ferie
-          <span>{hentTotaltFravaerTekstMedType("Ferie")}</span>
-        </p>
-      </div>
-    </div>
+      )}
+      {flatMapAktiviteter.length > 0 && (
+        <div className={styles.aktivitetOppsummeringKontainer}>
+          <p>Sammenlagt for meldeperioden:</p>
+          <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
+            <p>
+              Arbeid
+              <span>{hentTotaltArbeidstimerTekst()}</span>
+            </p>
+          </div>
+          <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
+            <p>
+              Syk
+              <span>{hentTotaltFravaerTekstMedType("Syk")}</span>
+            </p>
+          </div>
+          <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
+            <p>
+              Fravær / Ferie
+              <span>{hentTotaltFravaerTekstMedType("Ferie")}</span>
+            </p>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

@@ -156,6 +156,10 @@ export default function Rapportering() {
       <Heading level="2" size="large" spacing>
         {hentAppTekstMedId("rapportering-periode-tittel")}
       </Heading>
+      <p>
+        Klikk på dagen du ønsker å rapportere for. Du vil da få alternativer for jobb, sykdom,
+        fravær og ferie som er det du skal rapportere til NAV.
+      </p>
 
       {rapporteringsperiode.status === "Godkjent" && (
         <Alert variant="success" className="my-6">
@@ -194,7 +198,6 @@ export default function Rapportering() {
       />
 
       <div className={styles.registertMeldeperiodeKontainer}>
-        <p>Sammenlagt for meldeperioden:</p>
         <AktivitetOppsummering />
       </div>
 
