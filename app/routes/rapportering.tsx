@@ -79,9 +79,6 @@ export default function Rapportering() {
           <Heading level="1" size="xlarge">
             Dagpengerapportering
           </Heading>
-          {rapporteringsperiode && (
-            <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
-          )}
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
