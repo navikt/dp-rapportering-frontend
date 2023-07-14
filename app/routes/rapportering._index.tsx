@@ -127,8 +127,10 @@ export default function Rapportering() {
   }, [actionData]);
 
   function aapneModal(dato: string) {
-    setValgtDato(dato);
-    setModalAapen(true);
+    if (rapporteringsperiode.status === "TilUtfylling") {
+      setValgtDato(dato);
+      setModalAapen(true);
+    }
   }
 
   function lukkModal() {
