@@ -1,7 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Accordion, Alert, Heading, Modal } from "@navikt/ds-react";
-import { json, type ActionArgs, redirect } from "@remix-run/node";
-import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
+import { json, type ActionArgs, redirect, LoaderArgs } from "@remix-run/node";
+import { Form, useActionData, useLoaderData, useRouteLoaderData } from "@remix-run/react";
+import { isFriday, isPast, isToday } from "date-fns";
 import { useEffect, useState } from "react";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
@@ -18,10 +19,15 @@ import { type IRapporteringLoader } from "./rapportering";
 import styles from "./rapportering.module.css";
 import {
   avGodkjennPeriode,
+  hentAllePerioder,
+  hentGjeldendePeriode,
+  hentPeriode,
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
   lagKorrigeringsperiode,
 } from "~/models/rapporteringsperiode.server";
+import { getSession } from "~/utils/auth.utils.server";
+import invariant from "tiny-invariant";
 import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
 
 export async function action({ request }: ActionArgs) {
@@ -30,6 +36,7 @@ export async function action({ request }: ActionArgs) {
 
   switch (submitKnapp) {
     case "slette": {
+      console.log("prøver å slette fra spesifikk rapporteringsperiode");
       const rapporteringsperiodeId = formdata.get("rapporteringsperiodeId") as string;
       const aktivitetId = formdata.get("aktivitetId") as string;
 
@@ -43,7 +50,7 @@ export async function action({ request }: ActionArgs) {
         return json({ error: "Det har skjedd en feil ved sletting, prøv igjen." });
       }
 
-      return {};
+      return json({ lagret: true });
     }
     case "avgodkjenn": {
       const rapporteringsperiodeId = formdata.get("rapporteringsperiodeId") as string;
@@ -71,6 +78,8 @@ export async function action({ request }: ActionArgs) {
     }
 
     case "lagre": {
+      console.log("prøver å lagre fra spesifikk rapporteringsperiode");
+
       const aktivitType = formdata.get("type") as TAktivitetType;
       const inputVerdier = await validator(aktivitType).validate(formdata);
 
@@ -118,15 +127,41 @@ export async function action({ request }: ActionArgs) {
   }
 }
 
+export async function loader({ params, request }: LoaderArgs) {
+  const session = await getSession(request);
+  invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
+
+  // Denne gjelder bare lokalt, DEV og PROD håndteres av wonderwall
+  if (session.expiresIn === 0) {
+    return json({ rapporteringsperiode: null, session, error: null });
+  }
+
+  let periode = null;
+  let error = null;
+
+  const PeriodeResponse = await hentPeriode(request, params.rapporteringsperiodeId);
+
+  if (PeriodeResponse.ok) {
+    periode = await PeriodeResponse.json();
+  } else {
+    const { status, statusText } = PeriodeResponse;
+    error = { status, statusText };
+  }
+
+  const rapporteringsperiode = periode;
+
+  return json({ rapporteringsperiode, error });
+}
+
 export default function Rapportering() {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
+  const { rapporteringsperiode } = useLoaderData<typeof loader>() as IRapporteringLoader;
   const actionData = useActionData();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
-  const [valgtDag, setValgtDag] = useState<IRapporteringsperiodeDag | undefined>(undefined);
   const [modalAapen, setModalAapen] = useState(false);
   const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
+  const [valgtDag, setValgtDag] = useState<IRapporteringsperiodeDag | undefined>(undefined);
   const { hentAppTekstMedId } = useSanity();
 
   useEffect(() => {
@@ -251,7 +286,6 @@ export default function Rapportering() {
       </div>
 
       <div className={styles.navigasjonKontainer}>
-        '
         <RemixLink to="" as="Button" variant="secondary" icon={<ArrowLeftIcon fontSize="1.5rem" />}>
           Mine side
         </RemixLink>

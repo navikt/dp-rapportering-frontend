@@ -1,15 +1,16 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, BodyShort, Button, Heading, ReadMore } from "@navikt/ds-react";
-import { ActionArgs, json, redirect } from "@remix-run/node";
-import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
+import { ActionArgs, json, LoaderArgs, redirect } from "@remix-run/node";
+import { Form, useActionData, useLoaderData, useRouteLoaderData } from "@remix-run/react";
 import { logger } from "server/logger";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
+import { godkjennPeriode, hentPeriode } from "~/models/rapporteringsperiode.server";
 import { IRapporteringLoader } from "./rapportering";
 
 import styles from "./rapportering.module.css";
+import { getSession } from "~/utils/auth.utils.server";
 
 export async function action({ request }: ActionArgs) {
   const formdata = await request.formData();
@@ -30,8 +31,34 @@ export async function action({ request }: ActionArgs) {
   return redirect("/rapportering/innsendt");
 }
 
-export default function RapporteringSendInn() {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
+export async function loader({ params, request }: LoaderArgs) {
+  const session = await getSession(request);
+  invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
+
+  // Denne gjelder bare lokalt, DEV og PROD håndteres av wonderwall
+  if (session.expiresIn === 0) {
+    return json({ rapporteringsperiode: null, session, error: null });
+  }
+
+  let periode = null;
+  let error = null;
+
+  const PeriodeResponse = await hentPeriode(request, params.rapporteringsperiodeId);
+
+  if (PeriodeResponse.ok) {
+    periode = await PeriodeResponse.json();
+  } else {
+    const { status, statusText } = PeriodeResponse;
+    error = { status, statusText };
+  }
+
+  const rapporteringsperiode = periode;
+
+  return json({ rapporteringsperiode, error });
+}
+
+export default function RapporteringSendInnRapporteringsperiodeid() {
+  const { rapporteringsperiode } = useLoaderData<typeof loader>() as IRapporteringLoader;
   const actionData = useActionData<typeof action>();
 
   return (
@@ -44,7 +71,7 @@ export default function RapporteringSendInn() {
         <Heading level="3" size="small">
           Dette er det du har registrert for meldeperioden:
         </Heading>
-        <AktivitetOppsummering />
+        <AktivitetOppsummering rapporteringsperiode={rapporteringsperiode} />
       </div>
 
       <div className={styles.utbetalingsEstimat}>

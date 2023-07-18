@@ -4,11 +4,12 @@ import { useRouteLoaderData } from "@remix-run/react";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { periodeSomTimer } from "~/utils/periode.utils";
+interface IProps {
+  rapporteringsperiode: IRapporteringsperiode;
+}
 
-export function AktivitetOppsummering() {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as {
-    rapporteringsperiode: IRapporteringsperiode;
-  };
+export function AktivitetOppsummering(props: IProps) {
+  const rapporteringsperiode = props.rapporteringsperiode;
 
   const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
 

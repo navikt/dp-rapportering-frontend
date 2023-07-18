@@ -3,6 +3,7 @@ import { getEnv } from "~/utils/env.utils";
 import type { IAktivitet, TAktivitetType } from "./aktivitet.server";
 
 export interface IRapporteringsperiode {
+  beregnesEtter: string;
   id: string;
   fraOgMed: string;
   tilOgMed: string;
@@ -10,7 +11,7 @@ export interface IRapporteringsperiode {
   dager: IRapporteringsperiodeDag[];
 }
 
-interface IRapporteringsperiodeDag {
+export interface IRapporteringsperiodeDag {
   dagIndex: number;
   dato: string;
   muligeAktiviteter: TAktivitetType[];
@@ -19,6 +20,20 @@ interface IRapporteringsperiodeDag {
 
 export async function hentGjeldendePeriode(request: Request): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`;
+  const session = await getSession(request);
+  const onBehalfOfToken = await getRapporteringOboToken(session);
+
+  return await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
+export async function hentPeriode(request: Request, periodeId: string): Promise<Response> {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}`;
   const session = await getSession(request);
   const onBehalfOfToken = await getRapporteringOboToken(session);
 
@@ -75,4 +90,27 @@ export async function avGodkjennPeriode(id: string, request: Request): Promise<R
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
   });
+}
+
+export async function lagKorrigeringsperiode(periodeId: string, request: Request) {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/korrigering`;
+
+  const session = await getSession(request);
+
+  if (!session) {
+    throw new Error("Feil ved henting av sesjon");
+  }
+
+  const onBehalfOfToken = await getRapporteringOboToken(session);
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+
+  return response;
 }

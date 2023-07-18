@@ -1,4 +1,3 @@
-import { TrashIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
@@ -7,15 +6,16 @@ import nbLocale from "date-fns/locale/nb";
 import { ValidatedForm } from "remix-validated-form";
 import { TallInput } from "~/components/TallInput";
 import type { TAktivitetType } from "~/models/aktivitet.server";
-import { IRapporteringLoader } from "~/routes/rapportering";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 
 import styles from "./AktivitetModal.module.css";
+import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 interface IProps {
   rapporteringsperiodeId: string;
+  rapporteringsperiodeDag?: IRapporteringsperiodeDag;
   valgtDato?: string;
   valgtAktivitet: string | TAktivitetType;
   setValgtAktivitet: (aktivitet: string | TAktivitetType) => void;
@@ -26,12 +26,8 @@ interface IProps {
 }
 
 export function AktivitetModal(props: IProps) {
-  const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
   const actionData = useActionData();
-
-  const valgteDatoHarAktivitet = rapporteringsperiode.dager.find(
-    (dag) => dag.dato === props.valgtDato
-  );
+  const valgteDatoHarAktivitet = props.rapporteringsperiodeDag;
 
   function hentSlettKnappTekst() {
     const aktivitet = valgteDatoHarAktivitet?.aktiviteter[0];

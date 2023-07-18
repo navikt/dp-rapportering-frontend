@@ -1,4 +1,3 @@
-import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { format } from "date-fns";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";

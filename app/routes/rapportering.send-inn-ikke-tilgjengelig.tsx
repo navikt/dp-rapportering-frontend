@@ -39,7 +39,10 @@ export default function RapporteringSendInnIkkeTilgjengelig() {
         <Heading level="3" size="small">
           Dette er det du har registrert for meldeperioden:
         </Heading>
-        <AktivitetOppsummering />
+        {
+          //todo: må hente evt riktig rapporteringsperiode og ikke "dagens" periode fra førstesiden, større refaktorering trengs
+        }
+        <AktivitetOppsummering rapporteringsperiode={rapporteringsperiode} />
       </div>
 
       <div className={styles.navigasjonKontainer}>

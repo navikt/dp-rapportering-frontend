@@ -85,16 +85,6 @@ export default function Rapportering() {
         {error && <RapporteringError error={error} />}
         {!error && harSessjon && rapporteringsperiode && <Outlet />}
 
-        <DevelopmentKontainer>
-          <Accordion>
-            <Accordion.Item>
-              <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
-              <Accordion.Content>
-                <pre>${JSON.stringify(rapporteringsperiode, null, 2)}</pre>
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion>
-        </DevelopmentKontainer>
         <SessjonModal />
       </main>
     </div>
