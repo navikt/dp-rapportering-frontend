@@ -1,5 +1,5 @@
 import { type SessionWithOboProvider } from "@navikt/dp-auth/index/";
-import { Accordion, Alert, Heading } from "@navikt/ds-react";
+import { Alert, Heading } from "@navikt/ds-react";
 import { json, type LoaderArgs } from "@remix-run/node";
 import { Outlet, type ShouldRevalidateFunction, useLoaderData } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
@@ -9,8 +9,6 @@ import {
   hentAllePerioder,
 } from "~/models/rapporteringsperiode.server";
 import { getSession } from "~/utils/auth.utils.server";
-import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
-import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
 
 import styles from "./rapportering.module.css";
 
@@ -39,6 +37,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request);
+  console.log("henter alle perioder");
 
   // Denne gjelder bare lokalt, DEV og PROD håndteres av wonderwall
   if (session.expiresIn === 0) {

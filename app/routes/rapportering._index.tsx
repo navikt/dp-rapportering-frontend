@@ -64,7 +64,7 @@ export async function action({ request }: ActionArgs) {
       if (response.ok) {
         const korrigeringsperiode: IRapporteringsperiode = await response.json();
         console.log(korrigeringsperiode);
-        return redirect(`/rapportering/${korrigeringsperiode.id}`);
+        return redirect(`/rapportering/periode/${korrigeringsperiode.id}`);
       } else {
         throw new Error("Klarte ikke starte korrigering");
       }
