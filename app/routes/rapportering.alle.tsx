@@ -36,7 +36,7 @@ export default function RapporteringAlle() {
           </Heading>
         </div>
       </div>
-      <main>
+      <main className={styles.rapporteringKontainer}>
         {perioder.map((periode) => {
           return (
             <Kalender

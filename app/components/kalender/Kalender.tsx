@@ -5,6 +5,7 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import styles from "./Kalender.module.css";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
+import { Link } from "@navikt/ds-react";
 
 interface IProps {
   aapneModal: (dato: string) => void;
@@ -23,7 +24,18 @@ export function Kalender(props: IProps) {
 
   return (
     <>
-      <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
+      <div className={styles.kalenderHeaderKontainer}>
+        <div className={styles.kalenderHeaderPeriodeDetaljer}>
+          <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
+        </div>
+
+        <Link
+          href={`/rapportering/periode/${rapporteringsperiode.id}/korriger`}
+          className={styles.kalenderHeaderPeriodeAlternativer}
+        >
+          korriger
+        </Link>
+      </div>
       <div className={styles.kalender}>
         <br />
         <div className={styles.kalenderUkedagKontainer}>

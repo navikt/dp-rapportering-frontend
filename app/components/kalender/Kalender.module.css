@@ -4,6 +4,20 @@
   margin-bottom: var(--a-spacing-20);
 }
 
+.kalenderHeaderKontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.kalenderHeaderPeriodeDetaljer{
+  flex-direction: column;
+}
+.kalenderHeaderPeriodeAlternativer{
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+}
+
 .kalenderUkedagKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);

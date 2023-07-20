@@ -22,6 +22,7 @@ export default function Rapportering() {
 }
 export function ErrorBoundary() {
   const error = useRouteError();
+  console.log("treffer rapportering/ errorboundary", error);
   if (isRouteErrorResponse(error)) {
     if (error.status === 401) {
       return (
@@ -40,11 +41,20 @@ export function ErrorBoundary() {
       );
     }
     return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
+      <div id="dp-rapportering-frontend">
+        <div className={styles.rapporteringHeader}>
+          <div className={styles.rapporteringHeaderInnhold}>
+            <Heading level="1" size="xlarge">
+              Dagpengerapportering
+            </Heading>
+          </div>
+        </div>
+        <main className={styles.rapporteringKontainer}>
+          <h2>
+            {error.status} {error.statusText}
+          </h2>
+          <p>{error.data}</p>
+        </main>
       </div>
     );
   }
