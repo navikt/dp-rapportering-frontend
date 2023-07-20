@@ -1,8 +1,6 @@
 import { Radio, RadioGroup } from "@navikt/ds-react";
-import classNames from "classnames";
 import { useField } from "remix-validated-form";
-import { TAktivitetType } from "~/models/aktivitet.server";
-import styles from "./AktivitetRadio.module.css";
+import type { TAktivitetType } from "~/models/aktivitet.server";
 
 export interface IProps {
   name: string;

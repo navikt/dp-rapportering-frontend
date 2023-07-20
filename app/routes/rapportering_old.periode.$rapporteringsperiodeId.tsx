@@ -14,7 +14,7 @@ import { useSanity } from "~/hooks/useSanity";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
 import { validator } from "~/utils/validering.util";
-import { type IRapporteringLoader } from "./rapportering";
+import { type IRapporteringLoader } from "./rapportering-old";
 
 import styles from "./rapportering.module.css";
 import {

@@ -5,11 +5,11 @@ import { format, isFriday } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { IRapporteringLoader } from "./rapportering";
+import { IRapporteringLoader } from "./rapportering-old";
 
 import styles from "./rapportering.module.css";
 
-export default function RapporteringSendInnIkkeTilgjengelig() {
+export default function RapporteringOldSendInnIkkeTilgjengelig() {
   const { rapporteringsperiode } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
 
   function hentForstMuligInnsendingsDato() {

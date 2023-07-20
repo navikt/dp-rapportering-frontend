@@ -23,15 +23,13 @@ export function Kalender(props: IProps) {
 
   return (
     <>
-      {rapporteringsperiode && (
-        <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
-      )}
+      <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
       <div className={styles.kalender}>
         <br />
         <div className={styles.kalenderUkedagKontainer}>
           {ukedager.map((ukedag, index) => {
             return (
-              <div key={index} className={styles.kalenderUkedag}>
+              <div key={`${rapporteringsperiode.id}-${index}`} className={styles.kalenderUkedag}>
                 {ukedag}
               </div>
             );

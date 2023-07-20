@@ -7,7 +7,7 @@ import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { godkjennPeriode, hentPeriode } from "~/models/rapporteringsperiode.server";
-import { IRapporteringLoader } from "./rapportering";
+import { IRapporteringLoader } from "./rapportering-old";
 
 import styles from "./rapportering.module.css";
 import { getSession } from "~/utils/auth.utils.server";
