@@ -30,7 +30,7 @@ export function Kalender(props: IProps) {
         </div>
 
         <Link
-          href={`/rapportering/periode/${rapporteringsperiode.id}/korriger`}
+          href={`/rapportering/periode/${rapporteringsperiode.id}`}
           className={styles.kalenderHeaderPeriodeAlternativer}
         >
           korriger
