@@ -10,9 +10,11 @@ import { Link } from "@navikt/ds-react";
 interface IProps {
   aapneModal: (dato: string) => void;
   rapporteringsperiode: IRapporteringsperiode;
+  visRedigeringsAlternativer?: boolean;
 }
 
-function KalenderPeriodeRedigeringsLenke(props: { id: string; status: string }) {
+function KalenderPeriodeRedigeringsLenke(props: { id: string; status: string; vis: boolean }) {
+  if (!props.vis) return <></>;
   const lenketekst = finnLenkeTekstFraStatus(props.status);
   const lenkesti = finnLenkeDestinationFraStatus(props.status);
 
@@ -27,9 +29,9 @@ function KalenderPeriodeRedigeringsLenke(props: { id: string; status: string }) 
   function finnLenkeTekstFraStatus(status: string) {
     switch (status) {
       case "TilUtfylling":
-        return "Rediger";
+        return "Fyll ut";
       case "Godkjent":
-        return "Avgodkjenn";
+        return "Rediger";
       case "Innsendt":
         return "Korriger";
       default:
@@ -53,7 +55,7 @@ function KalenderPeriodeRedigeringsLenke(props: { id: string; status: string }) 
 }
 
 export function Kalender(props: IProps) {
-  const { rapporteringsperiode, aapneModal } = props;
+  const { rapporteringsperiode, aapneModal, visRedigeringsAlternativer = false } = props;
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];
@@ -72,6 +74,7 @@ export function Kalender(props: IProps) {
         <KalenderPeriodeRedigeringsLenke
           id={rapporteringsperiode.id}
           status={rapporteringsperiode.status}
+          vis={visRedigeringsAlternativer}
         />
       </div>
       <div className={styles.kalender}>

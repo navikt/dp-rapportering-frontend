@@ -42,6 +42,7 @@ export default function RapporteringAlle() {
             <Kalender
               rapporteringsperiode={periode as IRapporteringsperiode}
               aapneModal={() => {}}
+              visRedigeringsAlternativer={true}
               key={periode.id}
             />
           );
