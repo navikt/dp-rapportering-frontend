@@ -2,17 +2,17 @@ import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import { IRapporteringLoader } from "~/routes/rapportering-old";
 import { DevelopmentKontainer } from "../development-kontainer/DevelopmentKontainer";
 
 import styles from "./SessjonModal.module.css";
-import { SessionWithOboProvider } from "@navikt/dp-auth";
+import type { SessionWithOboProvider } from "@navikt/dp-auth";
+import { ISessionLoader } from "~/routes/rapportering";
 interface IProps {
   sesjon?: SessionWithOboProvider;
 }
 
 export function SessjonModal(props: IProps) {
-  const { session } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
+  const { session } = useRouteLoaderData("routes/rapportering") as ISessionLoader;
   const [utlopesOm, setUtlopesOm] = useState<number | undefined>(
     props.sesjon?.expiresIn || session?.expiresIn || 1
   );

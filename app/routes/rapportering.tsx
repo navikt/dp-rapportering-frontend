@@ -5,6 +5,11 @@ import { getSession } from "~/utils/auth.utils.server";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import styles from "~/routes/rapportering.module.css";
 import { Heading } from "@navikt/ds-react";
+import type { SessionWithOboProvider } from "@navikt/dp-auth";
+
+export interface ISessionLoader {
+  session: SessionWithOboProvider;
+}
 
 export async function loader({ request }: LoaderArgs) {
   console.log("rapportering loader");

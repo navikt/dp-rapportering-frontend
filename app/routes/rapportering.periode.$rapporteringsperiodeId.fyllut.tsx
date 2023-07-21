@@ -16,6 +16,7 @@ import { validator } from "~/utils/validering.util";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
 import invariant from "tiny-invariant";
+import { RemixLink } from "~/components/RemixLink";
 export async function action({ request, params }: ActionArgs) {
   invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
   let periodeId = params.rapporteringsperiodeId;
@@ -90,7 +91,6 @@ export default function RapporteringFyllut() {
   const [valgtDag, setValgtDag] = useState<IRapporteringsperiodeDag | undefined>(undefined);
   const [modalAapen, setModalAapen] = useState(false);
   const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
-  const { hentAppTekstMedId } = useSanity();
 
   useEffect(() => {
     Modal.setAppElement("#dp-rapportering-frontend");
@@ -144,6 +144,14 @@ export default function RapporteringFyllut() {
         />
         <div className={styles.registertMeldeperiodeKontainer}>
           <AktivitetOppsummering rapporteringsperiode={periode} />
+        </div>
+        <div className={styles.navigasjonKontainer}>
+          <RemixLink as={"Button"} to={`/rapportering/periode/${periode.id}/send-inn`}>
+            Send rapportering
+          </RemixLink>
+          <RemixLink as={"Button"} to={`/rapportering/alle`} variant={"secondary"}>
+            Lagre og fortsett senere
+          </RemixLink>
         </div>
       </main>
     </>

@@ -10,20 +10,19 @@ export default function Rapportering() {
   const navigate = useNavigate();
   useEffect(() => {
     if (periode) {
-      console.log("useEffect har rapporteringsperiode!", periode);
       switch (periode.status) {
         case "TilUtfylling":
-          console.log("til utfylling!");
+          console.log("naviger til utfylling!");
           navigate(`rapportering/periode/${periode.id}/fyllut`);
           break;
         default:
-          console.log("ikke til utfylling!");
-          navigate(`rapportering/periode/${periode.id}/les`);
+          console.log("naviger til view");
+          navigate(`rapportering/periode/${periode.id}/vis`);
       }
     } else {
-      console.log("if test feilet");
+      console.log("ingen periode i $rapporteringsperiode._index! :scream:");
     }
-  }, [periode]);
+  }, [navigate, periode]);
 
   return (
     <main className={styles.rapporteringKontainer}>
