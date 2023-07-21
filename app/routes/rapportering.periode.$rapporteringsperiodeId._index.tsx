@@ -14,6 +14,7 @@ export default function Rapportering() {
       switch (periode.status) {
         case "TilUtfylling":
           console.log("til utfylling!");
+          navigate(`rapportering/periode/${periode.id}/fyllut`);
           break;
         default:
           console.log("ikke til utfylling!");

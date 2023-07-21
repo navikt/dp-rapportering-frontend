@@ -12,6 +12,46 @@ interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
 }
 
+function KalenderPeriodeRedigeringsLenke(props: { id: string; status: string }) {
+  const lenketekst = finnLenkeTekstFraStatus(props.status);
+  const lenkesti = finnLenkeDestinationFraStatus(props.status);
+
+  return (
+    <Link
+      href={`/rapportering/periode/${props.id}/${lenkesti}`}
+      className={styles.kalenderHeaderPeriodeAlternativer}
+    >
+      {lenketekst}
+    </Link>
+  );
+  function finnLenkeTekstFraStatus(status: string) {
+    switch (status) {
+      case "TilUtfylling":
+        return "Rediger";
+      case "Godkjent":
+        return "Avgodkjenn";
+      case "Innsendt":
+        return "Korriger";
+      default:
+        return "ingen statusmatch";
+    }
+  }
+
+  function finnLenkeDestinationFraStatus(status: string) {
+    switch (status) {
+      case "TilUtfylling":
+        return "rediger";
+      case "Godkjent":
+        return "avgodkjenn";
+      case "Innsendt":
+        return "korriger";
+      default:
+        console.log("Traff ukjent status i kalenderlenke: ", status);
+        return;
+    }
+  }
+}
+
 export function Kalender(props: IProps) {
   const { rapporteringsperiode, aapneModal } = props;
 
@@ -29,12 +69,10 @@ export function Kalender(props: IProps) {
           <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
         </div>
 
-        <Link
-          href={`/rapportering/periode/${rapporteringsperiode.id}`}
-          className={styles.kalenderHeaderPeriodeAlternativer}
-        >
-          korriger
-        </Link>
+        <KalenderPeriodeRedigeringsLenke
+          id={rapporteringsperiode.id}
+          status={rapporteringsperiode.status}
+        />
       </div>
       <div className={styles.kalender}>
         <br />

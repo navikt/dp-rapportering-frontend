@@ -5,7 +5,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 
-export default function RapporteringAlle() {
+export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
