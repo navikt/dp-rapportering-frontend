@@ -97,7 +97,6 @@ jobs:
           destination: "/dp-rapportering-frontend/"
 
   deploy-dev:
-    if: github.ref == 'refs/heads/main'
     needs: [build, upload-cdn]
     runs-on: ubuntu-latest
     steps:
