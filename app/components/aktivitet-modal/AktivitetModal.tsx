@@ -1,5 +1,5 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import classNames from "classnames";
 import { format } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
@@ -14,7 +14,6 @@ import styles from "./AktivitetModal.module.css";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 interface IProps {
-  rapporteringsperiodeId: string;
   rapporteringsperiodeDag?: IRapporteringsperiodeDag;
   valgtDato?: string;
   valgtAktivitet: string | TAktivitetType;
@@ -50,18 +49,12 @@ export function AktivitetModal(props: IProps) {
     >
       <Modal.Content>
         <Heading spacing level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
-          {props.valgtDato && format(new Date(props.valgtDato), "EEEE d", { locale: nbLocale })}
+          {props.valgtDato && format(new Date(props.valgtDato), "EEEE d", { locale: nbLocale })}.
         </Heading>
 
         {valgteDatoHarAktivitet &&
           valgteDatoHarAktivitet.aktiviteter.map((aktivitet) => (
             <Form key={aktivitet.id} method="post">
-              <input
-                type="text"
-                hidden
-                name="rapporteringsperiodeId"
-                defaultValue={props.rapporteringsperiodeId}
-              />
               <input type="text" hidden name="aktivitetId" defaultValue={aktivitet.id} />
               <div className={classNames(styles.slettKnapp, styles[aktivitet.type])}>
                 {hentSlettKnappTekst()}
@@ -79,12 +72,6 @@ export function AktivitetModal(props: IProps) {
             key="lagre-ny-aktivitet"
             validator={validator(props.valgtAktivitet)}
           >
-            <input
-              type="text"
-              hidden
-              name="rapporteringsperiodeId"
-              defaultValue={props.rapporteringsperiodeId}
-            />
             <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
 
             <div className={styles.aktivitetKontainer}>

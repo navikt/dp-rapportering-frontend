@@ -270,7 +270,6 @@ export default function Rapportering() {
       <Kalender rapporteringsperiode={rapporteringsperiode} aapneModal={aapneModal} />
 
       <AktivitetModal
-        rapporteringsperiodeId={rapporteringsperiode.id}
         rapporteringsperiodeDag={valgtDag}
         valgtDato={valgtDato}
         valgtAktivitet={valgtAktivitet}

@@ -15,26 +15,24 @@ import { json } from "@remix-run/node";
 import { validator } from "~/utils/validering.util";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
-export async function action({ request }: ActionArgs) {
+import invariant from "tiny-invariant";
+export async function action({ request, params }: ActionArgs) {
+  invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
+  let periodeId = params.rapporteringsperiodeId;
   const formdata = await request.formData();
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
     case "slette": {
-      const rapporteringsperiodeId = formdata.get("rapporteringsperiodeId") as string;
       const aktivitetId = formdata.get("aktivitetId") as string;
 
-      const slettAktivitetResponse = await sletteAktivitet(
-        rapporteringsperiodeId,
-        aktivitetId,
-        request
-      );
+      const slettAktivitetResponse = await sletteAktivitet(periodeId, aktivitetId, request);
 
       if (!slettAktivitetResponse.ok) {
         return json({ error: "Det har skjedd en feil ved sletting, prøv igjen." });
       }
 
-      return {};
+      return json({ lagret: true });
     }
 
     case "lagre": {
@@ -45,7 +43,7 @@ export async function action({ request }: ActionArgs) {
         return validationError(inputVerdier.error);
       }
 
-      const { rapporteringsperiodeId, type, dato, timer: tid } = inputVerdier.submittedData;
+      const { type, dato, timer: tid } = inputVerdier.submittedData;
 
       function hentAktivitetArbeid() {
         const delt = tid.replace(/\./g, ",").split(",");
@@ -70,11 +68,7 @@ export async function action({ request }: ActionArgs) {
 
       const aktivitetData = aktivitType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
 
-      const lagreAktivitetResponse = await lagreAktivitet(
-        rapporteringsperiodeId,
-        aktivitetData,
-        request
-      );
+      const lagreAktivitetResponse = await lagreAktivitet(periodeId, aktivitetData, request);
 
       if (!lagreAktivitetResponse.ok) {
         return json({ error: "Noen gikk feil med lagring av aktivitet, prøv igjen." });
@@ -139,7 +133,6 @@ export default function RapporteringFyllut() {
       <main className={styles.rapporteringKontainer}>
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
         <AktivitetModal
-          rapporteringsperiodeId={periode.id}
           rapporteringsperiodeDag={valgtDag}
           valgtDato={valgtDato}
           valgtAktivitet={valgtAktivitet}
