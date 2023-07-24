@@ -37,8 +37,8 @@ export async function action({ request, params }: ActionArgs) {
     }
 
     case "lagre": {
-      const aktivitType = formdata.get("type") as TAktivitetType;
-      const inputVerdier = await validator(aktivitType).validate(formdata);
+      const aktivitetsType = formdata.get("type") as TAktivitetType;
+      const inputVerdier = await validator(aktivitetsType).validate(formdata);
 
       if (inputVerdier.error) {
         return validationError(inputVerdier.error);
@@ -67,7 +67,7 @@ export async function action({ request, params }: ActionArgs) {
         dato,
       };
 
-      const aktivitetData = aktivitType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
+      const aktivitetData = aktivitetsType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
 
       const lagreAktivitetResponse = await lagreAktivitet(periodeId, aktivitetData, request);
 
