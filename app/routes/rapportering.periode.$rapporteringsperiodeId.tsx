@@ -25,6 +25,7 @@ export async function loader({ request, params }: LoaderArgs) {
     throw new Response("IIIH NOE GIKK GALT VED UTHENTING AV PERIODE", { status, statusText });
   }
 }
+
 export default function Rapportering() {
   const { periode } = useLoaderData<typeof loader>() as IRapporteringsPeriodeLoader;
 
