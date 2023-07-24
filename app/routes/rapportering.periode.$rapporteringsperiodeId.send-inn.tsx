@@ -13,7 +13,6 @@ import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.
 export async function action({ request, params }: ActionArgs) {
   invariant(params.rapporteringsperiodeId, "Fant ikke rapporteringsperiodeId");
   const periodeId = params.rapporteringsperiodeId;
-
   const godkjennPeriodeResponse = await godkjennPeriode(periodeId, request);
 
   if (!godkjennPeriodeResponse.ok) {

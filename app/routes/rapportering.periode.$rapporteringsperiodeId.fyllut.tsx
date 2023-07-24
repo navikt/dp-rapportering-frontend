@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import { lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-import { useSanity } from "~/hooks/useSanity";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import type { ActionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -17,9 +16,10 @@ import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
+
 export async function action({ request, params }: ActionArgs) {
   invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
-  let periodeId = params.rapporteringsperiodeId;
+  const periodeId = params.rapporteringsperiodeId;
   const formdata = await request.formData();
   const submitKnapp = formdata.get("submit");
 

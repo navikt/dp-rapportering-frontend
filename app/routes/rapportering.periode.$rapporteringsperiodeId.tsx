@@ -9,14 +9,15 @@ import { Accordion } from "@navikt/ds-react";
 export interface IRapporteringsPeriodeLoader {
   periode: IRapporteringsperiode;
 }
+
 export async function loader({ request, params }: LoaderArgs) {
   console.log("rapportering/periode/$Id loader");
-  let periodeId = params.rapporteringsperiodeId || "";
-  let periode = null;
 
+  const periodeId = params.rapporteringsperiodeId || "";
   const periodeResponse = await hentPeriode(request, periodeId);
+
   if (periodeResponse.ok) {
-    periode = await periodeResponse.json();
+    const periode = await periodeResponse.json();
     return json({ periode });
   } else {
     const { status, statusText } = periodeResponse;

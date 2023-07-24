@@ -7,8 +7,7 @@ export async function loader({ request, params }: LoaderArgs) {
   console.log("rapportering/periode/$Id/avgodkjenn loader");
   invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
 
-  let periodeId = params.rapporteringsperiodeId;
-
+  const periodeId = params.rapporteringsperiodeId;
   const response = await avGodkjennPeriode(periodeId, request);
 
   if (response.ok) {

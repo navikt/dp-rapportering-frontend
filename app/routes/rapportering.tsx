@@ -17,6 +17,7 @@ export async function loader({ request }: LoaderArgs) {
 
   return json({ session });
 }
+
 export default function Rapportering() {
   return (
     <div id="dp-rapportering-frontend">
@@ -25,9 +26,11 @@ export default function Rapportering() {
     </div>
   );
 }
+
 export function ErrorBoundary() {
   const error = useRouteError();
   console.log("treffer rapportering/ errorboundary", error);
+
   if (isRouteErrorResponse(error)) {
     if (error.status === 401) {
       return (
@@ -45,6 +48,7 @@ export function ErrorBoundary() {
         </div>
       );
     }
+
     return (
       <div id="dp-rapportering-frontend">
         <div className={styles.rapporteringHeader}>

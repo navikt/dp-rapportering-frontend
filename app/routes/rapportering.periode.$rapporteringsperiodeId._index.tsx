@@ -7,7 +7,9 @@ export default function Rapportering() {
   const { periode } = useRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
+
   const navigate = useNavigate();
+
   useEffect(() => {
     if (periode) {
       switch (periode.status) {
