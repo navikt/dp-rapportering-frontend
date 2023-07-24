@@ -7,7 +7,7 @@ interface IProps {
 }
 
 export function PeriodeHeaderDetaljer({ rapporteringsperiode }: IProps) {
-  const { fraOgMed, tilOgMed } = rapporteringsperiode;
+  const { fraOgMed, tilOgMed, beregnesEtter, status } = rapporteringsperiode;
 
   return (
     <>
@@ -16,6 +16,9 @@ export function PeriodeHeaderDetaljer({ rapporteringsperiode }: IProps) {
         {formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}
       </Heading>
       <span>{formaterPeriodeDato(fraOgMed, tilOgMed)}</span>
+      {(status === "TilUtfylling" || status === "Godkjent") && (
+        <p>Beregnes etter: {beregnesEtter}</p>
+      )}
     </>
   );
 }

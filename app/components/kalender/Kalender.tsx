@@ -42,7 +42,7 @@ function KalenderPeriodeRedigeringsLenke(props: { id: string; status: string; vi
   function finnLenkeDestinationFraStatus(status: string) {
     switch (status) {
       case "TilUtfylling":
-        return "rediger";
+        return "fyllut";
       case "Godkjent":
         return "avgodkjenn";
       case "Innsendt":
