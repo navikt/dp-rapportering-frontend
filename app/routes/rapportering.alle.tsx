@@ -6,20 +6,19 @@ import { useLoaderData } from "@remix-run/react";
 import styles from "~/routes/rapportering.module.css";
 import { Heading } from "@navikt/ds-react";
 import { Kalender } from "~/components/kalender/Kalender";
-import { visGraaBakgrunn } from "~/utils/css.utils";
+import classNames from "classnames";
 
 export async function loader({ request }: LoaderArgs) {
   console.log("rapportering/alle loader");
-  let allePerioder = null;
 
   const allePerioderResponse = await hentAllePerioder(request);
 
-  if (allePerioderResponse.ok) {
-    allePerioder = await allePerioderResponse.json();
-  } else {
+  if (!allePerioderResponse.ok) {
     const { status, statusText } = allePerioderResponse;
     throw json({}, { status, statusText });
   }
+
+  const allePerioder = await allePerioderResponse.json();
 
   return json({ allePerioder });
 }
@@ -40,7 +39,12 @@ export default function RapporteringAlle() {
       <main className={styles.rapporteringKontainer}>
         {perioder.map((periode) => {
           return (
-            <div className={visGraaBakgrunn(periode.status)} key={periode.id}>
+            <div
+              className={classNames({
+                [styles.graaBakgrunn]: periode.status !== "TilUtfylling",
+              })}
+              key={periode.id}
+            >
               <Kalender
                 rapporteringsperiode={periode as IRapporteringsperiode}
                 aapneModal={() => {}}

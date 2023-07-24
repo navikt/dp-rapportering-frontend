@@ -10,8 +10,7 @@ export async function loader({ request, params }: LoaderArgs) {
   console.log("rapportering/periode/$Id/korriger loader");
   invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
 
-  let periodeId = params.rapporteringsperiodeId;
-
+  const periodeId = params.rapporteringsperiodeId;
   const response = await lagKorrigeringsperiode(periodeId, request);
 
   if (response.ok) {
