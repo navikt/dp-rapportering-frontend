@@ -1,4 +1,4 @@
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { Heading } from "@navikt/ds-react";
 

@@ -2,14 +2,20 @@ import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import { IRapporteringLoader } from "~/routes/rapportering";
 import { DevelopmentKontainer } from "../development-kontainer/DevelopmentKontainer";
 
 import styles from "./SessjonModal.module.css";
+import type { SessionWithOboProvider } from "@navikt/dp-auth";
+import { ISessionLoader } from "~/routes/rapportering";
+interface IProps {
+  sesjon?: SessionWithOboProvider;
+}
 
-export function SessjonModal() {
-  const { session } = useRouteLoaderData("routes/rapportering") as IRapporteringLoader;
-  const [utlopesOm, setUtlopesOm] = useState<number | undefined>(session?.expiresIn || 1);
+export function SessjonModal(props: IProps) {
+  const { session } = useRouteLoaderData("routes/rapportering") as ISessionLoader;
+  const [utlopesOm, setUtlopesOm] = useState<number | undefined>(
+    props.sesjon?.expiresIn || session?.expiresIn || 1
+  );
   const [utlopt, setUtlopt] = useState(false);
   const [laster, setLaster] = useState(false);
 
@@ -53,7 +59,7 @@ export function SessjonModal() {
           Du må logge inn på nytt for å fortsette
         </Heading>
         <p>
-          Sesjonen din har utløpt, og du må logge inn med BankID på nytt for å fortsette. Alle
+          Sesjonen din har utløpt, og du må logge inn med IDPorten på nytt for å fortsette. Alle
           svarene dine i søknaden er lagret og du kan fortsette der du slapp.
         </p>
         <div className={styles.knappKontainer}>

@@ -1,7 +1,21 @@
 .kalender {
   margin-left: calc(var(--a-spacing-2) * -1);
   width: calc(var(--a-spacing-4) + 100%);
-  margin-bottom: var(--a-spacing-20);
+  margin-bottom: var(--a-spacing-8);
+}
+
+.kalenderHeaderKontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.kalenderHeaderPeriodeDetaljer{
+  flex-direction: column;
+}
+.kalenderHeaderPeriodeAlternativer{
+  flex-direction: column-reverse;
+  justify-content: flex-start;
 }
 
 .kalenderUkedagKontainer {
