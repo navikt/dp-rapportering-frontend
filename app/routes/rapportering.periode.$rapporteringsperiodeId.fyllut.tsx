@@ -6,16 +6,12 @@ import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { useEffect, useState } from "react";
 import type { TAktivitetType } from "~/models/aktivitet.server";
-import { lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import type { ActionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { validator } from "~/utils/validering.util";
-import { validationError } from "remix-validated-form";
-import { serialize } from "tinyduration";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
+import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
 
 export async function action({ request, params }: ActionArgs) {
   invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
@@ -25,57 +21,11 @@ export async function action({ request, params }: ActionArgs) {
 
   switch (submitKnapp) {
     case "slette": {
-      const aktivitetId = formdata.get("aktivitetId") as string;
-
-      const slettAktivitetResponse = await sletteAktivitet(periodeId, aktivitetId, request);
-
-      if (!slettAktivitetResponse.ok) {
-        return json({ error: "Det har skjedd en feil ved sletting, prøv igjen." });
-      }
-
-      return json({ lagret: true });
+      await slettAktivitetAction(formdata, request, periodeId);
     }
 
     case "lagre": {
-      const aktivitetsType = formdata.get("type") as TAktivitetType;
-      const inputVerdier = await validator(aktivitetsType).validate(formdata);
-
-      if (inputVerdier.error) {
-        return validationError(inputVerdier.error);
-      }
-
-      const { type, dato, timer: tid } = inputVerdier.submittedData;
-
-      function hentAktivitetArbeid() {
-        const delt = tid.replace(/\./g, ",").split(",");
-        const timer = delt[0] || 0;
-        const minutter = delt[1] || 0;
-        const minutterFloat = parseFloat(`0.${minutter}`);
-
-        return {
-          type,
-          dato,
-          timer: serialize({
-            hours: timer,
-            minutes: Math.round(minutterFloat * 60),
-          }),
-        };
-      }
-
-      const andreAktivitet = {
-        type,
-        dato,
-      };
-
-      const aktivitetData = aktivitetsType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
-
-      const lagreAktivitetResponse = await lagreAktivitet(periodeId, aktivitetData, request);
-
-      if (!lagreAktivitetResponse.ok) {
-        return json({ error: "Noen gikk feil med lagring av aktivitet, prøv igjen." });
-      }
-
-      return json({ lagret: true });
+      await lagreAktivitetAction(formdata, request, periodeId);
     }
   }
 }
