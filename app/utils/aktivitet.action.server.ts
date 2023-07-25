@@ -1,5 +1,5 @@
-import { TypedResponse, json } from "@remix-run/node";
-import { TAktivitetType, lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
+import { type TypedResponse, json } from "@remix-run/node";
+import { type TAktivitetType, lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
 import { validator } from "./validering.util";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";

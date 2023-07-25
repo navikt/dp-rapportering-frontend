@@ -1,12 +1,12 @@
+import type { SessionWithOboProvider } from "@navikt/dp-auth";
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
+import type { ISessionLoader } from "~/routes/rapportering";
 import { DevelopmentKontainer } from "../development-kontainer/DevelopmentKontainer";
-
 import styles from "./SessjonModal.module.css";
-import type { SessionWithOboProvider } from "@navikt/dp-auth";
-import { ISessionLoader } from "~/routes/rapportering";
+
 interface IProps {
   sesjon?: SessionWithOboProvider;
 }
@@ -73,6 +73,7 @@ export function SessjonModal(props: IProps) {
         <DevelopmentKontainer>
           <a
             target="_blank"
+            rel="noreferrer"
             href="https://wonderwalled-idporten.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering"
           >
             Klikk på lenken for å hente ny token
