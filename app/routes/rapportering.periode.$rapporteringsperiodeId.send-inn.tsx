@@ -23,7 +23,7 @@ export async function action({ request, params }: ActionArgs) {
     return json({ error: "Det har skjedd noe feil med innsendingen din, prøv igjen." });
   }
 
-  return redirect(`/rapportering/periode/${periodeId}/innsendt`);
+  return redirect(`/rapportering/periode/${periodeId}/bekreftelse`);
 }
 
 export default function RapporteringSendInnRapporteringsperiodeid() {
