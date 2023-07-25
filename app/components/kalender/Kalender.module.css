@@ -10,10 +10,11 @@
   justify-content: space-between;
 }
 
-.kalenderHeaderPeriodeDetaljer{
+.kalenderHeaderPeriodeDetaljer {
   flex-direction: column;
 }
-.kalenderHeaderPeriodeAlternativer{
+
+.kalenderHeaderPeriodeAlternativer {
   flex-direction: column-reverse;
   justify-content: flex-start;
 }

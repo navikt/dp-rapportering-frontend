@@ -16,10 +16,7 @@ const configureServerSettings = () => {
   app.disable("x-powered-by");
 
   // Remix bygger appen med fingerprinting, så vi kan cache disse filene evig
-  app.use(
-    `${basePath}/build`,
-    express.static("public/build", { immutable: true, maxAge: "1y" })
-  );
+  app.use(`${basePath}/build`, express.static("public/build", { immutable: true, maxAge: "1y" }));
 
   // Cache public-filer (som favicon) i én time
   app.use(`${basePath}`, express.static("public", { maxAge: "1h" }));

@@ -5,9 +5,7 @@ import { sanityResponse } from "./api-routes/sanityResponse";
 
 export const handlers = [
   rest.get(
-    `${getEnv(
-      "DP_RAPPORTERING_URL"
-    )}/rapporteringsperioder/:rapporteringsperioderId`,
+    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId`,
     (req, res, ctx) => {
       const rapporteringPeriode = rapporteringsperioderResponse.find(
         (periode) => periode.id === req.params.rapporteringsperioderId
