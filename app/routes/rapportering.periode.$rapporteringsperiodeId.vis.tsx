@@ -21,7 +21,7 @@ export default function RapporteringLes() {
         </div>
       </div>
       <main
-        className={classNames(styles.navigasjonKontainer, {
+        className={classNames(styles.rapporteringKontainer, {
           [styles.graaBakgrunn]: periode.status !== "TilUtfylling",
         })}
       >

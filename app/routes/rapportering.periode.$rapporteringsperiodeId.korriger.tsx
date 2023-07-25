@@ -1,8 +1,6 @@
 import type { LoaderArgs } from "@remix-run/node";
-import {
-  IRapporteringsperiode,
-  lagKorrigeringsperiode,
-} from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { lagKorrigeringsperiode } from "~/models/rapporteringsperiode.server";
 import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 
