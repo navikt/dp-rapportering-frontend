@@ -10,6 +10,12 @@ export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
+  const { status } = periode;
+
+  const tekstForInnsending: string =
+    "Du har nå sendt inn rapportering for perioden. Når perioden er over så vil NAV beregne sum og utbetale dagpenger.";
+  const tekstEtterInnsending: string =
+    "Du har nå sendt inn rapportering for perioden. NAV  vil fortløpende beregne sum og utbetale dagpenger.";
 
   return (
     <>
@@ -22,11 +28,10 @@ export default function RapporteringLes() {
       </div>
       <main className={classNames(styles.rapporteringKontainer)}>
         <Heading size={"medium"} level={"2"} spacing={true}>
-          Tusen takk
+          Tusen takk!
         </Heading>
         <BodyLong spacing>
-          Du har nå sendt inn rapportering for perioden. Når perioden er over så vil NAV beregne sum
-          og utbetale dagpenger.
+          {status === "Innsendt" ? tekstEtterInnsending : tekstForInnsending}
         </BodyLong>
         <div className={styles.graaBakgrunn}>
           <Kalender rapporteringsperiode={periode} aapneModal={() => {}} />
