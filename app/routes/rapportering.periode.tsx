@@ -1,13 +1,8 @@
-import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
-import type { LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { getSession } from "~/utils/auth.utils.server";
-import { SessjonModal } from "~/components/session-modal/SessjonModal";
+import { Outlet } from "@remix-run/react";
 import styles from "~/routes/rapportering.module.css";
 import { Heading } from "@navikt/ds-react";
-import type { SessionWithOboProvider } from "@navikt/dp-auth";
 
-export default function Rapportering() {
+export default function RapporteringsPeriode() {
   return (
     <>
       <div className={styles.rapporteringHeader}>
