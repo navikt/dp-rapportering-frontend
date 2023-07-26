@@ -118,6 +118,6 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-
+  console.log("treffer root errorboundary", error);
   return <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />;
 }

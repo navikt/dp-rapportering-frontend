@@ -5,14 +5,57 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import styles from "./Kalender.module.css";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
+import { Link } from "@navikt/ds-react";
 
 interface IProps {
   aapneModal: (dato: string) => void;
   rapporteringsperiode: IRapporteringsperiode;
+  visRedigeringsAlternativer?: boolean;
+}
+
+function KalenderPeriodeRedigeringsLenke(props: { id: string; status: string; vis: boolean }) {
+  if (!props.vis) return <></>;
+  const lenketekst = finnLenkeTekstFraStatus(props.status);
+  const lenkesti = finnLenkeDestinationFraStatus(props.status);
+
+  return (
+    <Link
+      href={`/rapportering/periode/${props.id}/${lenkesti}`}
+      className={styles.kalenderHeaderPeriodeAlternativer}
+    >
+      {lenketekst}
+    </Link>
+  );
+  function finnLenkeTekstFraStatus(status: string) {
+    switch (status) {
+      case "TilUtfylling":
+        return "Fyll ut";
+      case "Godkjent":
+        return "Rediger";
+      case "Innsendt":
+        return "Korriger";
+      default:
+        return "ingen statusmatch";
+    }
+  }
+
+  function finnLenkeDestinationFraStatus(status: string) {
+    switch (status) {
+      case "TilUtfylling":
+        return "fyllut";
+      case "Godkjent":
+        return "avgodkjenn";
+      case "Innsendt":
+        return "korriger";
+      default:
+        console.log("Traff ukjent status i kalenderlenke: ", status);
+        return;
+    }
+  }
 }
 
 export function Kalender(props: IProps) {
-  const { rapporteringsperiode, aapneModal } = props;
+  const { rapporteringsperiode, aapneModal, visRedigeringsAlternativer = false } = props;
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   const helgIndex = [5, 6, 12, 13];
@@ -23,15 +66,23 @@ export function Kalender(props: IProps) {
 
   return (
     <>
-      {rapporteringsperiode && (
-        <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
-      )}
+      <div className={styles.kalenderHeaderKontainer}>
+        <div className={styles.kalenderHeaderPeriodeDetaljer}>
+          <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
+        </div>
+
+        <KalenderPeriodeRedigeringsLenke
+          id={rapporteringsperiode.id}
+          status={rapporteringsperiode.status}
+          vis={visRedigeringsAlternativer}
+        />
+      </div>
       <div className={styles.kalender}>
         <br />
         <div className={styles.kalenderUkedagKontainer}>
           {ukedager.map((ukedag, index) => {
             return (
-              <div key={index} className={styles.kalenderUkedag}>
+              <div key={`${rapporteringsperiode.id}-${index}`} className={styles.kalenderUkedag}>
                 {ukedag}
               </div>
             );

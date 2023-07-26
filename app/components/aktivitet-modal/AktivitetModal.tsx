@@ -1,5 +1,5 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import classNames from "classnames";
 import { format } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
@@ -14,7 +14,6 @@ import styles from "./AktivitetModal.module.css";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 interface IProps {
-  rapporteringsperiodeId: string;
   rapporteringsperiodeDag?: IRapporteringsperiodeDag;
   valgtDato?: string;
   valgtAktivitet: string | TAktivitetType;
@@ -26,8 +25,18 @@ interface IProps {
 }
 
 export function AktivitetModal(props: IProps) {
+  const {
+    rapporteringsperiodeDag,
+    modalAapen,
+    lukkModal,
+    valgtDato,
+    muligeAktiviteter,
+    valgtAktivitet,
+    setValgtAktivitet,
+  } = props;
+
   const actionData = useActionData();
-  const valgteDatoHarAktivitet = props.rapporteringsperiodeDag;
+  const valgteDatoHarAktivitet = rapporteringsperiodeDag;
 
   function hentSlettKnappTekst() {
     const aktivitet = valgteDatoHarAktivitet?.aktiviteter[0];
@@ -45,23 +54,17 @@ export function AktivitetModal(props: IProps) {
     <Modal
       aria-labelledby="modal-heading"
       aria-label="Rapporter aktivitet"
-      open={props.modalAapen}
-      onClose={() => props.lukkModal()}
+      open={modalAapen}
+      onClose={() => lukkModal()}
     >
       <Modal.Content>
         <Heading spacing level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
-          {props.valgtDato && format(new Date(props.valgtDato), "EEEE d", { locale: nbLocale })}
+          {valgtDato && format(new Date(valgtDato), "EEEE d", { locale: nbLocale })}.
         </Heading>
 
         {valgteDatoHarAktivitet &&
           valgteDatoHarAktivitet.aktiviteter.map((aktivitet) => (
             <Form key={aktivitet.id} method="post">
-              <input
-                type="text"
-                hidden
-                name="rapporteringsperiodeId"
-                defaultValue={props.rapporteringsperiodeId}
-              />
               <input type="text" hidden name="aktivitetId" defaultValue={aktivitet.id} />
               <div className={classNames(styles.slettKnapp, styles[aktivitet.type])}>
                 {hentSlettKnappTekst()}
@@ -73,31 +76,25 @@ export function AktivitetModal(props: IProps) {
               </div>
             </Form>
           ))}
-        {props.muligeAktiviteter.length > 0 && (
+        {muligeAktiviteter.length > 0 && (
           <ValidatedForm
             method="post"
             key="lagre-ny-aktivitet"
-            validator={validator(props.valgtAktivitet)}
+            validator={validator(valgtAktivitet)}
           >
-            <input
-              type="text"
-              hidden
-              name="rapporteringsperiodeId"
-              defaultValue={props.rapporteringsperiodeId}
-            />
-            <input type="text" hidden name="dato" defaultValue={props.valgtDato} />
+            <input type="text" hidden name="dato" defaultValue={valgtDato} />
 
             <div className={styles.aktivitetKontainer}>
               <AktivitetRadio
                 name="type"
-                muligeAktiviteter={props.muligeAktiviteter}
-                verdi={props.valgtAktivitet}
-                onChange={(aktivitet: string) => props.setValgtAktivitet(aktivitet)}
+                muligeAktiviteter={muligeAktiviteter}
+                verdi={valgtAktivitet}
+                onChange={(aktivitet: string) => setValgtAktivitet(aktivitet)}
                 label="Hva vil du registrere"
               />
             </div>
 
-            {props.valgtAktivitet === "Arbeid" && <TallInput name="timer" label="Antall timer:" />}
+            {valgtAktivitet === "Arbeid" && <TallInput name="timer" label="Antall timer:" />}
 
             {actionData?.error && (
               <Alert variant="error" className={styles.feilmelding}>
@@ -112,7 +109,7 @@ export function AktivitetModal(props: IProps) {
             </div>
           </ValidatedForm>
         )}
-        {props.muligeAktiviteter.length === 0 &&
+        {muligeAktiviteter.length === 0 &&
           valgteDatoHarAktivitet &&
           valgteDatoHarAktivitet.aktiviteter.length === 0 && (
             <p>Denne dagen er ikke rapporteringspliktig, så du kan ikke legge inn aktiviteter.</p>

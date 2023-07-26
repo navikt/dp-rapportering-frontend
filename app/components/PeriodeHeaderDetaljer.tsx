@@ -1,4 +1,4 @@
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { Heading } from "@navikt/ds-react";
 
@@ -7,7 +7,7 @@ interface IProps {
 }
 
 export function PeriodeHeaderDetaljer({ rapporteringsperiode }: IProps) {
-  const { fraOgMed, tilOgMed } = rapporteringsperiode;
+  const { fraOgMed, tilOgMed, beregnesEtter, status } = rapporteringsperiode;
 
   return (
     <>
@@ -16,6 +16,9 @@ export function PeriodeHeaderDetaljer({ rapporteringsperiode }: IProps) {
         {formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}
       </Heading>
       <span>{formaterPeriodeDato(fraOgMed, tilOgMed)}</span>
+      {(status === "TilUtfylling" || status === "Godkjent") && (
+        <p>Beregnes etter: {beregnesEtter}</p>
+      )}
     </>
   );
 }
