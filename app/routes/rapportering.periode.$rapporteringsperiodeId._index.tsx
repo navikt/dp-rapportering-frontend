@@ -15,11 +15,11 @@ export default function Rapportering() {
       switch (periode.status) {
         case "TilUtfylling":
           console.log("naviger til utfylling!");
-          navigate(`rapportering/periode/${periode.id}/fyllut`);
+          navigate(`/rapportering/periode/${periode.id}/fyllut`, { replace: true });
           break;
         default:
           console.log("naviger til view");
-          navigate(`rapportering/periode/${periode.id}/vis`);
+          navigate(`/rapportering/periode/${periode.id}/vis`, { replace: true });
       }
     } else {
       console.log("ingen periode i $rapporteringsperiode._index! :scream:");
