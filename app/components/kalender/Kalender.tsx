@@ -28,9 +28,12 @@ export function Kalender(props: IProps) {
         <div className={styles.kalenderHeaderPeriodeDetaljer}>
           <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
         </div>
-        {visRedigeringsAlternativer && (
-          <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
-        )}
+        <div className={styles.kalenderHeaderPeriodeAlternativer}>
+          <p>Status: {rapporteringsperiode.status}</p>
+          {visRedigeringsAlternativer && (
+            <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
+          )}
+        </div>
       </div>
       <div className={styles.kalender}>
         <br />

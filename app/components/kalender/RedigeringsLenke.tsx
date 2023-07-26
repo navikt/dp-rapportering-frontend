@@ -29,11 +29,7 @@ export function RedigeringsLenke(props: IProps) {
   const redigeringsType = finnRedigeringsType(props.status);
 
   return (
-    <RemixLink
-      as="Link"
-      to={`/rapportering/periode/${props.id}/${redigeringsType.sti}`}
-      className={styles.kalenderHeaderPeriodeAlternativer}
-    >
+    <RemixLink as="Link" to={`/rapportering/periode/${props.id}/${redigeringsType.sti}`}>
       {redigeringsType.tekst}
     </RemixLink>
   );

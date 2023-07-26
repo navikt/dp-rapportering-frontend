@@ -8,23 +8,18 @@ import classNames from "classnames";
 
 export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(
-    "routes/rapportering.periode.$rapporteringsperiodeId"
+    "routes/rapportering.korriger.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
-  const { status } = periode;
-
-  const tekstForInnsending: string =
-    "Du har nå sendt inn rapportering for perioden. Når perioden er over så vil NAV beregne sum og utbetale dagpenger.";
-  const tekstEtterInnsending: string =
-    "Du har nå sendt inn rapportering for perioden. NAV  vil fortløpende beregne sum og utbetale dagpenger.";
 
   return (
     <>
       <main className={classNames(styles.rapporteringKontainer)}>
         <Heading size={"medium"} level={"2"} spacing={true}>
-          Tusen takk!
+          Din korrigering er nå lagret og sendt til NAV
         </Heading>
         <BodyLong spacing>
-          {status === "Innsendt" ? tekstEtterInnsending : tekstForInnsending}
+          Perioden vil bli beregnet på nytt [så snart som mulig]. Du vil snart få informasjon fra
+          NAV om det har konsekvensre for ekstra utbetaling eller tilbakekreving av penger.
         </BodyLong>
         <div className={styles.graaBakgrunn}>
           <Kalender rapporteringsperiode={periode} aapneModal={() => {}} />

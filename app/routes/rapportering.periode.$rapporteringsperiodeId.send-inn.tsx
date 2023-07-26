@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, Heading, ReadMore } from "@navikt/ds-react";
+import { Alert, Button, Heading } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
@@ -34,13 +34,6 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
 
   return (
     <>
-      <div className={styles.rapporteringHeader}>
-        <div className={styles.rapporteringHeaderInnhold}>
-          <Heading level="1" size="xlarge">
-            Dagpengerapportering
-          </Heading>
-        </div>
-      </div>
       <main className={styles.rapporteringKontainer}>
         <Heading level="2" size="large" spacing>
           Send inn rapportering
@@ -51,17 +44,6 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
             Dette er det du har registrert for meldeperioden:
           </Heading>
           <AktivitetOppsummering rapporteringsperiode={periode} />
-        </div>
-
-        <div className={styles.utbetalingsEstimat}>
-          <BodyShort>Estimert utbetaling: 13 245 kr</BodyShort>
-
-          <ReadMore header="Se forklaring av estimat">
-            Med helsemessige begrensninger mener vi funksjonshemming, sykdom, allergier som hindrer
-            deg i arbeidet eller andre årsaker som må tas hensyn til når du skal finne nytt arbeid.
-            Du må oppgi hva som gjelder for deg, og dokumentere de helsemessige årsakene du viser
-            til.
-          </ReadMore>
         </div>
 
         {actionData?.error && (
