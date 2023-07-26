@@ -1,57 +1,15 @@
 import classNames from "classnames";
 import { format } from "date-fns";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-
 import styles from "./Kalender.module.css";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
-import { Link } from "@navikt/ds-react";
+import { RedigeringsLenke } from "./RedigeringsLenke";
 
 interface IProps {
   aapneModal: (dato: string) => void;
   rapporteringsperiode: IRapporteringsperiode;
   visRedigeringsAlternativer?: boolean;
-}
-
-function KalenderPeriodeRedigeringsLenke(props: { id: string; status: string; vis: boolean }) {
-  if (!props.vis) return <></>;
-  const lenketekst = finnLenkeTekstFraStatus(props.status);
-  const lenkesti = finnLenkeDestinationFraStatus(props.status);
-
-  return (
-    <Link
-      href={`/rapportering/periode/${props.id}/${lenkesti}`}
-      className={styles.kalenderHeaderPeriodeAlternativer}
-    >
-      {lenketekst}
-    </Link>
-  );
-  function finnLenkeTekstFraStatus(status: string) {
-    switch (status) {
-      case "TilUtfylling":
-        return "Fyll ut";
-      case "Godkjent":
-        return "Rediger";
-      case "Innsendt":
-        return "Korriger";
-      default:
-        return "ingen statusmatch";
-    }
-  }
-
-  function finnLenkeDestinationFraStatus(status: string) {
-    switch (status) {
-      case "TilUtfylling":
-        return "fyllut";
-      case "Godkjent":
-        return "avgodkjenn";
-      case "Innsendt":
-        return "korriger";
-      default:
-        console.log("Traff ukjent status i kalenderlenke: ", status);
-        return;
-    }
-  }
 }
 
 export function Kalender(props: IProps) {
@@ -70,12 +28,9 @@ export function Kalender(props: IProps) {
         <div className={styles.kalenderHeaderPeriodeDetaljer}>
           <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
         </div>
-
-        <KalenderPeriodeRedigeringsLenke
-          id={rapporteringsperiode.id}
-          status={rapporteringsperiode.status}
-          vis={visRedigeringsAlternativer}
-        />
+        {visRedigeringsAlternativer && (
+          <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
+        )}
       </div>
       <div className={styles.kalender}>
         <br />
