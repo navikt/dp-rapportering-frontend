@@ -4,7 +4,6 @@
 
 Appen er basert på [Remix](https://remix.run/docs)
 
-
 ```
 npm install
 npm run dev

@@ -8,8 +8,7 @@ export function useSanity() {
 
   function hentAppTekstMedId(textId: string): string {
     return (
-      sanityTexts?.apptekster.find((apptekst) => apptekst.textId === textId)
-        ?.valueText || textId
+      sanityTexts?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId
     );
   }
 
