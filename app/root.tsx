@@ -28,9 +28,14 @@ export function meta() {
   return [
     {
       charset: "utf-8",
-      title: "Dagpenger rapportering",
+    },
+    {
       viewport: "width=device-width,initial-scale=1",
-      description: "rapporteringløsning for dagpenger",
+    },
+    { title: "Dagpenger rapportering" },
+    {
+      name: "description",
+      content: "rapporteringløsning for dagpenger",
     },
   ];
 }

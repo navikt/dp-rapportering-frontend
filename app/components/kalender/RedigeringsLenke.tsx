@@ -1,5 +1,4 @@
 import { RemixLink } from "../RemixLink";
-import styles from "./Kalender.module.css";
 
 interface IProps {
   id: string;

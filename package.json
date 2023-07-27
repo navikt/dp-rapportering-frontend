@@ -78,7 +78,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "npx prettier . --write",
+      "prettier --list-different",
       "npm run lint"
     ]
   }
