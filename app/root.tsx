@@ -34,6 +34,10 @@ export function meta() {
     },
     { title: "Dagpenger rapportering" },
     {
+      property: "og:title",
+      content: "Dagpenger rapportering",
+    },
+    {
       name: "description",
       content: "rapporteringløsning for dagpenger",
     },
