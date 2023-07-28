@@ -32,11 +32,15 @@ export default function RapporteringAlle() {
       <div className={styles.rapporteringHeader}>
         <div className={styles.rapporteringHeaderInnhold}>
           <Heading level="1" size="xlarge">
-            Dagpengerapportering
+            Tidligere rapporteringer for dagpenger
           </Heading>
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
+        <Heading size={"medium"} level={"2"}>
+          Oversikt over tidligere rapporteringer
+        </Heading>
+        <p>Her kan du se alle tidligere rapportertinger du har sendt til NAV.</p>
         {perioder.map((periode) => {
           return (
             <div

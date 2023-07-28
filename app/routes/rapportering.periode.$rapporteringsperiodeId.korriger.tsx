@@ -15,6 +15,6 @@ export async function loader({ request, params }: LoaderArgs) {
     const korrigeringsperiode: IRapporteringsperiode = await response.json();
     return redirect(`/rapportering/korriger/${korrigeringsperiode.id}/fyllut`);
   } else {
-    throw new Error("Klarte ikke opprette korrigering");
+    throw new Response(`Klarte ikke avgodkjenne periode med id: ${periodeId}`, { status: 500 });
   }
 }

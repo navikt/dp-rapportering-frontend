@@ -14,6 +14,6 @@ export async function loader({ request, params }: LoaderArgs) {
     return redirect(`/rapportering/periode/${periodeId}/fyllut`);
   } else {
     console.log(response);
-    throw new Error(`Klarte ikke avgodkjenne periode med id: ${periodeId}`);
+    throw new Response(`Klarte ikke avgodkjenne periode med id: ${periodeId}`, { status: 500 });
   }
 }
