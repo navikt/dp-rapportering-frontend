@@ -43,12 +43,7 @@ export default function RapporteringAlle() {
         <p>Her kan du se alle tidligere rapportertinger du har sendt til NAV.</p>
         {perioder.map((periode) => {
           return (
-            <div
-              className={classNames({
-                [styles.graaBakgrunn]: periode.status !== "TilUtfylling",
-              })}
-              key={periode.id}
-            >
+            <div className={classNames([styles.graaBakgrunn])} key={periode.id}>
               <Kalender
                 rapporteringsperiode={periode as IRapporteringsperiode}
                 aapneModal={() => {}}

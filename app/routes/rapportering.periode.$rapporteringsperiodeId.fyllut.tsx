@@ -21,11 +21,11 @@ export async function action({ request, params }: ActionArgs) {
 
   switch (submitKnapp) {
     case "slette": {
-      await slettAktivitetAction(formdata, request, periodeId);
+      return await slettAktivitetAction(formdata, request, periodeId);
     }
 
     case "lagre": {
-      await lagreAktivitetAction(formdata, request, periodeId);
+      return await lagreAktivitetAction(formdata, request, periodeId);
     }
   }
 }
