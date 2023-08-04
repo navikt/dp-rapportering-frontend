@@ -1,6 +1,6 @@
 import { useActionData, useRouteLoaderData } from "@remix-run/react";
 import styles from "~/routes/rapportering.module.css";
-import { Modal } from "@navikt/ds-react";
+import { BodyLong, Heading, Modal } from "@navikt/ds-react";
 import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -74,6 +74,17 @@ export default function RapporteringFyllut() {
   return (
     <>
       <main className={styles.rapporteringKontainer}>
+        <Heading size={"large"} level={"2"}>
+          Fyll ut rapportering
+        </Heading>
+        <BodyLong spacing>
+          Klikk på dagen du ønsker å rapportere for. Du vil da få alternativer for jobb, sykdom,
+          fravær og ferie.
+        </BodyLong>
+        <BodyLong spacing>
+          For tidligst mulig utbetaling av dagpenger må rapportering sendes senest siste søndag i
+          perioden.
+        </BodyLong>
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
         <AktivitetModal
           rapporteringsperiodeDag={valgtDag}
