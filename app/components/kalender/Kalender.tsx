@@ -53,6 +53,14 @@ export function Kalender(props: IProps) {
         >
           {rapporteringsperiode.dager.map((dag) => {
             const harAktivitet = dag.aktiviteter.length > 0;
+            const erIkkeRapporteringspliktig = !harAktivitet && dag.muligeAktiviteter.length === 0;
+            const dagKnappStyle = {
+              [styles.helg]: helgIndex.includes(dag.dagIndex),
+              [styles.kalenderDatoMedAktivitet]: harAktivitet,
+              [styles.arbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
+              [styles.sykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
+              [styles.ferie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
+            };
 
             const timer = dag.aktiviteter.reduce((accumulator, current) => {
               if (current.timer) {
@@ -63,18 +71,15 @@ export function Kalender(props: IProps) {
 
             return (
               <div key={dag.dagIndex} className={styles.kalenderDag}>
-                <button
-                  className={classNames(styles.kalenderDato, {
-                    [styles.helg]: helgIndex.includes(dag.dagIndex),
-                    [styles.kalenderDatoMedAktivitet]: harAktivitet,
-                    [styles.arbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
-                    [styles.sykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
-                    [styles.ferie]: harAktivitet && dag.aktiviteter[0].type === "Ferie",
-                  })}
-                  onClick={() => aapneModal(dag.dato)}
-                >
-                  <p>{format(new Date(dag.dato), "dd")}</p>.
-                </button>
+                {erIkkeRapporteringspliktig && <p>{format(new Date(dag.dato), "dd")}.</p>}
+                {!erIkkeRapporteringspliktig && (
+                  <button
+                    className={classNames(styles.kalenderDato, dagKnappStyle)}
+                    onClick={() => aapneModal(dag.dato)}
+                  >
+                    <p>{format(new Date(dag.dato), "dd")}.</p>
+                  </button>
+                )}
                 {harAktivitet && dag.aktiviteter[0].type === "Arbeid" && (
                   <div
                     className={classNames(styles.kalenderDatoAktivitet, {

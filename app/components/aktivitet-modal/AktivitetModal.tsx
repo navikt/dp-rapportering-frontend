@@ -109,11 +109,6 @@ export function AktivitetModal(props: IProps) {
             </div>
           </ValidatedForm>
         )}
-        {muligeAktiviteter.length === 0 &&
-          valgteDatoHarAktivitet &&
-          valgteDatoHarAktivitet.aktiviteter.length === 0 && (
-            <p>Denne dagen er ikke rapporteringspliktig, så du kan ikke legge inn aktiviteter.</p>
-          )}
       </Modal.Content>
     </Modal>
   );

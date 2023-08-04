@@ -33,15 +33,12 @@ export default function RapporteringsLandingside() {
         </div>
       </div>
       <main className={styles.rapporteringKontainer}>
-        <BodyLong>
-          For å kunne motta dagpenger må du rapportere hver for hver dagpengeperiode. Periodene
-          varer i to uke fra det tidspunktet du har søkt om dagpenger.
+        <BodyLong spacing>
+          For å motta dagpenger må du rapportere hvor mye du har jobbet, og om du har vært syk eller
+          på ferie hver 14. dag. NAV bruker dette for å beregne hvor mye du skal ha i dagpenger.
         </BodyLong>
-        <p>
-          <RemixLink as={"Link"} to={"/rapportering/alle"}>
-            Se og korriger tidligere rapporteringer
-          </RemixLink>
-        </p>
+        <BodyLong spacing>Du må også rapportere mens du venter på svar på søknaden din.</BodyLong>
+
         <Heading size={"medium"}>Inneværende dagpengerapportering</Heading>
         {data.ingenperiode && <>Du har ingen perioder å rapportere</>}
         {!data.ingenperiode && data.id && (
@@ -50,7 +47,9 @@ export default function RapporteringsLandingside() {
               Uke {formaterPeriodeTilUkenummer(data.fraOgMed, data.tilOgMed)} (
               {formaterPeriodeDato(data.fraOgMed, data.tilOgMed)})
             </span>
-            <div className={styles.navigasjonKontainer}>
+            <br />
+            <br />
+            <div>
               <RemixLink as={"Button"} to={`/rapportering/periode/${data.id}/fyllut`}>
                 Rapporter for perioden
               </RemixLink>
@@ -61,6 +60,11 @@ export default function RapporteringsLandingside() {
             </div>
           </>
         )}
+        <p>
+          <RemixLink as={"Link"} to={"/rapportering/alle"}>
+            Se og korriger tidligere rapporteringer
+          </RemixLink>
+        </p>
       </main>
     </>
   );
