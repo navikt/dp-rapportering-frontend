@@ -5,7 +5,6 @@ import { json } from "@remix-run/node";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import styles from "~/routes-styles/rapportering.module.css";
-import sharedStyles from "~/routes-styles/shared-styles.module.css";
 import { getSession } from "~/utils/auth.utils.server";
 
 export interface ISessionLoader {
@@ -36,8 +35,8 @@ export function ErrorBoundary() {
     if (error.status === 401) {
       return (
         <div id="dp-rapportering-frontend">
-          <div className={sharedStyles.rapporteringHeader}>
-            <div className={sharedStyles.rapporteringHeaderInnhold}>
+          <div className="rapportering-header">
+            <div className="rapportering-header-innhold">
               <Heading level="1" size="xlarge">
                 Dagpengerapportering
               </Heading>
@@ -52,8 +51,8 @@ export function ErrorBoundary() {
 
     return (
       <div id="dp-rapportering-frontend">
-        <div className={sharedStyles.rapporteringHeader}>
-          <div className={sharedStyles.rapporteringHeaderInnhold}>
+        <div className="rapportering-header">
+          <div className="rapportering-header-innhold">
             <Heading level="1" size="xlarge">
               Dagpengerapportering
             </Heading>

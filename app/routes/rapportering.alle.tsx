@@ -7,7 +7,6 @@ import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
-import sharedStyles from "~/routes-styles/shared-styles.module.css";
 
 export async function loader({ request }: LoaderArgs) {
   console.log("rapportering/alle loader");
@@ -30,8 +29,8 @@ export default function RapporteringAlle() {
 
   return (
     <>
-      <div className={sharedStyles.rapporteringHeader}>
-        <div className={sharedStyles.rapporteringHeaderInnhold}>
+      <div className="rapportering-header">
+        <div className="rapportering-header-innhold">
           <Heading level="1" size="xlarge">
             Tidligere rapporteringer for dagpenger
           </Heading>

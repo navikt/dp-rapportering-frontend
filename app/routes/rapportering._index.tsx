@@ -7,7 +7,6 @@ import nbLocale from "date-fns/locale/nb";
 import { RemixLink } from "~/components/RemixLink";
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
-import sharedStyles from "~/routes-styles/shared-styles.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 export async function loader({ request }: LoaderArgs) {
@@ -26,8 +25,8 @@ export default function RapporteringsLandingside() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <div className={sharedStyles.rapporteringHeader}>
-        <div className={sharedStyles.rapporteringHeaderInnhold}>
+      <div className="rapportering-header">
+        <div className="rapportering-header-innhold">
           <Heading level="1" size="xlarge">
             Dine dagpenger
           </Heading>

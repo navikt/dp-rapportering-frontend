@@ -1,13 +1,13 @@
-.rapporteringHeader {
+.rapportering-header {
   border-bottom: 5px solid var(--a-green-400);
 }
 
-.rapporteringHeaderInnhold {
+.rapportering-header-innhold {
   max-width: var(--app-max-width);
   padding: var(--app-padding);
   margin: 0 auto;
 }
 
-.rapporteringHeaderInnhold p {
+.rapportering-header-innhold p {
   margin-bottom: 0;
 }
