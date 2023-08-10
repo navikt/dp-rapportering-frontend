@@ -1,4 +1,4 @@
-import { describe, expect } from "vitest";
+import { describe, test, expect } from "vitest";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 
 describe("formaterPeriodeDato", () => {
