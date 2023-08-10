@@ -1,11 +1,12 @@
-import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
+import type { SessionWithOboProvider } from "@navikt/dp-auth";
+import { Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { getSession } from "~/utils/auth.utils.server";
+import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
-import styles from "~/routes/rapportering.module.css";
-import { Heading } from "@navikt/ds-react";
-import type { SessionWithOboProvider } from "@navikt/dp-auth";
+import styles from "~/routes-styles/rapportering.module.css";
+import sharedStyles from "~/routes-styles/shared-styles.module.css";
+import { getSession } from "~/utils/auth.utils.server";
 
 export interface ISessionLoader {
   session: SessionWithOboProvider;
@@ -35,8 +36,8 @@ export function ErrorBoundary() {
     if (error.status === 401) {
       return (
         <div id="dp-rapportering-frontend">
-          <div className={styles.rapporteringHeader}>
-            <div className={styles.rapporteringHeaderInnhold}>
+          <div className={sharedStyles.rapporteringHeader}>
+            <div className={sharedStyles.rapporteringHeaderInnhold}>
               <Heading level="1" size="xlarge">
                 Dagpengerapportering
               </Heading>
@@ -51,8 +52,8 @@ export function ErrorBoundary() {
 
     return (
       <div id="dp-rapportering-frontend">
-        <div className={styles.rapporteringHeader}>
-          <div className={styles.rapporteringHeaderInnhold}>
+        <div className={sharedStyles.rapporteringHeader}>
+          <div className={sharedStyles.rapporteringHeaderInnhold}>
             <Heading level="1" size="xlarge">
               Dagpengerapportering
             </Heading>

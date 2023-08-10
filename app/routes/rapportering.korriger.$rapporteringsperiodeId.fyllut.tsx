@@ -1,16 +1,16 @@
-import { useActionData, useRouteLoaderData } from "@remix-run/react";
-import styles from "~/routes/rapportering.module.css";
 import { BodyLong, Heading, Modal } from "@navikt/ds-react";
-import { Kalender } from "~/components/kalender/Kalender";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { useEffect, useState } from "react";
-import type { TAktivitetType } from "~/models/aktivitet.server";
-import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import type { ActionArgs } from "@remix-run/node";
+import { useActionData, useRouteLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
+import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { Kalender } from "~/components/kalender/Kalender";
+import type { TAktivitetType } from "~/models/aktivitet.server";
+import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import styles from "~/routes-styles/rapportering.module.css";
+import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
 
 export async function action({ request, params }: ActionArgs) {

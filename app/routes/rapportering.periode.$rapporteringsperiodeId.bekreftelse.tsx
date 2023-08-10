@@ -1,10 +1,10 @@
-import { useRouteLoaderData } from "@remix-run/react";
-import styles from "~/routes/rapportering.module.css";
 import { BodyLong, Heading } from "@navikt/ds-react";
-import { Kalender } from "~/components/kalender/Kalender";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { Kalender } from "~/components/kalender/Kalender";
+import styles from "~/routes-styles/rapportering.module.css";
+import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(

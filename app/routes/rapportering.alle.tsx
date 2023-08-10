@@ -1,12 +1,13 @@
+import { Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import classNames from "classnames";
+import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
-import { useLoaderData } from "@remix-run/react";
-import styles from "~/routes/rapportering.module.css";
-import { Heading } from "@navikt/ds-react";
-import { Kalender } from "~/components/kalender/Kalender";
-import classNames from "classnames";
+import styles from "~/routes-styles/rapportering.module.css";
+import sharedStyles from "~/routes-styles/shared-styles.module.css";
 
 export async function loader({ request }: LoaderArgs) {
   console.log("rapportering/alle loader");
@@ -29,8 +30,8 @@ export default function RapporteringAlle() {
 
   return (
     <>
-      <div className={styles.rapporteringHeader}>
-        <div className={styles.rapporteringHeaderInnhold}>
+      <div className={sharedStyles.rapporteringHeader}>
+        <div className={sharedStyles.rapporteringHeaderInnhold}>
           <Heading level="1" size="xlarge">
             Tidligere rapporteringer for dagpenger
           </Heading>

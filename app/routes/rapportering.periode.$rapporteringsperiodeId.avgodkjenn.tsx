@@ -1,7 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { avGodkjennPeriode } from "~/models/rapporteringsperiode.server";
 import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
+import { avGodkjennPeriode } from "~/models/rapporteringsperiode.server";
 
 export async function loader({ request, params }: LoaderArgs) {
   console.log("rapportering/periode/$Id/avgodkjenn loader");

@@ -7,7 +7,7 @@ import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
-import styles from "./rapportering.module.css";
+import styles from "~/routes-styles/rapportering.module.css";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export async function action({ request, params }: ActionArgs) {

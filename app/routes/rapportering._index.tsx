@@ -1,13 +1,14 @@
+import { BodyLong, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
-import styles from "~/routes/rapportering.module.css";
-import { BodyLong, Heading } from "@navikt/ds-react";
 import { useLoaderData } from "@remix-run/react";
-import { RemixLink } from "~/components/RemixLink";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { format } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
+import { RemixLink } from "~/components/RemixLink";
+import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
+import styles from "~/routes-styles/rapportering.module.css";
+import sharedStyles from "~/routes-styles/shared-styles.module.css";
+import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 export async function loader({ request }: LoaderArgs) {
   const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
@@ -25,8 +26,8 @@ export default function RapporteringsLandingside() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <div className={styles.rapporteringHeader}>
-        <div className={styles.rapporteringHeaderInnhold}>
+      <div className={sharedStyles.rapporteringHeader}>
+        <div className={sharedStyles.rapporteringHeaderInnhold}>
           <Heading level="1" size="xlarge">
             Dine dagpenger
           </Heading>
@@ -39,7 +40,9 @@ export default function RapporteringsLandingside() {
         </BodyLong>
         <BodyLong spacing>Du må også rapportere mens du venter på svar på søknaden din.</BodyLong>
 
-        <Heading size={"medium"}>Inneværende dagpengerapportering</Heading>
+        <Heading size={"small"} level="2">
+          Inneværende dagpengerapportering
+        </Heading>
         {data.ingenperiode && <>Du har ingen perioder å rapportere</>}
         {!data.ingenperiode && data.id && (
           <>

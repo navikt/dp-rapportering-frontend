@@ -1,4 +1,7 @@
 {
   "printWidth": 100,
-  "trailingComma": "es5"
+  "trailingComma": "es5",
+  "importOrder": ["^components/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }

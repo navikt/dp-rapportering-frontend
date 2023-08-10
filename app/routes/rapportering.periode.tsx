@@ -1,12 +1,12 @@
-import { Outlet } from "@remix-run/react";
-import styles from "~/routes/rapportering.module.css";
 import { Heading } from "@navikt/ds-react";
+import { Outlet } from "@remix-run/react";
+import sharedStyles from "~/routes-styles/shared-styles.module.css";
 
 export default function RapporteringsPeriode() {
   return (
     <>
-      <div className={styles.rapporteringHeader}>
-        <div className={styles.rapporteringHeaderInnhold}>
+      <div className={sharedStyles.rapporteringHeader}>
+        <div className={sharedStyles.rapporteringHeaderInnhold}>
           <Heading level="1" size="xlarge">
             Dagpengerapportering
           </Heading>
