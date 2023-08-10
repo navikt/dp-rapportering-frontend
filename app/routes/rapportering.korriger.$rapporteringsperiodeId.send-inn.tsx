@@ -5,7 +5,6 @@ import { useLoaderData } from "@remix-run/react";
 import { logger } from "server/logger";
 import invariant from "tiny-invariant";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
-import styles from "~/routes-styles/rapportering.module.css";
 
 export async function loader({ request, params }: ActionArgs) {
   invariant(params.rapporteringsperiodeId, "Fant ikke rapporteringsperiodeId");
@@ -27,7 +26,7 @@ export default function KorrigeringSendInn() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <main className={styles.rapporteringKontainer}>
+      <main className="rapportering-kontainer">
         {data?.error && <Alert variant={"error"}>Aiaiai, noe gikk galt: {data.error}</Alert>}
         <BodyLong>Prøver å sende inn korrigeringen</BodyLong>
       </main>

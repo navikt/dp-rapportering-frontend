@@ -36,7 +36,7 @@ export default function RapporteringAlle() {
           </Heading>
         </div>
       </div>
-      <main className={styles.rapporteringKontainer}>
+      <main className="rapportering-kontainer">
         <Heading size={"medium"} level={"2"}>
           Oversikt over tidligere rapporteringer
         </Heading>

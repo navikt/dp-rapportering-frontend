@@ -34,7 +34,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
 
   return (
     <>
-      <main className={styles.rapporteringKontainer}>
+      <main className="rapportering-kontainer">
         <Heading level="2" size="large" spacing>
           Send inn rapportering
         </Heading>

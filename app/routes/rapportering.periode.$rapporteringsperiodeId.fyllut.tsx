@@ -73,7 +73,7 @@ export default function RapporteringFyllut() {
 
   return (
     <>
-      <main className={styles.rapporteringKontainer}>
+      <main className="rapportering-kontainer">
         <Heading size={"large"} level={"2"}>
           Fyll ut rapportering
         </Heading>

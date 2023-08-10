@@ -4,7 +4,6 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
-import styles from "~/routes-styles/rapportering.module.css";
 import { getSession } from "~/utils/auth.utils.server";
 
 export interface ISessionLoader {
@@ -42,7 +41,7 @@ export function ErrorBoundary() {
               </Heading>
             </div>
           </div>
-          <main className={styles.rapporteringKontainer}>
+          <main className="rapportering-kontainer">
             <SessjonModal sesjon={error.data.session} />
           </main>
         </div>
@@ -58,7 +57,7 @@ export function ErrorBoundary() {
             </Heading>
           </div>
         </div>
-        <main className={styles.rapporteringKontainer}>
+        <main className="rapportering-kontainer">
           <h2>
             {error.status} {error.statusText}
           </h2>

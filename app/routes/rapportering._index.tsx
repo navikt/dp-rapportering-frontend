@@ -6,7 +6,6 @@ import { format } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
 import { RemixLink } from "~/components/RemixLink";
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
-import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 export async function loader({ request }: LoaderArgs) {
@@ -32,7 +31,7 @@ export default function RapporteringsLandingside() {
           </Heading>
         </div>
       </div>
-      <main className={styles.rapporteringKontainer}>
+      <main className="rapportering-kontainer">
         <BodyLong spacing>
           For å motta dagpenger må du rapportere hvor mye du har jobbet, og om du har vært syk eller
           på ferie hver 14. dag. NAV bruker dette for å beregne hvor mye du skal ha i dagpenger.
