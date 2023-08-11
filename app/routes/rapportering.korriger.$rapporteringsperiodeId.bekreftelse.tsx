@@ -1,6 +1,5 @@
 import { BodyLong, Heading } from "@navikt/ds-react";
 import { useRouteLoaderData } from "@remix-run/react";
-import classNames from "classnames";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import styles from "~/routes-styles/rapportering.module.css";
@@ -13,7 +12,7 @@ export default function RapporteringLes() {
 
   return (
     <>
-      <main className={classNames(styles.rapporteringKontainer)}>
+      <main className="rapportering-kontainer">
         <Heading size={"medium"} level={"2"} spacing={true}>
           Din korrigering er nå lagret og sendt til NAV
         </Heading>
