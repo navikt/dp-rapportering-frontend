@@ -50,8 +50,8 @@ export function AktivitetModal(props: IProps) {
     return `${aktivitet?.type}`;
   }
 
-  const dateAndDay = valgtDato ? format(new Date(valgtDato), "EEEE d.", { locale: nbLocale }) : "";
-  const month = valgtDato ? format(new Date(valgtDato), "MMMM", { locale: nbLocale }) : "";
+  const dagOgDato = valgtDato ? format(new Date(valgtDato), "EEEE d.", { locale: nbLocale }) : "";
+  const maane = valgtDato ? format(new Date(valgtDato), "MMMM", { locale: nbLocale }) : "";
 
   return (
     <Modal
@@ -63,7 +63,7 @@ export function AktivitetModal(props: IProps) {
     >
       <Modal.Content>
         <Heading spacing level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
-          {dateAndDay} <span>{month}</span>
+          {dagOgDato} <span>{maane}</span>
         </Heading>
 
         {valgteDatoHarAktivitet &&
