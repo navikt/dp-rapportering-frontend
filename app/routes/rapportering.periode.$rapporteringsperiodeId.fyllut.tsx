@@ -1,16 +1,15 @@
-import { useActionData, useRouteLoaderData } from "@remix-run/react";
-import styles from "~/routes/rapportering.module.css";
 import { BodyLong, Heading, Modal } from "@navikt/ds-react";
-import { Kalender } from "~/components/kalender/Kalender";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { useEffect, useState } from "react";
-import type { TAktivitetType } from "~/models/aktivitet.server";
-import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import type { ActionArgs } from "@remix-run/node";
+import { useActionData, useRouteLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
+import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { Kalender } from "~/components/kalender/Kalender";
+import type { TAktivitetType } from "~/models/aktivitet.server";
+import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
 
 export async function action({ request, params }: ActionArgs) {
@@ -73,7 +72,7 @@ export default function RapporteringFyllut() {
 
   return (
     <>
-      <main className={styles.rapporteringKontainer}>
+      <main className="rapportering-kontainer">
         <Heading size={"large"} level={"2"}>
           Fyll ut rapportering
         </Heading>
@@ -96,10 +95,10 @@ export default function RapporteringFyllut() {
           lukkModal={lukkModal}
           muligeAktiviteter={muligeAktiviteter}
         />
-        <div className={styles.registertMeldeperiodeKontainer}>
+        <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
-        <div className={styles.navigasjonKontainer}>
+        <div className="navigasjon-kontainer">
           <RemixLink as={"Button"} to={`/rapportering/periode/${periode.id}/send-inn`}>
             Send rapportering
           </RemixLink>

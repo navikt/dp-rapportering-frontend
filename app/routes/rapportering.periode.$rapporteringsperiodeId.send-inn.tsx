@@ -7,7 +7,7 @@ import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
-import styles from "./rapportering.module.css";
+import styles from "~/routes-styles/rapportering.module.css";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export async function action({ request, params }: ActionArgs) {
@@ -34,12 +34,12 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
 
   return (
     <>
-      <main className={styles.rapporteringKontainer}>
+      <main className="rapportering-kontainer">
         <Heading level="2" size="large" spacing>
           Send inn rapportering
         </Heading>
 
-        <div className={styles.registertMeldeperiodeKontainer}>
+        <div className="registert-meldeperiode-kontainer">
           <Heading level="3" size="small">
             Dette er det du har registrert for meldeperioden:
           </Heading>
@@ -53,7 +53,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
         )}
 
         <Form method="post">
-          <div className={styles.navigasjonKontainer}>
+          <div className="navigasjon-kontainer">
             <Button type="submit" variant="primary" iconPosition="right">
               Send rapportering
             </Button>

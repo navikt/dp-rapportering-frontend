@@ -1,10 +1,10 @@
+import { Accordion } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
-import { Accordion } from "@navikt/ds-react";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { hentPeriode } from "~/models/rapporteringsperiode.server";
 
 export interface IRapporteringsPeriodeLoader {
   periode: IRapporteringsperiode;

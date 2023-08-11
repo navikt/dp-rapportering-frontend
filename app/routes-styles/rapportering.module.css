@@ -1,0 +1,8 @@
+.utbetalingsEstimat,
+.feilmelding {
+  margin-top: var(--a-spacing-10);
+}
+
+.klarteIkkeSendeInnFeilmelding {
+  margin-top: var(--a-spacing-12);
+}
