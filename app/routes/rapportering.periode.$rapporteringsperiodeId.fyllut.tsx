@@ -73,14 +73,14 @@ export default function RapporteringFyllut() {
   return (
     <>
       <main className="rapportering-kontainer">
-        <Heading size={"large"} level={"2"}>
+        <Heading size={"large"} level={"2"} spacing>
           Fyll ut rapportering
         </Heading>
-        <BodyLong spacing>
+        <BodyLong className="subtile" spacing>
           Klikk på dagen du ønsker å rapportere for. Du vil da få alternativer for jobb, sykdom,
           fravær og ferie.
         </BodyLong>
-        <BodyLong spacing>
+        <BodyLong className="subtile" spacing>
           For tidligst mulig utbetaling av dagpenger må rapportering sendes senest siste søndag i
           perioden.
         </BodyLong>
@@ -99,13 +99,17 @@ export default function RapporteringFyllut() {
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
         <div className="navigasjon-kontainer">
-          <RemixLink as={"Button"} to={`/rapportering/periode/${periode.id}/send-inn`}>
-            Send rapportering
-          </RemixLink>
           <RemixLink as={"Button"} to={`/rapportering/alle`} variant={"secondary"}>
             Lagre og fortsett senere
           </RemixLink>
+          <RemixLink as={"Button"} to={`/rapportering/periode/${periode.id}/send-inn`}>
+            Send rapportering
+          </RemixLink>
         </div>
+        <BodyLong spacing className="subtile my-6">
+          For tidligst mulig utbetaling av dagpenger må rapporering sendes senest siste søndag i
+          perioden.
+        </BodyLong>
       </main>
     </>
   );

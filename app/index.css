@@ -41,3 +41,7 @@ body {
 .my-2 {
   margin: var(--a-spacing-2) 0;
 }
+
+.subtile {
+  color: var(--a-text-subtle);
+}

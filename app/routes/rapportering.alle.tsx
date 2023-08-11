@@ -1,4 +1,4 @@
-import { Heading } from "@navikt/ds-react";
+import { BodyLong, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -29,7 +29,7 @@ export default function RapporteringAlle() {
     <>
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
-          <Heading level="1" size="xlarge">
+          <Heading level="1" size="large">
             Tidligere rapporteringer for dagpenger
           </Heading>
         </div>
@@ -38,11 +38,14 @@ export default function RapporteringAlle() {
         <Heading size={"medium"} level={"2"}>
           Oversikt over tidligere rapporteringer
         </Heading>
-        <p>Her kan du se alle tidligere rapportertinger du har sendt til NAV.</p>
+        <BodyLong className="subtile" spacing>
+          Her kan du se alle tidligere rapportertinger du har sendt til NAV.
+        </BodyLong>
         {perioder.map((periode) => {
           return (
             <div className="graa-bakgrunn" key={periode.id}>
               <Kalender
+                key={periode.id}
                 rapporteringsperiode={periode as IRapporteringsperiode}
                 aapneModal={() => {}}
                 visRedigeringsAlternativer={true}

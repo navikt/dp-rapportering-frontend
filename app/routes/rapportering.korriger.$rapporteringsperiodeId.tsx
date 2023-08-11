@@ -32,16 +32,18 @@ export default function Rapportering() {
   return (
     <>
       <Outlet />
-      <DevelopmentKontainer>
-        <Accordion>
-          <Accordion.Item>
-            <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
-            <Accordion.Content>
-              <pre>${JSON.stringify(periode, null, 2)}</pre>
-            </Accordion.Content>
-          </Accordion.Item>
-        </Accordion>
-      </DevelopmentKontainer>
+      <div className="debug-kontainer">
+        <DevelopmentKontainer>
+          <Accordion>
+            <Accordion.Item>
+              <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
+              <Accordion.Content>
+                <pre>${JSON.stringify(periode, null, 2)}</pre>
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion>
+        </DevelopmentKontainer>
+      </div>
     </>
   );
 }

@@ -54,12 +54,12 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
 
         <Form method="post">
           <div className="navigasjon-kontainer">
-            <Button type="submit" variant="primary" iconPosition="right">
-              Send rapportering
-            </Button>
             <RemixLink to="/rapportering/alle" as="Button" variant="secondary">
               Lagre og fortsett senere
             </RemixLink>
+            <Button type="submit" variant="primary" iconPosition="right">
+              Send rapportering
+            </Button>
           </div>
         </Form>
       </main>
