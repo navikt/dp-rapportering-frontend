@@ -2,11 +2,9 @@ import { Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import classNames from "classnames";
 import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
-import styles from "~/routes-styles/rapportering.module.css";
 
 export async function loader({ request }: LoaderArgs) {
   console.log("rapportering/alle loader");
@@ -43,7 +41,7 @@ export default function RapporteringAlle() {
         <p>Her kan du se alle tidligere rapportertinger du har sendt til NAV.</p>
         {perioder.map((periode) => {
           return (
-            <div className={classNames([styles.graaBakgrunn])} key={periode.id}>
+            <div className="graa-bakgrunn" key={periode.id}>
               <Kalender
                 rapporteringsperiode={periode as IRapporteringsperiode}
                 aapneModal={() => {}}

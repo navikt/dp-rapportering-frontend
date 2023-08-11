@@ -39,7 +39,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
           Send inn rapportering
         </Heading>
 
-        <div className={styles.registertMeldeperiodeKontainer}>
+        <div className="registert-meldeperiode-kontainer">
           <Heading level="3" size="small">
             Dette er det du har registrert for meldeperioden:
           </Heading>
@@ -53,7 +53,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
         )}
 
         <Form method="post">
-          <div className={styles.navigasjonKontainer}>
+          <div className="navigasjon-kontainer">
             <Button type="submit" variant="primary" iconPosition="right">
               Send rapportering
             </Button>

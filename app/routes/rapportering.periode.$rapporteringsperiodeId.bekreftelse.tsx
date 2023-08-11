@@ -2,7 +2,6 @@ import { BodyLong, Heading } from "@navikt/ds-react";
 import { useRouteLoaderData } from "@remix-run/react";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import styles from "~/routes-styles/rapportering.module.css";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function RapporteringLes() {
@@ -25,9 +24,9 @@ export default function RapporteringLes() {
         <BodyLong spacing>
           {status === "Innsendt" ? tekstEtterInnsending : tekstForInnsending}
         </BodyLong>
-        <div className={styles.graaBakgrunn}>
+        <div className="graa-bakgrunn">
           <Kalender rapporteringsperiode={periode} aapneModal={() => {}} />
-          <div className={styles.registertMeldeperiodeKontainer}>
+          <div className="registert-meldeperiode-kontainer">
             <AktivitetOppsummering rapporteringsperiode={periode} />
           </div>
         </div>

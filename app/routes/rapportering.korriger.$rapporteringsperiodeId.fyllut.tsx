@@ -1,13 +1,12 @@
 import { BodyLong, Heading, Modal } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { useActionData, useRouteLoaderData } from "@remix-run/react";
-import { RemixLink } from "~/components/RemixLink";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
+import { RemixLink } from "~/components/RemixLink";
+import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
-import styles from "~/routes-styles/rapportering.module.css";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
@@ -93,10 +92,10 @@ export default function RapporteringFyllut() {
           lukkModal={lukkModal}
           muligeAktiviteter={muligeAktiviteter}
         />
-        <div className={styles.registertMeldeperiodeKontainer}>
+        <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
-        <div className={styles.navigasjonKontainer}>
+        <div className="navigasjon-kontainer">
           <RemixLink as={"Button"} to={`/rapportering/korriger/${periode.id}/send-inn`}>
             Lagre og send korrigering
           </RemixLink>

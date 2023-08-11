@@ -9,7 +9,6 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-import styles from "~/routes-styles/rapportering.module.css";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
 
@@ -96,10 +95,10 @@ export default function RapporteringFyllut() {
           lukkModal={lukkModal}
           muligeAktiviteter={muligeAktiviteter}
         />
-        <div className={styles.registertMeldeperiodeKontainer}>
+        <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
-        <div className={styles.navigasjonKontainer}>
+        <div className="navigasjon-kontainer">
           <RemixLink as={"Button"} to={`/rapportering/periode/${periode.id}/send-inn`}>
             Send rapportering
           </RemixLink>

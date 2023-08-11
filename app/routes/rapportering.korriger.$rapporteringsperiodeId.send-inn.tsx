@@ -24,6 +24,7 @@ export async function loader({ request, params }: ActionArgs) {
 
 export default function KorrigeringSendInn() {
   const data = useLoaderData<typeof loader>();
+
   return (
     <>
       <main className="rapportering-kontainer">
