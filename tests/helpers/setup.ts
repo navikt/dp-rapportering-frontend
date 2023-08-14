@@ -10,7 +10,6 @@ afterEach(() => {
   cleanup();
 });
 
-vi.stubEnv("DP_BEHANDLING_URL", "https://dp-behandling.intern.dev.nav.no");
 vi.stubEnv("DP_RAPPORTERING_URL", "https://dp-rapportering.intern.dev.nav.no");
 
 if (typeof window !== "undefined") {

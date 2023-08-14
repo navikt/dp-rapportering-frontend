@@ -21,6 +21,11 @@ export interface IRapporteringsperiodeDag {
 export async function hentGjeldendePeriode(request: Request): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`;
   const session = await getSession(request);
+  
+  if (!session) {
+    throw new Response(null, { status: 500, statusText: "Feil ved henting av sesjon" });
+  }
+  
   const onBehalfOfToken = await getRapporteringOboToken(session);
 
   return await fetch(url, {
@@ -50,6 +55,11 @@ export async function hentPeriode(request: Request, periodeId: string): Promise<
 export async function hentAllePerioder(request: Request): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
   const session = await getSession(request);
+
+  if (!session) {
+    throw new Response(null, { status: 500, statusText: "Feil ved henting av sesjon" });
+  }
+
   const onBehalfOfToken = await getRapporteringOboToken(session);
 
   return await fetch(url, {

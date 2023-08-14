@@ -19,7 +19,7 @@ export function mockSession() {
   };
 
   return {
-    getAzureSession: getSessionSpy.mockReturnValue(Promise.resolve(obj)),
+    getSession: getSessionSpy.mockReturnValue(Promise.resolve(obj)),
     getRapporteringOboToken: getRapporteringOboTokenSpy.mockReturnValue(Promise.resolve(mockToken)),
   };
 }

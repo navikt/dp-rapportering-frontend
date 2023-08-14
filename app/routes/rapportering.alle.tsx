@@ -9,18 +9,19 @@ import { Kalender } from "~/components/kalender/Kalender";
 import classNames from "classnames";
 
 export async function loader({ request }: LoaderArgs) {
-  console.log("rapportering/alle loader");
-
   const allePerioderResponse = await hentAllePerioder(request);
 
-  if (!allePerioderResponse.ok) {
-    const { status, statusText } = allePerioderResponse;
-    throw json({}, { status, statusText });
+  if(allePerioderResponse.ok) {
+    const allePerioder = await allePerioderResponse.json();
+
+    return json({ allePerioder });
   }
-
-  const allePerioder = await allePerioderResponse.json();
-
-  return json({ allePerioder });
+  else {
+    throw new Response(
+      `Feil i uthenting av alle rapporteringsperioder`,
+      { status: 500 },
+    );
+  }
 }
 
 export default function RapporteringAlle() {

@@ -12,7 +12,7 @@ import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import { getEnv } from "./utils/env.utils";
-import { setup, start } from "./mocks/server";
+import { setup, start } from "../mocks/server";
 
 const ABORT_DELAY = 5000;
 
