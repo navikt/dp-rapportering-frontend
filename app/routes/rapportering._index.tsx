@@ -10,14 +10,15 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.u
 
 export async function loader({ request }: LoaderArgs) {
   const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
-  console.log("index loader");
 
   if (gjeldendePeriodeResponse.ok) {
     const periode = await gjeldendePeriodeResponse.json();
     return json(periode);
   }
-  console.log("gjeldende periode response er ikke ok: ", gjeldendePeriodeResponse);
-  return json({ ingenperiode: true });
+  else {
+    return json({ ingenperiode: true });
+  }
+
 }
 
 export default function RapporteringsLandingside() {

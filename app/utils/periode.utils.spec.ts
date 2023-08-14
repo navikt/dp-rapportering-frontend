@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest";
 import { asPeriod, leggSammenPeriode, periodeSomTimer } from "./periode.utils";
 
 describe("periodeSomTimer", () => {

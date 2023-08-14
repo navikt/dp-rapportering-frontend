@@ -30,6 +30,22 @@ jobs:
         if: steps.node_modules.outputs.cache-hit != 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+  test:
+    needs: [install]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - run: npm run test
 
   build:
     needs: [install]
@@ -74,7 +90,7 @@ jobs:
           key: ${{ github.sha }}
 
   upload-cdn:
-    needs: [build]
+    needs: [build, test]
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
@@ -97,7 +113,7 @@ jobs:
           destination: "/dp-rapportering-frontend/"
 
   deploy-dev:
-    needs: [build, upload-cdn]
+    needs: [build, test, upload-cdn]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

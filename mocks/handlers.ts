@@ -5,6 +5,13 @@ import { sanityResponse } from "./api-routes/sanityResponse";
 
 export const handlers = [
   rest.get(
+    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`,
+    (req, res, ctx) => {
+      return res(ctx.json(rapporteringsperioderResponse[0]));
+    }
+  ),
+  
+  rest.get(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId`,
     (req, res, ctx) => {
       const rapporteringPeriode = rapporteringsperioderResponse.find(
@@ -12,6 +19,13 @@ export const handlers = [
       );
 
       return res(ctx.json(rapporteringPeriode));
+    }
+  ),
+
+  rest.get(
+    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`,
+    (req, res, ctx) => {
+      return res(ctx.json(rapporteringsperioderResponse));
     }
   ),
 
