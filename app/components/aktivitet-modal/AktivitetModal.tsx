@@ -1,8 +1,6 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { Form, useActionData } from "@remix-run/react";
 import classNames from "classnames";
-import { format } from "date-fns";
-import nbLocale from "date-fns/locale/nb";
 import { ValidatedForm } from "remix-validated-form";
 import { TallInput } from "~/components/TallInput";
 import type { TAktivitetType } from "~/models/aktivitet.server";
@@ -12,6 +10,7 @@ import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 
 import styles from "./AktivitetModal.module.css";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { FormattertDato } from "../FormattertDato";
 
 interface IProps {
   rapporteringsperiodeDag?: IRapporteringsperiodeDag;
@@ -52,6 +51,7 @@ export function AktivitetModal(props: IProps) {
 
   return (
     <Modal
+      className={styles.modal}
       aria-labelledby="modal-heading"
       aria-label="Rapporter aktivitet"
       open={modalAapen}
@@ -59,7 +59,7 @@ export function AktivitetModal(props: IProps) {
     >
       <Modal.Content>
         <Heading spacing level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
-          {valgtDato && format(new Date(valgtDato), "EEEE d", { locale: nbLocale })}.
+          {valgtDato && <FormattertDato dato={valgtDato} ukedag />}
         </Heading>
 
         {valgteDatoHarAktivitet &&

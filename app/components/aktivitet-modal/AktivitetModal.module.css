@@ -1,6 +1,14 @@
+.modal {
+  width: 80vw;
+  max-width: 500px;
+}
+
 .modalHeader {
-  text-transform: capitalize;
   margin-bottom: var(--a-spacing-6);
+}
+
+.modalHeader::first-letter {
+  text-transform: capitalize;
 }
 
 .aktivitetKontainer {

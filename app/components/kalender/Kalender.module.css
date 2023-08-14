@@ -1,13 +1,17 @@
 .kalender {
   margin-left: calc(var(--a-spacing-2) * -1);
+  padding-bottom: var(--a-spacing-8);
   width: calc(var(--a-spacing-4) + 100%);
-  margin-bottom: var(--a-spacing-8);
 }
 
 .kalenderHeaderKontainer {
+  display: grid;
+}
+
+.statusTag {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
+  gap: var(--a-spacing-2);
 }
 
 .kalenderHeaderPeriodeDetaljer {
@@ -15,8 +19,9 @@
 }
 
 .kalenderHeaderPeriodeAlternativer {
-  flex-direction: column-reverse;
-  justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .kalenderUkedagKontainer {
@@ -24,7 +29,7 @@
   grid-template-columns: repeat(7, 1fr);
   gap: var(--a-spacing-4);
   justify-items: center;
-  margin-bottom: var(--a-spacing-4);
+  margin: var(--a-spacing-4) 0 var(--a-spacing-4);
 }
 
 .kalenderDatoKontainer {
@@ -35,7 +40,7 @@
 }
 
 .harNoenAktivitet {
-  gap: var(--a-spacing-8) var(--a-spacing-4);
+  gap: var(--a-spacing-8) var(--a-spacing-2);
 }
 
 .helg {
@@ -65,12 +70,12 @@
   z-index: 10;
 }
 
-.kalenderDato:hover {
-  background-color: var(--a-gray-200);
-}
-
 .kalenderDato p {
   margin-left: 3px;
+}
+
+.kalenderDato:hover {
+  background-color: var(--a-gray-200);
 }
 
 .kalenderDatoMedAktivitet {
@@ -104,6 +109,15 @@
   flex-direction: column;
   margin-top: var(--a-spacing-6);
   min-width: 450px;
+}
+
+.erIkkeRapporteringspliktig {
+  background-color: transparent;
+  cursor: default;
+}
+
+.erIkkeRapporteringspliktig:hover {
+  background-color: transparent;
 }
 
 .arbeid {
@@ -146,6 +160,10 @@
 }
 
 @media screen and (min-width: 768px) {
+  .kalenderHeaderKontainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .kalender {
     margin-left: calc(var(--a-spacing-6) * -1);
     width: calc(var(--a-spacing-12) + 100%);
@@ -155,8 +173,22 @@
     font-size: var(--a-font-size-medium);
   }
 
+  .kalenderDag {
+    display: flex;
+    align-items: center;
+  }
+
   .harNoenAktivitet {
     gap: var(--a-spacing-10) var(--a-spacing-4);
+  }
+
+  .kalenderHeaderPeriodeAlternativer {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .kalenderHeaderPeriodeAlternativer a {
+    margin-bottom: var(--a-spacing-4);
   }
 
   .kalenderDato {

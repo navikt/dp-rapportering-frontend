@@ -2,6 +2,7 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { Heading } from "@navikt/ds-react";
 import { format } from "date-fns";
+import styles from "./PeriodeHeaderDetaljer.module.css";
 import nbLocale from "date-fns/locale/nb";
 
 interface IProps {
@@ -13,13 +14,12 @@ export function PeriodeHeaderDetaljer({ rapporteringsperiode }: IProps) {
 
   return (
     <>
-      <Heading level="3" size="medium">
-        Uke
-        {formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}
+      <Heading level="3" size="small" className={styles.header}>
+        {`Uke ${formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}`}
       </Heading>
-      <span>{formaterPeriodeDato(fraOgMed, tilOgMed)}</span>
+      <span className="tekst-subtil">{formaterPeriodeDato(fraOgMed, tilOgMed)}</span>
       {(status === "TilUtfylling" || status === "Godkjent") && (
-        <p>
+        <p className="tekst-subtil">
           Beregnes etter: {format(new Date(beregnesEtter), "EEEE d. MMMM", { locale: nbLocale })}
         </p>
       )}

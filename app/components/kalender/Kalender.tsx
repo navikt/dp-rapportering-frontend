@@ -1,9 +1,10 @@
+import { Tag } from "@navikt/ds-react";
 import classNames from "classnames";
 import { format } from "date-fns";
+import { PeriodeHeaderDetaljer } from "~/components/kalender/PeriodeHeaderDetaljer";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import styles from "./Kalender.module.css";
 import { periodeSomTimer } from "~/utils/periode.utils";
-import { PeriodeHeaderDetaljer } from "~/components/PeriodeHeaderDetaljer";
+import styles from "./Kalender.module.css";
 import { RedigeringsLenke } from "./RedigeringsLenke";
 
 interface IProps {
@@ -29,14 +30,15 @@ export function Kalender(props: IProps) {
           <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
         </div>
         <div className={styles.kalenderHeaderPeriodeAlternativer}>
-          <p>Status: {rapporteringsperiode.status}</p>
+          <span className={styles.statusTag}>
+            Status: <Tag variant="neutral-moderate">{rapporteringsperiode.status}</Tag>
+          </span>
           {visRedigeringsAlternativer && (
             <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
           )}
         </div>
       </div>
       <div className={styles.kalender}>
-        <br />
         <div className={styles.kalenderUkedagKontainer}>
           {ukedager.map((ukedag, index) => {
             return (
@@ -71,7 +73,13 @@ export function Kalender(props: IProps) {
 
             return (
               <div key={dag.dagIndex} className={styles.kalenderDag}>
-                {erIkkeRapporteringspliktig && <p>{format(new Date(dag.dato), "dd")}.</p>}
+                {erIkkeRapporteringspliktig && (
+                  <div
+                    className={classNames(styles.kalenderDato, styles.erIkkeRapporteringspliktig)}
+                  >
+                    <p>{format(new Date(dag.dato), "dd")}.</p>
+                  </div>
+                )}
                 {!erIkkeRapporteringspliktig && (
                   <button
                     className={classNames(styles.kalenderDato, dagKnappStyle)}
