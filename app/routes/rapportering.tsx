@@ -1,11 +1,10 @@
-import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
+import type { SessionWithOboProvider } from "@navikt/dp-auth";
+import { Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { getSession } from "~/utils/auth.utils.server";
+import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
-import styles from "~/routes/rapportering.module.css";
-import { Heading } from "@navikt/ds-react";
-import type { SessionWithOboProvider } from "@navikt/dp-auth";
+import { getSession } from "~/utils/auth.utils.server";
 
 export interface ISessionLoader {
   session: SessionWithOboProvider;
@@ -35,14 +34,14 @@ export function ErrorBoundary() {
     if (error.status === 401) {
       return (
         <div id="dp-rapportering-frontend">
-          <div className={styles.rapporteringHeader}>
-            <div className={styles.rapporteringHeaderInnhold}>
+          <div className="rapportering-header">
+            <div className="rapportering-header-innhold">
               <Heading level="1" size="xlarge">
                 Dagpengerapportering
               </Heading>
             </div>
           </div>
-          <main className={styles.rapporteringKontainer}>
+          <main className="rapportering-kontainer">
             <SessjonModal sesjon={error.data.session} />
           </main>
         </div>
@@ -51,14 +50,14 @@ export function ErrorBoundary() {
 
     return (
       <div id="dp-rapportering-frontend">
-        <div className={styles.rapporteringHeader}>
-          <div className={styles.rapporteringHeaderInnhold}>
+        <div className="rapportering-header">
+          <div className="rapportering-header-innhold">
             <Heading level="1" size="xlarge">
               Dagpengerapportering
             </Heading>
           </div>
         </div>
-        <main className={styles.rapporteringKontainer}>
+        <main className="rapportering-kontainer">
           <h2>
             {error.status} {error.statusText}
           </h2>

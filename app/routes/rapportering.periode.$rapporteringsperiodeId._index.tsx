@@ -1,7 +1,6 @@
 import { useNavigate, useRouteLoaderData } from "@remix-run/react";
-import styles from "~/routes/rapportering.module.css";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { useEffect } from "react";
+import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function Rapportering() {
   const { periode } = useRouteLoaderData(
@@ -27,7 +26,7 @@ export default function Rapportering() {
   }, [navigate, periode]);
 
   return (
-    <main className={styles.rapporteringKontainer}>
+    <main className="rapportering-kontainer">
       <p>Laster rapporteringsperiode</p>
     </main>
   );

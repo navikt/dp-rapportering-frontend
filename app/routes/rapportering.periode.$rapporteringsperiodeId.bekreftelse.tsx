@@ -1,10 +1,8 @@
-import { useRouteLoaderData } from "@remix-run/react";
-import styles from "~/routes/rapportering.module.css";
 import { BodyLong, Heading } from "@navikt/ds-react";
+import { useRouteLoaderData } from "@remix-run/react";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import classNames from "classnames";
 
 export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(
@@ -19,16 +17,16 @@ export default function RapporteringLes() {
 
   return (
     <>
-      <main className={classNames(styles.rapporteringKontainer)}>
+      <main className="rapportering-kontainer">
         <Heading size={"medium"} level={"2"} spacing={true}>
           Tusen takk!
         </Heading>
         <BodyLong spacing>
           {status === "Innsendt" ? tekstEtterInnsending : tekstForInnsending}
         </BodyLong>
-        <div className={styles.graaBakgrunn}>
+        <div className="graa-bakgrunn">
           <Kalender rapporteringsperiode={periode} aapneModal={() => {}} />
-          <div className={styles.registertMeldeperiodeKontainer}>
+          <div className="registert-meldeperiode-kontainer">
             <AktivitetOppsummering rapporteringsperiode={periode} />
           </div>
         </div>
