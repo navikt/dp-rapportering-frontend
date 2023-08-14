@@ -13,6 +13,7 @@
 .aktivitetOppsummeringData p {
   display: flex;
   justify-content: space-between;
+  font-size: var(--a-font-size-medium);
   margin: 0;
 }
 
@@ -26,4 +27,10 @@
 
 .ferie {
   background-color: var(--a-green-200);
+}
+
+@media screen and (min-width: var(--a-breakpoint-md)) {
+  .aktivitetOppsummeringData p {
+    font-size: var(--a-font-size-large);
+  }
 }

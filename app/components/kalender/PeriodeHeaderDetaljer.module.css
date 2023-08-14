@@ -1,4 +1,4 @@
-@media screen and (min-width: 768px) {
+@media screen and (min-width: var(--a-breakpoint-md)) {
   .header {
     font-size: var(--a-font-size-heading-medium);
   }

@@ -33,14 +33,16 @@
 }
 
 .navigasjon-kontainer {
-  margin-top: var(--a-spacing-16);
   display: flex;
+  margin-top: var(--a-spacing-16);
   flex-direction: column;
+  align-items: center;
   gap: var(--a-spacing-2);
-  justify-content: space-around;
-  padding-left: var(--a-spacing-5);
-  padding-right: var(--a-spacing-5);
-  box-sizing: border-box;
+}
+
+.navigasjon-kontainer a {
+  width: 100%;
+  max-width: 350px;
 }
 
 .registert-meldeperiode-kontainer {
@@ -51,7 +53,7 @@
   color: var(--a-text-subtle);
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: var(--a-breakpoint-md)) {
   .rapportering-kontainer {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);
   }
