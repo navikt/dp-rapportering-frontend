@@ -53,7 +53,7 @@
   color: var(--a-text-subtle);
 }
 
-@media screen and (min-width: var(--a-breakpoint-md)) {
+@media screen and (min-width: 768px) {
   .rapportering-kontainer {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);
   }

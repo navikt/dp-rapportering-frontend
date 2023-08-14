@@ -29,7 +29,7 @@
   background-color: var(--a-green-200);
 }
 
-@media screen and (min-width: var(--a-breakpoint-md)) {
+@media screen and (min-width: 768px) {
   .aktivitetOppsummeringData p {
     font-size: var(--a-font-size-large);
   }
