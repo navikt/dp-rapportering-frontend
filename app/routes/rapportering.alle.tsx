@@ -38,7 +38,7 @@ export default function RapporteringAlle() {
         <Heading size={"medium"} level={"2"}>
           Oversikt over tidligere rapporteringer
         </Heading>
-        <BodyLong className="subtile" spacing>
+        <BodyLong className="tekst-subtil" spacing>
           Her kan du se alle tidligere rapportertinger du har sendt til NAV.
         </BodyLong>
         {perioder.map((periode) => {

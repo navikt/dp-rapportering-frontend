@@ -4,12 +4,11 @@
 }
 
 .modalHeader {
-  text-transform: capitalize;
   margin-bottom: var(--a-spacing-6);
 }
 
-.modalHeader span {
-  text-transform: lowercase;
+.modalHeader::first-letter {
+  text-transform: capitalize;
 }
 
 .aktivitetKontainer {

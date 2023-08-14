@@ -76,11 +76,11 @@ export default function RapporteringFyllut() {
         <Heading size={"large"} level={"2"} spacing>
           Fyll ut rapportering
         </Heading>
-        <BodyLong className="subtile" spacing>
+        <BodyLong className="tekst-subtil" spacing>
           Klikk på dagen du ønsker å rapportere for. Du vil da få alternativer for jobb, sykdom,
           fravær og ferie.
         </BodyLong>
-        <BodyLong className="subtile" spacing>
+        <BodyLong className="tekst-subtil" spacing>
           For tidligst mulig utbetaling av dagpenger må rapportering sendes senest siste søndag i
           perioden.
         </BodyLong>
@@ -106,7 +106,7 @@ export default function RapporteringFyllut() {
             Send rapportering
           </RemixLink>
         </div>
-        <BodyLong spacing className="subtile my-6">
+        <BodyLong spacing className="tekst-subtil my-6">
           For tidligst mulig utbetaling av dagpenger må rapporering sendes senest siste søndag i
           perioden.
         </BodyLong>

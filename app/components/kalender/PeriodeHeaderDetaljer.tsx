@@ -17,9 +17,9 @@ export function PeriodeHeaderDetaljer({ rapporteringsperiode }: IProps) {
       <Heading level="3" size="small" className={styles.header}>
         {`Uke ${formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}`}
       </Heading>
-      <span className="subtile">{formaterPeriodeDato(fraOgMed, tilOgMed)}</span>
+      <span className="tekst-subtil">{formaterPeriodeDato(fraOgMed, tilOgMed)}</span>
       {(status === "TilUtfylling" || status === "Godkjent") && (
-        <p className="subtile">
+        <p className="tekst-subtil">
           Beregnes etter: {format(new Date(beregnesEtter), "EEEE d. MMMM", { locale: nbLocale })}
         </p>
       )}

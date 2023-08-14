@@ -48,7 +48,7 @@ export function AktivitetOppsummering(props: IProps) {
       )}
       {flatMapAktiviteter.length > 0 && (
         <div className={styles.aktivitetOppsummeringKontainer}>
-          <p className="subtile">Sammenlagt for meldeperioden:</p>
+          <p className="tekst-subtil">Sammenlagt for meldeperioden:</p>
           <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
             <p>
               Arbeid
