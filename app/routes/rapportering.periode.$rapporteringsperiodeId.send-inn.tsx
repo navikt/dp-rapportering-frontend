@@ -15,15 +15,15 @@ export async function action({ request, params }: ActionArgs) {
   const periodeId = params.rapporteringsperiodeId;
   const godkjennPeriodeResponse = await godkjennPeriode(periodeId, request);
 
-  if (!godkjennPeriodeResponse.ok) {
+  if (godkjennPeriodeResponse.ok) {
+    return redirect(`/rapportering/periode/${periodeId}/bekreftelse`);
+  } else {
     logger.warn(`Klarte ikke godkjenne rapportering med id: ${periodeId}`, {
       statustext: godkjennPeriodeResponse.statusText,
     });
 
     return json({ error: "Det har skjedd noe feil med innsendingen din, prøv igjen." });
   }
-
-  return redirect(`/rapportering/periode/${periodeId}/bekreftelse`);
 }
 
 export default function RapporteringSendInnRapporteringsperiodeid() {

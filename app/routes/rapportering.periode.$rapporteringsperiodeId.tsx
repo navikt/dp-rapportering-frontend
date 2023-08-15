@@ -11,8 +11,6 @@ export interface IRapporteringsPeriodeLoader {
 }
 
 export async function loader({ request, params }: LoaderArgs) {
-  console.log("rapportering/periode/$Id loader");
-
   const periodeId = params.rapporteringsperiodeId || "";
   const periodeResponse = await hentPeriode(request, periodeId);
 
@@ -20,9 +18,7 @@ export async function loader({ request, params }: LoaderArgs) {
     const periode = await periodeResponse.json();
     return json({ periode });
   } else {
-    const { status, statusText } = periodeResponse;
-    console.log("uthenting av periode feilet", periodeResponse);
-    throw new Response("IIIH NOE GIKK GALT VED UTHENTING AV PERIODE", { status, statusText });
+    throw new Response(`Feil i uthenting av rapporteringsperiode`, { status: 500 });
   }
 }
 

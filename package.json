@@ -12,6 +12,7 @@
     "lint-fix": "eslint . --fix --ext .ts,.tsx",
     "validate": "npm run lint && tsc",
     "test": "vitest",
+    "test-coverage": "vitest --coverage",
     "pre-commit": "lint-staged && npm run typecheck"
   },
   "dependencies": {

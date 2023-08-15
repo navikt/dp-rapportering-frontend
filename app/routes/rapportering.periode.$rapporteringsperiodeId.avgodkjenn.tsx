@@ -13,7 +13,6 @@ export async function loader({ request, params }: LoaderArgs) {
   if (response.ok) {
     return redirect(`/rapportering/periode/${periodeId}/fyllut`);
   } else {
-    console.log(response);
     throw new Response(`Klarte ikke avgodkjenne periode med id: ${periodeId}`, { status: 500 });
   }
 }
