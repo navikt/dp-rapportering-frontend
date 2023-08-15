@@ -11,7 +11,6 @@ export interface ISessionLoader {
 }
 
 export async function loader({ request }: LoaderArgs) {
-  console.log("rapportering loader");
   const session = await getSession(request);
 
   return json({ session });
