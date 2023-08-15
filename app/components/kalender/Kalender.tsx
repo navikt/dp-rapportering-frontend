@@ -31,7 +31,12 @@ export function Kalender(props: IProps) {
         </div>
         <div className={styles.kalenderHeaderPeriodeAlternativer}>
           <span className={styles.statusTag}>
-            Status: <Tag variant="neutral-moderate">{rapporteringsperiode.status}</Tag>
+            Status:{" "}
+            <Tag variant="neutral-moderate">
+              {rapporteringsperiode.status === "TilUtfylling"
+                ? "Til utfylling"
+                : rapporteringsperiode.status}
+            </Tag>
           </span>
           {visRedigeringsAlternativer && (
             <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
