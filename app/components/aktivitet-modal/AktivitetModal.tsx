@@ -37,7 +37,7 @@ export function AktivitetModal(props: IProps) {
   const actionData = useActionData();
   const valgteDatoHarAktivitet = rapporteringsperiodeDag;
 
-  function hentSlettKnappTekst() {
+  function hentAktivitetTekst() {
     const aktivitet = valgteDatoHarAktivitet?.aktiviteter[0];
 
     if (aktivitet?.type === "Arbeid") {
@@ -58,7 +58,7 @@ export function AktivitetModal(props: IProps) {
       onClose={() => lukkModal()}
     >
       <Modal.Content>
-        <Heading spacing level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
+        <Heading level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
           {valgtDato && <FormattertDato dato={valgtDato} ukedag />}
         </Heading>
 
@@ -66,8 +66,8 @@ export function AktivitetModal(props: IProps) {
           valgteDatoHarAktivitet.aktiviteter.map((aktivitet) => (
             <Form key={aktivitet.id} method="post">
               <input type="text" hidden name="aktivitetId" defaultValue={aktivitet.id} />
-              <div className={classNames(styles.slettKnapp, styles[aktivitet.type])}>
-                {hentSlettKnappTekst()}
+              <div className={classNames(styles.registrertAktivitet, styles[aktivitet.type])}>
+                {hentAktivitetTekst()}
               </div>
               <div className={styles.knappKontainer}>
                 <Button type="submit" name="submit" value="slette">

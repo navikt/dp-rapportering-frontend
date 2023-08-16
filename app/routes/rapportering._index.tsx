@@ -14,11 +14,9 @@ export async function loader({ request }: LoaderArgs) {
   if (gjeldendePeriodeResponse.ok) {
     const periode = await gjeldendePeriodeResponse.json();
     return json(periode);
-  }
-  else {
+  } else {
     return json({ ingenperiode: true });
   }
-
 }
 
 export default function RapporteringsLandingside() {
@@ -38,7 +36,6 @@ export default function RapporteringsLandingside() {
           på ferie hver 14. dag. NAV bruker dette for å beregne hvor mye du skal ha i dagpenger.
         </BodyLong>
         <BodyLong spacing>Du må også rapportere mens du venter på svar på søknaden din.</BodyLong>
-
         <Heading size={"small"} level="2">
           Inneværende dagpengerapportering
         </Heading>
@@ -62,6 +59,7 @@ export default function RapporteringsLandingside() {
             </div>
           </>
         )}
+        {/* Her bør vi sjekke om bruker har tidligere rapportert rapporteringsperioder */}
         <p>
           <RemixLink as={"Link"} to={"/rapportering/alle"}>
             Se og korriger tidligere rapporteringer

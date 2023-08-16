@@ -9,16 +9,12 @@ import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
 export async function loader({ request }: LoaderArgs) {
   const allePerioderResponse = await hentAllePerioder(request);
 
-  if(allePerioderResponse.ok) {
+  if (allePerioderResponse.ok) {
     const allePerioder = await allePerioderResponse.json();
 
     return json({ allePerioder });
-  }
-  else {
-    throw new Response(
-      `Feil i uthenting av alle rapporteringsperioder`,
-      { status: 500 },
-    );
+  } else {
+    throw new Response(`Feil i uthenting av alle rapporteringsperioder`, { status: 500 });
   }
 }
 
