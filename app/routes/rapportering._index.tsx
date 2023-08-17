@@ -36,7 +36,9 @@ export async function loader({ request }: LoaderArgs) {
 
     return json(rapportering);
   } else {
-    throw new Response(`Feil i uthenting av alle rapporteringsperioder`, { status: 500 });
+    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
+      status: allePerioderResponse.status,
+    });
   }
 }
 

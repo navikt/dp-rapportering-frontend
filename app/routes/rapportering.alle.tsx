@@ -14,7 +14,9 @@ export async function loader({ request }: LoaderArgs) {
   const allePerioderResponse = await hentAllePerioder(request);
 
   if (!allePerioderResponse.ok) {
-    throw new Response(`Feil i uthenting av alle rapporteringsperioder`, { status: 500 });
+    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
+      status: allePerioderResponse.status,
+    });
   }
 
   const allePerioder: IRapporteringsperiode[] = await allePerioderResponse.json();

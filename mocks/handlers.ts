@@ -8,6 +8,10 @@ export const handlers = [
     return res(ctx.json(rapporteringsperioderResponse[0]));
   }),
 
+  rest.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/alle`, (req, res, ctx) => {
+    return res(ctx.json(rapporteringsperioderResponse));
+  }),
+
   rest.post(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId/godkjenn`,
     (req, res, ctx) => {

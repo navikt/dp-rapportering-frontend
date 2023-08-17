@@ -24,13 +24,13 @@ describe("Hovedside rapportering", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
-        }),
+        })
       );
 
       expect(response.status).toBe(500);
     });
 
-    test("skal hente ut gjeldende rapporteringsperiode", async () => {
+    test("skal hente ut gjeldende rapporteringsperiode og alle perioder", async () => {
       const mock = mockSession();
 
       const response = await loader({
@@ -41,36 +41,43 @@ describe("Hovedside rapportering", () => {
 
       const data = await response.json();
 
-      expect(mock.getSession).toHaveBeenCalledTimes(1);
+      expect(mock.getSession).toHaveBeenCalledTimes(2);
       expect(response.status).toBe(200);
-      expect(data).toEqual(rapporteringsperioderResponse[0]);
+      expect(data).toEqual({
+        gjeldendePeriode: rapporteringsperioderResponse[0],
+        allePerioder: rapporteringsperioderResponse,
+      });
     });
 
     test("skal gi tilbake feedback til viewet hvis backend-kallet feiler", async () => {
       server.use(
-        rest.get(`${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`, (req, res, ctx) => {
-          return res.once(
-            ctx.status(500),
-            ctx.json({
-              errorMessage: `Server Error`,
-            }),
-          );
-        }),
+        rest.get(
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
+          (req, res, ctx) => {
+            return res.once(
+              ctx.status(500),
+              ctx.json({
+                errorMessage: `Server Error`,
+              })
+            );
+          }
+        )
       );
 
       mockSession();
 
       const response = await loader({
-          request: new Request("http://localhost:3000"),
-          params: testParams,
-          context: {},
-        })
+        request: new Request("http://localhost:3000"),
+        params: testParams,
+        context: {},
+      });
 
       const data = await response.json();
 
       expect(response.status).toBe(200);
       expect(data).toEqual({
-        "ingenperiode": true,
+        gjeldendePeriode: null,
+        allePerioder: rapporteringsperioderResponse,
       });
     });
   });
