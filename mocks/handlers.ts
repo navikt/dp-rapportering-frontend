@@ -4,12 +4,12 @@ import { rapporteringsperioderResponse } from "./api-routes/rapporteringsperiode
 import { sanityResponse } from "./api-routes/sanityResponse";
 
 export const handlers = [
-  rest.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`, (req, res, ctx) => {
-    return res(ctx.json(rapporteringsperioderResponse[0]));
+  rest.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, (req, res, ctx) => {
+    return res(ctx.json(rapporteringsperioderResponse));
   }),
 
-  rest.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/alle`, (req, res, ctx) => {
-    return res(ctx.json(rapporteringsperioderResponse));
+  rest.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`, (req, res, ctx) => {
+    return res(ctx.json(rapporteringsperioderResponse[0]));
   }),
 
   rest.post(
@@ -29,10 +29,6 @@ export const handlers = [
       return res(ctx.json(rapporteringPeriode));
     }
   ),
-
-  rest.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, (req, res, ctx) => {
-    return res(ctx.json(rapporteringsperioderResponse));
-  }),
 
   rest.get(
     "https://rt6o382n.apicdn.sanity.io/v2021-06-06/data/query/production",
