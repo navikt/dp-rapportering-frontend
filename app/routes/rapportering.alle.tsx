@@ -6,6 +6,10 @@ import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
 
+interface IRapporteringAlleLoader {
+  allePerioder: IRapporteringsperiode[];
+}
+
 export async function loader({ request }: LoaderArgs) {
   const allePerioderResponse = await hentAllePerioder(request);
 
@@ -19,8 +23,7 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function RapporteringAlle() {
-  const { allePerioder } = useLoaderData<typeof loader>();
-  const perioder = allePerioder as IRapporteringsperiode[];
+  const { allePerioder } = useLoaderData<typeof loader>() as IRapporteringAlleLoader;
 
   return (
     <>
@@ -38,7 +41,7 @@ export default function RapporteringAlle() {
         <BodyLong className="tekst-subtil" spacing>
           Her kan du se alle tidligere rapportertinger du har sendt til NAV.
         </BodyLong>
-        {perioder.map((periode) => {
+        {allePerioder.map((periode) => {
           return (
             <div className="graa-bakgrunn" key={periode.id}>
               <Kalender
