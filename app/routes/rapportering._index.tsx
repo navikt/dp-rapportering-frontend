@@ -5,22 +5,46 @@ import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
 import { RemixLink } from "~/components/RemixLink";
-import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  hentAllePerioder,
+  hentGjeldendePeriode,
+} from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
+interface IRapporteringIndexLoader {
+  gjeldendePeriode: IRapporteringsperiode | null;
+  allePerioder: IRapporteringsperiode[] | null;
+}
+
 export async function loader({ request }: LoaderArgs) {
+  const allePerioderResponse = await hentAllePerioder(request);
+
+  let rapportering: IRapporteringIndexLoader = {
+    gjeldendePeriode: null,
+    allePerioder: null,
+  };
+
   const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
 
   if (gjeldendePeriodeResponse.ok) {
-    const periode = await gjeldendePeriodeResponse.json();
-    return json(periode);
+    rapportering.gjeldendePeriode = await gjeldendePeriodeResponse.json();
+  }
+
+  if (allePerioderResponse.ok) {
+    rapportering.allePerioder = await allePerioderResponse.json();
+
+    return json(rapportering);
   } else {
-    return json({ ingenperiode: true });
+    throw new Response(`Feil i uthenting av alle rapporteringsperioder`, { status: 500 });
   }
 }
 
 export default function RapporteringsLandingside() {
-  const data = useLoaderData<typeof loader>();
+  const { gjeldendePeriode, allePerioder } = useLoaderData<
+    typeof loader
+  >() as IRapporteringIndexLoader;
+
   return (
     <>
       <div className="rapportering-header">
@@ -39,32 +63,36 @@ export default function RapporteringsLandingside() {
         <Heading size={"small"} level="2">
           Inneværende dagpengerapportering
         </Heading>
-        {data.ingenperiode && <>Du har ingen perioder å rapportere</>}
-        {!data.ingenperiode && data.id && (
+        {!gjeldendePeriode && <>Du har ingen perioder å rapportere</>}
+        {gjeldendePeriode && (
           <>
             <span>
-              Uke {formaterPeriodeTilUkenummer(data.fraOgMed, data.tilOgMed)} (
-              {formaterPeriodeDato(data.fraOgMed, data.tilOgMed)})
+              Uke{" "}
+              {formaterPeriodeTilUkenummer(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed)} (
+              {formaterPeriodeDato(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed)})
             </span>
             <br />
             <br />
             <div>
-              <RemixLink as={"Button"} to={`/rapportering/periode/${data.id}/fyllut`}>
+              <RemixLink as={"Button"} to={`/rapportering/periode/${gjeldendePeriode.id}/fyllut`}>
                 Rapporter for perioden
               </RemixLink>
               <p>
                 Frist for rapportering:{" "}
-                {format(new Date(data.beregnesEtter), "EEEE d. MMMM", { locale: nbLocale })}
+                {format(new Date(gjeldendePeriode.beregnesEtter), "EEEE d. MMMM", {
+                  locale: nbLocale,
+                })}
               </p>
             </div>
           </>
         )}
-        {/* Her bør vi sjekke om bruker har tidligere rapportert rapporteringsperioder */}
-        <p>
-          <RemixLink as={"Link"} to={"/rapportering/alle"}>
-            Se og korriger tidligere rapporteringer
-          </RemixLink>
-        </p>
+        {allePerioder && allePerioder?.length > 0 && (
+          <p>
+            <RemixLink as={"Link"} to={"/rapportering/alle"}>
+              Se og korriger tidligere rapporteringer
+            </RemixLink>
+          </p>
+        )}
       </main>
     </>
   );

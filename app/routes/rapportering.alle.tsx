@@ -1,6 +1,6 @@
 import { BodyLong, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -13,12 +13,16 @@ interface IRapporteringAlleLoader {
 export async function loader({ request }: LoaderArgs) {
   const allePerioderResponse = await hentAllePerioder(request);
 
-  if (allePerioderResponse.ok) {
-    const allePerioder = await allePerioderResponse.json();
+  if (!allePerioderResponse.ok) {
+    throw new Response(`Feil i uthenting av alle rapporteringsperioder`, { status: 500 });
+  }
 
+  const allePerioder: IRapporteringsperiode[] = await allePerioderResponse.json();
+
+  if (allePerioder.length > 0) {
     return json({ allePerioder });
   } else {
-    throw new Response(`Feil i uthenting av alle rapporteringsperioder`, { status: 500 });
+    return redirect("/rapportering");
   }
 }
 
