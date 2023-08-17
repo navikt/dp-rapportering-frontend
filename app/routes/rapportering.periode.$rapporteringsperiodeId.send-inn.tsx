@@ -43,10 +43,6 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
         <BodyLong spacing>
           Jeg er også klar over at jeg må betale tilbake det jeg har fått feilaktig utbetalt.
         </BodyLong>
-        {/* <BodyLong spacing>
-          (siste frist for å gjøre endringer selv om du har sendt inn til NAV denne perioden er
-          søndag dd.mm)
-        </BodyLong> */}
 
         {actionData?.error && (
           <Alert variant="error" className={styles.feilmelding}>
