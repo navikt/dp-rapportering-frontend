@@ -1,9 +1,10 @@
 import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useNavigate } from "@remix-run/react";
+import { Form, useActionData, useParams } from "@remix-run/react";
 import { logger } from "server/logger";
 import invariant from "tiny-invariant";
+import { RemixLink } from "~/components/RemixLink";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 
@@ -25,9 +26,7 @@ export async function action({ request, params }: ActionArgs) {
 
 export default function RapporteringSendInnRapporteringsperiodeid() {
   const actionData = useActionData<typeof action>();
-
-  const navigate = useNavigate();
-  const tilbake = () => navigate(-1);
+  const { rapporteringsperiodeId } = useParams();
 
   return (
     <>
@@ -52,9 +51,14 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
 
         <Form method="post">
           <div className="navigasjon-kontainer">
-            <Button onClick={tilbake} variant="secondary">
+            <RemixLink
+              to={`/rapportering/periode/${rapporteringsperiodeId}/fyllut`}
+              as="Button"
+              variant="secondary"
+            >
               Avbryt og gå tilbake
-            </Button>
+            </RemixLink>
+
             <Button type="submit" variant="primary" iconPosition="right">
               Bekreft og send til NAV
             </Button>

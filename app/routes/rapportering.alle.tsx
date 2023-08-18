@@ -1,6 +1,6 @@
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -15,17 +15,13 @@ export async function loader({ request }: LoaderArgs) {
 
   if (!allePerioderResponse.ok) {
     throw new Response("Feil i uthenting av alle rapporteringsperioder", {
-      status: allePerioderResponse.status,
+      status: 500,
     });
   }
 
   const allePerioder: IRapporteringsperiode[] = await allePerioderResponse.json();
 
-  if (allePerioder.length > 0) {
-    return json({ allePerioder });
-  } else {
-    return redirect("/rapportering");
-  }
+  return json({ allePerioder });
 }
 
 export default function RapporteringAlle() {
@@ -47,6 +43,9 @@ export default function RapporteringAlle() {
         <BodyLong className="tekst-subtil" spacing>
           Her kan du se alle tidligere rapportertinger du har sendt til NAV.
         </BodyLong>
+        {allePerioder.length === 0 && (
+          <Alert variant="info">Du har ingen rapporteringsperiode å rapportere på.</Alert>
+        )}
         {allePerioder.map((periode) => {
           return (
             <div className="graa-bakgrunn" key={periode.id}>

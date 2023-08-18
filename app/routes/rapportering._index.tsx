@@ -27,18 +27,22 @@ export async function loader({ request }: LoaderArgs) {
 
   const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
 
-  if (gjeldendePeriodeResponse.ok) {
+  if (!gjeldendePeriodeResponse.ok) {
+    if (gjeldendePeriodeResponse.status !== 404)
+      throw new Response("Feil i uthenting av gjeldende periode", {
+        status: 500,
+      });
+  } else {
     rapportering.gjeldendePeriode = await gjeldendePeriodeResponse.json();
   }
 
-  if (allePerioderResponse.ok) {
-    rapportering.allePerioder = await allePerioderResponse.json();
-
-    return json(rapportering);
-  } else {
+  if (!allePerioderResponse.ok) {
     throw new Response("Feil i uthenting av alle rapporteringsperioder", {
-      status: allePerioderResponse.status,
+      status: 500,
     });
+  } else {
+    rapportering.allePerioder = await allePerioderResponse.json();
+    return json(rapportering);
   }
 }
 

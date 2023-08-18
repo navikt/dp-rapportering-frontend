@@ -16,13 +16,11 @@ describe("Hovedside rapportering", () => {
   });
 
   describe("Loader", () => {
-    const testParams = {};
-
     test("skal feile hvis bruker ikke er logget på", async () => {
       const response = await catchErrorResponse(() =>
         loader({
           request: new Request("http://localhost:3000"),
-          params: testParams,
+          params: {},
           context: {},
         })
       );
@@ -35,7 +33,7 @@ describe("Hovedside rapportering", () => {
 
       const response = await loader({
         request: new Request("http://localhost:3000"),
-        params: testParams,
+        params: {},
         context: {},
       });
 
@@ -49,17 +47,12 @@ describe("Hovedside rapportering", () => {
       });
     });
 
-    test("skal gi tilbake feedback til viewet hvis backend-kallet feiler", async () => {
+    test("skal vise at bruker har ingen gjeldene perdiode og viser tidligere rapporteringer", async () => {
       server.use(
         rest.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
           (req, res, ctx) => {
-            return res.once(
-              ctx.status(500),
-              ctx.json({
-                errorMessage: `Server Error`,
-              })
-            );
+            return res.once(ctx.status(404));
           }
         )
       );
@@ -68,7 +61,7 @@ describe("Hovedside rapportering", () => {
 
       const response = await loader({
         request: new Request("http://localhost:3000"),
-        params: testParams,
+        params: {},
         context: {},
       });
 
@@ -79,6 +72,32 @@ describe("Hovedside rapportering", () => {
         gjeldendePeriode: null,
         allePerioder: rapporteringsperioderResponse,
       });
+    });
+
+    test("skal vise feilmelding hvis uthenting av gjeldende perioder feilet", async () => {
+      server.use(
+        rest.get(
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
+          (req, res, ctx) => {
+            return res.once(ctx.status(500));
+          }
+        )
+      );
+
+      mockSession();
+
+      const response = await loader({
+        request: new Request("http://localhost:3000"),
+        params: {},
+        context: {},
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+
+      // console.log("==== 🚀");
+      // console.log(response);
     });
   });
 });
