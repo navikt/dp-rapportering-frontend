@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
 import { RemixLink } from "~/components/RemixLink";
 import {
-  IRapporteringsperiode,
+  type IRapporteringsperiode,
   hentAllePerioder,
   hentGjeldendePeriode,
 } from "~/models/rapporteringsperiode.server";

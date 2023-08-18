@@ -1,5 +1,5 @@
-import { BodyLong, Button, Heading } from "@navikt/ds-react";
-import { Form, useRouteLoaderData } from "@remix-run/react";
+import { BodyLong, Heading } from "@navikt/ds-react";
+import { useRouteLoaderData } from "@remix-run/react";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
@@ -30,20 +30,24 @@ export default function RapporteringLes() {
         </div>
       </div>
 
-      <Form method="post">
-        <div className="navigasjon-kontainer">
-          <RemixLink
-            as="Button"
-            to={`rapportering/periode/${periode.id}/avgodkjenn`}
-            variant="secondary"
-          >
-            Angre innsending
-          </RemixLink>
-          <Button type="button" variant="primary" iconPosition="right">
-            Tilbake til min side
-          </Button>
-        </div>
-      </Form>
+      <div className="navigasjon-kontainer">
+        <RemixLink
+          as="Button"
+          to={`rapportering/periode/${periode.id}/avgodkjenn`}
+          variant="secondary"
+        >
+          Angre innsending
+        </RemixLink>
+        <RemixLink
+          as="Link"
+          to="/rapportering"
+          type="button"
+          variant="primary"
+          iconPosition="right"
+        >
+          Tilbake til min side
+        </RemixLink>
+      </div>
     </main>
   );
 }
