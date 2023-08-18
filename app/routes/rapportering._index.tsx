@@ -14,7 +14,7 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.u
 
 interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
-  allePerioder: IRapporteringsperiode[] | null;
+  allePerioder: IRapporteringsperiode[];
 }
 
 export async function loader({ request }: LoaderArgs) {
@@ -22,7 +22,7 @@ export async function loader({ request }: LoaderArgs) {
 
   let rapportering: IRapporteringIndexLoader = {
     gjeldendePeriode: null,
-    allePerioder: null,
+    allePerioder: [],
   };
 
   const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
@@ -92,7 +92,7 @@ export default function RapporteringsLandingside() {
             </div>
           </>
         )}
-        {allePerioder && allePerioder?.length > 0 && (
+        {allePerioder.length > 0 && (
           <p>
             <RemixLink as={"Link"} to={"/rapportering/alle"}>
               Se og korriger tidligere rapporteringer
