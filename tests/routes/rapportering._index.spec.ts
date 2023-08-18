@@ -73,31 +73,5 @@ describe("Hovedside rapportering", () => {
         allePerioder: rapporteringsperioderResponse,
       });
     });
-
-    test("skal vise feilmelding hvis uthenting av gjeldende perioder feilet", async () => {
-      server.use(
-        rest.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
-          (req, res, ctx) => {
-            return res.once(ctx.status(500));
-          }
-        )
-      );
-
-      mockSession();
-
-      const response = await loader({
-        request: new Request("http://localhost:3000"),
-        params: {},
-        context: {},
-      });
-
-      const data = await response.json();
-
-      console.log(data);
-
-      // console.log("==== 🚀");
-      // console.log(response);
-    });
   });
 });
