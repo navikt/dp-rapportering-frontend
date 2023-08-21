@@ -28,7 +28,7 @@ describe("Hovedside rapportering", () => {
       expect(response.status).toBe(500);
     });
 
-    test("skal hente ut gjeldende rapporteringsperiode og alle perioder", async () => {
+    test("skal hente ut gjeldende rapporteringsperiode og innsendt perioder", async () => {
       const mock = mockSession();
 
       const response = await loader({
@@ -43,11 +43,11 @@ describe("Hovedside rapportering", () => {
       expect(response.status).toBe(200);
       expect(data).toEqual({
         gjeldendePeriode: rapporteringsperioderResponse[0],
-        allePerioder: rapporteringsperioderResponse,
+        innsendtPerioder: [],
       });
     });
 
-    test("skal vise at bruker har ingen gjeldene perdiode og viser tidligere rapporteringer", async () => {
+    test("skal vise at bruker har ingen gjeldene perdiode", async () => {
       server.use(
         rest.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
@@ -70,7 +70,7 @@ describe("Hovedside rapportering", () => {
       expect(response.status).toBe(200);
       expect(data).toEqual({
         gjeldendePeriode: null,
-        allePerioder: rapporteringsperioderResponse,
+        innsendtPerioder: [],
       });
     });
   });
