@@ -2,13 +2,11 @@ import { BodyLong, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { format } from "date-fns";
-import nbLocale from "date-fns/locale/nb";
 import { RemixLink } from "~/components/RemixLink";
 import {
-  type IRapporteringsperiode,
   hentAllePerioder,
   hentGjeldendePeriode,
+  type IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
@@ -83,12 +81,6 @@ export default function RapporteringsLandingside() {
               <RemixLink as="Button" to={`/rapportering/periode/${gjeldendePeriode.id}/fyllut`}>
                 Rapporter for perioden
               </RemixLink>
-              <p>
-                Frist for rapportering:{" "}
-                {format(new Date(gjeldendePeriode.beregnesEtter), "EEEE d. MMMM", {
-                  locale: nbLocale,
-                })}
-              </p>
             </div>
           </>
         )}
