@@ -31,8 +31,8 @@ export async function loader({ request }: LoaderArgs) {
       status: 500,
     });
   } else {
-    const allePerioderResponseData: IRapporteringsperiode[] = await allePerioderResponse.json();
-    const innsendtPerioder = allePerioderResponseData.filter((a) => a.id !== gjeldendePeriode.id);
+    const allePerioder: IRapporteringsperiode[] = await allePerioderResponse.json();
+    const innsendtPerioder = allePerioder.filter((a) => a.id !== gjeldendePeriode.id);
 
     return json({ innsendtPerioder });
   }

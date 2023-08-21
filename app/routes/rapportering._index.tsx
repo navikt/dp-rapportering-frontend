@@ -10,7 +10,7 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
-export interface IRapporteringIndexLoader {
+interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
   innsendtPerioder: IRapporteringsperiode[];
 }
