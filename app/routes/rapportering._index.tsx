@@ -10,18 +10,16 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
-interface IRapporteringIndexLoader {
+export interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
-  allePerioder: IRapporteringsperiode[];
+  innsendtPerioder: IRapporteringsperiode[];
 }
 
 export async function loader({ request }: LoaderArgs) {
   const allePerioderResponse = await hentAllePerioder(request);
 
-  let rapportering: IRapporteringIndexLoader = {
-    gjeldendePeriode: null,
-    allePerioder: [],
-  };
+  let gjeldendePeriode: IRapporteringsperiode | null = null;
+  let innsendtPerioder: IRapporteringsperiode[] = [];
 
   const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
 
@@ -31,7 +29,7 @@ export async function loader({ request }: LoaderArgs) {
         status: 500,
       });
   } else {
-    rapportering.gjeldendePeriode = await gjeldendePeriodeResponse.json();
+    gjeldendePeriode = await gjeldendePeriodeResponse.json();
   }
 
   if (!allePerioderResponse.ok) {
@@ -39,13 +37,18 @@ export async function loader({ request }: LoaderArgs) {
       status: 500,
     });
   } else {
-    rapportering.allePerioder = await allePerioderResponse.json();
-    return json(rapportering);
+    const allePerioder: IRapporteringsperiode[] = await allePerioderResponse.json();
+
+    if (gjeldendePeriode) {
+      innsendtPerioder = allePerioder.filter((a) => a.id !== gjeldendePeriode?.id);
+    }
+
+    return json({ gjeldendePeriode, innsendtPerioder });
   }
 }
 
 export default function RapporteringsLandingside() {
-  const { gjeldendePeriode, allePerioder } = useLoaderData<
+  const { gjeldendePeriode, innsendtPerioder } = useLoaderData<
     typeof loader
   >() as IRapporteringIndexLoader;
 
@@ -84,7 +87,7 @@ export default function RapporteringsLandingside() {
             </div>
           </>
         )}
-        {allePerioder.length > 0 && (
+        {innsendtPerioder.length > 0 && (
           <p>
             <RemixLink as="Link" to="/rapportering/alle">
               Se og korriger tidligere rapporteringer

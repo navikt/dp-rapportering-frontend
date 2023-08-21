@@ -4,28 +4,42 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
+import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 
 interface IRapporteringAlleLoader {
-  allePerioder: IRapporteringsperiode[];
+  innsendtPerioder: IRapporteringsperiode[];
 }
 
 export async function loader({ request }: LoaderArgs) {
   const allePerioderResponse = await hentAllePerioder(request);
 
+  let gjeldendePeriode: IRapporteringsperiode;
+
+  const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
+
+  if (!gjeldendePeriodeResponse.ok) {
+    if (gjeldendePeriodeResponse.status !== 404)
+      throw new Response("Feil i uthenting av gjeldende periode", {
+        status: 500,
+      });
+  } else {
+    gjeldendePeriode = await gjeldendePeriodeResponse.json();
+  }
+
   if (!allePerioderResponse.ok) {
     throw new Response("Feil i uthenting av alle rapporteringsperioder", {
       status: 500,
     });
+  } else {
+    const allePerioderResponseData: IRapporteringsperiode[] = await allePerioderResponse.json();
+    const innsendtPerioder = allePerioderResponseData.filter((a) => a.id !== gjeldendePeriode.id);
+
+    return json({ innsendtPerioder });
   }
-
-  const allePerioder: IRapporteringsperiode[] = await allePerioderResponse.json();
-
-  return json({ allePerioder });
 }
 
 export default function RapporteringAlle() {
-  const { allePerioder } = useLoaderData<typeof loader>() as IRapporteringAlleLoader;
+  const { innsendtPerioder } = useLoaderData<typeof loader>() as IRapporteringAlleLoader;
 
   return (
     <>
@@ -43,10 +57,10 @@ export default function RapporteringAlle() {
         <BodyLong className="tekst-subtil" spacing>
           Her kan du se alle tidligere rapportertinger du har sendt til NAV.
         </BodyLong>
-        {allePerioder.length === 0 && (
+        {innsendtPerioder.length === 0 && (
           <Alert variant="info">Du har ingen rapporteringsperiode å rapportere på.</Alert>
         )}
-        {allePerioder.map((periode) => {
+        {innsendtPerioder.map((periode) => {
           return (
             <div className="graa-bakgrunn" key={periode.id}>
               <Kalender
