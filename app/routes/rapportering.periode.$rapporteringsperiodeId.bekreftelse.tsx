@@ -33,7 +33,7 @@ export default function RapporteringLes() {
       <div className="navigasjon-kontainer">
         <RemixLink
           as="Button"
-          to={`rapportering/periode/${periode.id}/avgodkjenn`}
+          to={`/rapportering/periode/${periode.id}/avgodkjenn`}
           variant="secondary"
         >
           Angre innsending
