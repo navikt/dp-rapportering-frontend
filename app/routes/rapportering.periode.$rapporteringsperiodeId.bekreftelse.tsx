@@ -38,13 +38,7 @@ export default function RapporteringLes() {
         >
           Angre innsending
         </RemixLink>
-        <RemixLink
-          as="Link"
-          to="/rapportering"
-          type="button"
-          variant="primary"
-          iconPosition="right"
-        >
+        <RemixLink as="Button" to="/rapportering">
           Tilbake til min side
         </RemixLink>
       </div>

@@ -80,7 +80,7 @@ export default function RapporteringsLandingside() {
             <br />
             <br />
             <div>
-              <RemixLink as={"Button"} to={`/rapportering/periode/${gjeldendePeriode.id}/fyllut`}>
+              <RemixLink as="Button" to={`/rapportering/periode/${gjeldendePeriode.id}/fyllut`}>
                 Rapporter for perioden
               </RemixLink>
               <p>
@@ -94,7 +94,7 @@ export default function RapporteringsLandingside() {
         )}
         {allePerioder.length > 0 && (
           <p>
-            <RemixLink as={"Link"} to={"/rapportering/alle"}>
+            <RemixLink as="Link" to="/rapportering/alle">
               Se og korriger tidligere rapporteringer
             </RemixLink>
           </p>
