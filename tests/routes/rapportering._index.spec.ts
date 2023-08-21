@@ -6,6 +6,7 @@ import { loader } from "~/routes/rapportering._index";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
+import { gjeldendePeriodeResponse } from "mocks/api-routes/gjeldendePeriodeResponse";
 
 describe("Hovedside rapportering", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
@@ -42,8 +43,8 @@ describe("Hovedside rapportering", () => {
       expect(mock.getSession).toHaveBeenCalledTimes(2);
       expect(response.status).toBe(200);
       expect(data).toEqual({
-        gjeldendePeriode: rapporteringsperioderResponse[0],
-        innsendtPerioder: [],
+        gjeldendePeriode: gjeldendePeriodeResponse,
+        innsendtPerioder: rapporteringsperioderResponse,
       });
     });
 

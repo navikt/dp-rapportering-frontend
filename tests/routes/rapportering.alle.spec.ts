@@ -33,6 +33,15 @@ describe("Liste ut alle rapporteringsperioder", () => {
     test("skal hente ut alle rapporteringsperioder", async () => {
       const mock = mockSession();
 
+      server.use(
+        rest.get(
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
+          (req, res, ctx) => {
+            return res.once(ctx.status(200));
+          }
+        )
+      );
+
       const response = await loader({
         request: new Request("http://localhost:3000"),
         params: testParams,
