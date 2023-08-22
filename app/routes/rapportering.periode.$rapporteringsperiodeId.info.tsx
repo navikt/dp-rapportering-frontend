@@ -129,7 +129,32 @@ export default function Info() {
           </Accordion.Item>
           <Accordion.Item>
             <Accordion.Header>Hva må jeg rapportere av tiltak, kurs og utdanning?</Accordion.Header>
-            <Accordion.Content>LEGG INN INNHOLD</Accordion.Content>
+            <Accordion.Content>
+              <Heading size="small" level="3">
+                Aktivitet/kurs/utdanning
+              </Heading>
+              <BodyLong spacing>
+                Hvis du har avtalt med NAV å delta på tiltak, kurs, utdanning eller annen aktivitet,
+                skal du svare «ja» og krysse av for de dagene du har utført avtalt aktivitet. Les
+                mer om [dagpenger i kombinasjon med utdanning og
+                opplæring]("https://www.nav.no/arbeid/utdanning ").
+              </BodyLong>
+              <BodyLong spacing>
+                Hvis du deltar på kurs eller utdanning som ikke er avtalt, skal du svare «ja», og
+                krysse av for de dagene du har deltatt. Dette gjelder også hvis du «leser» et fag på
+                egenhånd.
+              </BodyLong>
+              <BodyLong spacing>
+                Du skal bare melde fra om tiltak, kurs eller utdanning på meldekortet. Du skal ikke
+                føre opp andre aktiviteter du har avtalt med NAV, slik som informasjonsmøter i regi
+                av NAV og tid til å føre aktivitetsplan.
+              </BodyLong>
+              <BodyLong spacing>
+                Hvis du ikke har utført en avtalt aktivitet, svarer du «nei». Hvis du ikke har
+                avtalt aktivitet med NAV, og heller ikke har deltatt på kurs/utdanning, svarer du
+                «nei».
+              </BodyLong>
+            </Accordion.Content>
           </Accordion.Item>
           <Accordion.Item>
             <Accordion.Header>Hva gjelder for sykdom?</Accordion.Header>
