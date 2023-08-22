@@ -80,10 +80,12 @@ export default function RapporteringFyllut() {
           Klikk på dagen du ønsker å rapportere for. Du vil da få alternativer for jobb, sykdom,
           fravær og ferie.
         </BodyLong>
+
         <BodyLong className="tekst-subtil" spacing>
           For tidligst mulig utbetaling av dagpenger må rapportering sendes senest siste søndag i
           perioden.
         </BodyLong>
+
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
         <AktivitetModal
           rapporteringsperiodeDag={valgtDag}
@@ -106,10 +108,6 @@ export default function RapporteringFyllut() {
             Send rapportering
           </RemixLink>
         </div>
-        <BodyLong spacing className="tekst-subtil my-6">
-          For tidligst mulig utbetaling av dagpenger må rapporering sendes senest siste søndag i
-          perioden.
-        </BodyLong>
       </main>
     </>
   );

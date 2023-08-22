@@ -56,7 +56,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
               as="Button"
               variant="secondary"
             >
-              Avbryt og gå tilbake
+              Gå tilbake
             </RemixLink>
 
             <Button type="submit" variant="primary" iconPosition="right">
