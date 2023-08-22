@@ -96,10 +96,10 @@ export default function RapporteringFyllut() {
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
         <div className="navigasjon-kontainer">
-          <RemixLink as={"Button"} to={`/rapportering/korriger/${periode.id}/send-inn`}>
+          <RemixLink as="Button" to={`/rapportering/korriger/${periode.id}/send-inn`}>
             Lagre og send korrigering
           </RemixLink>
-          <RemixLink as={"Button"} to={`/rapportering/alle`} variant={"secondary"}>
+          <RemixLink as="Button" to="/rapportering/alle" variant={"secondary"}>
             Avbryt
           </RemixLink>
         </div>

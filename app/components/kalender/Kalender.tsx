@@ -1,4 +1,3 @@
-import { Tag } from "@navikt/ds-react";
 import classNames from "classnames";
 import { format } from "date-fns";
 import { PeriodeHeaderDetaljer } from "~/components/kalender/PeriodeHeaderDetaljer";
@@ -17,7 +16,6 @@ export function Kalender(props: IProps) {
   const { rapporteringsperiode, aapneModal, visRedigeringsAlternativer = false } = props;
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
-  const helgIndex = [5, 6, 12, 13];
 
   const harNoenAktivitet = !!rapporteringsperiode.dager.find(
     (dager) => dager.aktiviteter.length > 0
@@ -30,14 +28,6 @@ export function Kalender(props: IProps) {
           <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
         </div>
         <div className={styles.kalenderHeaderPeriodeAlternativer}>
-          <span className={styles.statusTag}>
-            Status:{" "}
-            <Tag variant="neutral-moderate">
-              {rapporteringsperiode.status === "TilUtfylling"
-                ? "Til utfylling"
-                : rapporteringsperiode.status}
-            </Tag>
-          </span>
           {visRedigeringsAlternativer && (
             <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
           )}
@@ -62,7 +52,6 @@ export function Kalender(props: IProps) {
             const harAktivitet = dag.aktiviteter.length > 0;
             const erIkkeRapporteringspliktig = !harAktivitet && dag.muligeAktiviteter.length === 0;
             const dagKnappStyle = {
-              [styles.helg]: helgIndex.includes(dag.dagIndex),
               [styles.kalenderDatoMedAktivitet]: harAktivitet,
               [styles.arbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
               [styles.sykdom]: harAktivitet && dag.aktiviteter[0].type === "Syk",
@@ -93,15 +82,19 @@ export function Kalender(props: IProps) {
                     <p>{format(new Date(dag.dato), "dd")}.</p>
                   </button>
                 )}
-                {harAktivitet && dag.aktiviteter[0].type === "Arbeid" && (
+                {harAktivitet && (
                   <div
                     className={classNames(styles.kalenderDatoAktivitet, {
-                      [styles.timerArbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
+                      [styles.kalenderDatoAktivitetAktivitetSykdom]:
+                        harAktivitet && dag.aktiviteter[0].type === "Syk",
+                      [styles.kalenderDatoAktivitetAktivitetFerie]:
+                        harAktivitet && dag.aktiviteter[0].type === "Ferie",
                     })}
                   >
                     {dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid") && (
-                      <> {timer.toString().replace(/\./g, ",")}t</>
+                      <>{timer.toString().replace(/\./g, ",")}t</>
                     )}
+                    {dag.aktiviteter.some((aktivitet) => aktivitet.type !== "Arbeid") && <>1d</>}
                   </div>
                 )}
               </div>

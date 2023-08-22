@@ -1,4 +1,4 @@
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -7,21 +7,26 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
 import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 
+interface IRapporteringAlleLoader {
+  allePerioder: IRapporteringsperiode[];
+}
+
 export async function loader({ request }: LoaderArgs) {
   const allePerioderResponse = await hentAllePerioder(request);
 
-  if (allePerioderResponse.ok) {
-    const allePerioder = await allePerioderResponse.json();
-
-    return json({ allePerioder });
-  } else {
-    throw new Response(`Feil i uthenting av alle rapporteringsperioder`, { status: 500 });
+  if (!allePerioderResponse.ok) {
+    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
+      status: 500,
+    });
   }
+
+  const allePerioder: IRapporteringsperiode[] = await allePerioderResponse.json();
+
+  return json({ allePerioder });
 }
 
 export default function RapporteringAlle() {
-  const { allePerioder } = useLoaderData<typeof loader>();
-  const perioder = allePerioder as IRapporteringsperiode[];
+  const { allePerioder } = useLoaderData<typeof loader>() as IRapporteringAlleLoader;
 
   lagBrodsmulesti([{ title: "Innsendte rapporteringsperioder", url: hentBrodsmuleUrl("/alle") }]);
 
@@ -29,7 +34,7 @@ export default function RapporteringAlle() {
     <>
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
-          <Heading level="1" size="large">
+          <Heading level="1" size="xlarge">
             Tidligere rapporteringer for dagpenger
           </Heading>
         </div>
@@ -41,7 +46,10 @@ export default function RapporteringAlle() {
         <BodyLong className="tekst-subtil" spacing>
           Her kan du se alle tidligere rapportertinger du har sendt til NAV.
         </BodyLong>
-        {perioder.map((periode) => {
+        {allePerioder.length === 0 && (
+          <Alert variant="info">Du har ingen rapporteringsperiode å rapportere på.</Alert>
+        )}
+        {allePerioder.map((periode) => {
           return (
             <div className="graa-bakgrunn" key={periode.id}>
               <Kalender
