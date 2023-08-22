@@ -30,6 +30,14 @@ export default function Info() {
                   for.
                 </List.Item>
               </List>
+              <Heading size="small" level="3">
+                Utbetalt lunsj
+              </Heading>
+              <BodyLong spacing>Regnes ikke som arbeid, skal ikke føres på meldekortet.</BodyLong>
+              <Heading size="small" level="3">
+                Avspasering
+              </Heading>
+              <BodyLong spacing>Føres som om du var på jobb.</BodyLong>
             </Accordion.Content>
           </Accordion.Item>
           <Accordion.Item>
