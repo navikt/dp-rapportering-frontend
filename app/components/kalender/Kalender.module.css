@@ -100,7 +100,6 @@
   height: 40px;
   font-size: var(--a-font-size-small);
   color: var(--a-text-subtle);
-  cursor: pointer;
   z-index: 0;
 }
 
