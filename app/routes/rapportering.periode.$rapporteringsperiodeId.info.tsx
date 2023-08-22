@@ -158,11 +158,54 @@ export default function Info() {
           </Accordion.Item>
           <Accordion.Item>
             <Accordion.Header>Hva gjelder for sykdom?</Accordion.Header>
-            <Accordion.Content>LEGG INN INNHOLD</Accordion.Content>
+            <Accordion.Content>
+              <Heading size="small" level="3">
+                Sykdomsfravær
+              </Heading>
+              <BodyLong spacing>
+                Hvis du på grunn av egen sykdom ikke har vært i stand til å jobbe eller delta på
+                tiltak, kurs, utdanning eller jobbintervju, skal du svare «ja». Du skal da krysse av
+                for de dagene du ikke har jobbet eller utført avtalt aktivitet.
+              </BodyLong>
+              <BodyLong spacing>
+                Hvis du ikke har hatt fravær på grunn av sykdom, svarer du «nei».
+              </BodyLong>
+              <BodyLong spacing>
+                Hvis du deltar på tiltak må du i tillegg melde fra til den som er ansvarlig for
+                tiltaket.
+              </BodyLong>
+              <BodyLong spacing>
+                Du har ikke rett til dagpenger når du er syk, men du kan ha rett til sykepenger. Du
+                har ikke egenmeldingsdager når du mottar dagpenger, og må derfor be om sykmelding
+                fra første dag du er syk.[Jeg er arbeidsledig eller permittert og blir
+                sykmeldt.](/sykemeldt-og-permitert)
+              </BodyLong>
+            </Accordion.Content>
           </Accordion.Item>
           <Accordion.Item>
             <Accordion.Header>Hvis jeg tar ferie eller har annet fravær?</Accordion.Header>
-            <Accordion.Content>LEGG INN INNHOLD</Accordion.Content>
+            <Accordion.Content>
+              <Heading size="small" level="3">
+                Ferie og annet fravær
+              </Heading>
+              <BodyLong spacing>
+                Du kan som hovedregel oppholde deg hvor du vil i Norge når du mottar dagpenger, uten
+                å føre fravær på meldekortet. Er du ikke tilgjengelig for jobb eller tiltak på grunn
+                av ferie eller annet fravær, må du føre disse dagene som fravær på meldekortet.
+                Gjelder fraværet sykdom skal du svare på dette i spørsmål 3.
+              </BodyLong>
+              <BodyLong spacing>Deltar du på tiltak må du melde fra til tiltaksarrangør.</BodyLong>
+              <BodyLong spacing>
+                Hvis du har fravær vil du få trekk i utbetalingen din. Har du opparbeidet deg rett
+                til [dagpenger under
+                ferie](/no/nav-og-samfunn/kontakt-nav/utbetalinger/snarveier/ferie-og-feriepenger#chapter-6),
+                vil du ikke få trekk i utbetalingen din.
+              </BodyLong>
+              <BodyLong spacing>
+                Skal du reise bort over lengre tid, må du kontakte NAV. NAV vil da vurdere om du
+                fortsatt har rett til dagpenger i fraværsperioden.
+              </BodyLong>
+            </Accordion.Content>
           </Accordion.Item>
         </Accordion>
       </main>
