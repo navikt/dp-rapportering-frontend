@@ -4,6 +4,10 @@
   width: calc(var(--a-spacing-4) + 100%);
 }
 
+.readonly {
+  pointer-events: none;
+}
+
 .kalenderHeaderKontainer {
   display: grid;
 }
@@ -119,13 +123,10 @@
   min-width: 450px;
 }
 
-.erIkkeRapporteringspliktig {
+.ikkeRapporteringspliktig {
   background-color: transparent;
   cursor: default;
-}
-
-.erIkkeRapporteringspliktig:hover {
-  background-color: transparent;
+  pointer-events: none;
 }
 
 .arbeid {
