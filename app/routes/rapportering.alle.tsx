@@ -31,7 +31,7 @@ export default function RapporteringAlle() {
     <>
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
-          <Heading level="1" size="large">
+          <Heading level="1" size="xlarge">
             Tidligere rapporteringer for dagpenger
           </Heading>
         </div>
