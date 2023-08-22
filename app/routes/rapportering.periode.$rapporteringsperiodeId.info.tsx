@@ -1,4 +1,4 @@
-import { Accordion, BodyLong, Heading } from "@navikt/ds-react";
+import { Accordion, BodyLong, Heading, List } from "@navikt/ds-react";
 
 export default function Info() {
   return (
@@ -14,7 +14,23 @@ export default function Info() {
         <Accordion>
           <Accordion.Item>
             <Accordion.Header>Hva må jeg rapportere som arbeid?</Accordion.Header>
-            <Accordion.Content>LEGG INN INNHOLD</Accordion.Content>
+            <Accordion.Content>
+              <List as="ul" title="Arbeid">
+                <List.Item>Alle timer du har jobbet i perioden føres på meldekortet.</List.Item>
+                <List.Item>
+                  Timene rundes av til nærmeste halve time, er det midt mellom to halve timer,
+                  runder du nedover.
+                </List.Item>
+                <List.Item>
+                  Inntektsgivende arbeid skal føres i den perioden arbeidet er utført, selv om
+                  inntekten kommer senere.
+                </List.Item>
+                <List.Item>
+                  Får du lønn for flere timer enn du jobbet, skal du føre alle timene du får lønn
+                  for.
+                </List.Item>
+              </List>
+            </Accordion.Content>
           </Accordion.Item>
           <Accordion.Item>
             <Accordion.Header>Hva må jeg rapportere av tiltak, kurs og utdanning?</Accordion.Header>
