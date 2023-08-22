@@ -20,7 +20,7 @@ export default function RapporteringLes() {
           NAV om det har konsekvensre for ekstra utbetaling eller tilbakekreving av penger.
         </BodyLong>
         <div className="graa-bakgrunn">
-          <Kalender rapporteringsperiode={periode} aapneModal={() => {}} />
+          <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
           <div className="registert-meldeperiode-kontainer">
             <AktivitetOppsummering rapporteringsperiode={periode} />
           </div>

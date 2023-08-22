@@ -24,7 +24,7 @@ export default function RapporteringLes() {
         {periode.status === "Innsendt" ? tekstEtterInnsending : tekstForInnsending}
       </BodyLong>
       <div className="graa-bakgrunn">
-        <Kalender rapporteringsperiode={periode} aapneModal={() => {}} />
+        <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
         <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>

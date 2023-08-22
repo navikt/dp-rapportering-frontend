@@ -10,16 +10,25 @@ interface IProps {
   aapneModal: (dato: string) => void;
   rapporteringsperiode: IRapporteringsperiode;
   visRedigeringsAlternativer?: boolean;
+  readonly?: boolean;
 }
 
 export function Kalender(props: IProps) {
-  const { rapporteringsperiode, aapneModal, visRedigeringsAlternativer = false } = props;
+  const {
+    rapporteringsperiode,
+    aapneModal,
+    visRedigeringsAlternativer = false,
+    readonly = false,
+  } = props;
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
 
   const harNoenAktivitet = !!rapporteringsperiode.dager.find(
     (dager) => dager.aktiviteter.length > 0
   );
+
+  // Komponenten har blitt veldig komplisert
+  // Denne her bør refaktureres
 
   return (
     <>
@@ -33,7 +42,11 @@ export function Kalender(props: IProps) {
           )}
         </div>
       </div>
-      <div className={styles.kalender}>
+      <div
+        className={classNames(styles.kalender, {
+          [styles.readonly]: readonly,
+        })}
+      >
         <div className={styles.kalenderUkedagKontainer}>
           {ukedager.map((ukedag, index) => {
             return (
@@ -50,7 +63,7 @@ export function Kalender(props: IProps) {
         >
           {rapporteringsperiode.dager.map((dag) => {
             const harAktivitet = dag.aktiviteter.length > 0;
-            const erIkkeRapporteringspliktig = !harAktivitet && dag.muligeAktiviteter.length === 0;
+            const ikkeRapporteringspliktig = !harAktivitet && dag.muligeAktiviteter.length === 0;
             const dagKnappStyle = {
               [styles.kalenderDatoMedAktivitet]: harAktivitet,
               [styles.arbeid]: harAktivitet && dag.aktiviteter[0].type === "Arbeid",
@@ -67,14 +80,13 @@ export function Kalender(props: IProps) {
 
             return (
               <div key={dag.dagIndex} className={styles.kalenderDag}>
-                {erIkkeRapporteringspliktig && (
-                  <div
-                    className={classNames(styles.kalenderDato, styles.erIkkeRapporteringspliktig)}
-                  >
+                {ikkeRapporteringspliktig && (
+                  <div className={classNames(styles.kalenderDato, styles.ikkeRapporteringspliktig)}>
                     <p>{format(new Date(dag.dato), "dd")}.</p>
                   </div>
                 )}
-                {!erIkkeRapporteringspliktig && (
+
+                {!ikkeRapporteringspliktig && !readonly && (
                   <button
                     className={classNames(styles.kalenderDato, dagKnappStyle)}
                     onClick={() => aapneModal(dag.dato)}
@@ -82,6 +94,16 @@ export function Kalender(props: IProps) {
                     <p>{format(new Date(dag.dato), "dd")}.</p>
                   </button>
                 )}
+
+                {!ikkeRapporteringspliktig && readonly && (
+                  <div
+                    className={classNames(styles.kalenderDato, dagKnappStyle)}
+                    onClick={() => aapneModal(dag.dato)}
+                  >
+                    <p>{format(new Date(dag.dato), "dd")}.</p>
+                  </div>
+                )}
+
                 {harAktivitet && (
                   <div
                     className={classNames(styles.kalenderDatoAktivitet, {
