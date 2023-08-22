@@ -8,7 +8,7 @@
   pointer-events: none;
 }
 
-.kalenderHeaderKontainer {
+.header {
   display: grid;
 }
 
@@ -18,17 +18,17 @@
   gap: var(--a-spacing-2);
 }
 
-.kalenderHeaderPeriodeDetaljer {
+.headerPeriodeDetaljer {
   flex-direction: column;
 }
 
-.kalenderHeaderPeriodeAlternativer {
+.redigeringsAlternativer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.kalenderUkedagKontainer {
+.ukedagKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: var(--a-spacing-4);
@@ -36,7 +36,7 @@
   margin: var(--a-spacing-4) 0 var(--a-spacing-4);
 }
 
-.kalenderDatoKontainer {
+.datoKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: var(--a-spacing-4);
@@ -47,15 +47,15 @@
   gap: var(--a-spacing-8) var(--a-spacing-2);
 }
 
-.kalenderUkedag {
+.ukedag {
   font-size: var(--a-font-size-small);
 }
 
-.kalenderDag {
+.dagKontainer {
   position: relative;
 }
 
-.kalenderDato {
+.dato {
   position: relative;
   display: flex;
   justify-content: center;
@@ -70,23 +70,15 @@
   z-index: 10;
 }
 
-.kalenderDato p {
+.dato p {
   margin-left: 3px;
 }
 
-.kalenderDato:hover {
+.dato:hover {
   background-color: var(--a-gray-200);
 }
 
-.kalenderDatoMedAktivitet {
-  background-color: var(--a-blue-200);
-}
-
-.kalenderDatoMedAktivitet:hover {
-  background-color: var(--a-blue-300);
-}
-
-.kalenderDatoAktivitet {
+.datoMedAktivitet {
   position: absolute;
   top: 15px;
   left: 1px;
@@ -103,16 +95,12 @@
   z-index: 0;
 }
 
-.kalenderDatoAktivitetAktivitetSykdom {
+.datoMedAktivitetAktivitetSykdom {
   background-color: var(--a-surface-warning-subtle);
 }
 
-.kalenderDatoAktivitetAktivitetFerie {
+.datoMedAktivitetAktivitetFerie {
   background-color: var(--a-surface-success-subtle);
-}
-
-.kalenderDatoAktivitet > .Ferie {
-  background-color: red;
 }
 
 .timeTypeKontainer {
@@ -125,6 +113,7 @@
 .ikkeRapporteringspliktig {
   background-color: transparent;
   cursor: default;
+  pointer-events: none;
   pointer-events: none;
 }
 
@@ -167,8 +156,12 @@
   margin-top: var(--a-spacing-8);
 }
 
+.periodenHarMinstEnAktivitet {
+  gap: var(--a-spacing-10) var(--a-spacing-4);
+}
+
 @media screen and (min-width: 768px) {
-  .kalenderHeaderKontainer {
+  .headerKontainer {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -177,35 +170,31 @@
     width: calc(var(--a-spacing-12) + 100%);
   }
 
-  .kalenderUkedag {
+  .ukedag {
     font-size: var(--a-font-size-medium);
   }
 
-  .kalenderDag {
+  .datoKontainer {
     display: flex;
     align-items: center;
   }
 
-  .harNoenAktivitet {
-    gap: var(--a-spacing-10) var(--a-spacing-4);
-  }
-
-  .kalenderHeaderPeriodeAlternativer {
+  .redigeringsAlternativer {
     flex-direction: column;
     align-items: flex-end;
   }
 
-  .kalenderHeaderPeriodeAlternativer a {
+  .redigeringsAlternativer a {
     margin-bottom: var(--a-spacing-4);
   }
 
-  .kalenderDato {
+  .dato {
     width: 60px;
     height: 60px;
     font-size: var(--a-font-size-large);
   }
 
-  .kalenderDatoAktivitet {
+  .datoMedAktivitet {
     top: 40px;
     left: 3px;
     border-radius: 0 0 10px 10px;
