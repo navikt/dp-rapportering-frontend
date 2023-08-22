@@ -114,6 +114,7 @@
   background-color: transparent;
   cursor: default;
   pointer-events: none;
+  pointer-events: none;
 }
 
 .arbeid {
