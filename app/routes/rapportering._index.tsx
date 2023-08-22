@@ -81,7 +81,7 @@ export default function RapporteringsLandingside() {
             <br />
             <br />
             <div>
-              <RemixLink as="Button" to={`/rapportering/periode/${gjeldendePeriode.id}/fyllut`}>
+              <RemixLink as="Button" to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}>
                 Rapporter for perioden
               </RemixLink>
             </div>

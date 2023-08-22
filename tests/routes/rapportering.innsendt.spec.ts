@@ -2,7 +2,7 @@
 import { rapporteringsperioderResponse } from "../../mocks/api-routes/rapporteringsperioderResponse";
 import { rest } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { loader } from "~/routes/rapportering.alle";
+import { loader } from "~/routes/rapportering.innsendt";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";

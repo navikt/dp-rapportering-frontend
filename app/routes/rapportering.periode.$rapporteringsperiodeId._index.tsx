@@ -14,7 +14,7 @@ export default function Rapportering() {
       switch (periode.status) {
         case "TilUtfylling":
           console.log("naviger til utfylling!");
-          navigate(`/rapportering/periode/${periode.id}/fyllut`, { replace: true });
+          navigate(`/rapportering/periode/${periode.id}/fyll-ut`, { replace: true });
           break;
         default:
           console.log("naviger til view");
