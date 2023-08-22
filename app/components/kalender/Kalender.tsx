@@ -1,4 +1,3 @@
-import { Tag } from "@navikt/ds-react";
 import classNames from "classnames";
 import { format } from "date-fns";
 import { PeriodeHeaderDetaljer } from "~/components/kalender/PeriodeHeaderDetaljer";
@@ -29,14 +28,6 @@ export function Kalender(props: IProps) {
           <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
         </div>
         <div className={styles.kalenderHeaderPeriodeAlternativer}>
-          <span className={styles.statusTag}>
-            Status:{" "}
-            <Tag variant="neutral-moderate">
-              {rapporteringsperiode.status === "TilUtfylling"
-                ? "Til utfylling"
-                : rapporteringsperiode.status}
-            </Tag>
-          </span>
           {visRedigeringsAlternativer && (
             <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
           )}
