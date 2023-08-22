@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import nbLocale from "date-fns/locale/nb";
 import { RemixLink } from "~/components/RemixLink";
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
+import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 export async function loader({ request }: LoaderArgs) {
@@ -14,15 +15,15 @@ export async function loader({ request }: LoaderArgs) {
   if (gjeldendePeriodeResponse.ok) {
     const periode = await gjeldendePeriodeResponse.json();
     return json(periode);
-  }
-  else {
+  } else {
     return json({ ingenperiode: true });
   }
-
 }
 
 export default function RapporteringsLandingside() {
   const data = useLoaderData<typeof loader>();
+  lagBrodsmulesti([]);
+
   return (
     <>
       <div className="rapportering-header">

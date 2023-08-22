@@ -6,6 +6,7 @@ declare global {
 
 interface IEnv {
   BASE_PATH: string;
+  SELF_URL: string;
   DP_RAPPORTERING_URL: string;
   IS_LOCALHOST: string;
   DP_RAPPORTERING_TOKEN: string;

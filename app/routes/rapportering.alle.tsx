@@ -5,26 +5,25 @@ import { useLoaderData } from "@remix-run/react";
 import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
+import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 
 export async function loader({ request }: LoaderArgs) {
   const allePerioderResponse = await hentAllePerioder(request);
 
-  if(allePerioderResponse.ok) {
+  if (allePerioderResponse.ok) {
     const allePerioder = await allePerioderResponse.json();
 
     return json({ allePerioder });
-  }
-  else {
-    throw new Response(
-      `Feil i uthenting av alle rapporteringsperioder`,
-      { status: 500 },
-    );
+  } else {
+    throw new Response(`Feil i uthenting av alle rapporteringsperioder`, { status: 500 });
   }
 }
 
 export default function RapporteringAlle() {
   const { allePerioder } = useLoaderData<typeof loader>();
   const perioder = allePerioder as IRapporteringsperiode[];
+
+  lagBrodsmulesti([{ title: "Innsendte rapporteringsperioder", url: hentBrodsmuleUrl("/alle") }]);
 
   return (
     <>

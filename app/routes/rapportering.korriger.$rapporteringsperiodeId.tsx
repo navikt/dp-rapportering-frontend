@@ -5,6 +5,7 @@ import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
 import { Accordion } from "@navikt/ds-react";
+import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 
 export interface IRapporteringsPeriodeLoader {
   periode: IRapporteringsperiode;
@@ -28,6 +29,13 @@ export async function loader({ request, params }: LoaderArgs) {
 
 export default function Rapportering() {
   const { periode } = useLoaderData<typeof loader>() as IRapporteringsPeriodeLoader;
+
+  lagBrodsmulesti([
+    {
+      title: "Korriger rapportering",
+      url: hentBrodsmuleUrl(`/korriger/${periode.id}`),
+    },
+  ]);
 
   return (
     <>

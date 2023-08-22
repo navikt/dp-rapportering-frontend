@@ -87,6 +87,7 @@ export async function loader() {
     sanityTexts,
     env: {
       BASE_PATH: process.env.BASE_PATH,
+      SELF_URL: process.env.SELF_URL,
       DP_RAPPORTERING_URL: process.env.DP_RAPPORTERING_URL,
       IS_LOCALHOST: process.env.IS_LOCALHOST,
     },
