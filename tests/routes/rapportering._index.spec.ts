@@ -1,12 +1,11 @@
 // @vitest-environment node
-import { rapporteringsperioderResponse } from "../../mocks/api-routes/rapporteringsperioderResponse";
+import { gjeldendePeriodeResponse } from "mocks/api-routes/gjeldendePeriodeResponse";
 import { rest } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/rapportering._index";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
-import { gjeldendePeriodeResponse } from "mocks/api-routes/gjeldendePeriodeResponse";
 
 describe("Hovedside rapportering", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
@@ -29,7 +28,7 @@ describe("Hovedside rapportering", () => {
       expect(response.status).toBe(500);
     });
 
-    test("skal hente ut gjeldende rapporteringsperiode og innsendt perioder", async () => {
+    test("skal hente ut gjeldende rapporteringsperiode", async () => {
       const mock = mockSession();
 
       const response = await loader({
@@ -40,11 +39,10 @@ describe("Hovedside rapportering", () => {
 
       const data = await response.json();
 
-      expect(mock.getSession).toHaveBeenCalledTimes(2);
+      expect(mock.getSession).toHaveBeenCalledTimes(1);
       expect(response.status).toBe(200);
       expect(data).toEqual({
         gjeldendePeriode: gjeldendePeriodeResponse,
-        innsendtPerioder: rapporteringsperioderResponse,
       });
     });
 
@@ -71,7 +69,6 @@ describe("Hovedside rapportering", () => {
       expect(response.status).toBe(200);
       expect(data).toEqual({
         gjeldendePeriode: null,
-        innsendtPerioder: [],
       });
     });
   });
