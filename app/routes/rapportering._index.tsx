@@ -4,7 +4,6 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { RemixLink } from "~/components/RemixLink";
 import {
-  hentAllePerioder,
   hentGjeldendePeriode,
   type IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
@@ -12,14 +11,10 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.u
 
 interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
-  innsendtPerioder: IRapporteringsperiode[];
 }
 
 export async function loader({ request }: LoaderArgs) {
-  const allePerioderResponse = await hentAllePerioder(request);
-
   let gjeldendePeriode: IRapporteringsperiode | null = null;
-  let innsendtPerioder: IRapporteringsperiode[] = [];
 
   const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
 
@@ -32,25 +27,11 @@ export async function loader({ request }: LoaderArgs) {
     gjeldendePeriode = await gjeldendePeriodeResponse.json();
   }
 
-  if (!allePerioderResponse.ok) {
-    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
-      status: 500,
-    });
-  } else {
-    const allePerioder: IRapporteringsperiode[] = await allePerioderResponse.json();
-
-    if (gjeldendePeriode) {
-      innsendtPerioder = allePerioder.filter((a) => a.id !== gjeldendePeriode?.id);
-    }
-
-    return json({ gjeldendePeriode, innsendtPerioder });
-  }
+  return json({ gjeldendePeriode });
 }
 
 export default function RapporteringsLandingside() {
-  const { gjeldendePeriode, innsendtPerioder } = useLoaderData<
-    typeof loader
-  >() as IRapporteringIndexLoader;
+  const { gjeldendePeriode } = useLoaderData<typeof loader>() as IRapporteringIndexLoader;
 
   return (
     <>
@@ -87,13 +68,11 @@ export default function RapporteringsLandingside() {
             </div>
           </>
         )}
-        {innsendtPerioder.length > 0 && (
-          <p>
-            <RemixLink as="Link" to="/rapportering/alle">
-              Se og korriger tidligere rapporteringer
-            </RemixLink>
-          </p>
-        )}
+        <p>
+          <RemixLink as="Link" to="/rapportering/innsendt">
+            Se og korriger tidligere rapporteringer
+          </RemixLink>
+        </p>
       </main>
     </>
   );

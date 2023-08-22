@@ -12,6 +12,17 @@ interface IRapporteringAlleLoader {
 
 export async function loader({ request }: LoaderArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
+  let innsendtPerioder: IRapporteringsperiode[] = [];
+
+  const allePerioderResponse = await hentAllePerioder(request);
+
+  if (!allePerioderResponse.ok) {
+    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
+      status: 500,
+    });
+  } else {
+    innsendtPerioder = await allePerioderResponse.json();
+  }
 
   const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
 
@@ -24,20 +35,11 @@ export async function loader({ request }: LoaderArgs) {
     gjeldendePeriode = await gjeldendePeriodeResponse.json();
   }
 
-  const allePerioderResponse = await hentAllePerioder(request);
-  if (!allePerioderResponse.ok) {
-    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
-      status: 500,
-    });
-  } else {
-    const allePerioder: IRapporteringsperiode[] = await allePerioderResponse.json();
-
-    const innsendtPerioder = gjeldendePeriode
-      ? allePerioder.filter((a) => a.id !== gjeldendePeriode?.id)
-      : [];
-
-    return json({ innsendtPerioder });
+  if (gjeldendePeriode) {
+    innsendtPerioder = [...innsendtPerioder].filter((a) => a.status !== gjeldendePeriode?.id);
   }
+
+  return json({ innsendtPerioder });
 }
 
 export default function RapporteringAlle() {
