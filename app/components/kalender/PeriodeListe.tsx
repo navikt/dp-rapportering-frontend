@@ -11,7 +11,7 @@ interface IProps {
 }
 
 export function PeriodeListe(props: IProps) {
-  const { rapporteringsperiode, readonly = false, aapneModal } = props;
+  const { rapporteringsperiode, readonly, aapneModal } = props;
 
   const periodenHarMinstEnAktivitet = !!rapporteringsperiode.dager.find(
     (dag) => dag.aktiviteter.length > 0
@@ -29,7 +29,6 @@ export function PeriodeListe(props: IProps) {
         const ikkeRapporteringspliktig = !dagenHarAktivitet && dag.muligeAktiviteter.length === 0;
 
         const dagKnappStyle = {
-          [styles.datoMedAktivitet]: dagenHarAktivitet,
           [styles.arbeid]: dagenHarAktivitet && dag.aktiviteter[0].type === "Arbeid",
           [styles.sykdom]: dagenHarAktivitet && dag.aktiviteter[0].type === "Syk",
           [styles.ferie]: dagenHarAktivitet && dag.aktiviteter[0].type === "Ferie",
@@ -43,7 +42,7 @@ export function PeriodeListe(props: IProps) {
         }, 0);
 
         return (
-          <div key={dag.dagIndex} className={styles.dagKontainer}>
+          <div key={dag.dagIndex} className={styles.datoKontainer}>
             {ikkeRapporteringspliktig && (
               <div className={classNames(styles.dato, styles.ikkeRapporteringspliktig)}>
                 <p>{format(new Date(dag.dato), "dd")}.</p>
@@ -71,9 +70,9 @@ export function PeriodeListe(props: IProps) {
             {dagenHarAktivitet && (
               <div
                 className={classNames(styles.datoMedAktivitet, {
-                  [styles.datoMedAktivitetAktivitetSykdom]:
+                  [styles.datoMedAktivitetSykdom]:
                     dagenHarAktivitet && dag.aktiviteter[0].type === "Syk",
-                  [styles.datoMedAktivitetAktivitetFerie]:
+                  [styles.datoMedAktivitetFerie]:
                     dagenHarAktivitet && dag.aktiviteter[0].type === "Ferie",
                 })}
               >
