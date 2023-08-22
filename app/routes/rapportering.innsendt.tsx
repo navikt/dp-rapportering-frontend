@@ -72,6 +72,7 @@ export default function RapporteringAlle() {
                 rapporteringsperiode={periode as IRapporteringsperiode}
                 aapneModal={() => {}}
                 visRedigeringsAlternativer={true}
+                readonly
               />
             </div>
           );
