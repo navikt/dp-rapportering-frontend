@@ -1,4 +1,4 @@
-import { Accordion, BodyLong, Heading, List } from "@navikt/ds-react";
+import { Accordion, BodyLong, Heading, Link, List } from "@navikt/ds-react";
 
 export default function Info() {
   return (
@@ -136,8 +136,10 @@ export default function Info() {
               <BodyLong spacing>
                 Hvis du har avtalt med NAV å delta på tiltak, kurs, utdanning eller annen aktivitet,
                 skal du svare «ja» og krysse av for de dagene du har utført avtalt aktivitet. Les
-                mer om [dagpenger i kombinasjon med utdanning og
-                opplæring]("https://www.nav.no/arbeid/utdanning ").
+                mer om{" "}
+                <Link href="https://www.nav.no/arbeid/utdanning">
+                  dagpenger i kombinasjon med utdanning og opplæring
+                </Link>
               </BodyLong>
               <BodyLong spacing>
                 Hvis du deltar på kurs eller utdanning som ikke er avtalt, skal du svare «ja», og
@@ -177,8 +179,10 @@ export default function Info() {
               <BodyLong spacing>
                 Du har ikke rett til dagpenger når du er syk, men du kan ha rett til sykepenger. Du
                 har ikke egenmeldingsdager når du mottar dagpenger, og må derfor be om sykmelding
-                fra første dag du er syk.[Jeg er arbeidsledig eller permittert og blir
-                sykmeldt.](/sykemeldt-og-permitert)
+                fra første dag du er syk.{" "}
+                <Link href="https://www.nav.no/sykmeldt-og-permitert">
+                  Jeg er arbeidsledig eller permittert og blir sykmeldt.
+                </Link>
               </BodyLong>
             </Accordion.Content>
           </Accordion.Item>
@@ -197,9 +201,8 @@ export default function Info() {
               <BodyLong spacing>Deltar du på tiltak må du melde fra til tiltaksarrangør.</BodyLong>
               <BodyLong spacing>
                 Hvis du har fravær vil du få trekk i utbetalingen din. Har du opparbeidet deg rett
-                til [dagpenger under
-                ferie](/no/nav-og-samfunn/kontakt-nav/utbetalinger/snarveier/ferie-og-feriepenger#chapter-6),
-                vil du ikke få trekk i utbetalingen din.
+                til
+                <Link href="https://www.nav.no/feriepenger#dagpenger">dagpenger under ferie</Link>.
               </BodyLong>
               <BodyLong spacing>
                 Skal du reise bort over lengre tid, må du kontakte NAV. NAV vil da vurdere om du
