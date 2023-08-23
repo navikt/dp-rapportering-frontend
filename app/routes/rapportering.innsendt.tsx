@@ -36,7 +36,7 @@ export async function loader({ request }: LoaderArgs) {
   }
 
   if (gjeldendePeriode) {
-    innsendtPerioder = [...innsendtPerioder].filter((a) => a.status !== gjeldendePeriode?.id);
+    innsendtPerioder = [...innsendtPerioder].filter((periode) => periode.status !== "TilUtfylling");
   }
 
   return json({ innsendtPerioder });
@@ -62,7 +62,7 @@ export default function RapporteringAlle() {
           Her kan du se alle tidligere rapportertinger du har sendt til NAV.
         </BodyLong>
         {innsendtPerioder.length === 0 && (
-          <Alert variant="info">Du har ingen rapporteringsperiode å rapportere på.</Alert>
+          <Alert variant="info">Du har ingen innsendte rapporteringsperiode.</Alert>
         )}
         {innsendtPerioder.map((periode) => {
           return (
