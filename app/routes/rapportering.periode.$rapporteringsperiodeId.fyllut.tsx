@@ -83,7 +83,10 @@ export default function RapporteringFyllut() {
 
         <BodyLong className="tekst-subtil" spacing>
           For tidligst mulig utbetaling av dagpenger må rapportering sendes senest siste søndag i
-          perioden.
+          perioden.{" "}
+          <RemixLink as="Link" to={`/rapportering/periode/${periode.id}/info`}>
+            Hva skal jeg rapportere til NAV?
+          </RemixLink>
         </BodyLong>
 
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
