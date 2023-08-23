@@ -46,7 +46,9 @@ export async function loader({ request }: LoaderArgs) {
 export default function RapporteringAlle() {
   const { innsendtPerioder } = useLoaderData<typeof loader>() as IRapporteringAlleLoader;
 
-  lagBrodsmulesti([{ title: "Innsendte rapporteringsperioder", url: hentBrodsmuleUrl("/alle") }]);
+  lagBrodsmulesti([
+    { title: "Innsendte rapporteringsperioder", url: hentBrodsmuleUrl("/innsendt") },
+  ]);
 
   return (
     <>
