@@ -37,7 +37,9 @@ export async function loader({ request }: LoaderArgs) {
   }
 
   if (gjeldendePeriode) {
-    innsendtPerioder = [...innsendtPerioder].filter((periode) => periode.status !== "TilUtfylling");
+    innsendtPerioder = [...innsendtPerioder].filter(
+      (periode) => periode.id !== gjeldendePeriode?.id
+    );
   }
 
   return json({ innsendtPerioder });
