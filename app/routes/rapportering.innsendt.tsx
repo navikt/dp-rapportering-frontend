@@ -62,7 +62,7 @@ export default function RapporteringAlle() {
           Her kan du se alle tidligere rapportertinger du har sendt til NAV.
         </BodyLong>
         {innsendtPerioder.length === 0 && (
-          <Alert variant="info">Du har ingen innsendte rapporteringsperiode.</Alert>
+          <Alert variant="info">Du har ingen tidligere rapportertinger.</Alert>
         )}
         {innsendtPerioder.map((periode) => {
           return (
