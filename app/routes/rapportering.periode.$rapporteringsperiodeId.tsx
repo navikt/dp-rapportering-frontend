@@ -5,6 +5,7 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 
 export interface IRapporteringsPeriodeLoader {
   periode: IRapporteringsperiode;
@@ -24,6 +25,13 @@ export async function loader({ request, params }: LoaderArgs) {
 
 export default function Rapportering() {
   const { periode } = useLoaderData<typeof loader>() as IRapporteringsPeriodeLoader;
+
+  lagBrodsmulesti([
+    {
+      title: "Fyll ut rapportering",
+      url: hentBrodsmuleUrl(`/periode/${periode.id}`),
+    },
+  ]);
 
   return (
     <>

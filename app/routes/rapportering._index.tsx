@@ -3,6 +3,7 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { RemixLink } from "~/components/RemixLink";
+import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import {
   hentGjeldendePeriode,
   type IRapporteringsperiode,
@@ -32,6 +33,8 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function RapporteringsLandingside() {
   const { gjeldendePeriode } = useLoaderData<typeof loader>() as IRapporteringIndexLoader;
+
+  lagBrodsmulesti();
 
   return (
     <>

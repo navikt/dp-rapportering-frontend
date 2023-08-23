@@ -5,6 +5,7 @@ import { useLoaderData } from "@remix-run/react";
 import { Kalender } from "~/components/kalender/Kalender";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
+import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 
 interface IRapporteringAlleLoader {
   innsendtPerioder: IRapporteringsperiode[];
@@ -44,6 +45,10 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function RapporteringAlle() {
   const { innsendtPerioder } = useLoaderData<typeof loader>() as IRapporteringAlleLoader;
+
+  lagBrodsmulesti([
+    { title: "Innsendte rapporteringsperioder", url: hentBrodsmuleUrl("/innsendt") },
+  ]);
 
   return (
     <>
