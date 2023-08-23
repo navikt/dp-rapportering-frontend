@@ -80,7 +80,7 @@ export default function RapporteringFyllut() {
           Du kan korrigere rapporteringer intill X antall uker tilbake i tid. Endringer i
           rapportering vil føre til at NAV beregner periodene på nytt. Dette kan få konsekvenser for
           utbetaling eller tibakekreving av penger.{" "}
-          <RemixLink as="Link" to={`/rapportering/periode/${periode.id}/info`}>
+          <RemixLink as="Link" to="/rapportering/info">
             Hva skal jeg rapportere til NAV?
           </RemixLink>
         </BodyLong>
