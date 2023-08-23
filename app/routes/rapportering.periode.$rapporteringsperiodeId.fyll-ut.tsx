@@ -31,7 +31,7 @@ export async function action({ request, params }: ActionArgs) {
 
 export default function RapporteringFyllut() {
   const { periode } = useRouteLoaderData(
-    "routes/rapportering.korriger.$rapporteringsperiodeId"
+    "routes/rapportering.periode.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
   const actionData = useActionData();
 
@@ -73,14 +73,22 @@ export default function RapporteringFyllut() {
   return (
     <>
       <main className="rapportering-kontainer">
-        <Heading size={"medium"} level={"2"}>
-          Korrigering
+        <Heading size={"large"} level={"2"} spacing>
+          Fyll ut rapportering
         </Heading>
-        <BodyLong spacing>
-          Du kan korrigere rapporteringer intill X antall uker tilbake i tid. Endringer i
-          rapportering vil føre til at NAV beregner periodene på nytt. Dette kan få konsekvenser for
-          utbetaling eller tibakekreving av penger.
+        <BodyLong className="tekst-subtil" spacing>
+          Klikk på dagen du ønsker å rapportere for. Du vil da få alternativer for jobb, sykdom,
+          fravær og ferie.
         </BodyLong>
+
+        <BodyLong className="tekst-subtil" spacing>
+          For tidligst mulig utbetaling av dagpenger må rapportering sendes senest siste søndag i
+          perioden.{" "}
+          <RemixLink as="Link" to="/rapportering/info">
+            Hva skal jeg rapportere til NAV?
+          </RemixLink>
+        </BodyLong>
+
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
         <AktivitetModal
           rapporteringsperiodeDag={valgtDag}
@@ -96,11 +104,11 @@ export default function RapporteringFyllut() {
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
         <div className="navigasjon-kontainer">
-          <RemixLink as="Button" to={`/rapportering/korriger/${periode.id}/send-inn`}>
-            Lagre og send korrigering
+          <RemixLink as="Button" to="/rapportering" variant="secondary">
+            Lagre og fortsett senere
           </RemixLink>
-          <RemixLink as="Button" to="/rapportering/alle" variant={"secondary"}>
-            Avbryt
+          <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
+            Send rapportering
           </RemixLink>
         </div>
       </main>

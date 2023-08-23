@@ -16,7 +16,7 @@ export default function RapporteringLes() {
           "graa-bakgrunn": periode.status !== "TilUtfylling",
         })}
       >
-        <Kalender rapporteringsperiode={periode} aapneModal={() => {}} />
+        <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
         <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
