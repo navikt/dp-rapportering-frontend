@@ -41,11 +41,11 @@ export default function Info() {
               <Heading size="small" level="3">
                 Hva regnes som arbeid?
               </Heading>
-              <List as="ul" title="">
-                <BodyLong spacing>
-                  Med «arbeid» mener vi aktivitet som kan gi eller som normalt ville ha vært betalt,
-                  som for eksempel:
-                </BodyLong>
+              <BodyLong spacing>
+                Med «arbeid» mener vi aktivitet som kan gi eller som normalt ville ha vært betalt,
+                som for eksempel:
+              </BodyLong>
+              <List as="ul">
                 <List.Item>arbeid i arbeidsforholdarbeid</List.Item>
                 <List.Item>arbeid i eget foretak</List.Item>
                 <List.Item>gratisarbeid (for andre) når arbeidet vanligvis er betalt</List.Item>
@@ -62,18 +62,20 @@ export default function Info() {
               <Heading size="small" level="3">
                 Fosterforeldre
               </Heading>
-              <BodyLong>Du skal ikke føre opp timer som fosterforeldre på meldekortet.</BodyLong>
+              <BodyLong spacing>
+                Du skal ikke føre opp timer som fosterforeldre på meldekortet.
+              </BodyLong>
               <Heading size="small" level="3">
                 Etablere egen virksomhet
               </Heading>
-              <List as="ul" title="">
-                <BodyLong spacing>
-                  Har du fått vedtak om at du kan beholde dagpenger under etablering?
-                </BodyLong>
+              <BodyLong spacing>
+                Har du fått vedtak om at du kan beholde dagpenger under etablering?
+              </BodyLong>
+              <List as="ul">
                 <List.Item>Du skal ikke føre timene du jobber i virksomheten.</List.Item>
               </List>
-              <List as="ul" title="">
-                <BodyLong spacing>Har du ikke fått vedtak fra NAV?</BodyLong>
+              <BodyLong spacing>Har du ikke fått vedtak fra NAV?</BodyLong>
+              <List as="ul">
                 <List.Item>
                   Du skal føre alle timene du jobber i virksomheten, selv om du ikke tar ut lønn og
                   det går med underskudd.
@@ -82,11 +84,11 @@ export default function Info() {
               <Heading size="small" level="3">
                 Formue og skattefri inntekt
               </Heading>
-              <List as="ul" title="">
-                <BodyLong spacing>
-                  Du skal ikke føre opp rene inntekter fra formue, det samme gjelder enkelte
-                  skattefrie inntekter utenfor virksomhet. Eksempler er:
-                </BodyLong>
+              <BodyLong spacing>
+                Du skal ikke føre opp rene inntekter fra formue, det samme gjelder enkelte
+                skattefrie inntekter utenfor virksomhet. Eksempler er:
+              </BodyLong>
+              <List as="ul">
                 <List.Item>utleie av fast eiendom</List.Item>
                 <List.Item>
                   renter, aksjeutbytte og annen avkastning av penger og verdipapir
@@ -96,11 +98,11 @@ export default function Info() {
               <Heading size="small" level="3">
                 Ulønnet arbeid
               </Heading>
-              <List as="ul" title="">
-                <BodyLong spacing>
-                  Du skal ikke føre opp enkelte former for ulønnet arbeid på meldekortet. Eksempler
-                  er:
-                </BodyLong>
+              <BodyLong spacing>
+                Du skal ikke føre opp enkelte former for ulønnet arbeid på meldekortet. Eksempler
+                er:
+              </BodyLong>
+              <List as="ul">
                 <List.Item>
                   ulønnet arbeid, sosiale tjenester og besøkstjenester for funksjonshemmede og eldre
                 </List.Item>
@@ -110,15 +112,14 @@ export default function Info() {
                   godtgjørelse
                 </List.Item>
               </List>
-
               <Heading size="small" level="3">
                 Naturalytelser
               </Heading>
-              <List as="ul" title="">
-                <BodyLong spacing>
-                  Naturalytelser er goder som du mottar fra arbeidsgiveren din, som for eksempel
-                  telefon eller bil.
-                </BodyLong>
+              <BodyLong spacing>
+                Naturalytelser er goder som du mottar fra arbeidsgiveren din, som for eksempel
+                telefon eller bil.
+              </BodyLong>
+              <List as="ul">
                 <List.Item>
                   For permitterte: Hvis du har hatt goder i mindre enn tre måneder før du ble
                   permittert, regnes summen av disse godene som timelønn. Antall timer som godene
