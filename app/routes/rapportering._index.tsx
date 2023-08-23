@@ -49,8 +49,8 @@ export default function RapporteringsLandingside() {
   const { gjeldendePeriode, allePerioder } = useLoaderData<
     typeof loader
   >() as IRapporteringIndexLoader;
-      
-  lagBrodsmulesti([]);
+
+  lagBrodsmulesti();
 
   return (
     <>

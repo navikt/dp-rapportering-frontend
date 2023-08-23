@@ -6,7 +6,7 @@ interface Brodsmule {
   url: string;
 }
 
-export function lagBrodsmulesti(brodsmuler: Brodsmule[]) {
+export function lagBrodsmulesti(brodsmuler: Brodsmule[] = []) {
   const predefinerte = [
     {
       title: "Rapporteringsløsning for dagpenger",
@@ -22,5 +22,5 @@ export function lagBrodsmulesti(brodsmuler: Brodsmule[]) {
 }
 
 export function hentBrodsmuleUrl(routeFragment: string) {
-  return getEnv("SELF_URL") + routeFragment;
+  return getEnv("BASE_PATH") + routeFragment;
 }
