@@ -102,7 +102,7 @@ export default function RapporteringFyllut() {
           <RemixLink as="Button" to={`/rapportering/korriger/${periode.id}/send-inn`}>
             Lagre og send korrigering
           </RemixLink>
-          <RemixLink as="Button" to="/rapportering/alle" variant={"secondary"}>
+          <RemixLink as="Button" to="/rapportering/innsendt" variant={"secondary"}>
             Avbryt
           </RemixLink>
         </div>

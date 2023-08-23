@@ -1,5 +1,6 @@
 import { rest } from "msw";
 import { getEnv } from "~/utils/env.utils";
+import { gjeldendePeriodeResponse } from "./api-routes/gjeldendePeriodeResponse";
 import { rapporteringsperioderResponse } from "./api-routes/rapporteringsperioderResponse";
 import { sanityResponse } from "./api-routes/sanityResponse";
 
@@ -9,7 +10,7 @@ export const handlers = [
   }),
 
   rest.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`, (req, res, ctx) => {
-    return res(ctx.json(rapporteringsperioderResponse[0]));
+    return res(ctx.json(gjeldendePeriodeResponse));
   }),
 
   rest.post(

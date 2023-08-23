@@ -4,7 +4,6 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { RemixLink } from "~/components/RemixLink";
 import {
-  hentAllePerioder,
   hentGjeldendePeriode,
   type IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
@@ -12,16 +11,10 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.u
 
 interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
-  allePerioder: IRapporteringsperiode[];
 }
 
 export async function loader({ request }: LoaderArgs) {
-  const allePerioderResponse = await hentAllePerioder(request);
-
-  let rapportering: IRapporteringIndexLoader = {
-    gjeldendePeriode: null,
-    allePerioder: [],
-  };
+  let gjeldendePeriode: IRapporteringsperiode | null = null;
 
   const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
 
@@ -31,23 +24,14 @@ export async function loader({ request }: LoaderArgs) {
         status: 500,
       });
   } else {
-    rapportering.gjeldendePeriode = await gjeldendePeriodeResponse.json();
+    gjeldendePeriode = await gjeldendePeriodeResponse.json();
   }
 
-  if (!allePerioderResponse.ok) {
-    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
-      status: 500,
-    });
-  } else {
-    rapportering.allePerioder = await allePerioderResponse.json();
-    return json(rapportering);
-  }
+  return json({ gjeldendePeriode });
 }
 
 export default function RapporteringsLandingside() {
-  const { gjeldendePeriode, allePerioder } = useLoaderData<
-    typeof loader
-  >() as IRapporteringIndexLoader;
+  const { gjeldendePeriode } = useLoaderData<typeof loader>() as IRapporteringIndexLoader;
 
   return (
     <>
@@ -78,19 +62,17 @@ export default function RapporteringsLandingside() {
             <br />
             <br />
             <div>
-              <RemixLink as="Button" to={`/rapportering/periode/${gjeldendePeriode.id}/fyllut`}>
+              <RemixLink as="Button" to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}>
                 Rapporter for perioden
               </RemixLink>
             </div>
           </>
         )}
-        {allePerioder.length > 0 && (
-          <p>
-            <RemixLink as="Link" to="/rapportering/alle">
-              Se og korriger tidligere rapporteringer
-            </RemixLink>
-          </p>
-        )}
+        <p>
+          <RemixLink as="Link" to="/rapportering/innsendt">
+            Se og korriger tidligere rapporteringer
+          </RemixLink>
+        </p>
       </main>
     </>
   );
