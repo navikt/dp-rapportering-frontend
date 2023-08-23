@@ -2,7 +2,7 @@
 import { rapporteringsperioderResponse } from "../../mocks/api-routes/rapporteringsperioderResponse";
 import { rest } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { loader } from "~/routes/rapportering.alle";
+import { loader } from "~/routes/rapportering.innsendt";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
@@ -24,7 +24,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
-        }),
+        })
       );
 
       expect(response.status).toBe(500);
@@ -41,9 +41,9 @@ describe("Liste ut alle rapporteringsperioder", () => {
 
       const data = await response.json();
 
-      expect(mock.getSession).toHaveBeenCalledTimes(1);
+      expect(mock.getSession).toHaveBeenCalledTimes(2);
       expect(response.status).toBe(200);
-      expect(data).toEqual({allePerioder: rapporteringsperioderResponse});
+      expect(data).toEqual({ innsendtPerioder: rapporteringsperioderResponse });
     });
 
     test("skal feile hvis backend-kallet feiler", async () => {
@@ -53,9 +53,9 @@ describe("Liste ut alle rapporteringsperioder", () => {
             ctx.status(500),
             ctx.json({
               errorMessage: `Server Error`,
-            }),
+            })
           );
-        }),
+        })
       );
 
       mockSession();
@@ -65,7 +65,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
-        }),
+        })
       );
 
       expect(response.status).toBe(500);
