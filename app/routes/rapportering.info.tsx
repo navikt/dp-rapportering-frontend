@@ -1,6 +1,11 @@
 import { Accordion, BodyLong, Heading, Link, List } from "@navikt/ds-react";
+import { useNavigate } from "@remix-run/react";
+import { RemixLink } from "~/components/RemixLink";
 
 export default function Info() {
+  const navigate = useNavigate();
+  const tilbake = () => navigate(-1);
+
   return (
     <>
       <div className="rapportering-header">
@@ -219,6 +224,11 @@ export default function Info() {
             </Accordion.Content>
           </Accordion.Item>
         </Accordion>
+        <div className="navigasjon-kontainer">
+          <RemixLink as="Button" to="" onClick={tilbake} variant="primary">
+            Tilbake
+          </RemixLink>
+        </div>
       </main>
     </>
   );
