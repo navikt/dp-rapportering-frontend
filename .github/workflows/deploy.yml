@@ -61,7 +61,7 @@ jobs:
         with:
           path: ./node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
-
+      - run: npm prune --omit=dev
       - run: npm run build
 
       # Bygg docker image
