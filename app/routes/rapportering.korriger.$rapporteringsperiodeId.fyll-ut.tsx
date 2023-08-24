@@ -8,7 +8,6 @@ import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import type { TAktivitetType } from "~/models/aktivitet.server";
-import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
 
@@ -37,17 +36,11 @@ export default function RapporteringFyllut() {
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
-  const [valgtDag, setValgtDag] = useState<IRapporteringsperiodeDag | undefined>(undefined);
   const [modalAapen, setModalAapen] = useState(false);
-  const [muligeAktiviteter, setMuligeAktiviteter] = useState<TAktivitetType[]>([]);
 
   useEffect(() => {
     Modal.setAppElement("#dp-rapportering-frontend");
   }, []);
-
-  useEffect(() => {
-    setMuligeAktiviteter(periode.dager.find((r) => r.dato === valgtDato)?.muligeAktiviteter || []);
-  }, [periode.dager, valgtDato]);
 
   useEffect(() => {
     if (actionData?.lagret) {
@@ -58,7 +51,6 @@ export default function RapporteringFyllut() {
   function aapneModal(dato: string) {
     if (periode.status === "TilUtfylling") {
       setValgtDato(dato);
-      setValgtDag(periode.dager.find((dag) => dag.dato === dato));
       setModalAapen(true);
     }
   }
@@ -66,7 +58,6 @@ export default function RapporteringFyllut() {
   function lukkModal() {
     setValgtAktivitet("");
     setValgtDato(undefined);
-    setValgtDag(undefined);
     setModalAapen(false);
   }
 
@@ -86,14 +77,12 @@ export default function RapporteringFyllut() {
         </BodyLong>
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
         <AktivitetModal
-          rapporteringsperiodeDag={valgtDag}
+          rapporteringsperiode={periode}
           valgtDato={valgtDato}
           valgtAktivitet={valgtAktivitet}
           setValgtAktivitet={setValgtAktivitet}
           modalAapen={modalAapen}
-          setModalAapen={setModalAapen}
           lukkModal={lukkModal}
-          muligeAktiviteter={muligeAktiviteter}
         />
         <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />

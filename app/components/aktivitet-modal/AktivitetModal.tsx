@@ -9,36 +9,31 @@ import { validator } from "~/utils/validering.util";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 
 import styles from "./AktivitetModal.module.css";
-import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { FormattertDato } from "../FormattertDato";
+import { useState } from "react";
 
 interface IProps {
-  rapporteringsperiodeDag?: IRapporteringsperiodeDag;
+  rapporteringsperiode: IRapporteringsperiode;
   valgtDato?: string;
   valgtAktivitet: string | TAktivitetType;
   setValgtAktivitet: (aktivitet: string | TAktivitetType) => void;
   modalAapen: boolean;
-  setModalAapen: any;
   lukkModal: () => void;
-  muligeAktiviteter: TAktivitetType[];
 }
 
 export function AktivitetModal(props: IProps) {
-  const {
-    rapporteringsperiodeDag,
-    modalAapen,
-    lukkModal,
-    valgtDato,
-    muligeAktiviteter,
-    valgtAktivitet,
-    setValgtAktivitet,
-  } = props;
+  const { rapporteringsperiode, modalAapen, lukkModal, valgtDato } = props;
 
   const actionData = useActionData();
-  const valgteDatoHarAktivitet = rapporteringsperiodeDag;
+  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+
+  const dag = rapporteringsperiode.dager.find(
+    (rapporteringsdag) => rapporteringsdag.dato === valgtDato
+  );
 
   function hentAktivitetTekst() {
-    const aktivitet = valgteDatoHarAktivitet?.aktiviteter[0];
+    const aktivitet = dag?.aktiviteter[0];
 
     if (aktivitet?.type === "Arbeid") {
       return `${aktivitet.type} ${periodeSomTimer(aktivitet.timer!)
@@ -62,8 +57,8 @@ export function AktivitetModal(props: IProps) {
           {valgtDato && <FormattertDato dato={valgtDato} ukedag />}
         </Heading>
 
-        {valgteDatoHarAktivitet &&
-          valgteDatoHarAktivitet.aktiviteter.map((aktivitet) => (
+        {dag &&
+          dag.aktiviteter.map((aktivitet) => (
             <Form key={aktivitet.id} method="post">
               <input type="text" hidden name="aktivitetId" defaultValue={aktivitet.id} />
               <div className={classNames(styles.registrertAktivitet, styles[aktivitet.type])}>
@@ -76,7 +71,7 @@ export function AktivitetModal(props: IProps) {
               </div>
             </Form>
           ))}
-        {muligeAktiviteter.length > 0 && (
+        {dag && dag.muligeAktiviteter.length > 0 && (
           <ValidatedForm
             method="post"
             key="lagre-ny-aktivitet"
@@ -87,7 +82,7 @@ export function AktivitetModal(props: IProps) {
             <div className={styles.aktivitetKontainer}>
               <AktivitetRadio
                 name="type"
-                muligeAktiviteter={muligeAktiviteter}
+                muligeAktiviteter={dag.muligeAktiviteter}
                 verdi={valgtAktivitet}
                 onChange={(aktivitet: string) => setValgtAktivitet(aktivitet)}
                 label="Hva vil du registrere"
