@@ -3,9 +3,7 @@ import { LoaderArgs, json, redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 
 export async function loader({ params }: LoaderArgs) {
-  const periodeId = params.rapporteringsperiodeId || null;
-
-  if (!periodeId) {
+  if (!params.rapporteringsperiodeId) {
     return redirect("/rapportering");
   }
 
