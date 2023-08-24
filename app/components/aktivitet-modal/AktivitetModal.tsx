@@ -11,7 +11,6 @@ import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 import styles from "./AktivitetModal.module.css";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { FormattertDato } from "../FormattertDato";
-import { useState } from "react";
 
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
@@ -23,10 +22,16 @@ interface IProps {
 }
 
 export function AktivitetModal(props: IProps) {
-  const { rapporteringsperiode, modalAapen, lukkModal, valgtDato } = props;
+  const {
+    rapporteringsperiode,
+    modalAapen,
+    lukkModal,
+    valgtAktivitet,
+    setValgtAktivitet,
+    valgtDato,
+  } = props;
 
   const actionData = useActionData();
-  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
 
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
