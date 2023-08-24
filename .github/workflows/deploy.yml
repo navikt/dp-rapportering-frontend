@@ -61,8 +61,8 @@ jobs:
         with:
           path: ./node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
-      - run: npm prune --omit=dev
       - run: npm run build
+      - run: npm prune --omit=dev
 
       # Bygg docker image
       - uses: docker/setup-buildx-action@v2
