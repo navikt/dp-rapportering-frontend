@@ -5,7 +5,6 @@ import type { TAktivitetType } from "~/models/aktivitet.server";
 export interface IProps {
   name: string;
   label?: string;
-  description?: string;
   verdi?: string;
   muligeAktiviteter: TAktivitetType[];
   onChange: (aktivitet: string) => void;
@@ -25,7 +24,6 @@ export function AktivitetRadio(props: IProps) {
       error={!inputProps.value ? error : undefined}
       {...inputProps}
       onChange={props.onChange}
-      description={props.description}
     >
       {props.muligeAktiviteter.map((aktivitet) => (
         <Radio key={aktivitet} value={aktivitet}>

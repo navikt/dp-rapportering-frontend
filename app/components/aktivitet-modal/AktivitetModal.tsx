@@ -11,6 +11,7 @@ import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 import styles from "./AktivitetModal.module.css";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { FormattertDato } from "../FormattertDato";
+import { useEffect } from "react";
 
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
@@ -32,6 +33,10 @@ export function AktivitetModal(props: IProps) {
   } = props;
 
   const actionData = useActionData();
+
+  useEffect(() => {
+    Modal.setAppElement("#dp-rapportering-frontend");
+  }, []);
 
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato

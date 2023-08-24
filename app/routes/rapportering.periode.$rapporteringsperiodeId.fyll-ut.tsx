@@ -1,4 +1,4 @@
-import { BodyLong, Heading, Modal } from "@navikt/ds-react";
+import { BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { useActionData, useRouteLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
@@ -37,10 +37,6 @@ export default function RapporteringFyllut() {
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
-
-  useEffect(() => {
-    Modal.setAppElement("#dp-rapportering-frontend");
-  }, []);
 
   useEffect(() => {
     if (actionData?.lagret) {
