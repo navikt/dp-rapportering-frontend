@@ -53,6 +53,12 @@
   color: var(--a-text-subtle);
 }
 
+.hva-skal-jeg-rapportere-nav-link {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--a-spacing-20);
+}
+
 @media screen and (min-width: 768px) {
   .rapportering-kontainer {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);

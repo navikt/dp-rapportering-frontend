@@ -91,7 +91,9 @@ function RemixLinkComponent(
       }}
       ref={ref}
     >
+      {icon && iconPosition === "left" && icon}
       {children}
+      {icon && iconPosition === "right" && icon}
     </Link>
   );
 }

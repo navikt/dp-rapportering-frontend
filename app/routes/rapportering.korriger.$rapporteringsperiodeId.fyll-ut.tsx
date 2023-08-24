@@ -1,3 +1,4 @@
+import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading, Modal } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { useActionData, useRouteLoaderData } from "@remix-run/react";
@@ -79,10 +80,7 @@ export default function RapporteringFyllut() {
         <BodyLong spacing>
           Du kan korrigere rapporteringer intill X antall uker tilbake i tid. Endringer i
           rapportering vil føre til at NAV beregner periodene på nytt. Dette kan få konsekvenser for
-          utbetaling eller tibakekreving av penger.{" "}
-          <RemixLink as="Link" to="/rapportering/info">
-            Hva skal jeg rapportere til NAV?
-          </RemixLink>
+          utbetaling eller tibakekreving av penger.
         </BodyLong>
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
         <AktivitetModal
@@ -104,6 +102,16 @@ export default function RapporteringFyllut() {
           </RemixLink>
           <RemixLink as="Button" to="/rapportering/innsendt" variant={"secondary"}>
             Avbryt
+          </RemixLink>
+        </div>
+        <div className="hva-skal-jeg-rapportere-nav-link">
+          <RemixLink
+            as="Link"
+            to="/rapportering/info"
+            iconPosition="left"
+            icon={<InformationSquareIcon title="a11y-title" fontSize={20} />}
+          >
+            Hva skal jeg rapportere til NAV?
           </RemixLink>
         </div>
       </main>

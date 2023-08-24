@@ -1,3 +1,4 @@
+import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading, Modal } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { useActionData, useRouteLoaderData } from "@remix-run/react";
@@ -83,10 +84,7 @@ export default function RapporteringFyllut() {
 
         <BodyLong className="tekst-subtil" spacing>
           For tidligst mulig utbetaling av dagpenger må rapportering sendes senest siste søndag i
-          perioden.{" "}
-          <RemixLink as="Link" to="/rapportering/info">
-            Hva skal jeg rapportere til NAV?
-          </RemixLink>
+          perioden
         </BodyLong>
 
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
@@ -109,6 +107,16 @@ export default function RapporteringFyllut() {
           </RemixLink>
           <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
             Send rapportering
+          </RemixLink>
+        </div>
+        <div className="hva-skal-jeg-rapportere-nav-link">
+          <RemixLink
+            as="Link"
+            to="/rapportering/info"
+            iconPosition="left"
+            icon={<InformationSquareIcon title="a11y-title" fontSize={20} />}
+          >
+            Hva skal jeg rapportere til NAV?
           </RemixLink>
         </div>
       </main>
