@@ -1,5 +1,16 @@
 import { Heading } from "@navikt/ds-react";
+import { LoaderArgs, json, redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
+
+export async function loader({ params }: LoaderArgs) {
+  const periodeId = params.rapporteringsperiodeId || null;
+
+  if (!periodeId) {
+    return redirect("/rapportering");
+  }
+
+  return json({});
+}
 
 export default function RapporteringsPeriode() {
   return (
