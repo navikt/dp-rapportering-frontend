@@ -73,7 +73,7 @@ export default function RapporteringsLandingside() {
         )}
         <p>
           <RemixLink as="Link" to="/rapportering/innsendt">
-            Se og korriger tidligere rapporteringer
+            Se og korriger innsendte rapporteringer
           </RemixLink>
         </p>
       </main>

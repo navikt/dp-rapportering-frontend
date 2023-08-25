@@ -16,7 +16,7 @@ export default function RapporteringLes() {
           Din korrigering er nå lagret og sendt til NAV
         </Heading>
         <BodyLong spacing>
-          Perioden vil bli beregnet på nytt [så snart som mulig]. Du vil snart få informasjon fra
+          Perioden vil bli beregnet på nytt (så snart som mulig). Du vil snart få informasjon fra
           NAV om det har konsekvensre for ekstra utbetaling eller tilbakekreving av penger.
         </BodyLong>
         <div className="graa-bakgrunn">

@@ -1,9 +1,9 @@
+import { Alert } from "@navikt/ds-react";
 import classNames from "classnames";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import styles from "./AktivitetOppsummering.module.css";
-import { BodyLong } from "@navikt/ds-react";
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
 }
@@ -41,10 +41,10 @@ export function AktivitetOppsummering(props: IProps) {
   return (
     <>
       {flatMapAktiviteter.length < 1 && (
-        <BodyLong>
+        <Alert variant="info">
           Hvis du ikke har arbeidet, vært syk eller hatt fravær i perioden så trenger du ikke å
           fylle ut noe for å sende inn rapporteringen.
-        </BodyLong>
+        </Alert>
       )}
       {flatMapAktiviteter.length > 0 && (
         <div className={styles.aktivitetOppsummeringKontainer}>

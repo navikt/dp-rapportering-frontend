@@ -57,19 +57,19 @@ export default function RapporteringAlle() {
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
           <Heading level="1" size="xlarge">
-            Tidligere rapporteringer for dagpenger
+            Innsendte rapporteringer for dagpenger
           </Heading>
         </div>
       </div>
       <main className="rapportering-kontainer">
         <Heading size={"medium"} level={"2"}>
-          Oversikt over tidligere rapporteringer
+          Oversikt over innsendte rapporteringer
         </Heading>
         <BodyLong className="tekst-subtil" spacing>
-          Her kan du se alle tidligere rapportertinger du har sendt til NAV.
+          Her kan du se alle innsendte rapportertinger du har sendt til NAV.
         </BodyLong>
         {innsendtPerioder.length === 0 && (
-          <Alert variant="info">Du har ingen tidligere rapportertinger.</Alert>
+          <Alert variant="info">Du har ingen innsendte rapportertinger.</Alert>
         )}
         {innsendtPerioder.map((periode) => {
           return (
