@@ -13,19 +13,10 @@ interface IProps {
 export function PeriodeListe(props: IProps) {
   const { rapporteringsperiode, readonly, aapneModal } = props;
 
-  const periodenHarMinstEnAktivitet = !!rapporteringsperiode.dager.find(
-    (dag) => dag.aktiviteter.length > 0
-  );
-
   return (
-    <div
-      className={classNames(styles.dagKontainer, {
-        [styles.periodenHarMinstEnAktivitet]: periodenHarMinstEnAktivitet,
-      })}
-    >
+    <div className={styles.dagKontainer}>
       {rapporteringsperiode.dager.map((dag) => {
         const dagenHarAktivitet = dag.aktiviteter.length > 0;
-
         const ikkeRapporteringspliktig = !dagenHarAktivitet && dag.muligeAktiviteter.length === 0;
 
         const dagKnappStyle = {
