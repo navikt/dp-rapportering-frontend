@@ -21,7 +21,16 @@ export function Kalender(props: IProps) {
     readonly = false,
   } = props;
 
-  const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
+  const ukedager = [
+    { kort: "man", lang: "mandag" },
+    { kort: "tir", lang: "tirsdag" },
+    { kort: "ons", lang: "onsdag" },
+    { kort: "tor", lang: "torsdag" },
+    { kort: "fre", lang: "fredag" },
+    { kort: "lør", lang: "lørdag" },
+    { kort: "søn", lang: "søndag" },
+  ];
+
   const { fraOgMed, tilOgMed } = rapporteringsperiode;
 
   return (
@@ -40,26 +49,34 @@ export function Kalender(props: IProps) {
           <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
         )}
       </div>
-      <div
+      <table
         className={classNames(styles.kalender, {
           [styles.readonly]: readonly,
         })}
+        role="grid"
       >
-        <div className={styles.ukedagKontainer}>
-          {ukedager.map((ukedag, index) => {
-            return (
-              <div key={`${rapporteringsperiode.id}-${index}`} className={styles.ukedag}>
-                {ukedag}
-              </div>
-            );
-          })}
-        </div>
+        <thead>
+          <tr className={styles.ukedagKontainer}>
+            {ukedager.map((ukedag, index) => {
+              return (
+                <th
+                  scope="col"
+                  key={`${rapporteringsperiode.id}-${index}`}
+                  className={styles.ukedag}
+                >
+                  <span>{ukedag.kort}</span>
+                  <span className="navds-sr-only">{ukedag.lang}</span>
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
         <PeriodeListe
           readonly={readonly}
           rapporteringsperiode={rapporteringsperiode}
           aapneModal={aapneModal}
         />
-      </div>
+      </table>
     </>
   );
 }

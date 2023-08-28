@@ -65,7 +65,7 @@
 }
 
 .dato p {
-  margin-left: 3px;
+  margin-left: 2px;
 }
 
 .dato:hover {
@@ -190,6 +190,10 @@
     width: 60px;
     height: 60px;
     font-size: var(--a-font-size-large);
+  }
+
+  .dato p {
+    margin-left: 3px;
   }
 
   .datoMedAktivitet {

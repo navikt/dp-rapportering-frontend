@@ -14,7 +14,7 @@ export function PeriodeListe(props: IProps) {
   const { rapporteringsperiode, readonly, aapneModal } = props;
 
   return (
-    <div className={styles.dagKontainer}>
+    <tbody className={styles.dagKontainer}>
       {rapporteringsperiode.dager.map((dag) => {
         const dagenHarAktivitet = dag.aktiviteter.length > 0;
         const ikkeRapporteringspliktig = !dagenHarAktivitet && dag.muligeAktiviteter.length === 0;
@@ -76,6 +76,6 @@ export function PeriodeListe(props: IProps) {
           </div>
         );
       })}
-    </div>
+    </tbody>
   );
 }
