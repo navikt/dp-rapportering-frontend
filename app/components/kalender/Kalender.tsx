@@ -1,6 +1,7 @@
+import { Heading } from "@navikt/ds-react";
 import classNames from "classnames";
-import { PeriodeHeaderDetaljer } from "~/components/kalender/PeriodeHeaderDetaljer";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import styles from "./Kalender.module.css";
 import { PeriodeListe } from "./PeriodeListe";
 import { RedigeringsLenke } from "./RedigeringsLenke";
@@ -21,11 +22,20 @@ export function Kalender(props: IProps) {
   } = props;
 
   const ukedager = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
+  const { fraOgMed, tilOgMed } = rapporteringsperiode;
 
   return (
     <>
       <div className={styles.headerKontainer}>
-        <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
+        <div>
+          <Heading level="3" size="small" className={styles.header}>
+            {`Uke ${formaterPeriodeTilUkenummer(
+              rapporteringsperiode.fraOgMed,
+              rapporteringsperiode.tilOgMed
+            )}`}
+          </Heading>
+          <span className="tekst-subtil">{formaterPeriodeDato(fraOgMed, tilOgMed)}</span>
+        </div>
         {visRedigeringsAlternativer && (
           <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
         )}
