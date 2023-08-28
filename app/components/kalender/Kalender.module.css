@@ -8,18 +8,16 @@
   pointer-events: none;
 }
 
-.header {
-  display: grid;
+.headerKontainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .statusTag {
   display: flex;
   align-items: center;
   gap: var(--a-spacing-2);
-}
-
-.headerPeriodeDetaljer {
-  flex-direction: column;
 }
 
 .redigeringsAlternativer {
@@ -161,10 +159,6 @@
 }
 
 @media screen and (min-width: 768px) {
-  .headerKontainer {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .kalender {
     margin-left: calc(var(--a-spacing-6) * -1);
     width: calc(var(--a-spacing-12) + 100%);

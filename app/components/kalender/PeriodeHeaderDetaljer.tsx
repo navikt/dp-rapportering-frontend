@@ -11,11 +11,11 @@ export function PeriodeHeaderDetaljer({ rapporteringsperiode }: IProps) {
   const { fraOgMed, tilOgMed } = rapporteringsperiode;
 
   return (
-    <>
+    <div>
       <Heading level="3" size="small" className={styles.header}>
         {`Uke ${formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}`}
       </Heading>
       <span className="tekst-subtil">{formaterPeriodeDato(fraOgMed, tilOgMed)}</span>
-    </>
+    </div>
   );
 }

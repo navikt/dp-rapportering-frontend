@@ -25,14 +25,10 @@ export function Kalender(props: IProps) {
   return (
     <>
       <div className={styles.headerKontainer}>
-        <div className={styles.headerPeriodeDetaljer}>
-          <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
-        </div>
-        <div className={styles.redigeringsAlternativer}>
-          {visRedigeringsAlternativer && (
-            <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
-          )}
-        </div>
+        <PeriodeHeaderDetaljer rapporteringsperiode={rapporteringsperiode} />
+        {visRedigeringsAlternativer && (
+          <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
+        )}
       </div>
       <div
         className={classNames(styles.kalender, {
