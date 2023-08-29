@@ -76,7 +76,7 @@ export default function RapporteringAlle() {
             <div className="graa-bakgrunn" key={periode.id}>
               <Kalender
                 key={periode.id}
-                rapporteringsperiode={periode as IRapporteringsperiode}
+                rapporteringsperiode={periode}
                 aapneModal={() => {}}
                 visRedigeringsAlternativer={true}
                 readonly

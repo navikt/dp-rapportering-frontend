@@ -4,7 +4,7 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import styles from "./Kalender.module.css";
 import { RedigeringsLenke } from "./RedigeringsLenke";
-import { UkerListe } from "./UkerListeListe";
+import { Uke } from "./Uke";
 
 interface IProps {
   aapneModal: (dato: string) => void;
@@ -32,6 +32,9 @@ export function Kalender(props: IProps) {
   ];
 
   const { fraOgMed, tilOgMed } = rapporteringsperiode;
+
+  const forsteUke = [...rapporteringsperiode.dager].splice(0, 7);
+  const andreUke = [...rapporteringsperiode.dager].splice(7, 7);
 
   return (
     <>
@@ -71,11 +74,10 @@ export function Kalender(props: IProps) {
             })}
           </tr>
         </thead>
-        <UkerListe
-          readonly={readonly}
-          rapporteringsperiode={rapporteringsperiode}
-          aapneModal={aapneModal}
-        />
+        <tbody className={styles.ukerKontainer}>
+          <Uke rapporteringUke={forsteUke} readonly={readonly} aapneModal={aapneModal} />
+          <Uke rapporteringUke={andreUke} readonly={readonly} aapneModal={aapneModal} />
+        </tbody>
       </table>
     </>
   );
