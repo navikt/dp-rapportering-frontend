@@ -13,7 +13,7 @@ interface IProps {
   readonly?: boolean;
 }
 
-export function PeriodeListe(props: IProps) {
+export function UkerListe(props: IProps) {
   const { rapporteringsperiode, readonly, aapneModal } = props;
 
   const forsteUke = [...rapporteringsperiode.dager].splice(0, 7);
@@ -28,6 +28,20 @@ export function PeriodeListe(props: IProps) {
     }, 0);
 
     return <>{timer.toString().replace(/\./g, ",")}t</>;
+  }
+
+  function hentSkjermleserDatoTekst(dag: IRapporteringsperiodeDag) {
+    const locale = "no-NO";
+
+    let options: Intl.DateTimeFormatOptions = {
+      month: "long",
+      day: "2-digit",
+      weekday: "long",
+    };
+
+    const formattertDato = new Date(dag.dato).toLocaleDateString(locale, options);
+
+    return formattertDato;
   }
 
   return (
@@ -46,27 +60,32 @@ export function PeriodeListe(props: IProps) {
           return (
             <td key={dag.dagIndex} className={styles.datoKontainer}>
               {ikkeRapporteringspliktig && (
-                <div className={classNames(styles.dato, styles.ikkeRapporteringspliktig)}>
-                  <p>{format(new Date(dag.dato), "dd")}.</p>
-                </div>
+                <button
+                  className={classNames(styles.dato, styles.ikkeRapporteringspliktig)}
+                  disabled
+                >
+                  {`${format(new Date(dag.dato), "dd")}.`}
+                </button>
+              )}
+
+              {!ikkeRapporteringspliktig && readonly && (
+                <button
+                  className={classNames(styles.dato, dagKnappStyle)}
+                  onClick={() => aapneModal(dag.dato)}
+                  disabled
+                >
+                  {`${format(new Date(dag.dato), "dd")}.`}
+                </button>
               )}
 
               {!ikkeRapporteringspliktig && !readonly && (
                 <button
                   className={classNames(styles.dato, dagKnappStyle)}
                   onClick={() => aapneModal(dag.dato)}
+                  aria-label={hentSkjermleserDatoTekst(dag)}
                 >
-                  <p>{format(new Date(dag.dato), "dd")}.</p>
+                  {`${format(new Date(dag.dato), "dd")}.`}
                 </button>
-              )}
-
-              {!ikkeRapporteringspliktig && readonly && (
-                <div
-                  className={classNames(styles.dato, dagKnappStyle)}
-                  onClick={() => aapneModal(dag.dato)}
-                >
-                  <p>{format(new Date(dag.dato), "dd")}.</p>
-                </div>
               )}
 
               {dagenHarAktivitet && (
@@ -77,6 +96,7 @@ export function PeriodeListe(props: IProps) {
                     [styles.datoMedAktivitetFerie]:
                       dagenHarAktivitet && dag.aktiviteter[0].type === "Ferie",
                   })}
+                  aria-hidden="true"
                 >
                   {dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid") &&
                     hentAntallTimer(dag)}
@@ -103,7 +123,7 @@ export function PeriodeListe(props: IProps) {
             <td key={dag.dagIndex} className={styles.datoKontainer}>
               {ikkeRapporteringspliktig && (
                 <button className={classNames(styles.dato, styles.ikkeRapporteringspliktig)}>
-                  <p>{format(new Date(dag.dato), "dd")}.</p>
+                  {`${format(new Date(dag.dato), "dd")}.`}
                 </button>
               )}
 
@@ -112,7 +132,7 @@ export function PeriodeListe(props: IProps) {
                   className={classNames(styles.dato, dagKnappStyle)}
                   onClick={() => aapneModal(dag.dato)}
                 >
-                  {format(new Date(dag.dato), "dd")}.
+                  {`${format(new Date(dag.dato), "dd")}.`}
                 </button>
               )}
 
@@ -121,7 +141,7 @@ export function PeriodeListe(props: IProps) {
                   className={classNames(styles.dato, dagKnappStyle)}
                   onClick={() => aapneModal(dag.dato)}
                 >
-                  {format(new Date(dag.dato), "dd")}.
+                  {`${format(new Date(dag.dato), "dd")}.`}
                 </button>
               )}
 
@@ -133,6 +153,7 @@ export function PeriodeListe(props: IProps) {
                     [styles.datoMedAktivitetFerie]:
                       dagenHarAktivitet && dag.aktiviteter[0].type === "Ferie",
                   })}
+                  aria-hidden="true"
                 >
                   {dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid") &&
                     hentAntallTimer(dag)}

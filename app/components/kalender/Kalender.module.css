@@ -22,9 +22,8 @@
 }
 
 .ukerKontainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
+  display: grid;
+  gap: var(--a-spacing-10);
 }
 
 .ukeRadKontainer {
@@ -32,14 +31,15 @@
   grid-template-columns: repeat(7, 1fr);
   gap: var(--a-spacing-4);
   justify-items: center;
-  margin: var(--a-spacing-4) 0 var(--a-spacing-4);
 }
 
-.ukeRadKontainer {
+.ukedagKontainer {
   display: grid;
+  margin-top: var(--a-spacing-4);
+  gap: var(--a-spacing-4);
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--a-spacing-8) var(--a-spacing-4);
   justify-items: center;
+  margin-bottom: var(--a-spacing-2);
 }
 
 .ukedag {
@@ -63,10 +63,6 @@
   cursor: pointer;
   border: 0;
   z-index: 10;
-}
-
-.dato p {
-  margin-left: 2px;
 }
 
 .dato:hover {
@@ -190,11 +186,8 @@
   .dato {
     width: 60px;
     height: 60px;
+    padding-right: 2px;
     font-size: var(--a-font-size-large);
-  }
-
-  .dato p {
-    margin-left: 3px;
   }
 
   .datoMedAktivitet {
@@ -205,9 +198,5 @@
     font-size: var(--a-font-size-medium);
     width: 56px;
     height: 50px;
-  }
-
-  .ukeRadKontainer {
-    gap: var(--a-spacing-10) var(--a-spacing-4);
   }
 }

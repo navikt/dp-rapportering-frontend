@@ -3,8 +3,8 @@ import classNames from "classnames";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import styles from "./Kalender.module.css";
-import { PeriodeListe } from "./PeriodeListe";
 import { RedigeringsLenke } from "./RedigeringsLenke";
+import { UkerListe } from "./UkerListeListe";
 
 interface IProps {
   aapneModal: (dato: string) => void;
@@ -56,7 +56,7 @@ export function Kalender(props: IProps) {
         role="grid"
       >
         <thead aria-hidden="true">
-          <tr className={styles.ukeRadKontainer}>
+          <tr className={styles.ukedagKontainer}>
             {ukedager.map((ukedag, index) => {
               return (
                 <th
@@ -71,7 +71,7 @@ export function Kalender(props: IProps) {
             })}
           </tr>
         </thead>
-        <PeriodeListe
+        <UkerListe
           readonly={readonly}
           rapporteringsperiode={rapporteringsperiode}
           aapneModal={aapneModal}
