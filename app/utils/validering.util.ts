@@ -19,6 +19,7 @@ const aktivitetsvalideringArbeid = z.object({
       .positive({ message: "Du må skrive et tall mellom 0,5 og 24 timer" })
       .min(0.5, { message: "Du må skrive et tall mellom 0,5 og 24 timer" })
       .max(24, { message: "Du må skrive et tall mellom 0,5 og 24 timer" })
+      .step(0.5, { message: "Du kan bare føre hel eller halv time" })
   ),
 });
 
