@@ -16,7 +16,7 @@ export function RedigeringsLenke(props: IProps) {
       case "TilUtfylling":
         return { sti: "fyll-ut", tekst: "Fyll ut" };
       case "Godkjent":
-        return { sti: "avgodkjenn", tekst: "Avgodkjenn" };
+        return { sti: "avgodkjenn", tekst: "Korriger" };
       case "Innsendt":
         return { sti: "korriger", tekst: "Korriger" };
       default:
