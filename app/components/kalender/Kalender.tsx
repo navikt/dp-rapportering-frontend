@@ -55,8 +55,8 @@ export function Kalender(props: IProps) {
         })}
         role="grid"
       >
-        <thead>
-          <tr className={styles.ukedagKontainer}>
+        <thead aria-hidden="true">
+          <tr className={styles.ukeRadKontainer}>
             {ukedager.map((ukedag, index) => {
               return (
                 <th

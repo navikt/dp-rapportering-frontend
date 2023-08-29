@@ -12,12 +12,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-}
-
-.statusTag {
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
+  margin-bottom: var(--a-spacing-2);
 }
 
 .redigeringsAlternativer {
@@ -26,7 +21,13 @@
   justify-content: space-between;
 }
 
-.ukedagKontainer {
+.ukerKontainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+}
+
+.ukeRadKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: var(--a-spacing-4);
@@ -34,7 +35,7 @@
   margin: var(--a-spacing-4) 0 var(--a-spacing-4);
 }
 
-.dagKontainer {
+.ukeRadKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: var(--a-spacing-8) var(--a-spacing-4);
@@ -206,7 +207,7 @@
     height: 50px;
   }
 
-  .dagKontainer {
+  .ukeRadKontainer {
     gap: var(--a-spacing-10) var(--a-spacing-4);
   }
 }
