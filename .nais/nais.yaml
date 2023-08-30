@@ -60,7 +60,7 @@ spec:
     enabled: true
     sidecar:
       enabled: true
-      level: Level4
+      level: {{idporten.level}}
       autoLogin: true
   tokenx:
     enabled: true
