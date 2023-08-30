@@ -37,6 +37,8 @@ spec:
       memory: 512Mi
   ingresses:
     - {{ingress}}
+  secureLogs:
+    enabled: true
   env:
     - name: SELF_URL
       value: {{ingress}}
