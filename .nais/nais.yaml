@@ -22,9 +22,6 @@ spec:
     path: "{{base_path}}/api/internal/isready"
     initialDelay: 3
     timeout: 1
-  prometheus:
-    enabled: true
-    path: "{{base_path}}/api/internal/metrics"
   replicas:
     min: 2
     max: 2
@@ -37,6 +34,8 @@ spec:
       memory: 512Mi
   ingresses:
     - {{ingress}}
+  secureLogs:
+    enabled: true
   env:
     - name: SELF_URL
       value: {{ingress}}
@@ -61,7 +60,7 @@ spec:
     enabled: true
     sidecar:
       enabled: true
-      level: Level4
+      level: {{idporten.level}}
       autoLogin: true
   tokenx:
     enabled: true

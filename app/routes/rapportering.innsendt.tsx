@@ -72,6 +72,7 @@ export default function RapporteringAlle() {
           <Alert variant="info">Du har ingen innsendte rapportertinger.</Alert>
         )}
         {innsendtPerioder.map((periode) => {
+          const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
           return (
             <div className="graa-bakgrunn" key={periode.id}>
               <Kalender
@@ -81,6 +82,9 @@ export default function RapporteringAlle() {
                 visRedigeringsAlternativer={true}
                 readonly
               />
+              {flatMapAktiviteter.length < 1 && (
+                <p>Du har ikke jobbet, vært syk eller hatt fravær i denne perioden.</p>
+              )}
             </div>
           );
         })}
