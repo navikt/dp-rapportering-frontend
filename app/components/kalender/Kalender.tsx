@@ -46,7 +46,7 @@ export function Kalender(props: IProps) {
     <>
       <div className={styles.headerKontainer}>
         <div>
-          <p className={styles.header}>
+          <p className={styles.header} aria-hidden="true">
             {periodeUkenummerTekst}
             <span className="tekst-subtil">{periodeFomTomDatoTekst}</span>
           </p>

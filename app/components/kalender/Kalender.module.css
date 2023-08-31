@@ -12,13 +12,25 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: var(--a-spacing-2);
 }
 
 .redigeringsAlternativer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  font-weight: var(--a-font-weight-bold);
+  margin: 0;
+}
+
+.header span {
+  color: var(--a-text-subtle);
+  font-size: var(--a-font-size-medium);
+  font-weight: var(--a-font-weight-regular);
 }
 
 .ukerKontainer {
