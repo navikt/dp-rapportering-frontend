@@ -11,21 +11,8 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       {
         dagIndex: 0,
         dato: "2023-05-01",
-        muligeAktiviteter: ["Arbeid", "Syk"],
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
-            type: "Arbeid",
-            timer: "PT5H",
-            dato: "2023-05-01",
-          },
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
-            type: "Arbeid",
-            timer: "PT5H",
-            dato: "2023-05-01",
-          },
-        ],
+        muligeAktiviteter: [],
+        aktiviteter: [],
       },
       {
         dagIndex: 1,

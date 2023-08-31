@@ -1,4 +1,3 @@
-import { Heading } from "@navikt/ds-react";
 import classNames from "classnames";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
@@ -36,17 +35,22 @@ export function Kalender(props: IProps) {
   const forsteUke = [...rapporteringsperiode.dager].splice(0, 7);
   const andreUke = [...rapporteringsperiode.dager].splice(7, 7);
 
+  const periodeUkenummerTekst = `Uke ${formaterPeriodeTilUkenummer(
+    rapporteringsperiode.fraOgMed,
+    rapporteringsperiode.tilOgMed
+  )}`;
+
+  const periodeFomTomDatoTekst = formaterPeriodeDato(fraOgMed, tilOgMed);
+
   return (
     <>
       <div className={styles.headerKontainer}>
         <div>
-          <Heading level="3" size="small" className={styles.header}>
-            {`Uke ${formaterPeriodeTilUkenummer(
-              rapporteringsperiode.fraOgMed,
-              rapporteringsperiode.tilOgMed
-            )}`}
-          </Heading>
-          <span className="tekst-subtil">{formaterPeriodeDato(fraOgMed, tilOgMed)}</span>
+          <p className={styles.header}>
+            {periodeUkenummerTekst}
+            <span className="tekst-subtil">{periodeFomTomDatoTekst}</span>
+          </p>
+          <span className="navds-sr-only">{`${periodeUkenummerTekst}, ${periodeFomTomDatoTekst}`}</span>
         </div>
         {visRedigeringsAlternativer && (
           <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />

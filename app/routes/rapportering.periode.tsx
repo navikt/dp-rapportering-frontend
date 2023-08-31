@@ -1,5 +1,5 @@
 import { Heading } from "@navikt/ds-react";
-import { LoaderArgs, json, redirect } from "@remix-run/node";
+import { type LoaderArgs, json, redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 
 export async function loader({ params }: LoaderArgs) {

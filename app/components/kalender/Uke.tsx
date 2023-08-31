@@ -34,9 +34,9 @@ export function Uke(props: IProps) {
     const locale = "no-NO";
 
     let options: Intl.DateTimeFormatOptions = {
-      month: "long",
       day: "2-digit",
       weekday: "long",
+      month: "long",
     };
 
     const formattertDato = new Date(dag.dato).toLocaleDateString(locale, options);

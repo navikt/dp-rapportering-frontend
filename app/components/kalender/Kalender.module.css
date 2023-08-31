@@ -103,6 +103,11 @@
 
 .ikkeRapporteringspliktig {
   background-color: transparent;
+  cursor: not-allowed;
+}
+
+.ikkeRapporteringspliktig:hover {
+  background-color: transparent;
 }
 
 .datoMedAktivitetSykdom {
@@ -165,10 +170,6 @@
   .datoKontainer {
     display: flex;
     align-items: center;
-  }
-
-  .header {
-    font-size: var(--a-font-size-heading-medium);
   }
 
   .redigeringsAlternativer {
