@@ -62,9 +62,7 @@ export default function RapporteringsLandingside() {
               {formaterPeriodeTilUkenummer(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed)} (
               {formaterPeriodeDato(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed)})
             </span>
-            <br />
-            <br />
-            <div>
+            <div className="my-4">
               <RemixLink as="Button" to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}>
                 Rapporter for perioden
               </RemixLink>
