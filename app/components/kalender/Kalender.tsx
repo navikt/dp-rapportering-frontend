@@ -50,7 +50,7 @@ export function Kalender(props: IProps) {
             {periodeUkenummerTekst}
             <span className="tekst-subtil">{periodeFomTomDatoTekst}</span>
           </p>
-          <span className="navds-sr-only">{`${periodeUkenummerTekst}, ${periodeFomTomDatoTekst}`}</span>
+          <span className="navds-sr-only">{`${periodeUkenummerTekst} (${periodeFomTomDatoTekst})`}</span>
         </div>
         {visRedigeringsAlternativer && (
           <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
