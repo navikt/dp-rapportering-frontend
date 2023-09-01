@@ -1,7 +1,10 @@
 import { BodyLong, Heading } from "@navikt/ds-react";
 import { useRouteLoaderData } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
+import { useScrollIntoView } from "~/hooks/useScrollIntoView";
+import { useSetFocus } from "~/hooks/useSetFocus";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function RapporteringLes() {
@@ -9,10 +12,26 @@ export default function RapporteringLes() {
     "routes/rapportering.korriger.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
 
+  const sidelastFokusRef = useRef(null);
+  const { setFocus } = useSetFocus();
+  const { scrollIntoView } = useScrollIntoView();
+
+  useEffect(() => {
+    scrollIntoView(sidelastFokusRef);
+    setFocus(sidelastFokusRef);
+  }, []);
+
   return (
     <>
       <main className="rapportering-kontainer">
-        <Heading size={"medium"} level={"2"} spacing={true}>
+        <Heading
+          ref={sidelastFokusRef}
+          tabIndex={-1}
+          className="vo-focus"
+          size={"medium"}
+          level={"2"}
+          spacing={true}
+        >
           Din korrigering er nå lagret og sendt til NAV
         </Heading>
         <BodyLong spacing>

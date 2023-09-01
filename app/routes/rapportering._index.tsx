@@ -9,6 +9,9 @@ import {
   type IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { useEffect, useRef } from "react";
+import { useSetFocus } from "~/hooks/useSetFocus";
+import { useScrollIntoView } from "~/hooks/useScrollIntoView";
 
 interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
@@ -33,14 +36,28 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function RapporteringsLandingside() {
   const { gjeldendePeriode } = useLoaderData<typeof loader>() as IRapporteringIndexLoader;
-
   lagBrodsmulesti();
+
+  const sidelastFokusRef = useRef(null);
+  const { setFocus } = useSetFocus();
+  const { scrollIntoView } = useScrollIntoView();
+
+  useEffect(() => {
+    scrollIntoView(sidelastFokusRef);
+    setFocus(sidelastFokusRef);
+  }, []);
 
   return (
     <>
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
-          <Heading level="1" size="xlarge">
+          <Heading
+            ref={sidelastFokusRef}
+            tabIndex={-1}
+            level="1"
+            size="xlarge"
+            className="vo-focus"
+          >
             Dine dagpenger
           </Heading>
         </div>

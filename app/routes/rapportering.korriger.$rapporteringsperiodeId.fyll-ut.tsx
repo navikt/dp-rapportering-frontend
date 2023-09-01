@@ -2,12 +2,14 @@ import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { useActionData, useRouteLoaderData } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
+import { useScrollIntoView } from "~/hooks/useScrollIntoView";
+import { useSetFocus } from "~/hooks/useSetFocus";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
@@ -39,6 +41,15 @@ export default function RapporteringFyllut() {
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
 
+  const sidelastFokusRef = useRef(null);
+  const { setFocus } = useSetFocus();
+  const { scrollIntoView } = useScrollIntoView();
+
+  useEffect(() => {
+    scrollIntoView(sidelastFokusRef);
+    setFocus(sidelastFokusRef);
+  }, []);
+
   useEffect(() => {
     if (actionData?.lagret) {
       lukkModal();
@@ -61,7 +72,13 @@ export default function RapporteringFyllut() {
   return (
     <>
       <main className="rapportering-kontainer">
-        <Heading size={"medium"} level={"2"}>
+        <Heading
+          size={"medium"}
+          level={"2"}
+          ref={sidelastFokusRef}
+          tabIndex={-1}
+          className="vo-focus"
+        >
           Korrigering
         </Heading>
         <BodyLong spacing>

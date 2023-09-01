@@ -1,14 +1,26 @@
 import { BodyLong, Heading } from "@navikt/ds-react";
 import { useRouteLoaderData } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
+import { useScrollIntoView } from "~/hooks/useScrollIntoView";
+import { useSetFocus } from "~/hooks/useSetFocus";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
+
+  const sidelastFokusRef = useRef(null);
+  const { setFocus } = useSetFocus();
+  const { scrollIntoView } = useScrollIntoView();
+
+  useEffect(() => {
+    scrollIntoView(sidelastFokusRef);
+    setFocus(sidelastFokusRef);
+  }, []);
 
   const tekstForInnsending =
     "Du har nå sendt inn rapportering for perioden. Når perioden er over så vil NAV beregne sum og utbetale dagpenger.";
@@ -17,7 +29,14 @@ export default function RapporteringLes() {
 
   return (
     <main className="rapportering-kontainer">
-      <Heading size={"medium"} level={"2"} spacing={true}>
+      <Heading
+        ref={sidelastFokusRef}
+        className="vo-focus"
+        tabIndex={-1}
+        size={"medium"}
+        level={"2"}
+        spacing={true}
+      >
         Tusen takk!
       </Heading>
       <BodyLong spacing>

@@ -1,10 +1,28 @@
 import { Accordion, BodyLong, Heading, Link, List } from "@navikt/ds-react";
+import { useEffect, useRef } from "react";
+import { useScrollIntoView } from "~/hooks/useScrollIntoView";
+import { useSetFocus } from "~/hooks/useSetFocus";
 
 export default function Info() {
+  const sidelastFokusRef = useRef(null);
+  const { setFocus } = useSetFocus();
+  const { scrollIntoView } = useScrollIntoView();
+
+  useEffect(() => {
+    scrollIntoView(sidelastFokusRef);
+    setFocus(sidelastFokusRef);
+  }, []);
+
   return (
     <>
       <main className="rapportering-kontainer">
-        <Heading size={"medium"} level={"2"}>
+        <Heading
+          ref={sidelastFokusRef}
+          tabIndex={-1}
+          size={"medium"}
+          level={"2"}
+          className="vo-focus"
+        >
           Hva skal jeg rapportere til NAV?
         </Heading>
         <BodyLong spacing>
