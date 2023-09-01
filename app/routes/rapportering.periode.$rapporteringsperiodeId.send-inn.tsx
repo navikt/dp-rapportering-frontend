@@ -49,7 +49,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
           level="2"
           size="medium"
           spacing
-          className="vo-focus"
+          className="VO-focus"
         >
           Ønsker du å sende rapporteringen til NAV?
         </Heading>

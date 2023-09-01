@@ -21,7 +21,7 @@ export default function Info() {
           tabIndex={-1}
           size={"medium"}
           level={"2"}
-          className="vo-focus"
+          className="VO-focus"
         >
           Hva skal jeg rapportere til NAV?
         </Heading>
