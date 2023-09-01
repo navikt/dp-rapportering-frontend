@@ -47,6 +47,18 @@ export default function RapporteringsLandingside() {
     setFocus(sidelastFokusRef);
   }, []);
 
+  let invaerendePeriodeTekst;
+
+  if (gjeldendePeriode) {
+    const ukenummer = formaterPeriodeTilUkenummer(
+      gjeldendePeriode.fraOgMed,
+      gjeldendePeriode.tilOgMed
+    );
+    const dato = formaterPeriodeDato(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed);
+
+    invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
+  }
+
   return (
     <>
       <div className="rapportering-header">
@@ -73,18 +85,16 @@ export default function RapporteringsLandingside() {
         </Heading>
         {!gjeldendePeriode && <>Du har ingen perioder å rapportere</>}
         {gjeldendePeriode && (
-          <>
-            <span>
-              Uke{" "}
-              {formaterPeriodeTilUkenummer(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed)} (
-              {formaterPeriodeDato(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed)})
-            </span>
-            <div className="my-4">
-              <RemixLink as="Button" to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}>
-                Rapporter for perioden
-              </RemixLink>
-            </div>
-          </>
+          <div>
+            <p className="m-0">{invaerendePeriodeTekst}</p>
+            <RemixLink
+              as="Button"
+              to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}
+              className="my-4"
+            >
+              Rapporter for perioden
+            </RemixLink>
+          </div>
         )}
         <p>
           <RemixLink as="Link" to="/rapportering/innsendt">
