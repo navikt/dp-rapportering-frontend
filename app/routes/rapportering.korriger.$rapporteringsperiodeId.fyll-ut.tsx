@@ -77,7 +77,7 @@ export default function RapporteringFyllut() {
           level={"2"}
           ref={sidelastFokusRef}
           tabIndex={-1}
-          className="VO-focus"
+          className="VO-fokus"
         >
           Korrigering
         </Heading>

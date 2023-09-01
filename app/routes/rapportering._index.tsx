@@ -56,7 +56,7 @@ export default function RapporteringsLandingside() {
             tabIndex={-1}
             level="1"
             size="xlarge"
-            className="VO-focus"
+            className="VO-fokus"
           >
             Dine dagpenger
           </Heading>

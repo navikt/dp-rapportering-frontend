@@ -28,7 +28,7 @@ export default function Info() {
         </div>
       </div>
       <main className="rapportering-kontainer">
-        <Heading ref={sidelastFokusRef} tabIndex={-1} className="VO-focus" size="medium" level="2">
+        <Heading ref={sidelastFokusRef} tabIndex={-1} className="VO-fokus" size="medium" level="2">
           Hva skal jeg rapportere til NAV?
         </Heading>
         <BodyLong spacing>

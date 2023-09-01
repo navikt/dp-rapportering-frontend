@@ -31,7 +31,7 @@ export default function RapporteringLes() {
     <main className="rapportering-kontainer">
       <Heading
         ref={sidelastFokusRef}
-        className="VO-focus"
+        className="VO-fokus"
         tabIndex={-1}
         size={"medium"}
         level={"2"}

@@ -71,7 +71,7 @@ export default function RapporteringAlle() {
           <Heading
             ref={sidelastFokusRef}
             tabIndex={-1}
-            className="VO-focus"
+            className="VO-fokus"
             level="1"
             size="xlarge"
           >
