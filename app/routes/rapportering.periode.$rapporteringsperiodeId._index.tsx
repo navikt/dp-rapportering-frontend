@@ -1,6 +1,6 @@
 import { useNavigate, useRouteLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { useScrollTilSeksjon } from "~/hooks/useScrollTilSeksjon";
+import { useSkrollTilSeksjon } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
@@ -12,12 +12,12 @@ export default function Rapportering() {
   const navigate = useNavigate();
 
   const sidelastFokusRef = useRef(null);
-  const { setFocus } = useSetFokus();
-  const { scrollIntoView } = useScrollTilSeksjon();
+  const { setFokus } = useSetFokus();
+  const { scrollTilSeksjon } = useSkrollTilSeksjon();
 
   useEffect(() => {
-    scrollIntoView(sidelastFokusRef);
-    setFocus(sidelastFokusRef);
+    scrollTilSeksjon(sidelastFokusRef);
+    setFokus(sidelastFokusRef);
   }, []);
 
   useEffect(() => {

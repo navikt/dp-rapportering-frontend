@@ -3,7 +3,7 @@ import { useRouteLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollTilSeksjon } from "~/hooks/useScrollTilSeksjon";
+import { useSkrollTilSeksjon } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
@@ -13,12 +13,12 @@ export default function RapporteringLes() {
   ) as IRapporteringsPeriodeLoader;
 
   const sidelastFokusRef = useRef(null);
-  const { setFocus } = useSetFokus();
-  const { scrollIntoView } = useScrollTilSeksjon();
+  const { setFokus } = useSetFokus();
+  const { scrollTilSeksjon } = useSkrollTilSeksjon();
 
   useEffect(() => {
-    scrollIntoView(sidelastFokusRef);
-    setFocus(sidelastFokusRef);
+    scrollTilSeksjon(sidelastFokusRef);
+    setFokus(sidelastFokusRef);
   }, []);
 
   return (

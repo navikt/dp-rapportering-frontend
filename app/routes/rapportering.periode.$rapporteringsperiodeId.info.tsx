@@ -1,16 +1,16 @@
 import { Accordion, BodyLong, Heading, Link, List } from "@navikt/ds-react";
 import { useEffect, useRef } from "react";
-import { useScrollTilSeksjon } from "~/hooks/useScrollTilSeksjon";
+import { useSkrollTilSeksjon } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 
 export default function Info() {
   const sidelastFokusRef = useRef(null);
-  const { setFocus } = useSetFokus();
-  const { scrollIntoView } = useScrollTilSeksjon();
+  const { setFokus } = useSetFokus();
+  const { scrollTilSeksjon } = useSkrollTilSeksjon();
 
   useEffect(() => {
-    scrollIntoView(sidelastFokusRef);
-    setFocus(sidelastFokusRef);
+    scrollTilSeksjon(sidelastFokusRef);
+    setFokus(sidelastFokusRef);
   }, []);
 
   return (
