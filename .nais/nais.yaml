@@ -47,6 +47,8 @@ spec:
       value: {{dekorator.url}}
     - name: DEKORATOR_ENV
       value: {{dekorator.env}}
+    - name: COMMIT
+      value: {{commit}}
   accessPolicy:
     outbound:
       external:
