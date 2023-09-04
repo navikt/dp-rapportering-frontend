@@ -8,8 +8,8 @@ import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollIntoView } from "~/hooks/useScrollIntoView";
-import { useSetFocus } from "~/hooks/useSetFocus";
+import { useScrollTilSeksjon } from "~/hooks/useScrollTilSeksjon";
+import { useSetFokus } from "~/hooks/useSetFokus";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
@@ -42,8 +42,8 @@ export default function RapporteringFyllut() {
   const [modalAapen, setModalAapen] = useState(false);
 
   const sidelastFokusRef = useRef(null);
-  const { setFocus } = useSetFocus();
-  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFokus();
+  const { scrollIntoView } = useScrollTilSeksjon();
 
   useEffect(() => {
     scrollIntoView(sidelastFokusRef);

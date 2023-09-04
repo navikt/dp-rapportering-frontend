@@ -10,8 +10,8 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useEffect, useRef } from "react";
-import { useSetFocus } from "~/hooks/useSetFocus";
-import { useScrollIntoView } from "~/hooks/useScrollIntoView";
+import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollTilSeksjon } from "~/hooks/useScrollTilSeksjon";
 
 interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
@@ -39,8 +39,8 @@ export default function RapporteringsLandingside() {
   lagBrodsmulesti();
 
   const sidelastFokusRef = useRef(null);
-  const { setFocus } = useSetFocus();
-  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFokus();
+  const { scrollIntoView } = useScrollTilSeksjon();
 
   useEffect(() => {
     scrollIntoView(sidelastFokusRef);

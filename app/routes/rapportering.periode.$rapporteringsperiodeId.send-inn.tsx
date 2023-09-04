@@ -6,8 +6,8 @@ import { useEffect, useRef } from "react";
 import { logger } from "server/logger";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
-import { useScrollIntoView } from "~/hooks/useScrollIntoView";
-import { useSetFocus } from "~/hooks/useSetFocus";
+import { useScrollTilSeksjon } from "~/hooks/useScrollTilSeksjon";
+import { useSetFokus } from "~/hooks/useSetFokus";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 
@@ -32,8 +32,8 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
   const { rapporteringsperiodeId } = useParams();
 
   const sidelastFokusRef = useRef(null);
-  const { setFocus } = useSetFocus();
-  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFokus();
+  const { scrollIntoView } = useScrollTilSeksjon();
 
   useEffect(() => {
     scrollIntoView(sidelastFokusRef);

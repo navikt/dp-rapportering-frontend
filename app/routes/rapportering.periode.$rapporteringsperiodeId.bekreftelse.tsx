@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollIntoView } from "~/hooks/useScrollIntoView";
-import { useSetFocus } from "~/hooks/useSetFocus";
+import { useScrollTilSeksjon } from "~/hooks/useScrollTilSeksjon";
+import { useSetFokus } from "~/hooks/useSetFokus";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function RapporteringLes() {
@@ -14,8 +14,8 @@ export default function RapporteringLes() {
   ) as IRapporteringsPeriodeLoader;
 
   const sidelastFokusRef = useRef(null);
-  const { setFocus } = useSetFocus();
-  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFokus();
+  const { scrollIntoView } = useScrollTilSeksjon();
 
   useEffect(() => {
     scrollIntoView(sidelastFokusRef);

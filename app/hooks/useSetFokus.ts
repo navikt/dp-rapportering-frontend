@@ -1,6 +1,6 @@
 import { RefObject } from "react";
 
-export function useSetFocus() {
+export function useSetFokus() {
   function setFocus(ref: RefObject<HTMLElement>, previewScroll = true) {
     ref.current?.focus({ preventScroll: previewScroll });
   }
