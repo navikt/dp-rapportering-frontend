@@ -4,7 +4,7 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useSkrollTilSeksjon } from "~/hooks/useSkrollTilSeksjon";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
@@ -57,10 +57,10 @@ export default function RapporteringAlle() {
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
-  const { scrollTilSeksjon } = useSkrollTilSeksjon();
+  const { scrollToView } = useScrollToView();
 
   useEffect(() => {
-    scrollTilSeksjon(sidelastFokusRef);
+    scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
   }, []);
 

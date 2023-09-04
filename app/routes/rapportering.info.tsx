@@ -2,7 +2,7 @@ import { Accordion, BodyLong, Heading, Link, List } from "@navikt/ds-react";
 import { useNavigate } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
-import { useSkrollTilSeksjon } from "~/hooks/useSkrollTilSeksjon";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 
 export default function Info() {
@@ -11,10 +11,10 @@ export default function Info() {
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
-  const { scrollTilSeksjon } = useSkrollTilSeksjon();
+  const { scrollToView } = useScrollToView();
 
   useEffect(() => {
-    scrollTilSeksjon(sidelastFokusRef);
+    scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
   }, []);
 
