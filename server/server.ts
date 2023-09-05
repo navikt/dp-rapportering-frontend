@@ -30,6 +30,12 @@ const startServer = async () => {
     (_, res: Response) => res.sendStatus(200)
   );
 
+  const image = "1"; // getEnv("NAIS_APP_IMAGE");
+  const commit = "2"; // getEnv("COMMIT");
+  app.get([`${basePath}/api/internal/info`], (_, res: Response) =>
+    res.json({ image: image, commit: commit })
+  );
+
   app.use(logRequests);
 
   app.all(`${basePath}(/*)?`, handleRequestWithRemix);
