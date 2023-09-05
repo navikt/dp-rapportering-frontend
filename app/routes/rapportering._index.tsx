@@ -1,4 +1,4 @@
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -68,7 +68,7 @@ export default function RapporteringsLandingside() {
             tabIndex={-1}
             level="1"
             size="xlarge"
-            className="VO-fokus"
+            className="vo-fokus"
           >
             Dine dagpenger
           </Heading>
@@ -86,7 +86,7 @@ export default function RapporteringsLandingside() {
         {!gjeldendePeriode && <>Du har ingen perioder å rapportere</>}
         {gjeldendePeriode && (
           <div>
-            <p className="m-0">{invaerendePeriodeTekst}</p>
+            <BodyShort>{invaerendePeriodeTekst}</BodyShort>
             <RemixLink
               as="Button"
               to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}

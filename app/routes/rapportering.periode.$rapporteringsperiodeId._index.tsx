@@ -38,7 +38,7 @@ export default function Rapportering() {
 
   return (
     <main className="rapportering-kontainer">
-      <p ref={sidelastFokusRef} tabIndex={-1} className="VO-fokus">
+      <p ref={sidelastFokusRef} tabIndex={-1} className="vo-fokus">
         Laster rapporteringsperiode
       </p>
     </main>

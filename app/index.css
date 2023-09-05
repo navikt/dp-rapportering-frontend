@@ -14,10 +14,6 @@ body {
   margin: 0 auto;
 }
 
-.m-0 {
-  margin: 0;
-}
-
 .my-12 {
   margin: var(--a-spacing-12) 0;
 }

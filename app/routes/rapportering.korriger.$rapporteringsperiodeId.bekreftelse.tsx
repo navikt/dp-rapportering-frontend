@@ -27,7 +27,7 @@ export default function RapporteringLes() {
         <Heading
           ref={sidelastFokusRef}
           tabIndex={-1}
-          className="VO-fokus"
+          className="vo-fokus"
           size={"medium"}
           level={"2"}
           spacing={true}

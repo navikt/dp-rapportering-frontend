@@ -78,7 +78,7 @@ export default function RapporteringFyllut() {
           size={"large"}
           level={"2"}
           spacing
-          className="VO-fokus"
+          className="vo-fokus"
         >
           Fyll ut rapportering
         </Heading>
