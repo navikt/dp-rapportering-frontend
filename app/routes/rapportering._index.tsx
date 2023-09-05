@@ -1,4 +1,4 @@
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -9,6 +9,9 @@ import {
   type IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { useEffect, useRef } from "react";
+import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 
 interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
@@ -33,14 +36,40 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function RapporteringsLandingside() {
   const { gjeldendePeriode } = useLoaderData<typeof loader>() as IRapporteringIndexLoader;
-
   lagBrodsmulesti();
+
+  const sidelastFokusRef = useRef(null);
+  const { setFokus } = useSetFokus();
+  const { scrollToView } = useScrollToView();
+
+  useEffect(() => {
+    scrollToView(sidelastFokusRef);
+    setFokus(sidelastFokusRef);
+  }, []);
+
+  let invaerendePeriodeTekst;
+
+  if (gjeldendePeriode) {
+    const ukenummer = formaterPeriodeTilUkenummer(
+      gjeldendePeriode.fraOgMed,
+      gjeldendePeriode.tilOgMed
+    );
+    const dato = formaterPeriodeDato(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed);
+
+    invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
+  }
 
   return (
     <>
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
-          <Heading level="1" size="xlarge">
+          <Heading
+            ref={sidelastFokusRef}
+            tabIndex={-1}
+            level="1"
+            size="xlarge"
+            className="vo-fokus"
+          >
             Dine dagpenger
           </Heading>
         </div>
@@ -56,18 +85,16 @@ export default function RapporteringsLandingside() {
         </Heading>
         {!gjeldendePeriode && <>Du har ingen perioder å rapportere</>}
         {gjeldendePeriode && (
-          <>
-            <span>
-              Uke{" "}
-              {formaterPeriodeTilUkenummer(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed)} (
-              {formaterPeriodeDato(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed)})
-            </span>
-            <div className="my-4">
-              <RemixLink as="Button" to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}>
-                Rapporter for perioden
-              </RemixLink>
-            </div>
-          </>
+          <div>
+            <BodyShort>{invaerendePeriodeTekst}</BodyShort>
+            <RemixLink
+              as="Button"
+              to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}
+              className="my-4"
+            >
+              Rapporter for perioden
+            </RemixLink>
+          </div>
         )}
         <p>
           <RemixLink as="Link" to="/rapportering/innsendt">

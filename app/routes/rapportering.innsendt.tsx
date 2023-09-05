@@ -2,7 +2,10 @@ import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { Kalender } from "~/components/kalender/Kalender";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useSetFokus } from "~/hooks/useSetFokus";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
@@ -52,11 +55,26 @@ export default function RapporteringAlle() {
     { title: "Innsendte rapporteringsperioder", url: hentBrodsmuleUrl("/innsendt") },
   ]);
 
+  const sidelastFokusRef = useRef(null);
+  const { setFokus } = useSetFokus();
+  const { scrollToView } = useScrollToView();
+
+  useEffect(() => {
+    scrollToView(sidelastFokusRef);
+    setFokus(sidelastFokusRef);
+  }, []);
+
   return (
     <>
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
-          <Heading level="1" size="xlarge">
+          <Heading
+            ref={sidelastFokusRef}
+            tabIndex={-1}
+            className="vo-fokus"
+            level="1"
+            size="xlarge"
+          >
             Innsendte rapporteringer for dagpenger
           </Heading>
         </div>
@@ -77,7 +95,7 @@ export default function RapporteringAlle() {
             <div className="graa-bakgrunn" key={periode.id}>
               <Kalender
                 key={periode.id}
-                rapporteringsperiode={periode as IRapporteringsperiode}
+                rapporteringsperiode={periode}
                 aapneModal={() => {}}
                 visRedigeringsAlternativer={true}
                 readonly
