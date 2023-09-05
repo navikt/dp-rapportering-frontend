@@ -22,6 +22,7 @@ interface IProps extends LinkProps {
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
   disabled?: boolean;
+  className?: string;
 }
 
 export const RemixLink = forwardRef(RemixLinkComponent);
@@ -43,6 +44,7 @@ function RemixLinkComponent(
     iconPosition = "left",
     icon,
     disabled = false,
+    className,
   } = props;
   const href = useHref(to);
   const handleClick = useLinkClickHandler(to, {
@@ -74,6 +76,7 @@ function RemixLinkComponent(
         iconPosition={iconPosition}
         as="a"
         disabled={disabled}
+        className={className}
       >
         {children}
       </Button>
@@ -90,6 +93,7 @@ function RemixLinkComponent(
         }
       }}
       ref={ref}
+      className={className}
     >
       {icon && iconPosition === "left" && icon}
       {children}

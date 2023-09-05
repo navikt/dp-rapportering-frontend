@@ -1,5 +1,7 @@
 import { useNavigate, useRouteLoaderData } from "@remix-run/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useSetFokus } from "~/hooks/useSetFokus";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function Rapportering() {
@@ -8,6 +10,15 @@ export default function Rapportering() {
   ) as IRapporteringsPeriodeLoader;
 
   const navigate = useNavigate();
+
+  const sidelastFokusRef = useRef(null);
+  const { setFokus } = useSetFokus();
+  const { scrollToView } = useScrollToView();
+
+  useEffect(() => {
+    scrollToView(sidelastFokusRef);
+    setFokus(sidelastFokusRef);
+  }, []);
 
   useEffect(() => {
     if (periode) {
@@ -27,7 +38,9 @@ export default function Rapportering() {
 
   return (
     <main className="rapportering-kontainer">
-      <p>Laster rapporteringsperiode</p>
+      <p ref={sidelastFokusRef} tabIndex={-1} className="vo-fokus">
+        Laster rapporteringsperiode
+      </p>
     </main>
   );
 }

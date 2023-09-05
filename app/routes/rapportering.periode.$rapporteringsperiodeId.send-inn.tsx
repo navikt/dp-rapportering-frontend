@@ -2,9 +2,12 @@ import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useParams } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { logger } from "server/logger";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useSetFokus } from "~/hooks/useSetFokus";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 
@@ -28,10 +31,26 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
   const actionData = useActionData<typeof action>();
   const { rapporteringsperiodeId } = useParams();
 
+  const sidelastFokusRef = useRef(null);
+  const { setFokus } = useSetFokus();
+  const { scrollToView } = useScrollToView();
+
+  useEffect(() => {
+    scrollToView(sidelastFokusRef);
+    setFokus(sidelastFokusRef);
+  }, []);
+
   return (
     <>
       <main className="rapportering-kontainer">
-        <Heading level="2" size="medium" spacing>
+        <Heading
+          ref={sidelastFokusRef}
+          tabIndex={-1}
+          level="2"
+          size="medium"
+          spacing
+          className="vo-fokus"
+        >
           Ønsker du å sende rapporteringen til NAV?
         </Heading>
 

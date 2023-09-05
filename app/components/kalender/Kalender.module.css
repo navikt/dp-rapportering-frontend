@@ -14,31 +14,44 @@
   align-items: flex-end;
 }
 
-.statusTag {
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-}
-
 .redigeringsAlternativer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.ukedagKontainer {
+.header {
+  display: flex;
+  flex-direction: column;
+  font-weight: var(--a-font-weight-bold);
+  margin: 0;
+}
+
+.header span {
+  color: var(--a-text-subtle);
+  font-size: var(--a-font-size-medium);
+  font-weight: var(--a-font-weight-regular);
+}
+
+.ukerKontainer {
+  display: grid;
+  gap: var(--a-spacing-10);
+}
+
+.ukeRadKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: var(--a-spacing-4);
   justify-items: center;
-  margin: var(--a-spacing-4) 0 var(--a-spacing-4);
 }
 
-.dagKontainer {
+.ukedagKontainer {
   display: grid;
+  margin-top: var(--a-spacing-4);
+  gap: var(--a-spacing-4);
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--a-spacing-8) var(--a-spacing-4);
   justify-items: center;
+  margin-bottom: var(--a-spacing-2);
 }
 
 .ukedag {
@@ -62,10 +75,6 @@
   cursor: pointer;
   border: 0;
   z-index: 10;
-}
-
-.dato p {
-  margin-left: 3px;
 }
 
 .dato:hover {
@@ -106,9 +115,11 @@
 
 .ikkeRapporteringspliktig {
   background-color: transparent;
-  cursor: default;
-  pointer-events: none;
-  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.ikkeRapporteringspliktig:hover {
+  background-color: transparent;
 }
 
 .datoMedAktivitetSykdom {
@@ -189,6 +200,7 @@
   .dato {
     width: 60px;
     height: 60px;
+    padding-right: 2px;
     font-size: var(--a-font-size-large);
   }
 
@@ -200,9 +212,5 @@
     font-size: var(--a-font-size-medium);
     width: 56px;
     height: 50px;
-  }
-
-  .dagKontainer {
-    gap: var(--a-spacing-10) var(--a-spacing-4);
   }
 }

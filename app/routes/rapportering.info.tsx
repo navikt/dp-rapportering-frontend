@@ -1,10 +1,22 @@
 import { Accordion, BodyLong, Heading, Link, List } from "@navikt/ds-react";
 import { useNavigate } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useSetFokus } from "~/hooks/useSetFokus";
 
 export default function Info() {
   const navigate = useNavigate();
   const tilbake = () => navigate(-1);
+
+  const sidelastFokusRef = useRef(null);
+  const { setFokus } = useSetFokus();
+  const { scrollToView } = useScrollToView();
+
+  useEffect(() => {
+    scrollToView(sidelastFokusRef);
+    setFokus(sidelastFokusRef);
+  }, []);
 
   return (
     <>
@@ -16,7 +28,7 @@ export default function Info() {
         </div>
       </div>
       <main className="rapportering-kontainer">
-        <Heading size="medium" level="2">
+        <Heading ref={sidelastFokusRef} tabIndex={-1} className="vo-fokus" size="medium" level="2">
           Hva skal jeg rapportere til NAV?
         </Heading>
         <BodyLong spacing>
