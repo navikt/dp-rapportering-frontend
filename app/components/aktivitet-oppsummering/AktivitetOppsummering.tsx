@@ -42,8 +42,8 @@ export function AktivitetOppsummering(props: IProps) {
     <>
       {flatMapAktiviteter.length < 1 && (
         <Alert variant="info">
-          Hvis du ikke har arbeidet, vært syk eller hatt fravær i perioden så trenger du ikke å
-          fylle ut noe for å sende inn rapporteringen.
+          Hvis du ikke har jobbet, vært syk eller hatt fravær i perioden trenger du ikke å fylle ut
+          noe før du sender inn rapporteringen.
         </Alert>
       )}
       {flatMapAktiviteter.length > 0 && (

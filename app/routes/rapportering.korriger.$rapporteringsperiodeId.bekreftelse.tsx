@@ -6,6 +6,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { RemixLink } from "~/components/RemixLink";
 
 export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(
@@ -32,17 +33,18 @@ export default function RapporteringLes() {
           level={"2"}
           spacing={true}
         >
-          Din korrigering er nå lagret og sendt til NAV
+          Korrigeringen er mottatt
         </Heading>
-        <BodyLong spacing>
-          Perioden vil bli beregnet på nytt (så snart som mulig). Du vil snart få informasjon fra
-          NAV om det har konsekvensre for ekstra utbetaling eller tilbakekreving av penger.
-        </BodyLong>
         <div className="graa-bakgrunn">
           <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
           <div className="registert-meldeperiode-kontainer">
             <AktivitetOppsummering rapporteringsperiode={periode} />
           </div>
+        </div>
+        <div className="navigasjon-kontainer">
+          <RemixLink as="Button" to="/rapportering">
+            Tilbake til min side
+          </RemixLink>
         </div>
       </main>
     </>

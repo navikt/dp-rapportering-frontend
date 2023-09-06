@@ -7,7 +7,7 @@ export default function Korrigering() {
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
           <Heading level="1" size="xlarge">
-            Korrigering av dagpenger
+            Korrigere rapportering
           </Heading>
         </div>
       </div>

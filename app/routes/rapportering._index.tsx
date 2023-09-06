@@ -76,10 +76,12 @@ export default function RapporteringsLandingside() {
       </div>
       <main className="rapportering-kontainer">
         <BodyLong spacing>
-          For å motta dagpenger må du rapportere hvor mye du har jobbet, og om du har vært syk eller
-          på ferie hver 14. dag. NAV bruker dette for å beregne hvor mye du skal ha i dagpenger.
+          For å motta dagpenger må du rapportere hver 14. dag. Du må rapportere hvor mye du har
+          jobbet, og om du har vært syk, hatt fravær eller vært på ferie. NAV bruker informasjonen
+          du gir til å beregne hvor mye du får i dagpenger.
         </BodyLong>
         <BodyLong spacing>Du må også rapportere mens du venter på svar på søknaden din.</BodyLong>
+
         <Heading size={"small"} level="2">
           Inneværende dagpengerapportering
         </Heading>
@@ -101,6 +103,15 @@ export default function RapporteringsLandingside() {
             Se og korriger innsendte rapporteringer
           </RemixLink>
         </p>
+
+        {/* <ConfirmationPanel
+          checked={false}
+          label="Jeg bekrefter at jeg vil gi riktig informasjon. "
+          onChange={() => console.log("click")}
+        >
+          Det er viktig at du rapporterer riktig. Slik unngår du å få for mye eller for lite
+          utbetalt.
+        </ConfirmationPanel> */}
       </main>
     </>
   );

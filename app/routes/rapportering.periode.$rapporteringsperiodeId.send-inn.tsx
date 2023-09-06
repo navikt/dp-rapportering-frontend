@@ -51,15 +51,15 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
           spacing
           className="vo-fokus"
         >
-          Ønsker du å sende rapporteringen til NAV?
+          Send inn rapporteringen
         </Heading>
 
         <BodyLong spacing>
-          Jeg er kjent med at hvis opplysningene jeg har oppgitt ikke er riktige og fullstendige kan
-          jeg miste retten til stønad fra NAV.
+          Jeg er kjent med at hvis opplysningene jeg har gitt ikke er riktige og fullstendige kan
+          jeg miste retten til dagpenger.
         </BodyLong>
         <BodyLong spacing>
-          Jeg er også klar over at jeg må betale tilbake det jeg har fått feilaktig utbetalt.
+          Jeg er klar over at jeg må betale tilbake hvis jeg får for mye utbetalt.
         </BodyLong>
 
         {actionData?.error && (

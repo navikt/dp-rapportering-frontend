@@ -17,7 +17,7 @@ export function TallInput(props: IProps) {
       className={props.className}
       defaultValue={props.verdi}
       error={error}
-      description={"Halve timer skrives som desimal, 7 timer 30 min = 7,5 timer"}
+      description={"Halve timer skrives som desimal. 7 timer 30 min = 7,5 timer"}
       {...getInputProps({
         id: props.name,
         label: <>{props.label}</>,
