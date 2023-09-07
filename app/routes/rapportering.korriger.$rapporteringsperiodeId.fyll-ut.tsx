@@ -48,7 +48,7 @@ export default function RapporteringFyllut() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   useEffect(() => {
     if (actionData?.lagret) {

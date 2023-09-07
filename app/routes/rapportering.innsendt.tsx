@@ -62,7 +62,7 @@ export default function RapporteringAlle() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   return (
     <>

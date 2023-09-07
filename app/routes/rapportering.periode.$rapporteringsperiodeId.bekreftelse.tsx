@@ -20,7 +20,7 @@ export default function RapporteringLes() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   return (
     <main className="rapportering-kontainer">

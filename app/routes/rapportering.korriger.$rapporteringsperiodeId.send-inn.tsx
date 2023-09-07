@@ -36,7 +36,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   return (
     <>

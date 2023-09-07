@@ -18,7 +18,7 @@ export default function Rapportering() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   useEffect(() => {
     if (periode) {

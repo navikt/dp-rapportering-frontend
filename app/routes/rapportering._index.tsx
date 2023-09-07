@@ -2,16 +2,16 @@ import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
-import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
+import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import {
   hentGjeldendePeriode,
   type IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
+import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { useEffect, useRef } from "react";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 
 interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
@@ -45,7 +45,7 @@ export default function RapporteringsLandingside() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   let invaerendePeriodeTekst;
 
@@ -103,15 +103,6 @@ export default function RapporteringsLandingside() {
             Se og korriger innsendte rapporteringer
           </RemixLink>
         </p>
-
-        {/* <ConfirmationPanel
-          checked={false}
-          label="Jeg bekrefter at jeg vil gi riktig informasjon. "
-          onChange={() => console.log("click")}
-        >
-          Det er viktig at du rapporterer riktig. Slik unngår du å få for mye eller for lite
-          utbetalt.
-        </ConfirmationPanel> */}
       </main>
     </>
   );
