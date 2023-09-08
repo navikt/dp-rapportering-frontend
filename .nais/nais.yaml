@@ -64,5 +64,7 @@ spec:
       enabled: true
       level: {{idporten.level}}
       autoLogin: true
+      autoLoginIgnorePaths:
+        - /internal/*
   tokenx:
     enabled: true
