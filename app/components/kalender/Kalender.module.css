@@ -35,6 +35,12 @@
 
 .ukerKontainer {
   display: grid;
+  gap: var(--a-spacing-6);
+  grid-auto-flow: row;
+  transition: all ease-in-out 200ms;
+}
+
+.spacing {
   gap: var(--a-spacing-10);
 }
 

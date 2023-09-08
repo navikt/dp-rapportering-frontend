@@ -48,7 +48,7 @@ export default function RapporteringFyllut() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   useEffect(() => {
     if (actionData?.lagret) {
@@ -82,9 +82,9 @@ export default function RapporteringFyllut() {
           Korrigering
         </Heading>
         <BodyLong spacing>
-          Du kan korrigere rapporteringer intill X antall uker tilbake i tid. Endringer i
-          rapportering vil føre til at NAV beregner periodene på nytt. Dette kan få konsekvenser for
-          utbetaling eller tibakekreving av penger.
+          Endringer i rapporteringen vil føre til at NAV beregner perioden på nytt. Du vil få
+          etterbetalt hvis du har fått for lite utbetalt. Har du fått utbetalt for mye vil NAV
+          vurdere å kreve dette tilbake.
         </BodyLong>
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
         <AktivitetModal
@@ -99,11 +99,11 @@ export default function RapporteringFyllut() {
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
         <div className="navigasjon-kontainer">
-          <RemixLink as="Button" to={`/rapportering/korriger/${periode.id}/send-inn`}>
-            Lagre og send korrigering
-          </RemixLink>
           <RemixLink as="Button" to="/rapportering/innsendt" variant={"secondary"}>
             Avbryt
+          </RemixLink>
+          <RemixLink as="Button" to={`/rapportering/korriger/${periode.id}/send-inn`}>
+            Lagre og send korrigering
           </RemixLink>
         </div>
         <div className="hva-skal-jeg-rapportere-nav-link">

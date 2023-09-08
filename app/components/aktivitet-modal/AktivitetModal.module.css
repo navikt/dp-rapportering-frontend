@@ -41,6 +41,18 @@
   margin-top: var(--a-spacing-4);
 }
 
+.Arbeid {
+  background-color: var(--a-blue-200);
+}
+
+.Syk {
+  background-color: var(--a-orange-200);
+}
+
+.Ferie {
+  background-color: var(--a-green-200);
+}
+
 @media screen and (min-width: 768px) {
   .kalender {
     margin-left: calc(var(--a-spacing-6) * -1);

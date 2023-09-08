@@ -28,7 +28,7 @@ export default function Rapportering() {
 
   lagBrodsmulesti([
     {
-      title: "Fyll ut rapportering",
+      title: "Fyll ut rapporteringen",
       url: hentBrodsmuleUrl(`/periode/${periode.id}`),
     },
   ]);

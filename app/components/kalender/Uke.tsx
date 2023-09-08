@@ -8,10 +8,11 @@ interface IProps {
   aapneModal: (dato: string) => void;
   readonly?: boolean;
   rapporteringUke: IRapporteringsperiodeDag[];
+  spacing?: boolean;
 }
 
 export function Uke(props: IProps) {
-  const { rapporteringUke, readonly, aapneModal } = props;
+  const { rapporteringUke, readonly, aapneModal, spacing } = props;
 
   function hentAktivitetSummenTekst(dag: IRapporteringsperiodeDag, lang?: boolean) {
     const arbeid = dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid");
@@ -50,7 +51,11 @@ export function Uke(props: IProps) {
   }
 
   return (
-    <tr className={styles.ukeRadKontainer}>
+    <tr
+      className={classNames(styles.ukeRadKontainer, {
+        [styles.spacing]: spacing,
+      })}
+    >
       {rapporteringUke.map((dag) => {
         const dagenHarAktivitet = dag.aktiviteter.length > 0;
 

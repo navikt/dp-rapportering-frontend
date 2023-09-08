@@ -48,7 +48,7 @@ export default function RapporteringFyllut() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   useEffect(() => {
     if (actionData?.lagret) {
@@ -80,11 +80,10 @@ export default function RapporteringFyllut() {
           spacing
           className="vo-fokus"
         >
-          Fyll ut rapportering
+          Fyll ut rapporteringen
         </Heading>
         <BodyLong className="tekst-subtil" spacing>
-          Klikk på dagen du ønsker å rapportere for. Du vil da få alternativer for jobb, sykdom,
-          fravær og ferie.
+          Klikk på dagen du skal rapportere for. Du kan velge mellom jobb, sykdom, fravær og ferie.
         </BodyLong>
 
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />

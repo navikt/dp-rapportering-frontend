@@ -2,16 +2,16 @@ import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
-import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
+import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import {
   hentGjeldendePeriode,
   type IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
+import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { useEffect, useRef } from "react";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 
 interface IRapporteringIndexLoader {
   gjeldendePeriode: IRapporteringsperiode | null;
@@ -45,7 +45,7 @@ export default function RapporteringsLandingside() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   let invaerendePeriodeTekst;
 
@@ -76,10 +76,12 @@ export default function RapporteringsLandingside() {
       </div>
       <main className="rapportering-kontainer">
         <BodyLong spacing>
-          For å motta dagpenger må du rapportere hvor mye du har jobbet, og om du har vært syk eller
-          på ferie hver 14. dag. NAV bruker dette for å beregne hvor mye du skal ha i dagpenger.
+          For å motta dagpenger må du rapportere hver 14. dag. Du må rapportere hvor mye du har
+          jobbet, og om du har vært syk, hatt fravær eller vært på ferie. NAV bruker informasjonen
+          du gir til å beregne hvor mye du får i dagpenger.
         </BodyLong>
         <BodyLong spacing>Du må også rapportere mens du venter på svar på søknaden din.</BodyLong>
+
         <Heading size={"small"} level="2">
           Inneværende dagpengerapportering
         </Heading>

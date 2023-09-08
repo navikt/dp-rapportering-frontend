@@ -20,12 +20,7 @@ export default function RapporteringLes() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
-
-  const tekstForInnsending =
-    "Du har nå sendt inn rapportering for perioden. Når perioden er over så vil NAV beregne sum og utbetale dagpenger.";
-  const tekstEtterInnsending =
-    "Du har nå sendt inn rapportering for perioden. NAV  vil fortløpende beregne sum og utbetale dagpenger.";
+  }, [setFokus, scrollToView]);
 
   return (
     <main className="rapportering-kontainer">
@@ -40,7 +35,7 @@ export default function RapporteringLes() {
         Tusen takk!
       </Heading>
       <BodyLong spacing>
-        {periode.status === "Innsendt" ? tekstEtterInnsending : tekstForInnsending}
+        Du har sendt inn rapporteringen din. Når perioden er over vil NAV beregne dagpengene dine.
       </BodyLong>
       <div className="graa-bakgrunn">
         <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />

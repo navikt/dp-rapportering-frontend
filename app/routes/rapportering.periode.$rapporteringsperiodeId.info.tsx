@@ -11,7 +11,7 @@ export default function Info() {
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
-  }, []);
+  }, [setFokus, scrollToView]);
 
   return (
     <>

@@ -41,6 +41,7 @@ export function Kalender(props: IProps) {
   )}`;
 
   const periodeFomTomDatoTekst = formaterPeriodeDato(fraOgMed, tilOgMed);
+  const forsteUkeHarMinstEnAktivitet = forsteUke.some((dag) => dag.aktiviteter.length > 0);
 
   return (
     <>
@@ -78,7 +79,11 @@ export function Kalender(props: IProps) {
             })}
           </tr>
         </thead>
-        <tbody className={styles.ukerKontainer}>
+        <tbody
+          className={classNames(styles.ukerKontainer, {
+            [styles.spacing]: forsteUkeHarMinstEnAktivitet,
+          })}
+        >
           <Uke rapporteringUke={forsteUke} readonly={readonly} aapneModal={aapneModal} />
           <Uke rapporteringUke={andreUke} readonly={readonly} aapneModal={aapneModal} />
         </tbody>
