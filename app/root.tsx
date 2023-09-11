@@ -31,7 +31,8 @@ export function meta() {
       charset: "utf-8",
     },
     {
-      viewport: "width=device-width,initial-scale=1",
+      name: "viewport",
+      content: "width=device-width,initial-scale=1",
     },
     { title: "Dagpenger rapportering" },
     {
@@ -99,8 +100,6 @@ export default function App() {
   return (
     <html lang="nb">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         {parse(fragments.DECORATOR_STYLES, { trim: true })}
         {/* Ikke legg parsing av dekoratør-html i egne komponenter. Det trigger rehydrering, 
