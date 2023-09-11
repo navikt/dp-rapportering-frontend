@@ -41,49 +41,47 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
   }, [setFokus, scrollToView]);
 
   return (
-    <>
-      <main className="rapportering-kontainer">
-        <Heading
-          ref={sidelastFokusRef}
-          tabIndex={-1}
-          level="2"
-          size="medium"
-          spacing
-          className="vo-fokus"
-        >
-          Send inn rapporteringen
-        </Heading>
+    <div className="rapportering-kontainer">
+      <Heading
+        ref={sidelastFokusRef}
+        tabIndex={-1}
+        level="2"
+        size="medium"
+        spacing
+        className="vo-fokus"
+      >
+        Send inn rapporteringen
+      </Heading>
 
-        <BodyLong spacing>
-          Jeg er kjent med at hvis opplysningene jeg har gitt ikke er riktige og fullstendige kan
-          jeg miste retten til dagpenger.
-        </BodyLong>
-        <BodyLong spacing>
-          Jeg er klar over at jeg må betale tilbake hvis jeg får for mye utbetalt.
-        </BodyLong>
+      <BodyLong spacing>
+        Jeg er kjent med at hvis opplysningene jeg har gitt ikke er riktige og fullstendige kan jeg
+        miste retten til dagpenger.
+      </BodyLong>
+      <BodyLong spacing>
+        Jeg er klar over at jeg må betale tilbake hvis jeg får for mye utbetalt.
+      </BodyLong>
 
-        {actionData?.error && (
-          <Alert variant="error" className={styles.feilmelding}>
-            {actionData.error}
-          </Alert>
-        )}
+      {actionData?.error && (
+        <Alert variant="error" className={styles.feilmelding}>
+          {actionData.error}
+        </Alert>
+      )}
 
-        <Form method="post">
-          <div className="navigasjon-kontainer">
-            <RemixLink
-              to={`/rapportering/periode/${rapporteringsperiodeId}/fyll-ut`}
-              as="Button"
-              variant="secondary"
-            >
-              Gå tilbake
-            </RemixLink>
+      <Form method="post">
+        <div className="navigasjon-kontainer">
+          <RemixLink
+            to={`/rapportering/periode/${rapporteringsperiodeId}/fyll-ut`}
+            as="Button"
+            variant="secondary"
+          >
+            Gå tilbake
+          </RemixLink>
 
-            <Button type="submit" variant="primary" iconPosition="right">
-              Bekreft og send til NAV
-            </Button>
-          </div>
-        </Form>
-      </main>
-    </>
+          <Button type="submit" variant="primary" iconPosition="right">
+            Bekreft og send til NAV
+          </Button>
+        </div>
+      </Form>
+    </div>
   );
 }

@@ -71,7 +71,7 @@ export default function RapporteringFyllut() {
 
   return (
     <>
-      <main className="rapportering-kontainer">
+      <div className="rapportering-kontainer">
         <Heading
           size={"medium"}
           level={"2"}
@@ -116,7 +116,7 @@ export default function RapporteringFyllut() {
             Hva skal jeg rapportere til NAV?
           </RemixLink>
         </div>
-      </main>
+      </div>
     </>
   );
 }

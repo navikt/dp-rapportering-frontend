@@ -40,7 +40,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
 
   return (
     <>
-      <main className="rapportering-kontainer">
+      <div className="rapportering-kontainer">
         <Heading
           ref={sidelastFokusRef}
           tabIndex={-1}
@@ -81,7 +81,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
             </Button>
           </div>
         </Form>
-      </main>
+      </div>
     </>
   );
 }

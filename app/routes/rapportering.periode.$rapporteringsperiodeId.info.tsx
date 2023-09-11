@@ -15,7 +15,7 @@ export default function Info() {
 
   return (
     <>
-      <main className="rapportering-kontainer">
+      <div className="rapportering-kontainer">
         <Heading
           ref={sidelastFokusRef}
           tabIndex={-1}
@@ -230,7 +230,7 @@ export default function Info() {
             </Accordion.Content>
           </Accordion.Item>
         </Accordion>
-      </main>
+      </div>
     </>
   );
 }

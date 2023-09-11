@@ -27,7 +27,7 @@ export default function Info() {
           </Heading>
         </div>
       </div>
-      <main className="rapportering-kontainer">
+      <div className="rapportering-kontainer">
         <Heading ref={sidelastFokusRef} tabIndex={-1} className="vo-fokus" size="medium" level="2">
           Hva skal jeg rapportere til NAV?
         </Heading>
@@ -241,7 +241,7 @@ export default function Info() {
             Tilbake
           </RemixLink>
         </div>
-      </main>
+      </div>
     </>
   );
 }

@@ -24,7 +24,7 @@ export default function RapporteringLes() {
 
   return (
     <>
-      <main className="rapportering-kontainer">
+      <div className="rapportering-kontainer">
         <Heading
           ref={sidelastFokusRef}
           tabIndex={-1}
@@ -46,7 +46,7 @@ export default function RapporteringLes() {
             Tilbake til min side
           </RemixLink>
         </div>
-      </main>
+      </div>
     </>
   );
 }
