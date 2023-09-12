@@ -111,7 +111,7 @@ export default function RapporteringFyllut() {
             as="Link"
             to="/rapportering/info"
             iconPosition="left"
-            icon={<InformationSquareIcon title="a11y-title" fontSize={24} />}
+            icon={<InformationSquareIcon title="a11y-title" fontSize={24} aria-hidden />}
           >
             Hva skal jeg rapportere til NAV?
           </RemixLink>

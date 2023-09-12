@@ -47,7 +47,7 @@ export function Kalender(props: IProps) {
     <>
       <div className={styles.headerKontainer}>
         <div>
-          <p className={styles.header} aria-hidden="true">
+          <p className={styles.header} aria-hidden>
             {periodeUkenummerTekst}
             <span className="tekst-subtil">{periodeFomTomDatoTekst}</span>
           </p>
@@ -63,7 +63,7 @@ export function Kalender(props: IProps) {
         })}
         role="grid"
       >
-        <thead aria-hidden="true">
+        <thead aria-hidden>
           <tr className={styles.ukedagKontainer}>
             {ukedager.map((ukedag, index) => {
               return (
