@@ -1,7 +1,7 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
-import { useActionData, useRouteLoaderData } from "@remix-run/react";
+import { useActionData, useRouteLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
@@ -40,15 +40,20 @@ export default function RapporteringFyllut() {
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
 
   useEffect(() => {
+    // Vi setter fokus på heading ved sidelast
+    // Ellers går fokusen til elementet brukeren klikket på sist før modalen er lukket
+    if (!searchParams.get("dato")) {
+      setFokus(sidelastFokusRef);
+    }
     scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
+  }, [setFokus, scrollToView, searchParams]);
 
   useEffect(() => {
     if (actionData?.lagret) {
@@ -60,6 +65,7 @@ export default function RapporteringFyllut() {
     if (periode.status === "TilUtfylling") {
       setValgtDato(dato);
       setModalAapen(true);
+      setSearchParams({ dato });
     }
   }
 

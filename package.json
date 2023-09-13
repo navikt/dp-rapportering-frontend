@@ -16,10 +16,10 @@
     "pre-commit": "lint-staged && npm run typecheck"
   },
   "dependencies": {
-    "@navikt/aksel-icons": "^4.7.2",
+    "@navikt/aksel-icons": "^5.4.1",
     "@navikt/dp-auth": "^0.3.7",
-    "@navikt/ds-css": "^4.7.2",
-    "@navikt/ds-react": "^4.7.2",
+    "@navikt/ds-css": "^5.4.1",
+    "@navikt/ds-react": "^5.4.1",
     "@navikt/nav-dekoratoren-moduler": "^2.1.1",
     "@portabletext/types": "^2.0.5",
     "@remix-run/css-bundle": "^1.19.3",
