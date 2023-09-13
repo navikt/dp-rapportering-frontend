@@ -69,19 +69,16 @@ export function Uke(props: IProps) {
 
         return (
           <td key={dag.dagIndex} className={styles.datoKontainer}>
-            {ikkeRapporteringspliktig && (
-              <button
-                className={classNames(styles.dato, styles.ikkeRapporteringspliktig)}
-                aria-label={hentSkjermleserDatoTekst(dag)}
-                disabled
-              >
-                {`${format(new Date(dag.dato), "dd")}.`}
-              </button>
+            {readonly && (
+              <span className={classNames(styles.dato, dagKnappStyle, styles.readonly)}>{`${format(
+                new Date(dag.dato),
+                "dd"
+              )}. `}</span>
             )}
 
-            {!ikkeRapporteringspliktig && readonly && (
+            {ikkeRapporteringspliktig && !readonly && (
               <button
-                className={classNames(styles.dato, dagKnappStyle)}
+                className={classNames(styles.dato, styles.ikkeRapporteringspliktig)}
                 aria-label={hentSkjermleserDatoTekst(dag)}
                 disabled
               >
@@ -107,7 +104,7 @@ export function Uke(props: IProps) {
                   [styles.datoMedAktivitetFerie]:
                     dagenHarAktivitet && dag.aktiviteter[0].type === "Ferie",
                 })}
-                aria-hidden="true"
+                aria-hidden
               >
                 {hentAktivitetSummenTekst(dag)}
               </div>
