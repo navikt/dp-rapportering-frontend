@@ -47,8 +47,8 @@ export default function RapporteringFyllut() {
   const { scrollToView } = useScrollToView();
 
   useEffect(() => {
-    // Vi setter fokus på heading ved sidelast
-    // Ellers går fokusen til elementet brukeren klikket på sist før modalen er lukket
+    // Vi setter fokus på headeren når brukeren kommer til denne siden fra en annen side.
+    // Ellers følger vi browser default fokus oppførsel
     if (!searchParams.get("paabegynt")) {
       setFokus(sidelastFokusRef);
     }
