@@ -26,15 +26,11 @@ export async function hentPeriode(
 
   const response = await fetch(url, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
   });
 
   if (!response.ok) {
-    throw new Response("IIIH NOE GIKK GALT VED UTHENTING AV PERIODE");
+    throw new Response("Noe gikk galt ved uthenting av periode");
   }
 
   return response.json();
@@ -42,7 +38,7 @@ export async function hentPeriode(
 
 export async function hentGjeldendePeriode(
   onBehalfOfToken: string
-): Promise<IRapporteringsperiode> {
+): Promise<IRapporteringsperiode | null> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`;
 
   const response = await fetch(url, {
@@ -51,10 +47,14 @@ export async function hentGjeldendePeriode(
   });
 
   if (!response.ok) {
-    if (response.status !== 404)
+    // 404 betyr ingen gjeldende periode
+    if (response.status === 404) {
+      return null;
+    } else {
       throw new Response("Feil i uthenting av gjeldende periode", {
         status: 500,
       });
+    }
   }
 
   return response.json();
