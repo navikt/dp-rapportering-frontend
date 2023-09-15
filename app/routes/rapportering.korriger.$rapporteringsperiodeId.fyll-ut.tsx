@@ -49,7 +49,7 @@ export default function RapporteringFyllut() {
   useEffect(() => {
     // Vi setter fokus på heading ved sidelast
     // Ellers går fokusen til elementet brukeren klikket på sist før modalen er lukket
-    if (!searchParams.get("dato")) {
+    if (!searchParams.get("paabegynt")) {
       setFokus(sidelastFokusRef);
     }
     scrollToView(sidelastFokusRef);
@@ -62,6 +62,8 @@ export default function RapporteringFyllut() {
   }, [actionData]);
 
   function aapneModal(dato: string) {
+    setSearchParams({ paabegynt: "true" });
+
     if (periode.status === "TilUtfylling") {
       setValgtDato(dato);
       setModalAapen(true);
