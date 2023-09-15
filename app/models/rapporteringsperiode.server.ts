@@ -1,6 +1,6 @@
 import { getRapporteringOboToken, getSession } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
-import type { IAktivitet, TAktivitetType } from "./aktivitet.server";
+import type { IAktivitet, IAktivitetType } from "./aktivitet.server";
 
 export interface IRapporteringsperiode {
   beregnesEtter: string;
@@ -14,7 +14,7 @@ export interface IRapporteringsperiode {
 export interface IRapporteringsperiodeDag {
   dagIndex: number;
   dato: string;
-  muligeAktiviteter: TAktivitetType[];
+  muligeAktiviteter: IAktivitetType[];
   aktiviteter: IAktivitet[];
 }
 

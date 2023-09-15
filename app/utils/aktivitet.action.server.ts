@@ -1,5 +1,5 @@
 import { type TypedResponse, json } from "@remix-run/node";
-import { type TAktivitetType, lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
+import { type IAktivitetType, lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
 import { validator } from "./validering.util";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
@@ -25,7 +25,7 @@ export async function lagreAktivitetAction(
   request: Request,
   periodeId: string
 ): Promise<TypedResponse> {
-  const aktivitetsType = formdata.get("type") as TAktivitetType;
+  const aktivitetsType = formdata.get("type") as IAktivitetType;
   const inputVerdier = await validator(aktivitetsType).validate(formdata);
 
   if (inputVerdier.error) {

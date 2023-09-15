@@ -1,11 +1,11 @@
 import { getRapporteringOboToken, getSession } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
 
-export type TAktivitetType = "Arbeid" | "Syk" | "Ferie";
+export type IAktivitetType = "Arbeid" | "Syk" | "Ferie";
 
 export interface IAktivitet {
   id?: string;
-  type: TAktivitetType;
+  type: IAktivitetType;
   timer?: string;
   dato: string;
 }
