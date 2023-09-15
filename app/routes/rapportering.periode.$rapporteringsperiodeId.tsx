@@ -2,9 +2,11 @@ import { Accordion } from "@navikt/ds-react";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
+import invariant from "tiny-invariant";
 import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import { getOboToken } from "~/utils/auth.utils.server";
 import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 
 export interface IRapporteringsPeriodeLoader {
@@ -12,15 +14,13 @@ export interface IRapporteringsPeriodeLoader {
 }
 
 export async function loader({ request, params }: LoaderArgs) {
-  const periodeId = params.rapporteringsperiodeId || "";
-  const periodeResponse = await hentPeriode(request, periodeId);
+  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
-  if (periodeResponse.ok) {
-    const periode = await periodeResponse.json();
-    return json({ periode });
-  } else {
-    throw new Response(`Feil i uthenting av rapporteringsperiode`, { status: 500 });
-  }
+  const onBehalfOfToken = await getOboToken(request);
+  const periodeId = params.rapporteringsperiodeId;
+  const periode = await hentPeriode(onBehalfOfToken, periodeId);
+
+  return json({ periode });
 }
 
 export default function Rapportering() {

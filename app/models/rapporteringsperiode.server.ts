@@ -1,4 +1,3 @@
-import { getRapporteringOboToken, getSession } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
 import type { IAktivitet, IAktivitetType } from "./aktivitet.server";
 
@@ -18,36 +17,13 @@ export interface IRapporteringsperiodeDag {
   aktiviteter: IAktivitet[];
 }
 
-export async function hentGjeldendePeriode(request: Request): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`;
-  const session = await getSession(request);
-
-  if (!session) {
-    throw new Response(null, { status: 500, statusText: "Feil ved henting av sesjon" });
-  }
-
-  const onBehalfOfToken = await getRapporteringOboToken(session);
-
-  return await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
-  });
-}
-export async function hentPeriode(request: Request, periodeId: string): Promise<Response> {
+export async function hentPeriode(
+  onBehalfOfToken: string,
+  periodeId: string
+): Promise<IRapporteringsperiode> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}`;
-  const session = await getSession(request);
 
-  if (!session) {
-    throw new Response(null, { status: 500, statusText: "Feil ved henting av sesjon" });
-  }
-
-  const onBehalfOfToken = await getRapporteringOboToken(session);
-
-  return await fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -55,19 +31,42 @@ export async function hentPeriode(request: Request, periodeId: string): Promise<
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
   });
+
+  if (!response.ok) {
+    throw new Response("IIIH NOE GIKK GALT VED UTHENTING AV PERIODE");
+  }
+
+  return response.json();
 }
 
-export async function hentAllePerioder(request: Request): Promise<Response> {
+export async function hentGjeldendePeriode(
+  onBehalfOfToken: string
+): Promise<IRapporteringsperiode> {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    if (response.status !== 404)
+      throw new Response("Feil i uthenting av gjeldende periode", {
+        status: 500,
+      });
+  }
+
+  return response.json();
+}
+
+export async function hentAllePerioder(onBehalfOfToken: string): Promise<IRapporteringsperiode[]> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
-  const session = await getSession(request);
 
-  if (!session) {
-    throw new Response(null, { status: 500, statusText: "Feil ved henting av sesjon" });
-  }
-
-  const onBehalfOfToken = await getRapporteringOboToken(session);
-
-  return await fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -75,17 +74,21 @@ export async function hentAllePerioder(request: Request): Promise<Response> {
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
   });
-}
 
-export async function godkjennPeriode(id: string, request: Request): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}/godkjenn`;
-  const session = await getSession(request);
-
-  if (!session) {
-    throw new Response(null, { status: 500, statusText: "Feil ved henting av sesjon" });
+  if (!response.ok) {
+    throw new Response("Feil i uthenting av alle perioder", {
+      status: 500,
+    });
   }
 
-  const onBehalfOfToken = await getRapporteringOboToken(session);
+  return response.json();
+}
+
+export async function godkjennPeriode(
+  onBehalfOfToken: string,
+  periodeId: string
+): Promise<Response> {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/godkjenn`;
 
   return await fetch(url, {
     method: "POST",
@@ -97,15 +100,11 @@ export async function godkjennPeriode(id: string, request: Request): Promise<Res
   });
 }
 
-export async function avGodkjennPeriode(periodeId: string, request: Request): Promise<Response> {
+export async function avGodkjennPeriode(
+  onBehalfOfToken: string,
+  periodeId: string
+): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/avgodkjenn`;
-  const session = await getSession(request);
-
-  if (!session) {
-    throw new Error("Feil ved henting av sesjon");
-  }
-
-  const onBehalfOfToken = await getRapporteringOboToken(session);
 
   return await fetch(url, {
     method: "POST",
@@ -117,16 +116,8 @@ export async function avGodkjennPeriode(periodeId: string, request: Request): Pr
   });
 }
 
-export async function lagKorrigeringsperiode(periodeId: string, request: Request) {
+export async function lagKorrigeringsperiode(onBehalfOfToken: string, periodeId: string) {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/korrigering`;
-
-  const session = await getSession(request);
-
-  if (!session) {
-    throw new Error("Feil ved henting av sesjon");
-  }
-
-  const onBehalfOfToken = await getRapporteringOboToken(session);
 
   const response = await fetch(url, {
     method: "POST",

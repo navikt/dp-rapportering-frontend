@@ -29,6 +29,8 @@ describe("Hovedside rapportering", () => {
     });
 
     test("Skal feile hvis kallet til gjelende rapporteringsperioder feilet", async () => {
+      mockSession();
+
       server.use(
         rest.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
@@ -43,8 +45,6 @@ describe("Hovedside rapportering", () => {
         )
       );
 
-      mockSession();
-
       const response = await catchErrorResponse(() =>
         loader({
           request: new Request("http://localhost:3000"),
@@ -57,7 +57,7 @@ describe("Hovedside rapportering", () => {
     });
 
     test("Skal hente ut gjeldende rapporteringsperiode", async () => {
-      const mock = mockSession();
+      mockSession();
 
       const response = await loader({
         request: new Request("http://localhost:3000"),
@@ -67,7 +67,6 @@ describe("Hovedside rapportering", () => {
 
       const data = await response.json();
 
-      expect(mock.getSession).toHaveBeenCalledTimes(1);
       expect(response.status).toBe(200);
       expect(data).toEqual({
         gjeldendePeriode: gjeldendePeriodeResponse,
@@ -75,6 +74,8 @@ describe("Hovedside rapportering", () => {
     });
 
     test("Skal vise at bruker har ingen gjeldene perdiode", async () => {
+      mockSession();
+
       server.use(
         rest.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
@@ -83,8 +84,6 @@ describe("Hovedside rapportering", () => {
           }
         )
       );
-
-      mockSession();
 
       const response = await loader({
         request: new Request("http://localhost:3000"),

@@ -1,4 +1,3 @@
-import { getRapporteringOboToken, getSession } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
 
 export type IAktivitetType = "Arbeid" | "Syk" | "Ferie";
@@ -11,17 +10,13 @@ export interface IAktivitet {
 }
 
 export async function lagreAktivitet(
+  onBehalfOfToken: string,
   rapporteringsperiodeId: string,
-  aktivitet: IAktivitet,
-  request: Request
+  aktivitet: IAktivitet
 ): Promise<Response> {
-  const session = await getSession(request);
-
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"
   )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet`;
-
-  const onBehalfOfToken = await getRapporteringOboToken(session);
 
   return await fetch(url, {
     method: "POST",
@@ -35,17 +30,13 @@ export async function lagreAktivitet(
 }
 
 export async function sletteAktivitet(
+  onBehalfOfToken: string,
   rapporteringsperiodeId: string,
-  aktivitetId: String,
-  request: Request
+  aktivitetId: String
 ): Promise<Response> {
-  const session = await getSession(request);
-
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"
   )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet/${aktivitetId}`;
-
-  const onBehalfOfToken = await getRapporteringOboToken(session);
 
   return await fetch(url, {
     method: "DELETE",

@@ -10,7 +10,7 @@ let getSessionSpy: SpyInstance, getRapporteringOboTokenSpy: SpyInstance;
 
 export function mockSession() {
   getSessionSpy = vi.spyOn(mockAuth, "getSession");
-  getRapporteringOboTokenSpy = vi.spyOn(mockAuth, "getRapporteringOboToken");
+  getRapporteringOboTokenSpy = vi.spyOn(mockAuth, "getOboToken");
 
   const obj: SessionWithOboProvider = {
     token: mockToken,

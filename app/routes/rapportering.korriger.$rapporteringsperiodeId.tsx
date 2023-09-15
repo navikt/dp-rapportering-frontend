@@ -6,25 +6,21 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
 import { Accordion } from "@navikt/ds-react";
 import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
+import { getOboToken } from "~/utils/auth.utils.server";
+import invariant from "tiny-invariant";
 
 export interface IRapporteringsPeriodeLoader {
   periode: IRapporteringsperiode;
 }
 
 export async function loader({ request, params }: LoaderArgs) {
-  console.log("rapportering/korriger/$Id loader");
+  invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
 
-  const periodeId = params.rapporteringsperiodeId || "";
-  const periodeResponse = await hentPeriode(request, periodeId);
+  const periodeId = params.rapporteringsperiodeId;
+  const onBehalfOfToken = await getOboToken(request);
+  const periode = await hentPeriode(onBehalfOfToken, periodeId);
 
-  if (periodeResponse.ok) {
-    const periode = await periodeResponse.json();
-    return json({ periode });
-  } else {
-    const { status, statusText } = periodeResponse;
-    console.log("uthenting av periode feilet", periodeResponse);
-    throw new Response("IIIH NOE GIKK GALT VED UTHENTING AV PERIODE", { status, statusText });
-  }
+  return json({ periode });
 }
 
 export default function Rapportering() {

@@ -4,10 +4,11 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
+import { getOboToken } from "~/utils/auth.utils.server";
 import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 
 interface IRapporteringAlleLoader {
@@ -15,34 +16,14 @@ interface IRapporteringAlleLoader {
 }
 
 export async function loader({ request }: LoaderArgs) {
-  let gjeldendePeriode: IRapporteringsperiode | null = null;
   let innsendtPerioder: IRapporteringsperiode[] = [];
 
-  const allePerioderResponse = await hentAllePerioder(request);
-
-  if (!allePerioderResponse.ok) {
-    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
-      status: 500,
-    });
-  } else {
-    innsendtPerioder = await allePerioderResponse.json();
-  }
-
-  const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
-
-  if (!gjeldendePeriodeResponse.ok) {
-    if (gjeldendePeriodeResponse.status !== 404)
-      throw new Response("Feil i uthenting av gjeldende periode", {
-        status: 500,
-      });
-  } else {
-    gjeldendePeriode = await gjeldendePeriodeResponse.json();
-  }
+  const onBehalfOfToken = await getOboToken(request);
+  const allePerioder = await hentAllePerioder(onBehalfOfToken);
+  const gjeldendePeriode = await hentGjeldendePeriode(onBehalfOfToken);
 
   if (gjeldendePeriode) {
-    innsendtPerioder = [...innsendtPerioder].filter(
-      (periode) => periode.id !== gjeldendePeriode?.id
-    );
+    innsendtPerioder = allePerioder.filter((periode) => periode.id !== gjeldendePeriode?.id);
   }
 
   return json({ innsendtPerioder });
