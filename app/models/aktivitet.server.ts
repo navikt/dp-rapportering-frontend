@@ -1,4 +1,5 @@
 import { getEnv } from "~/utils/env.utils";
+import { getHeader } from "~/utils/fetch.utils";
 
 export type IAktivitetType = "Arbeid" | "Syk" | "Ferie";
 
@@ -20,11 +21,7 @@ export async function lagreAktivitet(
 
   return await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
     body: JSON.stringify({ ...aktivitet }),
   });
 }
@@ -40,10 +37,6 @@ export async function sletteAktivitet(
 
   return await fetch(url, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
   });
 }

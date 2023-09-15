@@ -1,5 +1,6 @@
 import { getEnv } from "~/utils/env.utils";
 import type { IAktivitet, IAktivitetType } from "./aktivitet.server";
+import { getHeader } from "~/utils/fetch.utils";
 
 export interface IRapporteringsperiode {
   beregnesEtter: string;
@@ -46,11 +47,7 @@ export async function hentGjeldendePeriode(
 
   const response = await fetch(url, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
   });
 
   if (!response.ok) {
@@ -68,11 +65,7 @@ export async function hentAllePerioder(onBehalfOfToken: string): Promise<IRappor
 
   const response = await fetch(url, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
   });
 
   if (!response.ok) {
@@ -92,11 +85,7 @@ export async function godkjennPeriode(
 
   return await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
   });
 }
 
@@ -108,11 +97,7 @@ export async function avGodkjennPeriode(
 
   return await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
   });
 }
 
@@ -121,11 +106,7 @@ export async function lagKorrigeringsperiode(onBehalfOfToken: string, periodeId:
 
   const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
   });
 
   return response;
