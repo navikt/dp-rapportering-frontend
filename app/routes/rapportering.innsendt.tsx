@@ -9,6 +9,7 @@ import { useSetFokus } from "~/hooks/useSetFokus";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
 interface IRapporteringAlleLoader {
   innsendtPerioder: IRapporteringsperiode[];
@@ -18,7 +19,8 @@ export async function loader({ request }: LoaderArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
   let innsendtPerioder: IRapporteringsperiode[] = [];
 
-  const allePerioderResponse = await hentAllePerioder(request);
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+  const allePerioderResponse = await hentAllePerioder(onBehalfOfToken);
 
   if (!allePerioderResponse.ok) {
     throw new Response("Feil i uthenting av alle rapporteringsperioder", {
@@ -28,7 +30,7 @@ export async function loader({ request }: LoaderArgs) {
     innsendtPerioder = await allePerioderResponse.json();
   }
 
-  const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
+  const gjeldendePeriodeResponse = await hentGjeldendePeriode(onBehalfOfToken);
 
   if (!gjeldendePeriodeResponse.ok) {
     if (gjeldendePeriodeResponse.status !== 404)

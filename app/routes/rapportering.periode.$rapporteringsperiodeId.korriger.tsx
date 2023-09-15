@@ -3,13 +3,14 @@ import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { lagKorrigeringsperiode } from "~/models/rapporteringsperiode.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
 export async function loader({ request, params }: LoaderArgs) {
-  console.log("rapportering/periode/$Id/korriger loader");
-  invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
+  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const response = await lagKorrigeringsperiode(periodeId, request);
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+  const response = await lagKorrigeringsperiode(onBehalfOfToken, periodeId);
 
   if (response.ok) {
     const korrigeringsperiode: IRapporteringsperiode = await response.json();

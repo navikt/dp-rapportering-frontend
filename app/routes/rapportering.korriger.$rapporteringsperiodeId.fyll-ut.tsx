@@ -15,7 +15,8 @@ import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
 
 export async function action({ request, params }: ActionArgs) {
-  invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
+  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+
   const periodeId = params.rapporteringsperiodeId;
   const formdata = await request.formData();
   const submitKnapp = formdata.get("submit");

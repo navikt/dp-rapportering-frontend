@@ -1,5 +1,5 @@
-import { getRapporteringOboToken, getSession } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
+import { getHeader } from "~/utils/fetch.utils";
 
 export type TAktivitetType = "Arbeid" | "Syk" | "Ferie";
 
@@ -11,48 +11,32 @@ export interface IAktivitet {
 }
 
 export async function lagreAktivitet(
+  onBehalfOfToken: string,
   rapporteringsperiodeId: string,
-  aktivitet: IAktivitet,
-  request: Request
+  aktivitet: IAktivitet
 ): Promise<Response> {
-  const session = await getSession(request);
-
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"
   )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet`;
 
-  const onBehalfOfToken = await getRapporteringOboToken(session);
-
   return await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
     body: JSON.stringify({ ...aktivitet }),
   });
 }
 
 export async function sletteAktivitet(
+  onBehalfOfToken: string,
   rapporteringsperiodeId: string,
-  aktivitetId: String,
-  request: Request
+  aktivitetId: String
 ): Promise<Response> {
-  const session = await getSession(request);
-
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"
   )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet/${aktivitetId}`;
 
-  const onBehalfOfToken = await getRapporteringOboToken(session);
-
   return await fetch(url, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
+    headers: getHeader(onBehalfOfToken),
   });
 }

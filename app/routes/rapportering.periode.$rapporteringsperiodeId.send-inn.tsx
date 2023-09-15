@@ -10,11 +10,14 @@ import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
 export async function action({ request, params }: ActionArgs) {
   invariant(params.rapporteringsperiodeId, "Fant ikke rapporteringsperiodeId");
+
   const periodeId = params.rapporteringsperiodeId;
-  const godkjennPeriodeResponse = await godkjennPeriode(periodeId, request);
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+  const godkjennPeriodeResponse = await godkjennPeriode(onBehalfOfToken, periodeId);
 
   if (godkjennPeriodeResponse.ok) {
     return redirect(`/rapportering/periode/${periodeId}/bekreftelse`);

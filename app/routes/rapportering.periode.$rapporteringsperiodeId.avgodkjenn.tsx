@@ -2,13 +2,14 @@ import type { LoaderArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import { avGodkjennPeriode } from "~/models/rapporteringsperiode.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
 export async function loader({ request, params }: LoaderArgs) {
-  console.log("rapportering/periode/$Id/avgodkjenn loader");
-  invariant(params.rapporteringsperiodeId, `params.rapporteringsperiode er påkrevd`);
+  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const response = await avGodkjennPeriode(periodeId, request);
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+  const response = await avGodkjennPeriode(onBehalfOfToken, periodeId);
 
   if (response.ok) {
     return redirect(`/rapportering/periode/${periodeId}/fyll-ut`);
