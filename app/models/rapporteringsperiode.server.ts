@@ -1,5 +1,5 @@
 import { getEnv } from "~/utils/env.utils";
-import type { IAktivitet, IAktivitetType } from "./aktivitet.server";
+import type { IAktivitet, TAktivitetType } from "./aktivitet.server";
 import { getHeader } from "~/utils/fetch.utils";
 
 export interface IRapporteringsperiode {
@@ -14,7 +14,7 @@ export interface IRapporteringsperiode {
 export interface IRapporteringsperiodeDag {
   dagIndex: number;
   dato: string;
-  muligeAktiviteter: IAktivitetType[];
+  muligeAktiviteter: TAktivitetType[];
   aktiviteter: IAktivitet[];
 }
 

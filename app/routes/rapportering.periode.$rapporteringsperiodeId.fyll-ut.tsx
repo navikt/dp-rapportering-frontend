@@ -10,7 +10,7 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
-import type { IAktivitetType } from "~/models/aktivitet.server";
+import type { TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
 
@@ -39,7 +39,7 @@ export default function RapporteringFyllut() {
   const actionData = useActionData();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-  const [valgtAktivitet, setValgtAktivitet] = useState<IAktivitetType | string>("");
+  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
 
   const sidelastFokusRef = useRef(null);

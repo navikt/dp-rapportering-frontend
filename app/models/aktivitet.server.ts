@@ -1,11 +1,11 @@
 import { getEnv } from "~/utils/env.utils";
 import { getHeader } from "~/utils/fetch.utils";
 
-export type IAktivitetType = "Arbeid" | "Syk" | "Ferie";
+export type TAktivitetType = "Arbeid" | "Syk" | "Ferie";
 
 export interface IAktivitet {
   id?: string;
-  type: IAktivitetType;
+  type: TAktivitetType;
   timer?: string;
   dato: string;
 }

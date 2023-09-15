@@ -3,7 +3,7 @@ import { Form, useActionData } from "@remix-run/react";
 import classNames from "classnames";
 import { ValidatedForm } from "remix-validated-form";
 import { TallInput } from "~/components/TallInput";
-import type { IAktivitetType } from "~/models/aktivitet.server";
+import type { TAktivitetType } from "~/models/aktivitet.server";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
@@ -16,8 +16,8 @@ import { useEffect } from "react";
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
   valgtDato?: string;
-  valgtAktivitet: string | IAktivitetType;
-  setValgtAktivitet: (aktivitet: string | IAktivitetType) => void;
+  valgtAktivitet: string | TAktivitetType;
+  setValgtAktivitet: (aktivitet: string | TAktivitetType) => void;
   modalAapen: boolean;
   lukkModal: () => void;
 }
