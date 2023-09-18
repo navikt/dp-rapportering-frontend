@@ -1,7 +1,7 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
-import { useActionData, useRouteLoaderData } from "@remix-run/react";
+import { useActionData, useRouteLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
@@ -41,15 +41,21 @@ export default function RapporteringFyllut() {
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
 
   useEffect(() => {
+    // Vi setter fokus på headeren når brukeren kommer til denne siden fra en annen side.
+    // Ellers følger vi browser default fokus oppførsel.
+    if (!searchParams.get("utfylling")) {
+      setFokus(sidelastFokusRef);
+    }
+
     scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
+  }, [setFokus, scrollToView, searchParams]);
 
   useEffect(() => {
     if (actionData?.lagret) {
@@ -58,6 +64,8 @@ export default function RapporteringFyllut() {
   }, [actionData]);
 
   function aapneModal(dato: string) {
+    setSearchParams({ utfylling: "true" });
+
     if (periode.status === "TilUtfylling") {
       setValgtDato(dato);
       setModalAapen(true);
@@ -78,7 +86,6 @@ export default function RapporteringFyllut() {
           tabIndex={-1}
           size={"large"}
           level={"2"}
-          spacing
           className="vo-fokus"
         >
           Fyll ut rapporteringen

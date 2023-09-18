@@ -20,12 +20,6 @@ export function SessjonModal(props: IProps) {
   const [laster, setLaster] = useState(false);
 
   useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#dp-rapportering-frontend");
-    }
-  }, []);
-
-  useEffect(() => {
     if (!utlopesOm) return;
 
     if (utlopesOm === 1) {
@@ -51,13 +45,13 @@ export function SessjonModal(props: IProps) {
         return;
       }}
       open={utlopt}
-      closeButton={false}
-      shouldCloseOnOverlayClick={false}
     >
-      <Modal.Content>
-        <Heading spacing level="1" size="medium">
+      <Modal.Header closeButton={false}>
+        <Heading level="1" size="medium">
           Du må logge inn på nytt for å fortsette
         </Heading>
+      </Modal.Header>
+      <Modal.Body>
         <p>
           Sesjonen din har utløpt, og du må logge inn med IDPorten på nytt for å fortsette. Alle
           svarene dine i søknaden er lagret og du kan fortsette der du slapp.
@@ -79,7 +73,7 @@ export function SessjonModal(props: IProps) {
             Klikk på lenken for å hente ny token
           </a>
         </DevelopmentKontainer>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 }

@@ -13,7 +13,7 @@ import styles from "~/routes-styles/rapportering.module.css";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
 export async function action({ request, params }: ActionArgs) {
-  invariant(params.rapporteringsperiodeId, "Fant ikke rapporteringsperiodeId");
+  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
   const onBehalfOfToken = await getRapporteringOboToken(request);

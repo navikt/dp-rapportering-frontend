@@ -4,14 +4,12 @@ import classNames from "classnames";
 import { ValidatedForm } from "remix-validated-form";
 import { TallInput } from "~/components/TallInput";
 import type { TAktivitetType } from "~/models/aktivitet.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
-import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
-
-import styles from "./AktivitetModal.module.css";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { FormattertDato } from "../FormattertDato";
-import { useEffect } from "react";
+import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
+import styles from "./AktivitetModal.module.css";
 
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
@@ -33,10 +31,6 @@ export function AktivitetModal(props: IProps) {
   } = props;
 
   const actionData = useActionData();
-
-  useEffect(() => {
-    Modal.setAppElement("#dp-rapportering-frontend");
-  }, []);
 
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
@@ -62,11 +56,12 @@ export function AktivitetModal(props: IProps) {
       open={modalAapen}
       onClose={() => lukkModal()}
     >
-      <Modal.Content>
+      <Modal.Header>
         <Heading level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
           {valgtDato && <FormattertDato dato={valgtDato} ukedag />}
         </Heading>
-
+      </Modal.Header>
+      <Modal.Body>
         {dag &&
           dag.aktiviteter.map((aktivitet) => (
             <Form key={aktivitet.id} method="post">
@@ -116,7 +111,7 @@ export function AktivitetModal(props: IProps) {
             </div>
           </ValidatedForm>
         )}
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 }

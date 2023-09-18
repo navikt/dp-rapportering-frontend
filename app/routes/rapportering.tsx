@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function Rapportering() {
   return (
-    <main id="dp-rapportering-frontend">
+    <main>
       <Outlet />
       <SessjonModal />
     </main>
@@ -32,7 +32,7 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     if (error.status === 401) {
       return (
-        <main id="dp-rapportering-frontend">
+        <main>
           <div className="rapportering-header">
             <div className="rapportering-header-innhold">
               <Heading level="1" size="xlarge">
@@ -48,7 +48,7 @@ export function ErrorBoundary() {
     }
 
     return (
-      <main id="dp-rapportering-frontend">
+      <main>
         <div className="rapportering-header">
           <div className="rapportering-header-innhold">
             <Heading level="1" size="xlarge">
