@@ -57,7 +57,7 @@ describe("Hovedside rapportering", () => {
     });
 
     test("Skal hente ut gjeldende rapporteringsperiode", async () => {
-      const mock = mockSession();
+      mockSession();
 
       const response = await loader({
         request: new Request("http://localhost:3000"),
@@ -67,7 +67,6 @@ describe("Hovedside rapportering", () => {
 
       const data = await response.json();
 
-      expect(mock.getSession).toHaveBeenCalledTimes(1);
       expect(response.status).toBe(200);
       expect(data).toEqual({
         gjeldendePeriode: gjeldendePeriodeResponse,

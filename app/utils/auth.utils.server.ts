@@ -1,8 +1,4 @@
-import {
-  makeSession,
-  type GetSessionWithOboProvider,
-  type SessionWithOboProvider,
-} from "@navikt/dp-auth";
+import { makeSession, type GetSessionWithOboProvider } from "@navikt/dp-auth";
 import { idporten } from "@navikt/dp-auth/identity-providers";
 import { tokenX, withInMemoryCache } from "@navikt/dp-auth/obo-providers";
 
@@ -25,7 +21,13 @@ if (process.env.IS_LOCALHOST === "true") {
   });
 }
 
-export async function getRapporteringOboToken(session: SessionWithOboProvider) {
+export async function getRapporteringOboToken(request: Request) {
+  const session = await getSession(request);
+
+  if (!session) {
+    throw new Response(null, { status: 500, statusText: "Feil ved henting av sesjon" });
+  }
+
   if (process.env.IS_LOCALHOST === "true") {
     return process.env.DP_RAPPORTERING_TOKEN || fallbackToken;
   } else {
