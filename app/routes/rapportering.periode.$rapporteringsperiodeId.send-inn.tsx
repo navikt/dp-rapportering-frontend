@@ -12,7 +12,8 @@ import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 
 export async function action({ request, params }: ActionArgs) {
-  invariant(params.rapporteringsperiodeId, "Fant ikke rapporteringsperiodeId");
+  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+
   const periodeId = params.rapporteringsperiodeId;
   const godkjennPeriodeResponse = await godkjennPeriode(periodeId, request);
 
