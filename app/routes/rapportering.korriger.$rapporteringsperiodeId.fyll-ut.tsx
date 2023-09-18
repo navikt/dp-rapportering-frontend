@@ -49,7 +49,7 @@ export default function RapporteringFyllut() {
   useEffect(() => {
     // Vi setter fokus på headeren når brukeren kommer til denne siden fra en annen side.
     // Ellers følger vi browser default fokus oppførsel
-    if (!searchParams.get("paabegynt")) {
+    if (!searchParams.get("utfylling")) {
       setFokus(sidelastFokusRef);
     }
     scrollToView(sidelastFokusRef);
@@ -62,7 +62,7 @@ export default function RapporteringFyllut() {
   }, [actionData]);
 
   function aapneModal(dato: string) {
-    setSearchParams({ paabegynt: "true" });
+    setSearchParams({ utfylling: "true" });
 
     if (periode.status === "TilUtfylling") {
       setValgtDato(dato);
