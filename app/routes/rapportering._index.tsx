@@ -10,6 +10,7 @@ import {
   hentGjeldendePeriode,
   type IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
@@ -20,7 +21,8 @@ interface IRapporteringIndexLoader {
 export async function loader({ request }: LoaderArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
 
-  const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+  const gjeldendePeriodeResponse = await hentGjeldendePeriode(onBehalfOfToken);
 
   if (!gjeldendePeriodeResponse.ok) {
     if (gjeldendePeriodeResponse.status !== 404)

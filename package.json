@@ -6,7 +6,7 @@
     "build:server": "tsc --project server/tsconfig.json",
     "dev": "remix dev",
     "start": "ts-node ./server/server.ts",
-    "typecheck": "tsc",
+    "typecheck": "tsc --project tsconfig.json",
     "prepare": "husky install",
     "lint": "eslint . --ext .ts,.tsx",
     "lint-fix": "eslint . --fix --ext .ts,.tsx",
@@ -83,7 +83,8 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "prettier --write",
-      "npm run lint"
+      "npm run lint",
+      "bash -c 'npm run typecheck'"
     ]
   }
 }
