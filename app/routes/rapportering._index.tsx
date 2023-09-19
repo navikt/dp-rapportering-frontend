@@ -10,6 +10,7 @@ import {
   hentGjeldendePeriode,
   type IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
@@ -20,7 +21,8 @@ interface IRapporteringIndexLoader {
 export async function loader({ request }: LoaderArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
 
-  const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+  const gjeldendePeriodeResponse = await hentGjeldendePeriode(onBehalfOfToken);
 
   if (!gjeldendePeriodeResponse.ok) {
     if (gjeldendePeriodeResponse.status !== 404)
@@ -74,7 +76,7 @@ export default function RapporteringsLandingside() {
           </Heading>
         </div>
       </div>
-      <main className="rapportering-kontainer">
+      <div className="rapportering-kontainer">
         <BodyLong spacing>
           For å motta dagpenger må du rapportere hver 14. dag. Du må rapportere hvor mye du har
           jobbet, og om du har vært syk, hatt fravær eller vært på ferie. NAV bruker informasjonen
@@ -103,7 +105,7 @@ export default function RapporteringsLandingside() {
             Se og korriger innsendte rapporteringer
           </RemixLink>
         </p>
-      </main>
+      </div>
     </>
   );
 }

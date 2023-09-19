@@ -10,17 +10,15 @@ export default function RapporteringLes() {
   ) as IRapporteringsPeriodeLoader;
 
   return (
-    <>
-      <main
-        className={classNames("rapportering-kontainer", {
-          "graa-bakgrunn": periode.status !== "TilUtfylling",
-        })}
-      >
-        <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-        <div className="registert-meldeperiode-kontainer">
-          <AktivitetOppsummering rapporteringsperiode={periode} />
-        </div>
-      </main>
-    </>
+    <div
+      className={classNames("rapportering-kontainer", {
+        "graa-bakgrunn": periode.status !== "TilUtfylling",
+      })}
+    >
+      <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
+      <div className="registert-meldeperiode-kontainer">
+        <AktivitetOppsummering rapporteringsperiode={periode} />
+      </div>
+    </div>
   );
 }

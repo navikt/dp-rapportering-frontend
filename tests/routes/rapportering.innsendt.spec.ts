@@ -84,7 +84,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
     });
 
     test("Skal hente ut innsendte rapporteringsperiode", async () => {
-      const mock = mockSession();
+      mockSession();
 
       server.use(
         rest.get(
@@ -114,7 +114,6 @@ describe("Liste ut alle rapporteringsperioder", () => {
 
       const data = await response.json();
 
-      expect(mock.getSession).toHaveBeenCalledTimes(2);
       expect(response.status).toBe(200);
       expect(data).toEqual({
         innsendtPerioder: innsendtRapporteringsperioderResponse,

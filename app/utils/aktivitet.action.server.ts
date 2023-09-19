@@ -3,6 +3,7 @@ import { type TAktivitetType, lagreAktivitet, sletteAktivitet } from "~/models/a
 import { validator } from "./validering.util";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
+import { getRapporteringOboToken } from "./auth.utils.server";
 
 export async function slettAktivitetAction(
   formdata: FormData,
@@ -10,8 +11,8 @@ export async function slettAktivitetAction(
   periodeId: string
 ): Promise<TypedResponse> {
   const aktivitetId = formdata.get("aktivitetId") as string;
-
-  const slettAktivitetResponse = await sletteAktivitet(periodeId, aktivitetId, request);
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+  const slettAktivitetResponse = await sletteAktivitet(onBehalfOfToken, periodeId, aktivitetId);
 
   if (!slettAktivitetResponse.ok) {
     return json({ error: "Det har skjedd en feil ved sletting, prøv igjen." });
@@ -26,6 +27,7 @@ export async function lagreAktivitetAction(
   periodeId: string
 ): Promise<TypedResponse> {
   const aktivitetsType = formdata.get("type") as TAktivitetType;
+  const onBehalfOfToken = await getRapporteringOboToken(request);
   const inputVerdier = await validator(aktivitetsType).validate(formdata);
 
   if (inputVerdier.error) {
@@ -57,7 +59,7 @@ export async function lagreAktivitetAction(
 
   const aktivitetData = aktivitetsType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
 
-  const lagreAktivitetResponse = await lagreAktivitet(periodeId, aktivitetData, request);
+  const lagreAktivitetResponse = await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
 
   if (!lagreAktivitetResponse.ok) {
     return json({ error: "Noen gikk feil med lagring av aktivitet, prøv igjen." });

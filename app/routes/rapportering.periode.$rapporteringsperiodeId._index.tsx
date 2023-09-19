@@ -37,10 +37,10 @@ export default function Rapportering() {
   }, [navigate, periode]);
 
   return (
-    <main className="rapportering-kontainer">
+    <div className="rapportering-kontainer">
       <p ref={sidelastFokusRef} tabIndex={-1} className="vo-fokus">
         Laster rapporteringsperiode
       </p>
-    </main>
+    </div>
   );
 }

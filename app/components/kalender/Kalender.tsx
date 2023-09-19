@@ -47,7 +47,7 @@ export function Kalender(props: IProps) {
     <>
       <div className={styles.headerKontainer}>
         <div>
-          <p className={styles.header} aria-hidden="true">
+          <p className={styles.header} aria-hidden>
             {periodeUkenummerTekst}
             <span className="tekst-subtil">{periodeFomTomDatoTekst}</span>
           </p>
@@ -57,13 +57,8 @@ export function Kalender(props: IProps) {
           <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
         )}
       </div>
-      <table
-        className={classNames(styles.kalender, {
-          [styles.readonly]: readonly,
-        })}
-        role="grid"
-      >
-        <thead aria-hidden="true">
+      <table className={styles.kalender} role="grid">
+        <thead aria-hidden>
           <tr className={styles.ukedagKontainer}>
             {ukedager.map((ukedag, index) => {
               return (

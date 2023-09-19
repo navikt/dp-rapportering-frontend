@@ -3,10 +3,6 @@
   max-width: 500px;
 }
 
-.modalHeader {
-  margin-bottom: var(--a-spacing-8);
-}
-
 .modalHeader::first-letter {
   text-transform: capitalize;
 }

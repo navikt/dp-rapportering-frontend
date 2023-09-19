@@ -23,7 +23,7 @@ export default function RapporteringLes() {
   }, [setFokus, scrollToView]);
 
   return (
-    <main className="rapportering-kontainer">
+    <div className="rapportering-kontainer">
       <Heading
         ref={sidelastFokusRef}
         className="vo-fokus"
@@ -56,6 +56,6 @@ export default function RapporteringLes() {
           Tilbake til min side
         </RemixLink>
       </div>
-    </main>
+    </div>
   );
 }

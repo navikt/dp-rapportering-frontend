@@ -33,7 +33,7 @@ describe("Hent en rapporteringsperiode", () => {
     });
 
     test("skal hente ut gjeldende rapporteringsperiode", async () => {
-      const mock = mockSession();
+      mockSession();
 
       const response = await loader({
         request: new Request("http://localhost:3000"),
@@ -43,7 +43,6 @@ describe("Hent en rapporteringsperiode", () => {
 
       const data = await response.json();
 
-      expect(mock.getSession).toHaveBeenCalledTimes(1);
       expect(response.status).toBe(200);
       expect(data.periode).toEqual(rapporteringsperioderResponse[0]);
     });
