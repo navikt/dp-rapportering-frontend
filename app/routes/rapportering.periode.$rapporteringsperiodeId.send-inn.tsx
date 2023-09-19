@@ -72,6 +72,9 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
 
       <Form method="post">
         <div className="navigasjon-kontainer">
+          <Button type="submit" variant="primary" iconPosition="right">
+            Bekreft og send til NAV
+          </Button>
           <RemixLink
             to={`/rapportering/periode/${rapporteringsperiodeId}/fyll-ut`}
             as="Button"
@@ -79,10 +82,6 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
           >
             Gå tilbake
           </RemixLink>
-
-          <Button type="submit" variant="primary" iconPosition="right">
-            Bekreft og send til NAV
-          </Button>
         </div>
       </Form>
     </div>

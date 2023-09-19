@@ -1,15 +1,17 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionArgs } from "@remix-run/node";
 import { useActionData, useRouteLoaderData } from "@remix-run/react";
+import { isBefore } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
+import { FormattertDato } from "~/components/FormattertDato";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
@@ -70,6 +72,10 @@ export default function RapporteringFyllut() {
     setModalAapen(false);
   }
 
+  const tidligstRapporteringsDato = periode.dager[12].dato;
+  // Idag er fra og med tidligste rapporteringsdato
+  const kanSendeRapportering = !isBefore(new Date(), new Date(tidligstRapporteringsDato));
+
   return (
     <>
       <div className="rapportering-kontainer">
@@ -99,14 +105,24 @@ export default function RapporteringFyllut() {
         <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
+
+        <Alert variant="info" className="my-10">
+          Du kan sende rapporteringen til NAV tidligst{" "}
+          <FormattertDato dato={tidligstRapporteringsDato} ukedag />
+        </Alert>
+
         <div className="navigasjon-kontainer">
+          {kanSendeRapportering && (
+            <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
+              Send rapportering
+            </RemixLink>
+          )}
+
           <RemixLink as="Button" to="/rapportering" variant="secondary">
             Lagre og fortsett senere
           </RemixLink>
-          <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
-            Send rapportering
-          </RemixLink>
         </div>
+
         <div className="hva-skal-jeg-rapportere-nav-link">
           <RemixLink
             as="Link"
