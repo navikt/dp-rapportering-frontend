@@ -115,7 +115,6 @@ export async function avGodkjennPeriode(periodeId: string, request: Request): Pr
       Accept: "application/json",
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
-    body: JSON.stringify({ image: getEnv("NAIS_APP_IMAGE"), commit: getEnv("COMMIT") }),
   });
 }
 
@@ -137,7 +136,6 @@ export async function lagKorrigeringsperiode(periodeId: string, request: Request
       Accept: "application/json",
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
-    body: JSON.stringify({ image: getEnv("NAIS_APP_IMAGE"), commit: getEnv("COMMIT") }),
   });
 
   return response;
