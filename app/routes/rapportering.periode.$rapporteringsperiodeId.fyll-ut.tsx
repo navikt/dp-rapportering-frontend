@@ -1,5 +1,6 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
+import { type ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useRouteLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
@@ -7,31 +8,29 @@ import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
-import type { TAktivitetType } from "~/models/aktivitet.server";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { sletteAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
-import {
-  IActionStatus,
-  lagreAktivitetAction,
-  slettAktivitetAction,
-} from "~/utils/aktivitet.action.server";
-import { ActionFunctionArgs } from "@remix-run/node";
+import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
+  const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
+  const aktivitetId = formdata.get("aktivitetId") as string;
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
     case "slette": {
-      await slettAktivitetAction(formdata, request, periodeId);
+      return await sletteAktivitet(onBehalfOfToken, periodeId, aktivitetId);
     }
 
     case "lagre": {
-      await lagreAktivitetAction(formdata, request, periodeId);
+      return await validerOgLagreAktivitet(onBehalfOfToken, periodeId, formdata);
     }
   }
 }
@@ -40,7 +39,7 @@ export default function RapporteringFyllut() {
   const { periode } = useRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
-  const actionData = useActionData() as IActionStatus;
+  const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
@@ -106,6 +105,7 @@ export default function RapporteringFyllut() {
           setValgtAktivitet={setValgtAktivitet}
           modalAapen={modalAapen}
           lukkModal={lukkModal}
+          error={actionData?.status === "error" ? actionData.error : undefined}
         />
         <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />

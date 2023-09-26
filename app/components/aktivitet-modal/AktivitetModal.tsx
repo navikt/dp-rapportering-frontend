@@ -1,5 +1,5 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { Form, useActionData } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 import classNames from "classnames";
 import { ValidatedForm } from "remix-validated-form";
 import { TallInput } from "~/components/TallInput";
@@ -10,8 +10,6 @@ import { validator } from "~/utils/validering.util";
 import { FormattertDato } from "../FormattertDato";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 import styles from "./AktivitetModal.module.css";
-import { action } from "~/routes/rapportering.periode.$rapporteringsperiodeId.send-inn";
-import { IActionStatus } from "~/utils/aktivitet.action.server";
 
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
@@ -20,6 +18,7 @@ interface IProps {
   setValgtAktivitet: (aktivitet: string | TAktivitetType) => void;
   modalAapen: boolean;
   lukkModal: () => void;
+  error?: string;
 }
 
 export function AktivitetModal(props: IProps) {
@@ -30,9 +29,8 @@ export function AktivitetModal(props: IProps) {
     valgtAktivitet,
     setValgtAktivitet,
     valgtDato,
+    error,
   } = props;
-
-  const actionData = useActionData() as IActionStatus;
 
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
@@ -100,9 +98,9 @@ export function AktivitetModal(props: IProps) {
               <TallInput name="timer" label="Antall timer:" className="my-4" />
             )}
 
-            {actionData?.status === "error" && (
+            {error && (
               <Alert variant="error" className={styles.feilmelding}>
-                Noen gikk feil med lagring av aktivitet, prøv igjen.
+                {error}
               </Alert>
             )}
 

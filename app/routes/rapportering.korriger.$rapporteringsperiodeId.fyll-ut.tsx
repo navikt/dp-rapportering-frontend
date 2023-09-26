@@ -8,30 +8,29 @@ import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
-import type { TAktivitetType } from "~/models/aktivitet.server";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { sletteAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
-import {
-  IActionStatus,
-  lagreAktivitetAction,
-  slettAktivitetAction,
-} from "~/utils/aktivitet.action.server";
+import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
+  const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
+  const aktivitetId = formdata.get("aktivitetId") as string;
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
     case "slette": {
-      return await slettAktivitetAction(formdata, request, periodeId);
+      return await sletteAktivitet(onBehalfOfToken, periodeId, aktivitetId);
     }
 
     case "lagre": {
-      return await lagreAktivitetAction(formdata, request, periodeId);
+      return await validerOgLagreAktivitet(onBehalfOfToken, periodeId, formdata);
     }
   }
 }
@@ -40,7 +39,7 @@ export default function RapporteringFyllut() {
   const { periode } = useRouteLoaderData(
     "routes/rapportering.korriger.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
-  const actionData = useActionData() as IActionStatus;
+  const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");

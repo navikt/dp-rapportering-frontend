@@ -1,37 +1,15 @@
-import { type TypedResponse, json } from "@remix-run/node";
-import { type TAktivitetType, lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
-import { validator } from "./validering.util";
+import { type TypedResponse } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
-import { getRapporteringOboToken } from "./auth.utils.server";
+import { IAktivitetResponse, lagreAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
+import { validator } from "./validering.util";
 
-export interface IActionStatus {
-  status: "success" | "error";
-}
-
-export async function slettAktivitetAction(
-  formdata: FormData,
-  request: Request,
-  periodeId: string
-): Promise<TypedResponse> {
-  const aktivitetId = formdata.get("aktivitetId") as string;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-  const slettAktivitetResponse = await sletteAktivitet(onBehalfOfToken, periodeId, aktivitetId);
-
-  if (!slettAktivitetResponse.ok) {
-    return json({ status: "error" });
-  }
-
-  return json({ status: "success" });
-}
-
-export async function lagreAktivitetAction(
-  formdata: FormData,
-  request: Request,
-  periodeId: string
-): Promise<TypedResponse> {
+export async function validerOgLagreAktivitet(
+  onBehalfOfToken: string,
+  periodeId: string,
+  formdata: FormData
+): Promise<TypedResponse | IAktivitetResponse> {
   const aktivitetsType = formdata.get("type") as TAktivitetType;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
   const inputVerdier = await validator(aktivitetsType).validate(formdata);
 
   if (inputVerdier.error) {
@@ -63,11 +41,5 @@ export async function lagreAktivitetAction(
 
   const aktivitetData = aktivitetsType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
 
-  const lagreAktivitetResponse = await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
-
-  if (!lagreAktivitetResponse.ok) {
-    return json({ status: "error" });
-  }
-
-  return json({ status: "success" });
+  return await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
 }
