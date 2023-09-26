@@ -10,7 +10,7 @@ export interface IAktivitet {
   dato: string;
 }
 
-export interface IActionResponse {
+export interface IActionData {
   status: "success" | "error";
   error?: string;
 }
@@ -19,7 +19,7 @@ export async function lagreAktivitet(
   onBehalfOfToken: string,
   rapporteringsperiodeId: string,
   aktivitet: IAktivitet
-): Promise<IActionResponse> {
+): Promise<IActionData> {
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"
   )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet`;
@@ -41,7 +41,7 @@ export async function sletteAktivitet(
   onBehalfOfToken: string,
   rapporteringsperiodeId: string,
   aktivitetId: String
-): Promise<IActionResponse> {
+): Promise<IActionData> {
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"
   )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet/${aktivitetId}`;
