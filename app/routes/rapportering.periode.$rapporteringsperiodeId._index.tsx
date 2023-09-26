@@ -3,7 +3,7 @@ import { useNavigate, useRouteLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import type { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { type loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function Rapportering() {
   const { periode } = useRouteLoaderData(

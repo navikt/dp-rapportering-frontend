@@ -3,7 +3,7 @@ import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import type { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { type loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(

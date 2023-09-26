@@ -1,6 +1,6 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
-import type { ActionFunctionArgs, SerializeFrom } from "@remix-run/node";
+import { type ActionFunctionArgs, type SerializeFrom } from "@remix-run/node";
 import { useActionData, useRouteLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";

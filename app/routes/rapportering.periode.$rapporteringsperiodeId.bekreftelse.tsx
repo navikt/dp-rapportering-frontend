@@ -7,7 +7,7 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import type { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { type loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(

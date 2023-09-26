@@ -1,7 +1,7 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import { type LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { lagKorrigeringsperiode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
