@@ -4,6 +4,15 @@ import { serialize } from "tinyduration";
 import { IAktivitetResponse, lagreAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
 import { validator } from "./validering.util";
 
+interface IAktivtetObjekt {
+  type: TAktivitetType;
+  dato: string;
+}
+
+interface IAktivitetArbeidObjekt extends IAktivtetObjekt {
+  timer: string;
+}
+
 export async function validerOgLagreAktivitet(
   onBehalfOfToken: string,
   periodeId: string,
@@ -17,8 +26,17 @@ export async function validerOgLagreAktivitet(
   }
 
   const { type, dato, timer: tid } = inputVerdier.submittedData;
+  const aktivtetObjekt = hentAktivitetObjekt(type, dato, tid);
 
-  function hentAktivitetArbeid() {
+  return await lagreAktivitet(onBehalfOfToken, periodeId, aktivtetObjekt);
+}
+
+function hentAktivitetObjekt(
+  type: TAktivitetType,
+  dato: string,
+  tid: string
+): IAktivitetArbeidObjekt | IAktivtetObjekt {
+  if (type === "Arbeid") {
     const delt = tid.replace(/\./g, ",").split(",");
     const timer = delt[0] || 0;
     const minutter = delt[1] || 0;
@@ -28,18 +46,11 @@ export async function validerOgLagreAktivitet(
       type,
       dato,
       timer: serialize({
-        hours: timer,
+        hours: timer as number,
         minutes: Math.round(minutterProsent * 60),
       }),
     };
+  } else {
+    return { type, dato };
   }
-
-  const andreAktivitet = {
-    type,
-    dato,
-  };
-
-  const aktivitetData = aktivitetsType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
-
-  return await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
 }
