@@ -27,7 +27,6 @@ export default function Rapportering() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.log("treffer rapportering/ errorboundary", error);
 
   if (isRouteErrorResponse(error)) {
     if (error.status === 401) {
