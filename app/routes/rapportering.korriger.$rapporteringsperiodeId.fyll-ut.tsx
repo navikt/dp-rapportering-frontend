@@ -21,6 +21,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const periodeId = params.rapporteringsperiodeId;
   const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
+  const aktivitetsType = formdata.get("type") as TAktivitetType;
   const aktivitetId = formdata.get("aktivitetId") as string;
   const submitKnapp = formdata.get("submit");
 
@@ -30,7 +31,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }
 
     case "lagre": {
-      return await validerOgLagreAktivitet(onBehalfOfToken, periodeId, formdata);
+      return await validerOgLagreAktivitet(onBehalfOfToken, aktivitetsType, periodeId, formdata);
     }
   }
 }

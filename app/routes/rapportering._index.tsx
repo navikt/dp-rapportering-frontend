@@ -34,6 +34,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function RapporteringsLandingside() {
   const { gjeldendePeriode } = useLoaderData<typeof loader>();
+
   lagBrodsmulesti();
 
   const sidelastFokusRef = useRef(null);

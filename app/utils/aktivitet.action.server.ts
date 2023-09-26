@@ -4,53 +4,57 @@ import { serialize } from "tinyduration";
 import { type IActionData, lagreAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
 import { validator } from "./validering.util";
 
-interface IAktivtetObjekt {
+interface IAktivtetData {
   type: TAktivitetType;
   dato: string;
 }
 
-interface IAktivitetArbeidObjekt extends IAktivtetObjekt {
+interface IAktivitetArbeidData extends IAktivtetData {
   timer: string;
 }
 
 export async function validerOgLagreAktivitet(
   onBehalfOfToken: string,
+  aktivitetsType: TAktivitetType,
   periodeId: string,
   formdata: FormData
 ): Promise<TypedResponse | IActionData> {
-  const aktivitetsType = formdata.get("type") as TAktivitetType;
   const inputVerdier = await validator(aktivitetsType).validate(formdata);
 
   if (inputVerdier.error) {
     return validationError(inputVerdier.error);
   }
 
-  const { type, dato, timer: tid } = inputVerdier.submittedData;
-  const aktivtetObjekt = hentAktivitetObjekt(type, dato, tid);
+  const { type, dato, timer: tidsstempel } = inputVerdier.submittedData;
+  const aktivitetData = hentAktivitetData(type, dato, tidsstempel);
 
-  return await lagreAktivitet(onBehalfOfToken, periodeId, aktivtetObjekt);
+  return await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
 }
 
-function hentAktivitetObjekt(
+function hentAktivitetData(
   type: TAktivitetType,
   dato: string,
-  tid: string
-): IAktivitetArbeidObjekt | IAktivtetObjekt {
+  tidsstempel: string
+): IAktivitetArbeidData | IAktivtetData {
   if (type === "Arbeid") {
-    const delt = tid.replace(/\./g, ",").split(",");
-    const timer = delt[0] || 0;
-    const minutter = delt[1] || 0;
-    const minutterProsent = parseFloat(`0.${minutter}`);
-
     return {
       type,
       dato,
-      timer: serialize({
-        hours: timer as number,
-        minutes: Math.round(minutterProsent * 60),
-      }),
+      timer: hentISO8601DurationString(tidsstempel),
     };
-  } else {
-    return { type, dato };
   }
+
+  return { type, dato };
+}
+
+function hentISO8601DurationString(tidsstempel: string): string {
+  const delt = tidsstempel.replace(/\./g, ",").split(",");
+  const timer = delt[0] || 0;
+  const minutter = delt[1] || 0;
+  const minutterProsent = parseFloat(`0.${minutter}`);
+
+  return serialize({
+    hours: timer as number,
+    minutes: Math.round(minutterProsent * 60),
+  });
 }
