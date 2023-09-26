@@ -5,6 +5,10 @@ import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
 import { getRapporteringOboToken } from "./auth.utils.server";
 
+export interface IActionStatus {
+  status: "success" | "error";
+}
+
 export async function slettAktivitetAction(
   formdata: FormData,
   request: Request,
@@ -15,10 +19,10 @@ export async function slettAktivitetAction(
   const slettAktivitetResponse = await sletteAktivitet(onBehalfOfToken, periodeId, aktivitetId);
 
   if (!slettAktivitetResponse.ok) {
-    return json({ error: "Det har skjedd en feil ved sletting, prøv igjen." });
+    return json({ status: "error" });
   }
 
-  return json({ lagret: true });
+  return json({ status: "success" });
 }
 
 export async function lagreAktivitetAction(
@@ -62,8 +66,8 @@ export async function lagreAktivitetAction(
   const lagreAktivitetResponse = await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
 
   if (!lagreAktivitetResponse.ok) {
-    return json({ error: "Noen gikk feil med lagring av aktivitet, prøv igjen." });
+    return json({ status: "error" });
   }
 
-  return json({ lagret: true });
+  return json({ status: "success" });
 }

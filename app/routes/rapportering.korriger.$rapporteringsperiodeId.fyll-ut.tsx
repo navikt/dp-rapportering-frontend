@@ -1,6 +1,6 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useRouteLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
@@ -12,9 +12,13 @@ import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
-import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
+import {
+  IActionStatus,
+  lagreAktivitetAction,
+  slettAktivitetAction,
+} from "~/utils/aktivitet.action.server";
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
@@ -36,7 +40,7 @@ export default function RapporteringFyllut() {
   const { periode } = useRouteLoaderData(
     "routes/rapportering.korriger.$rapporteringsperiodeId"
   ) as IRapporteringsPeriodeLoader;
-  const actionData = useActionData();
+  const actionData = useActionData() as IActionStatus;
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
@@ -57,7 +61,7 @@ export default function RapporteringFyllut() {
   }, [setFokus, scrollToView, searchParams]);
 
   useEffect(() => {
-    if (actionData?.lagret) {
+    if (actionData?.status === "success") {
       lukkModal();
     }
   }, [actionData]);

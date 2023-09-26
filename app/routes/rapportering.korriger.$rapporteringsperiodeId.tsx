@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
@@ -13,7 +13,7 @@ export interface IRapporteringsPeriodeLoader {
   periode: IRapporteringsperiode;
 }
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
@@ -30,7 +30,7 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 export default function Rapportering() {
-  const { periode } = useLoaderData<typeof loader>() as IRapporteringsPeriodeLoader;
+  const { periode } = useLoaderData<typeof loader>();
 
   lagBrodsmulesti([
     {

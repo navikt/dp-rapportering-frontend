@@ -10,6 +10,8 @@ import { validator } from "~/utils/validering.util";
 import { FormattertDato } from "../FormattertDato";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 import styles from "./AktivitetModal.module.css";
+import { action } from "~/routes/rapportering.periode.$rapporteringsperiodeId.send-inn";
+import { IActionStatus } from "~/utils/aktivitet.action.server";
 
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
@@ -30,7 +32,7 @@ export function AktivitetModal(props: IProps) {
     valgtDato,
   } = props;
 
-  const actionData = useActionData();
+  const actionData = useActionData() as IActionStatus;
 
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
@@ -98,9 +100,9 @@ export function AktivitetModal(props: IProps) {
               <TallInput name="timer" label="Antall timer:" className="my-4" />
             )}
 
-            {actionData?.error && (
+            {actionData?.status === "error" && (
               <Alert variant="error" className={styles.feilmelding}>
-                {actionData.error}
+                Noen gikk feil med lagring av aktivitet, prøv igjen.
               </Alert>
             )}
 

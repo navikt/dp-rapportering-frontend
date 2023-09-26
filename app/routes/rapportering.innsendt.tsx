@@ -1,5 +1,5 @@
 import { Alert, BodyLong, Heading } from "@navikt/ds-react";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
@@ -11,11 +11,7 @@ import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringspe
 import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
-interface IRapporteringAlleLoader {
-  innsendtPerioder: IRapporteringsperiode[];
-}
-
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
   let innsendtPerioder: IRapporteringsperiode[] = [];
 
@@ -51,7 +47,7 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function RapporteringAlle() {
-  const { innsendtPerioder } = useLoaderData<typeof loader>() as IRapporteringAlleLoader;
+  const { innsendtPerioder } = useLoaderData<typeof loader>();
 
   lagBrodsmulesti([
     { title: "Innsendte rapporteringsperioder", url: hentBrodsmuleUrl("/innsendt") },

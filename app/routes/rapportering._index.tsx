@@ -1,5 +1,5 @@
 import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
@@ -14,11 +14,7 @@ import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
-interface IRapporteringIndexLoader {
-  gjeldendePeriode: IRapporteringsperiode | null;
-}
-
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
 
   const onBehalfOfToken = await getRapporteringOboToken(request);
@@ -37,7 +33,7 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function RapporteringsLandingside() {
-  const { gjeldendePeriode } = useLoaderData<typeof loader>() as IRapporteringIndexLoader;
+  const { gjeldendePeriode } = useLoaderData<typeof loader>();
   lagBrodsmulesti();
 
   const sidelastFokusRef = useRef(null);

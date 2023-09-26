@@ -7,12 +7,5 @@ module.exports = {
   // publicPath: "/build/",
   serverModuleFormat: "cjs",
   publicPath: "/rapportering/build/",
-  future: {
-    v2_errorBoundary: true,
-    v2_meta: true,
-    v2_normalizeFormMethod: true,
-    v2_routeConvention: true,
-    v2_headers: true,
-    v2_dev: true,
-  },
+  future: {},
 };

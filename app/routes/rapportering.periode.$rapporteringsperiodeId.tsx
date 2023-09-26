@@ -1,5 +1,5 @@
 import { Accordion } from "@navikt/ds-react";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
@@ -13,7 +13,7 @@ export interface IRapporteringsPeriodeLoader {
   periode: IRapporteringsperiode;
 }
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
@@ -29,7 +29,7 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 export default function Rapportering() {
-  const { periode } = useLoaderData<typeof loader>() as IRapporteringsPeriodeLoader;
+  const { periode } = useLoaderData<typeof loader>();
 
   lagBrodsmulesti([
     {
