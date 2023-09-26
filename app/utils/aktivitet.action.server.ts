@@ -1,7 +1,7 @@
 import { type TypedResponse } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
-import { IActionData, lagreAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
+import { type IActionData, lagreAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
 import { validator } from "./validering.util";
 
 interface IAktivtetObjekt {

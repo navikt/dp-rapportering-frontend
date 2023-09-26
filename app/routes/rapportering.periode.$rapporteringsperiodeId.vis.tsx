@@ -1,13 +1,14 @@
+import { type SerializeFrom } from "@remix-run/node";
 import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import type { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
+  ) as SerializeFrom<typeof loader>;
 
   return (
     <div

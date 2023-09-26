@@ -1,4 +1,5 @@
 import { Heading } from "@navikt/ds-react";
+import { type SerializeFrom } from "@remix-run/node";
 import { useRouteLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
@@ -6,12 +7,12 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { type loader } from "~/routes/rapportering.korriger.$rapporteringsperiodeId";
 
 export default function RapporteringLes() {
   const { periode } = useRouteLoaderData(
     "routes/rapportering.korriger.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
+  ) as SerializeFrom<typeof loader>;
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();

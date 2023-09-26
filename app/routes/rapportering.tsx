@@ -1,14 +1,9 @@
-import type { SessionWithOboProvider } from "@navikt/dp-auth";
 import { Heading } from "@navikt/ds-react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import { getSession } from "~/utils/auth.utils.server";
-
-export interface ISessionLoader {
-  session: SessionWithOboProvider;
-}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request);

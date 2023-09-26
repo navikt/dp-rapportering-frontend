@@ -1,10 +1,10 @@
+import { type SerializeFrom } from "@remix-run/node";
 import { useRouteLoaderData } from "@remix-run/react";
-import type { ISanityInfoside, ISanityTexts } from "~/sanity/sanity.types";
+import { type loader } from "~/root";
+import type { ISanityInfoside } from "~/sanity/sanity.types";
 
 export function useSanity() {
-  const { sanityTexts } = useRouteLoaderData("root") as {
-    sanityTexts: ISanityTexts;
-  };
+  const { sanityTexts } = useRouteLoaderData("root") as SerializeFrom<typeof loader>;
 
   function hentAppTekstMedId(textId: string): string {
     return (
