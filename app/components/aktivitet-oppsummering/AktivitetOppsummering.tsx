@@ -1,7 +1,7 @@
 import { Alert } from "@navikt/ds-react";
 import classNames from "classnames";
-import type { TAktivitetType } from "~/models/aktivitet.server";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { type TAktivitetType } from "~/models/aktivitet.server";
+import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import styles from "./AktivitetOppsummering.module.css";
 interface IProps {

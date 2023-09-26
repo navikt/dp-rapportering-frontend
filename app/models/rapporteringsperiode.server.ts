@@ -1,6 +1,6 @@
 import { getEnv } from "~/utils/env.utils";
 import { getHeader } from "~/utils/fetch.utils";
-import type { IAktivitet, TAktivitetType } from "./aktivitet.server";
+import { type IAktivitet, type TAktivitetType } from "./aktivitet.server";
 
 export interface IRapporteringsperiode {
   beregnesEtter: string;

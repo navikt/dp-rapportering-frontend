@@ -1,4 +1,4 @@
-import type { DecoratorFetchProps } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { type DecoratorFetchProps } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { fetchDecoratorHtml } from "@navikt/nav-dekoratoren-moduler/ssr";
 
 export async function hentDekoratorHtml() {
