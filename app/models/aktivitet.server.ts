@@ -31,7 +31,10 @@ export async function lagreAktivitet(
   });
 
   if (!response.ok) {
-    return { status: "error", error: "Det har skjedd en feil ved sletting, prøv igjen." };
+    return {
+      status: "error",
+      error: "Det har skjedd en feil ved lagring av aktivitet, prøv igjen.",
+    };
   }
 
   return { status: "success" };

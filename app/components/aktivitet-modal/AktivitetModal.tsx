@@ -1,5 +1,5 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { Form } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import classNames from "classnames";
 import { ValidatedForm } from "remix-validated-form";
 import { TallInput } from "~/components/TallInput";
@@ -10,6 +10,7 @@ import { validator } from "~/utils/validering.util";
 import { FormattertDato } from "../FormattertDato";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
 import styles from "./AktivitetModal.module.css";
+import { action } from "~/routes/rapportering.periode.$rapporteringsperiodeId.fyll-ut";
 
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
@@ -18,7 +19,6 @@ interface IProps {
   setValgtAktivitet: (aktivitet: string | TAktivitetType) => void;
   modalAapen: boolean;
   lukkModal: () => void;
-  error?: string;
 }
 
 export function AktivitetModal(props: IProps) {
@@ -29,12 +29,13 @@ export function AktivitetModal(props: IProps) {
     valgtAktivitet,
     setValgtAktivitet,
     valgtDato,
-    error,
   } = props;
 
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
   );
+
+  const actionData = useActionData<typeof action>();
 
   function hentAktivitetTekst() {
     const aktivitet = dag?.aktiviteter[0];
@@ -70,9 +71,9 @@ export function AktivitetModal(props: IProps) {
                 {hentAktivitetTekst()}
               </div>
 
-              {error && (
+              {actionData?.status === "error" && actionData?.error && (
                 <Alert variant="error" className={styles.feilmelding}>
-                  {error}
+                  {actionData.error}
                 </Alert>
               )}
 
@@ -105,9 +106,9 @@ export function AktivitetModal(props: IProps) {
               <TallInput name="timer" label="Antall timer:" className="my-4" />
             )}
 
-            {error && (
+            {actionData?.status === "error" && actionData?.error && (
               <Alert variant="error" className={styles.feilmelding}>
-                {error}
+                {actionData.error}
               </Alert>
             )}
 

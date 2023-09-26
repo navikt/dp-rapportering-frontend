@@ -106,7 +106,6 @@ export default function RapporteringFyllut() {
           setValgtAktivitet={setValgtAktivitet}
           modalAapen={modalAapen}
           lukkModal={lukkModal}
-          error={actionData?.status === "error" ? actionData.error : undefined}
         />
         <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />

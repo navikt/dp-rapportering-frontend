@@ -84,7 +84,7 @@ describe("AktivitetModal", () => {
         submit = formData.get("submit") as string;
         aktivitetstype = formData.get("type") as string;
 
-        return json({ aktivitetLagret: true });
+        return json({ status: "success" });
       });
 
       const TestComponent = () => {
@@ -125,7 +125,10 @@ describe("AktivitetModal", () => {
 
     test("burde vise feilmelding hvis det er feil i backenden når vi lagrer aktivitet", async () => {
       const actionFn = vi.fn(async ({ request }) => {
-        return json({ error: "Det skjedde en feil." });
+        return json({
+          status: "error",
+          error: "Det har skjedd en feil ved lagring av aktivitet, prøv igjen.",
+        });
       });
 
       const TestComponent = () => {
@@ -158,7 +161,9 @@ describe("AktivitetModal", () => {
       await userEvent.click(lagreKnapp);
 
       expect(actionFn).toBeCalledTimes(1);
-      expect(await screen.findByText("Det skjedde en feil.")).toBeInTheDocument();
+      expect(
+        await screen.findByText("Det har skjedd en feil ved lagring av aktivitet, prøv igjen.")
+      ).toBeInTheDocument();
     });
 
     describe("Arbeid", () => {
