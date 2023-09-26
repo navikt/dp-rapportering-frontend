@@ -69,6 +69,13 @@ export function AktivitetModal(props: IProps) {
               <div className={classNames(styles.registrertAktivitet, styles[aktivitet.type])}>
                 {hentAktivitetTekst()}
               </div>
+
+              {error && (
+                <Alert variant="error" className={styles.feilmelding}>
+                  {error}
+                </Alert>
+              )}
+
               <div className={styles.knappKontainer}>
                 <Button type="submit" name="submit" value="slette">
                   Fjern registrering
