@@ -1,14 +1,13 @@
-import type { SerializeFrom } from "@remix-run/node";
-import { useNavigate, useRouteLoaderData } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import type { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 export default function Rapportering() {
-  const { periode } = useRouteLoaderData(
+  const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
-  ) as SerializeFrom<typeof loader>;
+  );
 
   const navigate = useNavigate();
 
