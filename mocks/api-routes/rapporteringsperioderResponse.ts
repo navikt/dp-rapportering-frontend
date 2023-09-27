@@ -6,6 +6,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
     id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     fraOgMed: "2023-05-01",
     tilOgMed: "2023-05-14",
+    kanGodkjennesFra: "2023-05-13",
     status: "TilUtfylling",
     dager: [
       {

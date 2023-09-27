@@ -84,9 +84,7 @@ export default function RapporteringFyllut() {
     setModalAapen(false);
   }
 
-  const tidligstRapporteringsDato = periode.dager[12].dato;
-  // Idag er fra og med tidligste rapporteringsdato
-  const kanSendeRapportering = !isBefore(new Date(), new Date(tidligstRapporteringsDato));
+  const kanSendePeriodeTilNav = !isBefore(new Date(), new Date(periode.kanGodkjennesFra));
 
   return (
     <>
@@ -119,11 +117,11 @@ export default function RapporteringFyllut() {
 
         <Alert variant="info" className="my-10">
           Du kan sende rapporteringen til NAV tidligst{" "}
-          <FormattertDato dato={tidligstRapporteringsDato} ukedag />
+          <FormattertDato dato={periode.kanGodkjennesFra} ukedag />
         </Alert>
 
         <div className="navigasjon-kontainer">
-          {kanSendeRapportering && (
+          {kanSendePeriodeTilNav && (
             <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
               Send rapportering
             </RemixLink>
