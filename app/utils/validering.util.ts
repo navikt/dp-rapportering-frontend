@@ -1,6 +1,6 @@
 import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
-import { type TAktivitetType } from "~/models/aktivitet.server";
+import type { TAktivitetType } from "~/models/aktivitet.server";
 
 const aktivitetsvalideringArbeid = z.object({
   type: z.enum(["Arbeid", "Syk", "Ferie"], {

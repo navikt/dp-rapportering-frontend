@@ -1,13 +1,13 @@
-import { useNavigate, useRouteLoaderData } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 export default function Rapportering() {
-  const { periode } = useRouteLoaderData(
+  const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
+  );
 
   const navigate = useNavigate();
 
@@ -24,11 +24,9 @@ export default function Rapportering() {
     if (periode) {
       switch (periode.status) {
         case "TilUtfylling":
-          console.log("naviger til utfylling!");
           navigate(`/rapportering/periode/${periode.id}/fyll-ut`, { replace: true });
           break;
         default:
-          console.log("naviger til view");
           navigate(`/rapportering/periode/${periode.id}/vis`, { replace: true });
       }
     } else {

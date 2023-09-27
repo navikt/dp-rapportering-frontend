@@ -2,14 +2,14 @@
 
 import { json } from "@remix-run/node";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, test, vi } from "vitest";
-import { gjeldendePeriodeResponse } from "../../../mocks/api-routes/gjeldendePeriodeResponse";
-import { AktivitetModal } from "./AktivitetModal";
-import { useState } from "react";
-import { type TAktivitetType } from "~/models/aktivitet.server";
 import userEvent from "@testing-library/user-event";
-import { type IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { useState } from "react";
+import { describe, expect, test, vi } from "vitest";
+import type { TAktivitetType } from "~/models/aktivitet.server";
+import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { gjeldendePeriodeResponse } from "../../../mocks/api-routes/gjeldendePeriodeResponse";
 import { TestContainer } from "../../../tests/helpers/TestContainer";
+import { AktivitetModal } from "./AktivitetModal";
 
 describe("AktivitetModal", () => {
   const dagUtenAktivitet: IRapporteringsperiodeDag = {
@@ -84,7 +84,7 @@ describe("AktivitetModal", () => {
         submit = formData.get("submit") as string;
         aktivitetstype = formData.get("type") as string;
 
-        return json({ aktivitetLagret: true });
+        return json({ status: "success" });
       });
 
       const TestComponent = () => {
@@ -125,7 +125,10 @@ describe("AktivitetModal", () => {
 
     test("burde vise feilmelding hvis det er feil i backenden når vi lagrer aktivitet", async () => {
       const actionFn = vi.fn(async ({ request }) => {
-        return json({ error: "Det skjedde en feil." });
+        return json({
+          status: "error",
+          error: "Det har skjedd en feil ved lagring av aktivitet, prøv igjen.",
+        });
       });
 
       const TestComponent = () => {
@@ -158,7 +161,9 @@ describe("AktivitetModal", () => {
       await userEvent.click(lagreKnapp);
 
       expect(actionFn).toBeCalledTimes(1);
-      expect(await screen.findByText("Det skjedde en feil.")).toBeInTheDocument();
+      expect(
+        await screen.findByText("Det har skjedd en feil ved lagring av aktivitet, prøv igjen.")
+      ).toBeInTheDocument();
     });
 
     describe("Arbeid", () => {

@@ -1,4 +1,4 @@
-import { type RefObject } from "react";
+import type { RefObject } from "react";
 
 export function useSetFokus() {
   function setFokus(ref: RefObject<HTMLElement>, previewScroll = true) {

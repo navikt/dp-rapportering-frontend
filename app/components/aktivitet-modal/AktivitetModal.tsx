@@ -5,6 +5,8 @@ import { ValidatedForm } from "remix-validated-form";
 import { TallInput } from "~/components/TallInput";
 import type { TAktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { action as korringeringAction } from "~/routes/rapportering.korriger.$rapporteringsperiodeId.fyll-ut";
+import type { action as rapporteringAction } from "~/routes/rapportering.periode.$rapporteringsperiodeId.fyll-ut";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
 import { FormattertDato } from "../FormattertDato";
@@ -30,11 +32,11 @@ export function AktivitetModal(props: IProps) {
     valgtDato,
   } = props;
 
-  const actionData = useActionData();
-
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
   );
+
+  const actionData = useActionData<typeof rapporteringAction | typeof korringeringAction>();
 
   function hentAktivitetTekst() {
     const aktivitet = dag?.aktiviteter[0];
@@ -69,6 +71,13 @@ export function AktivitetModal(props: IProps) {
               <div className={classNames(styles.registrertAktivitet, styles[aktivitet.type])}>
                 {hentAktivitetTekst()}
               </div>
+
+              {actionData?.status === "error" && actionData?.error && (
+                <Alert variant="error" className={styles.feilmelding}>
+                  {actionData.error}
+                </Alert>
+              )}
+
               <div className={styles.knappKontainer}>
                 <Button type="submit" name="submit" value="slette">
                   Fjern registrering
@@ -98,7 +107,7 @@ export function AktivitetModal(props: IProps) {
               <TallInput name="timer" label="Antall timer:" className="my-4" />
             )}
 
-            {actionData?.error && (
+            {actionData?.status === "error" && actionData?.error && (
               <Alert variant="error" className={styles.feilmelding}>
                 {actionData.error}
               </Alert>

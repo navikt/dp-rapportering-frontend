@@ -1,13 +1,12 @@
-import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 export default function RapporteringLes() {
-  const { periode } = useRouteLoaderData(
+  const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
+  );
 
   return (
     <div

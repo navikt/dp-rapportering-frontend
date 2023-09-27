@@ -1,17 +1,16 @@
 import { Heading } from "@navikt/ds-react";
-import { useRouteLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 export default function RapporteringLes() {
-  const { periode } = useRouteLoaderData(
+  const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.korriger.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
+  );
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
