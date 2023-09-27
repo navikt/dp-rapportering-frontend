@@ -1,7 +1,7 @@
 import { Button, Link } from "@navikt/ds-react";
-import { type LinkProps } from "@remix-run/react";
+import type { LinkProps } from "@remix-run/react";
 import { useHref } from "@remix-run/react";
-import { type PropsWithChildren, type Ref } from "react";
+import type { PropsWithChildren, Ref } from "react";
 import { forwardRef } from "react";
 import { useLinkClickHandler } from "react-router-dom";
 

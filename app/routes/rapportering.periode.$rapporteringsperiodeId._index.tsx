@@ -1,9 +1,9 @@
-import { type SerializeFrom } from "@remix-run/node";
+import type { SerializeFrom } from "@remix-run/node";
 import { useNavigate, useRouteLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import { type loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import type { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 
 export default function Rapportering() {
   const { periode } = useRouteLoaderData(
@@ -25,11 +25,9 @@ export default function Rapportering() {
     if (periode) {
       switch (periode.status) {
         case "TilUtfylling":
-          console.log("naviger til utfylling!");
           navigate(`/rapportering/periode/${periode.id}/fyll-ut`, { replace: true });
           break;
         default:
-          console.log("naviger til view");
           navigate(`/rapportering/periode/${periode.id}/vis`, { replace: true });
       }
     } else {

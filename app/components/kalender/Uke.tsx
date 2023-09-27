@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { format } from "date-fns";
-import { type IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import styles from "./Kalender.module.css";
 

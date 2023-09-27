@@ -2,14 +2,14 @@
 
 import { json } from "@remix-run/node";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, test, vi } from "vitest";
-import { gjeldendePeriodeResponse } from "../../../mocks/api-routes/gjeldendePeriodeResponse";
-import { AktivitetModal } from "./AktivitetModal";
-import { useState } from "react";
-import { type TAktivitetType } from "~/models/aktivitet.server";
 import userEvent from "@testing-library/user-event";
-import { type IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { useState } from "react";
+import { describe, expect, test, vi } from "vitest";
+import type { TAktivitetType } from "~/models/aktivitet.server";
+import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { gjeldendePeriodeResponse } from "../../../mocks/api-routes/gjeldendePeriodeResponse";
 import { TestContainer } from "../../../tests/helpers/TestContainer";
+import { AktivitetModal } from "./AktivitetModal";
 
 describe("AktivitetModal", () => {
   const dagUtenAktivitet: IRapporteringsperiodeDag = {

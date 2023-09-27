@@ -1,6 +1,7 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
-import { SerializeFrom, type ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { SerializeFrom } from "@remix-run/node";
 import { useActionData, useRouteLoaderData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
@@ -11,7 +12,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { sletteAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
-import { type loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import type { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 

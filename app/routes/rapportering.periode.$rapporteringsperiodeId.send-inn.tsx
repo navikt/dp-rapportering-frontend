@@ -1,5 +1,5 @@
 import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
-import { type ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";

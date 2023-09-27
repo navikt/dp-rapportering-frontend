@@ -1,7 +1,7 @@
-import { type SerializeFrom } from "@remix-run/node";
+import type { SerializeFrom } from "@remix-run/node";
 import { useRouteLoaderData } from "@remix-run/react";
-import { type loader } from "~/root";
-import { type ISanityInfoside } from "~/sanity/sanity.types";
+import type { loader } from "~/root";
+import type { ISanityInfoside } from "~/sanity/sanity.types";
 
 export function useSanity() {
   const { sanityTexts } = useRouteLoaderData("root") as SerializeFrom<typeof loader>;
