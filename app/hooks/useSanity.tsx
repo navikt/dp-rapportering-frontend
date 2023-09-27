@@ -1,10 +1,8 @@
-import { useRouteLoaderData } from "@remix-run/react";
-import type { ISanityInfoside, ISanityTexts } from "~/sanity/sanity.types";
+import type { ISanityInfoside } from "~/sanity/sanity.types";
+import { useTypedRouteLoaderData } from "./useTypedRouteLoaderData";
 
 export function useSanity() {
-  const { sanityTexts } = useRouteLoaderData("root") as {
-    sanityTexts: ISanityTexts;
-  };
+  const { sanityTexts } = useTypedRouteLoaderData("root");
 
   function hentAppTekstMedId(textId: string): string {
     return (

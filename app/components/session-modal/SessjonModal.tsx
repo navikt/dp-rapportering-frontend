@@ -1,9 +1,8 @@
 import type { SessionWithOboProvider } from "@navikt/dp-auth";
 import { Button, Heading, Modal } from "@navikt/ds-react";
-import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import type { ISessionLoader } from "~/routes/rapportering";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { DevelopmentKontainer } from "../development-kontainer/DevelopmentKontainer";
 import styles from "./SessjonModal.module.css";
 
@@ -12,18 +11,12 @@ interface IProps {
 }
 
 export function SessjonModal(props: IProps) {
-  const { session } = useRouteLoaderData("routes/rapportering") as ISessionLoader;
+  const { session } = useTypedRouteLoaderData("routes/rapportering");
   const [utlopesOm, setUtlopesOm] = useState<number | undefined>(
     props.sesjon?.expiresIn || session?.expiresIn || 1
   );
   const [utlopt, setUtlopt] = useState(false);
   const [laster, setLaster] = useState(false);
-
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#dp-rapportering-frontend");
-    }
-  }, []);
 
   useEffect(() => {
     if (!utlopesOm) return;
@@ -51,13 +44,13 @@ export function SessjonModal(props: IProps) {
         return;
       }}
       open={utlopt}
-      closeButton={false}
-      shouldCloseOnOverlayClick={false}
     >
-      <Modal.Content>
-        <Heading spacing level="1" size="medium">
+      <Modal.Header closeButton={false}>
+        <Heading level="1" size="medium">
           Du må logge inn på nytt for å fortsette
         </Heading>
+      </Modal.Header>
+      <Modal.Body>
         <p>
           Sesjonen din har utløpt, og du må logge inn med IDPorten på nytt for å fortsette. Alle
           svarene dine i søknaden er lagret og du kan fortsette der du slapp.
@@ -79,7 +72,7 @@ export function SessjonModal(props: IProps) {
             Klikk på lenken for å hente ny token
           </a>
         </DevelopmentKontainer>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 }

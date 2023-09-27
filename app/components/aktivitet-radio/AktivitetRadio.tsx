@@ -39,7 +39,12 @@ export function AktivitetRadio(props: IProps) {
       onChange={props.onChange}
     >
       {props.muligeAktiviteter.map((aktivitet) => (
-        <Radio key={aktivitet} value={aktivitet} description={hentAktivitetBeskrivelse(aktivitet)}>
+        <Radio
+          key={aktivitet}
+          value={aktivitet}
+          description={hentAktivitetBeskrivelse(aktivitet)}
+          data-testid={`aktivitet-radio-${aktivitet}`}
+        >
           {aktivitet}
         </Radio>
       ))}

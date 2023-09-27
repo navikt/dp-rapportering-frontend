@@ -10,7 +10,7 @@ export default defineConfig({
     watch: false,
     environment: "jsdom",
     coverage: {
-      provider: "v8",
+      provider: "istanbul",
       all: true,
       include: ["app/**/*"],
       exclude: ["**/*.spec.ts"],

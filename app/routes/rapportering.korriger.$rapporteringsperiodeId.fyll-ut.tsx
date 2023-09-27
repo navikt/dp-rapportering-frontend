@@ -1,66 +1,78 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
-import type { ActionArgs } from "@remix-run/node";
-import { useActionData, useRouteLoaderData } from "@remix-run/react";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
-import type { TAktivitetType } from "~/models/aktivitet.server";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
-import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { sletteAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
+import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
+  const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
+  const aktivitetsType = formdata.get("type") as TAktivitetType;
+  const aktivitetId = formdata.get("aktivitetId") as string;
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
     case "slette": {
-      return await slettAktivitetAction(formdata, request, periodeId);
+      return await sletteAktivitet(onBehalfOfToken, periodeId, aktivitetId);
     }
 
     case "lagre": {
-      return await lagreAktivitetAction(formdata, request, periodeId);
+      return await validerOgLagreAktivitet(onBehalfOfToken, aktivitetsType, periodeId, formdata);
     }
   }
 }
 
 export default function RapporteringFyllut() {
-  const { periode } = useRouteLoaderData(
+  const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.korriger.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
-  const actionData = useActionData();
+  );
+  const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
 
   useEffect(() => {
+    // Vi setter fokus på headeren når brukeren kommer til denne siden fra en annen side.
+    // Ellers følger vi browser default fokus oppførsel
+    if (!searchParams.get("utfylling")) {
+      setFokus(sidelastFokusRef);
+    }
     scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
+  }, [setFokus, scrollToView, searchParams]);
 
   useEffect(() => {
-    if (actionData?.lagret) {
+    if (actionData?.status === "success") {
       lukkModal();
     }
   }, [actionData]);
 
   function aapneModal(dato: string) {
+    setSearchParams({ utfylling: "true" });
+
     if (periode.status === "TilUtfylling") {
       setValgtDato(dato);
       setModalAapen(true);
+      setSearchParams({ dato });
     }
   }
 

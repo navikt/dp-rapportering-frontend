@@ -1,69 +1,60 @@
-import { type TypedResponse, json } from "@remix-run/node";
-import { type TAktivitetType, lagreAktivitet, sletteAktivitet } from "~/models/aktivitet.server";
-import { validator } from "./validering.util";
+import type { TypedResponse } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
-import { getRapporteringOboToken } from "./auth.utils.server";
+import { lagreAktivitet, type IAction, type TAktivitetType } from "~/models/aktivitet.server";
+import { validator } from "./validering.util";
 
-export async function slettAktivitetAction(
-  formdata: FormData,
-  request: Request,
-  periodeId: string
-): Promise<TypedResponse> {
-  const aktivitetId = formdata.get("aktivitetId") as string;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-  const slettAktivitetResponse = await sletteAktivitet(onBehalfOfToken, periodeId, aktivitetId);
-
-  if (!slettAktivitetResponse.ok) {
-    return json({ error: "Det har skjedd en feil ved sletting, prøv igjen." });
-  }
-
-  return json({ lagret: true });
+interface IAktivtetData {
+  type: TAktivitetType;
+  dato: string;
 }
 
-export async function lagreAktivitetAction(
-  formdata: FormData,
-  request: Request,
-  periodeId: string
-): Promise<TypedResponse> {
-  const aktivitetsType = formdata.get("type") as TAktivitetType;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
+interface IAktivitetArbeidData extends IAktivtetData {
+  timer: string;
+}
+
+export async function validerOgLagreAktivitet(
+  onBehalfOfToken: string,
+  aktivitetsType: TAktivitetType,
+  periodeId: string,
+  formdata: FormData
+): Promise<TypedResponse | IAction> {
   const inputVerdier = await validator(aktivitetsType).validate(formdata);
 
   if (inputVerdier.error) {
     return validationError(inputVerdier.error);
   }
 
-  const { type, dato, timer: tid } = inputVerdier.submittedData;
+  const { type, dato, timer: varighet } = inputVerdier.submittedData;
+  const aktivitetData = hentAktivitetData(type, dato, varighet);
 
-  function hentAktivitetArbeid() {
-    const delt = tid.replace(/\./g, ",").split(",");
-    const timer = delt[0] || 0;
-    const minutter = delt[1] || 0;
-    const minutterProsent = parseFloat(`0.${minutter}`);
+  return await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
+}
 
+function hentAktivitetData(
+  type: TAktivitetType,
+  dato: string,
+  varighet: string
+): IAktivitetArbeidData | IAktivtetData {
+  if (type === "Arbeid") {
     return {
       type,
       dato,
-      timer: serialize({
-        hours: timer,
-        minutes: Math.round(minutterProsent * 60),
-      }),
+      timer: hentISO8601DurationString(varighet),
     };
   }
 
-  const andreAktivitet = {
-    type,
-    dato,
-  };
+  return { type, dato };
+}
 
-  const aktivitetData = aktivitetsType === "Arbeid" ? hentAktivitetArbeid() : andreAktivitet;
+function hentISO8601DurationString(varighet: string): string {
+  const delt = varighet.replace(/\./g, ",").split(",");
+  const timer = delt[0] || 0;
+  const minutter = delt[1] || 0;
+  const minutterProsent = parseFloat(`0.${minutter}`);
 
-  const lagreAktivitetResponse = await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
-
-  if (!lagreAktivitetResponse.ok) {
-    return json({ error: "Noen gikk feil med lagring av aktivitet, prøv igjen." });
-  }
-
-  return json({ lagret: true });
+  return serialize({
+    hours: timer as number,
+    minutes: Math.round(minutterProsent * 60),
+  });
 }
