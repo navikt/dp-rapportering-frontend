@@ -1,7 +1,7 @@
 import { type TypedResponse } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
-import { type IActionData, lagreAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
+import { type IAction, lagreAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
 import { validator } from "./validering.util";
 
 interface IAktivtetData {
@@ -18,15 +18,15 @@ export async function validerOgLagreAktivitet(
   aktivitetsType: TAktivitetType,
   periodeId: string,
   formdata: FormData
-): Promise<TypedResponse | IActionData> {
+): Promise<TypedResponse | IAction> {
   const inputVerdier = await validator(aktivitetsType).validate(formdata);
 
   if (inputVerdier.error) {
     return validationError(inputVerdier.error);
   }
 
-  const { type, dato, timer: tidsstempel } = inputVerdier.submittedData;
-  const aktivitetData = hentAktivitetData(type, dato, tidsstempel);
+  const { type, dato, timer: varighet } = inputVerdier.submittedData;
+  const aktivitetData = hentAktivitetData(type, dato, varighet);
 
   return await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
 }
@@ -34,21 +34,21 @@ export async function validerOgLagreAktivitet(
 function hentAktivitetData(
   type: TAktivitetType,
   dato: string,
-  tidsstempel: string
+  varighet: string
 ): IAktivitetArbeidData | IAktivtetData {
   if (type === "Arbeid") {
     return {
       type,
       dato,
-      timer: hentISO8601DurationString(tidsstempel),
+      timer: hentISO8601DurationString(varighet),
     };
   }
 
   return { type, dato };
 }
 
-function hentISO8601DurationString(tidsstempel: string): string {
-  const delt = tidsstempel.replace(/\./g, ",").split(",");
+function hentISO8601DurationString(varighet: string): string {
+  const delt = varighet.replace(/\./g, ",").split(",");
   const timer = delt[0] || 0;
   const minutter = delt[1] || 0;
   const minutterProsent = parseFloat(`0.${minutter}`);
