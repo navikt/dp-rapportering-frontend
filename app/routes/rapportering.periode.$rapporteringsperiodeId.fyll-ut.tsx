@@ -1,9 +1,11 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
+import { isBefore } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
+import { FormattertDato } from "~/components/FormattertDato";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -82,6 +84,8 @@ export default function RapporteringFyllut() {
     setModalAapen(false);
   }
 
+  const kanSendePeriodeTilNav = !isBefore(new Date(), new Date(periode.kanGodkjennesFra));
+
   return (
     <>
       <div className="rapportering-kontainer">
@@ -110,14 +114,24 @@ export default function RapporteringFyllut() {
         <div className="registert-meldeperiode-kontainer">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
+
+        <Alert variant="info" className="my-10">
+          Du kan sende rapporteringen til NAV tidligst{" "}
+          <FormattertDato dato={periode.kanGodkjennesFra} ukedag />
+        </Alert>
+
         <div className="navigasjon-kontainer">
+          {kanSendePeriodeTilNav && (
+            <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
+              Send rapportering
+            </RemixLink>
+          )}
+
           <RemixLink as="Button" to="/rapportering" variant="secondary">
             Lagre og fortsett senere
           </RemixLink>
-          <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
-            Send rapportering
-          </RemixLink>
         </div>
+
         <div className="hva-skal-jeg-rapportere-nav-link">
           <RemixLink
             as="Link"

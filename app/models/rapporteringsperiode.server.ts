@@ -8,6 +8,7 @@ export interface IRapporteringsperiode {
   fraOgMed: string;
   tilOgMed: string;
   status: string;
+  kanGodkjennesFra: string;
   dager: IRapporteringsperiodeDag[];
 }
 
