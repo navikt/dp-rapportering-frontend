@@ -3,7 +3,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
+import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
@@ -38,7 +38,7 @@ export default function Rapportering() {
     <>
       <Outlet />
       <div className="debug-container">
-        <DevelopmentKontainer>
+        <DevelopmentContainer>
           <Accordion>
             <Accordion.Item>
               <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
@@ -47,7 +47,7 @@ export default function Rapportering() {
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>
-        </DevelopmentKontainer>
+        </DevelopmentContainer>
       </div>
     </>
   );

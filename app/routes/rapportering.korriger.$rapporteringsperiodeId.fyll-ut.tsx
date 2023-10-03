@@ -108,10 +108,10 @@ export default function RapporteringFyllut() {
           modalAapen={modalAapen}
           lukkModal={lukkModal}
         />
-        <div className="registert-meldeperiode-kontainer">
+        <div className="registert-meldeperiode-container">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
-        <div className="navigasjon-kontainer">
+        <div className="navigasjon-container">
           <RemixLink as="Button" to="/rapportering/innsendt" variant={"secondary"}>
             Avbryt
           </RemixLink>

@@ -3,8 +3,8 @@ import { Button, Heading, Modal } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { DevelopmentKontainer } from "../development-kontainer/DevelopmentKontainer";
 import styles from "./SessjonModal.module.css";
+import { DevelopmentContainer } from "../development-container/DevelopmentContainer";
 
 interface IProps {
   sesjon?: SessionWithOboProvider;
@@ -63,7 +63,7 @@ export function SessjonModal(props: IProps) {
             Gå til forsiden
           </Button>
         </div>
-        <DevelopmentKontainer>
+        <DevelopmentContainer>
           <a
             target="_blank"
             rel="noreferrer"
@@ -71,7 +71,7 @@ export function SessjonModal(props: IProps) {
           >
             Klikk på lenken for å hente ny token
           </a>
-        </DevelopmentKontainer>
+        </DevelopmentContainer>
       </Modal.Body>
     </Modal>
   );

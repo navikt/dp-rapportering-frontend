@@ -71,7 +71,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
       )}
 
       <Form method="post">
-        <div className="navigasjon-kontainer">
+        <div className="navigasjon-container">
           <RemixLink
             to={`/rapportering/periode/${rapporteringsperiodeId}/fyll-ut`}
             as="Button"

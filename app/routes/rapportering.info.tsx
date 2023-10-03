@@ -236,7 +236,7 @@ export default function Info() {
             </Accordion.Content>
           </Accordion.Item>
         </Accordion>
-        <div className="navigasjon-kontainer">
+        <div className="navigasjon-container">
           <RemixLink as="Button" to="" onClick={tilbake} variant="primary">
             Tilbake
           </RemixLink>

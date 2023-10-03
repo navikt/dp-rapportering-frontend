@@ -15,7 +15,7 @@ export default function RapporteringLes() {
       })}
     >
       <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-      <div className="registert-meldeperiode-kontainer">
+      <div className="registert-meldeperiode-container">
         <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
     </div>

@@ -48,7 +48,7 @@ body {
   border-radius: var(--a-spacing-2);
 }
 
-.navigasjon-kontainer {
+.navigasjon-container {
   display: flex;
   margin-top: var(--a-spacing-16);
   flex-direction: column;
@@ -56,16 +56,16 @@ body {
   gap: var(--a-spacing-2);
 }
 
-.navigasjon-kontainer > * {
+.navigasjon-container > * {
   width: 100%;
   max-width: 350px;
 }
 
-.registert-meldeperiode-kontainer {
+.registert-meldeperiode-container {
   margin-top: var(--a-spacing-10);
 }
 
-.registert-meldeperiode-kontainer > p {
+.registert-meldeperiode-container > p {
   color: var(--a-text-subtle);
 }
 
