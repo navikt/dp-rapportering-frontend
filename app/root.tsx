@@ -1,6 +1,6 @@
 import navStyles from "@navikt/ds-css/dist/index.css";
 import { cssBundleHref } from "@remix-run/css-bundle";
-import { json } from "@remix-run/node";
+import { LinksFunction, MetaFunction, json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -24,7 +24,7 @@ import indexStyle from "~/index.css";
 
 export const sanityClient = createClient(sanityConfig);
 
-export function meta() {
+export const meta: MetaFunction = () => {
   return [
     {
       charset: "utf-8",
@@ -43,9 +43,9 @@ export function meta() {
       content: "rapporteringløsning for dagpenger",
     },
   ];
-}
+};
 
-export function links() {
+export const links: LinksFunction = () => {
   return [
     ...(cssBundleHref
       ? [
@@ -72,7 +72,7 @@ export function links() {
         ]
       : []),
   ];
-}
+};
 
 export async function loader() {
   const fragments = await hentDekoratorHtml();
