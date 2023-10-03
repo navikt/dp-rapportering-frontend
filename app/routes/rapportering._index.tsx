@@ -30,7 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ gjeldendePeriode });
 }
 
-export default function RapporteringsLandingside() {
+export default function Landingsside() {
   const { gjeldendePeriode } = useLoaderData<typeof loader>();
 
   lagBrodsmulesti();

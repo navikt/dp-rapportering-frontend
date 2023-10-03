@@ -30,7 +30,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 }
 
-export default function RapporteringSendInnRapporteringsperiodeid() {
+export default function RapporteringsPeriodeSendInnSide() {
   const actionData = useActionData<typeof action>();
   const { rapporteringsperiodeId } = useParams();
 
