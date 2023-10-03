@@ -74,7 +74,7 @@ export function AktivitetModal(props: IProps) {
 
               {actionData?.status === "error" && actionData?.error && (
                 <Alert variant="error" className={styles.feilmelding}>
-                  {actionData.error}
+                  {actionData.error.statusText}
                 </Alert>
               )}
 
@@ -109,7 +109,7 @@ export function AktivitetModal(props: IProps) {
 
             {actionData?.status === "error" && actionData?.error && (
               <Alert variant="error" className={styles.feilmelding}>
-                {actionData.error}
+                {actionData.error.statusText}
               </Alert>
             )}
 

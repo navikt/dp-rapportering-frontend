@@ -1,7 +1,8 @@
 import type { TypedResponse } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
-import { lagreAktivitet, type IAction, type AktivitetType } from "~/models/aktivitet.server";
+import { lagreAktivitet, type AktivitetType } from "~/models/aktivitet.server";
+import type { INetworkResponse } from "./types";
 import { validator } from "./validering.util";
 
 interface IAktivtetData {
@@ -18,7 +19,7 @@ export async function validerOgLagreAktivitet(
   aktivitetsType: AktivitetType,
   periodeId: string,
   formdata: FormData
-): Promise<TypedResponse | IAction> {
+): Promise<TypedResponse | INetworkResponse> {
   const inputVerdier = await validator(aktivitetsType).validate(formdata);
 
   if (inputVerdier.error) {
