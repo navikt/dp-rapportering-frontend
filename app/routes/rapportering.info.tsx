@@ -5,7 +5,7 @@ import { RemixLink } from "~/components/RemixLink";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 
-export default function Info() {
+export default function Infoside() {
   const navigate = useNavigate();
   const tilbake = () => navigate(-1);
 

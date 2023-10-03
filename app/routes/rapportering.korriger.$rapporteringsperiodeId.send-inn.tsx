@@ -29,7 +29,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   return redirect(`/rapportering/korriger/${periodeId}/bekreftelse`);
 }
 
-export default function RapporteringSendInnRapporteringsperiodeid() {
+export default function KorrigeringSendInnSide() {
   const actionData = useActionData<typeof action>();
   const { rapporteringsperiodeId } = useParams();
 

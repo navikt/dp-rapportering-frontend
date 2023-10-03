@@ -3,7 +3,7 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
-export default function RapporteringLes() {
+export default function RapporteringsPeriodeVisningsSide() {
   const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
   );

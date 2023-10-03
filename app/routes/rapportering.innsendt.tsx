@@ -46,7 +46,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ innsendtPerioder });
 }
 
-export default function RapporteringAlle() {
+export default function InnsendteRapporteringsPerioderSide() {
   const { innsendtPerioder } = useLoaderData<typeof loader>();
 
   lagBrodsmulesti([

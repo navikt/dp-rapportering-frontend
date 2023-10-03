@@ -36,7 +36,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 }
 
-export default function RapporteringFyllut() {
+export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
   );

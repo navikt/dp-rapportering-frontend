@@ -24,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 }
 
-export default function Rapportering() {
+export default function Korrigering() {
   const { periode } = useLoaderData<typeof loader>();
 
   lagBrodsmulesti([
@@ -41,7 +41,9 @@ export default function Rapportering() {
         <DevelopmentContainer>
           <Accordion>
             <Accordion.Item>
-              <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
+              <Accordion.Header>
+                (DEBUG) Korrigering av rapporteringsperiode som json:
+              </Accordion.Header>
               <Accordion.Content>
                 <pre>${JSON.stringify(periode, null, 2)}</pre>
               </Accordion.Content>

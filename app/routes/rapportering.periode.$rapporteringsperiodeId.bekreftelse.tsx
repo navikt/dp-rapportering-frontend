@@ -7,7 +7,7 @@ import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
-export default function RapporteringLes() {
+export default function RapporteringsPeriodesBekrefelseSide() {
   const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
   );
