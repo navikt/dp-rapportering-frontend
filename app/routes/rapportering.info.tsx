@@ -27,7 +27,7 @@ export default function Info() {
           </Heading>
         </div>
       </div>
-      <div className="rapportering-kontainer">
+      <div className="rapportering-container">
         <Heading ref={sidelastFokusRef} tabIndex={-1} className="vo-fokus" size="medium" level="2">
           Hva skal jeg rapportere til NAV?
         </Heading>

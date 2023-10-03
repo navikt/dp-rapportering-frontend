@@ -37,7 +37,7 @@ export default function Rapportering() {
   return (
     <>
       <Outlet />
-      <div className="debug-kontainer">
+      <div className="debug-container">
         <DevelopmentKontainer>
           <Accordion>
             <Accordion.Item>

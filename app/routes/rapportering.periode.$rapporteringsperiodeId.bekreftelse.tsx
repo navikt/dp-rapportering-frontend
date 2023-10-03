@@ -22,7 +22,7 @@ export default function RapporteringLes() {
   }, [setFokus, scrollToView]);
 
   return (
-    <div className="rapportering-kontainer">
+    <div className="rapportering-container">
       <Heading
         ref={sidelastFokusRef}
         className="vo-fokus"

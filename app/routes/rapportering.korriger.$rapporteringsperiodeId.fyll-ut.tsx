@@ -84,7 +84,7 @@ export default function RapporteringFyllut() {
 
   return (
     <>
-      <div className="rapportering-kontainer">
+      <div className="rapportering-container">
         <Heading
           size={"medium"}
           level={"2"}

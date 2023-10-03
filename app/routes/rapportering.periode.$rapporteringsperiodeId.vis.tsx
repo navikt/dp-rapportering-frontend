@@ -10,7 +10,7 @@ export default function RapporteringLes() {
 
   return (
     <div
-      className={classNames("rapportering-kontainer", {
+      className={classNames("rapportering-container", {
         "graa-bakgrunn": periode.status !== "TilUtfylling",
       })}
     >

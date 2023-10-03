@@ -21,7 +21,6 @@ import type { ISanityTexts } from "./sanity/sanity.types";
 import { getEnv } from "./utils/env.utils";
 
 import indexStyle from "~/index.css";
-import globalStyle from "~/global.css";
 
 export const sanityClient = createClient(sanityConfig);
 
@@ -53,7 +52,6 @@ export function links() {
           { rel: "stylesheet", href: navStyles },
           { rel: "stylesheet", href: cssBundleHref },
           { rel: "stylesheet", href: indexStyle },
-          { rel: "stylesheet", href: globalStyle },
           {
             rel: "icon",
             type: "image/png",
