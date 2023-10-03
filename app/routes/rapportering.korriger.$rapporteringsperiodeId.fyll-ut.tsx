@@ -84,7 +84,7 @@ export default function KorrigeringFyllUtSide() {
 
   return (
     <>
-      <div className="rapportering-kontainer">
+      <div className="rapportering-container">
         <Heading
           size={"medium"}
           level={"2"}
@@ -108,10 +108,10 @@ export default function KorrigeringFyllUtSide() {
           modalAapen={modalAapen}
           lukkModal={lukkModal}
         />
-        <div className="registert-meldeperiode-kontainer">
+        <div className="registert-meldeperiode-container">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
-        <div className="navigasjon-kontainer">
+        <div className="navigasjon-container">
           <RemixLink as="Button" to="/rapportering/innsendt" variant={"secondary"}>
             Avbryt
           </RemixLink>

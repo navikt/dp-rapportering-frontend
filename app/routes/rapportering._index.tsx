@@ -71,7 +71,7 @@ export default function Landingsside() {
           </Heading>
         </div>
       </div>
-      <div className="rapportering-kontainer">
+      <div className="rapportering-container">
         <BodyLong spacing>
           For å motta dagpenger må du rapportere hver 14. dag. Du må rapportere hvor mye du har
           jobbet, og om du har vært syk, hatt fravær eller vært på ferie. NAV bruker informasjonen

@@ -77,7 +77,7 @@ export default function InnsendteRapporteringsPerioderSide() {
           </Heading>
         </div>
       </div>
-      <div className="rapportering-kontainer">
+      <div className="rapportering-container">
         <Heading size={"medium"} level={"2"}>
           Oversikt over innsendte rapporteringer
         </Heading>

@@ -22,7 +22,7 @@ export default function RapporteringsPeriodesBekrefelseSide() {
   }, [setFokus, scrollToView]);
 
   return (
-    <div className="rapportering-kontainer">
+    <div className="rapportering-container">
       <Heading
         ref={sidelastFokusRef}
         className="vo-fokus"
@@ -38,12 +38,12 @@ export default function RapporteringsPeriodesBekrefelseSide() {
       </BodyLong>
       <div className="graa-bakgrunn">
         <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-        <div className="registert-meldeperiode-kontainer">
+        <div className="registert-meldeperiode-container">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
       </div>
 
-      <div className="navigasjon-kontainer">
+      <div className="navigasjon-container">
         <RemixLink
           as="Button"
           to={`/rapportering/periode/${periode.id}/avgodkjenn`}

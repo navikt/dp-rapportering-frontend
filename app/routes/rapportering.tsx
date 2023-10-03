@@ -34,7 +34,7 @@ export function ErrorBoundary() {
               </Heading>
             </div>
           </div>
-          <div className="rapportering-kontainer">
+          <div className="rapportering-container">
             <SessjonModal sesjon={error.data.session} />
           </div>
         </main>
@@ -50,7 +50,7 @@ export function ErrorBoundary() {
             </Heading>
           </div>
         </div>
-        <div className="rapportering-kontainer">
+        <div className="rapportering-container">
           <Heading level="2" size="medium">
             {error.status} {error.statusText}
           </Heading>

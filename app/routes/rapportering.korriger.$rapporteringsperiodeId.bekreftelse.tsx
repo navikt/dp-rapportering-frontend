@@ -23,7 +23,7 @@ export default function KorrigeringBekrefetelseSide() {
 
   return (
     <>
-      <div className="rapportering-kontainer">
+      <div className="rapportering-container">
         <Heading
           ref={sidelastFokusRef}
           tabIndex={-1}
@@ -36,11 +36,11 @@ export default function KorrigeringBekrefetelseSide() {
         </Heading>
         <div className="graa-bakgrunn">
           <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-          <div className="registert-meldeperiode-kontainer">
+          <div className="registert-meldeperiode-container">
             <AktivitetOppsummering rapporteringsperiode={periode} />
           </div>
         </div>
-        <div className="navigasjon-kontainer">
+        <div className="navigasjon-container">
           <RemixLink as="Button" to="/rapportering">
             Tilbake til min side
           </RemixLink>

@@ -10,12 +10,12 @@ export default function RapporteringsPeriodeVisningsSide() {
 
   return (
     <div
-      className={classNames("rapportering-kontainer", {
+      className={classNames("rapportering-container", {
         "graa-bakgrunn": periode.status !== "TilUtfylling",
       })}
     >
       <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-      <div className="registert-meldeperiode-kontainer">
+      <div className="registert-meldeperiode-container">
         <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
     </div>

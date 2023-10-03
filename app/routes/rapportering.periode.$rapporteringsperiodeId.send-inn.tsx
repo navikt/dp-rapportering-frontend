@@ -44,7 +44,7 @@ export default function RapporteringsPeriodeSendInnSide() {
   }, [setFokus, scrollToView]);
 
   return (
-    <div className="rapportering-kontainer">
+    <div className="rapportering-container">
       <Heading
         ref={sidelastFokusRef}
         tabIndex={-1}
@@ -71,7 +71,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       )}
 
       <Form method="post">
-        <div className="navigasjon-kontainer">
+        <div className="navigasjon-container">
           <RemixLink
             to={`/rapportering/periode/${rapporteringsperiodeId}/fyll-ut`}
             as="Button"
