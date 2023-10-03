@@ -5,7 +5,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, test, vi } from "vitest";
-import type { TAktivitetType } from "~/models/aktivitet.server";
+import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { gjeldendePeriodeResponse } from "../../../mocks/api-routes/gjeldendePeriodeResponse";
 import { TestContainer } from "../../../tests/helpers/TestContainer";
@@ -41,7 +41,7 @@ describe("AktivitetModal", () => {
 
     test("burde vise mulige aktiviteter", async () => {
       const TestComponent = () => {
-        const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+        const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
 
         return (
           <div id="dp-saksbehandling-frontend">
@@ -88,7 +88,7 @@ describe("AktivitetModal", () => {
       });
 
       const TestComponent = () => {
-        const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+        const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
 
         return (
           <div id="dp-saksbehandling-frontend">
@@ -132,7 +132,7 @@ describe("AktivitetModal", () => {
       });
 
       const TestComponent = () => {
-        const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+        const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
 
         return (
           <div id="dp-saksbehandling-frontend">
@@ -183,7 +183,7 @@ describe("AktivitetModal", () => {
         });
 
         const TestComponent = () => {
-          const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+          const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
 
           return (
             <div id="dp-saksbehandling-frontend">
@@ -228,7 +228,7 @@ describe("AktivitetModal", () => {
         });
 
         const TestComponent = () => {
-          const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+          const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
 
           return (
             <div id="dp-saksbehandling-frontend">
@@ -270,7 +270,7 @@ describe("AktivitetModal", () => {
   describe("Slett aktivitet", () => {
     test("burde vise allerede valgt aktivitet", async () => {
       const TestComponent = () => {
-        const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+        const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
 
         return (
           <div id="dp-saksbehandling-frontend">
@@ -309,7 +309,7 @@ describe("AktivitetModal", () => {
       });
 
       const TestComponent = () => {
-        const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+        const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
 
         return (
           <div id="dp-saksbehandling-frontend">

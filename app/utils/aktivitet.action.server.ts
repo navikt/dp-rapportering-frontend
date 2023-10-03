@@ -1,11 +1,11 @@
 import type { TypedResponse } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
-import { lagreAktivitet, type IAction, type TAktivitetType } from "~/models/aktivitet.server";
+import { lagreAktivitet, type IAction, type AktivitetType } from "~/models/aktivitet.server";
 import { validator } from "./validering.util";
 
 interface IAktivtetData {
-  type: TAktivitetType;
+  type: AktivitetType;
   dato: string;
 }
 
@@ -15,7 +15,7 @@ interface IAktivitetArbeidData extends IAktivtetData {
 
 export async function validerOgLagreAktivitet(
   onBehalfOfToken: string,
-  aktivitetsType: TAktivitetType,
+  aktivitetsType: AktivitetType,
   periodeId: string,
   formdata: FormData
 ): Promise<TypedResponse | IAction> {
@@ -32,7 +32,7 @@ export async function validerOgLagreAktivitet(
 }
 
 function hentAktivitetData(
-  type: TAktivitetType,
+  type: AktivitetType,
   dato: string,
   varighet: string
 ): IAktivitetArbeidData | IAktivtetData {

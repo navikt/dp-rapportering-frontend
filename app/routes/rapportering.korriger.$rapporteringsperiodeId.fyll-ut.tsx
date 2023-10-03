@@ -11,7 +11,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { sletteAktivitet, type TAktivitetType } from "~/models/aktivitet.server";
+import { sletteAktivitet, type AktivitetType } from "~/models/aktivitet.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
@@ -21,7 +21,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const periodeId = params.rapporteringsperiodeId;
   const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
-  const aktivitetsType = formdata.get("type") as TAktivitetType;
+  const aktivitetsType = formdata.get("type") as AktivitetType;
   const aktivitetId = formdata.get("aktivitetId") as string;
   const submitKnapp = formdata.get("submit");
 
@@ -43,7 +43,7 @@ export default function KorrigeringFyllUtSide() {
   const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+  const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
