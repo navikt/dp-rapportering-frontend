@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   test: {
-    include: ["**/*.spec.ts", "**/*.spec.tsx"],
+    include: ["**/*.test.ts", "**/*.test.tsx"],
     exclude: ["node_modules/**/*"],
     setupFiles: ["tests/helpers/setup.ts"],
     watch: false,
@@ -13,7 +13,7 @@ export default defineConfig({
       provider: "istanbul",
       all: true,
       include: ["app/**/*"],
-      exclude: ["**/*.spec.ts"],
+      exclude: ["**/*.test.ts"],
     },
   },
   resolve: {
