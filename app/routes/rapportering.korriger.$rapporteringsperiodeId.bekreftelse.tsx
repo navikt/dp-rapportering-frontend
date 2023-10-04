@@ -7,7 +7,7 @@ import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
-export default function KorrigeringBekrefetelseSide() {
+export default function KorrigeringBekreftelsesSide() {
   const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.korriger.$rapporteringsperiodeId"
   );
