@@ -10,6 +10,7 @@ import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.ser
 import { gjeldendePeriodeResponse } from "../../../mocks/api-routes/gjeldendePeriodeResponse";
 import { TestContainer } from "../../../tests/helpers/TestContainer";
 import { AktivitetModal } from "./AktivitetModal";
+import { INetworkResponse } from "~/utils/types";
 
 describe("AktivitetModal", () => {
   const dagUtenAktivitet: IRapporteringsperiodeDag = {
@@ -125,10 +126,15 @@ describe("AktivitetModal", () => {
 
     test("burde vise feilmelding hvis det er feil i backenden når vi lagrer aktivitet", async () => {
       const actionFn = vi.fn(async ({ request }) => {
-        return json({
+        const actionResponse: INetworkResponse = {
           status: "error",
-          error: "Det har skjedd en feil ved lagring av aktivitet, prøv igjen.",
-        });
+          error: {
+            statusCode: 500,
+            statusText: "Det har skjedd en feil ved lagring av aktivitet, prøv igjen.",
+          },
+        };
+
+        return json(actionResponse);
       });
 
       const TestComponent = () => {
