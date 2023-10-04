@@ -1,5 +1,5 @@
 import { getEnv } from "~/utils/env.utils";
-import { getHeader } from "~/utils/fetch.utils";
+import { getHeaders } from "~/utils/fetch.utils";
 import type { IAktivitet, AktivitetType } from "./aktivitet.server";
 
 export interface IRapporteringsperiode {
@@ -23,7 +23,7 @@ export async function hentGjeldendePeriode(onBehalfOfToken: string): Promise<Res
 
   return await fetch(url, {
     method: "GET",
-    headers: getHeader(onBehalfOfToken),
+    headers: getHeaders(onBehalfOfToken),
   });
 }
 export async function hentPeriode(onBehalfOfToken: string, periodeId: string): Promise<Response> {
@@ -31,7 +31,7 @@ export async function hentPeriode(onBehalfOfToken: string, periodeId: string): P
 
   return await fetch(url, {
     method: "GET",
-    headers: getHeader(onBehalfOfToken),
+    headers: getHeaders(onBehalfOfToken),
   });
 }
 
@@ -40,7 +40,7 @@ export async function hentAllePerioder(onBehalfOfToken: string): Promise<Respons
 
   return await fetch(url, {
     method: "GET",
-    headers: getHeader(onBehalfOfToken),
+    headers: getHeaders(onBehalfOfToken),
   });
 }
 
@@ -49,7 +49,7 @@ export async function godkjennPeriode(onBehalfOfToken: string, id: string): Prom
 
   return await fetch(url, {
     method: "POST",
-    headers: getHeader(onBehalfOfToken),
+    headers: getHeaders(onBehalfOfToken),
   });
 }
 
@@ -61,7 +61,7 @@ export async function avGodkjennPeriode(
 
   return await fetch(url, {
     method: "POST",
-    headers: getHeader(onBehalfOfToken),
+    headers: getHeaders(onBehalfOfToken),
   });
 }
 
@@ -70,7 +70,7 @@ export async function lagKorrigeringsperiode(onBehalfOfToken: string, periodeId:
 
   const response = await fetch(url, {
     method: "POST",
-    headers: getHeader(onBehalfOfToken),
+    headers: getHeaders(onBehalfOfToken),
   });
 
   return response;
