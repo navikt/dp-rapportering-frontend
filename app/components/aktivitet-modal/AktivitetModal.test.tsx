@@ -177,6 +177,7 @@ describe("AktivitetModal", () => {
 
       test("burde kunne velge og lagre timer når man velger Arbeid", async () => {
         let dato, aktivitetstype, timer, submit;
+        const actionResponse: INetworkResponse = { status: "success" };
 
         const actionFn = vi.fn(async ({ request }) => {
           const formData = await request.formData();
@@ -185,7 +186,7 @@ describe("AktivitetModal", () => {
           submit = formData.get("submit") as string;
           aktivitetstype = formData.get("type") as string;
 
-          return json({ aktivitetLagret: true });
+          return json(actionResponse);
         });
 
         const TestComponent = () => {
@@ -229,8 +230,10 @@ describe("AktivitetModal", () => {
       });
 
       test("burde vise feilmelding hvis bruker prøver å lagre arbeid uten å skrive inn timer", async () => {
+        const actionResponse: INetworkResponse = { status: "success" };
+
         const actionFn = vi.fn(async ({ request }) => {
-          return json({ aktivitetLagret: true });
+          return json(actionResponse);
         });
 
         const TestComponent = () => {
@@ -305,13 +308,14 @@ describe("AktivitetModal", () => {
 
     test("burde kunne fjerne en aktivitet", async () => {
       let aktivitetId, submit;
+      const actionResponse: INetworkResponse = { status: "success" };
 
       const actionFn = vi.fn(async ({ request }) => {
         const formData = await request.formData();
         aktivitetId = formData.get("aktivitetId") as string;
         submit = formData.get("submit") as string;
 
-        return json({ aktivitetLagret: true });
+        return json(actionResponse);
       });
 
       const TestComponent = () => {
