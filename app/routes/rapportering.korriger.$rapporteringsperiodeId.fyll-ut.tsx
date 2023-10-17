@@ -33,6 +33,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
     case "lagre": {
       return await validerOgLagreAktivitet(onBehalfOfToken, aktivitetsType, periodeId, formdata);
     }
+
+    default: {
+      return {
+        status: "error",
+        error: {
+          statusCode: 500,
+          statusText: "Noe gikk gal!",
+        },
+      };
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
-import { json, type ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
@@ -35,13 +35,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }
 
     default: {
-      return json({
+      return {
         status: "error",
         error: {
           statusCode: 500,
           statusText: "Det skjedde en feil.",
         },
-      });
+      };
     }
   }
 }

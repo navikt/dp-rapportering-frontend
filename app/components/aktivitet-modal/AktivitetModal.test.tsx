@@ -10,7 +10,7 @@ import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.ser
 import { gjeldendePeriodeResponse } from "../../../mocks/api-routes/gjeldendePeriodeResponse";
 import { TestContainer } from "../../../tests/helpers/TestContainer";
 import { AktivitetModal } from "./AktivitetModal";
-import { INetworkResponse } from "~/utils/types";
+import type { INetworkResponse } from "~/utils/types";
 
 describe("AktivitetModal", () => {
   const dagUtenAktivitet: IRapporteringsperiodeDag = {
