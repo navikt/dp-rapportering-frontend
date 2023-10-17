@@ -14,7 +14,6 @@ import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { sletteAktivitet, type AktivitetType } from "~/models/aktivitet.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
-import type { INetworkResponse } from "~/utils/types";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -51,7 +50,7 @@ export default function KorrigeringFyllUtSide() {
   const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.korriger.$rapporteringsperiodeId"
   );
-  const actionData = useActionData<INetworkResponse>();
+  const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
