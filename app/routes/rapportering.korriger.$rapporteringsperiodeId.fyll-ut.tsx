@@ -14,6 +14,7 @@ import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { sletteAktivitet, type AktivitetType } from "~/models/aktivitet.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import type { INetworkResponse } from "~/utils/types";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -33,6 +34,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
     case "lagre": {
       return await validerOgLagreAktivitet(onBehalfOfToken, aktivitetsType, periodeId, formdata);
     }
+
+    default: {
+      return {
+        status: "error",
+        error: {
+          statusCode: 500,
+          statusText: "Noe gikk gal!",
+        },
+      };
+    }
   }
 }
 
@@ -40,7 +51,7 @@ export default function KorrigeringFyllUtSide() {
   const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.korriger.$rapporteringsperiodeId"
   );
-  const actionData = useActionData<typeof action>();
+  const actionData = useActionData<INetworkResponse>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");

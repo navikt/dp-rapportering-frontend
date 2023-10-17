@@ -14,6 +14,7 @@ import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { sletteAktivitet, type AktivitetType } from "~/models/aktivitet.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import type { INetworkResponse } from "~/utils/types";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -50,7 +51,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
   );
-  const actionData = useActionData<typeof action>();
+  const actionData = useActionData<INetworkResponse>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");

@@ -1,4 +1,4 @@
-import { unstable_createRemixStub } from "@remix-run/testing";
+import { createRemixStub } from "@remix-run/testing";
 import * as React from "react";
 import { type PropsWithChildren } from "react";
 import type { ActionFunction } from "@remix-run/node";
@@ -30,7 +30,7 @@ export function TestContainer(props: PropsWithChildren<IProps>) {
     },
   };
 
-  const RemixStub = unstable_createRemixStub([RemixStubConfig]);
+  const RemixStub = createRemixStub([RemixStubConfig]);
 
   return (
     <>

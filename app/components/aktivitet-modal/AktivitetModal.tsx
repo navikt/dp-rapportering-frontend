@@ -5,9 +5,8 @@ import { ValidatedForm } from "remix-validated-form";
 import { TallInput } from "~/components/TallInput";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import type { action as korringeringAction } from "~/routes/rapportering.korriger.$rapporteringsperiodeId.fyll-ut";
-import type { action as rapporteringAction } from "~/routes/rapportering.periode.$rapporteringsperiodeId.fyll-ut";
 import { periodeSomTimer } from "~/utils/periode.utils";
+import type { INetworkResponse } from "~/utils/types";
 import { validator } from "~/utils/validering.util";
 import { FormattertDato } from "../FormattertDato";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
@@ -36,7 +35,7 @@ export function AktivitetModal(props: IProps) {
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
   );
 
-  const actionData = useActionData<typeof rapporteringAction | typeof korringeringAction>();
+  const actionData = useActionData<INetworkResponse>();
 
   function hentAktivitetTekst() {
     const aktivitet = dag?.aktiviteter[0];
