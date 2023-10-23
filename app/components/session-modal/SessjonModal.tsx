@@ -1,18 +1,17 @@
 import type { SessionWithOboProvider } from "@navikt/dp-auth";
 import { Button, Heading, Modal } from "@navikt/ds-react";
-import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import type { ISessionLoader } from "~/routes/rapportering";
-import { DevelopmentKontainer } from "../development-kontainer/DevelopmentKontainer";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import styles from "./SessjonModal.module.css";
+import { DevelopmentContainer } from "../development-container/DevelopmentContainer";
 
 interface IProps {
   sesjon?: SessionWithOboProvider;
 }
 
 export function SessjonModal(props: IProps) {
-  const { session } = useRouteLoaderData("routes/rapportering") as ISessionLoader;
+  const { session } = useTypedRouteLoaderData("routes/rapportering");
   const [utlopesOm, setUtlopesOm] = useState<number | undefined>(
     props.sesjon?.expiresIn || session?.expiresIn || 1
   );
@@ -64,7 +63,7 @@ export function SessjonModal(props: IProps) {
             Gå til forsiden
           </Button>
         </div>
-        <DevelopmentKontainer>
+        <DevelopmentContainer>
           <a
             target="_blank"
             rel="noreferrer"
@@ -72,7 +71,7 @@ export function SessjonModal(props: IProps) {
           >
             Klikk på lenken for å hente ny token
           </a>
-        </DevelopmentKontainer>
+        </DevelopmentContainer>
       </Modal.Body>
     </Modal>
   );

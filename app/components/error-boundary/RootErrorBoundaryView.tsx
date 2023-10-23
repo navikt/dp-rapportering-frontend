@@ -1,6 +1,5 @@
 import { Alert, Heading } from "@navikt/ds-react";
 import { isRouteErrorResponse } from "@remix-run/react";
-
 import styles from "./RootErrorBoundaryView.module.css";
 
 interface IProps {

@@ -1,13 +1,13 @@
-import { useNavigate, useRouteLoaderData } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
-export default function Rapportering() {
-  const { periode } = useRouteLoaderData(
+export default function RapporteringsPeriodeSide() {
+  const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
+  );
 
   const navigate = useNavigate();
 
@@ -24,11 +24,9 @@ export default function Rapportering() {
     if (periode) {
       switch (periode.status) {
         case "TilUtfylling":
-          console.log("naviger til utfylling!");
           navigate(`/rapportering/periode/${periode.id}/fyll-ut`, { replace: true });
           break;
         default:
-          console.log("naviger til view");
           navigate(`/rapportering/periode/${periode.id}/vis`, { replace: true });
       }
     } else {
@@ -37,7 +35,7 @@ export default function Rapportering() {
   }, [navigate, periode]);
 
   return (
-    <div className="rapportering-kontainer">
+    <div className="rapportering-container">
       <p ref={sidelastFokusRef} tabIndex={-1} className="vo-fokus">
         Laster rapporteringsperiode
       </p>

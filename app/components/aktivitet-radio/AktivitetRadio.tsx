@@ -1,12 +1,12 @@
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useField } from "remix-validated-form";
-import type { TAktivitetType } from "~/models/aktivitet.server";
+import type { AktivitetType } from "~/models/aktivitet.server";
 
 export interface IProps {
   name: string;
   label?: string;
   verdi?: string;
-  muligeAktiviteter: TAktivitetType[];
+  muligeAktiviteter: AktivitetType[];
   onChange: (aktivitet: string) => void;
 }
 
@@ -18,7 +18,7 @@ export function AktivitetRadio(props: IProps) {
     value: props.verdi || "",
   });
 
-  function hentAktivitetBeskrivelse(aktivitet: TAktivitetType) {
+  function hentAktivitetBeskrivelse(aktivitet: AktivitetType) {
     switch (aktivitet) {
       case "Arbeid":
         return "Skriv antall timer du har jobbet, både lønnet og ulønnet. Får du lønn for flere timer enn du har jobbet, skriver du timene du får lønn for.";
@@ -39,7 +39,12 @@ export function AktivitetRadio(props: IProps) {
       onChange={props.onChange}
     >
       {props.muligeAktiviteter.map((aktivitet) => (
-        <Radio key={aktivitet} value={aktivitet} description={hentAktivitetBeskrivelse(aktivitet)}>
+        <Radio
+          key={aktivitet}
+          value={aktivitet}
+          description={hentAktivitetBeskrivelse(aktivitet)}
+          data-testid={`aktivitet-radio-${aktivitet}`}
+        >
           {aktivitet}
         </Radio>
       ))}

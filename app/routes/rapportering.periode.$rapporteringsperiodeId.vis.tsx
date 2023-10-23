@@ -1,22 +1,21 @@
-import { useRouteLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
-export default function RapporteringLes() {
-  const { periode } = useRouteLoaderData(
+export default function RapporteringsPeriodeVisningsSide() {
+  const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
+  );
 
   return (
     <div
-      className={classNames("rapportering-kontainer", {
+      className={classNames("rapportering-container", {
         "graa-bakgrunn": periode.status !== "TilUtfylling",
       })}
     >
       <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-      <div className="registert-meldeperiode-kontainer">
+      <div className="registert-meldeperiode-container">
         <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
     </div>

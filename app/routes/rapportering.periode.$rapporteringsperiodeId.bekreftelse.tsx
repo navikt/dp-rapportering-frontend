@@ -1,17 +1,16 @@
 import { BodyLong, Heading } from "@navikt/ds-react";
-import { useRouteLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
-export default function RapporteringLes() {
-  const { periode } = useRouteLoaderData(
+export default function RapporteringsPeriodesBekreftelsesSide() {
+  const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
+  );
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
@@ -23,7 +22,7 @@ export default function RapporteringLes() {
   }, [setFokus, scrollToView]);
 
   return (
-    <div className="rapportering-kontainer">
+    <div className="rapportering-container">
       <Heading
         ref={sidelastFokusRef}
         className="vo-fokus"
@@ -39,12 +38,12 @@ export default function RapporteringLes() {
       </BodyLong>
       <div className="graa-bakgrunn">
         <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-        <div className="registert-meldeperiode-kontainer">
+        <div className="registert-meldeperiode-container">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
       </div>
 
-      <div className="navigasjon-kontainer">
+      <div className="navigasjon-container">
         <RemixLink
           as="Button"
           to={`/rapportering/periode/${periode.id}/avgodkjenn`}

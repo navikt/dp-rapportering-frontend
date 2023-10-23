@@ -1,19 +1,15 @@
 import { Accordion } from "@navikt/ds-react";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import { DevelopmentKontainer } from "~/components/development-kontainer/DevelopmentKontainer";
+import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 
-export interface IRapporteringsPeriodeLoader {
-  periode: IRapporteringsperiode;
-}
-
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
@@ -28,8 +24,8 @@ export async function loader({ request, params }: LoaderArgs) {
   return json({ periode });
 }
 
-export default function Rapportering() {
-  const { periode } = useLoaderData<typeof loader>() as IRapporteringsPeriodeLoader;
+export default function RapporteringsPeriodeSide() {
+  const { periode } = useLoaderData<typeof loader>();
 
   lagBrodsmulesti([
     {
@@ -41,8 +37,8 @@ export default function Rapportering() {
   return (
     <>
       <Outlet />
-      <div className="debug-kontainer">
-        <DevelopmentKontainer>
+      <div className="debug-container">
+        <DevelopmentContainer>
           <Accordion>
             <Accordion.Item>
               <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
@@ -51,7 +47,7 @@ export default function Rapportering() {
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>
-        </DevelopmentKontainer>
+        </DevelopmentContainer>
       </div>
     </>
   );

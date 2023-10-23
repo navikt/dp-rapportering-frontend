@@ -1,24 +1,18 @@
 import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { RemixLink } from "~/components/RemixLink";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import {
-  hentGjeldendePeriode,
-  type IRapporteringsperiode,
-} from "~/models/rapporteringsperiode.server";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
-interface IRapporteringIndexLoader {
-  gjeldendePeriode: IRapporteringsperiode | null;
-}
-
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
 
   const onBehalfOfToken = await getRapporteringOboToken(request);
@@ -36,8 +30,9 @@ export async function loader({ request }: LoaderArgs) {
   return json({ gjeldendePeriode });
 }
 
-export default function RapporteringsLandingside() {
-  const { gjeldendePeriode } = useLoaderData<typeof loader>() as IRapporteringIndexLoader;
+export default function Landingsside() {
+  const { gjeldendePeriode } = useLoaderData<typeof loader>();
+
   lagBrodsmulesti();
 
   const sidelastFokusRef = useRef(null);
@@ -76,7 +71,7 @@ export default function RapporteringsLandingside() {
           </Heading>
         </div>
       </div>
-      <div className="rapportering-kontainer">
+      <div className="rapportering-container">
         <BodyLong spacing>
           For å motta dagpenger må du rapportere hver 14. dag. Du må rapportere hvor mye du har
           jobbet, og om du har vært syk, hatt fravær eller vært på ferie. NAV bruker informasjonen

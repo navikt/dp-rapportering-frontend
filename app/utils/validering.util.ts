@@ -1,6 +1,6 @@
 import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
-import { type TAktivitetType } from "~/models/aktivitet.server";
+import type { AktivitetType } from "~/models/aktivitet.server";
 
 const aktivitetsvalideringArbeid = z.object({
   type: z.enum(["Arbeid", "Syk", "Ferie"], {
@@ -25,7 +25,7 @@ const aktivitetsvalideringArbeid = z.object({
 
 const aktivitetsvalideringSykFerie = aktivitetsvalideringArbeid.partial({ timer: true });
 
-export function validator(aktivitetType: TAktivitetType | string) {
+export function validator(aktivitetType: AktivitetType | string) {
   return aktivitetType === "Arbeid"
     ? withZod(aktivitetsvalideringArbeid)
     : withZod(aktivitetsvalideringSykFerie);

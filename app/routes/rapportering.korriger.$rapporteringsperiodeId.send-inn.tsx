@@ -1,18 +1,18 @@
 import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { logger } from "server/logger";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
@@ -25,10 +25,11 @@ export async function action({ request, params }: ActionArgs) {
     });
     return json({ error: "Det har skjedd noe feil med innsendingen din, prøv igjen." });
   }
+
   return redirect(`/rapportering/korriger/${periodeId}/bekreftelse`);
 }
 
-export default function RapporteringSendInnRapporteringsperiodeid() {
+export default function KorrigeringSendInnSide() {
   const actionData = useActionData<typeof action>();
   const { rapporteringsperiodeId } = useParams();
 
@@ -43,7 +44,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
 
   return (
     <>
-      <div className="rapportering-kontainer">
+      <div className="rapportering-container">
         <Heading
           ref={sidelastFokusRef}
           tabIndex={-1}
@@ -70,7 +71,7 @@ export default function RapporteringSendInnRapporteringsperiodeid() {
         )}
 
         <Form method="post">
-          <div className="navigasjon-kontainer">
+          <div className="navigasjon-container">
             <RemixLink
               to={`/rapportering/korriger/${rapporteringsperiodeId}/fyll-ut`}
               as="Button"

@@ -1,45 +1,59 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
-import type { ActionArgs } from "@remix-run/node";
-import { useActionData, useRouteLoaderData, useSearchParams } from "@remix-run/react";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
-import type { TAktivitetType } from "~/models/aktivitet.server";
-import type { IRapporteringsPeriodeLoader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
-import { lagreAktivitetAction, slettAktivitetAction } from "~/utils/aktivitet.action.server";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { sletteAktivitet, type AktivitetType } from "~/models/aktivitet.server";
+import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
+  const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
+  const aktivitetId = formdata.get("aktivitetId") as string;
+  const aktivitetsType = formdata.get("type") as AktivitetType;
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
     case "slette": {
-      return await slettAktivitetAction(formdata, request, periodeId);
+      return await sletteAktivitet(onBehalfOfToken, periodeId, aktivitetId);
     }
 
     case "lagre": {
-      return await lagreAktivitetAction(formdata, request, periodeId);
+      return await validerOgLagreAktivitet(onBehalfOfToken, aktivitetsType, periodeId, formdata);
+    }
+
+    default: {
+      return {
+        status: "error",
+        error: {
+          statusCode: 500,
+          statusText: "Det skjedde en feil.",
+        },
+      };
     }
   }
 }
 
-export default function RapporteringFyllut() {
-  const { periode } = useRouteLoaderData(
+export default function RapporteringsPeriodeFyllUtSide() {
+  const { periode } = useTypedRouteLoaderData(
     "routes/rapportering.periode.$rapporteringsperiodeId"
-  ) as IRapporteringsPeriodeLoader;
-  const actionData = useActionData();
+  );
+  const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-  const [valgtAktivitet, setValgtAktivitet] = useState<TAktivitetType | string>("");
+  const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
   const [modalAapen, setModalAapen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -58,7 +72,7 @@ export default function RapporteringFyllut() {
   }, [setFokus, scrollToView, searchParams]);
 
   useEffect(() => {
-    if (actionData?.lagret) {
+    if (actionData?.status === "success") {
       lukkModal();
     }
   }, [actionData]);
@@ -80,7 +94,7 @@ export default function RapporteringFyllut() {
 
   return (
     <>
-      <div className="rapportering-kontainer">
+      <div className="rapportering-container">
         <Heading
           ref={sidelastFokusRef}
           tabIndex={-1}
@@ -103,10 +117,10 @@ export default function RapporteringFyllut() {
           modalAapen={modalAapen}
           lukkModal={lukkModal}
         />
-        <div className="registert-meldeperiode-kontainer">
+        <div className="registert-meldeperiode-container">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
-        <div className="navigasjon-kontainer">
+        <div className="navigasjon-container">
           <RemixLink as="Button" to="/rapportering" variant="secondary">
             Lagre og fortsett senere
           </RemixLink>

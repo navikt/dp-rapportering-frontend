@@ -67,6 +67,7 @@
 .dato {
   position: relative;
   display: flex;
+  padding-right: 4px;
   justify-content: center;
   align-items: center;
   background-color: var(--a-bg-subtle);
@@ -74,6 +75,7 @@
   height: 35px;
   border-radius: 50%;
   font-size: var(--a-font-size-medium);
+  line-height: var(--a-font-size-medium);
   cursor: pointer;
   border: 0;
   z-index: 10;
@@ -209,6 +211,7 @@
     height: 60px;
     padding-right: 2px;
     font-size: var(--a-font-size-large);
+    line-height: var(--a-font-size-large);
   }
 
   .readonly {

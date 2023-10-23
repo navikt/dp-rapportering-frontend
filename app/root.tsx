@@ -1,6 +1,7 @@
 import navStyles from "@navikt/ds-css/dist/index.css";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import { json } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -21,11 +22,10 @@ import type { ISanityTexts } from "./sanity/sanity.types";
 import { getEnv } from "./utils/env.utils";
 
 import indexStyle from "~/index.css";
-import globalStyle from "~/global.css";
 
 export const sanityClient = createClient(sanityConfig);
 
-export function meta() {
+export const meta: MetaFunction = () => {
   return [
     {
       charset: "utf-8",
@@ -44,16 +44,15 @@ export function meta() {
       content: "rapporteringløsning for dagpenger",
     },
   ];
-}
+};
 
-export function links() {
+export const links: LinksFunction = () => {
   return [
     ...(cssBundleHref
       ? [
           { rel: "stylesheet", href: navStyles },
           { rel: "stylesheet", href: cssBundleHref },
           { rel: "stylesheet", href: indexStyle },
-          { rel: "stylesheet", href: globalStyle },
           {
             rel: "icon",
             type: "image/png",
@@ -74,7 +73,7 @@ export function links() {
         ]
       : []),
   ];
-}
+};
 
 export async function loader() {
   const fragments = await hentDekoratorHtml();
@@ -128,6 +127,6 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.log("treffer root errorboundary", error);
+
   return <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />;
 }
