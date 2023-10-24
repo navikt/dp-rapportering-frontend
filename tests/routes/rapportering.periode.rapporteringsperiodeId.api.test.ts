@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { rapporteringsperioderResponse } from "../../mocks/api-routes/rapporteringsperioderResponse";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId";
 import { server } from "../../mocks/server";
@@ -49,16 +49,17 @@ describe("Hent en rapporteringsperiode", () => {
 
     test("skal gi tilbake feedback til viewet hvis backend-kallet feiler", async () => {
       server.use(
-        rest.get(
+        http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${rapporteringsperioderResponse[0].id}`,
-          (req, res, ctx) => {
-            return res.once(
-              ctx.status(500),
-              ctx.json({
+          () => {
+            return HttpResponse.json(
+              {
                 errorMessage: `Server Error`,
-              })
+              },
+              { status: 500 }
             );
-          }
+          },
+          { once: true }
         )
       );
 

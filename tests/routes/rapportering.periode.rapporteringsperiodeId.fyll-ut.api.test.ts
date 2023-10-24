@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { action } from "~/routes/rapportering.periode.$rapporteringsperiodeId.fyll-ut";
 import { rapporteringsperioderResponse } from "../../mocks/api-routes/rapporteringsperioderResponse";
@@ -64,15 +64,13 @@ describe("Fyll ut rapporteringsperiode", () => {
         });
 
         server.use(
-          rest.post(
+          http.post(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/:rapporteringsperioderId/aktivitet`,
-            (req, res, ctx) => {
-              return res.once(
-                ctx.status(500),
-                ctx.json({
-                  errorMessage: `Server Error`,
-                })
-              );
+            () => {
+              return HttpResponse.json({ errorMessage: `Server Error` }, { status: 500 });
+            },
+            {
+              once: true,
             }
           )
         );
@@ -130,16 +128,17 @@ describe("Fyll ut rapporteringsperiode", () => {
         });
 
         server.use(
-          rest.delete(
+          http.delete(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/:rapporteringsperioderId/aktivitet/:aktivitetId`,
-            (req, res, ctx) => {
-              return res.once(
-                ctx.status(500),
-                ctx.json({
+            () => {
+              return HttpResponse.json(
+                {
                   errorMessage: `Server Error`,
-                })
+                },
+                { status: 500 }
               );
-            }
+            },
+            { once: true }
           )
         );
 

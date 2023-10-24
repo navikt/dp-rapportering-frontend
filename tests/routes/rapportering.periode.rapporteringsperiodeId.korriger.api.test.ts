@@ -1,14 +1,14 @@
 // @vitest-environment node
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId.avgodkjenn";
+import { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId.korriger";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
 import { rapporteringsperioderResponse } from "mocks/api-routes/rapporteringsperioderResponse";
 import { redirect } from "@remix-run/node";
 
-describe("Avgodkjenn periode", () => {
+describe("Start korrigering", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
   afterAll(() => server.close());
   afterEach(() => {
@@ -21,7 +21,23 @@ describe("Avgodkjenn periode", () => {
       rapporteringsperiodeId: rapporteringsperioderResponse[0].id,
     };
 
-    test("Skal redirecte etter avgodkjenning av periode", async () => {
+    test("Skal redirecte etter laging av ny korrigeringsperiode", async () => {
+      const korrigeringsPeriode = {
+        ...rapporteringsperioderResponse[0],
+        id: rapporteringsperioderResponse[0].id + 1,
+      };
+      server.use(
+        http.post(
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${testParams.rapporteringsperiodeId}/korrigering`,
+          () => {
+            return HttpResponse.json(korrigeringsPeriode);
+          },
+          {
+            once: true,
+          }
+        )
+      );
+
       mockSession();
 
       const response = await loader({
@@ -31,22 +47,23 @@ describe("Avgodkjenn periode", () => {
       });
 
       expect(response).toEqual(
-        redirect(`/rapportering/periode/${rapporteringsperioderResponse[0].id}/fyll-ut`)
+        redirect(`/rapportering/korriger/${korrigeringsPeriode.id}/fyll-ut`)
       );
     });
 
     test("Skal feile hvis kallet til den bestemte rapporteringsperiode feiler", async () => {
       server.use(
-        rest.post(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${testParams.rapporteringsperiodeId}/avgodkjenn`,
-          (_, res, ctx) => {
-            return res.once(
-              ctx.status(500),
-              ctx.json({
+        http.post(
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${testParams.rapporteringsperiodeId}/korrigering`,
+          () => {
+            return HttpResponse.json(
+              {
                 errorMessage: `Server Error`,
-              })
+              },
+              { status: 500 }
             );
-          }
+          },
+          { once: true }
         )
       );
 
