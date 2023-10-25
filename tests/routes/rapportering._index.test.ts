@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { gjeldendePeriodeResponse } from "mocks/api-routes/gjeldendePeriodeResponse";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/rapportering._index";
 import { server } from "../../mocks/server";
@@ -30,15 +30,13 @@ describe("Hovedside rapportering", () => {
 
     test("Skal feile hvis kallet til gjelende rapporteringsperioder feilet", async () => {
       server.use(
-        rest.get(
+        http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
-          (_, res, ctx) => {
-            return res.once(
-              ctx.status(500),
-              ctx.json({
-                errorMessage: `Server Error`,
-              })
-            );
+          () => {
+            return HttpResponse.json(null, { status: 500 });
+          },
+          {
+            once: true,
           }
         )
       );
@@ -75,11 +73,10 @@ describe("Hovedside rapportering", () => {
 
     test("Skal vise at bruker har ingen gjeldene perdiode", async () => {
       server.use(
-        rest.get(
+        http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
-          (_, res, ctx) => {
-            return res.once(ctx.status(404));
-          }
+          () => new HttpResponse(null, { status: 404 }),
+          { once: true }
         )
       );
 

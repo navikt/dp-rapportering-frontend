@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { redirect } from "@remix-run/node";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { action } from "~/routes/rapportering.periode.$rapporteringsperiodeId.send-inn";
 import { rapporteringsperioderResponse } from "../../mocks/api-routes/rapporteringsperioderResponse";
@@ -73,16 +73,14 @@ describe("Send inn rapporteringsperiode", () => {
         });
 
         server.use(
-          rest.post(
+          http.post(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${rapporteringsperioderResponse[0].id}/godkjenn`,
-            (req, res, ctx) => {
-              return res.once(
-                ctx.status(500),
-                ctx.json({
-                  errorMessage: `Server Error`,
-                })
-              );
-            }
+            () => {
+              return HttpResponse.json(null, {
+                status: 500,
+              });
+            },
+            { once: true }
           )
         );
 
