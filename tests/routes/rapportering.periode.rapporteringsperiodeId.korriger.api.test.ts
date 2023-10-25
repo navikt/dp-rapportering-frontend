@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId.korriger";
 import { server } from "../../mocks/server";
@@ -27,10 +27,13 @@ describe("Start korrigering", () => {
         id: rapporteringsperioderResponse[0].id + 1,
       };
       server.use(
-        rest.post(
+        http.post(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${testParams.rapporteringsperiodeId}/korrigering`,
-          (_, res, ctx) => {
-            return res.once(ctx.json(korrigeringsPeriode));
+          () => {
+            return HttpResponse.json(korrigeringsPeriode);
+          },
+          {
+            once: true,
           }
         )
       );
@@ -50,16 +53,12 @@ describe("Start korrigering", () => {
 
     test("Skal feile hvis kallet til den bestemte rapporteringsperiode feiler", async () => {
       server.use(
-        rest.post(
+        http.post(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${testParams.rapporteringsperiodeId}/korrigering`,
-          (_, res, ctx) => {
-            return res.once(
-              ctx.status(500),
-              ctx.json({
-                errorMessage: `Server Error`,
-              })
-            );
-          }
+          () => {
+            return HttpResponse.json(null, { status: 500 });
+          },
+          { once: true }
         )
       );
 

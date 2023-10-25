@@ -1,4 +1,4 @@
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { getEnv } from "~/utils/env.utils";
 import { gjeldendePeriodeResponse } from "./api-routes/gjeldendePeriodeResponse";
 import { rapporteringsperioderResponse } from "./api-routes/rapporteringsperioderResponse";
@@ -6,73 +6,72 @@ import { sanityResponse } from "./api-routes/sanityResponse";
 
 export const handlers = [
   // Hent alle rapporteringsperioder
-  rest.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, (req, res, ctx) => {
-    return res(ctx.json(rapporteringsperioderResponse));
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, () => {
+    return HttpResponse.json(rapporteringsperioderResponse);
   }),
 
   // Hent gjeldende rapporteringsperiode
-  rest.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`, (req, res, ctx) => {
-    return res(ctx.json(gjeldendePeriodeResponse));
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`, () => {
+    return HttpResponse.json(gjeldendePeriodeResponse);
   }),
 
   // Godkjenn rapporteringsperiode
-  rest.post(
+  http.post(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId/godkjenn`,
-    (req, res, ctx) => {
-      return res(ctx.status(200));
+    () => {
+      return new HttpResponse(null, { status: 200 });
     }
   ),
 
   // Avgodkjenn rapporteringsperiode
-  rest.post(
+  http.post(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId/avgodkjenn`,
-    (req, res, ctx) => {
-      return res(ctx.status(200));
+    () => {
+      return new HttpResponse(null, { status: 200 });
     }
   ),
 
   // Hent spesifikk rapporteringsperiode
-  rest.get(
+  http.get(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId`,
-    (req, res, ctx) => {
+    ({ params }) => {
+      const { rapporteringsperioderId } = params;
+
       const rapporteringPeriode = rapporteringsperioderResponse.find(
-        (periode) => periode.id === req.params.rapporteringsperioderId
+        (periode) => periode.id === rapporteringsperioderId
       );
 
-      return res(ctx.json(rapporteringPeriode));
+      return HttpResponse.json(rapporteringPeriode);
     }
   ),
 
   // Start korrigering av rapporteringsperiode
-  rest.post(
+  http.post(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId/korrigering`,
-    (req, res, ctx) => {
-      return res(ctx.json(rapporteringsperioderResponse[1]));
+    () => {
+      return HttpResponse.json(rapporteringsperioderResponse[1]);
     }
   ),
 
   // Lagre en aktivitet
-  rest.post(
+  http.post(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId/aktivitet`,
-    (req, res, ctx) => {
-      return res(ctx.status(204));
+    () => {
+      return new HttpResponse(null, { status: 204 });
     }
   ),
 
   // Slett en aktivitet
-  rest.delete(
+  http.delete(
     `${getEnv(
       "DP_RAPPORTERING_URL"
     )}/rapporteringsperioder/:rapporteringsperioderId/aktivitet/:aktivitetId`,
-    (req, res, ctx) => {
-      return res(ctx.status(204));
+    () => {
+      return new HttpResponse(null, { status: 204 });
     }
   ),
 
-  rest.get(
-    "https://rt6o382n.apicdn.sanity.io/v2021-06-06/data/query/production",
-    (req, res, ctx) => {
-      return res(ctx.json(sanityResponse));
-    }
-  ),
+  http.get("https://rt6o382n.apicdn.sanity.io/v2021-06-06/data/query/production", () => {
+    return HttpResponse.json(sanityResponse);
+  }),
 ];
