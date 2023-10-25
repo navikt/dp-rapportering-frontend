@@ -21,7 +21,7 @@ Sett `USE_MSW="false"` dersom du ønsker å kjøre applikasjonen med `DEV API`.
 
 ## Kjøre mot dev-APIer i localhost
 
-For å kjøre requester mot dp-rapportering må vi ha et token, generert med [wonderwalled-idporten](https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering). Logg på med testid. Hent ut verdien fra `access_token`, rediger `.env` og endre `DP_RAPPORTERING_TOKEN` til det nylig genererte tokenet. Env-variabelen `IS_LOCALHOST="true"` må også være satt.
+For å kjøre requester mot dp-rapportering må vi ha et token, generert med [tokenx-token-generator](https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering). Logg på med testid. Hent ut verdien fra `access_token`, rediger `.env` og endre `DP_RAPPORTERING_TOKEN` til det nylig genererte tokenet. Env-variabelen `IS_LOCALHOST="true"` må også være satt.
 
 Dette tokenet vil vare i en time før du må generere et nytt token.
 
