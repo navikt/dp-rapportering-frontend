@@ -40,12 +40,7 @@ describe("Avgodkjenn periode", () => {
         http.post(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${testParams.rapporteringsperiodeId}/avgodkjenn`,
           () => {
-            return HttpResponse.json(
-              {
-                errorMessage: `Server Error`,
-              },
-              { status: 500 }
-            );
+            return HttpResponse.json(null, { status: 500 });
           },
           { once: true }
         )

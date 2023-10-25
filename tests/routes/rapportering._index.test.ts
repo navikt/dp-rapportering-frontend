@@ -33,12 +33,7 @@ describe("Hovedside rapportering", () => {
         http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
           () => {
-            return HttpResponse.json(
-              {
-                errorMessage: `Server Error`,
-              },
-              { status: 500 }
-            );
+            return HttpResponse.json(null, { status: 500 });
           },
           {
             once: true,
@@ -80,7 +75,7 @@ describe("Hovedside rapportering", () => {
       server.use(
         http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
-          () => new HttpResponse("not found", { status: 404 }),
+          () => new HttpResponse(null, { status: 404 }),
           { once: true }
         )
       );

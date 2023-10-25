@@ -56,14 +56,23 @@ describe("Liste ut alle rapporteringsperioder", () => {
       expect(response.status).toBe(500);
     });
 
-    test.skip("Skal feile hvis uthenting av gjeldende perioder feiler", async () => {
+    test("Skal feile hvis uthenting av gjeldende perioder feiler", async () => {
       server.use(
+        http.get(
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`,
+          () => {
+            return HttpResponse.json(innsendtRapporteringsperioderResponse, { status: 200 });
+          },
+          { once: true }
+        ),
         http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
           () => {
-            return HttpResponse.json({ errorMessage: `Server Error` }, { status: 500 });
+            return HttpResponse.json(null, { status: 500 });
           },
-          { once: true }
+          {
+            once: true,
+          }
         )
       );
 
@@ -87,12 +96,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
         http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
           () => {
-            return HttpResponse.json(
-              {
-                errorMessage: `Not found`,
-              },
-              { status: 404 }
-            );
+            return HttpResponse.json(null, { status: 404 });
           },
           { once: true }
         )
