@@ -50,6 +50,7 @@ export async function godkjennPeriode(onBehalfOfToken: string, id: string): Prom
   return await fetch(url, {
     method: "POST",
     headers: getHeaders(onBehalfOfToken),
+    body: JSON.stringify({ image: getEnv("NAIS_APP_IMAGE"), commit: getEnv("COMMIT") }),
   });
 }
 

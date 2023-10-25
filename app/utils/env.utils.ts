@@ -11,6 +11,8 @@ interface IEnv {
   DP_RAPPORTERING_TOKEN: string;
   NAIS_CLUSTER_NAME: string;
   USE_MSW: string;
+  NAIS_APP_IMAGE: string;
+  COMMIT: string;
 }
 
 export function getEnv(value: keyof IEnv) {
