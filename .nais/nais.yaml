@@ -49,6 +49,8 @@ spec:
       value: {{dekorator.env}}
     - name: COMMIT
       value: {{commit}}
+    - name: FARO_URL
+      value: {{faro_url}}
   accessPolicy:
     outbound:
       external:

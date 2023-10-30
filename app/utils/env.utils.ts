@@ -13,6 +13,7 @@ interface IEnv {
   USE_MSW: string;
   NAIS_APP_IMAGE: string;
   COMMIT: string;
+  FARO_URL: string;
 }
 
 export function getEnv(value: keyof IEnv) {

@@ -2,3 +2,4 @@ ingress: "https://dagpenger.nav.no/rapportering"
 base_path: "/rapportering"
 idporten:
   level: Level4
+faro_url: "https://telemetry.nav.no/collect"

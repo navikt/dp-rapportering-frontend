@@ -22,6 +22,7 @@ import type { ISanityTexts } from "./sanity/sanity.types";
 import { getEnv } from "./utils/env.utils";
 
 import indexStyle from "~/index.css";
+import { initInstrumentation } from "~/utils/faro";
 
 export const sanityClient = createClient(sanityConfig);
 
@@ -87,13 +88,14 @@ export async function loader() {
     sanityTexts,
     env: {
       BASE_PATH: process.env.BASE_PATH,
-      DP_RAPPORTERING_URL: process.env.DP_RAPPORTERING_URL,
       IS_LOCALHOST: process.env.IS_LOCALHOST,
+      FARO_URL: process.env.FARO_URL,
     },
     fragments,
   });
 }
 
+initInstrumentation();
 export default function App() {
   const { env, fragments } = useLoaderData<typeof loader>();
   return (
