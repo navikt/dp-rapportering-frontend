@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import styles from "./SessjonModal.module.css";
 import { DevelopmentContainer } from "../development-container/DevelopmentContainer";
+import { getEnv } from "~/utils/env.utils";
 
 interface IProps {
   sesjon?: SessionWithOboProvider;
@@ -19,7 +20,8 @@ export function SessjonModal(props: IProps) {
   const [laster, setLaster] = useState(false);
 
   useEffect(() => {
-    if (!utlopesOm) return;
+    console.log(getEnv("USE_MSW"));
+    if (!utlopesOm || getEnv("USE_MSW") === "true") return;
 
     if (utlopesOm === 1) {
       setUtlopt(true);

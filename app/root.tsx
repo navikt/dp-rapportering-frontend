@@ -89,6 +89,7 @@ export async function loader() {
     env: {
       BASE_PATH: process.env.BASE_PATH,
       IS_LOCALHOST: process.env.IS_LOCALHOST,
+      USE_MSW: process.env.USE_MSW,
       FARO_URL: process.env.FARO_URL,
     },
     fragments,
