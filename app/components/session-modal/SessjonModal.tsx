@@ -20,7 +20,6 @@ export function SessjonModal(props: IProps) {
   const [laster, setLaster] = useState(false);
 
   useEffect(() => {
-    console.log(getEnv("USE_MSW"));
     if (!utlopesOm || getEnv("USE_MSW") === "true") return;
 
     if (utlopesOm === 1) {
