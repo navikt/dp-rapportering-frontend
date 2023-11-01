@@ -28,10 +28,19 @@ export async function getRapporteringOboToken(request: Request) {
     throw new Response(null, { status: 500, statusText: "Feil ved henting av sesjon" });
   }
 
+  const utloptLocalhostSessjon = process.env.IS_LOCALHOST === "true" && session.expiresIn === 0;
+
+  if (utloptLocalhostSessjon && process.env.USE_MSW !== "true") {
+    throw new Response(null, {
+      status: 440,
+      statusText: "Localhost sessjon er utløpt!",
+    });
+  }
+
   if (process.env.IS_LOCALHOST === "true") {
     return process.env.DP_RAPPORTERING_TOKEN || fallbackToken;
-  } else {
-    const audienceDPRapportering = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-rapportering`;
-    return session.apiToken(audienceDPRapportering);
   }
+
+  const audienceDPRapportering = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-rapportering`;
+  return session.apiToken(audienceDPRapportering);
 }

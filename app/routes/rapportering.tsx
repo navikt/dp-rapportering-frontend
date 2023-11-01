@@ -2,8 +2,10 @@ import { Heading } from "@navikt/ds-react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
+import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
 import { getSession } from "~/utils/auth.utils.server";
+import { getEnv } from "~/utils/env.utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request);
@@ -24,7 +26,7 @@ export function ErrorBoundary() {
   const error = useRouteError();
 
   if (isRouteErrorResponse(error)) {
-    if (error.status === 401) {
+    if (getEnv("IS_LOCALHOST") === "true" && error.status === 440) {
       return (
         <main>
           <div className="rapportering-header">
@@ -35,7 +37,18 @@ export function ErrorBoundary() {
             </div>
           </div>
           <div className="rapportering-container">
-            <SessjonModal sesjon={error.data.session} />
+            <DevelopmentContainer>
+              <>
+                Sessjon utløpt! &nbsp;
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering"
+                >
+                  Klikk på lenken for å hente ny token
+                </a>
+              </>
+            </DevelopmentContainer>
           </div>
         </main>
       );

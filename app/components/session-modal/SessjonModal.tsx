@@ -1,20 +1,14 @@
-import type { SessionWithOboProvider } from "@navikt/dp-auth";
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import styles from "./SessjonModal.module.css";
-import { DevelopmentContainer } from "../development-container/DevelopmentContainer";
 import { getEnv } from "~/utils/env.utils";
+import styles from "./SessjonModal.module.css";
 
-interface IProps {
-  sesjon?: SessionWithOboProvider;
-}
-
-export function SessjonModal(props: IProps) {
+export function SessjonModal() {
   const { session } = useTypedRouteLoaderData("routes/rapportering");
   const [utlopesOm, setUtlopesOm] = useState<number | undefined>(
-    props.sesjon?.expiresIn || session?.expiresIn || 1
+    session?.expiresIn || session?.expiresIn || 1
   );
   const [utlopt, setUtlopt] = useState(false);
   const [laster, setLaster] = useState(false);
@@ -64,15 +58,6 @@ export function SessjonModal(props: IProps) {
             Gå til forsiden
           </Button>
         </div>
-        <DevelopmentContainer>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://wonderwalled-idporten.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering"
-          >
-            Klikk på lenken for å hente ny token
-          </a>
-        </DevelopmentContainer>
       </Modal.Body>
     </Modal>
   );
