@@ -59,7 +59,7 @@ spec:
       rules:
         - application: dp-rapportering
         - application: nav-dekoratoren
-          namespace: dagpenger
+          namespace: teamdagpenger
   idporten:
     enabled: true
     sidecar:
