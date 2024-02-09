@@ -53,7 +53,7 @@ Kjør `$ nvm use` og det burde løse problemet.
 
 ```
 npm ERR! code E401
-npm ERR! 401 Unauthorized - GET https://npm.pkg.github.com/download/@navikt/dp-auth/0.3.7/5c5965d82448aa24ef9c53430a745429555e153f - unauthenticated: User cannot be authenticated with the token provided.
+npm ERR! 401 Unauthorized - GET https://npm.pkg.github.com/download/@navikt/oasis/0.3.7/5c5965d82448aa24ef9c53430a745429555e153f - unauthenticated: User cannot be authenticated with the token provided.
 
 npm ERR! A complete log of this run can be found in: /Users/<user>/.npm/\_logs/2023-09-05T08_44_38_897Z-debug-0.log
 ```

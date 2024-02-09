@@ -1,5 +1,5 @@
 import { type SpyInstance, vi } from "vitest";
-import { type SessionWithOboProvider } from "@navikt/dp-auth";
+import { type SessionWithOboProvider } from "@navikt/oasis";
 
 import * as mockAuth from "~/utils/auth.utils.server";
 
