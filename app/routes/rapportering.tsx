@@ -4,13 +4,11 @@ import { json } from "@remix-run/node";
 import { isRouteErrorResponse, Outlet, useRouteError } from "@remix-run/react";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { SessjonModal } from "~/components/session-modal/SessjonModal";
-import { getSession } from "~/utils/auth.utils.server";
+import { sessionExpiresIn } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await getSession(request);
-
-  return json({ session });
+  return json({ session: { expiresIn: sessionExpiresIn(request) } });
 }
 
 export default function Rapportering() {
