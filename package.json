@@ -21,7 +21,7 @@
     "@navikt/ds-css": "^5.7.6",
     "@navikt/ds-react": "^5.7.6",
     "@navikt/nav-dekoratoren-moduler": "^2.1.3",
-    "@navikt/oasis": "^2.2.0",
+    "@navikt/oasis": "^3.0.0",
     "@portabletext/types": "^2.0.8",
     "@remix-run/css-bundle": "^2.1.0",
     "@remix-run/express": "^2.1.0",
