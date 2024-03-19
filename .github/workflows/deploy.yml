@@ -104,7 +104,7 @@ jobs:
       - name: Upload static files
         uses: nais/deploy/actions/cdn-upload/v2@master
         with:
-          cdn-team-name: teamdagpenger
+          team: teamdagpenger
           source: ./public
           destination: "/dp-rapportering-frontend/"
 
