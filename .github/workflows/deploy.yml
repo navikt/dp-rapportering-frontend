@@ -93,7 +93,6 @@ jobs:
       id-token: "write"
     steps:
       - uses: actions/cache@v4
-        id: restore-build
         with:
           path: |
             ./build
@@ -107,6 +106,8 @@ jobs:
           team: teamdagpenger
           source: ./public
           destination: "/dp-rapportering-frontend/"
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
   deploy-dev:
     needs: [build, test, upload-cdn]
