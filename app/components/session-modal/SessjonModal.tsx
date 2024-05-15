@@ -34,13 +34,14 @@ export function SessjonModal() {
 
   return (
     <Modal
+      aria-labelledby="sessjon-modal-heading"
       className={classNames("modal-container modal-container--error", styles.sessjonModal)}
       onClose={() => {
         return;
       }}
       open={utlopt}
     >
-      <Modal.Header closeButton={false}>
+      <Modal.Header id="sessjon-modal-heading" closeButton={false}>
         <Heading level="1" size="medium">
           Du må logge inn på nytt for å fortsette
         </Heading>

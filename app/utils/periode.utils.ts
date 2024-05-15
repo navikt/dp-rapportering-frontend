@@ -1,4 +1,5 @@
 import { parse } from "tinyduration";
+import type { Duration } from "tinyduration";
 
 export function periodeSomTimer(periode: string) {
   const parsed = parse(periode);

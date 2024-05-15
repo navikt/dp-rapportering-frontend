@@ -2,7 +2,7 @@ import express from "express";
 import compression from "compression";
 import handleRequestWithRemix from "./remix";
 import type { Response } from "express";
-import { logger, logRequests } from "./logger";
+import { logger, logRequests } from "./logger.server";
 const port = process.env.PORT || 3000;
 const basePath = process.env.BASE_PATH;
 

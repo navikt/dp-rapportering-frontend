@@ -53,13 +53,18 @@ export function AktivitetModal(props: IProps) {
   return (
     <Modal
       className={styles.modal}
-      aria-labelledby="modal-heading"
-      aria-label="Rapporter aktivitet"
+      aria-labelledby="aktivitet-modal-heading"
       open={modalAapen}
       onClose={() => lukkModal()}
     >
       <Modal.Header>
-        <Heading level="1" size="medium" id="modal-heading" className={styles.modalHeader}>
+        <Heading
+          level="1"
+          size="medium"
+          id="aktivitet-modal-heading"
+          className={styles.modalHeader}
+          aria-label="Rapporter aktivitet"
+        >
           {valgtDato && <FormattertDato dato={valgtDato} ukedag />}
         </Heading>
       </Modal.Header>

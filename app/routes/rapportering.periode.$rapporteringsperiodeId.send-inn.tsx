@@ -3,7 +3,7 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { logger } from "server/logger";
+import { logger } from "server/logger.server";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";

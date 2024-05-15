@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/nodejs18-debian11
+FROM gcr.io/distroless/nodejs20-debian12
 
 WORKDIR /var
 
