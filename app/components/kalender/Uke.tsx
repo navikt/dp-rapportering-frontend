@@ -34,7 +34,7 @@ export function Uke(props: IProps) {
   function hentSkjermleserDatoTekst(dag: IRapporteringsperiodeDag) {
     const locale = "no-NO";
 
-    let options: Intl.DateTimeFormatOptions = {
+    const options: Intl.DateTimeFormatOptions = {
       day: "2-digit",
       weekday: "long",
       month: "long",

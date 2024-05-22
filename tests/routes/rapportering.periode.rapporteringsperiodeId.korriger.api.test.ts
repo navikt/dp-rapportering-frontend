@@ -5,7 +5,7 @@ import { loader } from "~/routes/rapportering.periode.$rapporteringsperiodeId.ko
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
-import { rapporteringsperioderResponse } from "mocks/api-routes/rapporteringsperioderResponse";
+import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { redirect } from "@remix-run/node";
 
 describe("Start korrigering", () => {

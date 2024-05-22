@@ -42,7 +42,7 @@ export async function lagreAktivitet(
 export async function sletteAktivitet(
   onBehalfOfToken: string,
   rapporteringsperiodeId: string,
-  aktivitetId: String
+  aktivitetId: string
 ): Promise<INetworkResponse> {
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"

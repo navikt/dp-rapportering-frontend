@@ -2,10 +2,17 @@ import { Alert, Heading } from "@navikt/ds-react";
 import { isRouteErrorResponse } from "@remix-run/react";
 import styles from "./RootErrorBoundaryView.module.css";
 
+interface IError {
+  statusText: string;
+  data: string;
+  status: string;
+  message: string;
+}
+
 interface IProps {
   meta: JSX.Element;
   links: JSX.Element;
-  error: unknown;
+  error: unknown | IError;
 }
 
 export function RootErrorBoundaryView({ meta, links, error }: IProps) {
@@ -24,7 +31,7 @@ export function RootErrorBoundaryView({ meta, links, error }: IProps) {
   );
 }
 
-export function ErrorMessageComponent({ error }: any) {
+export function ErrorMessageComponent({ error }: { error: unknown | IError }) {
   // Treffer Response errors, eks. throw new Response(), 401, 404, 500 errors
   if (isRouteErrorResponse(error)) {
     const hasStatusText = error.statusText.length > 0;

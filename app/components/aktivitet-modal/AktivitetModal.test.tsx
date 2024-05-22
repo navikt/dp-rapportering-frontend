@@ -2,7 +2,7 @@
 
 import { json } from "@remix-run/node";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { userEvent } from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, test, vi } from "vitest";
 import type { AktivitetType } from "~/models/aktivitet.server";
@@ -125,7 +125,7 @@ describe("AktivitetModal", () => {
     });
 
     test("burde vise feilmelding hvis det er feil i backenden når vi lagrer aktivitet", async () => {
-      const actionFn = vi.fn(async ({ request }) => {
+      const actionFn = vi.fn(async () => {
         const actionResponse: INetworkResponse = {
           status: "error",
           error: {
@@ -232,7 +232,7 @@ describe("AktivitetModal", () => {
       test("burde vise feilmelding hvis bruker prøver å lagre arbeid uten å skrive inn timer", async () => {
         const actionResponse: INetworkResponse = { status: "success" };
 
-        const actionFn = vi.fn(async ({ request }) => {
+        const actionFn = vi.fn(async () => {
           return json(actionResponse);
         });
 
