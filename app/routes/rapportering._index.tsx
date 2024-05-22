@@ -9,7 +9,6 @@ import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
-import { lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -32,8 +31,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Landingsside() {
   const { gjeldendePeriode } = useLoaderData<typeof loader>();
-
-  lagBrodsmulesti();
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();

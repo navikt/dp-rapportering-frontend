@@ -7,7 +7,7 @@ import { useState } from "react";
 import { describe, expect, test, vi } from "vitest";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-import { gjeldendePeriodeResponse } from "../../../mocks/api-routes/gjeldendePeriodeResponse";
+import { gjeldendePeriodeResponse } from "../../../mocks/responses/gjeldendePeriodeResponse";
 import { TestContainer } from "../../../tests/helpers/TestContainer";
 import { AktivitetModal } from "./AktivitetModal";
 import type { INetworkResponse } from "~/utils/types";

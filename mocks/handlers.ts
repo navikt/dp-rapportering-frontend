@@ -1,8 +1,7 @@
-import { HttpResponse, http } from "msw";
+import { HttpResponse, http, bypass } from "msw";
 import { getEnv } from "~/utils/env.utils";
-import { gjeldendePeriodeResponse } from "./api-routes/gjeldendePeriodeResponse";
-import { rapporteringsperioderResponse } from "./api-routes/rapporteringsperioderResponse";
-import { sanityResponse } from "./api-routes/sanityResponse";
+import { gjeldendePeriodeResponse } from "./responses/gjeldendePeriodeResponse";
+import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 
 export const handlers = [
   // Hent alle rapporteringsperioder
@@ -71,7 +70,11 @@ export const handlers = [
     }
   ),
 
-  http.get("https://rt6o382n.apicdn.sanity.io/v2021-06-06/data/query/production", () => {
-    return HttpResponse.json(sanityResponse);
+  // Bypassing mocks, use actual data instead
+  http.get("https://rt6o382n.apicdn.sanity.io/*", async ({ request }) => {
+    const bypassResponse = await fetch(bypass(request));
+    const response = await bypassResponse.json();
+
+    return HttpResponse.json(response);
   }),
 ];

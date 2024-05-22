@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { action } from "~/routes/rapportering.periode.$rapporteringsperiodeId.send-inn";
-import { rapporteringsperioderResponse } from "../../mocks/api-routes/rapporteringsperioderResponse";
+import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";

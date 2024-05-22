@@ -1,28 +1,26 @@
-import navStyles from "@navikt/ds-css/dist/index.css";
-import { cssBundleHref } from "@remix-run/css-bundle";
+/* eslint-disable */
+import favicon16 from "/favicon-16x16.png";
+import favicon32 from "/favicon-32x32.png";
+import favicon from "/favicon.ico";
+/* eslint-enable */
+
+import navStyles from "@navikt/ds-css/dist/index.css?url";
 import { json } from "@remix-run/node";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData,
-  useRouteError,
-} from "@remix-run/react";
-import { createClient } from "@sanity/client";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from "@remix-run/react";
 import parse from "html-react-parser";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
 import { hentDekoratorHtml } from "./dekorator/dekorator.server";
 import { sanityConfig } from "./sanity/sanity.config";
 import { allTextsQuery } from "./sanity/sanity.query";
-import type { ISanityTexts } from "./sanity/sanity.types";
-import { getEnv } from "./utils/env.utils";
+import type { ISanity } from "./sanity/sanity.types";
 
-import indexStyle from "~/index.css";
+import indexStyle from "~/index.css?url";
 import { initInstrumentation } from "~/utils/faro";
+import { createClient } from "@sanity/client";
+import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
+import { Fragment, Suspense } from "react";
+import { Skeleton } from "@navikt/ds-react";
 
 export const sanityClient = createClient(sanityConfig);
 
@@ -49,37 +47,32 @@ export const meta: MetaFunction = () => {
 
 export const links: LinksFunction = () => {
   return [
-    ...(cssBundleHref
-      ? [
-          { rel: "stylesheet", href: navStyles },
-          { rel: "stylesheet", href: cssBundleHref },
-          { rel: "stylesheet", href: indexStyle },
-          {
-            rel: "icon",
-            type: "image/png",
-            sizes: "32x32",
-            href: `${getEnv("BASE_PATH")}/favicon-32x32.png`,
-          },
-          {
-            rel: "icon",
-            type: "image/png",
-            sizes: "16x16",
-            href: `${getEnv("BASE_PATH")}/favicon-16x16.png`,
-          },
-          {
-            rel: "icon",
-            type: "image/x-icon",
-            href: `${getEnv("BASE_PATH")}/favicon.ico`,
-          },
-        ]
-      : []),
+    { rel: "stylesheet", href: navStyles },
+    { rel: "stylesheet", href: indexStyle },
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "32x32",
+      href: favicon32,
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "16x16",
+      href: favicon16,
+    },
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      href: favicon,
+    },
   ];
 };
 
 export async function loader() {
   const fragments = await hentDekoratorHtml();
 
-  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
+  const sanityTexts = await sanityClient.fetch<ISanity>(allTextsQuery, {
     baseLang: "nb",
     lang: "nb",
   });
@@ -97,35 +90,42 @@ export async function loader() {
 }
 
 initInstrumentation();
-export default function App() {
-  const { env, fragments } = useLoaderData<typeof loader>();
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  const { fragments, env } = useTypedRouteLoaderData("root");
+
   return (
     <html lang="nb">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Suspense fallback={<Fragment />}>{parse(fragments?.DECORATOR_STYLES)}</Suspense>
         <Meta />
-        {parse(fragments.DECORATOR_STYLES, { trim: true })}
-        {/* Ikke legg parsing av dekoratør-html i egne komponenter. Det trigger rehydrering, 
-            som gjør at grensesnittet flimrer og alle assets lastes på nytt siden de har så mange side effects. 
-            Løsningen enn så lenge er å inline parsingen av HTML her i root. 
-         */}
         <Links />
       </head>
       <body>
-        {parse(fragments.DECORATOR_HEADER, { trim: true })}
-        <Outlet />
+        <Suspense fallback={<Skeleton variant="text" width="100%" height={300} />}>
+          {parse(fragments?.DECORATOR_HEADER)}
+        </Suspense>
+        {children}
         <ScrollRestoration />
-        {parse(fragments.DECORATOR_FOOTER, { trim: true })}
+        <Suspense fallback={<Skeleton variant="text" width="100%" height={300} />}>
+          {parse(fragments?.DECORATOR_FOOTER)}
+        </Suspense>
+        <Scripts />
+        <Suspense fallback={<Fragment />}>{parse(fragments?.DECORATOR_SCRIPTS)}</Suspense>
         <script
           dangerouslySetInnerHTML={{
             __html: `window.env = ${JSON.stringify(env)}`,
           }}
         />
-        <Scripts />
-        {parse(fragments.DECORATOR_SCRIPTS, { trim: true })}
-        <LiveReload />
       </body>
     </html>
   );
+}
+
+export default function App() {
+  return <Outlet />;
 }
 
 export function ErrorBoundary() {

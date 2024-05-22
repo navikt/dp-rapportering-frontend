@@ -15,6 +15,12 @@ export async function hentDekoratorHtml() {
       enforceLogin: false,
       redirectToApp: true,
       level: "Level4",
+      breadcrumbs: [
+        {
+          title: "Rapporteringsløsning for dagpenger",
+          url: "https://www.nav.no/arbeid/dagpenger/rapportering",
+        },
+      ],
     },
   };
 

@@ -7,7 +7,6 @@ import { DevelopmentContainer } from "~/components/development-container/Develop
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
-import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -27,12 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function RapporteringsPeriodeSide() {
   const { periode } = useLoaderData<typeof loader>();
 
-  lagBrodsmulesti([
-    {
-      title: "Fyll ut rapporteringen",
-      url: hentBrodsmuleUrl(`/periode/${periode.id}`),
-    },
-  ]);
+  // TODO: Lag brødsmulesti for /periode/${periode.id}
 
   return (
     <>

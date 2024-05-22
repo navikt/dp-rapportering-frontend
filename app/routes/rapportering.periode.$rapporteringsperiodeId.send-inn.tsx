@@ -3,7 +3,6 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { logger } from "server/logger.server";
 import invariant from "tiny-invariant";
 import { RemixLink } from "~/components/RemixLink";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
@@ -11,6 +10,7 @@ import { useSetFokus } from "~/hooks/useSetFokus";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { logger } from "~/models/logger.server";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");

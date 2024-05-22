@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { gjeldendePeriodeResponse } from "mocks/api-routes/gjeldendePeriodeResponse";
+import { gjeldendePeriodeResponse } from "mocks/responses/gjeldendePeriodeResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/rapportering._index";

@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { innsendtRapporteringsperioderResponse } from "mocks/api-routes/innsendtRapporteringsperioderResponse";
+import { innsendtRapporteringsperioderResponse } from "mocks/responses/innsendtRapporteringsperioderResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/rapportering.innsendt";

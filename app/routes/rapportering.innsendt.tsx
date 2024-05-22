@@ -8,7 +8,6 @@ import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
-import { hentBrodsmuleUrl, lagBrodsmulesti } from "~/utils/brodsmuler.utils";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -49,9 +48,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function InnsendteRapporteringsPerioderSide() {
   const { innsendtPerioder } = useLoaderData<typeof loader>();
 
-  lagBrodsmulesti([
-    { title: "Innsendte rapporteringsperioder", url: hentBrodsmuleUrl("/innsendt") },
-  ]);
+  // TODO: "Implementer brødsmulesti /innsendt"
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
