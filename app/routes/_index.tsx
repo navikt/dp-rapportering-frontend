@@ -1,21 +1,21 @@
 import { BodyShort, Heading } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { PortableText } from "@portabletext/react";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { RemixLink } from "~/components/RemixLink";
-import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { SessionModal } from "~/components/session-modal/SessionModal";
 import { getEnv } from "~/utils/env.utils";
+import { useSanity } from "~/hooks/useSanity";
+import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { RemixLink } from "~/components/RemixLink";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
-import { getSession } from "~/models/getSession.server";
+import { SessionModal } from "~/components/session-modal/SessionModal";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;

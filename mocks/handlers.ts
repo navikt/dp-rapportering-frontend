@@ -1,7 +1,7 @@
-import { HttpResponse, http, bypass } from "msw";
-import { getEnv } from "~/utils/env.utils";
 import { gjeldendePeriodeResponse } from "./responses/gjeldendePeriodeResponse";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
+import { HttpResponse, bypass, http } from "msw";
+import { getEnv } from "~/utils/env.utils";
 
 export const handlers = [
   // Hent alle rapporteringsperioder

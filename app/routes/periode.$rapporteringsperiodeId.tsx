@@ -3,10 +3,10 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");

@@ -1,8 +1,8 @@
+import type { ActionFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/server-runtime";
 import { createRemixStub } from "@remix-run/testing";
 import * as React from "react";
 import { type PropsWithChildren } from "react";
-import type { ActionFunction } from "@remix-run/node";
-import type { LoaderFunction } from "@remix-run/server-runtime";
 
 interface IProps {
   action?: ActionFunction;

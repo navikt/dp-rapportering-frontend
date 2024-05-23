@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import winston from "winston";
 import fs from "fs";
+import winston from "winston";
 
 const sikkerLogPath = () =>
   fs.existsSync("/secure-logs/") ? "/secure-logs/secure.log" : "./secure.log";

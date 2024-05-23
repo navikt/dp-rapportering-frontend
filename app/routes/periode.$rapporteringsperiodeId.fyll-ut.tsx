@@ -4,16 +4,16 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
+import { type AktivitetType, sletteAktivitet } from "~/models/aktivitet.server";
+import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { sletteAktivitet, type AktivitetType } from "~/models/aktivitet.server";
-import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");

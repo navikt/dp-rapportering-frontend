@@ -1,6 +1,6 @@
+import { useTypedRouteLoaderData } from "./useTypedRouteLoaderData";
 import type { TypedObject } from "@portabletext/types";
 import type { ISanityAppText, ISanityLink, ISanityRichText } from "~/sanity/sanity.types";
-import { useTypedRouteLoaderData } from "./useTypedRouteLoaderData";
 
 export function useSanity() {
   const { sanityTexts } = useTypedRouteLoaderData("root");

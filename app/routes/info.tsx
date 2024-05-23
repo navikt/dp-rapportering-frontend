@@ -1,9 +1,9 @@
 import { Accordion, BodyLong, Heading, Link, List } from "@navikt/ds-react";
 import { useNavigate } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { RemixLink } from "~/components/RemixLink";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { RemixLink } from "~/components/RemixLink";
 
 export default function Infoside() {
   const navigate = useNavigate();

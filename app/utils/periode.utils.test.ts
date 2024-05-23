@@ -1,5 +1,5 @@
-import { describe, expect, test } from "vitest";
 import { asPeriod, leggSammenPeriode, periodeSomTimer } from "./periode.utils";
+import { describe, expect, test } from "vitest";
 
 describe("periodeSomTimer", () => {
   test("skal returnere riktig antall timer for en gyldig periode-streng", () => {

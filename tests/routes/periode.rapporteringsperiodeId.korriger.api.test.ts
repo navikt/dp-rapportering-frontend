@@ -1,12 +1,12 @@
 // @vitest-environment node
+import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/periode.$rapporteringsperiodeId.korriger";
+import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
-import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
-import { redirect } from "@remix-run/node";
 
 describe("Start korrigering", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));

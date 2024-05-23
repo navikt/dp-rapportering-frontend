@@ -1,11 +1,11 @@
 import { BodyLong, Heading } from "@navikt/ds-react";
 import { useEffect, useRef } from "react";
-import { RemixLink } from "~/components/RemixLink";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { Kalender } from "~/components/kalender/Kalender";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { RemixLink } from "~/components/RemixLink";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { Kalender } from "~/components/kalender/Kalender";
 
 export default function RapporteringsPeriodesBekreftelsesSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");

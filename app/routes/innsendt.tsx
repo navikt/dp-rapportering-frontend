@@ -3,12 +3,12 @@ import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { Kalender } from "~/components/kalender/Kalender";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import { useSetFokus } from "~/hooks/useSetFokus";
 import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { useSetFokus } from "~/hooks/useSetFokus";
+import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { Kalender } from "~/components/kalender/Kalender";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;

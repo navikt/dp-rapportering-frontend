@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-
+import { AktivitetModal } from "./AktivitetModal";
 import { json } from "@remix-run/node";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
@@ -7,10 +7,9 @@ import { useState } from "react";
 import { describe, expect, test, vi } from "vitest";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import type { INetworkResponse } from "~/utils/types";
 import { gjeldendePeriodeResponse } from "../../../mocks/responses/gjeldendePeriodeResponse";
 import { TestContainer } from "../../../tests/helpers/TestContainer";
-import { AktivitetModal } from "./AktivitetModal";
-import type { INetworkResponse } from "~/utils/types";
 
 describe("AktivitetModal", () => {
   const dagUtenAktivitet: IRapporteringsperiodeDag = {

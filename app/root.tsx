@@ -1,26 +1,25 @@
 /* eslint-disable */
+import { hentDekoratorHtml } from "./dekorator/dekorator.server";
+import { allTextsQuery } from "./sanity/sanity.query";
+import type { ISanity } from "./sanity/sanity.types";
 import favicon16 from "/favicon-16x16.png";
 import favicon32 from "/favicon-32x32.png";
 import favicon from "/favicon.ico";
-/* eslint-enable */
-
-import navStyles from "@navikt/ds-css/dist/index.css?url";
+import { Skeleton } from "@navikt/ds-react";
 import { json } from "@remix-run/node";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from "@remix-run/react";
-import parse from "html-react-parser";
-import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
-import { hentDekoratorHtml } from "./dekorator/dekorator.server";
-import { sanityConfig } from "./sanity/sanity.config";
-import { allTextsQuery } from "./sanity/sanity.query";
-import type { ISanity } from "./sanity/sanity.types";
-
-import indexStyle from "~/index.css?url";
-import { initInstrumentation } from "~/utils/faro";
 import { createClient } from "@sanity/client";
-import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
+import parse from "html-react-parser";
 import { Fragment, Suspense } from "react";
-import { Skeleton } from "@navikt/ds-react";
+import { sanityConfig } from "./sanity/sanity.config";
+import { initInstrumentation } from "~/utils/faro";
+import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
+import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
+
+/* eslint-enable */
+import navStyles from "@navikt/ds-css/dist/index.css?url";
+import indexStyle from "~/index.css?url";
 
 export const sanityClient = createClient(sanityConfig);
 

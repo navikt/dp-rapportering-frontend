@@ -1,5 +1,5 @@
-import { Tag } from "@navikt/ds-react";
 import styles from "./DevelopmentContainer.module.css";
+import { Tag } from "@navikt/ds-react";
 import { getEnv } from "~/utils/env.utils";
 
 interface IProps {

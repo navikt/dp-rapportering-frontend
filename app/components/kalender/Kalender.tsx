@@ -1,9 +1,9 @@
-import classNames from "classnames";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import styles from "./Kalender.module.css";
 import { RedigeringsLenke } from "./RedigeringsLenke";
 import { Uke } from "./Uke";
+import classNames from "classnames";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 
 interface IProps {
   aapneModal: (dato: string) => void;

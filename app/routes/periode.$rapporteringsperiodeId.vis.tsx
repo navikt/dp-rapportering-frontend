@@ -1,7 +1,7 @@
 import classNames from "classnames";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 export default function RapporteringsPeriodeVisningsSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");

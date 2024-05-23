@@ -1,17 +1,17 @@
+import styles from "./AktivitetModal.module.css";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { Form, useActionData } from "@remix-run/react";
 import classNames from "classnames";
 import { ValidatedForm } from "remix-validated-form";
-import { TallInput } from "~/components/TallInput";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { action as korringeringAction } from "~/routes/korriger.$rapporteringsperiodeId.fyll-ut";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
+import { TallInput } from "~/components/TallInput";
 import { FormattertDato } from "../FormattertDato";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
-import styles from "./AktivitetModal.module.css";
 
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;

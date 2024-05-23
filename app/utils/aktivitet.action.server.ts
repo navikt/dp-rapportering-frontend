@@ -1,8 +1,8 @@
-import { validationError } from "remix-validated-form";
-import { serialize } from "tinyduration";
-import { lagreAktivitet, type AktivitetType } from "~/models/aktivitet.server";
 import type { INetworkResponse } from "./types";
 import { validator } from "./validering.util";
+import { validationError } from "remix-validated-form";
+import { serialize } from "tinyduration";
+import { type AktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
 
 interface IAktivtetData {
   type: AktivitetType;
