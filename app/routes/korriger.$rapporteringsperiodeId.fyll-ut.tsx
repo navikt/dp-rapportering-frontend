@@ -21,8 +21,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const periodeId = params.rapporteringsperiodeId;
   const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
-  const aktivitetId = formdata.get("aktivitetId") as string;
   const aktivitetsType = formdata.get("type") as AktivitetType;
+  const aktivitetId = formdata.get("aktivitetId") as string;
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
@@ -39,17 +39,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
         status: "error",
         error: {
           statusCode: 500,
-          statusText: "Det skjedde en feil.",
+          statusText: "Noe gikk gal!",
         },
       };
     }
   }
 }
 
-export default function RapporteringsPeriodeFyllUtSide() {
-  const { periode } = useTypedRouteLoaderData(
-    "routes/rapportering.periode.$rapporteringsperiodeId"
-  );
+export default function KorrigeringFyllUtSide() {
+  const { periode } = useTypedRouteLoaderData("routes/korriger.$rapporteringsperiodeId");
   const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
@@ -63,11 +61,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   useEffect(() => {
     // Vi setter fokus på headeren når brukeren kommer til denne siden fra en annen side.
-    // Ellers følger vi browser default fokus oppførsel.
+    // Ellers følger vi browser default fokus oppførsel
     if (!searchParams.get("utfylling")) {
       setFokus(sidelastFokusRef);
     }
-
     scrollToView(sidelastFokusRef);
   }, [setFokus, scrollToView, searchParams]);
 
@@ -83,6 +80,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
     if (periode.status === "TilUtfylling") {
       setValgtDato(dato);
       setModalAapen(true);
+      setSearchParams({ dato });
     }
   }
 
@@ -96,18 +94,19 @@ export default function RapporteringsPeriodeFyllUtSide() {
     <>
       <div className="rapportering-container">
         <Heading
+          size={"medium"}
+          level={"2"}
           ref={sidelastFokusRef}
           tabIndex={-1}
-          size={"large"}
-          level={"2"}
           className="vo-fokus"
         >
-          Fyll ut rapporteringen
+          Korrigering
         </Heading>
-        <BodyLong className="tekst-subtil" spacing>
-          Klikk på dagen du skal rapportere for. Du kan velge mellom jobb, sykdom, fravær og ferie.
+        <BodyLong spacing>
+          Endringer i rapporteringen vil føre til at NAV beregner perioden på nytt. Du vil få
+          etterbetalt hvis du har fått for lite utbetalt. Har du fått utbetalt for mye vil NAV
+          vurdere å kreve dette tilbake.
         </BodyLong>
-
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
         <AktivitetModal
           rapporteringsperiode={periode}
@@ -121,11 +120,11 @@ export default function RapporteringsPeriodeFyllUtSide() {
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
         <div className="navigasjon-container">
-          <RemixLink as="Button" to="/rapportering" variant="secondary">
-            Lagre og fortsett senere
+          <RemixLink as="Button" to="/rapportering/innsendt" variant={"secondary"}>
+            Avbryt
           </RemixLink>
-          <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
-            Send rapportering
+          <RemixLink as="Button" to={`/rapportering/korriger/${periode.id}/send-inn`}>
+            Lagre og send korrigering
           </RemixLink>
         </div>
         <div className="hva-skal-jeg-rapportere-nav-link">

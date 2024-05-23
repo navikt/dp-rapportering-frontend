@@ -24,7 +24,7 @@ export async function getRapporteringOboToken(request: Request) {
     if (sessionExpiresIn(request) <= 0 && process.env.USE_MSW !== "true") {
       throw new Response(null, {
         status: 440,
-        statusText: "Localhost sessjon er utløpt!",
+        statusText: "Localhost sesjon er utløpt!",
       });
     }
 

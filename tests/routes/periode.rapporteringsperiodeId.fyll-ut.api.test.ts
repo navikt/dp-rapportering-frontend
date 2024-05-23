@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { action } from "~/routes/rapportering.periode.$rapporteringsperiodeId.fyll-ut";
+import { action } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";

@@ -8,9 +8,7 @@ import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 export default function RapporteringsPeriodesBekreftelsesSide() {
-  const { periode } = useTypedRouteLoaderData(
-    "routes/rapportering.periode.$rapporteringsperiodeId"
-  );
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();

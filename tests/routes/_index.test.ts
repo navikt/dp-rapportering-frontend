@@ -2,7 +2,7 @@
 import { gjeldendePeriodeResponse } from "mocks/responses/gjeldendePeriodeResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { loader } from "~/routes/rapportering._index";
+import { loader } from "~/routes/_index";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";

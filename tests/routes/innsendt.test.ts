@@ -2,7 +2,7 @@
 import { innsendtRapporteringsperioderResponse } from "mocks/responses/innsendtRapporteringsperioderResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { loader } from "~/routes/rapportering.innsendt";
+import { loader } from "~/routes/innsendt";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";

@@ -2,7 +2,7 @@
 import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { action } from "~/routes/rapportering.periode.$rapporteringsperiodeId.send-inn";
+import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
@@ -76,9 +76,7 @@ describe("Send inn rapporteringsperiode", () => {
           http.post(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${rapporteringsperioderResponse[0].id}/godkjenn`,
             () => {
-              return HttpResponse.json(null, {
-                status: 500,
-              });
+              return HttpResponse.json(null, { status: 500 });
             },
             { once: true }
           )

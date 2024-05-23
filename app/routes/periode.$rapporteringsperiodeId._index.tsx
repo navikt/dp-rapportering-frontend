@@ -5,9 +5,7 @@ import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 export default function RapporteringsPeriodeSide() {
-  const { periode } = useTypedRouteLoaderData(
-    "routes/rapportering.periode.$rapporteringsperiodeId"
-  );
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
   const navigate = useNavigate();
 

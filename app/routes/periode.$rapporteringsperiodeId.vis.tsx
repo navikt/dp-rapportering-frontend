@@ -4,9 +4,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 export default function RapporteringsPeriodeVisningsSide() {
-  const { periode } = useTypedRouteLoaderData(
-    "routes/rapportering.periode.$rapporteringsperiodeId"
-  );
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
   return (
     <div

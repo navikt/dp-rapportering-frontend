@@ -14,9 +14,6 @@ module.exports = {
       jsx: true,
     },
   },
-  rules: {
-    "@typescript-eslint/ban-ts-comment": "off",
-  },
   env: {
     browser: true,
     commonjs: true,
@@ -74,6 +71,9 @@ module.exports = {
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
+      rules: {
+        "@typescript-eslint/ban-ts-comment": "off",
+      },
     },
 
     // Node
