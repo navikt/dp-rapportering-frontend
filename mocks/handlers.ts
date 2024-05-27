@@ -9,6 +9,11 @@ export const handlers = [
     return HttpResponse.json(rapporteringsperioderResponse);
   }),
 
+  // Hent alle innsendte rapporteringsperioder
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, () => {
+    return HttpResponse.json(rapporteringsperioderResponse);
+  }),
+
   // Hent gjeldende rapporteringsperiode
   http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`, () => {
     return HttpResponse.json(gjeldendePeriodeResponse);

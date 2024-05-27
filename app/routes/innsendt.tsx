@@ -4,14 +4,14 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { hentAllePerioder, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
+import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  let gjeldendePeriode: IRapporteringsperiode | null = null;
   let innsendtPerioder: IRapporteringsperiode[] = [];
 
   const onBehalfOfToken = await getRapporteringOboToken(request);
@@ -23,23 +23,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   } else {
     innsendtPerioder = await allePerioderResponse.json();
-  }
-
-  const gjeldendePeriodeResponse = await hentGjeldendePeriode(onBehalfOfToken);
-
-  if (!gjeldendePeriodeResponse.ok) {
-    if (gjeldendePeriodeResponse.status !== 404)
-      throw new Response("Feil i uthenting av gjeldende periode", {
-        status: 500,
-      });
-  } else {
-    gjeldendePeriode = await gjeldendePeriodeResponse.json();
-  }
-
-  if (gjeldendePeriode) {
-    innsendtPerioder = [...innsendtPerioder].filter(
-      (periode) => periode.id !== gjeldendePeriode?.id
-    );
   }
 
   return json({ innsendtPerioder });
@@ -87,17 +70,22 @@ export default function InnsendteRapporteringsPerioderSide() {
         {innsendtPerioder.map((periode) => {
           const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
           return (
-            <div className="graa-bakgrunn" key={periode.id}>
-              <Kalender
-                key={periode.id}
-                rapporteringsperiode={periode}
-                aapneModal={() => {}}
-                visRedigeringsAlternativer={true}
-                readonly
-              />
-              {flatMapAktiviteter.length < 1 && (
-                <p>Du har ikke jobbet, vært syk eller hatt fravær i denne perioden.</p>
-              )}
+            <div key={periode.id}>
+              <div className="graa-bakgrunn">
+                <Kalender
+                  key={periode.id}
+                  rapporteringsperiode={periode}
+                  aapneModal={() => {}}
+                  visRedigeringsAlternativer={true}
+                  readonly
+                />
+                {flatMapAktiviteter.length < 1 && (
+                  <p>Du har ikke jobbet, vært syk eller hatt fravær i denne perioden.</p>
+                )}
+              </div>
+              <AktivitetOppsummering rapporteringsperiode={periode} />
+              <br />
+              <hr aria-hidden />
             </div>
           );
         })}

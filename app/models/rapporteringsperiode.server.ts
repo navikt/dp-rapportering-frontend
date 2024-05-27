@@ -10,7 +10,7 @@ export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
-  status: string;
+  status: "TilUtfylling" | "Innsendt";
   kanSendesFra: string;
   kanSendes: boolean;
   kanKorrigeres: boolean;
@@ -40,7 +40,7 @@ export async function hentPeriode(onBehalfOfToken: string, periodeId: string): P
 }
 
 export async function hentAllePerioder(onBehalfOfToken: string): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`;
 
   return await fetch(url, {
     method: "GET",
