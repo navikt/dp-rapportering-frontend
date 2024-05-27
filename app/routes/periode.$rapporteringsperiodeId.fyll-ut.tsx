@@ -1,16 +1,15 @@
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, useActionData, useLoaderData, useSearchParams } from "@remix-run/react";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType, sletteAktivitet } from "~/models/aktivitet.server";
-import { getSession } from "~/models/getSession.server";
-import { IRapporteringsperiode, hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -47,30 +46,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  let gjeldendePeriode: IRapporteringsperiode | null = null;
-
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-  const gjeldendePeriodeResponse = await hentGjeldendePeriode(onBehalfOfToken);
-
-  const session = await getSession(request);
-
-  if (!gjeldendePeriodeResponse.ok) {
-    if (gjeldendePeriodeResponse.status !== 404)
-      throw new Response("Feil i uthenting av gjeldende periode", {
-        status: 500,
-      });
-  } else {
-    gjeldendePeriode = await gjeldendePeriodeResponse.json();
-  }
-
-  invariant(gjeldendePeriode, "Gjeldende periode er påkrevd");
-
-  return json({ gjeldendePeriode, session });
-}
-
 export default function RapporteringsPeriodeFyllUtSide() {
-  const { gjeldendePeriode: periode } = useLoaderData<typeof loader>();
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+
   const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);

@@ -1,7 +1,7 @@
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 export const gjeldendePeriodeResponse: IRapporteringsperiode = {
-  id: "123456789",
+  id: "3fa85f64-5717-4562-b3fc-2c963f66afa9",
   periode: {
     fraOgMed: "2023-05-01",
     tilOgMed: "2023-05-14",

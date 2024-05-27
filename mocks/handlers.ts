@@ -38,14 +38,14 @@ export const handlers = [
   // Hent spesifikk rapporteringsperiode
   http.get(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId`,
-    ({ params }) => {
-      const { rapporteringsperioderId } = params;
+    () => {
+      // const { rapporteringsperioderId } = params;
 
-      const rapporteringPeriode = rapporteringsperioderResponse.find(
-        (periode) => periode.id === rapporteringsperioderId
-      );
+      // const rapporteringPeriode = rapporteringsperioderResponse.find(
+      //   (periode) => periode.id === rapporteringsperioderId
+      // );
 
-      return HttpResponse.json(rapporteringPeriode);
+      return HttpResponse.json(gjeldendePeriodeResponse);
     }
   ),
 
