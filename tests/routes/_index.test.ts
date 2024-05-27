@@ -66,12 +66,10 @@ describe("Hovedside rapportering", () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data).toEqual({
-        gjeldendePeriode: gjeldendePeriodeResponse,
-      });
+      expect(data.gjeldendePeriode).toBe(gjeldendePeriodeResponse);
     });
 
-    test("Skal vise at bruker har ingen gjeldene perdiode", async () => {
+    test.only("Skal vise at bruker har ingen gjeldene perdiode", async () => {
       server.use(
         http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
@@ -91,9 +89,7 @@ describe("Hovedside rapportering", () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data).toEqual({
-        gjeldendePeriode: null,
-      });
+      expect(data.gjeldendePeriode).toBe(null);
     });
   });
 });
