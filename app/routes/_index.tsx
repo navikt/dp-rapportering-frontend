@@ -89,11 +89,7 @@ export default function Landingsside() {
         {gjeldendePeriode && (
           <div>
             <BodyShort>{invaerendePeriodeTekst}</BodyShort>
-            <RemixLink
-              as="Button"
-              to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}
-              className="my-4"
-            >
+            <RemixLink as="Button" to={`/periode/${gjeldendePeriode.id}/fyll-ut`} className="my-4">
               {getLink("rapportering-rapporter-for-perioden").linkText}
             </RemixLink>
           </div>
