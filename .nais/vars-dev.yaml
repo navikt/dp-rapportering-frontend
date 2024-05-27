@@ -1,5 +1,5 @@
 ingress: "https://dagpenger.intern.dev.nav.no/rapportering"
-base_path: "/rapportering"
+base_path: "/arbeid/dagpenger/rapportering"
 idporten:
   level: idporten-loa-high
 dekorator:
