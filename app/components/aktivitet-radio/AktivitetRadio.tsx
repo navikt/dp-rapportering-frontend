@@ -24,7 +24,7 @@ export function AktivitetRadio(props: IProps) {
         return "Skriv antall timer du har jobbet, både lønnet og ulønnet. Får du lønn for flere timer enn du har jobbet, skriver du timene du får lønn for.";
       case "Syk":
         return "Jeg har vært syk, og derfor forhindret fra å ta arbeid.";
-      case "Ferie":
+      case "Fravaer":
         return "Jeg har hatt ferie eller fravær, og derfor vært forhindret fra å ta arbeid.";
       default:
         return "";

@@ -1,20 +1,24 @@
-import type { AktivitetType, IAktivitet } from "./aktivitet.server";
+import type { IAktivitet } from "./aktivitet.server";
 import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 
-export interface IRapporteringsperiode {
-  beregnesEtter: string;
-  id: string;
+interface IPeriode {
   fraOgMed: string;
   tilOgMed: string;
-  status: string;
+}
+export interface IRapporteringsperiode {
+  id: string;
+  periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
+  status: string;
+  kanSendesFra: string;
+  kanSendes: boolean;
+  kanKorrigeres: boolean;
 }
 
 export interface IRapporteringsperiodeDag {
   dagIndex: number;
   dato: string;
-  muligeAktiviteter: AktivitetType[];
   aktiviteter: IAktivitet[];
 }
 

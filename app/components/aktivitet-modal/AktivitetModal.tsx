@@ -90,7 +90,7 @@ export function AktivitetModal(props: IProps) {
               </div>
             </Form>
           ))}
-        {dag && dag.muligeAktiviteter.length > 0 && (
+        {dag && (
           <ValidatedForm
             method="post"
             key="lagre-ny-aktivitet"
@@ -101,7 +101,7 @@ export function AktivitetModal(props: IProps) {
             <div className={styles.aktivitetKontainer}>
               <AktivitetRadio
                 name="type"
-                muligeAktiviteter={dag.muligeAktiviteter}
+                muligeAktiviteter={["Arbeid", "Utdanning", "Syk", "Fravaer"]}
                 verdi={valgtAktivitet}
                 onChange={(aktivitet: string) => setValgtAktivitet(aktivitet)}
                 label="Hva vil du registrere"

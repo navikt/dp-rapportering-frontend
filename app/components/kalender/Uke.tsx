@@ -59,12 +59,12 @@ export function Uke(props: IProps) {
       {rapporteringUke.map((dag) => {
         const dagenHarAktivitet = dag.aktiviteter.length > 0;
 
-        const ikkeRapporteringspliktig = !dagenHarAktivitet && dag.muligeAktiviteter.length === 0;
+        const ikkeRapporteringspliktig = false;
 
         const dagKnappStyle = {
           [styles.arbeid]: dagenHarAktivitet && dag.aktiviteter[0].type === "Arbeid",
           [styles.sykdom]: dagenHarAktivitet && dag.aktiviteter[0].type === "Syk",
-          [styles.ferie]: dagenHarAktivitet && dag.aktiviteter[0].type === "Ferie",
+          [styles.fravaer]: dagenHarAktivitet && dag.aktiviteter[0].type === "Fravaer",
         };
 
         return (
@@ -102,7 +102,7 @@ export function Uke(props: IProps) {
                   [styles.datoMedAktivitetSykdom]:
                     dagenHarAktivitet && dag.aktiviteter[0].type === "Syk",
                   [styles.datoMedAktivitetFerie]:
-                    dagenHarAktivitet && dag.aktiviteter[0].type === "Ferie",
+                    dagenHarAktivitet && dag.aktiviteter[0].type === "Fravaer",
                 })}
                 aria-hidden
               >

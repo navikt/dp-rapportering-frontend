@@ -65,7 +65,7 @@ export function AktivitetOppsummering(props: IProps) {
           <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
             <p>
               Fravær / Ferie
-              <span>{hentTotaltFravaerTekstMedType("Ferie")}</span>
+              <span>{hentTotaltFravaerTekstMedType("Fravaer")}</span>
             </p>
           </div>
         </div>

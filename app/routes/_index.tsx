@@ -54,10 +54,13 @@ export default function Landingsside() {
 
   if (gjeldendePeriode) {
     const ukenummer = formaterPeriodeTilUkenummer(
-      gjeldendePeriode.fraOgMed,
-      gjeldendePeriode.tilOgMed
+      gjeldendePeriode.periode.fraOgMed,
+      gjeldendePeriode.periode.tilOgMed
     );
-    const dato = formaterPeriodeDato(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed);
+    const dato = formaterPeriodeDato(
+      gjeldendePeriode.periode.fraOgMed,
+      gjeldendePeriode.periode.tilOgMed
+    );
 
     invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
   }

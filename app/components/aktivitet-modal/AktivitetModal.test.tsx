@@ -15,20 +15,17 @@ describe("AktivitetModal", () => {
   const dagUtenAktivitet: IRapporteringsperiodeDag = {
     dagIndex: 0,
     dato: "2023-06-19",
-    muligeAktiviteter: ["Arbeid", "Ferie"],
     aktiviteter: [],
   };
 
   const dagMedAktivitet: IRapporteringsperiodeDag = {
     dagIndex: 1,
     dato: "2023-06-20",
-    muligeAktiviteter: [],
     aktiviteter: [
       {
         id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
-        type: "Ferie",
+        type: "Fravaer",
         timer: "PT8H0M",
-        dato: "2023-06-20",
       },
     ],
   };
@@ -37,43 +34,7 @@ describe("AktivitetModal", () => {
   rapporteringsperiode.dager = [dagUtenAktivitet, dagMedAktivitet];
 
   describe("Lagre aktivitet", () => {
-    const utvalgtAktivitet = dagUtenAktivitet.muligeAktiviteter[1];
-
-    test("burde vise mulige aktiviteter", async () => {
-      const TestComponent = () => {
-        const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
-
-        return (
-          <div id="dp-saksbehandling-frontend">
-            <AktivitetModal
-              rapporteringsperiode={rapporteringsperiode}
-              valgtDato={dagUtenAktivitet.dato}
-              valgtAktivitet={valgtAktivitet}
-              setValgtAktivitet={setValgtAktivitet}
-              modalAapen={true}
-              lukkModal={() => {}}
-            />
-          </div>
-        );
-      };
-
-      render(
-        <TestContainer>
-          <TestComponent />
-        </TestContainer>
-      );
-
-      const arbeidLabel = await screen.findByTestId(
-        `aktivitet-radio-${dagUtenAktivitet.muligeAktiviteter[0]}`
-      );
-
-      const ferieLabel = await screen.findByTestId(
-        `aktivitet-radio-${dagUtenAktivitet.muligeAktiviteter[1]}`
-      );
-
-      expect(arbeidLabel).toBeInTheDocument();
-      expect(ferieLabel).toBeInTheDocument();
-    });
+    const utvalgtAktivitet = "Arbeid";
 
     test("burde kunne velge og lagre en aktivitet", async () => {
       let dato, aktivitetstype, submit;
