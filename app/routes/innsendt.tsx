@@ -3,8 +3,10 @@ import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { hentAllePerioder } from "~/models/rapporteringsperiode.server";
+import {
+  type IRapporteringsperiode,
+  hentInnsendtePerioder,
+} from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
@@ -15,7 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   let innsendtPerioder: IRapporteringsperiode[] = [];
 
   const onBehalfOfToken = await getRapporteringOboToken(request);
-  const allePerioderResponse = await hentAllePerioder(onBehalfOfToken);
+  const allePerioderResponse = await hentInnsendtePerioder(onBehalfOfToken);
 
   if (!allePerioderResponse.ok) {
     throw new Response("Feil i uthenting av alle rapporteringsperioder", {

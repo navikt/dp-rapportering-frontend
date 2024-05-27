@@ -39,7 +39,7 @@ export async function hentPeriode(onBehalfOfToken: string, periodeId: string): P
   });
 }
 
-export async function hentAllePerioder(onBehalfOfToken: string): Promise<Response> {
+export async function hentInnsendtePerioder(onBehalfOfToken: string): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`;
 
   return await fetch(url, {

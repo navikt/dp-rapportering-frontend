@@ -2,14 +2,14 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 
 export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
   {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa3",
+    id: "3fa85f64-5717-4562-b3fc-2c963f66afa9",
     periode: {
       fraOgMed: "2023-05-01",
       tilOgMed: "2023-05-14",
     },
-    status: "Innsendt",
+    status: "TilUtfylling",
     kanSendesFra: "2023-05-13",
-    kanSendes: false,
+    kanSendes: true,
     kanKorrigeres: true,
     dager: [
       {
@@ -20,44 +20,22 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       {
         dagIndex: 1,
         dato: "2023-05-02",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9b",
-            type: "Arbeid",
-            timer: "PT5H30M",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 2,
         dato: "2023-05-03",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9c",
-            type: "Syk",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 3,
         dato: "2023-05-04",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9d",
-            type: "Syk",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 4,
         dato: "2023-05-05",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
-            type: "Arbeid",
-            timer: "PT7H30M",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 5,
@@ -97,12 +75,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       {
         dagIndex: 12,
         dato: "2023-05-13",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
-            type: "Syk",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 13,
@@ -130,44 +103,22 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       {
         dagIndex: 1,
         dato: "2023-05-16",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9b",
-            type: "Arbeid",
-            timer: "PT5H30M",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 2,
         dato: "2023-05-17",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9c",
-            type: "Syk",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 3,
         dato: "2023-05-18",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9d",
-            type: "Syk",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 4,
         dato: "2023-05-19",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
-            type: "Arbeid",
-            timer: "PT6H0M",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 5,
@@ -207,23 +158,12 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       {
         dagIndex: 12,
         dato: "2023-05-27",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
-            type: "Arbeid",
-            timer: "PT4H30M",
-          },
-        ],
+        aktiviteter: [],
       },
       {
         dagIndex: 13,
         dato: "2023-05-28",
-        aktiviteter: [
-          {
-            id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9f",
-            type: "Fravaer",
-          },
-        ],
+        aktiviteter: [],
       },
     ],
   },

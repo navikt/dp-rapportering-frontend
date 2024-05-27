@@ -1,4 +1,5 @@
 import { gjeldendePeriodeResponse } from "./responses/gjeldendePeriodeResponse";
+import { innsendtRapporteringsperioderResponse } from "./responses/innsendtRapporteringsperioderResponse";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
 import { getEnv } from "~/utils/env.utils";
@@ -11,7 +12,7 @@ export const handlers = [
 
   // Hent alle innsendte rapporteringsperioder
   http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, () => {
-    return HttpResponse.json(rapporteringsperioderResponse);
+    return HttpResponse.json(innsendtRapporteringsperioderResponse);
   }),
 
   // Hent gjeldende rapporteringsperiode
