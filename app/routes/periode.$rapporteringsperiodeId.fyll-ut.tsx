@@ -119,9 +119,6 @@ export default function RapporteringsPeriodeFyllUtSide() {
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
         <div className="navigasjon-container">
-          <RemixLink as="Button" to="/rapportering" variant="secondary">
-            Lagre og fortsett senere
-          </RemixLink>
           <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
             Send rapportering
           </RemixLink>
