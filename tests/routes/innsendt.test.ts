@@ -33,7 +33,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
     test("Skal feile hvis uthenting av alle perioder feiler", async () => {
       server.use(
         http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`,
           () => {
             return HttpResponse.json({ errorMessage: "error" }, { status: 500 });
           },
@@ -52,39 +52,6 @@ describe("Liste ut alle rapporteringsperioder", () => {
           context: {},
         })
       );
-
-      expect(response.status).toBe(500);
-    });
-
-    test("Skal feile hvis uthenting av gjeldende perioder feiler", async () => {
-      server.use(
-        http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`,
-          () => {
-            return HttpResponse.json(innsendtRapporteringsperioderResponse, { status: 200 });
-          },
-          { once: true }
-        ),
-        http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
-          () => {
-            return HttpResponse.json(null, { status: 500 });
-          },
-          {
-            once: true,
-          }
-        )
-      );
-
-      mockSession();
-
-      const response = await catchErrorResponse(() => {
-        return loader({
-          request: new Request("http://localhost:3000"),
-          params: testParams,
-          context: {},
-        });
-      });
 
       expect(response.status).toBe(500);
     });

@@ -30,14 +30,14 @@ export function Kalender(props: IProps) {
     { kort: "søn", lang: "søndag" },
   ];
 
-  const { fraOgMed, tilOgMed } = rapporteringsperiode;
+  const { fraOgMed, tilOgMed } = rapporteringsperiode.periode;
 
   const forsteUke = [...rapporteringsperiode.dager].splice(0, 7);
   const andreUke = [...rapporteringsperiode.dager].splice(7, 7);
 
   const periodeUkenummerTekst = `Uke ${formaterPeriodeTilUkenummer(
-    rapporteringsperiode.fraOgMed,
-    rapporteringsperiode.tilOgMed
+    rapporteringsperiode.periode.fraOgMed,
+    rapporteringsperiode.periode.tilOgMed
   )}`;
 
   const periodeFomTomDatoTekst = formaterPeriodeDato(fraOgMed, tilOgMed);

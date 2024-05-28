@@ -1,4 +1,5 @@
 import { gjeldendePeriodeResponse } from "./responses/gjeldendePeriodeResponse";
+import { innsendtRapporteringsperioderResponse } from "./responses/innsendtRapporteringsperioderResponse";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
 import { getEnv } from "~/utils/env.utils";
@@ -7,6 +8,11 @@ export const handlers = [
   // Hent alle rapporteringsperioder
   http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, () => {
     return HttpResponse.json(rapporteringsperioderResponse);
+  }),
+
+  // Hent alle innsendte rapporteringsperioder
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, () => {
+    return HttpResponse.json(innsendtRapporteringsperioderResponse);
   }),
 
   // Hent gjeldende rapporteringsperiode
@@ -33,14 +39,14 @@ export const handlers = [
   // Hent spesifikk rapporteringsperiode
   http.get(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId`,
-    ({ params }) => {
-      const { rapporteringsperioderId } = params;
+    () => {
+      // const { rapporteringsperioderId } = params;
 
-      const rapporteringPeriode = rapporteringsperioderResponse.find(
-        (periode) => periode.id === rapporteringsperioderId
-      );
+      // const rapporteringPeriode = rapporteringsperioderResponse.find(
+      //   (periode) => periode.id === rapporteringsperioderId
+      // );
 
-      return HttpResponse.json(rapporteringPeriode);
+      return HttpResponse.json(gjeldendePeriodeResponse);
     }
   ),
 

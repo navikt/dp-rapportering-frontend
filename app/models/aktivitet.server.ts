@@ -2,13 +2,12 @@ import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
 
-export type AktivitetType = "Arbeid" | "Syk" | "Ferie";
+export type AktivitetType = "Arbeid" | "Syk" | "Utdanning" | "Fravaer";
 
 export interface IAktivitet {
   id?: string;
   type: AktivitetType;
   timer?: string;
-  dato: string;
 }
 
 export async function lagreAktivitet(

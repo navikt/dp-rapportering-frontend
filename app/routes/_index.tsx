@@ -54,10 +54,13 @@ export default function Landingsside() {
 
   if (gjeldendePeriode) {
     const ukenummer = formaterPeriodeTilUkenummer(
-      gjeldendePeriode.fraOgMed,
-      gjeldendePeriode.tilOgMed
+      gjeldendePeriode.periode.fraOgMed,
+      gjeldendePeriode.periode.tilOgMed
     );
-    const dato = formaterPeriodeDato(gjeldendePeriode.fraOgMed, gjeldendePeriode.tilOgMed);
+    const dato = formaterPeriodeDato(
+      gjeldendePeriode.periode.fraOgMed,
+      gjeldendePeriode.periode.tilOgMed
+    );
 
     invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
   }
@@ -86,11 +89,7 @@ export default function Landingsside() {
         {gjeldendePeriode && (
           <div>
             <BodyShort>{invaerendePeriodeTekst}</BodyShort>
-            <RemixLink
-              as="Button"
-              to={`/rapportering/periode/${gjeldendePeriode.id}/fyll-ut`}
-              className="my-4"
-            >
+            <RemixLink as="Button" to={`/periode/${gjeldendePeriode.id}/fyll-ut`} className="my-4">
               {getLink("rapportering-rapporter-for-perioden").linkText}
             </RemixLink>
           </div>
