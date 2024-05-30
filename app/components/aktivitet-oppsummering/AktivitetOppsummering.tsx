@@ -4,12 +4,15 @@ import classNames from "classnames";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { periodeSomTimer } from "~/utils/periode.utils";
+import { useSanity } from "~/hooks/useSanity";
 
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
 }
 
 export function AktivitetOppsummering(props: IProps) {
+  const { getAppText } = useSanity();
+
   const rapporteringsperiode = props.rapporteringsperiode;
 
   const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
@@ -43,8 +46,7 @@ export function AktivitetOppsummering(props: IProps) {
     <>
       {flatMapAktiviteter.length < 1 && (
         <Alert variant="info">
-          Hvis du ikke har jobbet, vært syk eller hatt fravær i perioden trenger du ikke å fylle ut
-          noe før du sender inn rapporteringen.
+          {getAppText("rapportering-aktivitet-oppsummering-ingen-aktiviteter")}
         </Alert>
       )}
       {flatMapAktiviteter.length > 0 && (
@@ -52,19 +54,19 @@ export function AktivitetOppsummering(props: IProps) {
           <p className="tekst-subtil">Sammenlagt for perioden:</p>
           <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
             <p>
-              Arbeid
+              {getAppText("rapportering-arbeid")}
               <span>{hentTotaltArbeidstimerTekst()}</span>
             </p>
           </div>
           <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
             <p>
-              Syk
+              {getAppText("rapportering-syk")}
               <span>{hentTotaltFravaerTekstMedType("Syk")}</span>
             </p>
           </div>
           <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
             <p>
-              Fravær / Ferie
+              {getAppText("rapportering-fraevaer")}
               <span>{hentTotaltFravaerTekstMedType("Fravaer")}</span>
             </p>
           </div>

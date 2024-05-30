@@ -6,6 +6,7 @@ interface IPeriode {
   fraOgMed: string;
   tilOgMed: string;
 }
+
 export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;

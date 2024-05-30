@@ -3,7 +3,7 @@ import { RedigeringsLenke } from "./RedigeringsLenke";
 import { Uke } from "./Uke";
 import classNames from "classnames";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { formaterPeriodeDato, formaterPeriodeTilUkenummer, getWeekDays } from "~/utils/dato.utils";
 
 interface IProps {
   aapneModal: (dato: string) => void;
@@ -20,15 +20,7 @@ export function Kalender(props: IProps) {
     readonly = false,
   } = props;
 
-  const ukedager = [
-    { kort: "man", lang: "mandag" },
-    { kort: "tir", lang: "tirsdag" },
-    { kort: "ons", lang: "onsdag" },
-    { kort: "tor", lang: "torsdag" },
-    { kort: "fre", lang: "fredag" },
-    { kort: "lør", lang: "lørdag" },
-    { kort: "søn", lang: "søndag" },
-  ];
+  const ukedager = getWeekDays("nb-NO");
 
   const { fraOgMed, tilOgMed } = rapporteringsperiode.periode;
 

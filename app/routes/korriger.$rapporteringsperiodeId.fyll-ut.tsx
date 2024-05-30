@@ -130,7 +130,7 @@ export default function KorrigeringFyllUtSide() {
         <div className="hva-skal-jeg-rapportere-nav-link">
           <RemixLink
             as="Link"
-            to="/rapportering/info"
+            to="/info"
             iconPosition="left"
             icon={<InformationSquareIcon title="a11y-title" fontSize={24} aria-hidden />}
           >

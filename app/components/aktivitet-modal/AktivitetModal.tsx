@@ -7,8 +7,10 @@ import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { action as korringeringAction } from "~/routes/korriger.$rapporteringsperiodeId.fyll-ut";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
+import { aktivitetTyper } from "~/utils/aktivitetstyper";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
+import { useSanity } from "~/hooks/useSanity";
 import { TallInput } from "~/components/TallInput";
 import { FormattertDato } from "../FormattertDato";
 import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
@@ -32,6 +34,8 @@ export function AktivitetModal(props: IProps) {
     valgtDato,
   } = props;
 
+  const { getAppText } = useSanity();
+
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
   );
@@ -44,7 +48,7 @@ export function AktivitetModal(props: IProps) {
     if (aktivitet?.type === "Arbeid") {
       return `${aktivitet.type} ${periodeSomTimer(aktivitet.timer!)
         .toString()
-        .replace(/\./g, ",")} timer`;
+        .replace(/\./g, ",")} ${getAppText("rapportering-timer")}`;
     }
 
     return `${aktivitet?.type}`;
@@ -63,7 +67,7 @@ export function AktivitetModal(props: IProps) {
           size="medium"
           id="aktivitet-modal-heading"
           className={styles.modalHeader}
-          aria-label="Rapporter aktivitet"
+          aria-label={getAppText("rapportering-rapporter-aktivitet")}
         >
           {valgtDato && <FormattertDato dato={valgtDato} ukedag />}
         </Heading>
@@ -85,7 +89,7 @@ export function AktivitetModal(props: IProps) {
 
               <div className={styles.knappKontainer}>
                 <Button type="submit" name="submit" value="slette">
-                  Fjern registrering
+                  {getAppText("rapportering-fjern-registrering")}
                 </Button>
               </div>
             </Form>
@@ -101,15 +105,19 @@ export function AktivitetModal(props: IProps) {
             <div className={styles.aktivitetKontainer}>
               <AktivitetRadio
                 name="type"
-                muligeAktiviteter={["Arbeid", "Utdanning", "Syk", "Fravaer"]}
+                muligeAktiviteter={aktivitetTyper}
                 verdi={valgtAktivitet}
                 onChange={(aktivitet: string) => setValgtAktivitet(aktivitet)}
-                label="Hva vil du registrere"
+                label={getAppText("rapportering-hva-vil-du-lagre")}
               />
             </div>
 
             {valgtAktivitet === "Arbeid" && (
-              <TallInput name="timer" label="Antall timer:" className="my-4" />
+              <TallInput
+                name="timer"
+                label={`${getAppText("rapportering-antall-timer")}:`}
+                className="my-4"
+              />
             )}
 
             {actionData?.status === "error" && actionData?.error && (
@@ -120,7 +128,7 @@ export function AktivitetModal(props: IProps) {
 
             <div className={styles.knappKontainer}>
               <Button type="submit" name="submit" value="lagre">
-                Lagre
+                {getAppText("rapportering-lagre")}
               </Button>
             </div>
           </ValidatedForm>

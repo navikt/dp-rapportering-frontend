@@ -107,6 +107,7 @@ export default function Landingsside() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  const { getAppText } = useSanity();
 
   if (isRouteErrorResponse(error)) {
     if (getEnv("IS_LOCALHOST") === "true" && error.status === 440) {
@@ -142,7 +143,7 @@ export function ErrorBoundary() {
         <div className="rapportering-header">
           <div className="rapportering-header-innhold">
             <Heading level="1" size="xlarge">
-              Dagpengerapportering
+              {getAppText("rapportering-tittel")}
             </Heading>
           </div>
         </div>
