@@ -8,6 +8,7 @@ import {
   hentInnsendtePerioder,
 } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -38,6 +39,7 @@ export default function InnsendteRapporteringsPerioderSide() {
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
+  const { getAppText } = useSanity();
 
   useEffect(() => {
     scrollToView(sidelastFokusRef);
@@ -55,19 +57,19 @@ export default function InnsendteRapporteringsPerioderSide() {
             level="1"
             size="xlarge"
           >
-            Innsendte rapporteringer for dagpenger
+            {getAppText("rapportering-innsendt-tittel")}
           </Heading>
         </div>
       </div>
       <div className="rapportering-container">
         <Heading size={"medium"} level={"2"}>
-          Oversikt over innsendte rapporteringer
+          {getAppText("rapportering-innsendt-beskrivelse-tittel")}
         </Heading>
         <BodyLong className="tekst-subtil" spacing>
-          Her kan du se alle innsendte rapportertinger du har sendt til NAV.
+          {getAppText("rapportering-innsendt-beskrivelse-innhold")}
         </BodyLong>
         {innsendtPerioder.length === 0 && (
-          <Alert variant="info">Du har ingen innsendte rapportertinger.</Alert>
+          <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
         )}
         {innsendtPerioder.map((periode) => {
           const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
@@ -82,7 +84,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                   readonly
                 />
                 {flatMapAktiviteter.length < 1 && (
-                  <p>Du har ikke jobbet, vært syk eller hatt fravær i denne perioden.</p>
+                  <p>{getAppText("rapportering-innsendt-ikke-fravaer")}</p>
                 )}
               </div>
               <AktivitetOppsummering rapporteringsperiode={periode} />
