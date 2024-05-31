@@ -58,7 +58,7 @@ export default function KorrigeringSendInnSide() {
         >
           {getAppText("rapportering-korriger-send-inn-tittel")}
         </Heading>
-        <PortableText value={getRichText("rapportering-korriger-send-inn-innhold")} />
+        <PortableText value={getRichText("rapportering-send-inn-innhold")} />
 
         {actionData?.error && (
           <Alert variant="error" className={styles.feilmelding}>
