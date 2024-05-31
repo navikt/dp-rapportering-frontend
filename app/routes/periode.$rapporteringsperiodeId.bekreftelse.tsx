@@ -1,5 +1,6 @@
 import { BodyLong, Heading } from "@navikt/ds-react";
 import { useEffect, useRef } from "react";
+import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -9,7 +10,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 
 export default function RapporteringsPeriodesBekreftelsesSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-
+  const { getAppText, getLink } = useSanity();
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
@@ -29,11 +30,9 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
         level={"2"}
         spacing={true}
       >
-        Tusen takk!
+        {getAppText("rapportering-periode-bekreftelse-tittel")}
       </Heading>
-      <BodyLong spacing>
-        Du har sendt inn rapporteringen din. Når perioden er over vil NAV beregne dagpengene dine.
-      </BodyLong>
+      <BodyLong spacing>{getAppText("rapportering-periode-bekreftelse-beskrivelse")}</BodyLong>
       <div className="graa-bakgrunn">
         <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
         <div className="registert-meldeperiode-container">
@@ -42,15 +41,11 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
       </div>
 
       <div className="navigasjon-container">
-        <RemixLink
-          as="Button"
-          to={`/rapportering/periode/${periode.id}/avgodkjenn`}
-          variant="secondary"
-        >
-          Angre innsending
+        <RemixLink as="Button" to={`/periode/${periode.id}/avgodkjenn`} variant="secondary">
+          {getLink("rapportering-periode-bekreftelse-avbryt").linkText}
         </RemixLink>
-        <RemixLink as="Button" to="/rapportering">
-          Tilbake til min side
+        <RemixLink as="Button" to={getLink("rapportering-periode-bekreftelse-tilbake").linkUrl}>
+          {getLink("rapportering-periode-bekreftelse-tilbake").linkText}
         </RemixLink>
       </div>
     </div>

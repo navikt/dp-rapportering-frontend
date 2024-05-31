@@ -1,5 +1,6 @@
 import { Heading } from "@navikt/ds-react";
 import { useEffect, useRef } from "react";
+import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -9,6 +10,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 
 export default function KorrigeringBekreftelsesSide() {
   const { periode } = useTypedRouteLoaderData("routes/korriger.$rapporteringsperiodeId");
+  const { getAppText } = useSanity();
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
@@ -30,7 +32,7 @@ export default function KorrigeringBekreftelsesSide() {
           level={"2"}
           spacing={true}
         >
-          Korrigeringen er mottatt
+          {getAppText("rapportering-korriger-bekreftelse-tittel")}
         </Heading>
         <div className="graa-bakgrunn">
           <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
@@ -40,7 +42,7 @@ export default function KorrigeringBekreftelsesSide() {
         </div>
         <div className="navigasjon-container">
           <RemixLink as="Button" to="/rapportering">
-            Tilbake til min side
+            {getAppText("rapportering-korriger-bekreftelse-tilbake-knapp")}
           </RemixLink>
         </div>
       </div>

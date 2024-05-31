@@ -1,5 +1,6 @@
 import { TextField } from "@navikt/ds-react";
 import { useField } from "remix-validated-form";
+import { useSanity } from "~/hooks/useSanity";
 
 export interface IProps {
   name: string;
@@ -10,6 +11,8 @@ export interface IProps {
 
 export function TallInput(props: IProps) {
   const { error, getInputProps } = useField(props.name);
+  const { getAppText } = useSanity();
+
   return (
     <TextField
       type="text"
@@ -17,7 +20,7 @@ export function TallInput(props: IProps) {
       className={props.className}
       defaultValue={props.verdi}
       error={error}
-      description={"Halve timer skrives som desimal. 7 timer 30 min = 7,5 timer"}
+      description={getAppText("rapportering-input-tall-beskrivelse")}
       {...getInputProps({
         id: props.name,
         label: <>{props.label}</>,

@@ -1,4 +1,5 @@
-import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
+import { Alert, Button, Heading } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useParams } from "@remix-run/react";
@@ -8,6 +9,7 @@ import { logger } from "~/models/logger.server";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { RemixLink } from "~/components/RemixLink";
@@ -32,6 +34,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function KorrigeringSendInnSide() {
   const actionData = useActionData<typeof action>();
   const { rapporteringsperiodeId } = useParams();
+  const { getLink, getRichText, getAppText } = useSanity();
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
@@ -53,16 +56,9 @@ export default function KorrigeringSendInnSide() {
           spacing
           className="vo-fokus"
         >
-          Send inn korrigering
+          {getAppText("rapportering-korriger-send-inn-tittel")}
         </Heading>
-
-        <BodyLong spacing>
-          Jeg er kjent med at hvis opplysningene jeg har gitt ikke er riktige og fullstendige kan
-          jeg miste retten til dagpenger.
-        </BodyLong>
-        <BodyLong spacing>
-          Jeg er klar over at jeg må betale tilbake hvis jeg får for mye utbetalt.
-        </BodyLong>
+        <PortableText value={getRichText("rapportering-send-inn-innhold")} />
 
         {actionData?.error && (
           <Alert variant="error" className={styles.feilmelding}>
@@ -73,15 +69,15 @@ export default function KorrigeringSendInnSide() {
         <Form method="post">
           <div className="navigasjon-container">
             <RemixLink
-              to={`/rapportering/korriger/${rapporteringsperiodeId}/fyll-ut`}
+              to={`/korriger/${rapporteringsperiodeId}/fyll-ut`}
               as="Button"
               variant="secondary"
             >
-              Gå tilbake
+              {getLink("rapportering-korriger-send-inn-tilbake").linkText}
             </RemixLink>
 
             <Button type="submit" variant="primary" iconPosition="right">
-              Bekreft og send til NAV
+              {getLink("rapportering-korriger-send-inn-bekreft").linkText}
             </Button>
           </div>
         </Form>

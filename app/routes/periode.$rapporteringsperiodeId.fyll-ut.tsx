@@ -7,6 +7,7 @@ import invariant from "tiny-invariant";
 import { type AktivitetType, sletteAktivitet } from "~/models/aktivitet.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -48,7 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-
+  const { getAppText, getLink } = useSanity();
   const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
@@ -101,10 +102,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
           level={"2"}
           className="vo-fokus"
         >
-          Fyll ut rapporteringen
+          {getAppText("rapportering-korriger-fyll-ut-tittel")}
         </Heading>
         <BodyLong className="tekst-subtil" spacing>
-          Klikk på dagen du skal rapportere for. Du kan velge mellom jobb, sykdom, fravær og ferie.
+          {getAppText("rapportering-korriger-fyll-ut-beskrivelse")}
         </BodyLong>
 
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
@@ -121,17 +122,17 @@ export default function RapporteringsPeriodeFyllUtSide() {
         </div>
         <div className="navigasjon-container">
           <RemixLink as="Button" to={`/rapportering/periode/${periode.id}/send-inn`}>
-            Send rapportering
+            {getLink("rapportering-korriger-fyll-ut-send-rapportering").linkText}
           </RemixLink>
         </div>
         <div className="hva-skal-jeg-rapportere-nav-link">
           <RemixLink
             as="Link"
-            to="/rapportering/info"
+            to={getLink("rapportering-korriger-fyll-ut-info").linkUrl}
             iconPosition="left"
             icon={<InformationSquareIcon title="a11y-title" fontSize={24} aria-hidden />}
           >
-            Hva skal jeg rapportere til NAV?
+            {getLink("rapportering-korriger-fyll-ut-info").linkText}
           </RemixLink>
         </div>
       </div>

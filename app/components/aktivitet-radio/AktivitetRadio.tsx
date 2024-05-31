@@ -1,17 +1,19 @@
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useField } from "remix-validated-form";
 import type { AktivitetType } from "~/models/aktivitet.server";
+import { useSanity } from "~/hooks/useSanity";
 
 export interface IProps {
   name: string;
   label?: string;
   verdi?: string;
-  muligeAktiviteter: AktivitetType[];
+  muligeAktiviteter: readonly AktivitetType[];
   onChange: (aktivitet: string) => void;
 }
 
 export function AktivitetRadio(props: IProps) {
   const { error, getInputProps } = useField(props.name);
+  const { getAppText } = useSanity();
 
   const inputProps: { type: string; value: string } = getInputProps({
     type: "radio",
@@ -21,11 +23,11 @@ export function AktivitetRadio(props: IProps) {
   function hentAktivitetBeskrivelse(aktivitet: AktivitetType) {
     switch (aktivitet) {
       case "Arbeid":
-        return "Skriv antall timer du har jobbet, både lønnet og ulønnet. Får du lønn for flere timer enn du har jobbet, skriver du timene du får lønn for.";
+        return getAppText("rapportering-aktivitet-radio-arbeid-beskrivelse");
       case "Syk":
-        return "Jeg har vært syk, og derfor forhindret fra å ta arbeid.";
+        return getAppText("rapportering-aktivitet-radio-syk-beskrivelse");
       case "Fravaer":
-        return "Jeg har hatt ferie eller fravær, og derfor vært forhindret fra å ta arbeid.";
+        return getAppText("rapportering-aktivitet-radio-fravaer-beskrivelse");
       default:
         return "";
     }

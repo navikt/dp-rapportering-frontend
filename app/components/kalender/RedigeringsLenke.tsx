@@ -1,3 +1,4 @@
+import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "../RemixLink";
 
 interface IProps {
@@ -11,17 +12,19 @@ interface IRedigeringsLenke {
 }
 
 export function RedigeringsLenke(props: IProps) {
+  const { getAppText } = useSanity();
+
   function finnRedigeringsType(status: string): IRedigeringsLenke {
     switch (status) {
       case "TilUtfylling":
-        return { sti: "fyll-ut", tekst: "Fyll ut" };
+        return { sti: "fyll-ut", tekst: getAppText("rapportering-redigeringslenke-fyll-ut") };
       case "Godkjent":
-        return { sti: "avgodkjenn", tekst: "Korriger" };
+        return { sti: "avgodkjenn", tekst: getAppText("rapportering-redigeringslenke-korriger") };
       case "Innsendt":
-        return { sti: "korriger", tekst: "Korriger" };
+        return { sti: "korriger", tekst: getAppText("rapportering-redigeringslenke-korriger") };
       default:
         console.log("Traff ukjent status i kalenderlenke: ", status);
-        return { sti: "", tekst: "Ukjent" };
+        return { sti: "", tekst: getAppText("rapportering-redigeringslenke-ukjent") };
     }
   }
 
