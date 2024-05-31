@@ -7,6 +7,7 @@ import invariant from "tiny-invariant";
 import { type AktivitetType, sletteAktivitet } from "~/models/aktivitet.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -49,6 +50,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function KorrigeringFyllUtSide() {
   const { periode } = useTypedRouteLoaderData("routes/korriger.$rapporteringsperiodeId");
   const actionData = useActionData<typeof action>();
+  const { getLink, getAppText } = useSanity();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
@@ -100,13 +102,9 @@ export default function KorrigeringFyllUtSide() {
           tabIndex={-1}
           className="vo-fokus"
         >
-          Korrigering
+          {getAppText("rapportering-korriger-fyll-ut-tittel")}
         </Heading>
-        <BodyLong spacing>
-          Endringer i rapporteringen vil føre til at NAV beregner perioden på nytt. Du vil få
-          etterbetalt hvis du har fått for lite utbetalt. Har du fått utbetalt for mye vil NAV
-          vurdere å kreve dette tilbake.
-        </BodyLong>
+        <BodyLong spacing>{getAppText("rapportering-korriger-fyll-ut-beskrivelse")}</BodyLong>
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
         <AktivitetModal
           rapporteringsperiode={periode}
@@ -120,21 +118,25 @@ export default function KorrigeringFyllUtSide() {
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
         <div className="navigasjon-container">
-          <RemixLink as="Button" to="/rapportering/innsendt" variant={"secondary"}>
-            Avbryt
+          <RemixLink
+            as="Button"
+            to={getLink("rapportering-korriger-fyll-ut-avbryt").linkUrl}
+            variant={"secondary"}
+          >
+            {getLink("rapportering-korriger-fyll-ut-avbryt").linkText}
           </RemixLink>
-          <RemixLink as="Button" to={`/rapportering/korriger/${periode.id}/send-inn`}>
-            Lagre og send korrigering
+          <RemixLink as="Button" to={`/korriger/${periode.id}/send-inn`}>
+            {getLink("rapportering-korriger-fyll-ut-send-inn").linkText}
           </RemixLink>
         </div>
         <div className="hva-skal-jeg-rapportere-nav-link">
           <RemixLink
             as="Link"
-            to="/info"
+            to={getLink("rapportering-korriger-fyll-ut-info").linkUrl}
             iconPosition="left"
             icon={<InformationSquareIcon title="a11y-title" fontSize={24} aria-hidden />}
           >
-            Hva skal jeg rapportere til NAV?
+            {getLink("rapportering-korriger-fyll-ut-info").linkText}
           </RemixLink>
         </div>
       </div>
