@@ -1,4 +1,5 @@
 import type { IAktivitet } from "./aktivitet.server";
+import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 
@@ -40,8 +41,22 @@ export async function hentPeriode(onBehalfOfToken: string, periodeId: string): P
   });
 }
 
-export async function hentInnsendtePerioder(onBehalfOfToken: string): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`;
+function getInnsendtePeriodeUrl(request: Request) {
+  const requestUrl = new URL(request.url);
+  const scenerio = requestUrl.searchParams.get("scenerio");
+
+  if (scenerio) {
+    const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte?scenerio=${scenerio}`;
+    return url;
+  }
+
+  return `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`;
+}
+
+export async function hentInnsendtePerioder(request: Request): Promise<Response> {
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+
+  const url = getInnsendtePeriodeUrl(request);
 
   return await fetch(url, {
     method: "GET",

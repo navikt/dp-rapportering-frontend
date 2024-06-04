@@ -35,6 +35,8 @@ body {
   max-width: var(--app-max-width);
   padding: var(--app-padding);
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
 }
 
 .rapportering-header-innhold p {

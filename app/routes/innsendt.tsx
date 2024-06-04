@@ -3,11 +3,12 @@ import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { DevTools } from "~/devTools";
 import {
   type IRapporteringsperiode,
   hentInnsendtePerioder,
 } from "~/models/rapporteringsperiode.server";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { isLocalOrDemo } from "~/utils/env.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
@@ -17,8 +18,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 export async function loader({ request }: LoaderFunctionArgs) {
   let innsendtPerioder: IRapporteringsperiode[] = [];
 
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-  const allePerioderResponse = await hentInnsendtePerioder(onBehalfOfToken);
+  const allePerioderResponse = await hentInnsendtePerioder(request);
 
   if (!allePerioderResponse.ok) {
     throw new Response("Feil i uthenting av alle rapporteringsperioder", {
@@ -59,6 +59,7 @@ export default function InnsendteRapporteringsPerioderSide() {
           >
             {getAppText("rapportering-innsendt-tittel")}
           </Heading>
+          {isLocalOrDemo && <DevTools />}
         </div>
       </div>
       <div className="rapportering-container">

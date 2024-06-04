@@ -21,3 +21,5 @@ export function getEnv(value: keyof IEnv) {
 
   return env[value] || "";
 }
+
+export const isLocalOrDemo = getEnv("USE_MSW") === "true";

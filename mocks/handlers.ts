@@ -1,8 +1,38 @@
+import {
+  perioderMedAktiviteter,
+  perioderMedArbeidSykFravaer,
+  perioderMedKunArbeid,
+  perioderUtenAktiviteter,
+} from "./../app/devTools/data";
+import { mockDb } from "./mockDb";
 import { gjeldendePeriodeResponse } from "./responses/gjeldendePeriodeResponse";
-import { innsendtRapporteringsperioderResponse } from "./responses/innsendtRapporteringsperioderResponse";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
+import { ScenerioType } from "~/devTools";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { getEnv } from "~/utils/env.utils";
+
+const hentInnsendtePerioder = (scenerio?: ScenerioType) => {
+  const innsendtePerioder =
+    mockDb.innsendteRapporteringsperioder.getAll() as IRapporteringsperiode[];
+
+  switch (scenerio) {
+    case ScenerioType.UtenAktiviteter:
+      return innsendtePerioder.filter(perioderUtenAktiviteter);
+
+    case ScenerioType.MedArbeidAktivitet:
+      return innsendtePerioder.filter(perioderMedAktiviteter).filter(perioderMedKunArbeid);
+
+    case ScenerioType.ArbeidSykFravaer:
+      return innsendtePerioder
+        .filter(perioderMedAktiviteter)
+        .filter((periode) => !perioderMedKunArbeid(periode))
+        .filter(perioderMedArbeidSykFravaer);
+
+    default:
+      return mockDb.innsendteRapporteringsperioder.getAll();
+  }
+};
 
 export const handlers = [
   // Hent alle rapporteringsperioder
@@ -11,8 +41,11 @@ export const handlers = [
   }),
 
   // Hent alle innsendte rapporteringsperioder
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, () => {
-    return HttpResponse.json(innsendtRapporteringsperioderResponse);
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, ({ request }) => {
+    const url = new URL(request.url);
+    const scenerio = url.searchParams.get("scenerio") as ScenerioType;
+
+    return HttpResponse.json(hentInnsendtePerioder(scenerio));
   }),
 
   // Hent gjeldende rapporteringsperiode

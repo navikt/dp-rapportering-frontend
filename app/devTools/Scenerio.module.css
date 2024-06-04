@@ -1,0 +1,24 @@
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 0.25em auto;
+}
+
+.button {
+  all: unset; /* Resets all properties except display and white-space */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  margin: 0.25em 0;
+
+  border: 1px solid #ccc;
+  border-radius: 0.25em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #f0f0f0;
+}
