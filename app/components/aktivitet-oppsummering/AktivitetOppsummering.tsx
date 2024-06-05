@@ -70,6 +70,12 @@ export function AktivitetOppsummering(props: IProps) {
               <span>{hentTotaltFravaerTekstMedType("Fravaer")}</span>
             </p>
           </div>
+          <div className={classNames(styles.aktivitetOppsummeringData, styles.utdanning)}>
+            <p>
+              {getAppText("rapportering-utdanning")}
+              <span>{hentTotaltFravaerTekstMedType("Utdanning")}</span>
+            </p>
+          </div>
         </div>
       )}
     </>

@@ -31,7 +31,7 @@ const lagDagMedAktiviteter = (
 
 const lagRapporteringsperiodeMedTidslinje = (
   status: "Innsendt",
-  tidslinje: Map<number, IAktivitet>,
+  tidslinje: Map<number, IAktivitet> | Map<number, IAktivitet[]>,
   index = 0
 ): IRapporteringsperiode => {
   const currentYear = getYear(new Date());
@@ -51,7 +51,9 @@ const lagRapporteringsperiodeMedTidslinje = (
     kanKorrigeres: true,
     dager: times(14, (i) => {
       const aktivitet = tidslinje.get(i);
-      return lagDagMedAktiviteter(i, aktivitet ? [aktivitet] : []);
+      if (!aktivitet) return lagDagMedAktiviteter(i, []);
+      if (Array.isArray(aktivitet)) return lagDagMedAktiviteter(i, aktivitet);
+      return lagDagMedAktiviteter(i, [aktivitet]);
     }),
   };
 };
@@ -86,6 +88,49 @@ export const lagInnsendteRapporteringsperiodeMedArbeidAktivitet = (
   antall: number
 ): IRapporteringsperiode[] => {
   return lagRapporteringsperiodeMedArbeidAktivitet(antall, "Innsendt");
+};
+
+export const lagRapporteringsperiodeMedArbeidOgUtdanning = (
+  antall: number,
+  status: "Innsendt"
+): IRapporteringsperiode[] => {
+  const dagerMedArbeid = [0, 2, 4, 8, 10];
+
+  const aktivitetstidslinje = new Map<number, IAktivitet[]>(
+    dagerMedArbeid.map((dag) => [
+      dag,
+      [{ id: uuid(), type: "Arbeid", timer: "PT3H30M" }, lagAktivitet("Utdanning")],
+    ])
+  );
+  return times(antall, (index) => {
+    return lagRapporteringsperiodeMedTidslinje(status, aktivitetstidslinje, index);
+  });
+};
+
+export const lagInnsendteRapporteringsperiodeMedArbeidOgUtdanning = (
+  antall: number
+): IRapporteringsperiode[] => {
+  return lagRapporteringsperiodeMedArbeidOgUtdanning(antall, "Innsendt");
+};
+
+export const lagRapporteringsperiodeMedUtdanning = (
+  antall: number,
+  status: "Innsendt"
+): IRapporteringsperiode[] => {
+  const dagerMedUtdanning = [2, 3, 4, 10, 11, 12];
+
+  const aktivitetstidslinje = new Map<number, IAktivitet>(
+    dagerMedUtdanning.map((dag) => [dag, lagAktivitet("Utdanning")])
+  );
+  return times(antall, (index) => {
+    return lagRapporteringsperiodeMedTidslinje(status, aktivitetstidslinje, index);
+  });
+};
+
+export const lagInnsendteRapporteringsperiodeMedUtdanning = (
+  antall: number
+): IRapporteringsperiode[] => {
+  return lagRapporteringsperiodeMedUtdanning(antall, "Innsendt");
 };
 
 export function lagRapporteringsperiodeMedArbeidSykOgFravaer(

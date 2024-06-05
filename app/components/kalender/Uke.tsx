@@ -65,6 +65,7 @@ export function Uke(props: IProps) {
           [styles.arbeid]: dagenHarAktivitet && dag.aktiviteter[0].type === "Arbeid",
           [styles.sykdom]: dagenHarAktivitet && dag.aktiviteter[0].type === "Syk",
           [styles.fravaer]: dagenHarAktivitet && dag.aktiviteter[0].type === "Fravaer",
+          [styles.utdanning]: dagenHarAktivitet && dag.aktiviteter[0].type === "Utdanning",
         };
 
         return (
@@ -103,6 +104,8 @@ export function Uke(props: IProps) {
                     dagenHarAktivitet && dag.aktiviteter[0].type === "Syk",
                   [styles.datoMedAktivitetFerie]:
                     dagenHarAktivitet && dag.aktiviteter[0].type === "Fravaer",
+                  [styles.datoMedAktivitetUtdanning]:
+                    dagenHarAktivitet && dag.aktiviteter[0].type === "Utdanning",
                 })}
                 aria-hidden
               >
