@@ -21,7 +21,7 @@ describe("Data functions", () => {
     });
   });
 
-  test.only("genererer rapporteringsperioder med 50% arbeid aktiviteter", () => {
+  test("genererer rapporteringsperioder med 50% arbeid aktiviteter", () => {
     const antallPerioder = 3;
     const status = "Innsendt";
 
@@ -39,7 +39,7 @@ describe("Data functions", () => {
     ).toBe(true);
   });
 
-  test.only("generer periode med arbeid, syk og fravær aktiviteter", () => {
+  test("generer periode med arbeid, syk og fravær aktiviteter", () => {
     const antallPerioder = 2;
     const status = "Innsendt";
     const perioder = lagRapporteringsperiodeMedArbeidSykOgFravaer(antallPerioder, status);

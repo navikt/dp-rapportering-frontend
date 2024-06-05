@@ -71,7 +71,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
 
       server.use(
         http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`,
           () => {
             return HttpResponse.json(innsendtRapporteringsperioderResponse, { status: 200 });
           },
