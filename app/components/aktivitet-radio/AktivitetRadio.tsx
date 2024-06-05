@@ -1,6 +1,7 @@
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useField } from "remix-validated-form";
 import type { AktivitetType } from "~/models/aktivitet.server";
+import { aktivitetsTyperMap } from "~/utils/aktivitetstyper";
 import { useSanity } from "~/hooks/useSanity";
 
 export interface IProps {
@@ -47,7 +48,7 @@ export function AktivitetRadio(props: IProps) {
           description={hentAktivitetBeskrivelse(aktivitet)}
           data-testid={`aktivitet-radio-${aktivitet}`}
         >
-          {aktivitet}
+          {aktivitetsTyperMap(aktivitet)}
         </Radio>
       ))}
     </RadioGroup>

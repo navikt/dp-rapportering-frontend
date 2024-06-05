@@ -7,7 +7,7 @@ import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { action as korringeringAction } from "~/routes/korriger.$rapporteringsperiodeId.fyll-ut";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
-import { aktivitetTyper } from "~/utils/aktivitetstyper";
+import { aktivitetsTyper } from "~/utils/aktivitetstyper";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
 import { useSanity } from "~/hooks/useSanity";
@@ -105,7 +105,7 @@ export function AktivitetModal(props: IProps) {
             <div className={styles.aktivitetKontainer}>
               <AktivitetRadio
                 name="type"
-                muligeAktiviteter={aktivitetTyper}
+                muligeAktiviteter={aktivitetsTyper}
                 verdi={valgtAktivitet}
                 onChange={(aktivitet: string) => setValgtAktivitet(aktivitet)}
                 label={getAppText("rapportering-hva-vil-du-lagre")}
