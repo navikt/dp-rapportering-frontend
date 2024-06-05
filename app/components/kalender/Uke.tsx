@@ -1,6 +1,7 @@
 import styles from "./Kalender.module.css";
 import classNames from "classnames";
 import { format } from "date-fns";
+import { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { periodeSomTimer } from "~/utils/periode.utils";
 
@@ -50,6 +51,18 @@ export function Uke(props: IProps) {
     return formattertDato;
   }
 
+  function erAktivStil(dag: IRapporteringsperiodeDag, typer: AktivitetType[]): boolean {
+    const dagenHarAktivitet = dag.aktiviteter.length > 0;
+
+    if (!dagenHarAktivitet) return false;
+
+    const alleTyperErTilstede = typer.map((type) =>
+      dag.aktiviteter.some((aktivitet) => aktivitet.type === type)
+    );
+
+    return alleTyperErTilstede.every((type) => type === true);
+  }
+
   return (
     <tr
       className={classNames(styles.ukeRadKontainer, {
@@ -62,19 +75,19 @@ export function Uke(props: IProps) {
         const ikkeRapporteringspliktig = false;
 
         const dagKnappStyle = {
-          [styles.arbeid]: dagenHarAktivitet && dag.aktiviteter[0].type === "Arbeid",
-          [styles.sykdom]: dagenHarAktivitet && dag.aktiviteter[0].type === "Syk",
-          [styles.fravaer]: dagenHarAktivitet && dag.aktiviteter[0].type === "Fravaer",
-          [styles.utdanning]: dagenHarAktivitet && dag.aktiviteter[0].type === "Utdanning",
+          [styles.arbeid]: erAktivStil(dag, ["Arbeid"]),
+          [styles.sykdom]: erAktivStil(dag, ["Syk"]),
+          [styles.fravaer]: erAktivStil(dag, ["Fravaer"]),
+          [styles.utdanning]: erAktivStil(dag, ["Utdanning"]),
+          [styles.arbeidOgUtdanning]: erAktivStil(dag, ["Arbeid", "Utdanning"]),
         };
 
         return (
           <td key={dag.dagIndex} className={styles.datoKontainer}>
             {readonly && (
-              <span className={classNames(styles.dato, dagKnappStyle, styles.readonly)}>{`${format(
-                new Date(dag.dato),
-                "dd"
-              )}. `}</span>
+              <span
+                className={classNames(styles.dato, dagKnappStyle, styles.readonly)}
+              >{`${format(new Date(dag.dato), "dd")}. `}</span>
             )}
 
             {ikkeRapporteringspliktig && !readonly && (
@@ -100,12 +113,13 @@ export function Uke(props: IProps) {
             {dagenHarAktivitet && (
               <div
                 className={classNames(styles.datoMedAktivitet, {
-                  [styles.datoMedAktivitetSykdom]:
-                    dagenHarAktivitet && dag.aktiviteter[0].type === "Syk",
-                  [styles.datoMedAktivitetFerie]:
-                    dagenHarAktivitet && dag.aktiviteter[0].type === "Fravaer",
-                  [styles.datoMedAktivitetUtdanning]:
-                    dagenHarAktivitet && dag.aktiviteter[0].type === "Utdanning",
+                  [styles.datoMedAktivitetSykdom]: erAktivStil(dag, ["Syk"]),
+                  [styles.datoMedAktivitetFerie]: erAktivStil(dag, ["Fravaer"]),
+                  [styles.datoMedAktivitetUtdanning]: erAktivStil(dag, ["Utdanning"]),
+                  [styles.datoMedAktivitetArbeidOgUtdanning]: erAktivStil(dag, [
+                    "Arbeid",
+                    "Utdanning",
+                  ]),
                 })}
                 aria-hidden
               >

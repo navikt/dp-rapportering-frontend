@@ -143,6 +143,11 @@
   background-color: var(--a-red-50);
 }
 
+/* TODO: Endre bakgrunn når arbeid og utdanning er aktivt */
+.datoMedAktivitetArbeidOgUtdanning {
+  background-color: var(--a-limegreen-50);
+}
+
 .arbeid {
   background-color: var(--a-blue-200);
 }
@@ -185,6 +190,19 @@
 
 .timerUtdanning {
   background-color: var(--a-red-50);
+}
+
+/* TODO: Endre bakgrunn når arbeid og utdanning er aktivt */
+.arbeidOgUtdanning {
+  background-color: var(--a-limegreen-200);
+}
+
+.arbeidOgUtdanning:hover {
+  background-color: var(--a-limegreen-300);
+}
+
+.timerArbeidOgUtdanning {
+  background-color: var(--a-limegreen-50);
 }
 
 .knappKontainer {
