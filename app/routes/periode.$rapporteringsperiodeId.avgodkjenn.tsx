@@ -12,7 +12,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const response = await avGodkjennPeriode(onBehalfOfToken, periodeId);
 
   if (response.ok) {
-    return redirect(`/rapportering/periode/${periodeId}/fyll-ut`);
+    return redirect(`/periode/${periodeId}/fyll-ut`);
   } else {
     throw new Response(`Klarte ikke avgodkjenne periode med id: ${periodeId}`, { status: 500 });
   }

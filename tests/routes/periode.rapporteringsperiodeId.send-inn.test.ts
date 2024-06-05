@@ -60,7 +60,7 @@ describe("Send inn rapporteringsperiode", () => {
         });
 
         expect(response).toEqual(
-          redirect(`/rapportering/periode/${rapporteringsperioderResponse[0].id}/bekreftelse`)
+          redirect(`/periode/${rapporteringsperioderResponse[0].id}/bekreftelse`)
         );
       });
 

@@ -22,7 +22,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const godkjennPeriodeResponse = await godkjennPeriode(onBehalfOfToken, periodeId);
 
   if (godkjennPeriodeResponse.ok) {
-    return redirect(`/rapportering/periode/${periodeId}/bekreftelse`);
+    return redirect(`/periode/${periodeId}/bekreftelse`);
   } else {
     logger.warn(`Klarte ikke godkjenne rapportering med id: ${periodeId}`, {
       statustext: godkjennPeriodeResponse.statusText,

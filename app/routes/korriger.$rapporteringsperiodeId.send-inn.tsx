@@ -28,7 +28,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json({ error: "Det har skjedd noe feil med innsendingen din, prøv igjen." });
   }
 
-  return redirect(`/rapportering/korriger/${periodeId}/bekreftelse`);
+  return redirect(`/korriger/${periodeId}/bekreftelse`);
 }
 
 export default function KorrigeringSendInnSide() {
