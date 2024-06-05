@@ -132,11 +132,11 @@ export default function KorrigeringFyllUtSide() {
         <div className="hva-skal-jeg-rapportere-nav-link">
           <RemixLink
             as="Link"
-            to={getLink("rapportering-korriger-fyll-ut-info").linkUrl}
+            to={getLink("rapportering-fyll-ut-info").linkUrl}
             iconPosition="left"
             icon={<InformationSquareIcon title="a11y-title" fontSize={24} aria-hidden />}
           >
-            {getLink("rapportering-korriger-fyll-ut-info").linkText}
+            {getLink("rapportering-fyll-ut-info").linkText}
           </RemixLink>
         </div>
       </div>
