@@ -1,4 +1,4 @@
-import { Radio, RadioGroup } from "@navikt/ds-react";
+import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import { useField } from "remix-validated-form";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import { aktivitetTypeMap } from "~/utils/aktivitettype.utils";
@@ -7,19 +7,15 @@ import { useSanity } from "~/hooks/useSanity";
 export interface IProps {
   name: string;
   label?: string;
-  verdi?: string;
+  verdi: AktivitetType[];
   muligeAktiviteter: readonly AktivitetType[];
-  onChange: (aktivitet: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange: (aktivitet: any[]) => void;
 }
 
-export function AktivitetRadio(props: IProps) {
-  const { error, getInputProps } = useField(props.name);
+export function AktivitetCheckboxes(props: IProps) {
+  const { error } = useField(props.name);
   const { getAppText } = useSanity();
-
-  const inputProps: { type: string; value: string } = getInputProps({
-    type: "radio",
-    value: props.verdi || "",
-  });
 
   function hentAktivitetBeskrivelse(aktivitet: AktivitetType) {
     switch (aktivitet) {
@@ -34,23 +30,43 @@ export function AktivitetRadio(props: IProps) {
     }
   }
 
+  function erIkkeAktiv(aktiviteter: AktivitetType[], aktivitet: AktivitetType) {
+    if (
+      (aktiviteter.includes("Arbeid") || aktiviteter.includes("Utdanning")) &&
+      !["Arbeid", "Utdanning"].includes(aktivitet)
+    ) {
+      return true;
+    }
+
+    if (aktiviteter.includes("Syk") && aktivitet !== "Syk") {
+      return true;
+    }
+
+    if (aktiviteter.includes("Fravaer") && aktivitet !== "Fravaer") {
+      return true;
+    }
+
+    return false;
+  }
+
   return (
-    <RadioGroup
+    <CheckboxGroup
       legend={props.label}
-      error={!inputProps.value ? error : undefined}
-      {...inputProps}
+      error={!props.verdi ? error : undefined}
+      value={props.verdi}
       onChange={props.onChange}
     >
       {props.muligeAktiviteter.map((aktivitet) => (
-        <Radio
+        <Checkbox
           key={aktivitet}
+          disabled={erIkkeAktiv(props.verdi, aktivitet)}
           value={aktivitet}
           description={hentAktivitetBeskrivelse(aktivitet)}
           data-testid={`aktivitet-radio-${aktivitet}`}
         >
           {aktivitetTypeMap(aktivitet)}
-        </Radio>
+        </Checkbox>
       ))}
-    </RadioGroup>
+    </CheckboxGroup>
   );
 }

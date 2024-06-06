@@ -13,9 +13,12 @@ interface IAktivitetArbeidData extends IAktivtetData {
   timer: string;
 }
 
+// TODO: Denne funksjonen forventer at aktivitetType er en string, mens det er en liste med strings
+// Den må endres slik at den oppretter en aktivtet for hver aktivitet i listen
+
 export async function validerOgLagreAktivitet(
   onBehalfOfToken: string,
-  aktivitetType: AktivitetType,
+  aktivitetType: AktivitetType[],
   periodeId: string,
   formdata: FormData
 ): Promise<INetworkResponse> {

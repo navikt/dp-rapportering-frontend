@@ -53,7 +53,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-  const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType | string>("");
+  const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -87,7 +87,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   }
 
   function lukkModal() {
-    setValgtAktivitet("");
+    setValgtAktivitet([]);
     setValgtDato(undefined);
     setModalAapen(false);
   }
