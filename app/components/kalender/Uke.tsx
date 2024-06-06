@@ -85,9 +85,9 @@ export function Uke(props: IProps) {
         return (
           <td key={dag.dagIndex} className={styles.datoKontainer}>
             {readonly && (
-              <span
-                className={classNames(styles.dato, dagKnappStyle, styles.readonly)}
-              >{`${format(new Date(dag.dato), "dd")}. `}</span>
+              <span className={classNames(styles.dato, dagKnappStyle, styles.readonly)}>
+                {`${format(new Date(dag.dato), "dd")}. `}
+              </span>
             )}
 
             {ikkeRapporteringspliktig && !readonly && (
@@ -110,19 +110,8 @@ export function Uke(props: IProps) {
               </button>
             )}
 
-            {dagenHarAktivitet && (
-              <div
-                className={classNames(styles.datoMedAktivitet, {
-                  [styles.datoMedAktivitetSykdom]: erAktivStil(dag, ["Syk"]),
-                  [styles.datoMedAktivitetFerie]: erAktivStil(dag, ["Fravaer"]),
-                  [styles.datoMedAktivitetUtdanning]: erAktivStil(dag, ["Utdanning"]),
-                  [styles.datoMedAktivitetArbeidOgUtdanning]: erAktivStil(dag, [
-                    "Arbeid",
-                    "Utdanning",
-                  ]),
-                })}
-                aria-hidden
-              >
+            {dagenHarAktivitet && erAktivStil(dag, ["Arbeid"]) && (
+              <div className={classNames(styles.datoMedAktivitet)} aria-hidden>
                 {hentAktivitetSummenTekst(dag)}
               </div>
             )}

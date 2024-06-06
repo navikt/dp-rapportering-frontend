@@ -140,20 +140,31 @@
 }
 
 .datoMedAktivitetUtdanning {
-  background-color: var(--a-red-50);
+  background-color: var(--a-purple-50);
 }
 
 /* TODO: Endre bakgrunn når arbeid og utdanning er aktivt */
 .datoMedAktivitetArbeidOgUtdanning {
-  background-color: var(--a-limegreen-50);
+  background-color: var(--a-blue-50);
 }
 
-.arbeid {
+.arbeid, .arbeidOgUtdanning, .arbeid.arbeidOgUtdanning {
   background-color: var(--a-blue-200);
 }
 
-.arbeid:hover {
+.arbeid:hover, .arbeidOgUtdanning:hover, .arbeid.arbeid.arbeidOgUtdanning:hover {
   background-color: var(--a-blue-300);
+}
+
+.arbeidOgUtdanning::after {
+  content: '';
+  position: absolute;
+  right: -12.5%;
+  top: -12.5%;
+  background-color: var(--a-purple-200);
+  border-radius: 50%;
+  height: 50%;
+  width: 50%;
 }
 
 .sykdom {
@@ -181,29 +192,17 @@
 }
 
 .utdanning {
-  background-color: var(--a-red-200);
+  background-color: var(--a-purple-200);
 }
 
 .utdanning:hover {
-  background-color: var(--a-red-300);
+  background-color: var(--a-purple-300);
 }
 
 .timerUtdanning {
-  background-color: var(--a-red-50);
+  background-color: var(--a-purple-50);
 }
 
-/* TODO: Endre bakgrunn når arbeid og utdanning er aktivt */
-.arbeidOgUtdanning {
-  background-color: var(--a-limegreen-200);
-}
-
-.arbeidOgUtdanning:hover {
-  background-color: var(--a-limegreen-300);
-}
-
-.timerArbeidOgUtdanning {
-  background-color: var(--a-limegreen-50);
-}
 
 .knappKontainer {
   display: flex;

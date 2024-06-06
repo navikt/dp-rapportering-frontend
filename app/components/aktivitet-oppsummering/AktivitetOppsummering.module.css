@@ -30,7 +30,7 @@
 }
 
 .utdanning {
-  background-color: var(--a-red-200);
+  background-color: var(--a-purple-200);
 }
 
 @media screen and (min-width: 768px) {
