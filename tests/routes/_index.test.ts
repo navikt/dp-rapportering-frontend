@@ -31,7 +31,7 @@ describe("Hovedside rapportering", () => {
     test("Skal feile hvis kallet til gjelende rapporteringsperioder feilet", async () => {
       server.use(
         http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/gjeldende`,
           () => {
             return HttpResponse.json(null, { status: 500 });
           },
@@ -72,7 +72,7 @@ describe("Hovedside rapportering", () => {
     test("Skal vise at bruker har ingen gjeldene perdiode", async () => {
       server.use(
         http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/gjeldende`,
           () => new HttpResponse(null, { status: 404 }),
           { once: true }
         )

@@ -25,7 +25,7 @@ export interface IRapporteringsperiodeDag {
 }
 
 export async function hentGjeldendePeriode(onBehalfOfToken: string): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`;
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`;
 
   return await fetch(url, {
     method: "GET",
@@ -33,7 +33,7 @@ export async function hentGjeldendePeriode(onBehalfOfToken: string): Promise<Res
   });
 }
 export async function hentPeriode(onBehalfOfToken: string, periodeId: string): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}`;
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/${periodeId}`;
 
   return await fetch(url, {
     method: "GET",

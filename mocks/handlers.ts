@@ -49,7 +49,7 @@ export const handlers = [
   }),
 
   // Hent gjeldende rapporteringsperiode
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/gjeldende`, () => {
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`, () => {
     return HttpResponse.json(gjeldendePeriodeResponse);
   }),
 
@@ -70,18 +70,15 @@ export const handlers = [
   ),
 
   // Hent spesifikk rapporteringsperiode
-  http.get(
-    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId`,
-    () => {
-      // const { rapporteringsperioderId } = params;
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId`, () => {
+    // const { rapporteringsperioderId } = params;
 
-      // const rapporteringPeriode = rapporteringsperioderResponse.find(
-      //   (periode) => periode.id === rapporteringsperioderId
-      // );
+    // const rapporteringPeriode = rapporteringsperioderResponse.find(
+    //   (periode) => periode.id === rapporteringsperioderId
+    // );
 
-      return HttpResponse.json(gjeldendePeriodeResponse);
-    }
-  ),
+    return HttpResponse.json(gjeldendePeriodeResponse);
+  }),
 
   // Start korrigering av rapporteringsperiode
   http.post(

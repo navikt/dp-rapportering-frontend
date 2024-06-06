@@ -50,7 +50,7 @@ describe("Hent en rapporteringsperiode", () => {
     test("skal gi tilbake feedback til viewet hvis backend-kallet feiler", async () => {
       server.use(
         http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${rapporteringsperioderResponse[0].id}`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/${rapporteringsperioderResponse[0].id}`,
           () => {
             return HttpResponse.json(null, { status: 500 });
           },
