@@ -31,7 +31,7 @@ export function RedigeringsLenke(props: IProps) {
   const redigeringsType = finnRedigeringsType(props.status);
 
   return (
-    <RemixLink as="Link" to={`/rapportering/periode/${props.id}/${redigeringsType.sti}`}>
+    <RemixLink as="Link" to={`/periode/${props.id}/${redigeringsType.sti}`}>
       {redigeringsType.tekst}
     </RemixLink>
   );

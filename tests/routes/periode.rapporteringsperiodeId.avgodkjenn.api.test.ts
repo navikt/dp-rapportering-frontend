@@ -30,9 +30,7 @@ describe("Avgodkjenn periode", () => {
         context: {},
       });
 
-      expect(response).toEqual(
-        redirect(`/rapportering/periode/${rapporteringsperioderResponse[0].id}/fyll-ut`)
-      );
+      expect(response).toEqual(redirect(`/periode/${rapporteringsperioderResponse[0].id}/fyll-ut`));
     });
 
     test("Skal feile hvis kallet til den bestemte rapporteringsperiode feiler", async () => {

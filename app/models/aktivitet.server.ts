@@ -1,9 +1,9 @@
-import { aktivitetTyper } from "~/utils/aktivitetstyper";
+import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
 
-export type AktivitetType = (typeof aktivitetTyper)[number];
+export type AktivitetType = (typeof aktivitetType)[number];
 
 export interface IAktivitet {
   id?: string;

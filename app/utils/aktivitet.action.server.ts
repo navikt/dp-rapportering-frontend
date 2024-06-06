@@ -15,11 +15,11 @@ interface IAktivitetArbeidData extends IAktivtetData {
 
 export async function validerOgLagreAktivitet(
   onBehalfOfToken: string,
-  aktivitetsType: AktivitetType,
+  aktivitetType: AktivitetType,
   periodeId: string,
   formdata: FormData
 ): Promise<INetworkResponse> {
-  const inputVerdier = await validator(aktivitetsType).validate(formdata);
+  const inputVerdier = await validator(aktivitetType).validate(formdata);
 
   if (inputVerdier.error) {
     validationError(inputVerdier.error);

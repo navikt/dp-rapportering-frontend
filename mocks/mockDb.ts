@@ -2,7 +2,9 @@ import { faker } from "@faker-js/faker";
 import { factory, primaryKey } from "@mswjs/data";
 import {
   lagInnsendteRapporteringsperiodeMedArbeidAktivitet,
+  lagInnsendteRapporteringsperiodeMedArbeidOgUtdanning,
   lagInnsendteRapporteringsperiodeMedArbeidSykOgFravaer,
+  lagInnsendteRapporteringsperiodeMedUtdanning,
   lagInnsendteRapporteringsperioderUtenAktivitet,
 } from "~/devTools/data";
 
@@ -22,9 +24,11 @@ export const mockDb = factory({
 });
 
 const innsendtRapporteringsperioder = [
-  ...lagInnsendteRapporteringsperiodeMedArbeidSykOgFravaer(3),
-  ...lagInnsendteRapporteringsperiodeMedArbeidAktivitet(3),
-  ...lagInnsendteRapporteringsperioderUtenAktivitet(3),
+  ...lagInnsendteRapporteringsperiodeMedUtdanning(1),
+  ...lagInnsendteRapporteringsperiodeMedArbeidOgUtdanning(1),
+  ...lagInnsendteRapporteringsperiodeMedArbeidSykOgFravaer(1),
+  ...lagInnsendteRapporteringsperiodeMedArbeidAktivitet(1),
+  ...lagInnsendteRapporteringsperioderUtenAktivitet(1),
 ];
 
 innsendtRapporteringsperioder.forEach(mockDb.innsendteRapporteringsperioder.create);
