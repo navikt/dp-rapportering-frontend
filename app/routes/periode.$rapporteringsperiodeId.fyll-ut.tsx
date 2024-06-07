@@ -102,10 +102,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
           level={"2"}
           className="vo-fokus"
         >
-          {getAppText("rapportering-korriger-fyll-ut-tittel")}
+          {getAppText("rapportering-periode-fyll-ut-tittel")}
         </Heading>
         <BodyLong className="tekst-subtil" spacing>
-          {getAppText("rapportering-korriger-fyll-ut-beskrivelse")}
+          {getAppText("rapportering-periode-fyll-ut-beskrivelse")}
         </BodyLong>
 
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
