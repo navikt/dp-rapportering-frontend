@@ -22,6 +22,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const periodeId = params.rapporteringsperiodeId;
   const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
+  // TODO: aktivitetTyper skal være typen AktivitetType[]
   const aktivitetType = formdata.get("type") as AktivitetType;
   const aktivitetId = formdata.get("aktivitetId") as string;
   const submitKnapp = formdata.get("submit");
@@ -53,7 +54,7 @@ export default function KorrigeringFyllUtSide() {
   const { getLink, getAppText } = useSanity();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-  const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType[]>([]);
+  const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -87,7 +88,7 @@ export default function KorrigeringFyllUtSide() {
   }
 
   function lukkModal() {
-    setValgtAktivitet();
+    setValgteAktiviteter([]);
     setValgtDato(undefined);
     setModalAapen(false);
   }
@@ -109,8 +110,8 @@ export default function KorrigeringFyllUtSide() {
         <AktivitetModal
           rapporteringsperiode={periode}
           valgtDato={valgtDato}
-          valgtAktivitet={valgtAktivitet}
-          setValgtAktivitet={setValgtAktivitet}
+          valgteAktiviteter={valgteAktiviteter}
+          setValgteAktiviteter={setValgteAktiviteter}
           modalAapen={modalAapen}
           lukkModal={lukkModal}
         />

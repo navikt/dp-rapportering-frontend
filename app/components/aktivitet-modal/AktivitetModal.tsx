@@ -18,9 +18,9 @@ import { AktivitetCheckboxes } from "../aktivitet-checkbox/AktivitetCheckboxes";
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
   valgtDato?: string;
-  valgtAktivitet: AktivitetType[];
+  valgteAktiviteter: AktivitetType[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setValgtAktivitet: (aktiviteter: any[]) => void;
+  setValgteAktiviteter: (aktiviteter: any[]) => void;
   modalAapen: boolean;
   lukkModal: () => void;
 }
@@ -30,8 +30,8 @@ export function AktivitetModal(props: IProps) {
     rapporteringsperiode,
     modalAapen,
     lukkModal,
-    valgtAktivitet,
-    setValgtAktivitet,
+    valgteAktiviteter,
+    setValgteAktiviteter,
     valgtDato,
   } = props;
 
@@ -99,7 +99,7 @@ export function AktivitetModal(props: IProps) {
           <ValidatedForm
             method="post"
             key="lagre-ny-aktivitet"
-            validator={validator(valgtAktivitet)}
+            validator={validator(valgteAktiviteter)}
           >
             <input type="text" hidden name="dato" defaultValue={valgtDato} />
 
@@ -107,14 +107,14 @@ export function AktivitetModal(props: IProps) {
               <AktivitetCheckboxes
                 name="type"
                 muligeAktiviteter={aktivitetType}
-                verdi={valgtAktivitet}
+                verdi={valgteAktiviteter}
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onChange={(aktiviteter: any[]) => setValgtAktivitet(aktiviteter)}
+                onChange={(aktiviteter: any[]) => setValgteAktiviteter(aktiviteter)}
                 label={getAppText("rapportering-hva-vil-du-lagre")}
               />
             </div>
 
-            {valgtAktivitet.includes("Arbeid") && (
+            {valgteAktiviteter.includes("Arbeid") && (
               <TallInput
                 name="timer"
                 label={`${getAppText("rapportering-antall-timer")}:`}

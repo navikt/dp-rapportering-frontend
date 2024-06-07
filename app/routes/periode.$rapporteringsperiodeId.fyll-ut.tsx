@@ -23,7 +23,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
   const aktivitetId = formdata.get("aktivitetId") as string;
-  const aktivitetType = formdata.get("type") as AktivitetType;
+  // TODO: aktivitetTyper skal være typen AktivitetType[]
+  const aktivitetTyper = formdata.get("type") as AktivitetType;
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
@@ -32,7 +33,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }
 
     case "lagre": {
-      return await validerOgLagreAktivitet(onBehalfOfToken, aktivitetType, periodeId, formdata);
+      return await validerOgLagreAktivitet(onBehalfOfToken, aktivitetTyper, periodeId, formdata);
     }
 
     default: {
@@ -53,7 +54,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
-  const [valgtAktivitet, setValgtAktivitet] = useState<AktivitetType[]>([]);
+  const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -87,7 +88,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   }
 
   function lukkModal() {
-    setValgtAktivitet([]);
+    setValgteAktiviteter([]);
     setValgtDato(undefined);
     setModalAapen(false);
   }
@@ -112,8 +113,8 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <AktivitetModal
           rapporteringsperiode={periode}
           valgtDato={valgtDato}
-          valgtAktivitet={valgtAktivitet}
-          setValgtAktivitet={setValgtAktivitet}
+          valgteAktiviteter={valgteAktiviteter}
+          setValgteAktiviteter={setValgteAktiviteter}
           modalAapen={modalAapen}
           lukkModal={lukkModal}
         />
