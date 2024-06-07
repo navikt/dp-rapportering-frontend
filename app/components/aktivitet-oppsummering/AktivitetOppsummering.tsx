@@ -44,7 +44,7 @@ export function AktivitetOppsummering(props: IProps) {
 
   return (
     <>
-      {flatMapAktiviteter.length < 1 && (
+      {flatMapAktiviteter.length < 1 && rapporteringsperiode.status !== "Innsendt" && (
         <Alert variant="info">
           {getAppText("rapportering-aktivitet-oppsummering-ingen-aktiviteter")}
         </Alert>
