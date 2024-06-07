@@ -1,4 +1,6 @@
+import styles from "./AktivitetCheckboxes.module.css";
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
+import classNames from "classnames";
 import { useField } from "remix-validated-form";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import { aktivitetTypeMap } from "~/utils/aktivitettype.utils";
@@ -58,6 +60,12 @@ export function AktivitetCheckboxes(props: IProps) {
     >
       {props.muligeAktiviteter.map((aktivitet) => (
         <Checkbox
+          className={classNames(styles.checkbox, {
+            [styles.arbeid]: aktivitet === "Arbeid",
+            [styles.syk]: aktivitet === "Syk",
+            [styles.fravaer]: aktivitet === "Fravaer",
+            [styles.utdanning]: aktivitet === "Utdanning",
+          })}
           key={aktivitet}
           disabled={erIkkeAktiv(props.verdi, aktivitet)}
           value={aktivitet}
