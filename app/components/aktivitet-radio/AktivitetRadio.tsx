@@ -1,4 +1,6 @@
+import styles from "./AktivitetRadio.module.css";
 import { Radio, RadioGroup } from "@navikt/ds-react";
+import classNames from "classnames";
 import { useField } from "remix-validated-form";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import { aktivitetTypeMap } from "~/utils/aktivitettype.utils";
@@ -43,6 +45,11 @@ export function AktivitetRadio(props: IProps) {
     >
       {props.muligeAktiviteter.map((aktivitet) => (
         <Radio
+          className={classNames(
+            styles.radio,
+            { [styles.arbeid]: aktivitet === "Arbeid" },
+            { [styles.syk]: aktivitet === "Syk" }
+          )}
           key={aktivitet}
           value={aktivitet}
           description={hentAktivitetBeskrivelse(aktivitet)}
