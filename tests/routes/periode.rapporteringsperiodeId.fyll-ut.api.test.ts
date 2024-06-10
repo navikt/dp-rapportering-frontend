@@ -29,6 +29,11 @@ describe("Fyll ut rapporteringsperiode", () => {
         dato: testAktivitet.dato,
         timer: testAktivitet.timer,
         submit: "lagre",
+        dag: JSON.stringify({
+          dato: testAktivitet.dato,
+          aktiviteter: [],
+          dagIndex: 0,
+        }),
       };
 
       const testParams = {
@@ -65,7 +70,7 @@ describe("Fyll ut rapporteringsperiode", () => {
 
         server.use(
           http.post(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/:rapporteringsperioderId/aktivitet`,
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
             () => {
               return HttpResponse.json({ errorMessage: `Server Error` }, { status: 500 });
             },

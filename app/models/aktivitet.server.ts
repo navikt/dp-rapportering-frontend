@@ -1,3 +1,4 @@
+import { IRapporteringsperiodeDag } from "./rapporteringsperiode.server";
 import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
@@ -14,16 +15,16 @@ export interface IAktivitet {
 export async function lagreAktivitet(
   onBehalfOfToken: string,
   rapporteringsperiodeId: string,
-  aktivitet: IAktivitet
+  dag: IRapporteringsperiodeDag
 ): Promise<INetworkResponse> {
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"
-  )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet`;
+  )}/rapporteringsperiode/${rapporteringsperiodeId}/aktivitet`;
 
   const response = await fetch(url, {
     method: "POST",
     headers: getHeaders(onBehalfOfToken),
-    body: JSON.stringify({ ...aktivitet }),
+    body: JSON.stringify({ ...dag }),
   });
 
   if (!response.ok) {

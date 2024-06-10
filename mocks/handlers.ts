@@ -90,7 +90,7 @@ export const handlers = [
 
   // Lagre en aktivitet
   http.post(
-    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId/aktivitet`,
+    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
     () => {
       return new HttpResponse(null, { status: 204 });
     }

@@ -2,9 +2,11 @@ import type { INetworkResponse } from "./types";
 import { validator } from "./validering.util";
 import { validationError } from "remix-validated-form";
 import { serialize } from "tinyduration";
+import { uuidv4 } from "uuidv7";
 import { type AktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
 
 interface IAktivtetData {
+  id?: string;
   type: AktivitetType;
   dato: string;
 }
@@ -12,9 +14,6 @@ interface IAktivtetData {
 interface IAktivitetArbeidData extends IAktivtetData {
   timer: string;
 }
-
-// TODO: Denne funksjonen forventer at aktivitetType er en string, mens det er en liste med strings
-// Den må endres slik at den oppretter en aktivtet for hver aktivitet i listen
 
 export async function validerOgLagreAktivitet(
   onBehalfOfToken: string,
@@ -28,9 +27,15 @@ export async function validerOgLagreAktivitet(
   }
 
   const { type, dato, timer: varighet } = inputVerdier.submittedData;
-  const aktivitetData = hentAktivitetData(type, dato, varighet);
+  const gjeldendeDag = JSON.parse(String(formdata.get("dag")));
 
-  return await lagreAktivitet(onBehalfOfToken, periodeId, aktivitetData);
+  const aktiviteter = Array.isArray(type) ? type : [type];
+  aktiviteter.forEach((aktivitetType) => {
+    const aktivitetData = hentAktivitetData(aktivitetType, dato, varighet);
+    gjeldendeDag.aktiviteter.push(aktivitetData);
+  });
+
+  return await lagreAktivitet(onBehalfOfToken, periodeId, gjeldendeDag);
 }
 
 function hentAktivitetData(
@@ -40,13 +45,18 @@ function hentAktivitetData(
 ): IAktivitetArbeidData | IAktivtetData {
   if (type === "Arbeid") {
     return {
+      id: uuidv4(),
       type,
       dato,
       timer: hentISO8601DurationString(varighet),
     };
   }
 
-  return { type, dato };
+  return {
+    id: uuidv4(),
+    type,
+    dato,
+  };
 }
 
 function hentISO8601DurationString(varighet: string): string {

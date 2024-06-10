@@ -98,6 +98,7 @@ export function AktivitetModal(props: IProps) {
         {dag && (
           <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator()}>
             <input type="text" hidden name="dato" defaultValue={valgtDato} />
+            <input type="text" hidden name="dag" defaultValue={JSON.stringify(dag)} />
 
             <div className={styles.aktivitetKontainer}>
               <AktivitetCheckboxes
