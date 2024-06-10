@@ -13,13 +13,14 @@ import { validator } from "~/utils/validering.util";
 import { useSanity } from "~/hooks/useSanity";
 import { TallInput } from "~/components/TallInput";
 import { FormattertDato } from "../FormattertDato";
-import { AktivitetRadio } from "../aktivitet-radio/AktivitetRadio";
+import { AktivitetCheckboxes } from "../aktivitet-checkbox/AktivitetCheckboxes";
 
 interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
   valgtDato?: string;
-  valgtAktivitet: string | AktivitetType;
-  setValgtAktivitet: (aktivitet: string | AktivitetType) => void;
+  valgteAktiviteter: AktivitetType[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setValgteAktiviteter: (aktiviteter: any[]) => void;
   modalAapen: boolean;
   lukkModal: () => void;
 }
@@ -29,8 +30,8 @@ export function AktivitetModal(props: IProps) {
     rapporteringsperiode,
     modalAapen,
     lukkModal,
-    valgtAktivitet,
-    setValgtAktivitet,
+    valgteAktiviteter,
+    setValgteAktiviteter,
     valgtDato,
   } = props;
 
@@ -98,21 +99,22 @@ export function AktivitetModal(props: IProps) {
           <ValidatedForm
             method="post"
             key="lagre-ny-aktivitet"
-            validator={validator(valgtAktivitet)}
+            validator={validator(valgteAktiviteter)}
           >
             <input type="text" hidden name="dato" defaultValue={valgtDato} />
 
             <div className={styles.aktivitetKontainer}>
-              <AktivitetRadio
+              <AktivitetCheckboxes
                 name="type"
                 muligeAktiviteter={aktivitetType}
-                verdi={valgtAktivitet}
-                onChange={(aktivitet: string) => setValgtAktivitet(aktivitet)}
+                verdi={valgteAktiviteter}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onChange={(aktiviteter: any[]) => setValgteAktiviteter(aktiviteter)}
                 label={getAppText("rapportering-hva-vil-du-lagre")}
               />
             </div>
 
-            {valgtAktivitet === "Arbeid" && (
+            {valgteAktiviteter.includes("Arbeid") && (
               <TallInput
                 name="timer"
                 label={`${getAppText("rapportering-antall-timer")}:`}

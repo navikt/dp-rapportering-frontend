@@ -1,4 +1,4 @@
-export const aktivitetType = ["Arbeid", "Syk", "Utdanning", "Fravaer"] as const;
+export const aktivitetType = ["Arbeid", "Utdanning", "Syk", "Fravaer"] as const;
 
 export const aktivitetTypeMap = (id: (typeof aktivitetType)[number]) => {
   switch (id) {

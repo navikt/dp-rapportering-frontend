@@ -2,6 +2,8 @@ import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
 import type { AktivitetType } from "~/models/aktivitet.server";
 
+// TODO: Denne validatoren er feil
+
 const aktivitetsvalideringArbeid = z.object({
   type: z.enum(["Arbeid", "Syk", "Ferie"], {
     errorMap: () => ({ message: "Du må velge et aktivitet" }),
@@ -25,8 +27,8 @@ const aktivitetsvalideringArbeid = z.object({
 
 const aktivitetsvalideringSykFerie = aktivitetsvalideringArbeid.partial({ timer: true });
 
-export function validator(aktivitetType: AktivitetType | string) {
-  return aktivitetType === "Arbeid"
+export function validator(aktivitetType: AktivitetType[]) {
+  return aktivitetType.includes("Arbeid")
     ? withZod(aktivitetsvalideringArbeid)
     : withZod(aktivitetsvalideringSykFerie);
 }
