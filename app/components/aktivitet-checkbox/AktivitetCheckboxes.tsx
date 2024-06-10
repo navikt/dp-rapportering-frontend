@@ -54,7 +54,7 @@ export function AktivitetCheckboxes(props: IProps) {
   return (
     <CheckboxGroup
       legend={props.label}
-      error={!props.verdi ? error : undefined}
+      error={error ? error : undefined}
       value={props.verdi}
       onChange={props.onChange}
     >
@@ -71,6 +71,7 @@ export function AktivitetCheckboxes(props: IProps) {
           value={aktivitet}
           description={hentAktivitetBeskrivelse(aktivitet)}
           data-testid={`aktivitet-radio-${aktivitet}`}
+          name={props.name}
         >
           {aktivitetTypeMap(aktivitet)}
         </Checkbox>

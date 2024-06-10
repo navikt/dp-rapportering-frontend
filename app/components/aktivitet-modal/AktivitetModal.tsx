@@ -96,11 +96,7 @@ export function AktivitetModal(props: IProps) {
             </Form>
           ))}
         {dag && (
-          <ValidatedForm
-            method="post"
-            key="lagre-ny-aktivitet"
-            validator={validator(valgteAktiviteter)}
-          >
+          <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator()}>
             <input type="text" hidden name="dato" defaultValue={valgtDato} />
 
             <div className={styles.aktivitetKontainer}>

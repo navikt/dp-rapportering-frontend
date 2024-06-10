@@ -17,6 +17,7 @@ export function TallInput(props: IProps) {
     <TextField
       type="text"
       inputMode="numeric"
+      name={props.name}
       className={props.className}
       defaultValue={props.verdi}
       error={error}

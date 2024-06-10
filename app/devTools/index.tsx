@@ -2,7 +2,7 @@ import { Scenerio } from "./Scenerio";
 import { SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Heading, Modal, Tooltip } from "@navikt/ds-react";
 import { useNavigate } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 export enum ScenerioType {
   UtenAktiviteter = "UtenAktiviteter",
@@ -32,13 +32,7 @@ const scenerios: IScenerio[] = [
 export function DevTools() {
   const ref = useRef<HTMLDialogElement>(null);
 
-  const [rapporteringsperioder] = useState([]);
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log(`🔥: rapporteringsperioder :`, rapporteringsperioder);
-  }, [rapporteringsperioder]);
 
   const handleChangeScenerio = (scenerioType: ScenerioType) => {
     ref.current?.close();
