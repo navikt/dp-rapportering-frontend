@@ -47,7 +47,7 @@ export async function sletteAktivitet(
 ): Promise<INetworkResponse> {
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"
-  )}/rapporteringsperioder/${rapporteringsperiodeId}/aktivitet/${aktivitetId}`;
+  )}/rapporteringsperiode/${rapporteringsperiodeId}/aktivitet/${aktivitetId}`;
 
   const response = await fetch(url, {
     method: "DELETE",

@@ -134,7 +134,7 @@ describe("Fyll ut rapporteringsperiode", () => {
 
         server.use(
           http.delete(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/:rapporteringsperioderId/aktivitet/:aktivitetId`,
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet/:aktivitetId`,
             () => {
               return HttpResponse.json(
                 {

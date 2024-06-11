@@ -100,7 +100,7 @@ export const handlers = [
   http.delete(
     `${getEnv(
       "DP_RAPPORTERING_URL"
-    )}/rapporteringsperioder/:rapporteringsperioderId/aktivitet/:aktivitetId`,
+    )}/rapporteringsperiode/:rapporteringsperioderId/aktivitet/:aktivitetId`,
     () => {
       return new HttpResponse(null, { status: 204 });
     }
