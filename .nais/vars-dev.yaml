@@ -1,4 +1,6 @@
-ingress: "https://dagpenger.intern.dev.nav.no/arbeid/dagpenger/rapportering"
+ingresses: 
+  - https://arbeid.intern.dev.nav.no/arbeid/dagpenger/rapportering
+  - https://arbeid.ansatt.dev.nav.no/arbeid/dagpenger/rapportering
 base_path: "/arbeid/dagpenger/rapportering"
 idporten:
   level: idporten-loa-high

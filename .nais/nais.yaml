@@ -33,7 +33,9 @@ spec:
       cpu: 200m
       memory: 512Mi
   ingresses:
-    - {{ingress}}
+    {{#each ingresses as |url|}}
+    - {{url}}
+    {{/each}}
   secureLogs:
     enabled: true
   env:
