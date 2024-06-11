@@ -5,5 +5,6 @@ base_path: "/arbeid/dagpenger/rapportering"
 idporten:
   level: idporten-loa-high
 dekorator:
+  url: https://dekoratoren.dev.nav.no/
   env: dev
 faro_url: "https://telemetry.ekstern.dev.nav.no/collect"
