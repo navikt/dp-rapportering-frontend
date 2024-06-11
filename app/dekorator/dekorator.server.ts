@@ -1,24 +1,27 @@
-import { type DecoratorFetchProps } from "@navikt/nav-dekoratoren-moduler/ssr";
-import { fetchDecoratorHtml } from "@navikt/nav-dekoratoren-moduler/ssr";
+import {
+  DecoratorElements,
+  DecoratorEnvProps,
+  type DecoratorFetchProps,
+  fetchDecoratorHtml,
+} from "@navikt/nav-dekoratoren-moduler/ssr";
+import { getEnv } from "~/utils/env.utils";
 
-export async function hentDekoratorHtml() {
-  const env = "dev";
-
+export async function getDecoratorHTML(): Promise<DecoratorElements> {
   const config: DecoratorFetchProps = {
-    env: env ?? "prod",
-    serviceDiscovery: false, //process.env.IS_LOCALHOST !== "true", //virker som at den defaulter til true og slår på service discovery?
+    env: (getEnv("DEKORATOR_ENV") || "localhost") as DecoratorEnvProps["env"],
+    localUrl: "https://dekoratoren.ekstern.dev.nav.no",
     params: {
       language: "nb",
       context: "privatperson",
       chatbot: false,
-      simple: true,
       enforceLogin: false,
       redirectToApp: true,
       level: "Level4",
       breadcrumbs: [
+        { title: "Min side", url: "https://www.nav.no/minside" },
         {
-          title: "Rapporteringsløsning for dagpenger",
-          url: "https://www.nav.no/arbeid/dagpenger/rapportering",
+          title: "Mine dagpenger",
+          url: "https://www.nav.no/arbeid/dagpenger/mine-dagpenger",
         },
       ],
     },

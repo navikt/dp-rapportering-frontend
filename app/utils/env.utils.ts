@@ -14,6 +14,7 @@ interface IEnv {
   NAIS_APP_IMAGE: string;
   COMMIT: string;
   FARO_URL: string;
+  DEKORATOR_ENV: string;
 }
 
 export function getEnv(value: keyof IEnv) {

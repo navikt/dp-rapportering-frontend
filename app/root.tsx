@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { hentDekoratorHtml } from "./dekorator/dekorator.server";
+import { getDecoratorHTML } from "./dekorator/dekorator.server";
 import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanity } from "./sanity/sanity.types";
 import favicon16 from "/favicon-16x16.png";
@@ -14,6 +14,7 @@ import parse from "html-react-parser";
 import { Fragment, Suspense } from "react";
 import { sanityConfig } from "./sanity/sanity.config";
 import { initInstrumentation } from "~/utils/faro";
+import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
 
@@ -69,7 +70,9 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader() {
-  const fragments = await hentDekoratorHtml();
+  const fragments = await getDecoratorHTML();
+
+  if (!fragments) throw json({ error: "Kunne ikke hente dekoratør" }, { status: 500 });
 
   const sanityTexts = await sanityClient.fetch<ISanity>(allTextsQuery, {
     baseLang: "nb",
@@ -93,31 +96,28 @@ initInstrumentation();
 export function Layout({ children }: { children: React.ReactNode }) {
   const { fragments, env } = useTypedRouteLoaderData("root");
 
+  useInjectDecoratorScript(fragments.DECORATOR_SCRIPTS);
+
   return (
     <html lang="nb">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Suspense fallback={<Fragment />}>{parse(fragments?.DECORATOR_STYLES)}</Suspense>
+        {parse(fragments.DECORATOR_STYLES, { trim: true })}
         <Meta />
         <Links />
       </head>
       <body>
-        <Suspense fallback={<Skeleton variant="text" width="100%" height={300} />}>
-          {parse(fragments?.DECORATOR_HEADER)}
-        </Suspense>
-        {children}
-        <ScrollRestoration />
-        <Suspense fallback={<Skeleton variant="text" width="100%" height={300} />}>
-          {parse(fragments?.DECORATOR_FOOTER)}
-        </Suspense>
-        <Scripts />
-        <Suspense fallback={<Fragment />}>{parse(fragments?.DECORATOR_SCRIPTS)}</Suspense>
         <script
           dangerouslySetInnerHTML={{
             __html: `window.env = ${JSON.stringify(env)}`,
           }}
         />
+        {parse(fragments.DECORATOR_HEADER, { trim: true })}
+        {children}
+        <ScrollRestoration />
+        {parse(fragments.DECORATOR_FOOTER, { trim: true })}
+        <Scripts />
       </body>
     </html>
   );
