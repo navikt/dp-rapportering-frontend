@@ -23,6 +23,8 @@ export function AktivitetCheckboxes(props: IProps) {
     switch (aktivitet) {
       case "Arbeid":
         return getAppText("rapportering-aktivitet-radio-arbeid-beskrivelse");
+      case "Utdanning":
+        return getAppText("rapportering-aktivitet-radio-utdanning-beskrivelse");
       case "Syk":
         return getAppText("rapportering-aktivitet-radio-syk-beskrivelse");
       case "Fravaer":
