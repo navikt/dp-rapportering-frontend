@@ -62,6 +62,7 @@ spec:
       rules:
         - application: dp-rapportering
         - application: nav-dekoratoren
+          namespace: personbruker
   idporten:
     enabled: true
     sidecar:

@@ -20,8 +20,8 @@ export async function getDecoratorHTML(): Promise<DecoratorElements> {
       breadcrumbs: [
         { title: "Min side", url: "https://www.nav.no/minside" },
         {
-          title: "Mine dagpenger",
-          url: "https://www.nav.no/arbeid/dagpenger/mine-dagpenger",
+          title: "Rapportering",
+          url: "https://www.nav.no/arbeid/dagpenger/rapporterings",
         },
       ],
     },
