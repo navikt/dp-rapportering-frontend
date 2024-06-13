@@ -1,14 +1,12 @@
 import styles from "./AktivitetModal.module.css";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { Form, useActionData } from "@remix-run/react";
-import classNames from "classnames";
+import { useActionData } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { action as korringeringAction } from "~/routes/korriger.$rapporteringsperiodeId.fyll-ut";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { aktivitetType } from "~/utils/aktivitettype.utils";
-import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
 import { useSanity } from "~/hooks/useSanity";
 import { TallInput } from "~/components/TallInput";
@@ -43,18 +41,6 @@ export function AktivitetModal(props: IProps) {
 
   const actionData = useActionData<typeof rapporteringAction | typeof korringeringAction>();
 
-  function hentAktivitetTekst() {
-    const aktivitet = dag?.aktiviteter[0];
-
-    if (aktivitet?.type === "Arbeid") {
-      return `${aktivitet.type} ${periodeSomTimer(aktivitet.timer!)
-        .toString()
-        .replace(/\./g, ",")} ${getAppText("rapportering-timer")}`;
-    }
-
-    return `${aktivitet?.type}`;
-  }
-
   return (
     <Modal
       className={styles.modal}
@@ -74,27 +60,6 @@ export function AktivitetModal(props: IProps) {
         </Heading>
       </Modal.Header>
       <Modal.Body>
-        {dag &&
-          dag.aktiviteter.map((aktivitet) => (
-            <Form key={aktivitet.id} method="post">
-              <input type="text" hidden name="aktivitetId" defaultValue={aktivitet.id} />
-              <div className={classNames(styles.registrertAktivitet, styles[aktivitet.type])}>
-                {hentAktivitetTekst()}
-              </div>
-
-              {actionData?.status === "error" && actionData?.error && (
-                <Alert variant="error" className={styles.feilmelding}>
-                  {actionData.error.statusText}
-                </Alert>
-              )}
-
-              <div className={styles.knappKontainer}>
-                <Button type="submit" name="submit" value="slette">
-                  {getAppText("rapportering-fjern-registrering")}
-                </Button>
-              </div>
-            </Form>
-          ))}
         {dag && (
           <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator()}>
             <input type="text" hidden name="dato" defaultValue={valgtDato} />
