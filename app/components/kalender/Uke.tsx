@@ -21,7 +21,7 @@ export function Uke(props: IProps) {
     if (arbeid) {
       const timer = dag.aktiviteter.reduce((accumulator, current) => {
         if (current.timer) {
-          return accumulator + periodeSomTimer(current.timer);
+          return accumulator + (periodeSomTimer(current.timer) ?? 0);
         }
         return accumulator + 1;
       }, 0);

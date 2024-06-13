@@ -5,7 +5,7 @@ import { useSanity } from "~/hooks/useSanity";
 export interface IProps {
   name: string;
   label?: string;
-  verdi?: string;
+  verdi?: number;
   className?: string;
 }
 

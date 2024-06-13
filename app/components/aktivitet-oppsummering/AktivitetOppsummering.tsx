@@ -24,7 +24,7 @@ export function AktivitetOppsummering(props: IProps) {
 
     const timer = filtertAktiviteter.reduce((accumulator, current) => {
       if (current.timer) {
-        return accumulator + periodeSomTimer(current.timer);
+        return accumulator + (periodeSomTimer(current.timer) ?? 0);
       }
       return accumulator + 1;
     }, 0);

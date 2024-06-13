@@ -1,9 +1,10 @@
+import { hentISO8601DurationString } from "./duration.utils";
 import type { INetworkResponse } from "./types";
 import { validator } from "./validering.util";
 import { validationError } from "remix-validated-form";
-import { serialize } from "tinyduration";
 import { uuidv4 } from "uuidv7";
 import { type AktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
+import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 interface IAktivtetData {
   id?: string;
@@ -27,12 +28,24 @@ export async function validerOgLagreAktivitet(
   }
 
   const { type, dato, timer: varighet } = inputVerdier.submittedData;
-  const gjeldendeDag = JSON.parse(String(formdata.get("dag")));
+  const gjeldendeDag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
 
   const aktiviteter = Array.isArray(type) ? type : [type];
-  aktiviteter.forEach((aktivitetType) => {
-    const aktivitetData = hentAktivitetData(aktivitetType, dato, varighet);
-    gjeldendeDag.aktiviteter.push(aktivitetData);
+
+  gjeldendeDag.aktiviteter = aktiviteter.map((aktivitetType) => {
+    const finnesFraFor = gjeldendeDag.aktiviteter.find(
+      (aktivitet) => aktivitet.type === aktivitetType
+    );
+
+    if (finnesFraFor && aktivitetType === "Arbeid") {
+      finnesFraFor.timer = hentISO8601DurationString(varighet);
+    }
+
+    if (finnesFraFor) {
+      return finnesFraFor;
+    }
+
+    return hentAktivitetData(aktivitetType, dato, varighet);
   });
 
   return await lagreAktivitet(onBehalfOfToken, periodeId, gjeldendeDag);
@@ -57,16 +70,4 @@ function hentAktivitetData(
     type,
     dato,
   };
-}
-
-function hentISO8601DurationString(varighet: string): string {
-  const delt = varighet.replace(/\./g, ",").split(",");
-  const timer = delt[0] || 0;
-  const minutter = delt[1] || 0;
-  const minutterProsent = parseFloat(`0.${minutter}`);
-
-  return serialize({
-    hours: timer as number,
-    minutes: Math.round(minutterProsent * 60),
-  });
 }

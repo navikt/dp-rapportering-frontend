@@ -1,7 +1,9 @@
 import { parse } from "tinyduration";
 import type { Duration } from "tinyduration";
 
-export function periodeSomTimer(periode: string) {
+export function periodeSomTimer(periode: string): number | undefined {
+  if (!periode) return undefined;
+
   const parsed = parse(periode);
   const timer = parsed.hours || 0;
   const minutt = parsed.minutes || 0;

@@ -7,6 +7,7 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import type { action as korrigeringAction } from "~/routes/korriger.$rapporteringsperiodeId.fyll-ut";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { aktivitetType } from "~/utils/aktivitettype.utils";
+import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
 import { useSanity } from "~/hooks/useSanity";
 import { TallInput } from "~/components/TallInput";
@@ -76,9 +77,9 @@ export function AktivitetModal({
                 name="timer"
                 label={`${getAppText("rapportering-antall-timer")}:`}
                 className="my-4"
-                verdi={
+                verdi={periodeSomTimer(
                   dag.aktiviteter.find((aktivitet) => aktivitet.type === "Arbeid")?.timer ?? ""
-                }
+                )}
               />
             )}
 
@@ -89,6 +90,9 @@ export function AktivitetModal({
             )}
 
             <div className={styles.knappKontainer}>
+              <Button variant="secondary" type="submit" name="reset" value="slette">
+                {getAppText("rapportering-slett")}
+              </Button>
               <Button type="submit" name="submit" value="lagre">
                 {getAppText("rapportering-lagre")}
               </Button>

@@ -76,6 +76,16 @@ export default function RapporteringsPeriodeFyllUtSide() {
     }
   }, [actionData]);
 
+  useEffect(() => {
+    if (valgtDato) {
+      const defaultValgteAktiviteter: AktivitetType[] | undefined = periode.dager
+        .find((dag) => dag.dato === valgtDato)
+        ?.aktiviteter.map((aktivitet) => aktivitet.type);
+
+      setValgteAktiviteter(defaultValgteAktiviteter || []);
+    }
+  }, [valgtDato, periode.dager]);
+
   function aapneModal(dato: string) {
     setSearchParams({ utfylling: "true" });
 

@@ -14,7 +14,7 @@
 
 .knappKontainer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: var(--a-spacing-2);
   margin-top: var(--a-spacing-8);
 }
