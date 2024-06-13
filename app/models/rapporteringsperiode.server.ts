@@ -3,7 +3,7 @@ import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 
-interface IPeriode {
+export interface IPeriode {
   fraOgMed: string;
   tilOgMed: string;
 }

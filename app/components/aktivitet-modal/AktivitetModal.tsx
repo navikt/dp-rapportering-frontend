@@ -4,7 +4,7 @@ import { useActionData } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import type { action as korringeringAction } from "~/routes/korriger.$rapporteringsperiodeId.fyll-ut";
+import type { action as korrigeringAction } from "~/routes/korriger.$rapporteringsperiodeId.fyll-ut";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { validator } from "~/utils/validering.util";
@@ -17,36 +17,32 @@ interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
   valgtDato?: string;
   valgteAktiviteter: AktivitetType[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setValgteAktiviteter: (aktiviteter: any[]) => void;
+  setValgteAktiviteter: (aktiviteter: AktivitetType[]) => void;
   modalAapen: boolean;
   lukkModal: () => void;
 }
 
-export function AktivitetModal(props: IProps) {
-  const {
-    rapporteringsperiode,
-    modalAapen,
-    lukkModal,
-    valgteAktiviteter,
-    setValgteAktiviteter,
-    valgtDato,
-  } = props;
-
+export function AktivitetModal({
+  rapporteringsperiode,
+  modalAapen,
+  lukkModal,
+  valgteAktiviteter,
+  setValgteAktiviteter,
+  valgtDato,
+}: IProps) {
   const { getAppText } = useSanity();
+  const actionData = useActionData<typeof rapporteringAction | typeof korrigeringAction>();
 
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
   );
-
-  const actionData = useActionData<typeof rapporteringAction | typeof korringeringAction>();
 
   return (
     <Modal
       className={styles.modal}
       aria-labelledby="aktivitet-modal-heading"
       open={modalAapen}
-      onClose={() => lukkModal()}
+      onClose={lukkModal}
     >
       <Modal.Header>
         <Heading
@@ -62,16 +58,15 @@ export function AktivitetModal(props: IProps) {
       <Modal.Body>
         {dag && (
           <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator()}>
-            <input type="text" hidden name="dato" defaultValue={valgtDato} />
-            <input type="text" hidden name="dag" defaultValue={JSON.stringify(dag)} />
+            <input type="hidden" name="dato" defaultValue={valgtDato} />
+            <input type="hidden" name="dag" defaultValue={JSON.stringify(dag)} />
 
             <div className={styles.aktivitetKontainer}>
               <AktivitetCheckboxes
                 name="type"
                 muligeAktiviteter={aktivitetType}
                 verdi={valgteAktiviteter}
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onChange={(aktiviteter: any[]) => setValgteAktiviteter(aktiviteter)}
+                onChange={setValgteAktiviteter}
                 label={getAppText("rapportering-hva-vil-du-lagre")}
               />
             </div>
@@ -81,6 +76,9 @@ export function AktivitetModal(props: IProps) {
                 name="timer"
                 label={`${getAppText("rapportering-antall-timer")}:`}
                 className="my-4"
+                verdi={
+                  dag.aktiviteter.find((aktivitet) => aktivitet.type === "Arbeid")?.timer ?? ""
+                }
               />
             )}
 
