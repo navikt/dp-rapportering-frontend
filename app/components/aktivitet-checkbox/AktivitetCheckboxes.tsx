@@ -11,15 +11,14 @@ export interface IProps {
   label?: string;
   verdi: AktivitetType[];
   muligeAktiviteter: readonly AktivitetType[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange: (aktivitet: any[]) => void;
+  onChange: (aktivitet: AktivitetType[]) => void;
 }
 
-export function AktivitetCheckboxes(props: IProps) {
-  const { error } = useField(props.name);
+export function AktivitetCheckboxes({ name, label, verdi, muligeAktiviteter, onChange }: IProps) {
+  const { error } = useField(name);
   const { getAppText } = useSanity();
 
-  function hentAktivitetBeskrivelse(aktivitet: AktivitetType) {
+  const hentAktivitetBeskrivelse = (aktivitet: AktivitetType) => {
     switch (aktivitet) {
       case "Arbeid":
         return getAppText("rapportering-aktivitet-radio-arbeid-beskrivelse");
@@ -32,9 +31,9 @@ export function AktivitetCheckboxes(props: IProps) {
       default:
         return "";
     }
-  }
+  };
 
-  function erIkkeAktiv(aktiviteter: AktivitetType[], aktivitet: AktivitetType) {
+  const erIkkeAktiv = (aktiviteter: AktivitetType[], aktivitet: AktivitetType) => {
     if (
       (aktiviteter.includes("Arbeid") || aktiviteter.includes("Utdanning")) &&
       !["Arbeid", "Utdanning"].includes(aktivitet)
@@ -51,16 +50,11 @@ export function AktivitetCheckboxes(props: IProps) {
     }
 
     return false;
-  }
+  };
 
   return (
-    <CheckboxGroup
-      legend={props.label}
-      error={error ? error : undefined}
-      value={props.verdi}
-      onChange={props.onChange}
-    >
-      {props.muligeAktiviteter.map((aktivitet) => (
+    <CheckboxGroup legend={label} error={error || undefined} value={verdi} onChange={onChange}>
+      {muligeAktiviteter.map((aktivitet) => (
         <Checkbox
           className={classNames(styles.checkbox, {
             [styles.arbeid]: aktivitet === "Arbeid",
@@ -69,11 +63,11 @@ export function AktivitetCheckboxes(props: IProps) {
             [styles.utdanning]: aktivitet === "Utdanning",
           })}
           key={aktivitet}
-          disabled={erIkkeAktiv(props.verdi, aktivitet)}
+          disabled={erIkkeAktiv(verdi, aktivitet)}
           value={aktivitet}
           description={hentAktivitetBeskrivelse(aktivitet)}
           data-testid={`aktivitet-radio-${aktivitet}`}
-          name={props.name}
+          name={name}
         >
           {aktivitetTypeMap(aktivitet)}
         </Checkbox>

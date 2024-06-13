@@ -5,6 +5,7 @@ export default defineConfig({
   test: {
     exclude: [...configDefaults.exclude, "tests/*"],
     setupFiles: ["tests/helpers/setup.ts"],
+    environment: "jsdom",
     watch: false,
   },
   resolve: {
