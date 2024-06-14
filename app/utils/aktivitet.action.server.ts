@@ -22,20 +22,6 @@ export async function validerOgLagreAktivitet(
   const aktivitetTyper: AktivitetType[] = Array.isArray(type) ? type : [type];
 
   const oppdatertDag = oppdaterAktiviteter(gjeldendeDag, aktivitetTyper, dato, varighet);
-  // // console.log(`🔥: oppdatertDag :`, oppdatertDag);
-  // const testDag: IRapporteringsperiodeDag = { ...oppdatertDag, aktiviteter: [] };
-
-  // console.log(`🔥: testDag :`, testDag);
-
-  // const d: IRapporteringsperiodeDag = {
-  //   dato: "2024-06-13",
-  //   dagIndex: 0,
-  //   aktiviteter: [],
-  // };
-
-  // console.log(`🔥: d :`, d);
-
-  console.log(`🔥: oppdatertDag :`, oppdatertDag);
 
   return await lagreAktivitet(onBehalfOfToken, periodeId, oppdatertDag);
 }
