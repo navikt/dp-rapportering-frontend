@@ -1,20 +1,9 @@
-import { hentISO8601DurationString } from "./duration.utils";
+import { oppdaterAktiviteter } from "./aktivitet.action.utils";
 import type { INetworkResponse } from "./types";
 import { validator } from "./validering.util";
 import { validationError } from "remix-validated-form";
-import { uuidv4 } from "uuidv7";
 import { type AktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-
-interface IAktivtetData {
-  id?: string;
-  type: AktivitetType;
-  dato: string;
-}
-
-interface IAktivitetArbeidData extends IAktivtetData {
-  timer: string;
-}
 
 export async function validerOgLagreAktivitet(
   onBehalfOfToken: string,
@@ -28,46 +17,25 @@ export async function validerOgLagreAktivitet(
   }
 
   const { type, dato, timer: varighet } = inputVerdier.submittedData;
+
   const gjeldendeDag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
+  const aktivitetTyper: AktivitetType[] = Array.isArray(type) ? type : [type];
 
-  const aktiviteter = Array.isArray(type) ? type : [type];
+  const oppdatertDag = oppdaterAktiviteter(gjeldendeDag, aktivitetTyper, dato, varighet);
+  // // console.log(`🔥: oppdatertDag :`, oppdatertDag);
+  // const testDag: IRapporteringsperiodeDag = { ...oppdatertDag, aktiviteter: [] };
 
-  gjeldendeDag.aktiviteter = aktiviteter.map((aktivitetType) => {
-    const finnesFraFor = gjeldendeDag.aktiviteter.find(
-      (aktivitet) => aktivitet.type === aktivitetType
-    );
+  // console.log(`🔥: testDag :`, testDag);
 
-    if (finnesFraFor && aktivitetType === "Arbeid") {
-      finnesFraFor.timer = hentISO8601DurationString(varighet);
-    }
+  // const d: IRapporteringsperiodeDag = {
+  //   dato: "2024-06-13",
+  //   dagIndex: 0,
+  //   aktiviteter: [],
+  // };
 
-    if (finnesFraFor) {
-      return finnesFraFor;
-    }
+  // console.log(`🔥: d :`, d);
 
-    return hentAktivitetData(aktivitetType, dato, varighet);
-  });
+  console.log(`🔥: oppdatertDag :`, oppdatertDag);
 
-  return await lagreAktivitet(onBehalfOfToken, periodeId, gjeldendeDag);
-}
-
-function hentAktivitetData(
-  type: AktivitetType,
-  dato: string,
-  varighet: string
-): IAktivitetArbeidData | IAktivtetData {
-  if (type === "Arbeid") {
-    return {
-      id: uuidv4(),
-      type,
-      dato,
-      timer: hentISO8601DurationString(varighet),
-    };
-  }
-
-  return {
-    id: uuidv4(),
-    type,
-    dato,
-  };
+  return await lagreAktivitet(onBehalfOfToken, periodeId, oppdatertDag);
 }
