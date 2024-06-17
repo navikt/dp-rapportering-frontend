@@ -1,5 +1,5 @@
-import { BodyShort, Heading } from "@navikt/ds-react";
-import { PortableText } from "@portabletext/react";
+import { PencilIcon } from "@navikt/aksel-icons";
+import { BodyLong, BodyShort, Heading, Label, Radio, RadioGroup, ReadMore } from "@navikt/ds-react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
@@ -14,6 +14,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { RemixLink } from "~/components/RemixLink";
+import Center from "~/components/center/Center";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { SessionModal } from "~/components/session-modal/SessionModal";
 
@@ -43,7 +44,7 @@ export default function Landingsside() {
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
-  const { getAppText, getRichText, getLink } = useSanity();
+  const { getAppText, getLink } = useSanity();
 
   useEffect(() => {
     scrollToView(sidelastFokusRef);
@@ -81,17 +82,55 @@ export default function Landingsside() {
         </div>
       </div>
       <div className="rapportering-container">
-        <PortableText value={getRichText("rapportering-innledning")} />
-        <Heading size={"small"} level="2">
-          {getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
-        </Heading>
+        <BodyLong size="small">
+          For å motta dagpenger må du rapportere hver 14. dag (periode) hvor mye du har jobbet, om
+          du har vært syk, hatt ferie/fravær eller deltatt på kurs/utdanning. NAV trenger dette for
+          å beregne hvor mye du skal ha i dagpenger.
+        </BodyLong>
+        <br />
+        <BodyLong size="small">
+          Husk at for å få dagpenger må du også rapportere mens du venter på svar på søknaden din.
+        </BodyLong>
+        <br />
+        {/* <PortableText value={getRichText("rapportering-innledning")} /> */}
+        <Label size="small">
+          {/* {getAppText("rapportering-ikke-utfylte-rapporter-tittel")} */}
+          Har du noe å rapportere for nåværende periode?
+        </Label>
+
         {!gjeldendePeriode && <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>}
+
         {gjeldendePeriode && (
           <div>
-            <BodyShort>{invaerendePeriodeTekst}</BodyShort>
-            <RemixLink as="Button" to={`/periode/${gjeldendePeriode.id}/fyll-ut`} className="my-4">
-              {getLink("rapportering-rapporter-for-perioden").linkText}
-            </RemixLink>
+            <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
+            <RadioGroup legend="" onChange={console.log}>
+              <Radio value="10">Ja, jeg har noe å rapportere</Radio>
+              <Radio value="20">
+                Nei, jeg har <b>ikke</b> jobbet, vært sykt, hatt fravær/ferie eller deltatt på
+                kurs/utdanning
+              </Radio>
+            </RadioGroup>
+
+            <ReadMore header="Les mer om hva som skal rapporteres">
+              Med helsemessige begrensninger mener vi funksjonshemming, sykdom, allergier som
+              hindrer deg i arbeidet eller andre årsaker som må tas hensyn til når du skal finne
+              nytt arbeid. Du må oppgi hva som gjelder for deg, og dokumentere de helsemessige
+              årsakene du viser til.
+            </ReadMore>
+
+            <Center>
+              <RemixLink
+                size="medium"
+                as="Button"
+                to={`/periode/${gjeldendePeriode.id}/fyll-ut`}
+                className="my-18"
+                icon={<PencilIcon aria-hidden />}
+                iconPosition="right"
+              >
+                {/* {getLink("rapportering-rapporter-for-perioden").linkText} */}
+                Til utfylling
+              </RemixLink>
+            </Center>
           </div>
         )}
         <p>
