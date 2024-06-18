@@ -44,7 +44,7 @@ export function AktivitetOppsummering(props: IProps) {
   return (
     <>
       <div className={styles.aktivitetOppsummeringKontainer}>
-        <p className="tekst-subtil">Du har svart:</p>
+        <p className="tekst-subtil">{getAppText("rapportering-oppsummering-tittel")}</p>
         <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
           <p>
             {getAppText("rapportering-arbeid")}

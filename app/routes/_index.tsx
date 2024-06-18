@@ -139,7 +139,7 @@ export default function Landingsside() {
                       ? `/periode/${gjeldendePeriode.id}/fyll-ut`
                       : `/periode/${gjeldendePeriode.id}/send-inn`
                   }
-                  className="my-18"
+                  className="my-18 py-4 px-16"
                   icon={<ArrowRightIcon aria-hidden />}
                   iconPosition="right"
                   disabled={!rapporteringstype}

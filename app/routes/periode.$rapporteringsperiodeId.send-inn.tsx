@@ -98,21 +98,26 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post">
-        <div className="navigasjon-container-send-inn">
-          <Button
-            onClick={() => navigate(-1)}
-            variant="secondary"
-            iconPosition="left"
-            icon={<ArrowLeftIcon aria-hidden />}
-          >
-            {getLink("rapportering-periode-send-inn-tilbake").linkText}
-          </Button>
+      <Form method="post" className="navigasjon-container-send-inn my-4">
+        <Button
+          onClick={() => navigate(-1)}
+          variant="secondary"
+          iconPosition="left"
+          icon={<ArrowLeftIcon aria-hidden />}
+          className="py-4 px-8"
+        >
+          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+        </Button>
 
-          <Button type="submit" variant="primary" iconPosition="right" disabled={!confirmed}>
-            {getLink("rapportering-periode-send-inn-bekreft").linkText}
-          </Button>
-        </div>
+        <Button
+          type="submit"
+          variant="primary"
+          iconPosition="right"
+          disabled={!confirmed}
+          className="py-4 px-8"
+        >
+          {getLink("rapportering-periode-send-inn-bekreft").linkText}
+        </Button>
       </Form>
     </div>
   );
