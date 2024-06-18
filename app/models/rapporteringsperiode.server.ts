@@ -16,6 +16,7 @@ export interface IRapporteringsperiode {
   kanSendesFra: string;
   kanSendes: boolean;
   kanKorrigeres: boolean;
+  registrertArbeidssoker: boolean | null;
 }
 
 export interface IRapporteringsperiodeDag {

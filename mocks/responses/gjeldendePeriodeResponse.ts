@@ -10,6 +10,7 @@ export const gjeldendePeriodeResponse: IRapporteringsperiode = {
   kanSendesFra: "2023-05-13",
   kanSendes: true,
   kanKorrigeres: true,
+  registrertArbeidssoker: null,
   dager: [
     {
       dagIndex: 0,

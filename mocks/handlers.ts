@@ -106,6 +106,14 @@ export const handlers = [
     }
   ),
 
+  // Lagre en arbeidssøker svar
+  http.post(
+    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId/arbeidssoker`,
+    () => {
+      return new HttpResponse(null, { status: 204 });
+    }
+  ),
+
   // Bypassing mocks, use actual data instead
   http.get("https://rt6o382n.apicdn.sanity.io/*", async ({ request }) => {
     const bypassResponse = await fetch(bypass(request));

@@ -5,6 +5,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
+import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
@@ -22,11 +23,16 @@ import { SessionModal } from "~/components/session-modal/SessionModal";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const name = formData.get("erRegistrertSomArbeidssoker");
+  const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
+  const svar = formData.get("registrertArbeidssoker");
 
-  const erRegistrertSomArbeidssoker = name === "true" ? true : false;
+  const registrertArbeidssoker = svar === "true" ? true : false;
 
-  return json({ erRegistrertSomArbeidssoker });
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+
+  return await lagreArbeidssokerSvar(onBehalfOfToken, rapporteringsperiodeId, {
+    registrertArbeidssoker,
+  });
 }
 export async function loader({ request }: LoaderFunctionArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
@@ -82,6 +88,7 @@ export default function Landingsside() {
     invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
   }
 
+  console.log(`🔥: periode :`, gjeldendePeriode?.registrertArbeidssoker);
   return (
     <>
       <div className="rapportering-header">
@@ -127,7 +134,12 @@ export default function Landingsside() {
               voluptates cum fugit.
             </ReadMore>
 
-            {rapporteringstype === Rapporteringstype.harIngenAktivitet && <ArbeidssokerRegister />}
+            {rapporteringstype === Rapporteringstype.harIngenAktivitet && (
+              <ArbeidssokerRegister
+                rapporteringsperiodeId={gjeldendePeriode.id}
+                registrertArbeidssoker={gjeldendePeriode.registrertArbeidssoker}
+              />
+            )}
 
             {rapporteringstype && (
               <Center>

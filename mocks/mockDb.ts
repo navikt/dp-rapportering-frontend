@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { factory, primaryKey } from "@mswjs/data";
+import { factory, nullable, primaryKey } from "@mswjs/data";
 import {
   lagInnsendteRapporteringsperiodeMedArbeidAktivitet,
   lagInnsendteRapporteringsperiodeMedArbeidOgUtdanning,
@@ -20,6 +20,7 @@ export const mockDb = factory({
     kanSendesFra: () => faker.date.recent().toISOString(),
     kanSendes: faker.datatype.boolean,
     kanKorrigeres: faker.datatype.boolean,
+    registrertArbeidssoker: nullable(faker.datatype.boolean),
   },
 });
 

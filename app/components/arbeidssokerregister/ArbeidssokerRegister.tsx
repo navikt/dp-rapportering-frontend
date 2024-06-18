@@ -1,14 +1,21 @@
 import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useFetcher } from "@remix-run/react";
+import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { useSanity } from "~/hooks/useSanity";
 
-export function ArbeidssokerRegister() {
+export function ArbeidssokerRegister({
+  rapporteringsperiodeId,
+  registrertArbeidssoker,
+}: {
+  rapporteringsperiodeId: string;
+  registrertArbeidssoker: boolean | null;
+}) {
   const { getAppText } = useSanity();
-  const fetcher = useFetcher<{ erRegistrertSomArbeidssoker: boolean }>();
+  const fetcher = useFetcher<ArbeidssokerSvar>();
 
-  const handleChange = (erRegistrertSomArbeidssoker: boolean) => {
-    fetcher.submit({ erRegistrertSomArbeidssoker }, { method: "post" });
+  const handleChange = (registrertArbeidssoker: boolean) => {
+    fetcher.submit({ registrertArbeidssoker, rapporteringsperiodeId }, { method: "post" });
   };
 
   return (
@@ -19,6 +26,7 @@ export function ArbeidssokerRegister() {
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
+          value={String(registrertArbeidssoker)}
         >
           <Radio name="erRegistrertSomArbeidssoker" value="true">
             {getAppText("rapportering-arbeidssokerregister-svar-ja")}
@@ -29,12 +37,8 @@ export function ArbeidssokerRegister() {
         </RadioGroup>
       </fetcher.Form>
 
-      {fetcher.data?.erRegistrertSomArbeidssoker !== undefined &&
-        (fetcher.data.erRegistrertSomArbeidssoker ? (
-          <RegistertSomArbeidssoker />
-        ) : (
-          <AvregistertSomArbeidssoker />
-        ))}
+      {registrertArbeidssoker !== null &&
+        (registrertArbeidssoker ? <RegistertSomArbeidssoker /> : <AvregistertSomArbeidssoker />)}
     </div>
   );
 }

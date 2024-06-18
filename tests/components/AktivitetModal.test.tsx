@@ -46,6 +46,7 @@ const mockRapporteringsperiode: IRapporteringsperiode = {
   kanSendesFra: "2024-06-01",
   kanSendes: true,
   kanKorrigeres: false,
+  registrertArbeidssoker: false,
 };
 
 const defaultProps = {

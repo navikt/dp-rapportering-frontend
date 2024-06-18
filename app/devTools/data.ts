@@ -49,6 +49,7 @@ const lagRapporteringsperiodeMedTidslinje = (
     kanSendesFra: tilOgMed,
     kanSendes: true,
     kanKorrigeres: true,
+    registrertArbeidssoker: null,
     dager: times(14, (i) => {
       const aktivitet = tidslinje.get(i);
       if (!aktivitet) return lagDagMedAktiviteter(i, []);

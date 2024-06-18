@@ -16,6 +16,10 @@ import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import {
+  AvregistertSomArbeidssoker,
+  RegistertSomArbeidssoker,
+} from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -87,6 +91,12 @@ export default function RapporteringsPeriodeSendInnSide() {
       </div>
 
       <AktivitetOppsummering rapporteringsperiode={periode} />
+
+      {periode.registrertArbeidssoker ? (
+        <RegistertSomArbeidssoker />
+      ) : (
+        <AvregistertSomArbeidssoker />
+      )}
 
       <Checkbox onChange={() => setConfirmed((prev) => !prev)}>
         {getAppText("rapportering-send-inn-bekreft-opplysning")}
