@@ -1,7 +1,10 @@
-import { Alert, BodyLong, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import { useFetcher } from "@remix-run/react";
+import { useSanity } from "~/hooks/useSanity";
 
 export function ArbeidssokerRegister() {
+  const { getAppText } = useSanity();
   const fetcher = useFetcher<{ erRegistrertSomArbeidssoker: boolean }>();
 
   const handleChange = (erRegistrertSomArbeidssoker: boolean) => {
@@ -9,50 +12,54 @@ export function ArbeidssokerRegister() {
   };
 
   return (
-    <div className="rapportering-container">
+    <div className="my-8">
       <fetcher.Form method="post">
         <RadioGroup
           size="small"
-          legend="Ønsker du fortsatt å være registrert som arbeidssøker de neste 14 dagene?"
-          description="Du må være registrert for å få utbetalinger og oppfølging fra Nav"
+          legend={getAppText("rapportering-arbeidssokerregister-tittel")}
+          description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
         >
           <Radio name="erRegistrertSomArbeidssoker" value="true">
-            Ja
+            {getAppText("rapportering-arbeidssokerregister-svar-ja")}
           </Radio>
           <Radio name="erRegistrertSomArbeidssoker" value="false">
-            Nei
+            {getAppText("rapportering-arbeidssokerregister-svar-nei")}
           </Radio>
         </RadioGroup>
       </fetcher.Form>
 
-      {fetcher.data?.erRegistrertSomArbeidssoker !== undefined && (
-        <ArbeidssokerRegisterAlert registrert={fetcher.data.erRegistrertSomArbeidssoker} />
-      )}
+      {fetcher.data?.erRegistrertSomArbeidssoker !== undefined &&
+        (fetcher.data.erRegistrertSomArbeidssoker ? (
+          <RegistertSomArbeidssoker />
+        ) : (
+          <AvregistertSomArbeidssoker />
+        ))}
     </div>
   );
 }
 
-function ArbeidssokerRegisterAlert({ registrert }: { registrert: boolean }) {
-  const alert = registrert
-    ? {
-        variant: "info" as const,
-        heading: "Du vil fortsatt være registrert som arbeidssøker de neste 14 dagene",
-        message: "",
-      }
-    : {
-        variant: "warning" as const,
-        heading: "Du vil bli avregistrert som arbeidssøker",
-        message:
-          "Du har svart Nei til å være registrert som arbeidssøker de neste 14 dagene. Du vil ikke lenger få utbetalt dagpenger eller oppfølging fra NAV.",
-      };
-
+export function RegistertSomArbeidssoker() {
+  const { getAppText } = useSanity();
   return (
-    <Alert size="small" variant={alert.variant} className="my-6">
+    <Alert size="small" variant="info" className="my-6">
       <Heading spacing size="xsmall">
-        {alert.heading}
+        {getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert")}
       </Heading>
-      <BodyLong size="small">{alert.message}</BodyLong>
+    </Alert>
+  );
+}
+
+export function AvregistertSomArbeidssoker() {
+  const { getAppText, getRichText } = useSanity();
+  return (
+    <Alert size="small" variant="warning" className="my-6">
+      <Heading spacing size="xsmall">
+        {getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert")}
+      </Heading>
+      <PortableText
+        value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert")}
+      />
     </Alert>
   );
 }

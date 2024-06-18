@@ -1,18 +1,21 @@
-import { Alert, Button, Heading } from "@navikt/ds-react";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useParams } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import { Form, useActionData, useNavigate } from "@remix-run/react";
+import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
-import { RemixLink } from "~/components/RemixLink";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -33,18 +36,35 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function RapporteringsPeriodeSendInnSide() {
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+
   const actionData = useActionData<typeof action>();
-  const { rapporteringsperiodeId } = useParams();
   const { getAppText, getRichText, getLink } = useSanity();
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
 
+  const navigate = useNavigate();
+
+  const [confirmed, setConfirmed] = useState<boolean | undefined>();
+
   useEffect(() => {
     scrollToView(sidelastFokusRef);
     setFokus(sidelastFokusRef);
   }, [setFokus, scrollToView]);
+
+  let invaerendePeriodeTekst;
+
+  if (periode) {
+    const ukenummer = formaterPeriodeTilUkenummer(
+      periode.periode.fraOgMed,
+      periode.periode.tilOgMed
+    );
+    const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed);
+
+    invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
+  }
 
   return (
     <div className="rapportering-container">
@@ -52,7 +72,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         ref={sidelastFokusRef}
         tabIndex={-1}
         level="2"
-        size="medium"
+        size="large"
         spacing
         className="vo-fokus"
       >
@@ -61,6 +81,17 @@ export default function RapporteringsPeriodeSendInnSide() {
 
       <PortableText value={getRichText("rapportering-send-inn-innhold")} />
 
+      <div className="my-4">
+        <Heading size="xsmall">{getAppText("rapportering-send-inn-periode-tittel")}</Heading>
+        <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
+      </div>
+
+      <AktivitetOppsummering rapporteringsperiode={periode} />
+
+      <Checkbox onChange={() => setConfirmed((prev) => !prev)}>
+        {getAppText("rapportering-send-inn-bekreft-opplysning")}
+      </Checkbox>
+
       {actionData?.error && (
         <Alert variant="error" className={styles.feilmelding}>
           {actionData.error}
@@ -68,16 +99,17 @@ export default function RapporteringsPeriodeSendInnSide() {
       )}
 
       <Form method="post">
-        <div className="navigasjon-container">
-          <RemixLink
-            to={`/rapportering/periode/${rapporteringsperiodeId}/fyll-ut`}
-            as="Button"
+        <div className="navigasjon-container-send-inn">
+          <Button
+            onClick={() => navigate(-1)}
             variant="secondary"
+            iconPosition="left"
+            icon={<ArrowLeftIcon aria-hidden />}
           >
             {getLink("rapportering-periode-send-inn-tilbake").linkText}
-          </RemixLink>
+          </Button>
 
-          <Button type="submit" variant="primary" iconPosition="right">
+          <Button type="submit" variant="primary" iconPosition="right" disabled={!confirmed}>
             {getLink("rapportering-periode-send-inn-bekreft").linkText}
           </Button>
         </div>

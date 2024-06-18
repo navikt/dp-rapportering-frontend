@@ -1,5 +1,4 @@
 import styles from "./AktivitetOppsummering.module.css";
-import { Alert } from "@navikt/ds-react";
 import classNames from "classnames";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -44,40 +43,33 @@ export function AktivitetOppsummering(props: IProps) {
 
   return (
     <>
-      {flatMapAktiviteter.length < 1 && rapporteringsperiode.status !== "Innsendt" && (
-        <Alert variant="info">
-          {getAppText("rapportering-aktivitet-oppsummering-ingen-aktiviteter")}
-        </Alert>
-      )}
-      {flatMapAktiviteter.length > 0 && (
-        <div className={styles.aktivitetOppsummeringKontainer}>
-          <p className="tekst-subtil">Sammenlagt for perioden:</p>
-          <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
-            <p>
-              {getAppText("rapportering-arbeid")}
-              <span>{hentTotaltArbeidstimerTekst()}</span>
-            </p>
-          </div>
-          <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
-            <p>
-              {getAppText("rapportering-syk")}
-              <span>{hentTotaltFravaerTekstMedType("Syk")}</span>
-            </p>
-          </div>
-          <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
-            <p>
-              {getAppText("rapportering-fraevaer")}
-              <span>{hentTotaltFravaerTekstMedType("Fravaer")}</span>
-            </p>
-          </div>
-          <div className={classNames(styles.aktivitetOppsummeringData, styles.utdanning)}>
-            <p>
-              {getAppText("rapportering-utdanning")}
-              <span>{hentTotaltFravaerTekstMedType("Utdanning")}</span>
-            </p>
-          </div>
+      <div className={styles.aktivitetOppsummeringKontainer}>
+        <p className="tekst-subtil">Du har svart:</p>
+        <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
+          <p>
+            {getAppText("rapportering-arbeid")}
+            <span>{hentTotaltArbeidstimerTekst()}</span>
+          </p>
         </div>
-      )}
+        <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
+          <p>
+            {getAppText("rapportering-syk")}
+            <span>{hentTotaltFravaerTekstMedType("Syk")}</span>
+          </p>
+        </div>
+        <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
+          <p>
+            {getAppText("rapportering-fraevaer")}
+            <span>{hentTotaltFravaerTekstMedType("Fravaer")}</span>
+          </p>
+        </div>
+        <div className={classNames(styles.aktivitetOppsummeringData, styles.utdanning)}>
+          <p>
+            {getAppText("rapportering-utdanning")}
+            <span>{hentTotaltFravaerTekstMedType("Utdanning")}</span>
+          </p>
+        </div>
+      </div>
     </>
   );
 }

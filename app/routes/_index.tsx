@@ -1,9 +1,10 @@
-import { PencilIcon } from "@navikt/aksel-icons";
-import { BodyLong, BodyShort, Heading, Label, Radio, RadioGroup, ReadMore } from "@navikt/ds-react";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import { ArrowRightIcon } from "@navikt/aksel-icons";
+import { BodyLong, Heading, Radio, RadioGroup, ReadMore } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
@@ -14,10 +15,19 @@ import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { RemixLink } from "~/components/RemixLink";
+import { ArbeidssokerRegister } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import Center from "~/components/center/Center";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { SessionModal } from "~/components/session-modal/SessionModal";
 
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const name = formData.get("erRegistrertSomArbeidssoker");
+
+  const erRegistrertSomArbeidssoker = name === "true" ? true : false;
+
+  return json({ erRegistrertSomArbeidssoker });
+}
 export async function loader({ request }: LoaderFunctionArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
 
@@ -38,13 +48,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ gjeldendePeriode, session });
 }
 
+enum Rapporteringstype {
+  harAktivitet = "harAktivitet",
+  harIngenAktivitet = "harIngenAktivitet",
+}
+
 export default function Landingsside() {
   const { gjeldendePeriode } = useLoaderData<typeof loader>();
+  const [rapporteringstype, setRapporteringstype] = useState<Rapporteringstype>();
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
-  const { getAppText, getLink } = useSanity();
+  const { getAppText, getLink, getRichText } = useSanity();
 
   useEffect(() => {
     scrollToView(sidelastFokusRef);
@@ -83,54 +99,57 @@ export default function Landingsside() {
       </div>
       <div className="rapportering-container">
         <BodyLong size="small">
-          For å motta dagpenger må du rapportere hver 14. dag (periode) hvor mye du har jobbet, om
-          du har vært syk, hatt ferie/fravær eller deltatt på kurs/utdanning. NAV trenger dette for
-          å beregne hvor mye du skal ha i dagpenger.
+          <PortableText value={getRichText("rapportering-innledning")} />
         </BodyLong>
-        <br />
-        <BodyLong size="small">
-          Husk at for å få dagpenger må du også rapportere mens du venter på svar på søknaden din.
-        </BodyLong>
-        <br />
-        {/* <PortableText value={getRichText("rapportering-innledning")} /> */}
-        <Label size="small">
-          {/* {getAppText("rapportering-ikke-utfylte-rapporter-tittel")} */}
-          Har du noe å rapportere for nåværende periode?
-        </Label>
 
         {!gjeldendePeriode && <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>}
-
         {gjeldendePeriode && (
           <div>
-            <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
-            <RadioGroup legend="" onChange={console.log}>
-              <Radio value="10">Ja, jeg har noe å rapportere</Radio>
-              <Radio value="20">
-                Nei, jeg har <b>ikke</b> jobbet, vært sykt, hatt fravær/ferie eller deltatt på
-                kurs/utdanning
+            <RadioGroup
+              size="small"
+              description={invaerendePeriodeTekst}
+              legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
+              onChange={setRapporteringstype}
+            >
+              <Radio value={Rapporteringstype.harAktivitet}>
+                {getAppText("rapportering-noe-å-rapportere")}
+              </Radio>
+              <Radio value={Rapporteringstype.harIngenAktivitet}>
+                {getAppText("rapportering-ingen-å-rapportere")}
               </Radio>
             </RadioGroup>
 
             <ReadMore header="Les mer om hva som skal rapporteres">
-              Med helsemessige begrensninger mener vi funksjonshemming, sykdom, allergier som
-              hindrer deg i arbeidet eller andre årsaker som må tas hensyn til når du skal finne
-              nytt arbeid. Du må oppgi hva som gjelder for deg, og dokumentere de helsemessige
-              årsakene du viser til.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias pariatur, explicabo
+              quisquam harum aspernatur ex, officiis doloremque atque tempora tenetur distinctio
+              quasi doloribus voluptatum aliquid ipsam! In dolore consectetur quae iusto porro ipsum
+              culpa nemo velit error eos assumenda illo omnis, amet, excepturi sit qui, ab quia
+              voluptates cum fugit.
             </ReadMore>
 
-            <Center>
-              <RemixLink
-                size="medium"
-                as="Button"
-                to={`/periode/${gjeldendePeriode.id}/fyll-ut`}
-                className="my-18"
-                icon={<PencilIcon aria-hidden />}
-                iconPosition="right"
-              >
-                {/* {getLink("rapportering-rapporter-for-perioden").linkText} */}
-                Til utfylling
-              </RemixLink>
-            </Center>
+            {rapporteringstype === Rapporteringstype.harIngenAktivitet && <ArbeidssokerRegister />}
+
+            {rapporteringstype && (
+              <Center>
+                <RemixLink
+                  size="medium"
+                  as="Button"
+                  to={
+                    rapporteringstype === Rapporteringstype.harAktivitet
+                      ? `/periode/${gjeldendePeriode.id}/fyll-ut`
+                      : `/periode/${gjeldendePeriode.id}/send-inn`
+                  }
+                  className="my-18"
+                  icon={<ArrowRightIcon aria-hidden />}
+                  iconPosition="right"
+                  disabled={!rapporteringstype}
+                >
+                  {rapporteringstype === Rapporteringstype.harAktivitet
+                    ? getLink("rapportering-rapporter-for-perioden").linkText
+                    : "Neste"}
+                </RemixLink>
+              </Center>
+            )}
           </div>
         )}
         <p>

@@ -63,6 +63,12 @@ body {
   max-width: 350px;
 }
 
+.navigasjon-container-send-inn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .registert-meldeperiode-container {
   margin-top: var(--a-spacing-10);
 }
@@ -102,6 +108,10 @@ body {
 
 .my-10 {
   margin: var(--a-spacing-10) 0;
+}
+
+.my-8 {
+  margin: var(--a-spacing-8) 0;
 }
 
 .my-6 {
