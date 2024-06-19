@@ -17,8 +17,8 @@ import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import {
-  AvregistertSomArbeidssoker,
-  RegistertSomArbeidssoker,
+  AvregistertArbeidssokerAlert,
+  RegistertArbeidssokerAlert,
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -98,9 +98,9 @@ export default function RapporteringsPeriodeSendInnSide() {
       <AktivitetOppsummering rapporteringsperiode={periode} />
 
       {periode.registrertArbeidssoker ? (
-        <RegistertSomArbeidssoker />
+        <RegistertArbeidssokerAlert />
       ) : (
-        <AvregistertSomArbeidssoker />
+        <AvregistertArbeidssokerAlert />
       )}
 
       <Checkbox onChange={() => setConfirmed((prev) => !prev)}>

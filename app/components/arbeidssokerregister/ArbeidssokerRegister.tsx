@@ -1,22 +1,45 @@
 import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useFetcher } from "@remix-run/react";
-import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
+import { useEffect, useState } from "react";
+import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 
 export function ArbeidssokerRegister({
   rapporteringsperiodeId,
-  registrertArbeidssoker,
+  registrertArbeidssoker: initialRegistrertArbeidssoker,
 }: {
   rapporteringsperiodeId: string;
   registrertArbeidssoker: boolean | null;
 }) {
   const { getAppText } = useSanity();
-  const fetcher = useFetcher<ArbeidssokerSvar>();
+  const fetcher = useFetcher<INetworkResponse>();
+  const [registrertArbeidssoker, setRegistrertArbeidssoker] = useState(
+    initialRegistrertArbeidssoker
+  );
 
-  const handleChange = (registrertArbeidssoker: boolean) => {
-    fetcher.submit({ registrertArbeidssoker, rapporteringsperiodeId }, { method: "post" });
+  const handleChange = (registrertArbeidssokerSvar: boolean) => {
+    setRegistrertArbeidssoker(registrertArbeidssokerSvar);
+
+    fetcher.submit(
+      { registrertArbeidssoker: registrertArbeidssokerSvar, rapporteringsperiodeId },
+      { method: "post" }
+    );
   };
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (fetcher.data?.status === "error") {
+      timeout = setTimeout(() => {
+        setRegistrertArbeidssoker(initialRegistrertArbeidssoker);
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [fetcher.data?.status, fetcher.data, initialRegistrertArbeidssoker]);
 
   return (
     <div className="my-8">
@@ -37,12 +60,16 @@ export function ArbeidssokerRegister({
       </fetcher.Form>
 
       {registrertArbeidssoker !== null &&
-        (registrertArbeidssoker ? <RegistertSomArbeidssoker /> : <AvregistertSomArbeidssoker />)}
+        (registrertArbeidssoker ? (
+          <RegistertArbeidssokerAlert />
+        ) : (
+          <AvregistertArbeidssokerAlert />
+        ))}
     </div>
   );
 }
 
-export function RegistertSomArbeidssoker() {
+export function RegistertArbeidssokerAlert() {
   const { getAppText } = useSanity();
   return (
     <Alert variant="info" className="my-6">
@@ -53,7 +80,7 @@ export function RegistertSomArbeidssoker() {
   );
 }
 
-export function AvregistertSomArbeidssoker() {
+export function AvregistertArbeidssokerAlert() {
   const { getAppText, getRichText } = useSanity();
   return (
     <Alert variant="warning" className="my-6">
