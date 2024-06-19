@@ -22,7 +22,6 @@ export function ArbeidssokerRegister({
     <div className="my-8">
       <fetcher.Form method="post">
         <RadioGroup
-          size="small"
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
@@ -46,7 +45,7 @@ export function ArbeidssokerRegister({
 export function RegistertSomArbeidssoker() {
   const { getAppText } = useSanity();
   return (
-    <Alert size="small" variant="info" className="my-6">
+    <Alert variant="info" className="my-6">
       <Heading spacing size="xsmall">
         {getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert")}
       </Heading>
@@ -57,7 +56,7 @@ export function RegistertSomArbeidssoker() {
 export function AvregistertSomArbeidssoker() {
   const { getAppText, getRichText } = useSanity();
   return (
-    <Alert size="small" variant="warning" className="my-6">
+    <Alert variant="warning" className="my-6">
       <Heading spacing size="xsmall">
         {getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert")}
       </Heading>

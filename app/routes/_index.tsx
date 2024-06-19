@@ -104,7 +104,7 @@ export default function Landingsside() {
         </div>
       </div>
       <div className="rapportering-container">
-        <BodyLong size="small">
+        <BodyLong>
           <PortableText value={getRichText("rapportering-innledning")} />
         </BodyLong>
 
@@ -112,7 +112,6 @@ export default function Landingsside() {
         {gjeldendePeriode && (
           <div>
             <RadioGroup
-              size="small"
               description={invaerendePeriodeTekst}
               legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
               onChange={setRapporteringstype}
