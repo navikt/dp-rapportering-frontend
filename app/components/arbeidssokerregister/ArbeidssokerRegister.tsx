@@ -20,7 +20,6 @@ export function ArbeidssokerRegister({
 
   const handleChange = (registrertArbeidssokerSvar: boolean) => {
     setRegistrertArbeidssoker(registrertArbeidssokerSvar);
-
     fetcher.submit(
       { registrertArbeidssoker: registrertArbeidssokerSvar, rapporteringsperiodeId },
       { method: "post" }
@@ -32,14 +31,14 @@ export function ArbeidssokerRegister({
 
     if (fetcher.data?.status === "error") {
       timeout = setTimeout(() => {
-        setRegistrertArbeidssoker(initialRegistrertArbeidssoker);
+        setRegistrertArbeidssoker(false);
       }, 2000);
     }
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [fetcher.data?.status, fetcher.data, initialRegistrertArbeidssoker]);
+  }, [fetcher.data?.status, fetcher.data, initialRegistrertArbeidssoker, registrertArbeidssoker]);
 
   return (
     <div className="my-8">
@@ -48,12 +47,20 @@ export function ArbeidssokerRegister({
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
-          value={String(registrertArbeidssoker)}
+          value={registrertArbeidssoker}
         >
-          <Radio name="erRegistrertSomArbeidssoker" value="true">
+          <Radio
+            name="erRegistrertSomArbeidssoker"
+            value={true}
+            checked={registrertArbeidssoker === true}
+          >
             {getAppText("rapportering-arbeidssokerregister-svar-ja")}
           </Radio>
-          <Radio name="erRegistrertSomArbeidssoker" value="false">
+          <Radio
+            name="erRegistrertSomArbeidssoker"
+            value={false}
+            checked={registrertArbeidssoker === false}
+          >
             {getAppText("rapportering-arbeidssokerregister-svar-nei")}
           </Radio>
         </RadioGroup>
