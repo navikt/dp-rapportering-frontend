@@ -58,7 +58,7 @@ export function AvregistertSomArbeidssoker() {
   return (
     <Alert variant="warning" className="my-6">
       <Heading spacing size="xsmall">
-        {getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert")}
+        {getAppText("rapportering-arbeidssokerregister-alert-tittel-avregistrert")}
       </Heading>
       <PortableText
         value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert")}

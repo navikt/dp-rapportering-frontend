@@ -11,7 +11,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
     kanSendesFra: "2023-05-13",
     kanSendes: true,
     kanKorrigeres: true,
-    registrertArbeidssoker: null,
+    registrertArbeidssoker: false,
     dager: [
       {
         dagIndex: 0,
