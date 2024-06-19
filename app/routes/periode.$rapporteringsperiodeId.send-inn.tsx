@@ -7,7 +7,7 @@ import { Form, useActionData, useNavigate } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
-import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
+import { hentPeriode, sendInnPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
@@ -25,14 +25,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-  const godkjennPeriodeResponse = await godkjennPeriode(onBehalfOfToken, periodeId);
 
-  if (godkjennPeriodeResponse.ok) {
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+
+  const periodeResponse = await hentPeriode(onBehalfOfToken, periodeId);
+  const periode = await periodeResponse.json();
+
+  const response = await sendInnPeriode(onBehalfOfToken, periode);
+
+  if (response.ok) {
     return redirect(`/periode/${periodeId}/bekreftelse`);
   } else {
-    logger.warn(`Klarte ikke godkjenne rapportering med id: ${periodeId}`, {
-      statustext: godkjennPeriodeResponse.statusText,
+    logger.warn(`Klarte ikke sende inn rapportering med id: ${periodeId}`, {
+      statustext: response.statusText,
     });
 
     return json({ error: "Det har skjedd noe feil med innsendingen din, prøv igjen." });

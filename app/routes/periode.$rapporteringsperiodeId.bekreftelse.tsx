@@ -1,4 +1,4 @@
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import { useEffect, useRef } from "react";
 import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
@@ -22,16 +22,12 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
 
   return (
     <div className="rapportering-container">
-      <Heading
-        ref={sidelastFokusRef}
-        className="vo-fokus"
-        tabIndex={-1}
-        size={"medium"}
-        level={"2"}
-        spacing={true}
-      >
-        {getAppText("rapportering-periode-bekreftelse-tittel")}
-      </Heading>
+      <Alert variant="success" className="my-4">
+        <Heading spacing size="small" level="3">
+          {getAppText("rapportering-periode-bekreftelse-tittel")}
+        </Heading>
+      </Alert>
+
       <BodyLong spacing>{getAppText("rapportering-periode-bekreftelse-beskrivelse")}</BodyLong>
       <div className="graa-bakgrunn">
         <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
@@ -41,10 +37,11 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
       </div>
 
       <div className="navigasjon-container">
-        <RemixLink as="Button" to={`/periode/${periode.id}/avgodkjenn`} variant="secondary">
-          {getLink("rapportering-periode-bekreftelse-avbryt").linkText}
-        </RemixLink>
-        <RemixLink as="Button" to={getLink("rapportering-periode-bekreftelse-tilbake").linkUrl}>
+        <RemixLink
+          as="Button"
+          to={getLink("rapportering-periode-bekreftelse-tilbake").linkUrl}
+          className="py-4 px-8"
+        >
           {getLink("rapportering-periode-bekreftelse-tilbake").linkText}
         </RemixLink>
       </div>

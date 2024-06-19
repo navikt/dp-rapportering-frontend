@@ -74,7 +74,7 @@ describe("Send inn rapporteringsperiode", () => {
 
         server.use(
           http.post(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${rapporteringsperioderResponse[0].id}/godkjenn`,
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`,
             () => {
               return HttpResponse.json(null, {
                 status: 500,

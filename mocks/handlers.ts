@@ -53,21 +53,10 @@ export const handlers = [
     return HttpResponse.json(gjeldendePeriodeResponse);
   }),
 
-  // Godkjenn rapporteringsperiode
-  http.post(
-    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId/godkjenn`,
-    () => {
-      return new HttpResponse(null, { status: 200 });
-    }
-  ),
-
-  // Avgodkjenn rapporteringsperiode
-  http.post(
-    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId/avgodkjenn`,
-    () => {
-      return new HttpResponse(null, { status: 200 });
-    }
-  ),
+  // Send inn rapporteringsperiode
+  http.post(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`, () => {
+    return new HttpResponse(null, { status: 200 });
+  }),
 
   // Hent spesifikk rapporteringsperiode
   http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId`, () => {

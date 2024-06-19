@@ -15,12 +15,6 @@ export async function lagreArbeidssokerSvar(
     "DP_RAPPORTERING_URL"
   )}/rapporteringsperiode/${rapporteringsperiodeId}/arbeidssoker`;
 
-  console.log(`🔥: Lagrer arbeidssøker svar :`);
-
-  console.log(`🔥: url :`, url);
-
-  console.log(`🔥: svar :`, svar);
-
   const response = await fetch(url, {
     method: "POST",
     headers: getHeaders(onBehalfOfToken),
@@ -28,7 +22,6 @@ export async function lagreArbeidssokerSvar(
   });
 
   if (!response.ok) {
-    console.log(`🔥: case error :`);
     return {
       status: "error",
       error: {
@@ -38,6 +31,5 @@ export async function lagreArbeidssokerSvar(
     };
   }
 
-  console.log(`🔥: case success :`);
   return { status: "success" };
 }

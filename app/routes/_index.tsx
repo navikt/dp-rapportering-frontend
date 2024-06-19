@@ -88,7 +88,6 @@ export default function Landingsside() {
     invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
   }
 
-  console.log(`🔥: periode :`, gjeldendePeriode?.registrertArbeidssoker);
   return (
     <>
       <div className="rapportering-header">

@@ -65,6 +65,19 @@ export async function hentInnsendtePerioder(request: Request): Promise<Response>
   });
 }
 
+export async function sendInnPeriode(
+  onBehalfOfToken: string,
+  rapporteringsperiode: IRapporteringsperiode
+): Promise<Response> {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`;
+
+  return await fetch(url, {
+    method: "POST",
+    headers: getHeaders(onBehalfOfToken),
+    body: JSON.stringify(rapporteringsperiode),
+  });
+}
+
 export async function godkjennPeriode(onBehalfOfToken: string, id: string): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}/godkjenn`;
 
