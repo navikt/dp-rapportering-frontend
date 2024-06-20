@@ -8,6 +8,7 @@ import { mockDb } from "./mockDb";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
 import { ScenerioType } from "~/devTools";
+import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { getEnv } from "~/utils/env.utils";
 
@@ -106,7 +107,21 @@ export const handlers = [
   // Lagre en arbeidssøker svar
   http.post(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId/arbeidssoker`,
-    () => {
+    async ({ params, request }) => {
+      const { rapporteringsperioderId } = params;
+      const { registrertArbeidssoker } = (await request.json()) as ArbeidssokerSvar;
+
+      mockDb.rapporteringsperioder.update({
+        where: {
+          id: {
+            equals: rapporteringsperioderId.toString(),
+          },
+        },
+        data: {
+          registrertArbeidssoker,
+        },
+      });
+
       return new HttpResponse(null, { status: 204 });
     }
   ),
