@@ -9,7 +9,7 @@ import {
 } from "~/devTools/data";
 
 export const mockDb = factory({
-  innsendteRapporteringsperioder: {
+  rapporteringsperioder: {
     id: primaryKey(faker.datatype.uuid),
     periode: {
       fraOgMed: () => faker.date.recent().toISOString(),
@@ -32,4 +32,4 @@ const innsendtRapporteringsperioder = [
   ...lagInnsendteRapporteringsperioderUtenAktivitet(1),
 ];
 
-innsendtRapporteringsperioder.forEach(mockDb.innsendteRapporteringsperioder.create);
+innsendtRapporteringsperioder.forEach(mockDb.rapporteringsperioder.create);

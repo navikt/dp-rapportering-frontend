@@ -13,8 +13,7 @@ import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { getEnv } from "~/utils/env.utils";
 
 const hentInnsendtePerioder = (scenerio?: ScenerioType) => {
-  const innsendtePerioder =
-    mockDb.innsendteRapporteringsperioder.getAll() as IRapporteringsperiode[];
+  const innsendtePerioder = mockDb.rapporteringsperioder.getAll() as IRapporteringsperiode[];
 
   switch (scenerio) {
     case ScenerioType.UtenAktiviteter:
@@ -30,7 +29,7 @@ const hentInnsendtePerioder = (scenerio?: ScenerioType) => {
         .filter(perioderMedArbeidSykFravaer);
 
     default:
-      return mockDb.innsendteRapporteringsperioder.getAll();
+      return mockDb.rapporteringsperioder.getAll();
   }
 };
 

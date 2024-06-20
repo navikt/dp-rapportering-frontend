@@ -30,7 +30,7 @@ const lagDagMedAktiviteter = (
 });
 
 const lagRapporteringsperiodeMedTidslinje = (
-  status: "Innsendt",
+  status: IRapporteringsperiode["status"],
   tidslinje: Map<number, IAktivitet> | Map<number, IAktivitet[]>,
   index = 0
 ): IRapporteringsperiode => {
@@ -61,7 +61,7 @@ const lagRapporteringsperiodeMedTidslinje = (
 
 export const lagRapporteringsperioderUtenAktivitet = (
   antall: number,
-  status: "Innsendt"
+  status: IRapporteringsperiode["status"]
 ): IRapporteringsperiode[] =>
   times(antall, (index) => {
     return lagRapporteringsperiodeMedTidslinje(status, new Map(), index);
