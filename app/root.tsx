@@ -14,6 +14,7 @@ import parse from "html-react-parser";
 import { Fragment, Suspense } from "react";
 import { sanityConfig } from "./sanity/sanity.config";
 import { initInstrumentation } from "~/utils/faro";
+import { RapporteringTypeProvider } from "./hooks/RapporteringType";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
@@ -124,7 +125,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <RapporteringTypeProvider>
+      <Outlet />
+    </RapporteringTypeProvider>
+  );
 }
 
 export function ErrorBoundary() {

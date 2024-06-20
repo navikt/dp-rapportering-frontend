@@ -4,7 +4,7 @@ import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -12,6 +12,7 @@ import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { getEnv } from "~/utils/env.utils";
+import { RapporteringType, useRapporteringType } from "~/hooks/RapporteringType";
 import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
@@ -54,14 +55,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ gjeldendePeriode, session });
 }
 
-enum Rapporteringstype {
-  harAktivitet = "harAktivitet",
-  harIngenAktivitet = "harIngenAktivitet",
-}
-
 export default function Landingsside() {
   const { gjeldendePeriode } = useLoaderData<typeof loader>();
-  const [rapporteringstype, setRapporteringstype] = useState<Rapporteringstype>();
+
+  const { rapporteringType, setRapporteringType } = useRapporteringType();
 
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
@@ -114,12 +111,13 @@ export default function Landingsside() {
             <RadioGroup
               description={invaerendePeriodeTekst}
               legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
-              onChange={setRapporteringstype}
+              onChange={setRapporteringType}
+              value={rapporteringType}
             >
-              <Radio value={Rapporteringstype.harAktivitet}>
+              <Radio value={RapporteringType.harAktivitet}>
                 {getAppText("rapportering-noe-å-rapportere")}
               </Radio>
-              <Radio value={Rapporteringstype.harIngenAktivitet}>
+              <Radio value={RapporteringType.harIngenAktivitet}>
                 {getAppText("rapportering-ingen-å-rapportere")}
               </Radio>
             </RadioGroup>
@@ -132,29 +130,29 @@ export default function Landingsside() {
               voluptates cum fugit.
             </ReadMore>
 
-            {rapporteringstype === Rapporteringstype.harIngenAktivitet && (
+            {rapporteringType === "harIngenAktivitet" && (
               <ArbeidssokerRegister
                 rapporteringsperiodeId={gjeldendePeriode.id}
                 registrertArbeidssoker={gjeldendePeriode.registrertArbeidssoker}
               />
             )}
 
-            {rapporteringstype && (
+            {rapporteringType && (
               <Center>
                 <RemixLink
                   size="medium"
                   as="Button"
                   to={
-                    rapporteringstype === Rapporteringstype.harAktivitet
+                    rapporteringType === RapporteringType.harAktivitet
                       ? `/periode/${gjeldendePeriode.id}/fyll-ut`
                       : `/periode/${gjeldendePeriode.id}/send-inn`
                   }
                   className="my-18 py-4 px-16"
                   icon={<ArrowRightIcon aria-hidden />}
                   iconPosition="right"
-                  disabled={!rapporteringstype}
+                  disabled={!rapporteringType}
                 >
-                  {rapporteringstype === Rapporteringstype.harAktivitet
+                  {rapporteringType === RapporteringType.harAktivitet
                     ? getLink("rapportering-rapporter-for-perioden").linkText
                     : "Neste"}
                 </RemixLink>
