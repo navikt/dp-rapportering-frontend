@@ -5,7 +5,6 @@ import {
   perioderUtenAktiviteter,
 } from "./../app/devTools/data";
 import { mockDb } from "./mockDb";
-import { gjeldendePeriodeResponse } from "./responses/gjeldendePeriodeResponse";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
 import { ScenerioType } from "~/devTools";
@@ -36,7 +35,8 @@ const hentInnsendtePerioder = (scenerio?: ScenerioType) => {
 export const handlers = [
   // Hent alle rapporteringsperioder
   http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, () => {
-    return HttpResponse.json(rapporteringsperioderResponse);
+    const rapporteringsperioder = mockDb.rapporteringsperioder.getAll() as IRapporteringsperiode[];
+    return HttpResponse.json(rapporteringsperioder);
   }),
 
   // Hent alle innsendte rapporteringsperioder
@@ -49,7 +49,10 @@ export const handlers = [
 
   // Hent gjeldende rapporteringsperiode
   http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`, () => {
-    return HttpResponse.json(gjeldendePeriodeResponse);
+    const allePerioder = mockDb.rapporteringsperioder.getAll() as IRapporteringsperiode[];
+    const rapporteringsperioder = allePerioder.filter((r) => r.status === "TilUtfylling");
+
+    return HttpResponse.json(rapporteringsperioder[0]);
   }),
 
   // Send inn rapporteringsperiode
@@ -58,15 +61,21 @@ export const handlers = [
   }),
 
   // Hent spesifikk rapporteringsperiode
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId`, () => {
-    // const { rapporteringsperioderId } = params;
+  http.get(
+    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId`,
+    ({ params }) => {
+      const { rapporteringsperioderId } = params;
 
-    // const rapporteringPeriode = rapporteringsperioderResponse.find(
-    //   (periode) => periode.id === rapporteringsperioderId
-    // );
+      const rapporteringsperioder =
+        mockDb.rapporteringsperioder.getAll() as IRapporteringsperiode[];
 
-    return HttpResponse.json(gjeldendePeriodeResponse);
-  }),
+      const rapporteringPeriode = rapporteringsperioder.find(
+        (periode) => periode.id === rapporteringsperioderId
+      );
+
+      return HttpResponse.json(rapporteringPeriode);
+    }
+  ),
 
   // Start korrigering av rapporteringsperiode
   http.post(

@@ -6,6 +6,7 @@ import {
   lagInnsendteRapporteringsperiodeMedArbeidSykOgFravaer,
   lagInnsendteRapporteringsperiodeMedUtdanning,
   lagInnsendteRapporteringsperioderUtenAktivitet,
+  lagRapporteringsperiodeMedArbeidAktivitet,
 } from "~/devTools/data";
 
 export const mockDb = factory({
@@ -33,3 +34,10 @@ const innsendtRapporteringsperioder = [
 ];
 
 innsendtRapporteringsperioder.forEach(mockDb.rapporteringsperioder.create);
+
+const rapporteringsperioderTilUtfylling = lagRapporteringsperiodeMedArbeidAktivitet(
+  1,
+  "TilUtfylling"
+);
+
+rapporteringsperioderTilUtfylling.forEach(mockDb.rapporteringsperioder.create);

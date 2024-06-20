@@ -73,7 +73,7 @@ export const lagInnsendteRapporteringsperioderUtenAktivitet = (antall: number) =
 
 export const lagRapporteringsperiodeMedArbeidAktivitet = (
   antall: number,
-  status: "Innsendt"
+  status: IRapporteringsperiode["status"]
 ): IRapporteringsperiode[] => {
   const dagerMedArbeid = [0, 2, 4, 8, 10];
 

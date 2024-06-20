@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { redirect } from "@remix-run/node";
+import { gjeldendePeriodeResponse } from "mocks/responses/gjeldendePeriodeResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
@@ -51,6 +52,15 @@ describe("Send inn rapporteringsperiode", () => {
           body,
         });
 
+        server.use(
+          http.get(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
+            () => {
+              return HttpResponse.json(gjeldendePeriodeResponse, { status: 200 });
+            }
+          )
+        );
+
         mockSession();
 
         const response = await action({
@@ -82,6 +92,14 @@ describe("Send inn rapporteringsperiode", () => {
           )
         );
 
+        server.use(
+          http.get(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
+            () => {
+              return HttpResponse.json(gjeldendePeriodeResponse, { status: 200 });
+            }
+          )
+        );
         mockSession();
 
         const response = await action({

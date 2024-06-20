@@ -55,6 +55,12 @@ describe("Hovedside rapportering", () => {
     });
 
     test("Skal hente ut gjeldende rapporteringsperiode", async () => {
+      server.use(
+        http.get(`${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/gjeldende`, () => {
+          return HttpResponse.json(gjeldendePeriodeResponse, { status: 200 });
+        })
+      );
+
       mockSession();
 
       const response = await loader({
