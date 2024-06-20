@@ -8,9 +8,31 @@ import { mockDb } from "./mockDb";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
 import { ScenerioType } from "~/devTools";
+import { UtfyllingScenerioType } from "~/devTools/UtfyllingDevTools";
 import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { getEnv } from "~/utils/env.utils";
+
+const hentRapporteringsperioder = (scenerio?: UtfyllingScenerioType) => {
+  const rapporteringsperioder = mockDb.rapporteringsperioder.findMany({
+    where: {
+      status: {
+        equals: "TilUtfylling",
+      },
+    },
+  }) as IRapporteringsperiode[];
+
+  switch (scenerio) {
+    case UtfyllingScenerioType.enkelt:
+      return rapporteringsperioder.slice(0, 1);
+
+    case UtfyllingScenerioType.flere:
+      return rapporteringsperioder;
+
+    default:
+      return rapporteringsperioder;
+  }
+};
 
 const hentInnsendtePerioder = (scenerio?: ScenerioType) => {
   const innsendtePerioder = mockDb.rapporteringsperioder.getAll() as IRapporteringsperiode[];
@@ -35,8 +57,11 @@ const hentInnsendtePerioder = (scenerio?: ScenerioType) => {
 
 export const handlers = [
   // Hent alle rapporteringsperioder
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, () => {
-    const rapporteringsperioder = mockDb.rapporteringsperioder.getAll() as IRapporteringsperiode[];
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, ({ request }) => {
+    const url = new URL(request.url);
+    const scenerio = url.searchParams.get("scenerio") as UtfyllingScenerioType;
+
+    const rapporteringsperioder = hentRapporteringsperioder(scenerio);
     return HttpResponse.json(rapporteringsperioder);
   }),
 
@@ -49,15 +74,83 @@ export const handlers = [
   }),
 
   // Hent gjeldende rapporteringsperiode
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`, () => {
-    const allePerioder = mockDb.rapporteringsperioder.getAll() as IRapporteringsperiode[];
-    const rapporteringsperioder = allePerioder.filter((r) => r.status === "TilUtfylling");
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`, ({ request }) => {
+    const url = new URL(request.url);
+    const scenerio = url.searchParams.get("scenerio") as UtfyllingScenerioType;
 
-    return HttpResponse.json(rapporteringsperioder[0]);
+    if (scenerio) {
+      if (scenerio === UtfyllingScenerioType.enkelt) {
+        const first = mockDb.rapporteringsperioder.findFirst({
+          where: {
+            status: {
+              equals: "TilUtfylling",
+            },
+          },
+        });
+
+        mockDb.rapporteringsperioder.updateMany({
+          where: {
+            id: {
+              notEquals: first?.id,
+            },
+            status: {
+              equals: "TilUtfylling",
+            },
+          },
+          data: {
+            active: false,
+          },
+        });
+      }
+
+      if (scenerio === UtfyllingScenerioType.flere || scenerio === UtfyllingScenerioType.reset) {
+        mockDb.rapporteringsperioder.updateMany({
+          where: {
+            status: {
+              equals: "TilUtfylling",
+            },
+          },
+          data: {
+            active: true,
+          },
+        });
+      }
+    }
+
+    const rapporteringsperioder = mockDb.rapporteringsperioder.findMany({
+      where: {
+        status: {
+          equals: "TilUtfylling",
+        },
+        active: {
+          equals: true,
+        },
+      },
+    }) as IRapporteringsperiode[];
+
+    if (rapporteringsperioder.length > 0) {
+      return HttpResponse.json(rapporteringsperioder[0]);
+    }
+
+    return new HttpResponse(null, { status: 404 });
   }),
 
   // Send inn rapporteringsperiode
-  http.post(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`, () => {
+  http.post(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`, async ({ request }) => {
+    const periode = (await request.json()) as IRapporteringsperiode;
+
+    // update status til innsendt
+    mockDb.rapporteringsperioder.update({
+      where: {
+        id: {
+          equals: periode.id,
+        },
+      },
+      data: {
+        status: "Innsendt",
+      },
+    });
+
     return new HttpResponse(null, { status: 200 });
   }),
 

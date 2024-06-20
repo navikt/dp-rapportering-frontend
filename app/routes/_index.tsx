@@ -5,13 +5,14 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { UtfyllingDevTools } from "~/devTools/UtfyllingDevTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { getEnv } from "~/utils/env.utils";
+import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 import { RapporteringType, useRapporteringType } from "~/hooks/RapporteringType";
 import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
@@ -38,8 +39,7 @@ export async function action({ request }: ActionFunctionArgs) {
 export async function loader({ request }: LoaderFunctionArgs) {
   let gjeldendePeriode: IRapporteringsperiode | null = null;
 
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-  const gjeldendePeriodeResponse = await hentGjeldendePeriode(onBehalfOfToken);
+  const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
 
   const session = await getSession(request);
 
@@ -98,6 +98,7 @@ export default function Landingsside() {
           >
             {getAppText("rapportering-tittel")}
           </Heading>
+          {isLocalOrDemo && <UtfyllingDevTools />}
         </div>
       </div>
       <div className="rapportering-container">

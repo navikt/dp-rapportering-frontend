@@ -22,6 +22,7 @@ export const mockDb = factory({
     kanSendes: faker.datatype.boolean,
     kanKorrigeres: faker.datatype.boolean,
     registrertArbeidssoker: nullable(faker.datatype.boolean),
+    active: faker.datatype.boolean || true,
   },
 });
 
@@ -36,7 +37,7 @@ const innsendtRapporteringsperioder = [
 innsendtRapporteringsperioder.forEach(mockDb.rapporteringsperioder.create);
 
 const rapporteringsperioderTilUtfylling = lagRapporteringsperiodeMedArbeidAktivitet(
-  1,
+  2,
   "TilUtfylling"
 );
 
