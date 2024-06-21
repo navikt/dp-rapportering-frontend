@@ -2,10 +2,7 @@ import { faker } from "@faker-js/faker";
 import { factory, nullable, primaryKey } from "@mswjs/data";
 import { addDays, format, subDays } from "date-fns";
 import { UtfyllingScenerioType } from "~/devTools/UtfyllingDevTools";
-import {
-  lagRapporteringsperiodeMedArbeidAktivitet,
-  lagRapporteringsperioderUtenAktivitet,
-} from "~/devTools/data";
+import { lagRapporteringsperioderUtenAktivitet } from "~/devTools/data";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 const model = factory({
@@ -107,7 +104,7 @@ const findRapporteringsperioderByScenerio = (
   if (scenerio === UtfyllingScenerioType.flere) {
     const perioder = findAllRapporteringsperioder();
     if (perioder.length === 1) {
-      const ny = lagRapporteringsperiodeMedArbeidAktivitet(1, "TilUtfylling")[0];
+      const ny = lagRapporteringsperioderUtenAktivitet(1, "TilUtfylling")[0];
       const { fraOgMed, tilOgMed } = getNestePeriodeDato(perioder[0]);
       const periode: IRapporteringsperiode = {
         ...ny,

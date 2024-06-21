@@ -3,12 +3,10 @@ import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { DevTools } from "~/devTools";
 import {
   type IRapporteringsperiode,
   hentInnsendtePerioder,
 } from "~/models/rapporteringsperiode.server";
-import { isLocalOrDemo } from "~/utils/env.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
@@ -59,7 +57,6 @@ export default function InnsendteRapporteringsPerioderSide() {
           >
             {getAppText("rapportering-innsendt-tittel")}
           </Heading>
-          {isLocalOrDemo && <DevTools />}
         </div>
       </div>
       <div className="rapportering-container">

@@ -1,46 +1,15 @@
-import {
-  perioderMedAktiviteter,
-  perioderMedArbeidSykFravaer,
-  perioderMedKunArbeid,
-  perioderUtenAktiviteter,
-} from "./../app/devTools/data";
 import { db } from "./db";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
-import { ScenerioType } from "~/devTools";
 import { UtfyllingScenerioType } from "~/devTools/UtfyllingDevTools";
 import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { getEnv } from "~/utils/env.utils";
 
-const hentInnsendtePerioder = (scenerio?: ScenerioType) => {
-  const innsendtePerioder = db.findAllInnsendtePerioder();
-
-  switch (scenerio) {
-    case ScenerioType.UtenAktiviteter:
-      return innsendtePerioder.filter(perioderUtenAktiviteter);
-
-    case ScenerioType.MedArbeidAktivitet:
-      return innsendtePerioder.filter(perioderMedAktiviteter).filter(perioderMedKunArbeid);
-
-    case ScenerioType.ArbeidSykFravaer:
-      return innsendtePerioder
-        .filter(perioderMedAktiviteter)
-        .filter((periode) => !perioderMedKunArbeid(periode))
-        .filter(perioderMedArbeidSykFravaer);
-
-    default:
-      return innsendtePerioder;
-  }
-};
-
 export const handlers = [
   // Hent alle innsendte rapporteringsperioder
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, ({ request }) => {
-    const url = new URL(request.url);
-    const scenerio = url.searchParams.get("scenerio") as ScenerioType;
-
-    return HttpResponse.json(hentInnsendtePerioder(scenerio));
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, () => {
+    return HttpResponse.json(db.findAllInnsendtePerioder());
   }),
 
   // Hent gjeldende rapporteringsperiode
