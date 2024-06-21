@@ -87,6 +87,7 @@ export async function loader() {
       IS_LOCALHOST: process.env.IS_LOCALHOST,
       USE_MSW: process.env.USE_MSW,
       FARO_URL: process.env.FARO_URL,
+      RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
     },
     fragments,
   });

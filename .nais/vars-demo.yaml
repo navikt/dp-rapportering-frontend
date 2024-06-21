@@ -1,7 +1,8 @@
 ingresses: 
-  - https://arbeid.demo.ekstern.dev.nav.no/arbeid/dagpenger/rapportering
+  - https://demo.ekstern.dev.nav.no/arbeid/dagpenger/rapportering
 base_path: "/arbeid/dagpenger/rapportering"
 dekorator:
   url: https://dekoratoren.dev.nav.no/
   env: dev
 faro_url: "https://telemetry.ekstern.dev.nav.no/collect"
+RUNTIME_ENVIRONMENT: "demo"

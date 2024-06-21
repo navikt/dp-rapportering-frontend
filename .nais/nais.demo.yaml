@@ -53,6 +53,8 @@ spec:
       value: {{commit}}
     - name: FARO_URL
       value: {{faro_url}}
+    - name: RUNTIME_ENVIRONMENT
+      value: {{RUNTIME_ENVIRONMENT}}
   accessPolicy:
     outbound:
       external:
