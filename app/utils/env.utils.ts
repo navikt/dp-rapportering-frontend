@@ -23,4 +23,5 @@ export function getEnv(value: keyof IEnv) {
   return env[value] || "";
 }
 
-export const isLocalOrDemo = getEnv("USE_MSW") === "true";
+export const isLocalOrDemo =
+  process.env.RUNTIME_ENVIRONMENT === "demo" || getEnv("USE_MSW") === "true";

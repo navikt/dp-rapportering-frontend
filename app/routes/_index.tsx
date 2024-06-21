@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading, Radio, RadioGroup, ReadMore } from "@navikt/ds-react";
+import { Alert, BodyLong, Heading, Radio, RadioGroup, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -88,6 +88,13 @@ export default function Landingsside() {
   return (
     <>
       <div className="rapportering-header">
+        {isLocalOrDemo && (
+          <Center>
+            <Alert variant="warning">
+              Dette er en demoside og inneholder ikke dine personlige data.
+            </Alert>
+          </Center>
+        )}
         <div className="rapportering-header-innhold">
           <Heading
             ref={sidelastFokusRef}
