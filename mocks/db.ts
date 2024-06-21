@@ -3,17 +3,12 @@ import { factory, nullable, primaryKey } from "@mswjs/data";
 import { addDays, format, subDays } from "date-fns";
 import { UtfyllingScenerioType } from "~/devTools/UtfyllingDevTools";
 import {
-  lagInnsendteRapporteringsperiodeMedArbeidAktivitet,
-  lagInnsendteRapporteringsperiodeMedArbeidOgUtdanning,
-  lagInnsendteRapporteringsperiodeMedArbeidSykOgFravaer,
-  lagInnsendteRapporteringsperiodeMedUtdanning,
-  lagInnsendteRapporteringsperioderUtenAktivitet,
   lagRapporteringsperiodeMedArbeidAktivitet,
   lagRapporteringsperioderUtenAktivitet,
 } from "~/devTools/data";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
-const mockDb = factory({
+const model = factory({
   rapporteringsperioder: {
     id: primaryKey(faker.datatype.uuid),
     periode: {
@@ -29,33 +24,17 @@ const mockDb = factory({
   },
 });
 
-export const seedInnsendtePerioder = () => {
-  const innsendtRapporteringsperioder = [
-    ...lagInnsendteRapporteringsperiodeMedUtdanning(1),
-    ...lagInnsendteRapporteringsperiodeMedArbeidOgUtdanning(1),
-    ...lagInnsendteRapporteringsperiodeMedArbeidSykOgFravaer(1),
-    ...lagInnsendteRapporteringsperiodeMedArbeidAktivitet(1),
-    ...lagInnsendteRapporteringsperioderUtenAktivitet(1),
-  ];
-
-  innsendtRapporteringsperioder.forEach(mockDb.rapporteringsperioder.create);
-};
-
 const seedRapporteringsperioder = () => {
   const rapporteringsperioderTilUtfylling = lagRapporteringsperioderUtenAktivitet(
     1,
     "TilUtfylling"
   );
 
-  rapporteringsperioderTilUtfylling.forEach(mockDb.rapporteringsperioder.create);
+  rapporteringsperioderTilUtfylling.forEach(model.rapporteringsperioder.create);
 };
 
-const seed = () => {
-  seedRapporteringsperioder();
-};
-
-const update = (id: string, data: Partial<IRapporteringsperiode>) => {
-  mockDb.rapporteringsperioder.update({
+const updateRapporteringsperiode = (id: string, data: Partial<IRapporteringsperiode>) => {
+  model.rapporteringsperioder.update({
     where: {
       id: {
         equals: id,
@@ -65,17 +44,8 @@ const update = (id: string, data: Partial<IRapporteringsperiode>) => {
   });
 };
 
-const findAllByStatus = (status: IRapporteringsperiode["status"]) =>
-  mockDb.rapporteringsperioder.findMany({
-    where: {
-      status: {
-        equals: status,
-      },
-    },
-  }) as IRapporteringsperiode[];
-
 const findAllRapporteringsperioder = () =>
-  mockDb.rapporteringsperioder.findMany({
+  model.rapporteringsperioder.findMany({
     where: {
       status: {
         equals: "TilUtfylling",
@@ -84,7 +54,7 @@ const findAllRapporteringsperioder = () =>
   }) as IRapporteringsperiode[];
 
 const findAllInnsendtePerioder = () =>
-  mockDb.rapporteringsperioder.findMany({
+  model.rapporteringsperioder.findMany({
     where: {
       status: {
         equals: "Innsendt",
@@ -93,7 +63,7 @@ const findAllInnsendtePerioder = () =>
   }) as IRapporteringsperiode[];
 
 const findRapporteringsperiodeById = (id: string) => {
-  return mockDb.rapporteringsperioder.findFirst({
+  return model.rapporteringsperioder.findFirst({
     where: {
       id: {
         equals: id,
@@ -102,30 +72,9 @@ const findRapporteringsperiodeById = (id: string) => {
   }) as IRapporteringsperiode;
 };
 
-// create new rapporteringsperiode
-
-const createRapporteringsperiode = (): IRapporteringsperiode => {
-  const periode = lagRapporteringsperioderUtenAktivitet(1, "TilUtfylling")[0];
-
-  return mockDb.rapporteringsperioder.create(periode) as IRapporteringsperiode;
-};
-
-const deleteLastRapporteringsperiode = () => {
-  const perioder = findAllByStatus("TilUtfylling");
-  const { id } = perioder[perioder.length - 1];
-
-  mockDb.rapporteringsperioder.delete({
-    where: {
-      id: {
-        equals: id,
-      },
-    },
-  });
-};
-
 const deleteAllRapporteringsperioder = (perioder: IRapporteringsperiode[]) => {
   perioder.forEach((periode) => {
-    mockDb.rapporteringsperioder.delete({
+    model.rapporteringsperioder.delete({
       where: {
         id: {
           equals: periode.id,
@@ -169,7 +118,7 @@ const findRapporteringsperioderByScenerio = (
         },
       };
 
-      mockDb.rapporteringsperioder.create(periode);
+      model.rapporteringsperioder.create(periode);
     }
     return findAllRapporteringsperioder();
   } else if (scenerio === UtfyllingScenerioType.reset) {
@@ -177,7 +126,7 @@ const findRapporteringsperioderByScenerio = (
 
     if (perioder.length === 0) {
       const periode = lagRapporteringsperioderUtenAktivitet(1, "TilUtfylling")[0];
-      mockDb.rapporteringsperioder.create(periode);
+      model.rapporteringsperioder.create(periode);
       return findAllRapporteringsperioder();
     }
 
@@ -188,14 +137,11 @@ const findRapporteringsperioderByScenerio = (
 };
 
 export const db = {
-  ...mockDb,
-  seed,
-  createRapporteringsperiode,
-  update,
-  findAllByStatus,
+  ...model,
+  seedRapporteringsperioder,
+  updateRapporteringsperiode,
   findAllRapporteringsperioder,
   findAllInnsendtePerioder,
-  findRapporteringsperioderByScenerio,
   findRapporteringsperiodeById,
-  deleteLastRapporteringsperiode,
+  findRapporteringsperioderByScenerio,
 };

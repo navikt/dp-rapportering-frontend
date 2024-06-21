@@ -4,7 +4,7 @@ import {
   perioderMedKunArbeid,
   perioderUtenAktiviteter,
 } from "./../app/devTools/data";
-import { db } from "./mockDb";
+import { db } from "./db";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
 import { ScenerioType } from "~/devTools";
@@ -60,7 +60,7 @@ export const handlers = [
   http.post(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`, async ({ request }) => {
     const periode = (await request.json()) as IRapporteringsperiode;
 
-    db.update(periode.id, { status: "Innsendt" });
+    db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
 
     return new HttpResponse(null, { status: 200 });
   }),
@@ -108,7 +108,7 @@ export const handlers = [
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
       const { registrertArbeidssoker } = (await request.json()) as ArbeidssokerSvar;
 
-      db.update(rapporteringsperioderId, { registrertArbeidssoker });
+      db.updateRapporteringsperiode(rapporteringsperioderId, { registrertArbeidssoker });
       return new HttpResponse(null, { status: 204 });
     }
   ),
