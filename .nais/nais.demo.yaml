@@ -1,7 +1,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: dp-rapportering-frontend-demo
+  name: dp-rapportering-frontend
   namespace: teamdagpenger
   labels:
     team: teamdagpenger
@@ -62,5 +62,3 @@ spec:
       rules:
         - application: nav-dekoratoren
           namespace: personbruker
-  tokenx:
-    enabled: true
