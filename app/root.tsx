@@ -11,7 +11,6 @@ import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from "@remix-run/react";
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
-import { Fragment, Suspense } from "react";
 import { sanityConfig } from "./sanity/sanity.config";
 import { initInstrumentation } from "~/utils/faro";
 import { RapporteringTypeProvider } from "./hooks/RapporteringType";
@@ -90,6 +89,7 @@ export async function loader() {
       FARO_URL: process.env.FARO_URL,
       RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
     },
+    isLocalOrDemo: process.env.RUNTIME_ENVIRONMENT === "demo" || process.env.USE_MSW === "true",
     fragments,
   });
 }
@@ -97,7 +97,7 @@ export async function loader() {
 initInstrumentation();
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { fragments, env } = useTypedRouteLoaderData("root");
+  const { fragments, env, isLocalOrDemo } = useTypedRouteLoaderData("root");
 
   useInjectDecoratorScript(fragments.DECORATOR_SCRIPTS);
 
@@ -117,7 +117,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
         {parse(fragments.DECORATOR_HEADER, { trim: true })}
-        {env.RUNTIME_ENVIRONMENT === "demo" && (
+        {isLocalOrDemo && (
           <Center>
             <Alert variant="warning">
               Dette er en demoside og inneholder ikke dine personlige data.

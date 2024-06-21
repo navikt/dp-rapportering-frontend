@@ -12,11 +12,12 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
+import { getEnv } from "~/utils/env.utils";
 import { RapporteringType, useRapporteringType } from "~/hooks/RapporteringType";
 import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { ArbeidssokerRegister } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import Center from "~/components/center/Center";
@@ -57,6 +58,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Landingsside() {
   const { gjeldendePeriode } = useLoaderData<typeof loader>();
+  const { isLocalOrDemo } = useTypedRouteLoaderData("root");
 
   const { rapporteringType, setRapporteringType } = useRapporteringType();
 
