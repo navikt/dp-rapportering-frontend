@@ -1,10 +1,14 @@
 import { handlers } from "./handlers";
+import { db } from "./mockDb";
 import type { SetupServerApi } from "msw/node";
 import { setupServer } from "msw/node";
 
 export const server = setupServer(...handlers);
 
-export const setup = () => setupServer(...handlers) as SetupServerApi;
+export const setup = () => {
+  db.seed();
+  return setupServer(...handlers) as SetupServerApi;
+};
 
 export const start = (server: SetupServerApi) => {
   server.listen({ onUnhandledRequest: "bypass" });
