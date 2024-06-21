@@ -10,11 +10,11 @@ import { isbot } from "isbot";
 import { setup, start } from "mocks/server";
 import { PassThrough } from "node:stream";
 import { renderToPipeableStream } from "react-dom/server";
-import { getEnv } from "./utils/env.utils";
+import { isLocalOrDemo } from "./utils/env.utils";
 
 const ABORT_DELAY = 5_000;
 
-if (getEnv("USE_MSW") === "true") {
+if (isLocalOrDemo) {
   const server = setup();
   start(server);
 }
