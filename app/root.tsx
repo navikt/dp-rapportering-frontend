@@ -5,7 +5,7 @@ import type { ISanity } from "./sanity/sanity.types";
 import favicon16 from "/favicon-16x16.png";
 import favicon32 from "/favicon-32x32.png";
 import favicon from "/favicon.ico";
-import { Skeleton } from "@navikt/ds-react";
+import { Alert } from "@navikt/ds-react";
 import { json } from "@remix-run/node";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from "@remix-run/react";
@@ -17,6 +17,7 @@ import { initInstrumentation } from "~/utils/faro";
 import { RapporteringTypeProvider } from "./hooks/RapporteringType";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
+import Center from "./components/center/Center";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
 
 /* eslint-enable */
@@ -116,6 +117,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
         {parse(fragments.DECORATOR_HEADER, { trim: true })}
+        {env.RUNTIME_ENVIRONMENT === "demo" && (
+          <Center>
+            <Alert variant="warning">
+              Dette er en demoside og inneholder ikke dine personlige data.
+            </Alert>
+          </Center>
+        )}
+
         {children}
         <ScrollRestoration />
         {parse(fragments.DECORATOR_FOOTER, { trim: true })}
