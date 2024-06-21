@@ -43,47 +43,47 @@ jobs:
 
       - run: npm run test
 
-  build:
-    needs: [install]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: "read"
-      id-token: "write"
-      packages: write
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18.x"
+  # build:
+  #   needs: [install]
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: "read"
+  #     id-token: "write"
+  #     packages: write
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: "18.x"
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: ./node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
-      - run: npm run build
+  #     - name: Cache node_modules
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ./node_modules
+  #         key: modules-${{ hashFiles('package-lock.json') }}
+  #     - run: npm run build
 
-      # Bygg docker image
-      - name: docker-build-push
-        uses: nais/docker-build-push@v0
-        id: docker-build-push
-        with:
-          team: teamdagpenger
-          push_image: true # optional, default true
-          dockerfile: Dockerfile # optional, default Dockerfile
-          docker_context: . # optional, default .
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+  #     # Bygg docker image
+  #     - name: docker-build-push
+  #       uses: nais/docker-build-push@v0
+  #       id: docker-build-push
+  #       with:
+  #         team: teamdagpenger
+  #         push_image: true # optional, default true
+  #         dockerfile: Dockerfile # optional, default Dockerfile
+  #         docker_context: . # optional, default .
+  #         identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+  #         project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
-      - name: Cache static files
-        uses: actions/cache@v3
-        with:
-          path: |
-            ./build
-            ./public
-          key: ${{ github.sha }}
-    outputs:
-      image: ${{ steps.docker-build-push.outputs.image }}
+  #     - name: Cache static files
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: |
+  #           ./build
+  #           ./public
+  #         key: ${{ github.sha }}
+  #   outputs:
+  #     image: ${{ steps.docker-build-push.outputs.image }}
   
 
   build-demo:
@@ -133,43 +133,43 @@ jobs:
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
 
-  upload-cdn:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: "read"
-      id-token: "write"
-    steps:
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ./build
-            ./public
-          key: ${{ github.sha }}
-          fail-on-cache-miss: true
+  # upload-cdn:
+  #   needs: [build, test]
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: "read"
+  #     id-token: "write"
+  #   steps:
+  #     - uses: actions/cache@v4
+  #       with:
+  #         path: |
+  #           ./build
+  #           ./public
+  #         key: ${{ github.sha }}
+  #         fail-on-cache-miss: true
 
-      - name: Upload static files
-        uses: nais/deploy/actions/cdn-upload/v2@master
-        with:
-          team: teamdagpenger
-          source: ./public
-          destination: "/dp-rapportering-frontend/"
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+  #     - name: Upload static files
+  #       uses: nais/deploy/actions/cdn-upload/v2@master
+  #       with:
+  #         team: teamdagpenger
+  #         source: ./public
+  #         destination: "/dp-rapportering-frontend/"
+  #         identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+  #         project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
-  deploy-dev:
-    needs: [build, test, upload-cdn]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: nais/deploy/actions/deploy@v1
-        env:
-          VAR: image=${{ needs.build.outputs.image }}
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/nais.yaml
-          VARS: .nais/vars-dev.yaml
-          PRINT_PAYLOAD: true
+  # deploy-dev:
+  #   needs: [build, test, upload-cdn]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: nais/deploy/actions/deploy@v1
+  #       env:
+  #         VAR: image=${{ needs.build.outputs.image }}
+  #         APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+  #         CLUSTER: dev-gcp
+  #         RESOURCE: .nais/nais.yaml
+  #         VARS: .nais/vars-dev.yaml
+  #         PRINT_PAYLOAD: true
 
   deploy-demo:
     needs: [build-demo, test,]
