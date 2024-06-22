@@ -62,6 +62,10 @@ export default function Landingsside() {
 
   const { rapporteringType, setRapporteringType } = useRapporteringType();
 
+  useEffect(() => {
+    console.log(`🔥: rapporteringstype :`, rapporteringType);
+  }, [rapporteringType]);
+
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
@@ -114,7 +118,10 @@ export default function Landingsside() {
             <RadioGroup
               description={invaerendePeriodeTekst}
               legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
-              onChange={setRapporteringType}
+              onChange={(val) => {
+                console.log(`🔥: changed. time to update :`, val);
+                setRapporteringType(val);
+              }}
               value={rapporteringType}
             >
               <Radio value={RapporteringType.harAktivitet}>

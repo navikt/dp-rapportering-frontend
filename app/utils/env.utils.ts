@@ -15,6 +15,7 @@ interface IEnv {
   COMMIT: string;
   FARO_URL: string;
   DEKORATOR_ENV: string;
+  RUNTIME_ENVIRONMENT: string;
 }
 
 export function getEnv(value: keyof IEnv) {
@@ -24,4 +25,4 @@ export function getEnv(value: keyof IEnv) {
 }
 
 export const isLocalOrDemo =
-  process.env.RUNTIME_ENVIRONMENT === "demo" || getEnv("USE_MSW") === "true";
+  getEnv("RUNTIME_ENVIRONMENT") === "demo" || getEnv("USE_MSW") === "true";
