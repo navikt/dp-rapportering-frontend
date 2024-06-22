@@ -4,33 +4,33 @@ import { Button, Heading, Modal, Tooltip } from "@navikt/ds-react";
 import { useNavigate } from "@remix-run/react";
 import { useRef } from "react";
 
-export enum UtfyllingScenerioType {
+export enum ScenerioType {
   enkelt = "enkelt",
   flere = "flere",
   reset = "reset",
 }
 interface IScenerio {
-  type: UtfyllingScenerioType;
+  type: ScenerioType;
   tittel: string;
 }
 
 const scenerios: IScenerio[] = [
   {
-    type: UtfyllingScenerioType.enkelt,
+    type: ScenerioType.enkelt,
     tittel: "Enkelt periode",
   },
   {
-    type: UtfyllingScenerioType.flere,
+    type: ScenerioType.flere,
     tittel: "Flere perioder",
   },
 ];
 
-export function UtfyllingDevTools() {
+export function DevTools() {
   const ref = useRef<HTMLDialogElement>(null);
 
   const navigate = useNavigate();
 
-  const handleChangeScenerio = (scenerioType: UtfyllingScenerioType) => {
+  const handleChangeScenerio = (scenerioType: ScenerioType) => {
     ref.current?.close();
     navigate(`/?scenerio=${scenerioType}`);
   };

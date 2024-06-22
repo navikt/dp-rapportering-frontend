@@ -5,7 +5,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { UtfyllingDevTools } from "~/devTools/UtfyllingDevTools";
+import { DevTools } from "~/devTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -62,10 +62,6 @@ export default function Landingsside() {
 
   const { rapporteringType, setRapporteringType } = useRapporteringType();
 
-  useEffect(() => {
-    console.log(`🔥: rapporteringstype :`, rapporteringType);
-  }, [rapporteringType]);
-
   const sidelastFokusRef = useRef(null);
   const { setFokus } = useSetFokus();
   const { scrollToView } = useScrollToView();
@@ -104,7 +100,7 @@ export default function Landingsside() {
           >
             {getAppText("rapportering-tittel")}
           </Heading>
-          {isLocalOrDemo && <UtfyllingDevTools />}
+          {isLocalOrDemo && <DevTools />}
         </div>
       </div>
       <div className="rapportering-container">
@@ -118,10 +114,7 @@ export default function Landingsside() {
             <RadioGroup
               description={invaerendePeriodeTekst}
               legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
-              onChange={(val) => {
-                console.log(`🔥: changed. time to update :`, val);
-                setRapporteringType(val);
-              }}
+              onChange={setRapporteringType}
               value={rapporteringType}
             >
               <Radio value={RapporteringType.harAktivitet}>

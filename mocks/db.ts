@@ -1,8 +1,10 @@
 import { faker } from "@faker-js/faker";
 import { factory, nullable, primaryKey } from "@mswjs/data";
-import { addDays, format, subDays } from "date-fns";
-import { UtfyllingScenerioType } from "~/devTools/UtfyllingDevTools";
-import { lagRapporteringsperioderUtenAktivitet } from "~/devTools/data";
+import { ScenerioType } from "~/devTools/";
+import {
+  lagForstRapporteringsperiode,
+  leggTilForrigeRapporteringsperiode,
+} from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 const model = factory({
@@ -22,12 +24,7 @@ const model = factory({
 });
 
 const seedRapporteringsperioder = () => {
-  const rapporteringsperioderTilUtfylling = lagRapporteringsperioderUtenAktivitet(
-    1,
-    "TilUtfylling"
-  );
-
-  rapporteringsperioderTilUtfylling.forEach(model.rapporteringsperioder.create);
+  model.rapporteringsperioder.create(lagForstRapporteringsperiode());
 };
 
 const updateRapporteringsperiode = (id: string, data: Partial<IRapporteringsperiode>) => {
@@ -48,13 +45,24 @@ const findAllRapporteringsperioder = () =>
         equals: "TilUtfylling",
       },
     },
+    orderBy: {
+      periode: {
+        fraOgMed: "asc",
+      },
+    },
   }) as IRapporteringsperiode[];
+// ).sort((a, b) => compareAsc(parseISO(a.periode.fraOgMed), parseISO(b.periode.fraOgMed)));
 
 const findAllInnsendtePerioder = () =>
   model.rapporteringsperioder.findMany({
     where: {
       status: {
         equals: "Innsendt",
+      },
+    },
+    orderBy: {
+      periode: {
+        fraOgMed: "asc",
       },
     },
   }) as IRapporteringsperiode[];
@@ -81,53 +89,36 @@ const deleteAllRapporteringsperioder = (perioder: IRapporteringsperiode[]) => {
   });
 };
 
-const getNestePeriodeDato = (rapporteringsperiode: IRapporteringsperiode) => {
-  const fraOgMed = format(subDays(rapporteringsperiode.periode.fraOgMed, 14), "yyyy-MM-dd");
-  const tilOgMed = format(addDays(fraOgMed, 13), "yyyy-MM-dd");
-  return {
-    fraOgMed,
-    tilOgMed,
-  };
-};
-
-const findRapporteringsperioderByScenerio = (
-  scenerio: UtfyllingScenerioType
-): IRapporteringsperiode[] => {
-  if (scenerio === UtfyllingScenerioType.enkelt) {
+const findRapporteringsperioderByScenerio = (scenerio: ScenerioType): IRapporteringsperiode[] => {
+  if (scenerio === ScenerioType.enkelt) {
     const perioder = findAllRapporteringsperioder();
     if (perioder.length > 1) {
-      deleteAllRapporteringsperioder(perioder.filter((periode) => periode.id !== perioder[0].id));
+      deleteAllRapporteringsperioder(
+        perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
+      );
     }
     return findAllRapporteringsperioder();
   }
 
-  if (scenerio === UtfyllingScenerioType.flere) {
-    const perioder = findAllRapporteringsperioder();
-    if (perioder.length === 1) {
-      const ny = lagRapporteringsperioderUtenAktivitet(1, "TilUtfylling")[0];
-      const { fraOgMed, tilOgMed } = getNestePeriodeDato(perioder[0]);
-      const periode: IRapporteringsperiode = {
-        ...ny,
-        periode: {
-          ...ny.periode,
-          fraOgMed,
-          tilOgMed,
-        },
-      };
-
-      model.rapporteringsperioder.create(periode);
+  if (scenerio === ScenerioType.flere) {
+    const rapporteringsperioder = findAllRapporteringsperioder();
+    if (rapporteringsperioder.length === 1) {
+      model.rapporteringsperioder.create(
+        leggTilForrigeRapporteringsperiode(rapporteringsperioder[0].periode)
+      );
     }
     return findAllRapporteringsperioder();
-  } else if (scenerio === UtfyllingScenerioType.reset) {
+  } else if (scenerio === ScenerioType.reset) {
     const perioder = findAllRapporteringsperioder();
 
     if (perioder.length === 0) {
-      const periode = lagRapporteringsperioderUtenAktivitet(1, "TilUtfylling")[0];
-      model.rapporteringsperioder.create(periode);
+      model.rapporteringsperioder.create(lagForstRapporteringsperiode());
       return findAllRapporteringsperioder();
     }
 
-    deleteAllRapporteringsperioder(perioder.filter((periode) => periode.id !== perioder[0].id));
+    deleteAllRapporteringsperioder(
+      perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
+    );
     return findAllRapporteringsperioder();
   }
   return findAllRapporteringsperioder();

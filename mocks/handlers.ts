@@ -1,7 +1,7 @@
 import { db } from "./db";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
-import { UtfyllingScenerioType } from "~/devTools/UtfyllingDevTools";
+import { ScenerioType } from "~/devTools";
 import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { getEnv } from "~/utils/env.utils";
@@ -15,7 +15,7 @@ export const handlers = [
   // Hent gjeldende rapporteringsperiode
   http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`, ({ request }) => {
     const url = new URL(request.url);
-    const scenerio = url.searchParams.get("scenerio") as UtfyllingScenerioType;
+    const scenerio = url.searchParams.get("scenerio") as ScenerioType;
     const rapporteringsperioder = db.findRapporteringsperioderByScenerio(scenerio);
 
     if (rapporteringsperioder.length > 0) {
