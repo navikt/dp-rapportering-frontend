@@ -157,7 +157,7 @@ export default function Landingsside() {
                 >
                   {rapporteringType === RapporteringType.harAktivitet
                     ? getLink("rapportering-rapporter-for-perioden").linkText
-                    : "Neste"}
+                    : getAppText("rapportering-knapp-neste")}
                 </RemixLink>
               </Center>
             )}

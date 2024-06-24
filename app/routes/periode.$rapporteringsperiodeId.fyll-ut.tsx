@@ -1,4 +1,4 @@
-import { InformationSquareIcon } from "@navikt/aksel-icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
@@ -11,6 +11,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -129,21 +130,36 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <div className="registert-meldeperiode-container">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
-        <div className="navigasjon-container">
-          <RemixLink as="Button" to={`/periode/${periode.id}/send-inn`}>
-            {getLink("rapportering-korriger-fyll-ut-send-rapportering").linkText}
-          </RemixLink>
-        </div>
-        <div className="hva-skal-jeg-rapportere-nav-link">
+        <BodyLong className="my-8">
+          Du kan sende denne rapporteringen fra 6. juni, og senest 13. juni for å unngå trekk i
+          utbetalingen.
+        </BodyLong>
+
+        <div className="navigasjon-container-fyll-ut my-4">
           <RemixLink
-            as="Link"
-            to={getLink("rapportering-fyll-ut-info").linkUrl}
+            as="Button"
+            to={`/`}
+            variant="secondary"
             iconPosition="left"
-            icon={<InformationSquareIcon title="a11y-title" fontSize={24} aria-hidden />}
+            icon={<ArrowLeftIcon aria-hidden />}
+            className="py-4 px-8"
           >
-            {getLink("rapportering-fyll-ut-info").linkText}
+            {getLink("rapportering-periode-send-inn-tilbake").linkText}
+          </RemixLink>
+
+          <RemixLink
+            as="Button"
+            to={`/periode/${periode.id}/send-inn`}
+            variant="primary"
+            iconPosition="right"
+            icon={<ArrowRightIcon aria-hidden />}
+            className="py-4 px-8"
+          >
+            {getAppText("rapportering-knapp-neste")}
           </RemixLink>
         </div>
+
+        <LagretAutomatisk />
       </div>
     </>
   );
