@@ -5,8 +5,6 @@ import { useSetFokus } from "~/hooks/useSetFokus";
 import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { Kalender } from "~/components/kalender/Kalender";
 
 export default function RapporteringsPeriodesBekreftelsesSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
@@ -29,11 +27,15 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
       </Alert>
 
       <BodyLong spacing>{getAppText("rapportering-periode-bekreftelse-beskrivelse")}</BodyLong>
-      <div className="graa-bakgrunn">
+      {/* <div className="graa-bakgrunn">
         <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
         <div className="registert-meldeperiode-container">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
+      </div> */}
+
+      <div>
+        <p>{JSON.stringify(periode)}</p>
       </div>
 
       <div className="navigasjon-container">
