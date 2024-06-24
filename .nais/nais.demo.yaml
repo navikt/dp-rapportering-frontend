@@ -1,11 +1,11 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: dp-rapportering-frontend
+  name: dp-rapportering-frontend-demo
   namespace: teamdagpenger
   labels:
     team: teamdagpenger
-    app: dp-rapportering-frontend
+    app: dp-rapportering-frontend-demo
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "64M"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
