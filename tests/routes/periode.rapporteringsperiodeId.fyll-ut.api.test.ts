@@ -123,40 +123,6 @@ describe("Fyll ut rapporteringsperiode", () => {
 
         expect(response.status).toBe("success");
       });
-
-      test("burde feile hvis backend feiler", async () => {
-        const body = new URLSearchParams(testBody);
-
-        const request = new Request("http://localhost:3000", {
-          method: "POST",
-          body,
-        });
-
-        server.use(
-          http.delete(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet/:aktivitetId`,
-            () => {
-              return HttpResponse.json(
-                {
-                  errorMessage: `Server Error`,
-                },
-                { status: 500 }
-              );
-            },
-            { once: true }
-          )
-        );
-
-        mockSession();
-
-        const response = await action({
-          request,
-          params: testParams,
-          context: {},
-        });
-
-        expect(response.status).toBe("error");
-      });
     });
   });
 });

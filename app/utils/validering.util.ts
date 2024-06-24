@@ -5,12 +5,7 @@ import { zfd } from "zod-form-data";
 const AktivitetstypeEnum = z.enum(["Arbeid", "Syk", "Utdanning", "Fravaer"]);
 
 export const aktivitetsvalidering = z.object({
-  type: zfd.repeatable(
-    z
-      .array(AktivitetstypeEnum)
-      .min(1, "Du må velge minst en aktivitet")
-      .max(2, "Du kan velge maks to aktiviteter")
-  ),
+  type: zfd.repeatable(z.array(AktivitetstypeEnum).max(2, "Du kan velge maks to aktiviteter")),
   timer: z
     .preprocess(
       (timer) => String(timer).replace(/,/g, "."),

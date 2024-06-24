@@ -5,6 +5,18 @@ import { validationError } from "remix-validated-form";
 import { type AktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
+export async function slettAlleAktiviteter(
+  onBehalfOfToken: string,
+  periodeId: string,
+  formdata: FormData
+): Promise<INetworkResponse> {
+  const gjeldendeDag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
+
+  const oppdatertDag = { ...gjeldendeDag, aktiviteter: [] };
+
+  return await lagreAktivitet(onBehalfOfToken, periodeId, oppdatertDag);
+}
+
 export async function validerOgLagreAktivitet(
   onBehalfOfToken: string,
   periodeId: string,

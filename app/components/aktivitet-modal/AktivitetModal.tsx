@@ -90,7 +90,7 @@ export function AktivitetModal({
             )}
 
             <div className={styles.knappKontainer}>
-              <Button variant="secondary" type="submit" name="reset" value="slette">
+              <Button variant="secondary" type="submit" name="submit" value="slette">
                 {getAppText("rapportering-slett")}
               </Button>
               <Button type="submit" name="submit" value="lagre">
