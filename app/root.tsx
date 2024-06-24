@@ -5,17 +5,18 @@ import type { ISanity } from "./sanity/sanity.types";
 import favicon16 from "/favicon-16x16.png";
 import favicon32 from "/favicon-32x32.png";
 import favicon from "/favicon.ico";
-import { Skeleton } from "@navikt/ds-react";
+import { Alert } from "@navikt/ds-react";
 import { json } from "@remix-run/node";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from "@remix-run/react";
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
-import { Fragment, Suspense } from "react";
 import { sanityConfig } from "./sanity/sanity.config";
 import { initInstrumentation } from "~/utils/faro";
+import { RapporteringTypeProvider } from "./hooks/RapporteringType";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
+import Center from "./components/center/Center";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
 
 /* eslint-enable */
@@ -86,7 +87,9 @@ export async function loader() {
       IS_LOCALHOST: process.env.IS_LOCALHOST,
       USE_MSW: process.env.USE_MSW,
       FARO_URL: process.env.FARO_URL,
+      RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
     },
+    isLocalOrDemo: process.env.RUNTIME_ENVIRONMENT === "demo" || process.env.USE_MSW === "true",
     fragments,
   });
 }
@@ -94,7 +97,7 @@ export async function loader() {
 initInstrumentation();
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { fragments, env } = useTypedRouteLoaderData("root");
+  const { fragments, env, isLocalOrDemo } = useTypedRouteLoaderData("root");
 
   useInjectDecoratorScript(fragments.DECORATOR_SCRIPTS);
 
@@ -114,6 +117,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
         {parse(fragments.DECORATOR_HEADER, { trim: true })}
+        {isLocalOrDemo && (
+          <Center>
+            <Alert variant="warning">
+              Dette er en demoside og inneholder ikke dine personlige data.
+            </Alert>
+          </Center>
+        )}
+
         {children}
         <ScrollRestoration />
         {parse(fragments.DECORATOR_FOOTER, { trim: true })}
@@ -124,7 +135,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <RapporteringTypeProvider>
+      <Outlet />
+    </RapporteringTypeProvider>
+  );
 }
 
 export function ErrorBoundary() {

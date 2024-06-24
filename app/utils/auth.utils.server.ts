@@ -1,3 +1,4 @@
+import { isLocalOrDemo } from "./env.utils";
 import { expiresIn, getToken, requestOboToken, validateToken } from "@navikt/oasis";
 
 const fallbackToken =
@@ -20,6 +21,10 @@ export function sessionExpiresIn(request: Request) {
 }
 
 export async function getRapporteringOboToken(request: Request) {
+  if (isLocalOrDemo) {
+    return localToken;
+  }
+
   if (process.env.IS_LOCALHOST === "true") {
     if (sessionExpiresIn(request) <= 0 && process.env.USE_MSW !== "true") {
       throw new Response(null, {

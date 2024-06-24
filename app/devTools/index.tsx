@@ -5,9 +5,9 @@ import { useNavigate } from "@remix-run/react";
 import { useRef } from "react";
 
 export enum ScenerioType {
-  UtenAktiviteter = "UtenAktiviteter",
-  MedArbeidAktivitet = "MedArbeidAktivitet",
-  ArbeidSykFravaer = "ArbeidSykFravaer",
+  enkelt = "enkelt",
+  flere = "flere",
+  reset = "reset",
 }
 interface IScenerio {
   type: ScenerioType;
@@ -16,16 +16,12 @@ interface IScenerio {
 
 const scenerios: IScenerio[] = [
   {
-    type: ScenerioType.UtenAktiviteter,
-    tittel: "Perioder uten aktivitet",
+    type: ScenerioType.enkelt,
+    tittel: "Enkelt periode",
   },
   {
-    type: ScenerioType.MedArbeidAktivitet,
-    tittel: "Perioder med arbeid aktivitet",
-  },
-  {
-    type: ScenerioType.ArbeidSykFravaer,
-    tittel: "Perioder med arbeid, syk og fravær aktiviteter",
+    type: ScenerioType.flere,
+    tittel: "Flere perioder",
   },
 ];
 
@@ -36,12 +32,12 @@ export function DevTools() {
 
   const handleChangeScenerio = (scenerioType: ScenerioType) => {
     ref.current?.close();
-    navigate(`/innsendt?scenerio=${scenerioType}`);
+    navigate(`/?scenerio=${scenerioType}`);
   };
 
   const handleResetScenerio = () => {
     ref.current?.close();
-    navigate("/innsendt");
+    navigate("/?scenerio=reset");
   };
 
   return (
@@ -63,12 +59,12 @@ export function DevTools() {
             height: "100%",
             left: "auto",
           }}
+          width={400}
         >
           <Modal.Body>
-            {/* <Scenerios /> */}
             <hr />
             <Heading level="2" size="small">
-              Innsendte perioder
+              Rapporteringsperioder
             </Heading>
             {scenerios.map((scenerio) => {
               return (

@@ -1,0 +1,66 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: dp-rapportering-frontend-demo
+  namespace: teamdagpenger
+  labels:
+    team: teamdagpenger
+    app: dp-rapportering-frontend-demo
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "64M"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+spec:
+  image: {{image}}
+  port: 3000
+  liveness:
+    path: "{{base_path}}/api/internal/isalive"
+    initialDelay: 3
+    timeout: 1
+    periodSeconds: 5
+    failureThreshold: 10
+  readiness:
+    path: "{{base_path}}/api/internal/isready"
+    initialDelay: 3
+    timeout: 1
+  replicas:
+    min: 2
+    max: 2
+    cpuThresholdPercentage: 75
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+  ingresses:
+    {{#each ingresses as |url|}}
+    - {{url}}
+    {{/each}}
+  secureLogs:
+    enabled: true
+  env:
+    - name: SELF_URL
+      value: {{ingress}}
+    - name: BASE_PATH
+      value: {{base_path}}
+    - name: DP_RAPPORTERING_URL
+      value: http://dp-rapportering
+    - name: DEKORATOR_URL
+      value: {{dekorator.url}}
+    - name: DEKORATOR_ENV
+      value: {{dekorator.env}}
+    - name: COMMIT
+      value: {{commit}}
+    - name: FARO_URL
+      value: {{faro_url}}
+    - name: RUNTIME_ENVIRONMENT
+      value: {{RUNTIME_ENVIRONMENT}}
+  accessPolicy:
+    outbound:
+      external:
+        - host: rt6o382n.apicdn.sanity.io
+        - host: www.nav.no
+        - host: dekoratoren.dev.nav.no
+      rules:
+        - application: nav-dekoratoren
+          namespace: personbruker

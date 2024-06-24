@@ -25,8 +25,22 @@ export interface IRapporteringsperiodeDag {
   aktiviteter: IAktivitet[];
 }
 
-export async function hentGjeldendePeriode(onBehalfOfToken: string): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`;
+function getGjeldendePeriodeUrl(request: Request) {
+  const requestUrl = new URL(request.url);
+  const scenerio = requestUrl.searchParams.get("scenerio");
+
+  if (scenerio) {
+    const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende?scenerio=${scenerio}`;
+    return url;
+  }
+
+  return `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`;
+}
+
+export async function hentGjeldendePeriode(request: Request): Promise<Response> {
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+
+  const url = getGjeldendePeriodeUrl(request);
 
   return await fetch(url, {
     method: "GET",

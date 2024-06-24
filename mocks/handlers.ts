@@ -1,73 +1,48 @@
-import {
-  perioderMedAktiviteter,
-  perioderMedArbeidSykFravaer,
-  perioderMedKunArbeid,
-  perioderUtenAktiviteter,
-} from "./../app/devTools/data";
-import { mockDb } from "./mockDb";
-import { gjeldendePeriodeResponse } from "./responses/gjeldendePeriodeResponse";
+import { db } from "./db";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
 import { ScenerioType } from "~/devTools";
+import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { getEnv } from "~/utils/env.utils";
 
-const hentInnsendtePerioder = (scenerio?: ScenerioType) => {
-  const innsendtePerioder =
-    mockDb.innsendteRapporteringsperioder.getAll() as IRapporteringsperiode[];
-
-  switch (scenerio) {
-    case ScenerioType.UtenAktiviteter:
-      return innsendtePerioder.filter(perioderUtenAktiviteter);
-
-    case ScenerioType.MedArbeidAktivitet:
-      return innsendtePerioder.filter(perioderMedAktiviteter).filter(perioderMedKunArbeid);
-
-    case ScenerioType.ArbeidSykFravaer:
-      return innsendtePerioder
-        .filter(perioderMedAktiviteter)
-        .filter((periode) => !perioderMedKunArbeid(periode))
-        .filter(perioderMedArbeidSykFravaer);
-
-    default:
-      return mockDb.innsendteRapporteringsperioder.getAll();
-  }
-};
-
 export const handlers = [
-  // Hent alle rapporteringsperioder
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, () => {
-    return HttpResponse.json(rapporteringsperioderResponse);
-  }),
-
   // Hent alle innsendte rapporteringsperioder
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, ({ request }) => {
-    const url = new URL(request.url);
-    const scenerio = url.searchParams.get("scenerio") as ScenerioType;
-
-    return HttpResponse.json(hentInnsendtePerioder(scenerio));
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, () => {
+    return HttpResponse.json(db.findAllInnsendtePerioder());
   }),
 
   // Hent gjeldende rapporteringsperiode
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`, () => {
-    return HttpResponse.json(gjeldendePeriodeResponse);
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`, ({ request }) => {
+    const url = new URL(request.url);
+    const scenerio = url.searchParams.get("scenerio") as ScenerioType;
+    const rapporteringsperioder = db.findRapporteringsperioderByScenerio(scenerio);
+
+    if (rapporteringsperioder.length > 0) {
+      return HttpResponse.json(rapporteringsperioder[0]);
+    }
+
+    return new HttpResponse(null, { status: 404 });
   }),
 
   // Send inn rapporteringsperiode
-  http.post(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`, () => {
+  http.post(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`, async ({ request }) => {
+    const periode = (await request.json()) as IRapporteringsperiode;
+
+    db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
+
     return new HttpResponse(null, { status: 200 });
   }),
 
   // Hent spesifikk rapporteringsperiode
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId`, () => {
-    // const { rapporteringsperioderId } = params;
+  http.get(
+    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId`,
+    ({ params }) => {
+      const rapporteringsperioderId = params.rapporteringsperioderId as string;
 
-    // const rapporteringPeriode = rapporteringsperioderResponse.find(
-    //   (periode) => periode.id === rapporteringsperioderId
-    // );
-
-    return HttpResponse.json(gjeldendePeriodeResponse);
-  }),
+      return HttpResponse.json(db.findRapporteringsperiodeById(rapporteringsperioderId));
+    }
+  ),
 
   // Start korrigering av rapporteringsperiode
   http.post(
@@ -98,7 +73,11 @@ export const handlers = [
   // Lagre en arbeidssøker svar
   http.post(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId/arbeidssoker`,
-    () => {
+    async ({ params, request }) => {
+      const rapporteringsperioderId = params.rapporteringsperioderId as string;
+      const { registrertArbeidssoker } = (await request.json()) as ArbeidssokerSvar;
+
+      db.updateRapporteringsperiode(rapporteringsperioderId, { registrertArbeidssoker });
       return new HttpResponse(null, { status: 204 });
     }
   ),

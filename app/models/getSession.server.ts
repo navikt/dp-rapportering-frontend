@@ -1,13 +1,13 @@
 import { expiresIn, getToken, validateToken } from "@navikt/oasis";
 import { INetworkResponse } from "~/models/networkResponse";
-import { getEnv } from "~/utils/env.utils";
+import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 
 export interface ISessionData {
   expiresIn: number;
 }
 
 export async function getSession(req: Request): Promise<INetworkResponse<ISessionData>> {
-  if (getEnv("USE_MSW") === "true") {
+  if (isLocalOrDemo) {
     return {
       status: "success",
       data: {
