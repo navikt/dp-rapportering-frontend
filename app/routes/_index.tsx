@@ -134,10 +134,12 @@ export default function Landingsside() {
             </ReadMore>
 
             {rapporteringType === "harIngenAktivitet" && (
-              <ArbeidssokerRegister
-                rapporteringsperiodeId={gjeldendePeriode.id}
-                registrertArbeidssoker={gjeldendePeriode.registrertArbeidssoker}
-              />
+              <div className="my-8">
+                <ArbeidssokerRegister
+                  rapporteringsperiodeId={gjeldendePeriode.id}
+                  registrertArbeidssoker={gjeldendePeriode.registrertArbeidssoker}
+                />
+              </div>
             )}
 
             {rapporteringType && (

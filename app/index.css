@@ -63,12 +63,7 @@ body {
   max-width: 350px;
 }
 
-.navigasjon-container-send-inn {
-  display: flex;
-  justify-content: space-between;
-}
-
-.navigasjon-container-fyll-ut {
+.navigasjon-container-to-knapper {
   display: flex;
   justify-content: space-between;
 }

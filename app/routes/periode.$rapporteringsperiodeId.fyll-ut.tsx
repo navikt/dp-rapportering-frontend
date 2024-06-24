@@ -135,7 +135,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           utbetalingen.
         </BodyLong>
 
-        <div className="navigasjon-container-fyll-ut my-4">
+        <div className="navigasjon-container-to-knapper my-4">
           <RemixLink
             as="Button"
             to={`/`}
@@ -149,7 +149,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
           <RemixLink
             as="Button"
-            to={`/periode/${periode.id}/send-inn`}
+            to={`/periode/${periode.id}/arbeidssoker`}
             variant="primary"
             iconPosition="right"
             icon={<ArrowRightIcon aria-hidden />}

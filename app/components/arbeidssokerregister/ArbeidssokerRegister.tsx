@@ -41,7 +41,7 @@ export function ArbeidssokerRegister({
   }, [fetcher.data?.status, fetcher.data, initialRegistrertArbeidssoker, registrertArbeidssoker]);
 
   return (
-    <div className="my-8">
+    <div>
       <fetcher.Form method="post">
         <RadioGroup
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
