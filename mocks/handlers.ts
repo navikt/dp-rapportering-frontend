@@ -28,9 +28,8 @@ export const handlers = [
   // Send inn rapporteringsperiode
   http.post(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`, async ({ request }) => {
     const periode = (await request.json()) as IRapporteringsperiode;
-    console.log(`🔥: updated periode :`, periode);
 
-    db.updateRapporteringsperiode(periode.id, { ...periode, status: "Innsendt" });
+    db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
 
     return new HttpResponse(null, { status: 200 });
   }),
