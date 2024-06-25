@@ -25,6 +25,17 @@ export interface IRapporteringsperiodeDag {
   aktiviteter: IAktivitet[];
 }
 
+export async function hentRapporteringsperioder(request: Request): Promise<Response> {
+  const onBehalfOfToken = await getRapporteringOboToken(request);
+
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
+
+  return await fetch(url, {
+    method: "GET",
+    headers: getHeaders(onBehalfOfToken),
+  });
+}
+
 function getGjeldendePeriodeUrl(request: Request) {
   const requestUrl = new URL(request.url);
   const scenerio = requestUrl.searchParams.get("scenerio");

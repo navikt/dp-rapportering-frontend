@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { gjeldendePeriodeResponse } from "mocks/responses/gjeldendePeriodeResponse";
+import { rapporteringsperioderResponse } from "mocks/responses/rapporteringsperioderResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/_index";
@@ -28,10 +28,10 @@ describe("Hovedside rapportering", () => {
       expect(response.status).toBe(500);
     });
 
-    test("Skal feile hvis kallet til gjelende rapporteringsperioder feilet", async () => {
+    test("Skal feile hvis kallet til rapporteringsperioder feilet", async () => {
       server.use(
         http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/gjeldende`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`,
           () => {
             return HttpResponse.json(null, { status: 500 });
           },
@@ -54,10 +54,10 @@ describe("Hovedside rapportering", () => {
       expect(response.status).toBe(500);
     });
 
-    test("Skal hente ut gjeldende rapporteringsperiode", async () => {
+    test("Skal hente ut rapporteringsperioder", async () => {
       server.use(
-        http.get(`${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/gjeldende`, () => {
-          return HttpResponse.json(gjeldendePeriodeResponse, { status: 200 });
+        http.get(`${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`, () => {
+          return HttpResponse.json(rapporteringsperioderResponse, { status: 200 });
         })
       );
 
@@ -72,7 +72,7 @@ describe("Hovedside rapportering", () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.gjeldendePeriode).toEqual(gjeldendePeriodeResponse);
+      expect(data.gjeldendePeriode).toEqual(rapporteringsperioderResponse[0]);
     });
 
     test("Skal vise at bruker har ingen gjeldene perdiode", async () => {

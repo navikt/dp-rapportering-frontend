@@ -9,6 +9,11 @@ import {
 import { getEnv } from "~/utils/env.utils";
 
 export const handlers = [
+  // Hent alle rapporteringsperioder
+  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, () => {
+    return HttpResponse.json(db.findAllRapporteringsperioder());
+  }),
+
   // Hent alle innsendte rapporteringsperioder
   http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, () => {
     return HttpResponse.json(db.findAllInnsendtePerioder());

@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading, Radio, RadioGroup, ReadMore } from "@navikt/ds-react";
+import { Alert, BodyLong, BodyShort, Heading, Radio, RadioGroup, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -9,7 +9,7 @@ import { DevTools, ScenerioType } from "~/devTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
+import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
@@ -44,26 +44,27 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 }
 export async function loader({ request }: LoaderFunctionArgs) {
+  let rapporteringsperioder: IRapporteringsperiode[] = [];
   let gjeldendePeriode: IRapporteringsperiode | null = null;
 
-  const gjeldendePeriodeResponse = await hentGjeldendePeriode(request);
+  const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
 
   const session = await getSession(request);
 
-  if (!gjeldendePeriodeResponse.ok) {
-    if (gjeldendePeriodeResponse.status !== 404)
-      throw new Response("Feil i uthenting av gjeldende periode", {
-        status: 500,
-      });
-  } else {
-    gjeldendePeriode = await gjeldendePeriodeResponse.json();
+  if (rapporteringsperioderResponse.ok) {
+    rapporteringsperioder = await rapporteringsperioderResponse.json();
+    gjeldendePeriode = rapporteringsperioder?.[0] ?? null;
+
+    return json({ gjeldendePeriode, rapporteringsperioder, session });
   }
 
-  return json({ gjeldendePeriode, session });
+  throw new Response("Feil i uthenting av rapporteringsperioder", {
+    status: 500,
+  });
 }
 
 export default function Landingsside() {
-  const { gjeldendePeriode } = useLoaderData<typeof loader>();
+  const { gjeldendePeriode, rapporteringsperioder } = useLoaderData<typeof loader>();
   const { isLocalOrDemo } = useTypedRouteLoaderData("root");
 
   const { rapporteringType, setRapporteringType } = useRapporteringType();
@@ -100,11 +101,30 @@ export default function Landingsside() {
           <PortableText value={getRichText("rapportering-innledning")} />
         </BodyLong>
 
+        {rapporteringsperioder.length > 1 && (
+          <Alert variant="info" className="my-8">
+            <Heading spacing size="small" level="3">
+              {getAppText("rapportering-flere-perioder-tittel")}
+            </Heading>
+            {getAppText("rapportering-flere-perioder-innledning")}
+          </Alert>
+        )}
+
+        {rapporteringsperioder.length > 0 && (
+          <div className="my-8">
+            <Heading size="small">
+              {rapporteringsperioder.length > 1
+                ? getAppText("rapportering-forste-periode")
+                : getAppText("rapportering-navaerende-periode")}
+            </Heading>
+            <BodyShort textColor="subtle">{invaerendePeriodeTekst}</BodyShort>
+          </div>
+        )}
+
         {!gjeldendePeriode && <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>}
         {gjeldendePeriode && (
           <div>
             <RadioGroup
-              description={invaerendePeriodeTekst}
               legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
               onChange={setRapporteringType}
               value={rapporteringType}
