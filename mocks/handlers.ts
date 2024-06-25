@@ -2,7 +2,10 @@ import { db } from "./db";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { HttpResponse, bypass, http } from "msw";
 import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  IRapporteringsperiodeDag,
+} from "~/models/rapporteringsperiode.server";
 import { getEnv } from "~/utils/env.utils";
 
 export const handlers = [
@@ -52,7 +55,13 @@ export const handlers = [
   // Lagre en aktivitet
   http.post(
     `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
-    () => {
+    async ({ params, request }) => {
+      const rapporteringsperioderId = params.rapporteringsperioderId as string;
+
+      const dag: IRapporteringsperiodeDag = (await request.json()) as IRapporteringsperiodeDag;
+
+      db.lagreAktivitet(rapporteringsperioderId, dag);
+
       return new HttpResponse(null, { status: 204 });
     }
   ),

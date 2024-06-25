@@ -5,7 +5,10 @@ import {
   lagForstRapporteringsperiode,
   leggTilForrigeRapporteringsperiode,
 } from "~/devTools/rapporteringsperiode";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  IRapporteringsperiodeDag,
+} from "~/models/rapporteringsperiode.server";
 
 const model = factory({
   rapporteringsperioder: {
@@ -138,6 +141,30 @@ export function updateRapporteringsperioder(scenerio: ScenerioType) {
   }
 }
 
+export function lagreAktivitet(rapporteringsperiodeId: string, dag: IRapporteringsperiodeDag) {
+  const periode = findRapporteringsperiodeById(rapporteringsperiodeId);
+
+  if (periode) {
+    const oppdatertDager = periode.dager.map((d) => {
+      if (d.dato === dag.dato) {
+        return dag;
+      }
+      return d;
+    });
+
+    db.rapporteringsperioder.update({
+      where: {
+        id: {
+          equals: rapporteringsperiodeId,
+        },
+      },
+      data: {
+        dager: oppdatertDager,
+      },
+    });
+  }
+}
+
 export const db = {
   ...model,
   seedRapporteringsperioder,
@@ -145,4 +172,5 @@ export const db = {
   findAllRapporteringsperioder,
   findAllInnsendtePerioder,
   findRapporteringsperiodeById,
+  lagreAktivitet,
 };
