@@ -1,8 +1,6 @@
 import { useNavigate } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 export default function RapporteringsPeriodeSide() {
@@ -10,15 +8,6 @@ export default function RapporteringsPeriodeSide() {
 
   const { getAppText } = useSanity();
   const navigate = useNavigate();
-
-  const sidelastFokusRef = useRef(null);
-  const { setFokus } = useSetFokus();
-  const { scrollToView } = useScrollToView();
-
-  useEffect(() => {
-    scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
 
   useEffect(() => {
     if (periode) {
@@ -37,7 +26,7 @@ export default function RapporteringsPeriodeSide() {
 
   return (
     <div className="rapportering-container">
-      <p ref={sidelastFokusRef} tabIndex={-1} className="vo-fokus">
+      <p tabIndex={-1} className="vo-fokus">
         {getAppText("rapportering-periode-laster")}
       </p>
     </div>

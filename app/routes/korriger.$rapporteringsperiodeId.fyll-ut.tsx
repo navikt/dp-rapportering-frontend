@@ -2,14 +2,12 @@ import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType, sletteAktivitet } from "~/models/aktivitet.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
@@ -54,20 +52,9 @@ export default function KorrigeringFyllUtSide() {
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
 
-  const sidelastFokusRef = useRef(null);
-  const { setFokus } = useSetFokus();
-  const { scrollToView } = useScrollToView();
-
-  useEffect(() => {
-    // Vi setter fokus på headeren når brukeren kommer til denne siden fra en annen side.
-    // Ellers følger vi browser default fokus oppførsel
-    if (!searchParams.get("utfylling")) {
-      setFokus(sidelastFokusRef);
-    }
-    scrollToView(sidelastFokusRef);
-  }, [setFokus, scrollToView, searchParams]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (actionData?.status === "success") {
@@ -94,13 +81,7 @@ export default function KorrigeringFyllUtSide() {
   return (
     <>
       <div className="rapportering-container">
-        <Heading
-          size={"medium"}
-          level={"2"}
-          ref={sidelastFokusRef}
-          tabIndex={-1}
-          className="vo-fokus"
-        >
+        <Heading size={"medium"} level={"2"} tabIndex={-1} className="vo-fokus">
           {getAppText("rapportering-korriger-fyll-ut-tittel")}
         </Heading>
         <BodyLong spacing>{getAppText("rapportering-korriger-fyll-ut-beskrivelse")}</BodyLong>

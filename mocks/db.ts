@@ -60,11 +60,6 @@ const findAllInnsendtePerioder = () =>
         equals: "Innsendt",
       },
     },
-    orderBy: {
-      periode: {
-        fraOgMed: "asc",
-      },
-    },
   }) as IRapporteringsperiode[];
 
 const findRapporteringsperiodeById = (id: string) => {
@@ -79,6 +74,20 @@ const findRapporteringsperiodeById = (id: string) => {
 
 const deleteAllRapporteringsperioder = (perioder: IRapporteringsperiode[]) => {
   perioder.forEach((periode) => {
+    model.rapporteringsperioder.delete({
+      where: {
+        id: {
+          equals: periode.id,
+        },
+      },
+    });
+  });
+};
+
+const deleteAllInnsendteperioder = () => {
+  const innsendteperioder = findAllInnsendtePerioder();
+
+  innsendteperioder.forEach((periode) => {
     model.rapporteringsperioder.delete({
       where: {
         id: {
@@ -119,10 +128,53 @@ const findRapporteringsperioderByScenerio = (scenerio: ScenerioType): IRapporter
     deleteAllRapporteringsperioder(
       perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
     );
+
+    deleteAllInnsendteperioder();
+
     return findAllRapporteringsperioder();
   }
   return findAllRapporteringsperioder();
 };
+
+export function updateRapporteringsperioder(scenerio: ScenerioType) {
+  switch (scenerio) {
+    case ScenerioType.enkelt: {
+      const perioder = findAllRapporteringsperioder();
+      if (perioder.length > 1) {
+        deleteAllRapporteringsperioder(
+          perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
+        );
+      }
+      break;
+    }
+    case ScenerioType.flere: {
+      const rapporteringsperioder = findAllRapporteringsperioder();
+      if (rapporteringsperioder.length === 1) {
+        model.rapporteringsperioder.create(
+          leggTilForrigeRapporteringsperiode(rapporteringsperioder[0].periode)
+        );
+      }
+      break;
+    }
+
+    case ScenerioType.reset: {
+      deleteAllInnsendteperioder();
+
+      const perioder = findAllRapporteringsperioder();
+
+      if (perioder.length === 0) {
+        model.rapporteringsperioder.create(lagForstRapporteringsperiode());
+        return findAllRapporteringsperioder();
+      }
+
+      deleteAllRapporteringsperioder(
+        perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
+      );
+
+      return findAllRapporteringsperioder();
+    }
+  }
+}
 
 export const db = {
   ...model,

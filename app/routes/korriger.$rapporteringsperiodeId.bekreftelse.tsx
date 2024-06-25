@@ -1,8 +1,5 @@
 import { Heading } from "@navikt/ds-react";
-import { useEffect, useRef } from "react";
 import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -12,26 +9,10 @@ export default function KorrigeringBekreftelsesSide() {
   const { periode } = useTypedRouteLoaderData("routes/korriger.$rapporteringsperiodeId");
   const { getAppText } = useSanity();
 
-  const sidelastFokusRef = useRef(null);
-  const { setFokus } = useSetFokus();
-  const { scrollToView } = useScrollToView();
-
-  useEffect(() => {
-    scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
-
   return (
     <>
       <div className="rapportering-container">
-        <Heading
-          ref={sidelastFokusRef}
-          tabIndex={-1}
-          className="vo-fokus"
-          size={"medium"}
-          level={"2"}
-          spacing={true}
-        >
+        <Heading tabIndex={-1} className="vo-fokus" size={"medium"} level={"2"} spacing={true}>
           {getAppText("rapportering-korriger-bekreftelse-tittel")}
         </Heading>
         <div className="graa-bakgrunn">

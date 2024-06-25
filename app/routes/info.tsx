@@ -1,10 +1,7 @@
 import { Accordion, BodyLong, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useNavigate } from "@remix-run/react";
-import { useEffect, useRef } from "react";
 import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { RemixLink } from "~/components/RemixLink";
 
 export default function Infoside() {
@@ -12,15 +9,6 @@ export default function Infoside() {
   const { getAppText, getRichText } = useSanity();
 
   const tilbake = () => navigate(-1);
-
-  const sidelastFokusRef = useRef(null);
-  const { setFokus } = useSetFokus();
-  const { scrollToView } = useScrollToView();
-
-  useEffect(() => {
-    scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
 
   return (
     <>
@@ -32,7 +20,7 @@ export default function Infoside() {
         </div>
       </div>
       <div className="rapportering-container">
-        <Heading ref={sidelastFokusRef} tabIndex={-1} className="vo-fokus" size="medium" level="2">
+        <Heading tabIndex={-1} className="vo-fokus" size="medium" level="2">
           {getAppText("rapportering-info-beskrivelse-tittel")}
         </Heading>
         <BodyLong spacing>{getAppText("rapportering-info-beskrivelse")}</BodyLong>

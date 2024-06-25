@@ -2,14 +2,11 @@ import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useEffect, useRef } from "react";
 import {
   type IRapporteringsperiode,
   hentInnsendtePerioder,
 } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 
@@ -34,27 +31,13 @@ export default function InnsendteRapporteringsPerioderSide() {
 
   // TODO: "Implementer brødsmulesti /innsendt"
 
-  const sidelastFokusRef = useRef(null);
-  const { setFokus } = useSetFokus();
-  const { scrollToView } = useScrollToView();
   const { getAppText } = useSanity();
-
-  useEffect(() => {
-    scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
 
   return (
     <>
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
-          <Heading
-            ref={sidelastFokusRef}
-            tabIndex={-1}
-            className="vo-fokus"
-            level="1"
-            size="xlarge"
-          >
+          <Heading tabIndex={-1} className="vo-fokus" level="1" size="xlarge">
             {getAppText("rapportering-innsendt-tittel")}
           </Heading>
         </div>

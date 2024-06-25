@@ -4,19 +4,17 @@ import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
-import { useEffect, useRef } from "react";
-import { DevTools } from "~/devTools";
+import { updateRapporteringsperioder } from "mocks/db";
+import { DevTools, ScenerioType } from "~/devTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentGjeldendePeriode } from "~/models/rapporteringsperiode.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { getEnv } from "~/utils/env.utils";
+import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 import { RapporteringType, useRapporteringType } from "~/hooks/RapporteringType";
 import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { ArbeidssokerRegister } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
@@ -26,6 +24,14 @@ import { SessionModal } from "~/components/session-modal/SessionModal";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+
+  if (isLocalOrDemo) {
+    const { scenerio } = Object.fromEntries(formData);
+
+    updateRapporteringsperioder(scenerio as ScenerioType);
+    return { status: "success" };
+  }
+
   const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
   const svar = formData.get("registrertArbeidssoker");
 
@@ -62,15 +68,7 @@ export default function Landingsside() {
 
   const { rapporteringType, setRapporteringType } = useRapporteringType();
 
-  const sidelastFokusRef = useRef(null);
-  const { setFokus } = useSetFokus();
-  const { scrollToView } = useScrollToView();
   const { getAppText, getLink, getRichText } = useSanity();
-
-  useEffect(() => {
-    scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
 
   let invaerendePeriodeTekst;
 
@@ -91,13 +89,7 @@ export default function Landingsside() {
     <>
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
-          <Heading
-            ref={sidelastFokusRef}
-            tabIndex={-1}
-            level="1"
-            size="xlarge"
-            className="vo-fokus"
-          >
+          <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
             {getAppText("rapportering-tittel")}
           </Heading>
           {isLocalOrDemo && <DevTools />}

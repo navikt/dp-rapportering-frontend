@@ -1,7 +1,7 @@
 import { Scenerio } from "./Scenerio";
 import { SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Heading, Modal, Tooltip } from "@navikt/ds-react";
-import { useNavigate } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
 
 export enum ScenerioType {
@@ -26,19 +26,8 @@ const scenerios: IScenerio[] = [
 ];
 
 export function DevTools() {
+  const fetcher = useFetcher();
   const ref = useRef<HTMLDialogElement>(null);
-
-  const navigate = useNavigate();
-
-  const handleChangeScenerio = (scenerioType: ScenerioType) => {
-    ref.current?.close();
-    navigate(`/?scenerio=${scenerioType}`);
-  };
-
-  const handleResetScenerio = () => {
-    ref.current?.close();
-    navigate("/?scenerio=reset");
-  };
 
   return (
     <div>
@@ -66,27 +55,37 @@ export function DevTools() {
             <Heading level="2" size="small">
               Rapporteringsperioder
             </Heading>
-            {scenerios.map((scenerio) => {
-              return (
-                <Scenerio
-                  key={scenerio.type}
-                  tittel={scenerio.tittel}
-                  onClick={() => handleChangeScenerio(scenerio.type)}
-                />
-              );
-            })}
+            <fetcher.Form method="post">
+              {scenerios.map((scenerio) => {
+                return (
+                  <Scenerio
+                    key={scenerio.type}
+                    tittel={scenerio.tittel}
+                    value={scenerio.type}
+                    onClick={() => ref.current?.close()}
+                  />
+                );
+              })}
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "2rem",
-              }}
-            >
-              <Button size="medium" variant="secondary" onClick={handleResetScenerio}>
-                Reset testdata
-              </Button>
-            </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "2rem",
+                }}
+              >
+                <Button
+                  name="scenerio"
+                  size="medium"
+                  variant="secondary"
+                  value="reset"
+                  type="submit"
+                  onClick={() => ref.current?.close()}
+                >
+                  Reset testdata
+                </Button>
+              </div>
+            </fetcher.Form>
           </Modal.Body>
         </Modal>
       </div>

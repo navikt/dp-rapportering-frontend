@@ -2,14 +2,12 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType } from "~/models/aktivitet.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
@@ -54,21 +52,9 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
 
-  const sidelastFokusRef = useRef(null);
-  const { setFokus } = useSetFokus();
-  const { scrollToView } = useScrollToView();
-
-  useEffect(() => {
-    // Vi setter fokus på headeren når brukeren kommer til denne siden fra en annen side.
-    // Ellers følger vi browser default fokus oppførsel.
-    if (!searchParams.get("utfylling")) {
-      setFokus(sidelastFokusRef);
-    }
-
-    scrollToView(sidelastFokusRef);
-  }, [setFokus, scrollToView, searchParams]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (actionData?.status === "success") {
@@ -104,13 +90,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   return (
     <>
       <div className="rapportering-container">
-        <Heading
-          ref={sidelastFokusRef}
-          tabIndex={-1}
-          size={"large"}
-          level={"2"}
-          className="vo-fokus"
-        >
+        <Heading tabIndex={-1} size={"large"} level={"2"} className="vo-fokus">
           {getAppText("rapportering-periode-fyll-ut-tittel")}
         </Heading>
         <BodyLong className="tekst-subtil" spacing>

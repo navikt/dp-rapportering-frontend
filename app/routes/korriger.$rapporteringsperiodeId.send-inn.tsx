@@ -3,15 +3,12 @@ import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useParams } from "@remix-run/react";
-import { useEffect, useRef } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { RemixLink } from "~/components/RemixLink";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -36,26 +33,10 @@ export default function KorrigeringSendInnSide() {
   const { rapporteringsperiodeId } = useParams();
   const { getLink, getRichText, getAppText } = useSanity();
 
-  const sidelastFokusRef = useRef(null);
-  const { setFokus } = useSetFokus();
-  const { scrollToView } = useScrollToView();
-
-  useEffect(() => {
-    scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
-
   return (
     <>
       <div className="rapportering-container">
-        <Heading
-          ref={sidelastFokusRef}
-          tabIndex={-1}
-          level="2"
-          size="medium"
-          spacing
-          className="vo-fokus"
-        >
+        <Heading tabIndex={-1} level="2" size="medium" spacing className="vo-fokus">
           {getAppText("rapportering-korriger-send-inn-tittel")}
         </Heading>
         <PortableText value={getRichText("rapportering-send-inn-innhold")} />

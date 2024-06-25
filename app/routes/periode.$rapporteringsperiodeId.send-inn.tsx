@@ -4,7 +4,7 @@ import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useNavigate } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import { hentPeriode, sendInnPeriode } from "~/models/rapporteringsperiode.server";
@@ -12,8 +12,6 @@ import styles from "~/routes-styles/rapportering.module.css";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
-import { useSetFokus } from "~/hooks/useSetFokus";
-import { useScrollToView } from "~/hooks/useSkrollTilSeksjon";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import {
@@ -50,18 +48,9 @@ export default function RapporteringsPeriodeSendInnSide() {
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
 
-  const sidelastFokusRef = useRef(null);
-  const { setFokus } = useSetFokus();
-  const { scrollToView } = useScrollToView();
-
   const navigate = useNavigate();
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
-
-  useEffect(() => {
-    scrollToView(sidelastFokusRef);
-    setFokus(sidelastFokusRef);
-  }, [setFokus, scrollToView]);
 
   let invaerendePeriodeTekst;
 
@@ -77,14 +66,7 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   return (
     <div className="rapportering-container">
-      <Heading
-        ref={sidelastFokusRef}
-        tabIndex={-1}
-        level="2"
-        size="large"
-        spacing
-        className="vo-fokus"
-      >
+      <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
         {getAppText("rapportering-send-inn-tittel")}
       </Heading>
 
