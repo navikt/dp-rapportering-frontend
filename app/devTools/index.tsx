@@ -5,8 +5,8 @@ import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
 
 export enum ScenerioType {
-  enkelt = "enkelt",
-  flere = "flere",
+  en = "en",
+  to = "to",
   reset = "reset",
 }
 interface IScenerio {
@@ -16,12 +16,12 @@ interface IScenerio {
 
 const scenerios: IScenerio[] = [
   {
-    type: ScenerioType.enkelt,
-    tittel: "Enkelt periode",
+    type: ScenerioType.en,
+    tittel: "Én periode",
   },
   {
-    type: ScenerioType.flere,
-    tittel: "Flere perioder",
+    type: ScenerioType.to,
+    tittel: "To perioder",
   },
 ];
 
@@ -32,7 +32,7 @@ export function DevTools() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <Tooltip content="Verktøy for testing" style={{}}>
+        <Tooltip content="Verktøy for testing">
           <Button
             onClick={() => ref.current?.showModal()}
             icon={<SandboxIcon title="Åpne testdataverktøy" />}
@@ -53,7 +53,7 @@ export function DevTools() {
           <Modal.Body>
             <hr />
             <Heading level="2" size="small">
-              Rapporteringsperioder
+              Scenerio:
             </Heading>
             <fetcher.Form method="post">
               {scenerios.map((scenerio) => {

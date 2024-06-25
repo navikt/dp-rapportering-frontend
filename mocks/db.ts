@@ -98,47 +98,9 @@ const deleteAllInnsendteperioder = () => {
   });
 };
 
-const findRapporteringsperioderByScenerio = (scenerio: ScenerioType): IRapporteringsperiode[] => {
-  if (scenerio === ScenerioType.enkelt) {
-    const perioder = findAllRapporteringsperioder();
-    if (perioder.length > 1) {
-      deleteAllRapporteringsperioder(
-        perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
-      );
-    }
-    return findAllRapporteringsperioder();
-  }
-
-  if (scenerio === ScenerioType.flere) {
-    const rapporteringsperioder = findAllRapporteringsperioder();
-    if (rapporteringsperioder.length === 1) {
-      model.rapporteringsperioder.create(
-        leggTilForrigeRapporteringsperiode(rapporteringsperioder[0].periode)
-      );
-    }
-    return findAllRapporteringsperioder();
-  } else if (scenerio === ScenerioType.reset) {
-    const perioder = findAllRapporteringsperioder();
-
-    if (perioder.length === 0) {
-      model.rapporteringsperioder.create(lagForstRapporteringsperiode());
-      return findAllRapporteringsperioder();
-    }
-
-    deleteAllRapporteringsperioder(
-      perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
-    );
-
-    deleteAllInnsendteperioder();
-
-    return findAllRapporteringsperioder();
-  }
-  return findAllRapporteringsperioder();
-};
-
 export function updateRapporteringsperioder(scenerio: ScenerioType) {
   switch (scenerio) {
-    case ScenerioType.enkelt: {
+    case ScenerioType.en: {
       const perioder = findAllRapporteringsperioder();
       if (perioder.length > 1) {
         deleteAllRapporteringsperioder(
@@ -147,7 +109,7 @@ export function updateRapporteringsperioder(scenerio: ScenerioType) {
       }
       break;
     }
-    case ScenerioType.flere: {
+    case ScenerioType.to: {
       const rapporteringsperioder = findAllRapporteringsperioder();
       if (rapporteringsperioder.length === 1) {
         model.rapporteringsperioder.create(
@@ -183,5 +145,4 @@ export const db = {
   findAllRapporteringsperioder,
   findAllInnsendtePerioder,
   findRapporteringsperiodeById,
-  findRapporteringsperioderByScenerio,
 };
