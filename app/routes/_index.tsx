@@ -124,8 +124,6 @@ export default function Landingsside() {
           </div>
         )}
 
-        <h3>{gjeldendePeriode?.id}</h3>
-
         {!gjeldendePeriode && <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>}
         {gjeldendePeriode && (
           <div>
