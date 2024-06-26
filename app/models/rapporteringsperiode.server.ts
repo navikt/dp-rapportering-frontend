@@ -1,6 +1,7 @@
 import type { IAktivitet } from "./aktivitet.server";
+import { getSessionId } from "mocks/session";
 import { getRapporteringOboToken } from "~/utils/auth.utils.server";
-import { getEnv } from "~/utils/env.utils";
+import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 
 export interface IPeriode {
@@ -30,9 +31,13 @@ export async function hentRapporteringsperioder(request: Request): Promise<Respo
 
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
 
+  const headers = isLocalOrDemo
+    ? { ...getHeaders(onBehalfOfToken), Cookie: `sessionId=${getSessionId(request)}` }
+    : getHeaders(onBehalfOfToken);
+
   return await fetch(url, {
     method: "GET",
-    headers: getHeaders(onBehalfOfToken),
+    headers,
   });
 }
 

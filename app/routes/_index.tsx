@@ -4,7 +4,8 @@ import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
-import { updateRapporteringsperioder } from "mocks/db";
+import { withDb } from "mocks/responses/withDb";
+import { getSessionId, sessionRecord } from "mocks/session";
 import { DevTools, ScenerioType } from "~/devTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
@@ -28,8 +29,13 @@ export async function action({ request }: ActionFunctionArgs) {
   if (isLocalOrDemo) {
     const { scenerio } = Object.fromEntries(formData);
 
-    updateRapporteringsperioder(scenerio as ScenerioType);
-    return { status: "success" };
+    const sessionId = getSessionId(request);
+    if (sessionId) {
+      withDb(sessionRecord.getDatabase(sessionId)).updateRapporteringsperioder(
+        scenerio as ScenerioType
+      );
+      return { status: "success" };
+    }
   }
 
   const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
@@ -120,6 +126,8 @@ export default function Landingsside() {
             <BodyShort textColor="subtle">{invaerendePeriodeTekst}</BodyShort>
           </div>
         )}
+
+        <h3>{gjeldendePeriode?.id}</h3>
 
         {!gjeldendePeriode && <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>}
         {gjeldendePeriode && (
