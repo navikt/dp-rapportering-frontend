@@ -11,7 +11,6 @@ import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 import { RapporteringType, useRapporteringType } from "~/hooks/RapporteringType";
@@ -43,9 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const registrertArbeidssoker = svar === "true" ? true : false;
 
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-
-  return await lagreArbeidssokerSvar(onBehalfOfToken, rapporteringsperiodeId, {
+  return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
     registrertArbeidssoker,
   });
 }

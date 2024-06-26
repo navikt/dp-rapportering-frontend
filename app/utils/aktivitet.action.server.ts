@@ -6,7 +6,7 @@ import { type AktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 export async function slettAlleAktiviteter(
-  onBehalfOfToken: string,
+  request: Request,
   periodeId: string,
   formdata: FormData
 ): Promise<INetworkResponse> {
@@ -14,11 +14,11 @@ export async function slettAlleAktiviteter(
 
   const oppdatertDag = { ...gjeldendeDag, aktiviteter: [] };
 
-  return await lagreAktivitet(onBehalfOfToken, periodeId, oppdatertDag);
+  return await lagreAktivitet(request, periodeId, oppdatertDag);
 }
 
 export async function validerOgLagreAktivitet(
-  onBehalfOfToken: string,
+  request: Request,
   periodeId: string,
   formdata: FormData
 ): Promise<INetworkResponse> {
@@ -35,5 +35,5 @@ export async function validerOgLagreAktivitet(
 
   const oppdatertDag = oppdaterAktiviteter(gjeldendeDag, aktivitetTyper, dato, varighet);
 
-  return await lagreAktivitet(onBehalfOfToken, periodeId, oppdatertDag);
+  return await lagreAktivitet(request, periodeId, oppdatertDag);
 }

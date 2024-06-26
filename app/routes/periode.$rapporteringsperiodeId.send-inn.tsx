@@ -9,7 +9,6 @@ import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import { hentPeriode, sendInnPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -24,12 +23,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const periodeId = params.rapporteringsperiodeId;
 
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-
-  const periodeResponse = await hentPeriode(onBehalfOfToken, periodeId);
+  const periodeResponse = await hentPeriode(request, periodeId);
   const periode = await periodeResponse.json();
 
-  const response = await sendInnPeriode(onBehalfOfToken, periode);
+  const response = await sendInnPeriode(request, periode);
 
   if (response.ok) {
     return redirect(`/periode/${periodeId}/bekreftelse`);

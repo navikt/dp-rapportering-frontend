@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType } from "~/models/aktivitet.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
@@ -19,17 +18,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
     case "slette": {
-      return await slettAlleAktiviteter(onBehalfOfToken, periodeId, formdata);
+      return await slettAlleAktiviteter(request, periodeId, formdata);
     }
 
     case "lagre": {
-      return await validerOgLagreAktivitet(onBehalfOfToken, periodeId, formdata);
+      return await validerOgLagreAktivitet(request, periodeId, formdata);
     }
 
     default: {

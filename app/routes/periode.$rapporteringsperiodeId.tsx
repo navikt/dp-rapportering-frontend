@@ -5,15 +5,13 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-  const response = await hentPeriode(onBehalfOfToken, periodeId);
+  const response = await hentPeriode(request, periodeId);
 
   if (!response.ok) {
     throw new Response("Feil i uthenting av rapporteringsperiode", { status: 500 });
