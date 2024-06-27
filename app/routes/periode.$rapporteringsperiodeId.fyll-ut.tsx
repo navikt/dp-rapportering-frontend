@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { BodyLong, Heading, ReadMore } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
@@ -93,6 +93,13 @@ export default function RapporteringsPeriodeFyllUtSide() {
         </Heading>
         <BodyLong className="tekst-subtil" spacing>
           {getAppText("rapportering-periode-fyll-ut-beskrivelse")}
+          <ReadMore header="Les mer om hva som skal rapporteres">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias pariatur, explicabo
+            quisquam harum aspernatur ex, officiis doloremque atque tempora tenetur distinctio quasi
+            doloribus voluptatum aliquid ipsam! In dolore consectetur quae iusto porro ipsum culpa
+            nemo velit error eos assumenda illo omnis, amet, excepturi sit qui, ab quia voluptates
+            cum fugit.
+          </ReadMore>
         </BodyLong>
 
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />

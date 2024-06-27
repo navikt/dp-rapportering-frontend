@@ -129,6 +129,7 @@ export default function Landingsside() {
           <div>
             <RadioGroup
               legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
+              description={getAppText("rapportering-ikke-utfylte-rapporter-subtittel")}
               onChange={setRapporteringType}
               value={rapporteringType}
             >
@@ -202,7 +203,7 @@ export function ErrorBoundary() {
           <div className="rapportering-header">
             <div className="rapportering-header-innhold">
               <Heading level="1" size="xlarge">
-                Dagpengerapportering
+                {getAppText("rapportering-tittel")}
               </Heading>
             </div>
           </div>
