@@ -110,7 +110,10 @@ export default function Landingsside() {
         {rapporteringsperioder.length > 1 && (
           <Alert variant="info" className="my-8">
             <Heading spacing size="small" level="3">
-              {getAppText("rapportering-flere-perioder-tittel")}
+              {`${getAppText("rapportering-flere-perioder-tittel").replace(
+                "{antall}",
+                rapporteringsperioder.length.toString()
+              )}`}
             </Heading>
             {getAppText("rapportering-flere-perioder-innledning")}
           </Alert>

@@ -1,4 +1,9 @@
 import { format, getISOWeek } from "date-fns";
+import { nb } from "date-fns/locale";
+
+export function formaterDato(date: Date) {
+  return format(date, "d. MMMM", { locale: nb });
+}
 
 export function formaterPeriodeDato(fraOgMed: string, tilOgMed: string) {
   const fom = format(new Date(fraOgMed), "dd.MM.yyyy");

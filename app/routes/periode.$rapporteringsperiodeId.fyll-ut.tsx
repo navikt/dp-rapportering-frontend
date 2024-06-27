@@ -2,10 +2,12 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading, ReadMore } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
+import { addDays } from "date-fns";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType } from "~/models/aktivitet.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { formaterDato } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
@@ -85,6 +87,9 @@ export default function RapporteringsPeriodeFyllUtSide() {
     setModalAapen(false);
   }
 
+  const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
+  const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
+
   return (
     <>
       <div className="rapportering-container">
@@ -115,8 +120,9 @@ export default function RapporteringsPeriodeFyllUtSide() {
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
         <BodyLong className="my-8">
-          Du kan sende denne rapporteringen fra 6. juni, og senest 13. juni for å unngå trekk i
-          utbetalingen.
+          {`${getAppText("rapportering-periode-innsending-og-frist-dato")
+            .replace("{date1}", tidligstInnsendingDato)
+            .replace("{date2}", senestInnsendingDato)})`}
         </BodyLong>
 
         <div className="navigasjon-container-to-knapper my-4">
