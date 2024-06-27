@@ -110,7 +110,7 @@ initInstrumentation();
 export function Layout({ children }: { children: React.ReactNode }) {
   const { fragments, env, isLocalOrDemo } = useTypedRouteLoaderData("root");
 
-  // useInjectDecoratorScript(fragments.DECORATOR_SCRIPTS);
+  useInjectDecoratorScript(fragments.DECORATOR_SCRIPTS);
 
   return (
     <html lang="nb">
