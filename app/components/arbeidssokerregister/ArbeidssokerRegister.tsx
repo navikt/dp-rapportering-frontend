@@ -20,6 +20,7 @@ export function ArbeidssokerRegister({
 
   const handleChange = (registrertArbeidssokerSvar: boolean) => {
     setRegistrertArbeidssoker(registrertArbeidssokerSvar);
+
     fetcher.submit(
       { registrertArbeidssoker: registrertArbeidssokerSvar, rapporteringsperiodeId },
       { method: "post" }

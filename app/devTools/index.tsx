@@ -1,5 +1,5 @@
 import { Scenerio } from "./Scenerio";
-import { SandboxIcon } from "@navikt/aksel-icons";
+import { ArrowsCirclepathIcon, SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Heading, Modal, Tooltip } from "@navikt/ds-react";
 import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
@@ -86,6 +86,7 @@ export function DevTools() {
                   value="reset"
                   type="submit"
                   onClick={() => ref.current?.close()}
+                  icon={<ArrowsCirclepathIcon aria-hidden />}
                 >
                   Reset testdata
                 </Button>

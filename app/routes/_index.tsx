@@ -25,7 +25,7 @@ import { SessionModal } from "~/components/session-modal/SessionModal";
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  if (isLocalOrDemo) {
+  if (isLocalOrDemo && formData.get("scenerio")) {
     const { scenerio } = Object.fromEntries(formData);
 
     const sessionId = getSessionId(request);
@@ -33,18 +33,21 @@ export async function action({ request }: ActionFunctionArgs) {
       withDb(sessionRecord.getDatabase(sessionId)).updateRapporteringsperioder(
         scenerio as ScenerioType
       );
+
       return { status: "success" };
     }
   }
 
-  const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
-  const svar = formData.get("registrertArbeidssoker");
+  if (formData.get("registrertArbeidssoker")) {
+    const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
+    const svar = formData.get("registrertArbeidssoker");
 
-  const registrertArbeidssoker = svar === "true" ? true : false;
+    const registrertArbeidssoker = svar === "true" ? true : false;
 
-  return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
-    registrertArbeidssoker,
-  });
+    return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
+      registrertArbeidssoker,
+    });
+  }
 }
 export async function loader({ request }: LoaderFunctionArgs) {
   let rapporteringsperioder: IRapporteringsperiode[] = [];
