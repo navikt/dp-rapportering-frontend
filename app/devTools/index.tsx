@@ -5,6 +5,7 @@ import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
 
 export enum ScenerioType {
+  ingen = "ingen",
   en = "en",
   to = "to",
   reset = "reset",
@@ -15,6 +16,10 @@ interface IScenerio {
 }
 
 const scenerios: IScenerio[] = [
+  {
+    type: ScenerioType.ingen,
+    tittel: "Ingen perioder",
+  },
   {
     type: ScenerioType.en,
     tittel: "Én periode",

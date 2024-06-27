@@ -119,8 +119,17 @@ const deleteAllInnsendteperioder = (db: Database) => {
 
 export function updateRapporteringsperioder(db: Database, scenerio: ScenerioType) {
   switch (scenerio) {
+    case ScenerioType.ingen: {
+      deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
+      break;
+    }
     case ScenerioType.en: {
       const perioder = findAllRapporteringsperioder(db);
+
+      if (perioder.length === 0) {
+        db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+      }
+
       if (perioder.length > 1) {
         deleteAllRapporteringsperioder(
           db,
@@ -131,6 +140,14 @@ export function updateRapporteringsperioder(db: Database, scenerio: ScenerioType
     }
     case ScenerioType.to: {
       const rapporteringsperioder = findAllRapporteringsperioder(db);
+
+      if (rapporteringsperioder.length === 0) {
+        db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+        db.rapporteringsperioder.create(
+          leggTilForrigeRapporteringsperiode(findAllRapporteringsperioder(db)[0].periode)
+        );
+      }
+
       if (rapporteringsperioder.length === 1) {
         db.rapporteringsperioder.create(
           leggTilForrigeRapporteringsperiode(rapporteringsperioder[0].periode)
