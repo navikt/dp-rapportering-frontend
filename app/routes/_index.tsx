@@ -4,7 +4,7 @@ import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
-import { withDb } from "mocks/responses/withDb";
+import { withDb } from "mocks/responses/db";
 import { getSessionId, sessionRecord } from "mocks/session";
 import { DevTools, ScenerioType } from "~/devTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";

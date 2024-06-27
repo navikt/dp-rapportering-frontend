@@ -1,5 +1,5 @@
+import { withDb } from "./responses/db";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
-import { withDb } from "./responses/withDb";
 import { sessionRecord } from "./session";
 import { HttpResponse, JsonBodyType, PathParams, bypass, http } from "msw";
 import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
