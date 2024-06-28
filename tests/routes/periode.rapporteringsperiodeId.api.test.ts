@@ -1,5 +1,4 @@
 // @vitest-environment node
-import { gjeldendePeriodeResponse } from "mocks/responses/gjeldendePeriodeResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/periode.$rapporteringsperiodeId";
@@ -7,6 +6,8 @@ import { rapporteringsperioderResponse } from "../../mocks/responses/rapporterin
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
+
+const rapporteringsperiodeResponse = rapporteringsperioderResponse[0];
 
 describe("Hent en rapporteringsperiode", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
@@ -33,12 +34,12 @@ describe("Hent en rapporteringsperiode", () => {
       expect(response.status).toBe(500);
     });
 
-    test("skal hente ut gjeldende rapporteringsperiode", async () => {
+    test("skal hente ut rapporteringsperiode", async () => {
       server.use(
         http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
           () => {
-            return HttpResponse.json(gjeldendePeriodeResponse, { status: 200 });
+            return HttpResponse.json(rapporteringsperiodeResponse, { status: 200 });
           }
         )
       );
@@ -54,7 +55,7 @@ describe("Hent en rapporteringsperiode", () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.periode).toEqual(gjeldendePeriodeResponse);
+      expect(data.periode).toEqual(rapporteringsperiodeResponse);
     });
 
     test("skal gi tilbake feedback til viewet hvis backend-kallet feiler", async () => {

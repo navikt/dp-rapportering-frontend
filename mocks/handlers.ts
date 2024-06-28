@@ -45,20 +45,6 @@ export const handlers = [
     withDbHandler(({ db }) => HttpResponse.json(db.findAllInnsendtePerioder()))
   ),
 
-  http.get(
-    path("/rapporteringsperiode/gjeldende"),
-    withDbHandler(({ db }) => {
-      const rapporteringsperioder = db.findAllRapporteringsperioder();
-      const response = rapporteringsperioder.length > 0 ? rapporteringsperioder[0] : null;
-
-      if (response) {
-        return HttpResponse.json(response, { status: 200 });
-      } else {
-        return HttpResponse.json(null, { status: 404 });
-      }
-    })
-  ),
-
   http.post(
     path("/rapporteringsperiode"),
     withDbHandler(async ({ db, request }) => {

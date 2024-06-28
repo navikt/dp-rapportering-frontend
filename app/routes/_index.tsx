@@ -11,8 +11,8 @@ import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
+import { hentForstePeriodeTekst } from "~/utils/periode.utils";
 import { RapporteringType, useRapporteringType } from "~/hooks/RapporteringType";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -51,7 +51,6 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 export async function loader({ request }: LoaderFunctionArgs) {
   let rapporteringsperioder: IRapporteringsperiode[] = [];
-  let gjeldendePeriode: IRapporteringsperiode | null = null;
 
   const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
 
@@ -59,9 +58,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   if (rapporteringsperioderResponse.ok) {
     rapporteringsperioder = await rapporteringsperioderResponse.json();
-    gjeldendePeriode = rapporteringsperioder?.[0] ?? null;
 
-    return json({ gjeldendePeriode, rapporteringsperioder, session });
+    return json({ rapporteringsperioder, session });
   }
 
   throw new Response("Feil i uthenting av rapporteringsperioder", {
@@ -70,27 +68,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Landingsside() {
-  const { gjeldendePeriode, rapporteringsperioder } = useLoaderData<typeof loader>();
+  const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { isLocalOrDemo } = useTypedRouteLoaderData("root");
 
   const { rapporteringType, setRapporteringType } = useRapporteringType();
 
   const { getAppText, getLink, getRichText } = useSanity();
 
-  let invaerendePeriodeTekst;
-
-  if (gjeldendePeriode) {
-    const ukenummer = formaterPeriodeTilUkenummer(
-      gjeldendePeriode.periode.fraOgMed,
-      gjeldendePeriode.periode.tilOgMed
-    );
-    const dato = formaterPeriodeDato(
-      gjeldendePeriode.periode.fraOgMed,
-      gjeldendePeriode.periode.tilOgMed
-    );
-
-    invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
-  }
+  const forstePeriode = rapporteringsperioder?.[0] ?? null;
 
   return (
     <>
@@ -126,12 +111,14 @@ export default function Landingsside() {
                 ? getAppText("rapportering-forste-periode")
                 : getAppText("rapportering-navaerende-periode")}
             </Heading>
-            <BodyShort textColor="subtle">{invaerendePeriodeTekst}</BodyShort>
+            <BodyShort textColor="subtle">
+              {hentForstePeriodeTekst(rapporteringsperioder)}
+            </BodyShort>
           </div>
         )}
 
-        {!gjeldendePeriode && <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>}
-        {gjeldendePeriode && (
+        {!forstePeriode && <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>}
+        {forstePeriode && (
           <div>
             <RadioGroup
               legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
@@ -158,8 +145,8 @@ export default function Landingsside() {
             {rapporteringType === "harIngenAktivitet" && (
               <div className="my-8">
                 <ArbeidssokerRegister
-                  rapporteringsperiodeId={gjeldendePeriode.id}
-                  registrertArbeidssoker={gjeldendePeriode.registrertArbeidssoker}
+                  rapporteringsperiodeId={forstePeriode.id}
+                  registrertArbeidssoker={forstePeriode.registrertArbeidssoker}
                 />
               </div>
             )}
@@ -171,8 +158,8 @@ export default function Landingsside() {
                   as="Button"
                   to={
                     rapporteringType === RapporteringType.harAktivitet
-                      ? `/periode/${gjeldendePeriode.id}/fyll-ut`
-                      : `/periode/${gjeldendePeriode.id}/send-inn`
+                      ? `/periode/${forstePeriode.id}/fyll-ut`
+                      : `/periode/${forstePeriode.id}/send-inn`
                   }
                   className="my-18 py-4 px-16"
                   icon={<ArrowRightIcon aria-hidden />}

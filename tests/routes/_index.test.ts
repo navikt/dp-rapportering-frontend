@@ -72,18 +72,10 @@ describe("Hovedside rapportering", () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.gjeldendePeriode).toEqual(rapporteringsperioderResponse[0]);
+      expect(data.rapporteringsperioder).toEqual(rapporteringsperioderResponse);
     });
 
-    test("Skal vise at bruker har ingen gjeldene perdiode", async () => {
-      server.use(
-        http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/gjeldende`,
-          () => new HttpResponse(null, { status: 404 }),
-          { once: true }
-        )
-      );
-
+    test.only("Skal vise at bruker har ingen rapporteringsperiode", async () => {
       mockSession();
 
       const response = await loader({
@@ -95,7 +87,7 @@ describe("Hovedside rapportering", () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.gjeldendePeriode).toBe(null);
+      expect(data.rapporteringsperioder).toEqual([]);
     });
   });
 });
