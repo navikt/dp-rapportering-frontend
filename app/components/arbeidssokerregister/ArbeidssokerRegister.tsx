@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 
-export function ArbeidssokerRegister({
+export function ArbeidssokerRegisterering({
   rapporteringsperiodeId,
   registrertArbeidssoker: initialRegistrertArbeidssoker,
 }: {

@@ -9,15 +9,17 @@ import { getSessionId, sessionRecord } from "mocks/session";
 import { DevTools, ScenerioType } from "~/devTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  hentRapporteringsperioder,
+} from "~/models/rapporteringsperiode.server";
 import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 import { hentForstePeriodeTekst } from "~/utils/periode.utils";
 import { RapporteringType, useRapporteringType } from "~/hooks/RapporteringType";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
-import { ArbeidssokerRegister } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import Center from "~/components/center/Center";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { SessionModal } from "~/components/session-modal/SessionModal";
@@ -27,8 +29,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (isLocalOrDemo && formData.get("scenerio")) {
     const { scenerio } = Object.fromEntries(formData);
-
     const sessionId = getSessionId(request);
+
     if (sessionId) {
       withDb(sessionRecord.getDatabase(sessionId)).updateRapporteringsperioder(
         scenerio as ScenerioType
@@ -40,9 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (formData.get("registrertArbeidssoker")) {
     const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
-    const svar = formData.get("registrertArbeidssoker");
-
-    const registrertArbeidssoker = svar === "true" ? true : false;
+    const registrertArbeidssoker: boolean = formData.get("registrertArbeidssoker") === "true";
 
     return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
       registrertArbeidssoker,
@@ -50,21 +50,15 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 }
 export async function loader({ request }: LoaderFunctionArgs) {
-  let rapporteringsperioder: IRapporteringsperiode[] = [];
-
+  const session = await getSession(request);
   const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
 
-  const session = await getSession(request);
-
   if (rapporteringsperioderResponse.ok) {
-    rapporteringsperioder = await rapporteringsperioderResponse.json();
-
+    const rapporteringsperioder = await rapporteringsperioderResponse.json();
     return json({ rapporteringsperioder, session });
   }
 
-  throw new Response("Feil i uthenting av rapporteringsperioder", {
-    status: 500,
-  });
+  throw new Response("Feil i uthenting av rapporteringsperioder", { status: 500 });
 }
 
 export default function Landingsside() {
@@ -73,66 +67,25 @@ export default function Landingsside() {
 
   const { rapporteringType, setRapporteringType } = useRapporteringType();
 
-  const { getAppText, getLink, getRichText } = useSanity();
+  const { getLink, getRichText } = useSanity();
 
-  const forstePeriode = rapporteringsperioder?.[0] ?? null;
+  const harPeriode = rapporteringsperioder.length > 0;
+  const forstePeriode = harPeriode ? rapporteringsperioder[0] : null;
+  const visArbeidssokerRegisterering = rapporteringType === RapporteringType.harIngenAktivitet;
 
   return (
     <>
-      <div className="rapportering-header">
-        <div className="rapportering-header-innhold">
-          <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
-            {getAppText("rapportering-tittel")}
-          </Heading>
-          {isLocalOrDemo && <DevTools />}
-        </div>
-      </div>
+      <Header isLocalOrDemo={isLocalOrDemo} />
       <div className="rapportering-container">
         <BodyLong>
           <PortableText value={getRichText("rapportering-innledning")} />
         </BodyLong>
 
-        {rapporteringsperioder.length > 1 && (
-          <Alert variant="info" className="my-8">
-            <Heading spacing size="small" level="3">
-              {`${getAppText("rapportering-flere-perioder-tittel").replace(
-                "{antall}",
-                rapporteringsperioder.length.toString()
-              )}`}
-            </Heading>
-            {getAppText("rapportering-flere-perioder-innledning")}
-          </Alert>
-        )}
+        <PeriodeDetaljer rapporteringsperioder={rapporteringsperioder} />
 
-        {rapporteringsperioder.length > 0 && (
-          <div className="my-8">
-            <Heading size="small">
-              {rapporteringsperioder.length > 1
-                ? getAppText("rapportering-forste-periode")
-                : getAppText("rapportering-navaerende-periode")}
-            </Heading>
-            <BodyShort textColor="subtle">
-              {hentForstePeriodeTekst(rapporteringsperioder)}
-            </BodyShort>
-          </div>
-        )}
-
-        {!forstePeriode && <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>}
-        {forstePeriode && (
+        {harPeriode && (
           <div>
-            <RadioGroup
-              legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
-              description={getAppText("rapportering-ikke-utfylte-rapporter-subtittel")}
-              onChange={setRapporteringType}
-              value={rapporteringType}
-            >
-              <Radio value={RapporteringType.harAktivitet}>
-                {getAppText("rapportering-noe-å-rapportere")}
-              </Radio>
-              <Radio value={RapporteringType.harIngenAktivitet}>
-                {getAppText("rapportering-ingen-å-rapportere")}
-              </Radio>
-            </RadioGroup>
+            <RapporteringstypeForm type={rapporteringType} setType={setRapporteringType} />
 
             <ReadMore header="Les mer om hva som skal rapporteres">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias pariatur, explicabo
@@ -142,46 +95,140 @@ export default function Landingsside() {
               voluptates cum fugit.
             </ReadMore>
 
-            {rapporteringType === "harIngenAktivitet" && (
+            {visArbeidssokerRegisterering && (
               <div className="my-8">
-                <ArbeidssokerRegister
+                <ArbeidssokerRegisterering
                   rapporteringsperiodeId={forstePeriode.id}
                   registrertArbeidssoker={forstePeriode.registrertArbeidssoker}
                 />
               </div>
             )}
 
-            {rapporteringType && (
-              <Center>
-                <RemixLink
-                  size="medium"
-                  as="Button"
-                  to={
-                    rapporteringType === RapporteringType.harAktivitet
-                      ? `/periode/${forstePeriode.id}/fyll-ut`
-                      : `/periode/${forstePeriode.id}/send-inn`
-                  }
-                  className="my-18 py-4 px-16"
-                  icon={<ArrowRightIcon aria-hidden />}
-                  iconPosition="right"
-                  disabled={!rapporteringType}
-                >
-                  {rapporteringType === RapporteringType.harAktivitet
-                    ? getLink("rapportering-rapporter-for-perioden").linkText
-                    : getAppText("rapportering-knapp-neste")}
-                </RemixLink>
-              </Center>
-            )}
+            <NextButton
+              rappporteringstype={rapporteringType}
+              rapporteringsPeriode={forstePeriode}
+            />
           </div>
         )}
-        <p>
-          <RemixLink as="Link" to={getLink("rapportering-se-og-korriger").linkUrl}>
-            {getLink("rapportering-se-og-korriger").linkText}
-          </RemixLink>
-        </p>
+
+        <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-korriger").linkUrl}>
+          {getLink("rapportering-se-og-korriger").linkText}
+        </RemixLink>
       </div>
       <SessionModal />
     </>
+  );
+}
+
+function Header({ isLocalOrDemo }: { isLocalOrDemo: boolean }) {
+  const { getAppText } = useSanity();
+  return (
+    <div className="rapportering-header">
+      <div className="rapportering-header-innhold">
+        <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
+          {getAppText("rapportering-tittel")}
+        </Heading>
+        {isLocalOrDemo && <DevTools />}
+      </div>
+    </div>
+  );
+}
+
+function PeriodeDetaljer({
+  rapporteringsperioder,
+}: {
+  rapporteringsperioder: IRapporteringsperiode[];
+}) {
+  const { getAppText } = useSanity();
+
+  const antallPerioder = rapporteringsperioder.length;
+  const harFlerePerioder = antallPerioder > 1;
+
+  if (antallPerioder > 0) {
+    return (
+      <div className="my-8">
+        {harFlerePerioder && (
+          <Alert variant="info" className="my-8">
+            <Heading spacing size="small" level="3">
+              {getAppText("rapportering-flere-perioder-tittel").replace(
+                "{antall}",
+                antallPerioder.toString()
+              )}
+            </Heading>
+            {getAppText("rapportering-flere-perioder-innledning")}
+          </Alert>
+        )}
+        <Heading size="small">
+          {antallPerioder > 1
+            ? getAppText("rapportering-forste-periode")
+            : getAppText("rapportering-navaerende-periode")}
+        </Heading>
+        <BodyShort textColor="subtle">{hentForstePeriodeTekst(rapporteringsperioder)}</BodyShort>
+      </div>
+    );
+  }
+  return <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>;
+}
+
+function RapporteringstypeForm({
+  type,
+  setType,
+}: {
+  type: RapporteringType | undefined;
+  setType: (value: RapporteringType) => void;
+}) {
+  const { getAppText } = useSanity();
+
+  return (
+    <div>
+      <RadioGroup
+        legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
+        description={getAppText("rapportering-ikke-utfylte-rapporter-subtittel")}
+        onChange={setType}
+        value={type}
+      >
+        <Radio value={RapporteringType.harAktivitet}>
+          {getAppText("rapportering-noe-å-rapportere")}
+        </Radio>
+        <Radio value={RapporteringType.harIngenAktivitet}>
+          {getAppText("rapportering-ingen-å-rapportere")}
+        </Radio>
+      </RadioGroup>
+    </div>
+  );
+}
+
+export function NextButton({
+  rappporteringstype,
+  rapporteringsPeriode,
+}: {
+  rappporteringstype: RapporteringType | undefined;
+  rapporteringsPeriode: IRapporteringsperiode;
+}) {
+  const { getAppText, getLink } = useSanity();
+
+  if (!rappporteringstype) return null;
+
+  return (
+    <Center>
+      <RemixLink
+        size="medium"
+        as="Button"
+        to={
+          rappporteringstype === RapporteringType.harAktivitet
+            ? `/periode/${rapporteringsPeriode.id}/fyll-ut`
+            : `/periode/${rapporteringsPeriode.id}/send-inn`
+        }
+        className="my-18 py-4 px-16"
+        icon={<ArrowRightIcon aria-hidden />}
+        iconPosition="right"
+        disabled={!rappporteringstype}
+      >
+        {rappporteringstype === RapporteringType.harAktivitet
+          ? getLink("rapportering-rapporter-for-perioden").linkText
+          : getAppText("rapportering-knapp-neste")}
+      </RemixLink>
+    </Center>
   );
 }
 
