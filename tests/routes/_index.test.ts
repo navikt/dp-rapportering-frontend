@@ -75,7 +75,7 @@ describe("Hovedside rapportering", () => {
       expect(data.rapporteringsperioder).toEqual(rapporteringsperioderResponse);
     });
 
-    test.only("Skal vise at bruker har ingen rapporteringsperiode", async () => {
+    test("Skal vise at bruker har ingen rapporteringsperiode", async () => {
       mockSession();
 
       const response = await loader({
