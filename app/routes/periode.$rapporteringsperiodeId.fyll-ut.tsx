@@ -122,7 +122,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <BodyLong className="my-8">
           {`${getAppText("rapportering-periode-innsending-og-frist-dato")
             .replace("{date1}", tidligstInnsendingDato)
-            .replace("{date2}", senestInnsendingDato)})`}
+            .replace("{date2}", senestInnsendingDato)}`}
         </BodyLong>
 
         <div className="navigasjon-container-to-knapper my-4">
