@@ -6,7 +6,7 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -30,7 +30,7 @@ jobs:
     needs: [install]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "18.x"
@@ -51,7 +51,7 @@ jobs:
       id-token: "write"
       packages: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "18.x"
@@ -94,7 +94,7 @@ jobs:
       id-token: "write"
       packages: write
     steps:
-       - uses: actions/checkout@v3
+       - uses: actions/checkout@v4
        - uses: actions/setup-node@v4
          with:
           node-version: "18.x"
@@ -161,7 +161,7 @@ jobs:
     needs: [build, test, upload-cdn]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
           VAR: image=${{ needs.build.outputs.image }}
@@ -175,7 +175,7 @@ jobs:
     needs: [build-demo, test,]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
           VAR: image=${{ needs.build-demo.outputs.image }}
