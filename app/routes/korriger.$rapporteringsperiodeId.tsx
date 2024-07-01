@@ -4,15 +4,13 @@ import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-  const periodeResponse = await hentPeriode(onBehalfOfToken, periodeId);
+  const periodeResponse = await hentPeriode(request, periodeId);
 
   if (periodeResponse.ok) {
     const periode = await periodeResponse.json();

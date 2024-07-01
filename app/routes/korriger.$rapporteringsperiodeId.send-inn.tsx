@@ -7,7 +7,6 @@ import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import { godkjennPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
 
@@ -15,8 +14,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-  const godkjennPeriodeResponse = await godkjennPeriode(onBehalfOfToken, periodeId);
+  const godkjennPeriodeResponse = await godkjennPeriode(request, periodeId);
 
   if (!godkjennPeriodeResponse.ok) {
     logger.warn(`Klarte ikke godkjenne rapportering med id: ${periodeId}`, {

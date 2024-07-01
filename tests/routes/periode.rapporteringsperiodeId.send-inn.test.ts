@@ -1,6 +1,5 @@
 // @vitest-environment node
 import { redirect } from "@remix-run/node";
-import { gjeldendePeriodeResponse } from "mocks/responses/gjeldendePeriodeResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
@@ -8,6 +7,8 @@ import { rapporteringsperioderResponse } from "../../mocks/responses/rapporterin
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
+
+const rapporteringsperiodeResponse = rapporteringsperioderResponse[0];
 
 describe("Send inn rapporteringsperiode", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "bypass" }));
@@ -56,7 +57,7 @@ describe("Send inn rapporteringsperiode", () => {
           http.get(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
             () => {
-              return HttpResponse.json(gjeldendePeriodeResponse, { status: 200 });
+              return HttpResponse.json(rapporteringsperiodeResponse, { status: 200 });
             }
           )
         );
@@ -96,7 +97,7 @@ describe("Send inn rapporteringsperiode", () => {
           http.get(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
             () => {
-              return HttpResponse.json(gjeldendePeriodeResponse, { status: 200 });
+              return HttpResponse.json(rapporteringsperiodeResponse, { status: 200 });
             }
           )
         );
