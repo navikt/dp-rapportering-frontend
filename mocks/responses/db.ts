@@ -13,11 +13,15 @@ function seedRapporteringsperioder(db: Database) {
   db.rapporteringsperioder.create(lagForstRapporteringsperiode());
 }
 
+function addRapporteringsperioder(db: Database, rapporteringsperiode: IRapporteringsperiode) {
+  db.rapporteringsperioder.create(rapporteringsperiode);
+}
+
 function findAllRapporteringsperioder(db: Database) {
   return db.rapporteringsperioder.findMany({
     where: {
       status: {
-        equals: "TilUtfylling",
+        in: ["TilUtfylling", "Korrigert"],
       },
     },
     orderBy: {
@@ -179,6 +183,8 @@ export function updateRapporteringsperioder(db: Database, scenerio: ScenerioType
 export const withDb = (db: Database) => {
   return {
     seedRapporteringsperioder: () => seedRapporteringsperioder(db),
+    addRapporteringsperioder: (rapporteringsperiode: IRapporteringsperiode) =>
+      addRapporteringsperioder(db, rapporteringsperiode),
     findAllRapporteringsperioder: () => findAllRapporteringsperioder(db),
     findAllInnsendtePerioder: () => findAllInnsendtePerioder(db),
     findRapporteringsperiodeById: (id: string) => findRapporteringsperiodeById(db, id),

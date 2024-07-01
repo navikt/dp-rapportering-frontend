@@ -2,6 +2,7 @@
 import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { loader } from "~/routes/periode.$rapporteringsperiodeId.korriger";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
@@ -22,9 +23,10 @@ describe("Start korrigering", () => {
     };
 
     test("Skal redirecte etter laging av ny korrigeringsperiode", async () => {
-      const korrigeringsPeriode = {
+      const korrigeringsPeriode: IRapporteringsperiode = {
         ...rapporteringsperioderResponse[0],
         id: rapporteringsperioderResponse[0].id + 1,
+        status: "Korrigert",
       };
       server.use(
         http.post(
@@ -46,7 +48,7 @@ describe("Start korrigering", () => {
         context: {},
       });
 
-      expect(response).toEqual(redirect(`/korriger/${korrigeringsPeriode.id}/fyll-ut`));
+      expect(response).toEqual(redirect(`/periode/${korrigeringsPeriode.id}/fyll-ut`));
     });
 
     test("Skal feile hvis kallet til den bestemte rapporteringsperiode feiler", async () => {

@@ -61,7 +61,6 @@ export default function InnsendteRapporteringsPerioderSide() {
                   key={periode.id}
                   rapporteringsperiode={periode}
                   aapneModal={() => {}}
-                  visRedigeringsAlternativer={true}
                   readonly
                 />
                 {flatMapAktiviteter.length < 1 && (

@@ -8,17 +8,11 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer, getWeekDays } from "~
 interface IProps {
   aapneModal: (dato: string) => void;
   rapporteringsperiode: IRapporteringsperiode;
-  visRedigeringsAlternativer?: boolean;
   readonly?: boolean;
 }
 
 export function Kalender(props: IProps) {
-  const {
-    rapporteringsperiode,
-    aapneModal,
-    visRedigeringsAlternativer = false,
-    readonly = false,
-  } = props;
+  const { rapporteringsperiode, aapneModal, readonly = false } = props;
 
   const ukedager = getWeekDays("nb-NO");
 
@@ -45,7 +39,7 @@ export function Kalender(props: IProps) {
           </p>
           <span className="navds-sr-only">{`${periodeUkenummerTekst} (${periodeFomTomDatoTekst})`}</span>
         </div>
-        {visRedigeringsAlternativer && (
+        {rapporteringsperiode.kanKorrigeres && (
           <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
         )}
       </div>

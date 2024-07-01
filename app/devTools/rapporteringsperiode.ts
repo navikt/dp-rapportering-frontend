@@ -43,9 +43,13 @@ export function finnForrigePeriodeDato(fraOgMed: string): Periode {
   };
 }
 
-export function lagRapporteringsperiode(fraOgMed: string, tilOgMed: string): IRapporteringsperiode {
+export function lagRapporteringsperiode(
+  id: string,
+  fraOgMed: string,
+  tilOgMed: string
+): IRapporteringsperiode {
   return {
-    id: uuid(),
+    id,
     status: "TilUtfylling",
     periode: {
       fraOgMed,
@@ -53,7 +57,7 @@ export function lagRapporteringsperiode(fraOgMed: string, tilOgMed: string): IRa
     },
     kanSendesFra: format(subDays(new Date(tilOgMed), 1), "yyyy-MM-dd"),
     kanSendes: true,
-    kanKorrigeres: false,
+    kanKorrigeres: true,
     registrertArbeidssoker: null,
     dager: times(14, (i) => ({
       dagIndex: i,
@@ -65,12 +69,18 @@ export function lagRapporteringsperiode(fraOgMed: string, tilOgMed: string): IRa
 
 export function lagForstRapporteringsperiode() {
   const { fraOgMed, tilOgMed } = lagForstPeriodeDato();
-  return lagRapporteringsperiode(fraOgMed, tilOgMed);
+  return lagRapporteringsperiode(uuid(), fraOgMed, tilOgMed);
 }
 
 export function leggTilForrigeRapporteringsperiode(
   navaerendePeriode: IRapporteringsperiode["periode"]
 ) {
   const { fraOgMed, tilOgMed } = finnForrigePeriodeDato(navaerendePeriode.fraOgMed);
-  return lagRapporteringsperiode(fraOgMed, tilOgMed);
+  return lagRapporteringsperiode(uuid(), fraOgMed, tilOgMed);
+}
+
+export function lagKorrigeringsperiode(
+  navaerendePeriode: IRapporteringsperiode
+): IRapporteringsperiode {
+  return { ...navaerendePeriode, id: uuid(), status: "Korrigert", kanKorrigeres: false };
 }

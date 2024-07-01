@@ -7,10 +7,11 @@ import { describe, expect, test } from "vitest";
 
 describe("lagRapporteringsperiode", () => {
   test("skal generere en periode med 14 dager", () => {
+    const id = "123";
     const fraOgMed = "2024-06-08";
     const tilOgMed = "2024-06-21";
 
-    const rapporteringsperiode = lagRapporteringsperiode(fraOgMed, tilOgMed);
+    const rapporteringsperiode = lagRapporteringsperiode(id, fraOgMed, tilOgMed);
 
     expect(rapporteringsperiode.dager).toHaveLength(14);
     rapporteringsperiode.dager.forEach((dag, index) => {
@@ -21,10 +22,11 @@ describe("lagRapporteringsperiode", () => {
   });
 
   test("skal ha riktig kanSendesFra-dato", () => {
+    const id = "123";
     const fraOgMed = "2024-06-08";
     const tilOgMed = "2024-06-21";
 
-    const rapporteringsperiode = lagRapporteringsperiode(fraOgMed, tilOgMed);
+    const rapporteringsperiode = lagRapporteringsperiode(id, fraOgMed, tilOgMed);
 
     const expectedKanSendesFra = new Date(tilOgMed);
     expectedKanSendesFra.setDate(expectedKanSendesFra.getDate() - 1);
@@ -35,14 +37,16 @@ describe("lagRapporteringsperiode", () => {
   });
 
   test("skal generere unike id-er for hver periode", () => {
+    const id1 = "123";
     const fraOgMed1 = "2024-09-01";
     const tilOgMed1 = "2024-09-14";
 
+    const id2 = "456";
     const fraOgMed2 = "2024-10-01";
     const tilOgMed2 = "2024-10-14";
 
-    const rapporteringsperiode1 = lagRapporteringsperiode(fraOgMed1, tilOgMed1);
-    const rapporteringsperiode2 = lagRapporteringsperiode(fraOgMed2, tilOgMed2);
+    const rapporteringsperiode1 = lagRapporteringsperiode(id1, fraOgMed1, tilOgMed1);
+    const rapporteringsperiode2 = lagRapporteringsperiode(id2, fraOgMed2, tilOgMed2);
 
     expect(rapporteringsperiode1.id).not.toBe(rapporteringsperiode2.id);
   });

@@ -17,6 +17,7 @@ export function RedigeringsLenke(props: IProps) {
   function finnRedigeringsType(status: string): IRedigeringsLenke {
     switch (status) {
       case "TilUtfylling":
+        "Korrigert";
         return { sti: "fyll-ut", tekst: getAppText("rapportering-redigeringslenke-fyll-ut") };
       case "Godkjent":
         return { sti: "avgodkjenn", tekst: getAppText("rapportering-redigeringslenke-korriger") };

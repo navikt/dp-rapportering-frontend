@@ -75,7 +75,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   function aapneModal(dato: string) {
     setSearchParams({ utfylling: "true" });
 
-    if (periode.status === "TilUtfylling") {
+    if (periode.status === "TilUtfylling" || periode.status === "Korrigert") {
       setValgtDato(dato);
       setModalAapen(true);
     }

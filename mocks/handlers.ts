@@ -1,7 +1,7 @@
 import { withDb } from "./responses/db";
-import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
 import { sessionRecord } from "./session";
 import { HttpResponse, JsonBodyType, PathParams, bypass, http } from "msw";
+import { lagKorrigeringsperiode } from "~/devTools/rapporteringsperiode";
 import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import {
   IRapporteringsperiode,
@@ -64,9 +64,23 @@ export const handlers = [
     })
   ),
 
-  http.post(path("/rapporteringsperioder/:rapporteringsperioderId/korrigering"), () => {
-    return HttpResponse.json(rapporteringsperioderResponse[1]);
-  }),
+  // http.post(path("/rapporteringsperioder/:rapporteringsperioderId/korrigering"), ({ params }) => {
+  //   return HttpResponse.json(rapporteringsperioderResponse[1]);
+  // }),
+
+  http.post(
+    path("/rapporteringsperioder/:rapporteringsperioderId/korrigering"),
+    withDbHandler(({ db, params }) => {
+      const rapporteringsperioderId = params.rapporteringsperioderId as string;
+
+      const rapporteringsperiode = db.findRapporteringsperiodeById(rapporteringsperioderId);
+
+      const korrigertPeriode = lagKorrigeringsperiode(rapporteringsperiode);
+      db.addRapporteringsperioder(korrigertPeriode);
+
+      return HttpResponse.json(korrigertPeriode, { status: 200 });
+    })
+  ),
 
   http.post(
     path("/rapporteringsperiode/:rapporteringsperioderId/aktivitet"),

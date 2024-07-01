@@ -11,7 +11,7 @@ export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
-  status: "TilUtfylling" | "Innsendt";
+  status: "TilUtfylling" | "Innsendt" | "Korrigert";
   kanSendesFra: string;
   kanSendes: boolean;
   kanKorrigeres: boolean;
