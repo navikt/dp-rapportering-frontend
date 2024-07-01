@@ -76,16 +76,6 @@ export async function sendInnPeriode(
   });
 }
 
-export async function godkjennPeriode(request: Request, id: string): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}/godkjenn`;
-
-  return await fetch(url, {
-    method: "POST",
-    headers: await getHeaders(request),
-    body: JSON.stringify({ image: getEnv("NAIS_APP_IMAGE"), commit: getEnv("COMMIT") }),
-  });
-}
-
 export async function lagKorrigeringsperiode(request: Request, periodeId: string) {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/korrigering`;
 

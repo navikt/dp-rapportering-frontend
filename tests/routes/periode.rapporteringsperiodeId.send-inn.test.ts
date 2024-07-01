@@ -1,5 +1,4 @@
 // @vitest-environment node
-import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
@@ -43,36 +42,6 @@ describe("Send inn rapporteringsperiode", () => {
         );
 
         expect(response.status).toBe(500);
-      });
-
-      test("burde kunne godkjenne og redirecte til riktig side", async () => {
-        const body = new URLSearchParams(testBody);
-
-        const request = new Request("http://localhost:3000", {
-          method: "POST",
-          body,
-        });
-
-        server.use(
-          http.get(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
-            () => {
-              return HttpResponse.json(rapporteringsperiodeResponse, { status: 200 });
-            }
-          )
-        );
-
-        mockSession();
-
-        const response = await action({
-          request,
-          params: testParams,
-          context: {},
-        });
-
-        expect(response).toEqual(
-          redirect(`/periode/${rapporteringsperioderResponse[0].id}/bekreftelse`)
-        );
       });
 
       test("burde feile hvis backend feiler", async () => {
