@@ -7,7 +7,7 @@ export interface ArbeidssokerSvar {
 }
 
 export async function lagreArbeidssokerSvar(
-  onBehalfOfToken: string,
+  request: Request,
   rapporteringsperiodeId: string,
   svar: ArbeidssokerSvar
 ): Promise<INetworkResponse> {
@@ -17,7 +17,7 @@ export async function lagreArbeidssokerSvar(
 
   const response = await fetch(url, {
     method: "POST",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
     body: JSON.stringify({ ...svar }),
   });
 

@@ -1,6 +1,7 @@
-import { db } from "./db";
+import { withDb } from "./responses/db";
 import { rapporteringsperioderResponse } from "./responses/rapporteringsperioderResponse";
-import { HttpResponse, bypass, http } from "msw";
+import { sessionRecord } from "./session";
+import { HttpResponse, JsonBodyType, PathParams, bypass, http } from "msw";
 import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import {
   IRapporteringsperiode,
@@ -8,92 +9,93 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { getEnv } from "~/utils/env.utils";
 
-export const handlers = [
-  // Hent alle rapporteringsperioder
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`, () => {
-    return HttpResponse.json(db.findAllRapporteringsperioder());
-  }),
+interface RequestHandler {
+  request: Request;
+  params: PathParams;
+  cookies: Record<string, string>;
+}
 
-  // Hent alle innsendte rapporteringsperioder
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`, () => {
-    return HttpResponse.json(db.findAllInnsendtePerioder());
-  }),
+type CallbackArgs = {
+  db: ReturnType<typeof withDb>;
+  request: Request;
+  params: PathParams;
+};
 
-  // Hent gjeldende rapporteringsperiode
-  http.get(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`, () => {
-    const rapporteringsperioder = db.findAllRapporteringsperioder();
-
-    if (rapporteringsperioder.length > 0) {
-      return HttpResponse.json(rapporteringsperioder[0]);
+const withDbHandler =
+  <T extends JsonBodyType>(callback: (args: CallbackArgs) => T) =>
+  ({ cookies, request, params }: RequestHandler) => {
+    const sessionId = cookies["sessionId"];
+    if (sessionId) {
+      const db = withDb(sessionRecord.getDatabase(sessionId));
+      return callback({ db, request, params });
     }
+    return HttpResponse.json([]);
+  };
 
-    return new HttpResponse(null, { status: 404 });
-  }),
+const path = (endpoint: string) => `${getEnv("DP_RAPPORTERING_URL")}${endpoint}`;
 
-  // Send inn rapporteringsperiode
-  http.post(`${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`, async ({ request }) => {
-    const periode = (await request.json()) as IRapporteringsperiode;
-
-    db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
-
-    return new HttpResponse(null, { status: 200 });
-  }),
-
-  // Hent spesifikk rapporteringsperiode
+export const handlers = [
   http.get(
-    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId`,
-    ({ params }) => {
+    path("/rapporteringsperioder"),
+    withDbHandler(({ db }) => HttpResponse.json(db.findAllRapporteringsperioder()))
+  ),
+
+  http.get(
+    path("/rapporteringsperioder/innsendte"),
+    withDbHandler(({ db }) => HttpResponse.json(db.findAllInnsendtePerioder()))
+  ),
+
+  http.post(
+    path("/rapporteringsperiode"),
+    withDbHandler(async ({ db, request }) => {
+      const periode = (await request.json()) as IRapporteringsperiode;
+      db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
+
+      return HttpResponse.json(null, { status: 200 });
+    })
+  ),
+
+  http.get(
+    path("/rapporteringsperiode/:rapporteringsperioderId"),
+    withDbHandler(({ db, params }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
 
       return HttpResponse.json(db.findRapporteringsperiodeById(rapporteringsperioderId));
-    }
+    })
   ),
 
-  // Start korrigering av rapporteringsperiode
-  http.post(
-    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/:rapporteringsperioderId/korrigering`,
-    () => {
-      return HttpResponse.json(rapporteringsperioderResponse[1]);
-    }
-  ),
+  http.post(path("/rapporteringsperioder/:rapporteringsperioderId/korrigering"), () => {
+    return HttpResponse.json(rapporteringsperioderResponse[1]);
+  }),
 
-  // Lagre en aktivitet
   http.post(
-    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
-    async ({ params, request }) => {
+    path("/rapporteringsperiode/:rapporteringsperioderId/aktivitet"),
+    withDbHandler(async ({ db, params, request }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
-
-      const dag: IRapporteringsperiodeDag = (await request.json()) as IRapporteringsperiodeDag;
+      const dag = (await request.json()) as IRapporteringsperiodeDag;
 
       db.lagreAktivitet(rapporteringsperioderId, dag);
 
-      return new HttpResponse(null, { status: 204 });
-    }
+      return HttpResponse.json(null, { status: 204 });
+    })
   ),
 
-  // Slett en aktivitet
-  http.delete(
-    `${getEnv(
-      "DP_RAPPORTERING_URL"
-    )}/rapporteringsperiode/:rapporteringsperioderId/aktivitet/:aktivitetId`,
-    () => {
-      return new HttpResponse(null, { status: 204 });
-    }
-  ),
+  http.delete(path("/rapporteringsperiode/:rapporteringsperioderId/aktivitet/:aktivitetId"), () => {
+    HttpResponse.json(null, { status: 204 });
+  }),
 
-  // Lagre en arbeidssøker svar
   http.post(
-    `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/:rapporteringsperioderId/arbeidssoker`,
-    async ({ params, request }) => {
+    path("/rapporteringsperiode/:rapporteringsperioderId/arbeidssoker"),
+    withDbHandler(async ({ db, params, request }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
       const { registrertArbeidssoker } = (await request.json()) as ArbeidssokerSvar;
 
       db.updateRapporteringsperiode(rapporteringsperioderId, { registrertArbeidssoker });
-      return new HttpResponse(null, { status: 204 });
-    }
+
+      return HttpResponse.json(null, { status: 204 });
+    })
   ),
 
-  // Bypassing mocks, use actual data instead
   http.get("https://rt6o382n.apicdn.sanity.io/*", async ({ request }) => {
     const bypassResponse = await fetch(bypass(request));
     const response = await bypassResponse.json();
