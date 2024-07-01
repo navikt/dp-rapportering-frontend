@@ -39,30 +39,3 @@ export async function lagreAktivitet(
 
   return { status: "success" };
 }
-
-export async function sletteAktivitet(
-  request: Request,
-  rapporteringsperiodeId: string,
-  aktivitetId: string
-): Promise<INetworkResponse> {
-  const url = `${getEnv(
-    "DP_RAPPORTERING_URL"
-  )}/rapporteringsperiode/${rapporteringsperiodeId}/aktivitet/${aktivitetId}`;
-
-  const response = await fetch(url, {
-    method: "DELETE",
-    headers: await getHeaders(request),
-  });
-
-  if (!response.ok) {
-    return {
-      status: "error",
-      error: {
-        statusCode: response.status,
-        statusText: "Det har skjedd en feil ved sletting, prøv igjen.",
-      },
-    };
-  }
-
-  return { status: "success" };
-}

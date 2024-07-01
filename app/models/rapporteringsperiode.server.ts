@@ -42,20 +42,8 @@ export async function hentPeriode(request: Request, periodeId: string): Promise<
   });
 }
 
-function getInnsendtePeriodeUrl(request: Request) {
-  const requestUrl = new URL(request.url);
-  const scenerio = requestUrl.searchParams.get("scenerio");
-
-  if (scenerio) {
-    const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte?scenerio=${scenerio}`;
-    return url;
-  }
-
-  return `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`;
-}
-
 export async function hentInnsendtePerioder(request: Request): Promise<Response> {
-  const url = getInnsendtePeriodeUrl(request);
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`;
 
   return await fetch(url, {
     method: "GET",

@@ -64,10 +64,6 @@ export const handlers = [
     })
   ),
 
-  // http.post(path("/rapporteringsperioder/:rapporteringsperioderId/korrigering"), ({ params }) => {
-  //   return HttpResponse.json(rapporteringsperioderResponse[1]);
-  // }),
-
   http.post(
     path("/rapporteringsperioder/:rapporteringsperioderId/korrigering"),
     withDbHandler(({ db, params }) => {
@@ -93,10 +89,6 @@ export const handlers = [
       return HttpResponse.json(null, { status: 204 });
     })
   ),
-
-  http.delete(path("/rapporteringsperiode/:rapporteringsperioderId/aktivitet/:aktivitetId"), () => {
-    HttpResponse.json(null, { status: 204 });
-  }),
 
   http.post(
     path("/rapporteringsperiode/:rapporteringsperioderId/arbeidssoker"),
