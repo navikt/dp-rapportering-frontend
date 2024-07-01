@@ -15,7 +15,7 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 import { hentForstePeriodeTekst } from "~/utils/periode.utils";
-import { RapporteringType, useRapporteringType } from "~/hooks/RapporteringType";
+import { Rapporteringstype, useRapporteringstype } from "~/hooks/useRapporteringstype";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
@@ -65,13 +65,13 @@ export default function Landingsside() {
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { isLocalOrDemo } = useTypedRouteLoaderData("root");
 
-  const { rapporteringType, setRapporteringType } = useRapporteringType();
+  const { rapporteringstype, setRapporteringstype } = useRapporteringstype();
 
   const { getLink, getRichText } = useSanity();
 
   const harPeriode = rapporteringsperioder.length > 0;
   const forstePeriode = harPeriode ? rapporteringsperioder[0] : null;
-  const visArbeidssokerRegisterering = rapporteringType === RapporteringType.harIngenAktivitet;
+  const visArbeidssokerRegisterering = rapporteringstype === Rapporteringstype.harIngenAktivitet;
 
   return (
     <>
@@ -85,7 +85,7 @@ export default function Landingsside() {
 
         {harPeriode && (
           <div>
-            <RapporteringstypeForm type={rapporteringType} setType={setRapporteringType} />
+            <RapporteringstypeForm type={rapporteringstype} setType={setRapporteringstype} />
 
             <ReadMore header="Les mer om hva som skal rapporteres">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias pariatur, explicabo
@@ -105,7 +105,7 @@ export default function Landingsside() {
             )}
 
             <NextButton
-              rappporteringstype={rapporteringType}
+              rappporteringstype={rapporteringstype}
               rapporteringsPeriode={forstePeriode}
             />
           </div>
@@ -175,8 +175,8 @@ function RapporteringstypeForm({
   type,
   setType,
 }: {
-  type: RapporteringType | undefined;
-  setType: (value: RapporteringType) => void;
+  type: Rapporteringstype | undefined;
+  setType: (value: Rapporteringstype) => void;
 }) {
   const { getAppText } = useSanity();
 
@@ -188,10 +188,10 @@ function RapporteringstypeForm({
         onChange={setType}
         value={type}
       >
-        <Radio value={RapporteringType.harAktivitet}>
+        <Radio value={Rapporteringstype.harAktivitet}>
           {getAppText("rapportering-noe-å-rapportere")}
         </Radio>
-        <Radio value={RapporteringType.harIngenAktivitet}>
+        <Radio value={Rapporteringstype.harIngenAktivitet}>
           {getAppText("rapportering-ingen-å-rapportere")}
         </Radio>
       </RadioGroup>
@@ -203,7 +203,7 @@ export function NextButton({
   rappporteringstype,
   rapporteringsPeriode,
 }: {
-  rappporteringstype: RapporteringType | undefined;
+  rappporteringstype: Rapporteringstype | undefined;
   rapporteringsPeriode: IRapporteringsperiode;
 }) {
   const { getAppText, getLink } = useSanity();
@@ -216,7 +216,7 @@ export function NextButton({
         size="medium"
         as="Button"
         to={
-          rappporteringstype === RapporteringType.harAktivitet
+          rappporteringstype === Rapporteringstype.harAktivitet
             ? `/periode/${rapporteringsPeriode.id}/fyll-ut`
             : `/periode/${rapporteringsPeriode.id}/send-inn`
         }
@@ -225,7 +225,7 @@ export function NextButton({
         iconPosition="right"
         disabled={!rappporteringstype}
       >
-        {rappporteringstype === RapporteringType.harAktivitet
+        {rappporteringstype === Rapporteringstype.harAktivitet
           ? getLink("rapportering-rapporter-for-perioden").linkText
           : getAppText("rapportering-knapp-neste")}
       </RemixLink>

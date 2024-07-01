@@ -16,8 +16,8 @@ import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
 import { isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "~/utils/faro";
-import { RapporteringTypeProvider } from "./hooks/RapporteringType";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
+import { RapporteringstypeProvider } from "./hooks/useRapporteringstype";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import Center from "./components/center/Center";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
@@ -147,9 +147,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <RapporteringTypeProvider>
+    <RapporteringstypeProvider>
       <Outlet />
-    </RapporteringTypeProvider>
+    </RapporteringstypeProvider>
   );
 }
 
