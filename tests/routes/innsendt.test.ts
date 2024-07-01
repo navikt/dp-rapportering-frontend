@@ -61,16 +61,6 @@ describe("Liste ut alle rapporteringsperioder", () => {
 
       server.use(
         http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/gjeldende`,
-          () => {
-            return HttpResponse.json(null, { status: 404 });
-          },
-          { once: true }
-        )
-      );
-
-      server.use(
-        http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`,
           () => {
             return HttpResponse.json(innsendtRapporteringsperioderResponse, { status: 200 });

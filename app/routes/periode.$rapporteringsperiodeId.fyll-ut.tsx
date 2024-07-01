@@ -1,12 +1,13 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { BodyLong, Heading, ReadMore } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
+import { addDays } from "date-fns";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType } from "~/models/aktivitet.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
+import { formaterDato } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
@@ -19,17 +20,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
   const formdata = await request.formData();
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
     case "slette": {
-      return await slettAlleAktiviteter(onBehalfOfToken, periodeId, formdata);
+      return await slettAlleAktiviteter(request, periodeId, formdata);
     }
 
     case "lagre": {
-      return await validerOgLagreAktivitet(onBehalfOfToken, periodeId, formdata);
+      return await validerOgLagreAktivitet(request, periodeId, formdata);
     }
 
     default: {
@@ -87,6 +87,9 @@ export default function RapporteringsPeriodeFyllUtSide() {
     setModalAapen(false);
   }
 
+  const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
+  const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
+
   return (
     <>
       <div className="rapportering-container">
@@ -95,6 +98,13 @@ export default function RapporteringsPeriodeFyllUtSide() {
         </Heading>
         <BodyLong className="tekst-subtil" spacing>
           {getAppText("rapportering-periode-fyll-ut-beskrivelse")}
+          <ReadMore header="Les mer om hva som skal rapporteres">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias pariatur, explicabo
+            quisquam harum aspernatur ex, officiis doloremque atque tempora tenetur distinctio quasi
+            doloribus voluptatum aliquid ipsam! In dolore consectetur quae iusto porro ipsum culpa
+            nemo velit error eos assumenda illo omnis, amet, excepturi sit qui, ab quia voluptates
+            cum fugit.
+          </ReadMore>
         </BodyLong>
 
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
@@ -110,8 +120,9 @@ export default function RapporteringsPeriodeFyllUtSide() {
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
         <BodyLong className="my-8">
-          Du kan sende denne rapporteringen fra 6. juni, og senest 13. juni for å unngå trekk i
-          utbetalingen.
+          {`${getAppText("rapportering-periode-innsending-og-frist-dato")
+            .replace("{date1}", tidligstInnsendingDato)
+            .replace("{date2}", senestInnsendingDato)}`}
         </BodyLong>
 
         <div className="navigasjon-container-to-knapper my-4">

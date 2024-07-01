@@ -1,10 +1,11 @@
 import { Scenerio } from "./Scenerio";
-import { SandboxIcon } from "@navikt/aksel-icons";
+import { ArrowsCirclepathIcon, SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Heading, Modal, Tooltip } from "@navikt/ds-react";
 import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
 
 export enum ScenerioType {
+  ingen = "ingen",
   en = "en",
   to = "to",
   reset = "reset",
@@ -15,6 +16,10 @@ interface IScenerio {
 }
 
 const scenerios: IScenerio[] = [
+  {
+    type: ScenerioType.ingen,
+    tittel: "Ingen perioder",
+  },
   {
     type: ScenerioType.en,
     tittel: "Én periode",
@@ -81,6 +86,7 @@ export function DevTools() {
                   value="reset"
                   type="submit"
                   onClick={() => ref.current?.close()}
+                  icon={<ArrowsCirclepathIcon aria-hidden />}
                 >
                   Reset testdata
                 </Button>
