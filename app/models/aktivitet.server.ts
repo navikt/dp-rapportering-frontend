@@ -13,7 +13,7 @@ export interface IAktivitet {
 }
 
 export async function lagreAktivitet(
-  onBehalfOfToken: string,
+  request: Request,
   rapporteringsperiodeId: string,
   dag: IRapporteringsperiodeDag
 ): Promise<INetworkResponse> {
@@ -23,7 +23,7 @@ export async function lagreAktivitet(
 
   const response = await fetch(url, {
     method: "POST",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
     body: JSON.stringify({ ...dag }),
   });
 
@@ -41,7 +41,7 @@ export async function lagreAktivitet(
 }
 
 export async function sletteAktivitet(
-  onBehalfOfToken: string,
+  request: Request,
   rapporteringsperiodeId: string,
   aktivitetId: string
 ): Promise<INetworkResponse> {
@@ -51,7 +51,7 @@ export async function sletteAktivitet(
 
   const response = await fetch(url, {
     method: "DELETE",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
   });
 
   if (!response.ok) {

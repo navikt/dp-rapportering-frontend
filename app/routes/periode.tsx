@@ -20,7 +20,7 @@ export default function RapporteringsPeriode() {
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
           <Heading level="1" size="xlarge">
-            {getAppText("rapportering-periode-tittel")}
+            {getAppText("rapportering-tittel")}
           </Heading>
         </div>
       </div>
