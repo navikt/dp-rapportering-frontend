@@ -2,7 +2,7 @@ import { useFetcher } from "@remix-run/react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useSanity } from "~/hooks/useSanity";
-import { ArbeidssokerRegister } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 
 interface MockFetcher {
   submit: Mock;
@@ -41,7 +41,9 @@ describe("ArbeidssokerRegister", () => {
   });
 
   it("rendrer komponenten med initiell tilstand", () => {
-    render(<ArbeidssokerRegister rapporteringsperiodeId="testId" registrertArbeidssoker={null} />);
+    render(
+      <ArbeidssokerRegisterering rapporteringsperiodeId="testId" registrertArbeidssoker={null} />
+    );
 
     expect(screen.getByText("rapportering-arbeidssokerregister-tittel")).toBeInTheDocument();
     expect(screen.getByText("rapportering-arbeidssokerregister-subtittel")).toBeInTheDocument();
@@ -50,7 +52,9 @@ describe("ArbeidssokerRegister", () => {
   });
 
   it("håndterer optimistisk UI-oppdatering ved endring av radioknapp", async () => {
-    render(<ArbeidssokerRegister rapporteringsperiodeId="testId" registrertArbeidssoker={null} />);
+    render(
+      <ArbeidssokerRegisterering rapporteringsperiodeId="testId" registrertArbeidssoker={null} />
+    );
 
     const yesRadio = screen.getByLabelText("rapportering-arbeidssokerregister-svar-ja");
     const noRadio = screen.getByLabelText("rapportering-arbeidssokerregister-svar-nei");
@@ -69,7 +73,9 @@ describe("ArbeidssokerRegister", () => {
   });
 
   it("viser RegistrertArbeidssoker-Alert", () => {
-    render(<ArbeidssokerRegister rapporteringsperiodeId="testId" registrertArbeidssoker={true} />);
+    render(
+      <ArbeidssokerRegisterering rapporteringsperiodeId="testId" registrertArbeidssoker={true} />
+    );
 
     expect(
       screen.getByText("rapportering-arbeidssokerregister-alert-tittel-registrert")
@@ -77,7 +83,9 @@ describe("ArbeidssokerRegister", () => {
   });
 
   it("viser AvregistrertArbeidssoker-Alert", () => {
-    render(<ArbeidssokerRegister rapporteringsperiodeId="testId" registrertArbeidssoker={false} />);
+    render(
+      <ArbeidssokerRegisterering rapporteringsperiodeId="testId" registrertArbeidssoker={false} />
+    );
 
     expect(
       screen.getByText("rapportering-arbeidssokerregister-alert-tittel-avregistrert")
@@ -85,7 +93,9 @@ describe("ArbeidssokerRegister", () => {
   });
 
   it("ruller tilbake tilstand ved feil i serveren", async () => {
-    render(<ArbeidssokerRegister rapporteringsperiodeId="testId" registrertArbeidssoker={false} />);
+    render(
+      <ArbeidssokerRegisterering rapporteringsperiodeId="testId" registrertArbeidssoker={false} />
+    );
 
     expect(
       await screen.findByLabelText("rapportering-arbeidssokerregister-svar-nei")
