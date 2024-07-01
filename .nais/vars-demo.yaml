@@ -1,5 +1,6 @@
 ingresses: 
   - https://ramp.ekstern.dev.nav.no/arbeid/dagpenger/rapportering
+  - https://rapportering.ekstern.dev.nav.no/arbeid/dagpenger/rapportering
 base_path: "/arbeid/dagpenger/rapportering"
 dekorator:
   url: https://dekoratoren.dev.nav.no/

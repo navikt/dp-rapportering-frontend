@@ -2,24 +2,22 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
-import { ArbeidssokerRegister } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const rapporteringsperiodeId = params.rapporteringsperiodeId;
-  const onBehalfOfToken = await getRapporteringOboToken(request);
   const formData = await request.formData();
   const svar = formData.get("registrertArbeidssoker");
 
   const registrertArbeidssoker = svar === "true" ? true : false;
 
-  return await lagreArbeidssokerSvar(onBehalfOfToken, rapporteringsperiodeId, {
+  return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
     registrertArbeidssoker,
   });
 }
@@ -31,7 +29,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   return (
     <>
       <div className="rapportering-container">
-        <ArbeidssokerRegister
+        <ArbeidssokerRegisterering
           rapporteringsperiodeId={periode.id}
           registrertArbeidssoker={periode.registrertArbeidssoker}
         />

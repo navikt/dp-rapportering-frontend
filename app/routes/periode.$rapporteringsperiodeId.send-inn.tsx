@@ -3,13 +3,12 @@ import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useNavigate } from "@remix-run/react";
+import { Form, useActionData, useNavigate, useNavigation } from "@remix-run/react";
 import { useState } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import { hentPeriode, sendInnPeriode } from "~/models/rapporteringsperiode.server";
 import styles from "~/routes-styles/rapportering.module.css";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -24,12 +23,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const periodeId = params.rapporteringsperiodeId;
 
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-
-  const periodeResponse = await hentPeriode(onBehalfOfToken, periodeId);
+  const periodeResponse = await hentPeriode(request, periodeId);
   const periode = await periodeResponse.json();
 
-  const response = await sendInnPeriode(onBehalfOfToken, periode);
+  const response = await sendInnPeriode(request, periode);
 
   if (response.ok) {
     return redirect(`/periode/${periodeId}/bekreftelse`);
@@ -43,14 +40,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function RapporteringsPeriodeSendInnSide() {
+  const navigation = useNavigation();
+  const navigate = useNavigate();
+
+  const [confirmed, setConfirmed] = useState<boolean | undefined>();
+
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
-
-  const navigate = useNavigate();
-
-  const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
   let invaerendePeriodeTekst;
 
@@ -63,6 +61,8 @@ export default function RapporteringsPeriodeSendInnSide() {
 
     invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
   }
+
+  const isSubmitting = navigation.state !== "idle";
 
   return (
     <div className="rapportering-container">
@@ -110,10 +110,12 @@ export default function RapporteringsPeriodeSendInnSide() {
           type="submit"
           variant="primary"
           iconPosition="right"
-          disabled={!confirmed}
+          disabled={!confirmed || isSubmitting}
           className="py-4 px-8"
         >
-          {getLink("rapportering-periode-send-inn-bekreft").linkText}
+          {isSubmitting
+            ? getAppText("rapportering-periode-send-inn-bekreft-loading")
+            : getLink("rapportering-periode-send-inn-bekreft").linkText}
         </Button>
       </Form>
     </div>

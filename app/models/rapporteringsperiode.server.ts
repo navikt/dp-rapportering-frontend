@@ -1,5 +1,4 @@
 import type { IAktivitet } from "./aktivitet.server";
-import { getRapporteringOboToken } from "~/utils/auth.utils.server";
 import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 
@@ -26,44 +25,20 @@ export interface IRapporteringsperiodeDag {
 }
 
 export async function hentRapporteringsperioder(request: Request): Promise<Response> {
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
 
   return await fetch(url, {
     method: "GET",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
   });
 }
 
-function getGjeldendePeriodeUrl(request: Request) {
-  const requestUrl = new URL(request.url);
-  const scenerio = requestUrl.searchParams.get("scenerio");
-
-  if (scenerio) {
-    const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende?scenerio=${scenerio}`;
-    return url;
-  }
-
-  return `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`;
-}
-
-export async function hentGjeldendePeriode(request: Request): Promise<Response> {
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-
-  const url = getGjeldendePeriodeUrl(request);
-
-  return await fetch(url, {
-    method: "GET",
-    headers: getHeaders(onBehalfOfToken),
-  });
-}
-export async function hentPeriode(onBehalfOfToken: string, periodeId: string): Promise<Response> {
+export async function hentPeriode(request: Request, periodeId: string): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/${periodeId}`;
 
   return await fetch(url, {
     method: "GET",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
   });
 }
 
@@ -80,57 +55,52 @@ function getInnsendtePeriodeUrl(request: Request) {
 }
 
 export async function hentInnsendtePerioder(request: Request): Promise<Response> {
-  const onBehalfOfToken = await getRapporteringOboToken(request);
-
   const url = getInnsendtePeriodeUrl(request);
 
   return await fetch(url, {
     method: "GET",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
   });
 }
 
 export async function sendInnPeriode(
-  onBehalfOfToken: string,
+  request: Request,
   rapporteringsperiode: IRapporteringsperiode
 ): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`;
 
   return await fetch(url, {
     method: "POST",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
     body: JSON.stringify(rapporteringsperiode),
   });
 }
 
-export async function godkjennPeriode(onBehalfOfToken: string, id: string): Promise<Response> {
+export async function godkjennPeriode(request: Request, id: string): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${id}/godkjenn`;
 
   return await fetch(url, {
     method: "POST",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
     body: JSON.stringify({ image: getEnv("NAIS_APP_IMAGE"), commit: getEnv("COMMIT") }),
   });
 }
 
-export async function avGodkjennPeriode(
-  onBehalfOfToken: string,
-  periodeId: string
-): Promise<Response> {
+export async function avGodkjennPeriode(request: Request, periodeId: string): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/avgodkjenn`;
 
   return await fetch(url, {
     method: "POST",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
   });
 }
 
-export async function lagKorrigeringsperiode(onBehalfOfToken: string, periodeId: string) {
+export async function lagKorrigeringsperiode(request: Request, periodeId: string) {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/korrigering`;
 
   const response = await fetch(url, {
     method: "POST",
-    headers: getHeaders(onBehalfOfToken),
+    headers: await getHeaders(request),
   });
 
   return response;

@@ -6,12 +6,15 @@ import favicon16 from "/favicon-16x16.png";
 import favicon32 from "/favicon-32x32.png";
 import favicon from "/favicon.ico";
 import { Alert } from "@navikt/ds-react";
-import { json } from "@remix-run/node";
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from "@remix-run/react";
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
+import { hasSession } from "mocks/session";
+import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
+import { isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "~/utils/faro";
 import { RapporteringTypeProvider } from "./hooks/RapporteringType";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
@@ -70,7 +73,7 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
   const fragments = await getDecoratorHTML();
 
   if (!fragments) throw json({ error: "Kunne ikke hente dekoratør" }, { status: 500 });
@@ -79,6 +82,14 @@ export async function loader() {
     baseLang: "nb",
     lang: "nb",
   });
+
+  if (isLocalOrDemo && !hasSession(request)) {
+    return redirect("/", {
+      headers: {
+        "Set-Cookie": `sessionId=${uuidv7()}`,
+      },
+    });
+  }
 
   return json({
     sanityTexts,
