@@ -6,7 +6,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
-import { ArbeidssokerRegister } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -29,7 +29,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   return (
     <>
       <div className="rapportering-container">
-        <ArbeidssokerRegister
+        <ArbeidssokerRegisterering
           rapporteringsperiodeId={periode.id}
           registrertArbeidssoker={periode.registrertArbeidssoker}
         />

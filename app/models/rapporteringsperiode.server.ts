@@ -33,26 +33,6 @@ export async function hentRapporteringsperioder(request: Request): Promise<Respo
   });
 }
 
-function getGjeldendePeriodeUrl(request: Request) {
-  const requestUrl = new URL(request.url);
-  const scenerio = requestUrl.searchParams.get("scenerio");
-
-  if (scenerio) {
-    const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende?scenerio=${scenerio}`;
-    return url;
-  }
-
-  return `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/gjeldende`;
-}
-
-export async function hentGjeldendePeriode(request: Request): Promise<Response> {
-  const url = getGjeldendePeriodeUrl(request);
-
-  return await fetch(url, {
-    method: "GET",
-    headers: await getHeaders(request),
-  });
-}
 export async function hentPeriode(request: Request, periodeId: string): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/${periodeId}`;
 

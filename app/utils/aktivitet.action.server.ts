@@ -10,9 +10,9 @@ export async function slettAlleAktiviteter(
   periodeId: string,
   formdata: FormData
 ): Promise<INetworkResponse> {
-  const gjeldendeDag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
+  const dag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
 
-  const oppdatertDag = { ...gjeldendeDag, aktiviteter: [] };
+  const oppdatertDag = { ...dag, aktiviteter: [] };
 
   return await lagreAktivitet(request, periodeId, oppdatertDag);
 }
@@ -30,10 +30,10 @@ export async function validerOgLagreAktivitet(
 
   const { type, dato, timer: varighet } = inputVerdier.submittedData;
 
-  const gjeldendeDag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
+  const dag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
   const aktivitetTyper: AktivitetType[] = Array.isArray(type) ? type : [type];
 
-  const oppdatertDag = oppdaterAktiviteter(gjeldendeDag, aktivitetTyper, dato, varighet);
+  const oppdatertDag = oppdaterAktiviteter(dag, aktivitetTyper, dato, varighet);
 
   return await lagreAktivitet(request, periodeId, oppdatertDag);
 }
