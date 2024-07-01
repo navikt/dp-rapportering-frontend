@@ -6,19 +6,19 @@ import { type AktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 export async function slettAlleAktiviteter(
-  onBehalfOfToken: string,
+  request: Request,
   periodeId: string,
   formdata: FormData
 ): Promise<INetworkResponse> {
-  const gjeldendeDag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
+  const dag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
 
-  const oppdatertDag = { ...gjeldendeDag, aktiviteter: [] };
+  const oppdatertDag = { ...dag, aktiviteter: [] };
 
-  return await lagreAktivitet(onBehalfOfToken, periodeId, oppdatertDag);
+  return await lagreAktivitet(request, periodeId, oppdatertDag);
 }
 
 export async function validerOgLagreAktivitet(
-  onBehalfOfToken: string,
+  request: Request,
   periodeId: string,
   formdata: FormData
 ): Promise<INetworkResponse> {
@@ -30,10 +30,10 @@ export async function validerOgLagreAktivitet(
 
   const { type, dato, timer: varighet } = inputVerdier.submittedData;
 
-  const gjeldendeDag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
+  const dag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
   const aktivitetTyper: AktivitetType[] = Array.isArray(type) ? type : [type];
 
-  const oppdatertDag = oppdaterAktiviteter(gjeldendeDag, aktivitetTyper, dato, varighet);
+  const oppdatertDag = oppdaterAktiviteter(dag, aktivitetTyper, dato, varighet);
 
-  return await lagreAktivitet(onBehalfOfToken, periodeId, oppdatertDag);
+  return await lagreAktivitet(request, periodeId, oppdatertDag);
 }
