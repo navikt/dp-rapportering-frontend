@@ -86,15 +86,6 @@ export async function godkjennPeriode(request: Request, id: string): Promise<Res
   });
 }
 
-export async function avGodkjennPeriode(request: Request, periodeId: string): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/avgodkjenn`;
-
-  return await fetch(url, {
-    method: "POST",
-    headers: await getHeaders(request),
-  });
-}
-
 export async function lagKorrigeringsperiode(request: Request, periodeId: string) {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/korrigering`;
 
