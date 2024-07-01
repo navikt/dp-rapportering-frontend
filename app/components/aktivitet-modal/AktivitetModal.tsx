@@ -4,7 +4,6 @@ import { useActionData } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import type { action as korrigeringAction } from "~/routes/korriger.$rapporteringsperiodeId.fyll-ut";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
@@ -32,7 +31,7 @@ export function AktivitetModal({
   valgtDato,
 }: IProps) {
   const { getAppText } = useSanity();
-  const actionData = useActionData<typeof rapporteringAction | typeof korrigeringAction>();
+  const actionData = useActionData<typeof rapporteringAction>();
 
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato

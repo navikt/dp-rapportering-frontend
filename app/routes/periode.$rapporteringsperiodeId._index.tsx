@@ -12,13 +12,6 @@ export default function RapporteringsPeriodeSide() {
   useEffect(() => {
     if (periode) {
       navigate(`/rapportering/periode/${periode.id}/fyll-ut`, { replace: true });
-      // switch (periode.status) {
-      //   case "TilUtfylling":
-      //     navigate(`/rapportering/periode/${periode.id}/fyll-ut`, { replace: true });
-      //     break;
-      //   default:
-      //     navigate(`/rapportering/periode/${periode.id}/vis`, { replace: true });
-      // }
     } else {
       console.log("ingen periode i $rapporteringsperiode._index! :scream:");
     }
