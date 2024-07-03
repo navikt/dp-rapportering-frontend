@@ -64,6 +64,10 @@ export const handlers = [
     })
   ),
 
+  http.post(path("/rapporteringsperioder/:rapporteringsperioderId/start"), () => {
+    return HttpResponse.json(null, { status: 200 });
+  }),
+
   http.post(
     path("/rapporteringsperioder/:rapporteringsperioderId/korrigering"),
     withDbHandler(({ db, params }) => {

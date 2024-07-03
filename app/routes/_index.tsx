@@ -3,7 +3,7 @@ import { Alert, BodyLong, BodyShort, Heading, Radio, RadioGroup, ReadMore } from
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
+import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
 import { withDb } from "mocks/responses/db";
 import { getSessionId, sessionRecord } from "mocks/session";
 import { DevTools, ScenerioType } from "~/devTools";
@@ -12,6 +12,7 @@ import { getSession } from "~/models/getSession.server";
 import {
   IRapporteringsperiode,
   hentRapporteringsperioder,
+  startUtfylling,
 } from "~/models/rapporteringsperiode.server";
 import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 import { hentForstePeriodeTekst } from "~/utils/periode.utils";
@@ -26,6 +27,12 @@ import { SessionModal } from "~/components/session-modal/SessionModal";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+
+  if (formData.get("_action") === "start") {
+    const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
+    await startUtfylling(request, rapporteringsperiodeId);
+    return { status: "success" };
+  }
 
   if (isLocalOrDemo && formData.get("scenerio")) {
     const { scenerio } = Object.fromEntries(formData);
@@ -70,7 +77,7 @@ export default function Landingsside() {
   const { getLink, getRichText } = useSanity();
 
   const harPeriode = rapporteringsperioder.length > 0;
-  const forstePeriode = harPeriode ? rapporteringsperioder[0] : null;
+  const forstePeriode: IRapporteringsperiode = harPeriode ? rapporteringsperioder[0] : null;
   const visArbeidssokerRegisterering = rapporteringstype === Rapporteringstype.harIngenAktivitet;
 
   return (
@@ -85,7 +92,11 @@ export default function Landingsside() {
 
         {harPeriode && (
           <div>
-            <RapporteringstypeForm type={rapporteringstype} setType={setRapporteringstype} />
+            <RapporteringstypeForm
+              type={rapporteringstype}
+              setType={setRapporteringstype}
+              rapporteringsperiodeId={forstePeriode.id}
+            />
 
             <ReadMore header="Les mer om hva som skal rapporteres">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias pariatur, explicabo
@@ -174,18 +185,29 @@ function PeriodeDetaljer({
 function RapporteringstypeForm({
   type,
   setType,
+  rapporteringsperiodeId,
 }: {
   type: Rapporteringstype | undefined;
   setType: (value: Rapporteringstype) => void;
+  rapporteringsperiodeId: string;
 }) {
   const { getAppText } = useSanity();
+  const fetcher = useFetcher();
+
+  const changeHandler = (valgtType: Rapporteringstype) => {
+    if (type === undefined) {
+      fetcher.submit({ _action: "start", rapporteringsperiodeId }, { method: "post" });
+    }
+
+    setType(valgtType);
+  };
 
   return (
     <div>
       <RadioGroup
         legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
         description={getAppText("rapportering-ikke-utfylte-rapporter-subtittel")}
-        onChange={setType}
+        onChange={changeHandler}
         value={type}
       >
         <Radio value={Rapporteringstype.harAktivitet}>

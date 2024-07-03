@@ -24,6 +24,15 @@ export interface IRapporteringsperiodeDag {
   aktiviteter: IAktivitet[];
 }
 
+export async function startUtfylling(request: Request, periodeId: string): Promise<Response> {
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/${periodeId}/start`;
+
+  return await fetch(url, {
+    method: "POST",
+    headers: await getHeaders(request),
+  });
+}
+
 export async function hentRapporteringsperioder(request: Request): Promise<Response> {
   const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
 
