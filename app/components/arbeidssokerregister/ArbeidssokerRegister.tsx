@@ -22,7 +22,11 @@ export function ArbeidssokerRegisterering({
     setRegistrertArbeidssoker(registrertArbeidssokerSvar);
 
     fetcher.submit(
-      { registrertArbeidssoker: registrertArbeidssokerSvar, rapporteringsperiodeId },
+      {
+        _action: "registrertArbeidssoker",
+        registrertArbeidssoker: registrertArbeidssokerSvar,
+        rapporteringsperiodeId,
+      },
       { method: "post" }
     );
   };

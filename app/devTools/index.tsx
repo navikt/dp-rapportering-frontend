@@ -3,6 +3,7 @@ import { ArrowsCirclepathIcon, SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Heading, Modal, Tooltip } from "@navikt/ds-react";
 import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
+import { INetworkResponse } from "~/utils/types";
 
 export enum ScenerioType {
   ingen = "ingen",
@@ -31,8 +32,13 @@ const scenerios: IScenerio[] = [
 ];
 
 export function DevTools() {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<INetworkResponse>();
   const ref = useRef<HTMLDialogElement>(null);
+
+  const changeHandler = (type: ScenerioType) => {
+    fetcher.submit({ _action: "scenerio", type }, { method: "post" });
+    ref.current?.close();
+  };
 
   return (
     <div>
@@ -60,18 +66,16 @@ export function DevTools() {
             <Heading level="2" size="small">
               Scenerio:
             </Heading>
-            <fetcher.Form method="post">
+            <fetcher.Form method="post" onSubmit={(e) => e.preventDefault()}>
               {scenerios.map((scenerio) => {
                 return (
                   <Scenerio
                     key={scenerio.type}
                     tittel={scenerio.tittel}
-                    value={scenerio.type}
-                    onClick={() => ref.current?.close()}
+                    onClick={() => changeHandler(scenerio.type)}
                   />
                 );
               })}
-
               <div
                 style={{
                   display: "flex",
@@ -80,12 +84,9 @@ export function DevTools() {
                 }}
               >
                 <Button
-                  name="scenerio"
                   size="medium"
                   variant="secondary"
-                  value="reset"
-                  type="submit"
-                  onClick={() => ref.current?.close()}
+                  onClick={() => changeHandler(ScenerioType.reset)}
                   icon={<ArrowsCirclepathIcon aria-hidden />}
                 >
                   Reset testdata

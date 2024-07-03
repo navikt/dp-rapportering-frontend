@@ -27,33 +27,49 @@ import { SessionModal } from "~/components/session-modal/SessionModal";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const action = formData.get("_action");
 
-  if (formData.get("_action") === "start") {
-    const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
-    await startUtfylling(request, rapporteringsperiodeId);
-    return { status: "success" };
-  }
-
-  if (isLocalOrDemo && formData.get("scenerio")) {
-    const { scenerio } = Object.fromEntries(formData);
-    const sessionId = getSessionId(request);
-
-    if (sessionId) {
-      withDb(sessionRecord.getDatabase(sessionId)).updateRapporteringsperioder(
-        scenerio as ScenerioType
-      );
-
+  switch (action) {
+    case "start": {
+      const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
+      await startUtfylling(request, rapporteringsperiodeId);
       return { status: "success" };
     }
-  }
 
-  if (formData.get("registrertArbeidssoker")) {
-    const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
-    const registrertArbeidssoker: boolean = formData.get("registrertArbeidssoker") === "true";
+    case "scenerio": {
+      if (isLocalOrDemo) {
+        const { type: scenerio } = Object.fromEntries(formData);
+        const sessionId = getSessionId(request);
 
-    return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
-      registrertArbeidssoker,
-    });
+        if (sessionId) {
+          withDb(sessionRecord.getDatabase(sessionId)).updateRapporteringsperioder(
+            scenerio as ScenerioType
+          );
+
+          return { status: "success" };
+        }
+      }
+      return { status: "success" };
+    }
+
+    case "registrertArbeidssoker": {
+      const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
+      const registrertArbeidssoker: boolean = formData.get("registrertArbeidssoker") === "true";
+
+      return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
+        registrertArbeidssoker,
+      });
+    }
+
+    default: {
+      return {
+        status: "error",
+        error: {
+          statusCode: 500,
+          statusText: "Det skjedde en feil.",
+        },
+      };
+    }
   }
 }
 export async function loader({ request }: LoaderFunctionArgs) {
