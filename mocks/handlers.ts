@@ -74,6 +74,7 @@ export const handlers = [
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
 
       const rapporteringsperiode = db.findRapporteringsperiodeById(rapporteringsperioderId);
+      db.updateRapporteringsperiode(rapporteringsperioderId, { kanKorrigeres: false });
 
       const korrigertPeriode = lagKorrigeringsperiode(rapporteringsperiode);
       db.addRapporteringsperioder(korrigertPeriode);
