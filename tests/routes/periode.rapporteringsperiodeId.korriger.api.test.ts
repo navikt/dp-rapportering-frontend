@@ -30,7 +30,7 @@ describe("Start korrigering", () => {
       };
       server.use(
         http.post(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${testParams.rapporteringsperiodeId}/korrigering`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/${testParams.rapporteringsperiodeId}/korriger`,
           () => {
             return HttpResponse.json(korrigeringsPeriode);
           },
@@ -54,7 +54,7 @@ describe("Start korrigering", () => {
     test("Skal feile hvis kallet til den bestemte rapporteringsperiode feiler", async () => {
       server.use(
         http.post(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder/${testParams.rapporteringsperiodeId}/korrigering`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/${testParams.rapporteringsperiodeId}/korriger`,
           () => {
             return HttpResponse.json(null, { status: 500 });
           },

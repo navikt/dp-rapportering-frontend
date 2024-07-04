@@ -74,7 +74,7 @@ export async function sendInnPeriode(
 }
 
 export async function lagKorrigeringsperiode(request: Request, periodeId: string) {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/${periodeId}/korrigering`;
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/${periodeId}/korriger`;
 
   const response = await fetch(url, {
     method: "POST",

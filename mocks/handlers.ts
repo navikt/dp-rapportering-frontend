@@ -69,7 +69,7 @@ export const handlers = [
   }),
 
   http.post(
-    path("/rapporteringsperioder/:rapporteringsperioderId/korrigering"),
+    path("/rapporteringsperiode/:rapporteringsperioderId/korriger"),
     withDbHandler(({ db, params }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
 

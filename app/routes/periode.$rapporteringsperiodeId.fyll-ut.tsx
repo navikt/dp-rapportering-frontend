@@ -46,6 +46,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+
   const { getAppText, getLink } = useSanity();
   const actionData = useActionData<typeof action>();
 
