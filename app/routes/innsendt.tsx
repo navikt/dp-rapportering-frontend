@@ -20,7 +20,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
       status: 500,
     });
   } else {
-    innsendtPerioder = await allePerioderResponse.json();
+    if (allePerioderResponse.status === 204) {
+      innsendtPerioder = [];
+    } else {
+      innsendtPerioder = await allePerioderResponse.json();
+    }
   }
 
   return json({ innsendtPerioder });
