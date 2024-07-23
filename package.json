@@ -39,7 +39,7 @@
     "express": "^4.19.2",
     "groq": "^3.52.0",
     "html-react-parser": "^5.1.10",
-    "isbot": "^5.1.11",
+    "isbot": "^5.1.13",
     "morgan": "^1.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
