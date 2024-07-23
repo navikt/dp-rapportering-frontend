@@ -7,6 +7,11 @@ export default defineConfig({
     setupFiles: ["tests/helpers/setup.ts"],
     environment: "jsdom",
     watch: false,
+    coverage: {
+      provider: "istanbul",
+      all: true,
+      include: ["app/*"],
+    },
   },
   resolve: {
     alias: {
