@@ -1,7 +1,6 @@
 import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useFetcher } from "@remix-run/react";
-import { useEffect, useState } from "react";
 import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 
@@ -14,13 +13,12 @@ export function ArbeidssokerRegisterering({
 }) {
   const { getAppText } = useSanity();
   const fetcher = useFetcher<INetworkResponse>();
-  const [registrertArbeidssoker, setRegistrertArbeidssoker] = useState(
-    initialRegistrertArbeidssoker
-  );
+
+  const registrertArbeidssoker = fetcher.formData
+    ? fetcher.formData.get("registrertArbeidssoker") === "true"
+    : initialRegistrertArbeidssoker;
 
   const handleChange = (registrertArbeidssokerSvar: boolean) => {
-    setRegistrertArbeidssoker(registrertArbeidssokerSvar);
-
     fetcher.submit(
       {
         _action: "registrertArbeidssoker",
@@ -30,20 +28,6 @@ export function ArbeidssokerRegisterering({
       { method: "post" }
     );
   };
-
-  useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
-
-    if (fetcher.data?.status === "error") {
-      timeout = setTimeout(() => {
-        setRegistrertArbeidssoker(false);
-      }, 2000);
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [fetcher.data?.status, fetcher.data, initialRegistrertArbeidssoker, registrertArbeidssoker]);
 
   return (
     <div>

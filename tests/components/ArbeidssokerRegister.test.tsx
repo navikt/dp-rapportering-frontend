@@ -1,5 +1,5 @@
 import { useFetcher } from "@remix-run/react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useSanity } from "~/hooks/useSanity";
 import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
@@ -98,28 +98,5 @@ describe("ArbeidssokerRegister", () => {
     expect(
       screen.getByText("rapportering-arbeidssokerregister-alert-tittel-avregistrert")
     ).toBeInTheDocument();
-  });
-
-  it("ruller tilbake tilstand ved feil i serveren", async () => {
-    render(
-      <ArbeidssokerRegisterering rapporteringsperiodeId="testId" registrertArbeidssoker={false} />
-    );
-
-    expect(
-      await screen.findByLabelText("rapportering-arbeidssokerregister-svar-nei")
-    ).toBeChecked();
-
-    (useFetcher as Mock).mockReturnValueOnce({ ...mockFetcher, data: { status: "error" } });
-
-    fireEvent.click(screen.getByLabelText("rapportering-arbeidssokerregister-svar-ja"));
-
-    expect(screen.getByLabelText("rapportering-arbeidssokerregister-svar-ja")).toBeChecked();
-
-    await waitFor(
-      async () => {
-        expect(screen.getByLabelText("rapportering-arbeidssokerregister-svar-nei")).toBeChecked();
-      },
-      { timeout: 3000 }
-    );
   });
 });
