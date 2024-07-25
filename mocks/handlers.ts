@@ -64,7 +64,7 @@ export const handlers = [
     })
   ),
 
-  http.post(path("/rapporteringsperioder/:rapporteringsperioderId/start"), () => {
+  http.post(path("/rapporteringsperiode/:rapporteringsperioderId/start"), () => {
     return HttpResponse.json(null, { status: 200 });
   }),
 
