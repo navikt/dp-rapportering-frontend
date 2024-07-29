@@ -3,41 +3,40 @@ import { useFetcher } from "@remix-run/react";
 import { Rapporteringstype } from "~/hooks/useRapporteringstype";
 import { useSanity } from "~/hooks/useSanity";
 
+interface RapporteringstypeFormProps {
+  type: Rapporteringstype | undefined;
+  setType: (value: Rapporteringstype) => void;
+  rapporteringsperiodeId: string;
+}
+
 export function RapporteringstypeForm({
   type,
   setType,
   rapporteringsperiodeId,
-}: {
-  type: Rapporteringstype | undefined;
-  setType: (value: Rapporteringstype) => void;
-  rapporteringsperiodeId: string;
-}) {
+}: RapporteringstypeFormProps) {
   const { getAppText } = useSanity();
   const fetcher = useFetcher();
 
-  const changeHandler = (valgtType: Rapporteringstype) => {
+  const handleChange = (valgtType: Rapporteringstype) => {
     if (type === undefined) {
       fetcher.submit({ _action: "start", rapporteringsperiodeId }, { method: "post" });
     }
-
     setType(valgtType);
   };
 
   return (
-    <div>
-      <RadioGroup
-        legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
-        description={getAppText("rapportering-ikke-utfylte-rapporter-subtittel")}
-        onChange={changeHandler}
-        value={type}
-      >
-        <Radio value={Rapporteringstype.harAktivitet}>
-          {getAppText("rapportering-noe-å-rapportere")}
-        </Radio>
-        <Radio value={Rapporteringstype.harIngenAktivitet}>
-          {getAppText("rapportering-ingen-å-rapportere")}
-        </Radio>
-      </RadioGroup>
-    </div>
+    <RadioGroup
+      legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
+      description={getAppText("rapportering-ikke-utfylte-rapporter-subtittel")}
+      onChange={handleChange}
+      value={type}
+    >
+      <Radio value={Rapporteringstype.harAktivitet}>
+        {getAppText("rapportering-noe-å-rapportere")}
+      </Radio>
+      <Radio value={Rapporteringstype.harIngenAktivitet}>
+        {getAppText("rapportering-ingen-å-rapportere")}
+      </Radio>
+    </RadioGroup>
   );
 }
