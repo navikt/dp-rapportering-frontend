@@ -1,4 +1,4 @@
-import { NextButton } from "./NextButton";
+import { NesteKnapp } from "./NesteKnapp";
 import { PeriodeDetaljer } from "./PeriodeDetaljer";
 import { RapporteringstypeForm } from "./RapporteringstypeForm";
 import { BodyLong, Heading, ReadMore } from "@navikt/ds-react";
@@ -139,7 +139,7 @@ export default function Landingsside() {
               </div>
             )}
 
-            <NextButton
+            <NesteKnapp
               rapporteringstype={rapporteringstype}
               rapporteringsPeriode={forstePeriode}
             />

@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, test, vi } from "vitest";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { NextButton } from "~/routes/_index/NextButton";
+import { NesteKnapp } from "~/routes/_index/NesteKnapp";
 import { Rapporteringstype } from "~/hooks/useRapporteringstype";
 
 vi.mock("~/hooks/useSanity", () => ({
@@ -12,13 +12,13 @@ vi.mock("~/hooks/useSanity", () => ({
   }),
 }));
 
-describe("NextButton Komponent", () => {
+describe("<NesteKnapp/>", () => {
   const rapporteringsPeriode: IRapporteringsperiode = { id: "123" } as IRapporteringsperiode;
 
   test("ikke rendere når rapporteringstype ikke er valgt", () => {
     const { queryByRole } = render(
       <MemoryRouter>
-        <NextButton rapporteringstype={undefined} rapporteringsPeriode={rapporteringsPeriode} />
+        <NesteKnapp rapporteringstype={undefined} rapporteringsPeriode={rapporteringsPeriode} />
       </MemoryRouter>
     );
     expect(queryByRole("button")).not.toBeInTheDocument();
@@ -27,17 +27,17 @@ describe("NextButton Komponent", () => {
   test("rendere korrekt lenke og tekst når man har aktiviteter'", () => {
     const { getByText } = render(
       <MemoryRouter>
-        <NextButton
+        <NesteKnapp
           rapporteringstype={Rapporteringstype.harAktivitet}
           rapporteringsPeriode={rapporteringsPeriode}
         />
       </MemoryRouter>
     );
 
-    const nextButton = getByText("Til utfylling");
+    const nesteKnapp = getByText("Til utfylling");
 
-    expect(nextButton).toBeInTheDocument();
-    expect(nextButton.closest("a")).toHaveAttribute(
+    expect(nesteKnapp).toBeInTheDocument();
+    expect(nesteKnapp.closest("a")).toHaveAttribute(
       "href",
       `/periode/${rapporteringsPeriode.id}/fyll-ut`
     );
@@ -46,17 +46,17 @@ describe("NextButton Komponent", () => {
   it("skal rendere korrekt lenke og tekst når man ikke har aktiviteter'", () => {
     const { getByText } = render(
       <MemoryRouter>
-        <NextButton
+        <NesteKnapp
           rapporteringstype={Rapporteringstype.harIngenAktivitet}
           rapporteringsPeriode={rapporteringsPeriode}
         />
       </MemoryRouter>
     );
 
-    const nextButton = getByText("Neste");
-    expect(nextButton).toBeInTheDocument();
+    const nesteKnapp = getByText("Neste");
+    expect(nesteKnapp).toBeInTheDocument();
 
-    expect(nextButton.closest("a")).toHaveAttribute(
+    expect(nesteKnapp.closest("a")).toHaveAttribute(
       "href",
       `/periode/${rapporteringsPeriode.id}/send-inn`
     );

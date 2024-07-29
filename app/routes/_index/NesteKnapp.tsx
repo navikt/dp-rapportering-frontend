@@ -5,12 +5,12 @@ import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
 import Center from "~/components/center/Center";
 
-interface NextButtonProps {
+interface NesteKnappProps {
   rapporteringstype: Rapporteringstype | undefined;
   rapporteringsPeriode: IRapporteringsperiode;
 }
 
-export function NextButton({ rapporteringstype, rapporteringsPeriode }: NextButtonProps) {
+export function NesteKnapp({ rapporteringstype, rapporteringsPeriode }: NesteKnappProps) {
   const { getAppText, getLink } = useSanity();
 
   if (!rapporteringstype) return null;
