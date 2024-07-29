@@ -1,4 +1,3 @@
-import { Header } from "./Header";
 import { NextButton } from "./NextButton";
 import { PeriodeDetaljer } from "./PeriodeDetaljer";
 import { RapporteringstypeForm } from "./RapporteringstypeForm";
@@ -9,7 +8,7 @@ import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
 import { withDb } from "mocks/responses/db";
 import { getSessionId, sessionRecord } from "mocks/session";
-import { ScenerioType } from "~/devTools";
+import { DevTools, ScenerioType } from "~/devTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import {
@@ -91,7 +90,7 @@ export default function Landingsside() {
 
   const { rapporteringstype, setRapporteringstype } = useRapporteringstype();
 
-  const { getLink, getRichText } = useSanity();
+  const { getAppText, getLink, getRichText } = useSanity();
 
   const harPeriode = rapporteringsperioder.length > 0;
   const forstePeriode: IRapporteringsperiode = harPeriode ? rapporteringsperioder[0] : null;
@@ -99,7 +98,15 @@ export default function Landingsside() {
 
   return (
     <>
-      <Header isLocalOrDemo={isLocalOrDemo} />
+      <div className="rapportering-header">
+        <div className="rapportering-header-innhold">
+          <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
+            {getAppText("rapportering-tittel")}
+          </Heading>
+          {isLocalOrDemo && <DevTools />}
+        </div>
+      </div>
+
       <div className="rapportering-container">
         <BodyLong>
           <PortableText value={getRichText("rapportering-innledning")} />
