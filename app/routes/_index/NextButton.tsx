@@ -5,35 +5,38 @@ import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
 import Center from "~/components/center/Center";
 
-export function NextButton({
-  rappporteringstype,
-  rapporteringsPeriode,
-}: {
-  rappporteringstype: Rapporteringstype | undefined;
+interface NextButtonProps {
+  rapporteringstype: Rapporteringstype | undefined;
   rapporteringsPeriode: IRapporteringsperiode;
-}) {
+}
+
+export function NextButton({ rapporteringstype, rapporteringsPeriode }: NextButtonProps) {
   const { getAppText, getLink } = useSanity();
 
-  if (!rappporteringstype) return null;
+  if (!rapporteringstype) return null;
+
+  const link =
+    rapporteringstype === Rapporteringstype.harAktivitet
+      ? `/periode/${rapporteringsPeriode.id}/fyll-ut`
+      : `/periode/${rapporteringsPeriode.id}/send-inn`;
+
+  const label =
+    rapporteringstype === Rapporteringstype.harAktivitet
+      ? getLink("rapportering-rapporter-for-perioden").linkText
+      : getAppText("rapportering-knapp-neste");
 
   return (
     <Center>
       <RemixLink
         size="medium"
         as="Button"
-        to={
-          rappporteringstype === Rapporteringstype.harAktivitet
-            ? `/periode/${rapporteringsPeriode.id}/fyll-ut`
-            : `/periode/${rapporteringsPeriode.id}/send-inn`
-        }
+        to={link}
         className="my-18 py-4 px-16"
         icon={<ArrowRightIcon aria-hidden />}
         iconPosition="right"
-        disabled={!rappporteringstype}
+        disabled={!rapporteringstype}
       >
-        {rappporteringstype === Rapporteringstype.harAktivitet
-          ? getLink("rapportering-rapporter-for-perioden").linkText
-          : getAppText("rapportering-knapp-neste")}
+        {label}
       </RemixLink>
     </Center>
   );

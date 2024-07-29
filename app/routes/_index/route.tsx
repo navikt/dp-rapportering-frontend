@@ -133,7 +133,7 @@ export default function Landingsside() {
             )}
 
             <NextButton
-              rappporteringstype={rapporteringstype}
+              rapporteringstype={rapporteringstype}
               rapporteringsPeriode={forstePeriode}
             />
           </div>

@@ -47,6 +47,7 @@ function RemixLinkComponent(
     className,
   } = props;
   const href = useHref(to);
+
   const handleClick = useLinkClickHandler(to, {
     replace,
     state,
