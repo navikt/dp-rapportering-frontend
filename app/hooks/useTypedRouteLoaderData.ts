@@ -1,6 +1,6 @@
 import { useRouteLoaderData } from "@remix-run/react";
 import type { loader as RootLoader } from "~/root";
-import type { loader as RouteRapportering } from "~/routes/_index";
+import type { loader as RouteRapportering } from "~/routes/_index/route";
 import type { loader as RouteRapporteringPeriodeRapporteringsId } from "~/routes/periode.$rapporteringsperiodeId";
 
 type Loaders = {

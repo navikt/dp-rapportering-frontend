@@ -1,12 +1,15 @@
-import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, BodyLong, BodyShort, Heading, Radio, RadioGroup, ReadMore } from "@navikt/ds-react";
+import { Header } from "./Header";
+import { NextButton } from "./NextButton";
+import { PeriodeDetaljer } from "./PeriodeDetaljer";
+import { RapporteringstypeForm } from "./RapporteringstypeForm";
+import { BodyLong, Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
+import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
 import { withDb } from "mocks/responses/db";
 import { getSessionId, sessionRecord } from "mocks/session";
-import { DevTools, ScenerioType } from "~/devTools";
+import { ScenerioType } from "~/devTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import {
@@ -15,13 +18,11 @@ import {
   startUtfylling,
 } from "~/models/rapporteringsperiode.server";
 import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
-import { hentForstePeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype, useRapporteringstype } from "~/hooks/useRapporteringstype";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
-import Center from "~/components/center/Center";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { SessionModal } from "~/components/session-modal/SessionModal";
 
@@ -145,129 +146,6 @@ export default function Landingsside() {
       </div>
       <SessionModal />
     </>
-  );
-}
-
-function Header({ isLocalOrDemo }: { isLocalOrDemo: boolean }) {
-  const { getAppText } = useSanity();
-  return (
-    <div className="rapportering-header">
-      <div className="rapportering-header-innhold">
-        <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
-          {getAppText("rapportering-tittel")}
-        </Heading>
-        {isLocalOrDemo && <DevTools />}
-      </div>
-    </div>
-  );
-}
-
-function PeriodeDetaljer({
-  rapporteringsperioder,
-}: {
-  rapporteringsperioder: IRapporteringsperiode[];
-}) {
-  const { getAppText } = useSanity();
-
-  const antallPerioder = rapporteringsperioder.length;
-  const harFlerePerioder = antallPerioder > 1;
-
-  if (antallPerioder > 0) {
-    return (
-      <div className="my-8">
-        {harFlerePerioder && (
-          <Alert variant="info" className="my-8">
-            <Heading spacing size="small" level="3">
-              {getAppText("rapportering-flere-perioder-tittel").replace(
-                "{antall}",
-                antallPerioder.toString()
-              )}
-            </Heading>
-            {getAppText("rapportering-flere-perioder-innledning")}
-          </Alert>
-        )}
-        <Heading size="small">
-          {antallPerioder > 1
-            ? getAppText("rapportering-forste-periode")
-            : getAppText("rapportering-navaerende-periode")}
-        </Heading>
-        <BodyShort textColor="subtle">{hentForstePeriodeTekst(rapporteringsperioder)}</BodyShort>
-      </div>
-    );
-  }
-  return <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>;
-}
-
-function RapporteringstypeForm({
-  type,
-  setType,
-  rapporteringsperiodeId,
-}: {
-  type: Rapporteringstype | undefined;
-  setType: (value: Rapporteringstype) => void;
-  rapporteringsperiodeId: string;
-}) {
-  const { getAppText } = useSanity();
-  const fetcher = useFetcher();
-
-  const changeHandler = (valgtType: Rapporteringstype) => {
-    if (type === undefined) {
-      fetcher.submit({ _action: "start", rapporteringsperiodeId }, { method: "post" });
-    }
-
-    setType(valgtType);
-  };
-
-  return (
-    <div>
-      <RadioGroup
-        legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
-        description={getAppText("rapportering-ikke-utfylte-rapporter-subtittel")}
-        onChange={changeHandler}
-        value={type}
-      >
-        <Radio value={Rapporteringstype.harAktivitet}>
-          {getAppText("rapportering-noe-å-rapportere")}
-        </Radio>
-        <Radio value={Rapporteringstype.harIngenAktivitet}>
-          {getAppText("rapportering-ingen-å-rapportere")}
-        </Radio>
-      </RadioGroup>
-    </div>
-  );
-}
-
-export function NextButton({
-  rappporteringstype,
-  rapporteringsPeriode,
-}: {
-  rappporteringstype: Rapporteringstype | undefined;
-  rapporteringsPeriode: IRapporteringsperiode;
-}) {
-  const { getAppText, getLink } = useSanity();
-
-  if (!rappporteringstype) return null;
-
-  return (
-    <Center>
-      <RemixLink
-        size="medium"
-        as="Button"
-        to={
-          rappporteringstype === Rapporteringstype.harAktivitet
-            ? `/periode/${rapporteringsPeriode.id}/fyll-ut`
-            : `/periode/${rapporteringsPeriode.id}/send-inn`
-        }
-        className="my-18 py-4 px-16"
-        icon={<ArrowRightIcon aria-hidden />}
-        iconPosition="right"
-        disabled={!rappporteringstype}
-      >
-        {rappporteringstype === Rapporteringstype.harAktivitet
-          ? getLink("rapportering-rapporter-for-perioden").linkText
-          : getAppText("rapportering-knapp-neste")}
-      </RemixLink>
-    </Center>
   );
 }
 
