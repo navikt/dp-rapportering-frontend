@@ -14,7 +14,6 @@ import { getSession } from "~/models/getSession.server";
 import {
   IRapporteringsperiode,
   hentRapporteringsperioder,
-  startUtfylling,
 } from "~/models/rapporteringsperiode.server";
 import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 import { Rapporteringstype, useRapporteringstype } from "~/hooks/useRapporteringstype";
@@ -30,12 +29,6 @@ export async function action({ request }: ActionFunctionArgs) {
   const action = formData.get("_action");
 
   switch (action) {
-    case "start": {
-      const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
-      await startUtfylling(request, rapporteringsperiodeId);
-      return { status: "success" };
-    }
-
     case "scenerio": {
       if (isLocalOrDemo) {
         const { type: scenerio } = Object.fromEntries(formData);

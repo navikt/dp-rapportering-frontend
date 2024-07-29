@@ -54,8 +54,8 @@ describe("<RapporteringstypeForm/>", () => {
     fireEvent.click(getByLabelText("rapportering-noe-å-rapportere"));
 
     expect(mockSubmit).toHaveBeenCalledWith(
-      { _action: "start", rapporteringsperiodeId },
-      { method: "post" }
+      { rapporteringsperiodeId },
+      { method: "post", action: "api/start" }
     );
     expect(setType).toHaveBeenCalledWith(Rapporteringstype.harAktivitet);
   });

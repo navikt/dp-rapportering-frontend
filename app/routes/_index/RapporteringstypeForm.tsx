@@ -19,7 +19,7 @@ export function RapporteringstypeForm({
 
   const handleChange = (valgtType: Rapporteringstype) => {
     if (type === undefined) {
-      fetcher.submit({ _action: "start", rapporteringsperiodeId }, { method: "post" });
+      fetcher.submit({ rapporteringsperiodeId }, { method: "post", action: "api/start" });
     }
     setType(valgtType);
   };
