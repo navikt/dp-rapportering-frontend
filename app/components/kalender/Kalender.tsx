@@ -1,5 +1,5 @@
 import styles from "./Kalender.module.css";
-import { RedigeringsLenke } from "./RedigeringsLenke";
+import { KorrigeringsLenke } from "./KorrigeringsLenke";
 import { Uke } from "./Uke";
 import classNames from "classnames";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -39,8 +39,8 @@ export function Kalender(props: IProps) {
           </p>
           <span className="navds-sr-only">{`${periodeUkenummerTekst} (${periodeFomTomDatoTekst})`}</span>
         </div>
-        {rapporteringsperiode.kanKorrigeres && (
-          <RedigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
+        {rapporteringsperiode.status === "Innsendt" && rapporteringsperiode.kanKorrigeres && (
+          <KorrigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
         )}
       </div>
       <table className={styles.kalender} role="grid">
