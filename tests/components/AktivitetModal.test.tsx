@@ -70,7 +70,7 @@ describe("AktivitetModal", () => {
     render(<AktivitetModal {...defaultProps} />);
 
     const arbeidCheckbox = screen.getByLabelText("Arbeid");
-    const utdanningCheckbox = screen.getByLabelText("Utdanning");
+    const utdanningCheckbox = screen.getByLabelText("Tiltak / kurs / utdanning");
     const sykCheckbox = screen.getByLabelText("Syk");
 
     expect(arbeidCheckbox).toBeInTheDocument();

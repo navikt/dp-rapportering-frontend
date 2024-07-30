@@ -180,6 +180,16 @@ export function updateRapporteringsperioder(db: Database, scenerio: ScenerioType
   }
 }
 
+function deleteRapporteringsperiode(db: Database, id: string) {
+  db.rapporteringsperioder.delete({
+    where: {
+      id: {
+        equals: id,
+      },
+    },
+  });
+}
+
 export const withDb = (db: Database) => {
   return {
     seedRapporteringsperioder: () => seedRapporteringsperioder(db),
@@ -190,6 +200,7 @@ export const withDb = (db: Database) => {
     findRapporteringsperiodeById: (id: string) => findRapporteringsperiodeById(db, id),
     updateRapporteringsperiode: (id: string, data: Partial<IRapporteringsperiode>) =>
       updateRapporteringsperiode(db, id, data),
+    deleteRapporteringsperiode: (id: string) => deleteRapporteringsperiode(db, id),
     lagreAktivitet: (rapporteringsperiodeId: string, dag: IRapporteringsperiodeDag) =>
       lagreAktivitet(db, rapporteringsperiodeId, dag),
     updateRapporteringsperioder: (scenerio: ScenerioType) =>

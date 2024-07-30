@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Heading } from "@navikt/ds-react";
+import { Alert, Heading } from "@navikt/ds-react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
@@ -33,7 +33,6 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
         </Heading>
       </Alert>
 
-      <BodyLong spacing>{getAppText("rapportering-periode-bekreftelse-beskrivelse")}</BodyLong>
       <div className="graa-bakgrunn">
         <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
         <div className="registert-meldeperiode-container">

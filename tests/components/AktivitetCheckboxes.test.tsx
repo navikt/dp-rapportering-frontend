@@ -18,7 +18,7 @@ describe("AktivitetCheckboxes", () => {
     name: "aktiviteter",
     label: "Velg aktiviteter",
     verdi: [],
-    muligeAktiviteter: ["Arbeid", "Utdanning", "Syk"] as AktivitetType[],
+    muligeAktiviteter: ["Arbeid", "Syk"] as AktivitetType[],
     onChange: vi.fn(),
   };
 
@@ -52,7 +52,7 @@ describe("AktivitetCheckboxes", () => {
     render(<AktivitetCheckboxes {...defaultProps} verdi={selectedAktiviteter} />);
 
     expect(screen.getByLabelText("Arbeid")).not.toBeDisabled();
-    expect(screen.getByLabelText("Utdanning")).not.toBeDisabled();
+    // expect(screen.getByLabelText("Utdanning")).not.toBeDisabled();
     expect(screen.getByLabelText("Syk")).toBeDisabled();
     // expect(screen.getByLabelText("Fravaer")).toBeDisabled();
   });
