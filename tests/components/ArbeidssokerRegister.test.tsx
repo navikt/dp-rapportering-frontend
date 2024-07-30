@@ -65,7 +65,7 @@ describe("ArbeidssokerRegister", () => {
         registrertArbeidssoker: true,
         rapporteringsperiodeId: "testId",
       },
-      { method: "post", action: "api/arbeidssoker" }
+      { method: "post", action: "/api/arbeidssoker" }
     );
 
     fireEvent.click(noRadio);
@@ -74,7 +74,7 @@ describe("ArbeidssokerRegister", () => {
         registrertArbeidssoker: false,
         rapporteringsperiodeId: "testId",
       },
-      { method: "post", action: "api/arbeidssoker" }
+      { method: "post", action: "/api/arbeidssoker" }
     );
   });
 
