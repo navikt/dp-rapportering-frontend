@@ -21,11 +21,10 @@ export function ArbeidssokerRegisterering({
   const handleChange = (registrertArbeidssokerSvar: boolean) => {
     fetcher.submit(
       {
-        _action: "registrertArbeidssoker",
         registrertArbeidssoker: registrertArbeidssokerSvar,
         rapporteringsperiodeId,
       },
-      { method: "post" }
+      { method: "post", action: "api/arbeidssoker" }
     );
   };
 

@@ -3,11 +3,10 @@ import { PeriodeDetaljer } from "./PeriodeDetaljer";
 import { RapporteringstypeForm } from "./RapporteringstypeForm";
 import { BodyLong, Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
 import { DevTools } from "~/devTools";
-import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import {
   IRapporteringsperiode,
@@ -22,31 +21,6 @@ import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/Arb
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { SessionModal } from "~/components/session-modal/SessionModal";
 
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const action = formData.get("_action");
-
-  switch (action) {
-    case "registrertArbeidssoker": {
-      const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
-      const registrertArbeidssoker: boolean = formData.get("registrertArbeidssoker") === "true";
-
-      return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
-        registrertArbeidssoker,
-      });
-    }
-
-    default: {
-      return {
-        status: "error",
-        error: {
-          statusCode: 500,
-          statusText: "Det skjedde en feil.",
-        },
-      };
-    }
-  }
-}
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request);
   const rapporteringsperioderResponse = await hentRapporteringsperioder(request);

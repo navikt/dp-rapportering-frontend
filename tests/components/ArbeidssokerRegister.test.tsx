@@ -62,21 +62,19 @@ describe("ArbeidssokerRegister", () => {
     fireEvent.click(yesRadio);
     expect(mockFetcher.submit).toHaveBeenCalledWith(
       {
-        _action: "registrertArbeidssoker",
         registrertArbeidssoker: true,
         rapporteringsperiodeId: "testId",
       },
-      { method: "post" }
+      { method: "post", action: "api/arbeidssoker" }
     );
 
     fireEvent.click(noRadio);
     expect(mockFetcher.submit).toHaveBeenCalledWith(
       {
-        _action: "registrertArbeidssoker",
         registrertArbeidssoker: false,
         rapporteringsperiodeId: "testId",
       },
-      { method: "post" }
+      { method: "post", action: "api/arbeidssoker" }
     );
   });
 
