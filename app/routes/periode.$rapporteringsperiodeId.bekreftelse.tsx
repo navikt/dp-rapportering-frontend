@@ -1,4 +1,4 @@
-import { Alert, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, Heading } from "@navikt/ds-react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
@@ -33,12 +33,21 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
         </Heading>
       </Alert>
 
-      <div className="graa-bakgrunn">
-        <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-        <div className="registert-meldeperiode-container">
-          <AktivitetOppsummering rapporteringsperiode={periode} />
-        </div>
-      </div>
+      <Accordion headingSize="medium">
+        <Accordion.Item>
+          <Accordion.Header>
+            {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
+          </Accordion.Header>
+          <Accordion.Content>
+            <div className="graa-bakgrunn">
+              <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
+              <div className="registert-meldeperiode-container">
+                <AktivitetOppsummering rapporteringsperiode={periode} />
+              </div>
+            </div>
+          </Accordion.Content>
+        </Accordion.Item>
+      </Accordion>
 
       <div className="navigasjon-container">
         <RemixLink
