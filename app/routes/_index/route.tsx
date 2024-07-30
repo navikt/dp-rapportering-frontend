@@ -6,16 +6,14 @@ import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse, useLoaderData, useRouteError } from "@remix-run/react";
-import { withDb } from "mocks/responses/db";
-import { getSessionId, sessionRecord } from "mocks/session";
-import { DevTools, ScenerioType } from "~/devTools";
+import { DevTools } from "~/devTools";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { getSession } from "~/models/getSession.server";
 import {
   IRapporteringsperiode,
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
-import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
+import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype, useRapporteringstype } from "~/hooks/useRapporteringstype";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -29,22 +27,6 @@ export async function action({ request }: ActionFunctionArgs) {
   const action = formData.get("_action");
 
   switch (action) {
-    case "scenerio": {
-      if (isLocalOrDemo) {
-        const { type: scenerio } = Object.fromEntries(formData);
-        const sessionId = getSessionId(request);
-
-        if (sessionId) {
-          withDb(sessionRecord.getDatabase(sessionId)).updateRapporteringsperioder(
-            scenerio as ScenerioType
-          );
-
-          return { status: "success" };
-        }
-      }
-      return { status: "success" };
-    }
-
     case "registrertArbeidssoker": {
       const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
       const registrertArbeidssoker: boolean = formData.get("registrertArbeidssoker") === "true";

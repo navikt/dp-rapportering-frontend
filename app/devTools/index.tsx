@@ -36,7 +36,7 @@ export function DevTools() {
   const ref = useRef<HTMLDialogElement>(null);
 
   const changeHandler = (type: ScenerioType) => {
-    fetcher.submit({ _action: "scenerio", type }, { method: "post" });
+    fetcher.submit({ type }, { method: "post", action: "demo/scenerio" });
     ref.current?.close();
   };
 
