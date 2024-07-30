@@ -1,5 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import type { ActionFunctionArgs } from "@remix-run/node";
+import { useNavigate } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { useSanity } from "~/hooks/useSanity";
@@ -26,6 +27,8 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText, getLink } = useSanity();
 
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="rapportering-container">
@@ -36,7 +39,8 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <div className="navigasjon-container-to-knapper my-4">
           <RemixLink
             as="Button"
-            to={`/`}
+            to={""}
+            onClick={() => navigate(-1)}
             variant="secondary"
             iconPosition="left"
             icon={<ArrowLeftIcon aria-hidden />}
