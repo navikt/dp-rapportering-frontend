@@ -55,7 +55,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [modalAapen, setModalAapen] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (actionData?.status === "success") {
@@ -74,7 +74,12 @@ export default function RapporteringsPeriodeFyllUtSide() {
   }, [valgtDato, periode.dager]);
 
   function aapneModal(dato: string) {
-    setSearchParams({ utfylling: "true" });
+    setSearchParams((prev) => {
+      if (!prev.has("utfylling")) {
+        prev.append("utfylling", "true");
+      }
+      return prev;
+    });
 
     if (periode.status === "TilUtfylling" || periode.status === "Korrigert") {
       setValgtDato(dato);
@@ -134,6 +139,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
             iconPosition="left"
             icon={<ArrowLeftIcon aria-hidden />}
             className="py-4 px-8"
+            disabled={searchParams.has("korrigering")}
           >
             {getLink("rapportering-periode-send-inn-tilbake").linkText}
           </RemixLink>

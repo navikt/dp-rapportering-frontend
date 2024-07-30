@@ -67,7 +67,7 @@ function RemixLinkComponent(
           bakover i designsystemet gjenspeiler ikke dette. */
           // @ts-expect-error ts klager over feil event-type
           onClick?.(event);
-          if (!event.defaultPrevented) {
+          if (!event.defaultPrevented && !disabled) {
             // @ts-expect-error ts klager over feil event-type
             handleClick(event);
           }

@@ -48,7 +48,9 @@ describe("Start korrigering", () => {
         context: {},
       });
 
-      expect(response).toEqual(redirect(`/periode/${korrigeringsPeriode.id}/fyll-ut`));
+      expect(response).toEqual(
+        redirect(`/periode/${korrigeringsPeriode.id}/fyll-ut?korrigering=true`)
+      );
     });
 
     test("Skal feile hvis kallet til den bestemte rapporteringsperiode feiler", async () => {

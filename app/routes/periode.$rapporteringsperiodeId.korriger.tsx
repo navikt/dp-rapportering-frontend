@@ -12,7 +12,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   if (response.ok) {
     const korrigeringsperiode: IRapporteringsperiode = await response.json();
-    return redirect(`/periode/${korrigeringsperiode.id}/fyll-ut`);
+    return redirect(`/periode/${korrigeringsperiode.id}/fyll-ut?korrigering=true`);
   } else {
     throw new Response(`Klarte ikke korrigere periode med id: ${periodeId}`, { status: 500 });
   }
