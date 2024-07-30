@@ -28,7 +28,8 @@ export async function validerOgLagreAktivitet(
     validationError(inputVerdier.error);
   }
 
-  const { type, dato, timer: varighet } = inputVerdier.submittedData;
+  const { dato, timer: varighet } = inputVerdier.submittedData;
+  const type = inputVerdier.submittedData.type || [];
 
   const dag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
   const aktivitetTyper: AktivitetType[] = Array.isArray(type) ? type : [type];
