@@ -12,8 +12,9 @@ import {
   IRapporteringsperiode,
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
+import { getRapporteringstype, setRapporteringstype } from "~/models/rapporteringstype.server";
 import { getEnv } from "~/utils/env.utils";
-import { Rapporteringstype, useRapporteringstype } from "~/hooks/useRapporteringstype";
+import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
@@ -22,22 +23,37 @@ import { DevelopmentContainer } from "~/components/development-container/Develop
 import { SessionModal } from "~/components/session-modal/SessionModal";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const rapporteringstype = await getRapporteringstype(request);
   const session = await getSession(request);
   const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
 
   if (rapporteringsperioderResponse.ok) {
     const rapporteringsperioder = await rapporteringsperioderResponse.json();
-    return json({ rapporteringsperioder, session });
+    return json({ rapporteringstype, rapporteringsperioder, session });
   }
 
   throw new Response("Feil i uthenting av rapporteringsperioder", { status: 500 });
 }
 
-export default function Landingsside() {
-  const { rapporteringsperioder } = useLoaderData<typeof loader>();
-  const { isLocalOrDemo } = useTypedRouteLoaderData("root");
+export async function action({ request }: LoaderFunctionArgs) {
+  const cookieHeader = request.headers.get("Cookie") || "";
+  const formData = await request.formData();
 
-  const { rapporteringstype, setRapporteringstype } = useRapporteringstype();
+  const rapporteringstype = formData.get("rapporteringstype") as Rapporteringstype;
+
+  return json(
+    { status: "success" },
+    {
+      headers: {
+        "Set-Cookie": await setRapporteringstype(cookieHeader, rapporteringstype),
+      },
+    }
+  );
+}
+
+export default function Landingsside() {
+  const { rapporteringsperioder, rapporteringstype } = useLoaderData<typeof loader>();
+  const { isLocalOrDemo } = useTypedRouteLoaderData("root");
 
   const { getAppText, getLink, getRichText } = useSanity();
 
@@ -66,8 +82,7 @@ export default function Landingsside() {
         {harPeriode && (
           <div>
             <RapporteringstypeForm
-              type={rapporteringstype}
-              setType={setRapporteringstype}
+              rapporteringstype={rapporteringstype}
               rapporteringsperiodeId={forstePeriode.id}
             />
 

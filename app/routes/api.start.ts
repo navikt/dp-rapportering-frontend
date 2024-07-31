@@ -7,8 +7,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
   try {
     await startUtfylling(request, rapporteringsperiodeId);
-    return json({ ok: true });
+    return json({ status: "success" });
   } catch (error) {
-    return json({ ok: false, error });
+    return json({ status: "error", error });
   }
 }

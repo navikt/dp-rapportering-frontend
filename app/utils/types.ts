@@ -14,3 +14,8 @@ interface INetworkResponseError {
   };
   id?: string;
 }
+
+export enum Rapporteringstype {
+  harAktivitet = "harAktivitet",
+  harIngenAktivitet = "harIngenAktivitet",
+}

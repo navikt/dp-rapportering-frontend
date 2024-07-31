@@ -1,27 +1,26 @@
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { useFetcher } from "@remix-run/react";
-import { Rapporteringstype } from "~/hooks/useRapporteringstype";
+import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 
 interface RapporteringstypeFormProps {
-  type: Rapporteringstype | undefined;
-  setType: (value: Rapporteringstype) => void;
+  rapporteringstype: Rapporteringstype | undefined;
   rapporteringsperiodeId: string;
 }
 
 export function RapporteringstypeForm({
-  type,
-  setType,
+  rapporteringstype,
   rapporteringsperiodeId,
 }: RapporteringstypeFormProps) {
   const { getAppText } = useSanity();
   const fetcher = useFetcher();
 
   const handleChange = (valgtType: Rapporteringstype) => {
-    if (type === undefined) {
+    if (rapporteringstype === undefined) {
       fetcher.submit({ rapporteringsperiodeId }, { method: "post", action: "api/start" });
     }
-    setType(valgtType);
+
+    fetcher.submit({ rapporteringstype: valgtType }, { method: "post" });
   };
 
   return (
@@ -29,7 +28,7 @@ export function RapporteringstypeForm({
       legend={getAppText("rapportering-ikke-utfylte-rapporter-tittel")}
       description={getAppText("rapportering-ikke-utfylte-rapporter-subtittel")}
       onChange={handleChange}
-      value={type}
+      value={rapporteringstype || ""}
     >
       <Radio value={Rapporteringstype.harAktivitet}>
         {getAppText("rapportering-noe-å-rapportere")}

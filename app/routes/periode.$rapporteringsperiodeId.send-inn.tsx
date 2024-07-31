@@ -8,6 +8,7 @@ import { useState } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import { hentPeriode, sendInnPeriode } from "~/models/rapporteringsperiode.server";
+import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
@@ -29,7 +30,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const response = await sendInnPeriode(request, periode);
 
   if (response.ok) {
-    return redirect(`/periode/${periodeId}/bekreftelse`);
+    return redirect(`/periode/${periodeId}/bekreftelse`, {
+      headers: {
+        "Set-Cookie": await resetRapporteringstypeCookie(),
+      },
+    });
   } else {
     logger.warn(`Klarte ikke sende inn rapportering med id: ${periodeId}`, {
       statustext: response.statusText,

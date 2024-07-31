@@ -1,77 +1,94 @@
 import { useFetcher } from "@remix-run/react";
-import { fireEvent, render } from "@testing-library/react";
-import { Mock, beforeEach, describe, expect, test, vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { Mock, beforeEach, describe, expect, it, vi } from "vitest";
 import { RapporteringstypeForm } from "~/routes/_index/RapporteringstypeForm";
-import { Rapporteringstype } from "~/hooks/useRapporteringstype";
-
-vi.mock("~/hooks/useSanity", () => ({
-  useSanity: () => ({
-    getAppText: (key: string) => key,
-  }),
-}));
+import { Rapporteringstype } from "~/utils/types";
+import { useSanity } from "~/hooks/useSanity";
 
 vi.mock("@remix-run/react", () => ({
-  ...vi.importActual("@remix-run/react"),
-  useFetcher: vi.fn(() => ({ submit: vi.fn() })),
+  useFetcher: vi.fn(),
 }));
 
-describe("<RapporteringstypeForm/>", () => {
-  const setType = vi.fn();
+vi.mock("~/hooks/useSanity", () => ({
+  useSanity: vi.fn(),
+}));
 
-  const rapporteringsperiodeId = "123";
+describe("RapporteringstypeForm", () => {
+  const getAppText = (key: string) => key;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    (useSanity as Mock).mockReturnValue({ getAppText });
   });
 
-  test("rendere radioknappene korrekt", () => {
-    const { getByText } = render(
+  it("rendere radioknappene korrekt", () => {
+    render(<RapporteringstypeForm rapporteringstype={undefined} rapporteringsperiodeId="123" />);
+
+    const radioAktivitet = screen.getByLabelText("rapportering-noe-å-rapportere");
+    const radioIngenAktivitet = screen.getByLabelText("rapportering-ingen-å-rapportere");
+
+    expect(radioAktivitet).not.toBeChecked();
+    expect(radioIngenAktivitet).not.toBeChecked();
+  });
+
+  it("oppdaterer radioknappene riktig", () => {
+    render(
       <RapporteringstypeForm
-        type={undefined}
-        setType={setType}
-        rapporteringsperiodeId={rapporteringsperiodeId}
+        rapporteringstype={Rapporteringstype.harAktivitet}
+        rapporteringsperiodeId="123"
       />
     );
 
-    expect(getByText("rapportering-noe-å-rapportere")).toBeInTheDocument();
-    expect(getByText("rapportering-ingen-å-rapportere")).toBeInTheDocument();
+    const radioAktivitet = screen.getByLabelText("rapportering-noe-å-rapportere");
+    const radioIngenAktivitet = screen.getByLabelText("rapportering-ingen-å-rapportere");
+
+    expect(radioAktivitet).toBeChecked();
+    expect(radioIngenAktivitet).not.toBeChecked();
   });
 
-  test("kalle start-endepunktet når en radioknapp velges første gang", () => {
+  it("kalle start-endepunktet når en radioknapp velges første gang", () => {
     const mockSubmit = vi.fn();
-    (useFetcher as Mock).mockReturnValue({
-      submit: mockSubmit,
-    });
+    (useFetcher as Mock).mockReturnValue({ submit: mockSubmit });
 
-    const { getByLabelText } = render(
-      <RapporteringstypeForm
-        type={undefined}
-        setType={setType}
-        rapporteringsperiodeId={rapporteringsperiodeId}
-      />
-    );
+    render(<RapporteringstypeForm rapporteringstype={undefined} rapporteringsperiodeId="123" />);
 
-    fireEvent.click(getByLabelText("rapportering-noe-å-rapportere"));
+    const radioAktivitet = screen.getByLabelText("rapportering-noe-å-rapportere");
+
+    fireEvent.click(radioAktivitet);
 
     expect(mockSubmit).toHaveBeenCalledWith(
-      { rapporteringsperiodeId },
+      { rapporteringsperiodeId: "123" },
       { method: "post", action: "api/start" }
     );
-    expect(setType).toHaveBeenCalledWith(Rapporteringstype.harAktivitet);
+
+    expect(mockSubmit).toHaveBeenCalledWith(
+      { rapporteringstype: Rapporteringstype.harAktivitet },
+      { method: "post" }
+    );
   });
 
-  test("ikke kalle start-endepunktet når typen er allerede satt", () => {
-    const { getByLabelText } = render(
+  it("sender form med riktig rapporteringstype når en radioknapp er valgt", () => {
+    const mockSubmit = vi.fn();
+    (useFetcher as Mock).mockReturnValue({ submit: mockSubmit });
+
+    render(
       <RapporteringstypeForm
-        type={Rapporteringstype.harIngenAktivitet}
-        setType={setType}
-        rapporteringsperiodeId={rapporteringsperiodeId}
+        rapporteringstype={Rapporteringstype.harIngenAktivitet}
+        rapporteringsperiodeId="123"
       />
     );
 
-    fireEvent.click(getByLabelText("rapportering-noe-å-rapportere"));
+    const radioAktivitet = screen.getByLabelText("rapportering-noe-å-rapportere");
 
-    expect(useFetcher().submit).not.toHaveBeenCalled();
-    expect(setType).toHaveBeenCalledWith(Rapporteringstype.harAktivitet);
+    fireEvent.click(radioAktivitet);
+
+    expect(mockSubmit).not.toHaveBeenCalledWith(
+      { rapporteringsperiodeId: "123" },
+      { method: "post", action: "api/start" }
+    );
+
+    expect(mockSubmit).toHaveBeenCalledWith(
+      { rapporteringstype: Rapporteringstype.harAktivitet },
+      { method: "post" }
+    );
   });
 });

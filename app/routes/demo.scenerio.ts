@@ -2,6 +2,7 @@ import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { withDb } from "mocks/responses/db";
 import { getSessionId, sessionRecord } from "mocks/session";
 import { ScenerioType } from "~/devTools";
+import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import { isLocalOrDemo } from "~/utils/env.utils";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -16,7 +17,11 @@ export async function action({ request }: ActionFunctionArgs) {
         scenerio as ScenerioType
       );
 
-      redirect("/");
+      return redirect("/", {
+        headers: {
+          "Set-Cookie": await resetRapporteringstypeCookie(),
+        },
+      });
     }
   }
 

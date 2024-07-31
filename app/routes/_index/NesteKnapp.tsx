@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { Rapporteringstype } from "~/hooks/useRapporteringstype";
+import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
 import Center from "~/components/center/Center";
