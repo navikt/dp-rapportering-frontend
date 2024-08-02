@@ -23,7 +23,7 @@ export function Uke(props: IProps) {
         if (current.timer) {
           return accumulator + (periodeSomTimer(current.timer) ?? 0);
         }
-        return accumulator + 1;
+        return accumulator;
       }, 0);
 
       return `${timer.toString().replace(/\./g, ",")}${lang ? " timer" : "t"}`;
