@@ -8,4 +8,7 @@ installGlobals();
 export default defineConfig({
   base: "/arbeid/dagpenger/rapportering/",
   plugins: [remix({ basename: "/arbeid/dagpenger/rapportering/" }), tsconfigPaths()],
+  server: {
+    port: 3000,
+  },
 });

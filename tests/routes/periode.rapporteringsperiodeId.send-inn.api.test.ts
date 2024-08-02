@@ -62,8 +62,6 @@ describe("Send inn rapporteringsperiode", () => {
           context: {},
         });
 
-        console.log(`🔥: response :`, Object.keys(response));
-
         expect(response).toEqual(
           redirect(`/periode/${rapporteringsperiodeResponse.id}/bekreftelse`, {
             headers: {
