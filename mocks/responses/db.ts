@@ -162,18 +162,8 @@ export function updateRapporteringsperioder(db: Database, scenerio: ScenerioType
 
     case ScenerioType.reset: {
       deleteAllInnsendteperioder(db);
-
-      const perioder = findAllRapporteringsperioder(db);
-
-      if (perioder.length === 0) {
-        db.rapporteringsperioder.create(lagForstRapporteringsperiode());
-        return findAllRapporteringsperioder(db);
-      }
-
-      deleteAllRapporteringsperioder(
-        db,
-        perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
-      );
+      deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
+      db.rapporteringsperioder.create(lagForstRapporteringsperiode());
 
       return findAllRapporteringsperioder(db);
     }
