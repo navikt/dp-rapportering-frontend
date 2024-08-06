@@ -67,7 +67,10 @@ export default function RapporteringsPeriodeSendInnSide() {
     invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
   }
 
-  const isSubmitting = navigation.state !== "idle";
+  const isSubmitting =
+    navigation.state !== "idle" &&
+    navigation.formData &&
+    navigation.formData.get("_action") === "send-inn";
 
   return (
     <div className="rapportering-container">
@@ -117,6 +120,8 @@ export default function RapporteringsPeriodeSendInnSide() {
           iconPosition="right"
           disabled={!confirmed || isSubmitting}
           className="py-4 px-8"
+          name="_action"
+          value="send-inn"
         >
           {isSubmitting
             ? getAppText("rapportering-periode-send-inn-bekreft-loading")
