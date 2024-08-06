@@ -40,7 +40,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
       statustext: response.statusText,
     });
 
-    return json({ error: "Det har skjedd noe feil med innsendingen din, prøv igjen." });
+    return json(
+      {
+        error: "Det har skjedd noe feil med innsendingen din, prøv igjen.",
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }
 
