@@ -51,7 +51,7 @@ export const handlers = [
       const periode = (await request.json()) as IRapporteringsperiode;
       db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
 
-      return HttpResponse.json(null, { status: 500 });
+      return HttpResponse.json(null, { status: 200 });
     })
   ),
 
