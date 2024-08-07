@@ -56,6 +56,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
             iconPosition="right"
             icon={<ArrowRightIcon aria-hidden />}
             className="py-4 px-8"
+            disabled={periode.registrertArbeidssoker === null}
           >
             {getAppText("rapportering-knapp-neste")}
           </RemixLink>
