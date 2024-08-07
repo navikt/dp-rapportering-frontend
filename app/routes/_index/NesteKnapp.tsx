@@ -34,7 +34,10 @@ export function NesteKnapp({ rapporteringstype, rapporteringsPeriode }: NesteKna
         className="my-18 py-4 px-16"
         icon={<ArrowRightIcon aria-hidden />}
         iconPosition="right"
-        disabled={!rapporteringstype}
+        disabled={
+          rapporteringstype !== Rapporteringstype.harAktivitet &&
+          rapporteringsPeriode.registrertArbeidssoker === null
+        }
       >
         {label}
       </RemixLink>

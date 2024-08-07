@@ -1,6 +1,6 @@
 import { NesteKnapp } from "./NesteKnapp";
 import { PeriodeDetaljer } from "./PeriodeDetaljer";
-import { BodyLong, Heading, ReadMore } from "@navikt/ds-react";
+import { BodyLong, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -16,6 +16,7 @@ import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
@@ -83,9 +84,7 @@ export default function Landingsside() {
 
         {harPeriode && (
           <div>
-            <ReadMore header="Les mer om hva som skal rapporteres">
-              <PortableText value={getRichText("rapportering-les-mer-hva-skal-rapporteres")} />
-            </ReadMore>
+            <LesMer />
 
             {visArbeidssokerRegisterering && (
               <div className="my-8">

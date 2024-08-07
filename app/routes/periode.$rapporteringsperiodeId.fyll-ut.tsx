@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading, ReadMore } from "@navikt/ds-react";
+import { BodyLong, Heading } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { addDays } from "date-fns";
@@ -11,6 +11,7 @@ import { formaterDato } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
+import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -104,13 +105,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         </Heading>
         <BodyLong className="tekst-subtil" spacing>
           {getAppText("rapportering-periode-fyll-ut-beskrivelse")}
-          <ReadMore header="Les mer om hva som skal rapporteres">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias pariatur, explicabo
-            quisquam harum aspernatur ex, officiis doloremque atque tempora tenetur distinctio quasi
-            doloribus voluptatum aliquid ipsam! In dolore consectetur quae iusto porro ipsum culpa
-            nemo velit error eos assumenda illo omnis, amet, excepturi sit qui, ab quia voluptates
-            cum fugit.
-          </ReadMore>
+          <LesMer />
         </BodyLong>
 
         <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />

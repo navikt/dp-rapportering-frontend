@@ -45,6 +45,14 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
                 <AktivitetOppsummering rapporteringsperiode={periode} />
               </div>
             </div>
+
+            <RemixLink
+              className="mt-10"
+              as="Link"
+              to={getLink("rapportering-se-og-korriger").linkUrl}
+            >
+              {getLink("rapportering-se-og-korriger").linkText}
+            </RemixLink>
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>

@@ -101,6 +101,9 @@ body {
   outline: none;
 }
 
+.mt-10 {
+  margin-top: var(--a-spacing-10);
+}
 .my-18 {
   margin: var(--a-spacing-18) 0;
 }
