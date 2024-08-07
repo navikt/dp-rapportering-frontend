@@ -1,13 +1,19 @@
-import { Alert, BodyShort, Heading } from "@navikt/ds-react";
+import { RapporteringstypeForm } from "./RapporteringstypeForm";
+import { Alert, Heading } from "@navikt/ds-react";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentForstePeriodeTekst } from "~/utils/periode.utils";
+import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 
 interface PeriodeDetaljerProps {
+  rapporteringstype: Rapporteringstype | undefined;
   rapporteringsperioder: IRapporteringsperiode[];
 }
 
-export function PeriodeDetaljer({ rapporteringsperioder }: PeriodeDetaljerProps) {
+export function PeriodeDetaljer({
+  rapporteringstype,
+  rapporteringsperioder,
+}: PeriodeDetaljerProps) {
   const { getAppText } = useSanity();
   const antallPerioder = rapporteringsperioder.length;
   const harFlerePerioder = antallPerioder > 1;
@@ -15,6 +21,11 @@ export function PeriodeDetaljer({ rapporteringsperioder }: PeriodeDetaljerProps)
   if (antallPerioder === 0) {
     return <>{getAppText("rapportering-ingen-rapporter-å-fylle-ut")}</>;
   }
+
+  const rapporteringstypeFormLabel =
+    rapporteringsperioder.length === 1
+      ? getAppText("rapportering-rapporter-navarende-tittel")
+      : getAppText("rapportering-ikke-utfylte-rapporter-tittel");
 
   return (
     <div className="my-8">
@@ -29,12 +40,13 @@ export function PeriodeDetaljer({ rapporteringsperioder }: PeriodeDetaljerProps)
           {getAppText("rapportering-flere-perioder-innledning")}
         </Alert>
       )}
-      <Heading size="small">
-        {harFlerePerioder
-          ? getAppText("rapportering-forste-periode")
-          : getAppText("rapportering-navaerende-periode")}
-      </Heading>
-      <BodyShort textColor="subtle">{hentForstePeriodeTekst(rapporteringsperioder)}</BodyShort>
+
+      <RapporteringstypeForm
+        label={rapporteringstypeFormLabel}
+        description={hentForstePeriodeTekst(rapporteringsperioder)}
+        rapporteringstype={rapporteringstype}
+        rapporteringsperiodeId={rapporteringsperioder[0].id}
+      />
     </div>
   );
 }

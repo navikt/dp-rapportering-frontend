@@ -6,7 +6,12 @@ import { PeriodeDetaljer } from "~/routes/_index/PeriodeDetaljer";
 vi.mock("~/hooks/useSanity", () => ({
   useSanity: () => ({
     getAppText: (key: string) => key,
+    getRichText: (key: string) => key,
   }),
+}));
+
+vi.mock("@remix-run/react", () => ({
+  useFetcher: vi.fn(),
 }));
 
 vi.mock("~/utils/periode.utils", () => ({
@@ -20,24 +25,32 @@ describe("PeriodeDetaljer Komponent", () => {
   ];
 
   it("viser riktig melding ved ingen rapporteringsperioder", () => {
-    const { getByText } = render(<PeriodeDetaljer rapporteringsperioder={[]} />);
+    const { getByText } = render(
+      <PeriodeDetaljer rapporteringstype={undefined} rapporteringsperioder={[]} />
+    );
     expect(getByText("rapportering-ingen-rapporter-å-fylle-ut")).toBeInTheDocument();
   });
 
   it("viser info-alert med riktig tittel og innledning ved flere perioder", () => {
     const rapporteringsperioder = [{ id: "1" }, { id: "2" }] as IRapporteringsperiode[];
-    const { getByText } = render(<PeriodeDetaljer rapporteringsperioder={rapporteringsperioder} />);
+    const { getByText } = render(
+      <PeriodeDetaljer
+        rapporteringstype={undefined}
+        rapporteringsperioder={rapporteringsperioder}
+      />
+    );
 
     expect(getByText("rapportering-flere-perioder-tittel")).toBeInTheDocument();
     expect(getByText("rapportering-flere-perioder-innledning")).toBeInTheDocument();
-
-    expect(getByText("rapportering-forste-periode")).toBeInTheDocument();
   });
 
   it("ikke viser info-alert med riktig tittel og innledning ved en periode", () => {
     const rapporteringsperioder = [{ id: "1" }] as IRapporteringsperiode[];
     const { queryByText } = render(
-      <PeriodeDetaljer rapporteringsperioder={rapporteringsperioder} />
+      <PeriodeDetaljer
+        rapporteringstype={undefined}
+        rapporteringsperioder={rapporteringsperioder}
+      />
     );
 
     expect(queryByText("rapportering-flere-perioder-tittel")).not.toBeInTheDocument();
@@ -46,9 +59,12 @@ describe("PeriodeDetaljer Komponent", () => {
 
   it("viser korrekt tittel for én periode", () => {
     const { getByText } = render(
-      <PeriodeDetaljer rapporteringsperioder={[rapporteringsperioder[0]]} />
+      <PeriodeDetaljer
+        rapporteringstype={undefined}
+        rapporteringsperioder={[rapporteringsperioder[0]]}
+      />
     );
 
-    expect(getByText("rapportering-navaerende-periode")).toBeInTheDocument();
+    expect(getByText("rapportering-rapporter-navarende-tittel")).toBeInTheDocument();
   });
 });

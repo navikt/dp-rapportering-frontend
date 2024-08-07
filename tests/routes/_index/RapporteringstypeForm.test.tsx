@@ -15,16 +15,24 @@ vi.mock("~/hooks/useSanity", () => ({
 
 describe("RapporteringstypeForm", () => {
   const getAppText = (key: string) => key;
+  const getRichText = (key: string) => key;
 
   beforeEach(() => {
-    (useSanity as Mock).mockReturnValue({ getAppText });
+    (useSanity as Mock).mockReturnValue({ getAppText, getRichText });
   });
 
   it("rendere radioknappene korrekt", () => {
-    render(<RapporteringstypeForm rapporteringstype={undefined} rapporteringsperiodeId="123" />);
+    render(
+      <RapporteringstypeForm
+        label={getAppText("rapportering-rapporter-navarende-tittel")}
+        description=""
+        rapporteringstype={undefined}
+        rapporteringsperiodeId="123"
+      />
+    );
 
     const radioAktivitet = screen.getByLabelText("rapportering-noe-å-rapportere");
-    const radioIngenAktivitet = screen.getByLabelText("rapportering-ingen-å-rapportere");
+    const radioIngenAktivitet = screen.getByTestId("rapportering-ingen-å-rapportere");
 
     expect(radioAktivitet).not.toBeChecked();
     expect(radioIngenAktivitet).not.toBeChecked();
@@ -33,13 +41,15 @@ describe("RapporteringstypeForm", () => {
   it("oppdaterer radioknappene riktig", () => {
     render(
       <RapporteringstypeForm
+        label={getAppText("rapportering-rapporter-navarende-tittel")}
+        description=""
         rapporteringstype={Rapporteringstype.harAktivitet}
         rapporteringsperiodeId="123"
       />
     );
 
     const radioAktivitet = screen.getByLabelText("rapportering-noe-å-rapportere");
-    const radioIngenAktivitet = screen.getByLabelText("rapportering-ingen-å-rapportere");
+    const radioIngenAktivitet = screen.getByTestId("rapportering-ingen-å-rapportere");
 
     expect(radioAktivitet).toBeChecked();
     expect(radioIngenAktivitet).not.toBeChecked();
@@ -49,7 +59,14 @@ describe("RapporteringstypeForm", () => {
     const mockSubmit = vi.fn();
     (useFetcher as Mock).mockReturnValue({ submit: mockSubmit });
 
-    render(<RapporteringstypeForm rapporteringstype={undefined} rapporteringsperiodeId="123" />);
+    render(
+      <RapporteringstypeForm
+        label={getAppText("rapportering-rapporter-navarende-tittel")}
+        description=""
+        rapporteringstype={undefined}
+        rapporteringsperiodeId="123"
+      />
+    );
 
     const radioAktivitet = screen.getByLabelText("rapportering-noe-å-rapportere");
 
@@ -72,6 +89,8 @@ describe("RapporteringstypeForm", () => {
 
     render(
       <RapporteringstypeForm
+        label={getAppText("rapportering-rapporter-navarende-tittel")}
+        description=""
         rapporteringstype={Rapporteringstype.harIngenAktivitet}
         rapporteringsperiodeId="123"
       />

@@ -1,6 +1,5 @@
 import { NesteKnapp } from "./NesteKnapp";
 import { PeriodeDetaljer } from "./PeriodeDetaljer";
-import { RapporteringstypeForm } from "./RapporteringstypeForm";
 import { BodyLong, Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
@@ -77,21 +76,15 @@ export default function Landingsside() {
           <PortableText value={getRichText("rapportering-innledning")} />
         </BodyLong>
 
-        <PeriodeDetaljer rapporteringsperioder={rapporteringsperioder} />
+        <PeriodeDetaljer
+          rapporteringstype={rapporteringstype}
+          rapporteringsperioder={rapporteringsperioder}
+        />
 
         {harPeriode && (
           <div>
-            <RapporteringstypeForm
-              rapporteringstype={rapporteringstype}
-              rapporteringsperiodeId={forstePeriode.id}
-            />
-
             <ReadMore header="Les mer om hva som skal rapporteres">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias pariatur, explicabo
-              quisquam harum aspernatur ex, officiis doloremque atque tempora tenetur distinctio
-              quasi doloribus voluptatum aliquid ipsam! In dolore consectetur quae iusto porro ipsum
-              culpa nemo velit error eos assumenda illo omnis, amet, excepturi sit qui, ab quia
-              voluptates cum fugit.
+              <PortableText value={getRichText("rapportering-les-mer-hva-skal-rapporteres")} />
             </ReadMore>
 
             {visArbeidssokerRegisterering && (
