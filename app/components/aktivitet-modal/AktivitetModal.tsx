@@ -6,10 +6,8 @@ import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { aktivitetType } from "~/utils/aktivitettype.utils";
-import { periodeSomTimer } from "~/utils/periode.utils";
 import { validator } from "~/utils/validering.util";
 import { useSanity } from "~/hooks/useSanity";
-import { TallInput } from "~/components/TallInput";
 import { FormattertDato } from "../FormattertDato";
 import { AktivitetCheckboxes } from "../aktivitet-checkbox/AktivitetCheckboxes";
 
@@ -68,19 +66,9 @@ export function AktivitetModal({
                 verdi={valgteAktiviteter}
                 onChange={setValgteAktiviteter}
                 label={getAppText("rapportering-hva-vil-du-lagre")}
+                aktiviteter={dag.aktiviteter}
               />
             </div>
-
-            {valgteAktiviteter.includes("Arbeid") && (
-              <TallInput
-                name="timer"
-                label={`${getAppText("rapportering-antall-timer")}:`}
-                className="my-4"
-                verdi={periodeSomTimer(
-                  dag.aktiviteter.find((aktivitet) => aktivitet.type === "Arbeid")?.timer ?? ""
-                )}
-              />
-            )}
 
             {actionData?.status === "error" && actionData?.error && (
               <Alert variant="error" className={styles.feilmelding}>

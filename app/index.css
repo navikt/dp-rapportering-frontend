@@ -171,3 +171,12 @@ body {
 .tekst-subtil {
   color: var(--a-text-subtle);
 }
+
+.rapportering-ingen-å-rapportere p {
+  margin: 0;
+}
+
+.navds-checkbox,
+.navds-radio {
+  width: 100%;
+}

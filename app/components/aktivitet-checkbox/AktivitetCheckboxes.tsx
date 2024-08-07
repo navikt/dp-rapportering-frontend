@@ -2,9 +2,11 @@ import styles from "./AktivitetCheckboxes.module.css";
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useField } from "remix-validated-form";
-import type { AktivitetType } from "~/models/aktivitet.server";
+import type { AktivitetType, IAktivitet } from "~/models/aktivitet.server";
 import { aktivitetTypeMap } from "~/utils/aktivitettype.utils";
+import { periodeSomTimer } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
+import { TallInput } from "../TallInput";
 
 export interface IProps {
   name: string;
@@ -12,9 +14,17 @@ export interface IProps {
   verdi: AktivitetType[];
   muligeAktiviteter: readonly AktivitetType[];
   onChange: (aktivitet: AktivitetType[]) => void;
+  aktiviteter: IAktivitet[];
 }
 
-export function AktivitetCheckboxes({ name, label, verdi, muligeAktiviteter, onChange }: IProps) {
+export function AktivitetCheckboxes({
+  name,
+  label,
+  verdi,
+  muligeAktiviteter,
+  aktiviteter,
+  onChange,
+}: IProps) {
   const { error } = useField(name);
   const { getAppText } = useSanity();
 
@@ -54,24 +64,56 @@ export function AktivitetCheckboxes({ name, label, verdi, muligeAktiviteter, onC
 
   return (
     <CheckboxGroup legend={label} error={error || undefined} value={verdi} onChange={onChange}>
-      {muligeAktiviteter.map((aktivitet) => (
-        <Checkbox
-          className={classNames(styles.checkbox, {
-            [styles.arbeid]: aktivitet === "Arbeid",
-            [styles.syk]: aktivitet === "Syk",
-            [styles.fravaer]: aktivitet === "Fravaer",
-            [styles.utdanning]: aktivitet === "Utdanning",
-          })}
-          key={aktivitet}
-          disabled={erIkkeAktiv(verdi, aktivitet)}
-          value={aktivitet}
-          description={hentAktivitetBeskrivelse(aktivitet)}
-          data-testid={`aktivitet-radio-${aktivitet}`}
-          name={name}
-        >
-          {aktivitetTypeMap(aktivitet)}
-        </Checkbox>
-      ))}
+      {muligeAktiviteter.map((aktivitet) => {
+        if (verdi.includes("Arbeid") && aktivitet === "Arbeid") {
+          return (
+            <div
+              key={aktivitet}
+              className={classNames(styles.checkbox, {
+                [styles.arbeid]: aktivitet === "Arbeid",
+              })}
+            >
+              <Checkbox
+                disabled={erIkkeAktiv(verdi, aktivitet)}
+                value={aktivitet}
+                description={hentAktivitetBeskrivelse(aktivitet)}
+                data-testid={`aktivitet-radio-${aktivitet}`}
+                name={name}
+              >
+                {aktivitetTypeMap(aktivitet)}
+              </Checkbox>
+              <div className="abdi">
+                <TallInput
+                  name="timer"
+                  label={`${getAppText("rapportering-antall-timer")}:`}
+                  className={styles.timer}
+                  verdi={periodeSomTimer(
+                    aktiviteter?.find((aktivitet) => aktivitet.type === "Arbeid")?.timer ?? ""
+                  )}
+                />
+              </div>
+            </div>
+          );
+        }
+        return (
+          <Checkbox
+            key={aktivitet}
+            className={classNames(styles.checkbox, {
+              [styles.arbeid]: aktivitet === "Arbeid",
+              [styles.syk]: aktivitet === "Syk",
+              [styles.fravaer]: aktivitet === "Fravaer",
+              [styles.utdanning]: aktivitet === "Utdanning",
+            })}
+            disabled={erIkkeAktiv(verdi, aktivitet)}
+            value={aktivitet}
+            description={hentAktivitetBeskrivelse(aktivitet)}
+            data-testid={`aktivitet-radio-${aktivitet}`}
+            name={name}
+          >
+            {aktivitetTypeMap(aktivitet)}
+          </Checkbox>
+        );
+      })}
     </CheckboxGroup>
   );
 }

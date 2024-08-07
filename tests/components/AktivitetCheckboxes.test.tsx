@@ -3,9 +3,11 @@ import { describe, expect, it, vi } from "vitest";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import { AktivitetCheckboxes } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
 
-vi.mock("remix-validated-form", () => ({
-  useField: () => ({ error: null }),
-}));
+vi.mock("remix-validated-form", () => {
+  return {
+    useField: () => ({ error: null, getInputProps: () => {} }),
+  };
+});
 
 vi.mock("~/hooks/useSanity", () => ({
   useSanity: () => ({
@@ -18,6 +20,7 @@ describe("AktivitetCheckboxes", () => {
     name: "aktiviteter",
     label: "Velg aktiviteter",
     verdi: [],
+    aktiviteter: [],
     muligeAktiviteter: ["Arbeid", "Syk"] as AktivitetType[],
     onChange: vi.fn(),
   };
@@ -68,9 +71,11 @@ describe("AktivitetCheckboxes", () => {
   });
 
   it("viser feilmelding", () => {
-    vi.mock("remix-validated-form", () => ({
-      useField: () => ({ error: "Feilmelding" }),
-    }));
+    vi.mock("remix-validated-form", () => {
+      return {
+        useField: () => ({ error: "Feilmelding", getInputProps: () => {} }),
+      };
+    });
 
     render(<AktivitetCheckboxes {...defaultProps} />);
 
