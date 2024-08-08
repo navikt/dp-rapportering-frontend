@@ -97,6 +97,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
   const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
 
+  const harIngenAktiviteter = periode.dager.every((dag) => dag.aktiviteter.length === 0);
+  const nextLink = harIngenAktiviteter
+    ? `/periode/${periode.id}/tom`
+    : `/periode/${periode.id}/arbeidssoker`;
   return (
     <>
       <div className="rapportering-container">
@@ -141,7 +145,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
           <RemixLink
             as="Button"
-            to={`/periode/${periode.id}/arbeidssoker`}
+            to={nextLink}
             variant="primary"
             iconPosition="right"
             icon={<ArrowRightIcon aria-hidden />}
