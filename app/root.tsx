@@ -36,14 +36,14 @@ export const meta: MetaFunction = () => {
       name: "viewport",
       content: "width=device-width,initial-scale=1",
     },
-    { title: "Dagpenger rapportering" },
+    { title: "Meldekort - dagpenger" },
     {
       property: "og:title",
-      content: "Dagpenger rapportering",
+      content: "Meldekort - dagpenger",
     },
     {
       name: "description",
-      content: "rapporteringløsning for dagpenger",
+      content: "meldekortløsning for dagpenger",
     },
   ];
 };

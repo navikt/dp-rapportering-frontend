@@ -1,7 +1,7 @@
 ingresses: 
-  - https://arbeid.intern.dev.nav.no/arbeid/dagpenger/rapportering
-  - https://arbeid.ansatt.dev.nav.no/arbeid/dagpenger/rapportering
-base_path: "/arbeid/dagpenger/rapportering"
+  - https://arbeid.intern.dev.nav.no/arbeid/dagpenger/meldekort
+  - https://arbeid.ansatt.dev.nav.no/arbeid/dagpenger/meldekort
+base_path: "/arbeid/dagpenger/meldekort"
 idporten:
   level: idporten-loa-high
 dekorator:

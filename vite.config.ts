@@ -6,8 +6,8 @@ import tsconfigPaths from "vite-tsconfig-paths";
 installGlobals();
 
 export default defineConfig({
-  base: "/arbeid/dagpenger/rapportering/",
-  plugins: [remix({ basename: "/arbeid/dagpenger/rapportering/" }), tsconfigPaths()],
+  base: "/arbeid/dagpenger/meldekort/",
+  plugins: [remix({ basename: "/arbeid/dagpenger/meldekort/" }), tsconfigPaths()],
   server: {
     port: 3000,
   },
