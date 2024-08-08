@@ -16,6 +16,7 @@ import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
@@ -61,6 +62,10 @@ export default function Landingsside() {
   const forstePeriode: IRapporteringsperiode = harPeriode ? rapporteringsperioder[0] : null;
   const visArbeidssokerRegisterering = rapporteringstype === Rapporteringstype.harIngenAktivitet;
 
+  const visAutomatiskLagret =
+    rapporteringstype === Rapporteringstype.harIngenAktivitet &&
+    forstePeriode &&
+    forstePeriode.registrertArbeidssoker !== null;
   return (
     <>
       <div className="rapportering-header">
@@ -99,6 +104,8 @@ export default function Landingsside() {
               rapporteringstype={rapporteringstype}
               rapporteringsPeriode={forstePeriode}
             />
+
+            {visAutomatiskLagret && <LagretAutomatisk />}
           </div>
         )}
         <div>
