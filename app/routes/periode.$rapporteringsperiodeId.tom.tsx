@@ -1,5 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Heading } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import { useNavigate } from "@remix-run/react";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -7,7 +8,7 @@ import { RemixLink } from "~/components/RemixLink";
 
 export default function TomRapporteringsPeriodeSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-  const { getAppText, getLink } = useSanity();
+  const { getAppText, getRichText, getLink } = useSanity();
 
   const navigate = useNavigate();
   return (
@@ -21,7 +22,7 @@ export default function TomRapporteringsPeriodeSide() {
 
       <div className="my-10">
         <p>{getAppText("rapportering-tom-noe-å-rapportere")}</p>
-        <p>{getAppText("rapportering-tom-ingen-å-rapportere")}</p>
+        <PortableText value={getRichText("rapportering-tom-ingen-å-rapportere")} />
       </div>
 
       <div className="navigasjon-container-to-knapper my-4">

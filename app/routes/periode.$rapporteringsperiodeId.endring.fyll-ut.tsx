@@ -1,8 +1,8 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
+import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { useActionData, useSearchParams } from "@remix-run/react";
+import { useActionData } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
@@ -55,9 +55,6 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [searchParams, setSearchParams] = useSearchParams();
-
   useEffect(() => {
     if (actionData?.status === "success") {
       lukkModal();
@@ -75,13 +72,6 @@ export default function RapporteringsPeriodeFyllUtSide() {
   }, [valgtDato, periode.dager]);
 
   function aapneModal(dato: string) {
-    setSearchParams((prev) => {
-      if (!prev.has("utfylling")) {
-        prev.append("utfylling", "true");
-      }
-      return prev;
-    });
-
     if (periode.status === "TilUtfylling" || periode.status === "Korrigert") {
       setValgtDato(dato);
       setModalAapen(true);
@@ -130,12 +120,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
             as="Button"
             to={`${getLink("rapportering-endring-fyll-ut-avbryt").linkUrl}`}
             variant="secondary"
-            iconPosition="left"
-            icon={<ArrowLeftIcon aria-hidden />}
             className="py-4 px-8"
-            disabled={searchParams.has("endring")}
+            disabled
           >
-            {getLink("rapportering-periode-send-inn-tilbake").linkText}
+            {getLink("rapportering-endring-fyll-ut-avbryt").linkText}
           </RemixLink>
 
           <RemixLink

@@ -7,6 +7,7 @@ import {
   hentInnsendtePerioder,
 } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
+import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 
@@ -78,6 +79,12 @@ export default function InnsendteRapporteringsPerioderSide() {
             </div>
           );
         })}
+
+        <div className="navigasjon-container">
+          <RemixLink as="Button" to="/" className="py-4 px-8">
+            {getAppText("rapportering-knapp-tilbake-til-start")}
+          </RemixLink>
+        </div>
       </div>
     </>
   );

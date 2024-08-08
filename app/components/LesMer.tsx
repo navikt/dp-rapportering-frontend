@@ -3,10 +3,10 @@ import { PortableText } from "@portabletext/react";
 import { useSanity } from "~/hooks/useSanity";
 
 export function LesMer() {
-  const { getRichText } = useSanity();
+  const { getRichText, getAppText } = useSanity();
   return (
-    <ReadMore header="Les mer om hva som skal rapporteres">
-      <PortableText value={getRichText("rapportering-les-mer-hva-skal-rapporteres")} />
+    <ReadMore header={getAppText("rapportering-les-mer-hva-skal-rapporteres-tittel")}>
+      <PortableText value={getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold")} />
     </ReadMore>
   );
 }

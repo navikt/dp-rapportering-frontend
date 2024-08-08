@@ -47,7 +47,7 @@ describe("AktivitetCheckboxes", () => {
     const props = { ...defaultProps, muligeAktiviteter: [aktivitet] as AktivitetType[] };
     render(<AktivitetCheckboxes {...props} />);
 
-    const checkbox = screen.getByLabelText("Fravær");
+    const checkbox = screen.getByLabelText("Ferie eller fravær");
 
     expect(checkbox).toBeInTheDocument();
     expect(
