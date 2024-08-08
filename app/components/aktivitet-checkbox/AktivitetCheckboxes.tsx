@@ -6,7 +6,7 @@ import type { AktivitetType, IAktivitet } from "~/models/aktivitet.server";
 import { aktivitetTypeMap } from "~/utils/aktivitettype.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
-import { TallInput } from "../TallInput";
+import { TallInput } from "../tall-input/TallInput";
 
 export interface IProps {
   name: string;

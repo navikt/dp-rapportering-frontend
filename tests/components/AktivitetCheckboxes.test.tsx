@@ -9,9 +9,14 @@ vi.mock("remix-validated-form", () => {
   };
 });
 
+vi.mock("@portabletext/react", () => ({
+  PortableText: ({ value }: { value: string }) => value,
+}));
+
 vi.mock("~/hooks/useSanity", () => ({
   useSanity: () => ({
     getAppText: (key: string) => key,
+    getRichText: (key: string) => key,
   }),
 }));
 

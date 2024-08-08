@@ -1,0 +1,5 @@
+.tallInputBeskrivelse p {
+  margin-top: 0;
+  margin-left: var(--a-spacing-8);
+  padding-bottom: var(--a-spacing-4);
+}
