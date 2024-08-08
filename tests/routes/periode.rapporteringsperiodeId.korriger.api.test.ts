@@ -48,7 +48,7 @@ describe("Start endring", () => {
         context: {},
       });
 
-      expect(response).toEqual(redirect(`/periode/${endringsPeriode.id}/fyll-ut?endring=true`));
+      expect(response).toEqual(redirect(`/periode/${endringsPeriode.id}/endring/fyll-ut`));
     });
 
     test("Skal feile hvis kallet til den bestemte rapporteringsperiode feiler", async () => {

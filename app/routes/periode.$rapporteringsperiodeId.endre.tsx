@@ -12,7 +12,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   if (response.ok) {
     const endringsperiode: IRapporteringsperiode = await response.json();
-    return redirect(`/periode/${endringsperiode.id}/fyll-ut?endring=true`);
+    return redirect(`/periode/${endringsperiode.id}/endring/fyll-ut`);
   } else {
     throw new Response(`Klarte ikke endre periode med id: ${periodeId}`, { status: 500 });
   }
