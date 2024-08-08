@@ -3,13 +3,13 @@ import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { loader } from "~/routes/periode.$rapporteringsperiodeId.korriger";
+import { loader } from "~/routes/periode.$rapporteringsperiodeId.endre";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
 
-describe("Start korrigering", () => {
+describe("Start endring", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
   afterAll(() => server.close());
   afterEach(() => {
@@ -22,17 +22,17 @@ describe("Start korrigering", () => {
       rapporteringsperiodeId: rapporteringsperioderResponse[0].id,
     };
 
-    test("Skal redirecte etter laging av ny korrigeringsperiode", async () => {
-      const korrigeringsPeriode: IRapporteringsperiode = {
+    test("Skal redirecte etter laging av ny endringsperiode", async () => {
+      const endringsPeriode: IRapporteringsperiode = {
         ...rapporteringsperioderResponse[0],
         id: rapporteringsperioderResponse[0].id + 1,
         status: "Korrigert",
       };
       server.use(
         http.post(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/${testParams.rapporteringsperiodeId}/korriger`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/${testParams.rapporteringsperiodeId}/endre`,
           () => {
-            return HttpResponse.json(korrigeringsPeriode);
+            return HttpResponse.json(endringsPeriode);
           },
           {
             once: true,
@@ -48,15 +48,13 @@ describe("Start korrigering", () => {
         context: {},
       });
 
-      expect(response).toEqual(
-        redirect(`/periode/${korrigeringsPeriode.id}/fyll-ut?korrigering=true`)
-      );
+      expect(response).toEqual(redirect(`/periode/${endringsPeriode.id}/fyll-ut?endring=true`));
     });
 
     test("Skal feile hvis kallet til den bestemte rapporteringsperiode feiler", async () => {
       server.use(
         http.post(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/${testParams.rapporteringsperiodeId}/korriger`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/${testParams.rapporteringsperiodeId}/endre`,
           () => {
             return HttpResponse.json(null, { status: 500 });
           },

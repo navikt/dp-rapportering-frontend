@@ -46,12 +46,8 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
               </div>
             </div>
 
-            <RemixLink
-              className="mt-10"
-              as="Link"
-              to={getLink("rapportering-se-og-korriger").linkUrl}
-            >
-              {getLink("rapportering-se-og-korriger").linkText}
+            <RemixLink className="mt-10" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
+              {getLink("rapportering-se-og-endre").linkText}
             </RemixLink>
           </Accordion.Content>
         </Accordion.Item>

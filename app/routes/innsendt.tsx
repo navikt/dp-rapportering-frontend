@@ -64,6 +64,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                 <Kalender
                   key={periode.id}
                   rapporteringsperiode={periode}
+                  visEndringslenke={periode.kanKorrigeres}
                   aapneModal={() => {}}
                   readonly
                 />

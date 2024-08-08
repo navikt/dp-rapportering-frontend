@@ -109,8 +109,8 @@ export default function Landingsside() {
           </div>
         )}
         <div>
-          <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-korriger").linkUrl}>
-            {getLink("rapportering-se-og-korriger").linkText}
+          <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
+            {getLink("rapportering-se-og-endre").linkText}
           </RemixLink>
         </div>
       </div>

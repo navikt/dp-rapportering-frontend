@@ -1,5 +1,5 @@
+import { EndringsLenke } from "./Endringslenke";
 import styles from "./Kalender.module.css";
-import { KorrigeringsLenke } from "./KorrigeringsLenke";
 import { Uke } from "./Uke";
 import classNames from "classnames";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -8,11 +8,12 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer, getWeekDays } from "~
 interface IProps {
   aapneModal: (dato: string) => void;
   rapporteringsperiode: IRapporteringsperiode;
+  visEndringslenke?: boolean;
   readonly?: boolean;
 }
 
 export function Kalender(props: IProps) {
-  const { rapporteringsperiode, aapneModal, readonly = false } = props;
+  const { rapporteringsperiode, aapneModal, readonly = false, visEndringslenke = false } = props;
 
   const ukedager = getWeekDays("nb-NO");
 
@@ -39,8 +40,8 @@ export function Kalender(props: IProps) {
           </p>
           <span className="navds-sr-only">{`${periodeUkenummerTekst} (${periodeFomTomDatoTekst})`}</span>
         </div>
-        {rapporteringsperiode.status === "Innsendt" && rapporteringsperiode.kanKorrigeres && (
-          <KorrigeringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
+        {visEndringslenke && (
+          <EndringsLenke id={rapporteringsperiode.id} status={rapporteringsperiode.status} />
         )}
       </div>
       <table className={styles.kalender} role="grid">

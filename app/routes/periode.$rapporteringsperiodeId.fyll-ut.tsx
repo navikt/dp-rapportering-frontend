@@ -138,7 +138,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
             iconPosition="left"
             icon={<ArrowLeftIcon aria-hidden />}
             className="py-4 px-8"
-            disabled={searchParams.has("korrigering")}
+            disabled={searchParams.has("endring")}
           >
             {getLink("rapportering-periode-send-inn-tilbake").linkText}
           </RemixLink>

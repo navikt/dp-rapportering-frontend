@@ -79,7 +79,7 @@ export function leggTilForrigeRapporteringsperiode(
   return lagRapporteringsperiode(uuid(), fraOgMed, tilOgMed);
 }
 
-export function lagKorrigeringsperiode(
+export function lagEndringsperiode(
   navaerendePeriode: IRapporteringsperiode
 ): IRapporteringsperiode {
   return { ...navaerendePeriode, id: uuid(), status: "Korrigert", kanKorrigeres: false };
