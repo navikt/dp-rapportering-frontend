@@ -6,6 +6,8 @@ export const aktivitetTypeMap = (id: (typeof aktivitetType)[number]) => {
       return "Ferie eller fravær";
     case "Utdanning":
       return "Tiltak / kurs / utdanning";
+    case "Arbeid":
+      return "Jobb";
     default:
       return id;
   }

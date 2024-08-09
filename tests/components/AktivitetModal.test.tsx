@@ -69,7 +69,7 @@ describe("AktivitetModal", () => {
   it("viser checkboxes og håndterer tilstandsendringer riktig", () => {
     render(<AktivitetModal {...defaultProps} />);
 
-    const arbeidCheckbox = screen.getByLabelText("Arbeid");
+    const arbeidCheckbox = screen.getByLabelText("Jobb");
     const utdanningCheckbox = screen.getByLabelText("Tiltak / kurs / utdanning");
     const sykCheckbox = screen.getByLabelText("Syk");
 
@@ -81,7 +81,7 @@ describe("AktivitetModal", () => {
     expect(defaultProps.setValgteAktiviteter).toHaveBeenCalledWith(["Arbeid"]);
   });
 
-  it.skip("viser TallInput-komponenten når 'Arbeid' er valgt", () => {
+  it.skip("viser TallInput-komponenten når 'Jobb' er valgt", () => {
     render(<AktivitetModal {...defaultProps} valgteAktiviteter={["Arbeid"]} />);
 
     expect(screen.getByLabelText("rapportering-antall-timer:")).toBeInTheDocument();
