@@ -21,7 +21,7 @@ function findAllRapporteringsperioder(db: Database) {
   return db.rapporteringsperioder.findMany({
     where: {
       status: {
-        in: ["TilUtfylling", "Korrigert"],
+        in: ["TilUtfylling", "Endret"],
       },
     },
     orderBy: {

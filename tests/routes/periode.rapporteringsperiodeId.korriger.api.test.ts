@@ -26,7 +26,7 @@ describe("Start endring", () => {
       const endringsPeriode: IRapporteringsperiode = {
         ...rapporteringsperioderResponse[0],
         id: rapporteringsperioderResponse[0].id + 1,
-        status: "Korrigert",
+        status: "Endret",
       };
       server.use(
         http.post(

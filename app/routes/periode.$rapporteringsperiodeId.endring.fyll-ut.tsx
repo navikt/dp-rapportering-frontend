@@ -72,7 +72,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   }, [valgtDato, periode.dager]);
 
   function aapneModal(dato: string) {
-    if (periode.status === "TilUtfylling" || periode.status === "Korrigert") {
+    if (periode.status === "TilUtfylling" || periode.status === "Endret") {
       setValgtDato(dato);
       setModalAapen(true);
     }

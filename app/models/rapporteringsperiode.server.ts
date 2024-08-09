@@ -11,10 +11,10 @@ export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
-  status: "TilUtfylling" | "Innsendt" | "Korrigert";
+  status: "TilUtfylling" | "Innsendt" | "Endret";
   kanSendesFra: string;
   kanSendes: boolean;
-  kanKorrigeres: boolean;
+  kandEndres: boolean;
   registrertArbeidssoker: boolean | null;
 }
 

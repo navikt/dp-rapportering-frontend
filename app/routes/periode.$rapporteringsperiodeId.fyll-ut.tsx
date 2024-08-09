@@ -82,7 +82,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       return prev;
     });
 
-    if (periode.status === "TilUtfylling" || periode.status === "Korrigert") {
+    if (periode.status === "TilUtfylling" || periode.status === "Endret") {
       setValgtDato(dato);
       setModalAapen(true);
     }
