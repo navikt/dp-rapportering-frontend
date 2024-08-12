@@ -77,7 +77,7 @@ export const handlers = [
 
       const endretPeriode = lagEndringsperiode(rapporteringsperiode);
 
-      db.deleteRapporteringsperiode(rapporteringsperioderId);
+      db.updateRapporteringsperiode(rapporteringsperioderId, { kanEndres: false });
       db.addRapporteringsperioder(endretPeriode);
 
       return HttpResponse.json(endretPeriode, { status: 200 });
