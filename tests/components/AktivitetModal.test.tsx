@@ -45,7 +45,7 @@ const mockRapporteringsperiode: IRapporteringsperiode = {
   status: "TilUtfylling",
   kanSendesFra: "2024-06-01",
   kanSendes: true,
-  kandEndres: false,
+  kanEndres: false,
   registrertArbeidssoker: false,
 };
 

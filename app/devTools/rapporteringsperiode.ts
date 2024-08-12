@@ -57,7 +57,7 @@ export function lagRapporteringsperiode(
     },
     kanSendesFra: format(subDays(new Date(tilOgMed), 1), "yyyy-MM-dd"),
     kanSendes: true,
-    kandEndres: true,
+    kanEndres: true,
     registrertArbeidssoker: null,
     dager: times(14, (i) => ({
       dagIndex: i,
@@ -82,5 +82,5 @@ export function leggTilForrigeRapporteringsperiode(
 export function lagEndringsperiode(
   navaerendePeriode: IRapporteringsperiode
 ): IRapporteringsperiode {
-  return { ...navaerendePeriode, id: uuid(), status: "Endret", kandEndres: false };
+  return { ...navaerendePeriode, id: uuid(), status: "Endret", kanEndres: false };
 }

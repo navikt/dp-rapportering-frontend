@@ -10,7 +10,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
     status: "TilUtfylling",
     kanSendesFra: "2023-05-13",
     kanSendes: true,
-    kandEndres: true,
+    kanEndres: true,
     registrertArbeidssoker: false,
     dager: [
       {
@@ -94,7 +94,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
     status: "Innsendt",
     kanSendesFra: "2023-05-27",
     kanSendes: false,
-    kandEndres: true,
+    kanEndres: true,
     registrertArbeidssoker: null,
     dager: [
       {

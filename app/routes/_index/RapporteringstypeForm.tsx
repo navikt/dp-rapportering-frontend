@@ -18,14 +18,16 @@ export function RapporteringstypeForm({
   rapporteringsperiodeId,
 }: RapporteringstypeFormProps) {
   const { getAppText, getRichText } = useSanity();
-  const fetcher = useFetcher();
 
-  const handleChange = (valgtType: Rapporteringstype) => {
+  const startFetcher = useFetcher();
+  const rapporteringstypeFetcher = useFetcher();
+
+  const handleChange = async (valgtType: Rapporteringstype) => {
     if (rapporteringstype === undefined) {
-      fetcher.submit({ rapporteringsperiodeId }, { method: "post", action: "api/start" });
+      startFetcher.submit({ rapporteringsperiodeId }, { method: "post", action: "api/start" });
     }
 
-    fetcher.submit({ rapporteringstype: valgtType }, { method: "post" });
+    rapporteringstypeFetcher.submit({ rapporteringstype: valgtType }, { method: "post" });
   };
 
   return (

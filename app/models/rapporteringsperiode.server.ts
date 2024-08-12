@@ -14,7 +14,7 @@ export interface IRapporteringsperiode {
   status: "TilUtfylling" | "Innsendt" | "Endret";
   kanSendesFra: string;
   kanSendes: boolean;
-  kandEndres: boolean;
+  kanEndres: boolean;
   registrertArbeidssoker: boolean | null;
 }
 
