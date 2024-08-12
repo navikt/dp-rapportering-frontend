@@ -128,7 +128,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
           <RemixLink
             as="Button"
-            to={`/periode/${periode.id}/send-inn`}
+            to={`/periode/${periode.id}/endring/send-inn`}
             variant="primary"
             icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"

@@ -15,6 +15,7 @@ export interface IRapporteringsperiode {
   kanSendesFra: string;
   kanSendes: boolean;
   kanEndres: boolean;
+  begrunnelseEndring?: string;
   registrertArbeidssoker: boolean | null;
 }
 
