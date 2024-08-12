@@ -32,21 +32,21 @@ const withDbHandler =
     return HttpResponse.json([]);
   };
 
-const path = (endpoint: string) => `${getEnv("DP_RAPPORTERING_URL")}${endpoint}`;
+const DP_RAPPORTERING_URL = getEnv("DP_RAPPORTERING_URL");
 
 export const handlers = [
   http.get(
-    path("/rapporteringsperioder"),
+    `${DP_RAPPORTERING_URL}/rapporteringsperioder`,
     withDbHandler(({ db }) => HttpResponse.json(db.findAllRapporteringsperioder()))
   ),
 
   http.get(
-    path("/rapporteringsperioder/innsendte"),
+    `${DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`,
     withDbHandler(({ db }) => HttpResponse.json(db.findAllInnsendtePerioder()))
   ),
 
   http.post(
-    path("/rapporteringsperiode"),
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode`,
     withDbHandler(async ({ db, request }) => {
       const periode = (await request.json()) as IRapporteringsperiode;
       db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
@@ -56,7 +56,7 @@ export const handlers = [
   ),
 
   http.get(
-    path("/rapporteringsperiode/:rapporteringsperioderId"),
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
     withDbHandler(({ db, params }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
 
@@ -64,12 +64,12 @@ export const handlers = [
     })
   ),
 
-  http.post(path("/rapporteringsperiode/:rapporteringsperioderId/start"), () => {
+  http.post(`${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/start`, () => {
     return HttpResponse.json(null, { status: 200 });
   }),
 
   http.post(
-    path("/rapporteringsperiode/:rapporteringsperioderId/endre"),
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/endre`,
     withDbHandler(({ db, params }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
 
@@ -85,7 +85,7 @@ export const handlers = [
   ),
 
   http.post(
-    path("/rapporteringsperiode/:rapporteringsperioderId/aktivitet"),
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
     withDbHandler(async ({ db, params, request }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
       const dag = (await request.json()) as IRapporteringsperiodeDag;
@@ -97,7 +97,7 @@ export const handlers = [
   ),
 
   http.post(
-    path("/rapporteringsperiode/:rapporteringsperioderId/arbeidssoker"),
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/arbeidssoker`,
     withDbHandler(async ({ db, params, request }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
       const { registrertArbeidssoker } = (await request.json()) as ArbeidssokerSvar;
