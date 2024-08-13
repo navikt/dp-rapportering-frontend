@@ -36,7 +36,7 @@ export function Uke(props: IProps) {
     const locale = "no-NO";
 
     const options: Intl.DateTimeFormatOptions = {
-      day: "2-digit",
+      day: "numeric",
       weekday: "long",
       month: "long",
     };
@@ -86,7 +86,7 @@ export function Uke(props: IProps) {
           <td key={dag.dagIndex} className={styles.datoKontainer}>
             {readonly && (
               <span className={classNames(styles.dato, dagKnappStyle, styles.readonly)}>
-                {`${format(new Date(dag.dato), "dd")}. `}
+                {`${format(new Date(dag.dato), "d")}. `}
               </span>
             )}
 
@@ -96,7 +96,7 @@ export function Uke(props: IProps) {
                 aria-label={hentSkjermleserDatoTekst(dag)}
                 disabled
               >
-                {`${format(new Date(dag.dato), "dd")}.`}
+                {`${format(new Date(dag.dato), "d")}.`}
               </button>
             )}
 
@@ -106,7 +106,7 @@ export function Uke(props: IProps) {
                 aria-label={hentSkjermleserDatoTekst(dag)}
                 onClick={() => aapneModal(dag.dato)}
               >
-                {`${format(new Date(dag.dato), "dd")}.`}
+                {`${format(new Date(dag.dato), "d")}.`}
               </button>
             )}
 
