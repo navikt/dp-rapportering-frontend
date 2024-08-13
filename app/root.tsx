@@ -15,7 +15,6 @@ import { hasSession } from "mocks/session";
 import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
 import { isLocalOrDemo } from "./utils/env.utils";
-import { initInstrumentation } from "~/utils/faro";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import Center from "./components/center/Center";
@@ -103,8 +102,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     fragments,
   });
 }
-
-initInstrumentation();
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { fragments, env, isLocalOrDemo } = useTypedRouteLoaderData("root");

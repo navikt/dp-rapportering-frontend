@@ -1,6 +1,6 @@
 import { NesteKnapp } from "./NesteKnapp";
 import { PeriodeDetaljer } from "./PeriodeDetaljer";
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -78,9 +78,7 @@ export default function Landingsside() {
       </div>
 
       <div className="rapportering-container">
-        <BodyLong>
-          <PortableText value={getRichText("rapportering-innledning")} />
-        </BodyLong>
+        <PortableText value={getRichText("rapportering-innledning")} />
 
         <PeriodeDetaljer
           rapporteringstype={rapporteringstype}
