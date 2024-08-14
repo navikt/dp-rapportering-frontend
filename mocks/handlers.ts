@@ -7,7 +7,7 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
-import { getEnv } from "~/utils/env.utils";
+import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 
 interface RequestHandler {
   request: Request;
@@ -31,8 +31,6 @@ const withDbHandler =
     }
     return HttpResponse.json([]);
   };
-
-const DP_RAPPORTERING_URL = getEnv("DP_RAPPORTERING_URL");
 
 export const handlers = [
   http.get(

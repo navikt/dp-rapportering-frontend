@@ -12,7 +12,6 @@ import {
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
 import { getRapporteringstype, setRapporteringstype } from "~/models/rapporteringstype.server";
-import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -121,8 +120,10 @@ export function ErrorBoundary() {
   const error = useRouteError();
   const { getAppText } = useSanity();
 
+  const { env } = useTypedRouteLoaderData("root");
+
   if (isRouteErrorResponse(error)) {
-    if (getEnv("IS_LOCALHOST") === "true" && error.status === 440) {
+    if (env.IS_LOCALHOST && error.status === 440) {
       return (
         <main>
           <div className="rapportering-header">

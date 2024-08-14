@@ -24,5 +24,9 @@ export function getEnv(value: keyof IEnv) {
   return env[value] || "";
 }
 
+export const DP_RAPPORTERING_URL = getEnv("DP_RAPPORTERING_URL");
+
+export const isLocalhost = getEnv("IS_LOCALHOST") === "true";
+
 export const isLocalOrDemo =
   getEnv("RUNTIME_ENVIRONMENT") === "demo" || getEnv("USE_MSW") === "true";

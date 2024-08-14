@@ -1,6 +1,6 @@
 import { expiresIn, getToken, validateToken } from "@navikt/oasis";
 import { INetworkResponse } from "~/models/networkResponse";
-import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
+import { getEnv, isLocalOrDemo, isLocalhost } from "~/utils/env.utils";
 
 export interface ISessionData {
   expiresIn: number;
@@ -16,7 +16,7 @@ export async function getSession(req: Request): Promise<INetworkResponse<ISessio
     };
   }
 
-  if (getEnv("IS_LOCALHOST") === "true" && getEnv("DP_RAPPORTERING_TOKEN")) {
+  if (isLocalhost && getEnv("DP_RAPPORTERING_TOKEN")) {
     return {
       status: "success",
       data: {

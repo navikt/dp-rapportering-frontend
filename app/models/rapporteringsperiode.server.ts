@@ -1,5 +1,5 @@
 import type { IAktivitet } from "./aktivitet.server";
-import { getEnv } from "~/utils/env.utils";
+import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 
 export interface IPeriode {
@@ -26,7 +26,7 @@ export interface IRapporteringsperiodeDag {
 }
 
 export async function startUtfylling(request: Request, periodeId: string): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/${periodeId}/start`;
+  const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/start`;
 
   return await fetch(url, {
     method: "POST",
@@ -35,7 +35,7 @@ export async function startUtfylling(request: Request, periodeId: string): Promi
 }
 
 export async function hentRapporteringsperioder(request: Request): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder`;
+  const url = `${DP_RAPPORTERING_URL}/rapporteringsperioder`;
 
   return await fetch(url, {
     method: "GET",
@@ -44,7 +44,7 @@ export async function hentRapporteringsperioder(request: Request): Promise<Respo
 }
 
 export async function hentPeriode(request: Request, periodeId: string): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/${periodeId}`;
+  const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}`;
 
   return await fetch(url, {
     method: "GET",
@@ -53,7 +53,7 @@ export async function hentPeriode(request: Request, periodeId: string): Promise<
 }
 
 export async function hentInnsendtePerioder(request: Request): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperioder/innsendte`;
+  const url = `${DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`;
 
   return await fetch(url, {
     method: "GET",
@@ -65,7 +65,7 @@ export async function sendInnPeriode(
   request: Request,
   rapporteringsperiode: IRapporteringsperiode
 ): Promise<Response> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode`;
+  const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
   return await fetch(url, {
     method: "POST",
@@ -75,7 +75,7 @@ export async function sendInnPeriode(
 }
 
 export async function lagEndringsperiode(request: Request, periodeId: string) {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/rapporteringsperiode/${periodeId}/endre`;
+  const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/endre`;
 
   const response = await fetch(url, {
     method: "POST",
