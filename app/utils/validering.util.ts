@@ -25,3 +25,9 @@ export const aktivitetsvalidering = z.object({
 export function validator() {
   return withZod(aktivitetsvalidering);
 }
+
+export function begrunnelseEndringValidator() {
+  return withZod(
+    z.object({ begrunnelseEndring: z.string().min(1, "Du må skrive en begrunnelse") })
+  );
+}

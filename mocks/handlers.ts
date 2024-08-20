@@ -3,6 +3,7 @@ import { sessionRecord } from "./session";
 import { HttpResponse, JsonBodyType, PathParams, bypass, http } from "msw";
 import { lagEndringsperiode } from "~/devTools/rapporteringsperiode";
 import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
+import { BegrunnelseSvar } from "~/models/begrunnelse.server";
 import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
@@ -101,6 +102,18 @@ export const handlers = [
       const { registrertArbeidssoker } = (await request.json()) as ArbeidssokerSvar;
 
       db.updateRapporteringsperiode(rapporteringsperioderId, { registrertArbeidssoker });
+
+      return HttpResponse.json(null, { status: 204 });
+    })
+  ),
+
+  http.post(
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/begrunnelse`,
+    withDbHandler(async ({ db, params, request }) => {
+      const rapporteringsperioderId = params.rapporteringsperioderId as string;
+      const { begrunnelseEndring } = (await request.json()) as BegrunnelseSvar;
+
+      db.updateRapporteringsperiode(rapporteringsperioderId, { begrunnelseEndring });
 
       return HttpResponse.json(null, { status: 204 });
     })

@@ -58,6 +58,7 @@ export function lagRapporteringsperiode(
     kanSendesFra: format(subDays(new Date(tilOgMed), 1), "yyyy-MM-dd"),
     kanSendes: true,
     kanEndres: true,
+    begrunnelseEndring: "",
     registrertArbeidssoker: null,
     dager: times(14, (i) => ({
       dagIndex: i,
