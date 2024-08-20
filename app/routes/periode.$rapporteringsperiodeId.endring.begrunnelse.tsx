@@ -1,47 +1,29 @@
-import { ArrowRightIcon } from "@navikt/aksel-icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading, Select } from "@navikt/ds-react";
-import type { ActionFunctionArgs } from "@remix-run/node";
-// import { useActionData } from "@remix-run/react";
-import invariant from "tiny-invariant";
-import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { useFetcher } from "@remix-run/react";
+import { ChangeEvent } from "react";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
 
-export async function action({ request, params }: ActionFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
-
-  const periodeId = params.rapporteringsperiodeId;
-  const formdata = await request.formData();
-  const submitKnapp = formdata.get("submit");
-
-  switch (submitKnapp) {
-    case "slette": {
-      return await slettAlleAktiviteter(request, periodeId, formdata);
-    }
-
-    case "lagre": {
-      return await validerOgLagreAktivitet(request, periodeId, formdata);
-    }
-
-    default: {
-      return {
-        status: "error",
-        error: {
-          statusCode: 500,
-          statusText: "Det skjedde en feil.",
-        },
-      };
-    }
-  }
-}
-
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const fetcher = useFetcher();
+
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+
+    fetcher.submit(
+      {
+        rapporteringsperiodeId: periode.id,
+        begrunnelseEndring: value,
+      },
+      { method: "post", action: "/api/begrunnelse" }
+    );
+  };
 
   const { getAppText, getLink } = useSanity();
-  // const actionData = useActionData<typeof action>();
 
   return (
     <>
@@ -57,10 +39,13 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <BodyLong className="mb-4">
           {getAppText("rapportering-endring-begrunnelse-beskrivelse")}
         </BodyLong>
+        <fetcher.Form></fetcher.Form>
 
         <Select
           label={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-label")}
           description={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-description")}
+          name="begrunnelseEndring"
+          onChange={handleChange}
         >
           <option value="">
             {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-select")}
@@ -91,12 +76,13 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <div className="navigasjon-container-to-knapper my-4">
           <RemixLink
             as="Button"
-            to={`${getLink("rapportering-endring-fyll-ut-avbryt").linkUrl}`}
+            to={`/periode/${periode.id}/endring/fyll-ut`}
             variant="secondary"
             className="py-4 px-8"
-            disabled
+            iconPosition="left"
+            icon={<ArrowLeftIcon aria-hidden />}
           >
-            {getLink("rapportering-endring-fyll-ut-avbryt").linkText}
+            {getLink("rapportering-knapp-tilbake").linkText}
           </RemixLink>
 
           <RemixLink
@@ -106,6 +92,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
             icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"
             className="py-4 px-8"
+            disabled={!periode.begrunnelseEndring}
           >
             {getAppText("rapportering-knapp-neste")}
           </RemixLink>

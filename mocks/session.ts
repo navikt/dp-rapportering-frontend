@@ -37,6 +37,7 @@ class SessionRecord {
         kanSendesFra: () => faker.date.recent().toISOString(),
         kanSendes: faker.datatype.boolean,
         kanEndres: faker.datatype.boolean,
+        begrunnelseEndring: faker.datatype.string,
         registrertArbeidssoker: nullable(faker.datatype.boolean),
       },
     });

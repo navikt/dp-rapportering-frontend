@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@navikt/aksel-icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
@@ -118,12 +118,13 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <div className="navigasjon-container-to-knapper my-4">
           <RemixLink
             as="Button"
-            to={`${getLink("rapportering-endring-fyll-ut-avbryt").linkUrl}`}
+            to={`/innsendt`}
             variant="secondary"
             className="py-4 px-8"
-            disabled
+            icon={<ArrowLeftIcon aria-hidden />}
+            iconPosition="left"
           >
-            {getLink("rapportering-endring-fyll-ut-avbryt").linkText}
+            {getLink("rapportering-knapp-tilbake").linkText}
           </RemixLink>
 
           <RemixLink

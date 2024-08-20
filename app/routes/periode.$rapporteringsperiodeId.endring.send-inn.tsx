@@ -123,7 +123,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           icon={<ArrowLeftIcon aria-hidden />}
           className="py-4 px-8"
         >
-          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+          {getLink("rapportering-knapp-tilbake").linkText}
         </Button>
 
         <Button
