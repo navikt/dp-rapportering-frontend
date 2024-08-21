@@ -27,7 +27,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const response = await sendInnPeriode(request, periode);
 
   if (response.ok) {
-    return redirect(`/periode/${periodeId}/bekreftelse`, {
+    return redirect(`/periode/${periodeId}/endring/bekreftelse`, {
       headers: {
         "Set-Cookie": await resetRapporteringstypeCookie(),
       },

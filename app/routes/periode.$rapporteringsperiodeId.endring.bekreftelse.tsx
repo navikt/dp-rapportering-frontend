@@ -1,5 +1,4 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -18,16 +17,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function RapporteringsPeriodesBekreftelsesSide() {
-  const { harNestePeriode } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText } = useSanity();
 
   return (
     <div className="rapportering-container">
       <Kvittering
-        tittel={getAppText("rapportering-periode-bekreftelse-tittel")}
+        tittel={getAppText("rapportering-periode-endring-bekreftelse-tittel")}
         periode={periode}
-        harNestePeriode={harNestePeriode}
+        harNestePeriode={false}
       />
     </div>
   );
