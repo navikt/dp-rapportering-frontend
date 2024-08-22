@@ -17,6 +17,7 @@ export interface IRapporteringsperiode {
   kanEndres: boolean;
   begrunnelseEndring?: string;
   registrertArbeidssoker: boolean | null;
+  originalId?: string;
 }
 
 export interface IRapporteringsperiodeDag {

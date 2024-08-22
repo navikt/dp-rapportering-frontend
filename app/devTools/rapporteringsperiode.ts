@@ -80,8 +80,19 @@ export function leggTilForrigeRapporteringsperiode(
   return lagRapporteringsperiode(uuid(), fraOgMed, tilOgMed);
 }
 
-export function lagEndringsperiode(
-  navaerendePeriode: IRapporteringsperiode
-): IRapporteringsperiode {
-  return { ...navaerendePeriode, id: uuid(), status: "Endret", kanEndres: false };
+export function startEndring(navaerendePeriode: IRapporteringsperiode): IRapporteringsperiode {
+  return {
+    ...navaerendePeriode,
+    id: uuid(),
+    originalId: navaerendePeriode.id,
+    status: "Endret",
+    kanEndres: false,
+  };
+}
+
+export function hentEndringsId(navaerendePeriode: IRapporteringsperiode): IRapporteringsperiode {
+  return {
+    ...navaerendePeriode,
+    id: uuid(),
+  };
 }

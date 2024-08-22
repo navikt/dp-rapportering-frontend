@@ -1,7 +1,7 @@
 import { withDb } from "./responses/db";
 import { sessionRecord } from "./session";
 import { HttpResponse, JsonBodyType, PathParams, bypass, http } from "msw";
-import { lagEndringsperiode } from "~/devTools/rapporteringsperiode";
+import { hentEndringsId, startEndring } from "~/devTools/rapporteringsperiode";
 import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { BegrunnelseSvar } from "~/models/begrunnelse.server";
 import {
@@ -48,9 +48,18 @@ export const handlers = [
     `${DP_RAPPORTERING_URL}/rapporteringsperiode`,
     withDbHandler(async ({ db, request }) => {
       const periode = (await request.json()) as IRapporteringsperiode;
-      db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
 
-      return HttpResponse.json(null, { status: 200 });
+      if (periode.status === "Endret") {
+        const originalPeriode = db.findRapporteringsperiodeById(periode.originalId as string);
+        db.updateRapporteringsperiode(originalPeriode.id, { kanEndres: false });
+
+        const endretPeriode = hentEndringsId(periode);
+        db.addRapporteringsperioder({ ...endretPeriode, status: "Innsendt" });
+        return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
+      }
+
+      db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
+      return HttpResponse.json({ id: periode.id }, { status: 200 });
     })
   ),
 
@@ -74,12 +83,11 @@ export const handlers = [
 
       const rapporteringsperiode = db.findRapporteringsperiodeById(rapporteringsperioderId);
 
-      const endretPeriode = lagEndringsperiode(rapporteringsperiode);
+      const endretPeriode = startEndring(rapporteringsperiode);
 
-      db.updateRapporteringsperiode(rapporteringsperioderId, { kanEndres: false });
       db.addRapporteringsperioder(endretPeriode);
 
-      return HttpResponse.json(endretPeriode, { status: 200 });
+      return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
     })
   ),
 
