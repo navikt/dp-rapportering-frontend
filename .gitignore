@@ -19,6 +19,4 @@ node_modules
 
 secure.log
 /test-results/
-/playwright-report/
 /blob-report/
-/playwright/.cache/
