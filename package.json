@@ -13,7 +13,6 @@
     "validate": "npm run lint && tsc",
     "test": "vitest",
     "test-coverage": "vitest --coverage",
-    "e2e": "playwright test",
     "pre-commit": "lint-staged && npm run typecheck"
   },
   "dependencies": {
@@ -55,7 +54,6 @@
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
     "@mswjs/data": "^0.16.1",
-    "@playwright/test": "^1.45.3",
     "@remix-run/dev": "^2.10.3",
     "@remix-run/eslint-config": "^2.10.3",
     "@remix-run/testing": "^2.10.3",

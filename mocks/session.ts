@@ -39,6 +39,7 @@ class SessionRecord {
         kanEndres: faker.datatype.boolean,
         begrunnelseEndring: faker.datatype.string,
         registrertArbeidssoker: nullable(faker.datatype.boolean),
+        originalId: nullable(faker.string.uuid),
       },
     });
   }
