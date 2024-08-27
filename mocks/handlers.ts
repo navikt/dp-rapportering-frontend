@@ -10,6 +10,8 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 
+let originalIdVedEndring = "";
+
 interface RequestHandler {
   request: Request;
   params: PathParams;
@@ -50,6 +52,11 @@ export const handlers = [
       const periode = (await request.json()) as IRapporteringsperiode;
       db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
 
+      if (originalIdVedEndring) {
+        db.updateRapporteringsperiode(originalIdVedEndring, { kanEndres: false });
+        originalIdVedEndring = "";
+      }
+
       return HttpResponse.json(null, { status: 200 });
     })
   ),
@@ -74,9 +81,9 @@ export const handlers = [
 
       const rapporteringsperiode = db.findRapporteringsperiodeById(rapporteringsperioderId);
 
+      originalIdVedEndring = rapporteringsperioderId;
       const endretPeriode = lagEndringsperiode(rapporteringsperiode);
 
-      db.updateRapporteringsperiode(rapporteringsperioderId, { kanEndres: false });
       db.addRapporteringsperioder(endretPeriode);
 
       return HttpResponse.json(endretPeriode, { status: 200 });

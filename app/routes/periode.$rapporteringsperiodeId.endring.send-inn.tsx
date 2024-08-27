@@ -13,6 +13,7 @@ import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 
@@ -140,6 +141,16 @@ export default function RapporteringsPeriodeSendInnSide() {
             : getLink("rapportering-endring-send-inn-bekreft").linkText}
         </Button>
       </Form>
+      <div className="navigasjon-container-en-knapp my-4">
+        <RemixLink
+          as="Link"
+          to={getLink("rapportering-endre-avbryt").linkUrl}
+          variant="primary"
+          className="py-4 px-8"
+        >
+          {getLink("rapportering-endre-avbryt").linkText}
+        </RemixLink>
+      </div>
     </div>
   );
 }
