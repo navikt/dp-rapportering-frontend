@@ -30,6 +30,7 @@ export function AktivitetOppsummering(props: IProps) {
 
     const formattertTimer = timer.toString().replace(/\./g, ",");
 
+    // TODO: Hent tekst fra sanity og alltid vise "timer"
     return `${formattertTimer} ${timer > 1 ? "timer" : "time"}`;
   }
 
@@ -38,6 +39,7 @@ export function AktivitetOppsummering(props: IProps) {
       (aktivitet) => aktivitet.type === aktivitetType
     );
 
+    // TODO: Hent tekst fra sanity
     return `${filtertAktiviteter.length} ${filtertAktiviteter.length > 1 ? "dager" : "dag"}`;
   }
 
