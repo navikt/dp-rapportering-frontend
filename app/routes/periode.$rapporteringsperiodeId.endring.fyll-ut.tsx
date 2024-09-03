@@ -7,6 +7,7 @@ import { addDays } from "date-fns";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType } from "~/models/aktivitet.server";
+import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { formaterDato } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
@@ -109,12 +110,13 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <div className="registert-meldeperiode-container">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
-        <BodyLong className="my-8">
-          {`${getAppText("rapportering-periode-innsending-og-frist-dato")
-            .replace("{date1}", tidligstInnsendingDato)
-            .replace("{date2}", senestInnsendingDato)}`}
-        </BodyLong>
-
+        <PortableText
+          components={getSanityPortableTextComponents({
+            "fra-dato": tidligstInnsendingDato,
+            "til-dato": senestInnsendingDato,
+          })}
+          value={getRichText("rapportering-periode-innsending-og-frist-dato")}
+        />
         <div className="navigasjon-container-to-knapper my-4">
           <RemixLink
             as="Button"
