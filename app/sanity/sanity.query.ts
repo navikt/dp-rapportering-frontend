@@ -43,8 +43,6 @@ const linksGroq = `* [_type=="rapporteringLink"  && __i18n_lang==$baseLang]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${linkFields}, ${linkFields})
       }`;
 
-console.log(infoTextsGroq);
-
 export const allTextsQuery = groq`{
     "appTexts": ${appTextsGroq},
     "richTexts": ${infoTextsGroq},
