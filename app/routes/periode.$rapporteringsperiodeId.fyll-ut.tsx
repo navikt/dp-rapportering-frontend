@@ -1,11 +1,13 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { BodyLong, Heading } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType } from "~/models/aktivitet.server";
+import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { formaterDato } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
@@ -48,7 +50,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
-  const { getAppText, getLink } = useSanity();
+  const { getAppText, getLink, getRichText } = useSanity();
   const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
@@ -101,6 +103,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const nextLink = harIngenAktiviteter
     ? `/periode/${periode.id}/tom`
     : `/periode/${periode.id}/arbeidssoker`;
+
   return (
     <>
       <div className="rapportering-container">
@@ -124,11 +127,13 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <div className="registert-meldeperiode-container">
           <AktivitetOppsummering rapporteringsperiode={periode} />
         </div>
-        <BodyLong className="my-8">
-          {`${getAppText("rapportering-periode-innsending-og-frist-dato")
-            .replace("{date1}", tidligstInnsendingDato)
-            .replace("{date2}", senestInnsendingDato)}`}
-        </BodyLong>
+        <PortableText
+          components={getSanityPortableTextComponents({
+            "fra-dato": tidligstInnsendingDato,
+            "til-dato": senestInnsendingDato,
+          })}
+          value={getRichText("rapportering-periode-innsending-og-frist-dato")}
+        />
 
         <div className="navigasjon-container-to-knapper my-4">
           <RemixLink

@@ -7,7 +7,21 @@ const appTextsFields = `{
 
 const infoTextsFields = `{
   "slug": slug.current,
-  body
+  body[]{
+    ...,
+    _type == "block" => {
+      ...,
+      children[]{
+        ...,
+        _type == "dynamicFieldReference" => {
+          ...,
+          "dynamiskFelt": @-> {
+            ...
+          }
+        },
+      }
+    },
+  }
 }`;
 
 const linkFields = `{
