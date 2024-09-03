@@ -7,7 +7,21 @@ const appTextsFields = `{
 
 const infoTextsFields = `{
   "slug": slug.current,
-  body
+  body[]{
+    ...,
+    _type == "block" => {
+      ...,
+      children[]{
+        ...,
+        _type == "dynamicFieldReference" => {
+          ...,
+          "dynamiskFelt": @-> {
+            ...
+          }
+        },
+      }
+    },
+  }
 }`;
 
 const linkFields = `{
@@ -28,6 +42,8 @@ const infoTextsGroq = `* [_type=="rapporteringRichText"  && __i18n_lang==$baseLa
 const linksGroq = `* [_type=="rapporteringLink"  && __i18n_lang==$baseLang]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${linkFields}, ${linkFields})
       }`;
+
+console.log(infoTextsGroq);
 
 export const allTextsQuery = groq`{
     "appTexts": ${appTextsGroq},

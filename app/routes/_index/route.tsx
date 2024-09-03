@@ -12,6 +12,7 @@ import {
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
 import { getRapporteringstype, setRapporteringstype } from "~/models/rapporteringstype.server";
+import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -65,6 +66,7 @@ export default function Landingsside() {
     rapporteringstype === Rapporteringstype.harIngenAktivitet &&
     forstePeriode &&
     forstePeriode.registrertArbeidssoker !== null;
+
   return (
     <>
       <div className="rapportering-header">
@@ -77,7 +79,13 @@ export default function Landingsside() {
       </div>
 
       <div className="rapportering-container">
-        <PortableText value={getRichText("rapportering-innledning")} />
+        <PortableText
+          value={getRichText("rapportering-innledning")}
+          components={getSanityPortableTextComponents({
+            "fra-dato": "2024-09-03",
+            "til-dato": "2024-09-04",
+          })}
+        />
 
         <PeriodeDetaljer
           rapporteringstype={rapporteringstype}
