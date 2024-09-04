@@ -82,7 +82,7 @@ export function AktivitetCheckboxes({
               >
                 {aktivitetTypeMap(aktivitet, getAppText)}
               </Checkbox>
-              <div className="abdi">
+              <div>
                 <TallInput
                   name="timer"
                   label={`${getAppText("rapportering-antall-timer")}:`}
