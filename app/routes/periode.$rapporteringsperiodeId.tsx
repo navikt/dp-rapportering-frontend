@@ -18,6 +18,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const periode: IRapporteringsperiode = await response.json();
+
+  // TODO: Hvis periode er null, kast en 404
+
+  if (!periode) {
+    throw new Response("Fant ikke meldekortet", { status: 404 });
+  }
+
   return json({ periode });
 }
 
