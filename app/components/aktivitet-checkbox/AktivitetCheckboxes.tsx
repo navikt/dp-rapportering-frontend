@@ -80,7 +80,7 @@ export function AktivitetCheckboxes({
                 data-testid={`aktivitet-radio-${aktivitet}`}
                 name={name}
               >
-                {aktivitetTypeMap(aktivitet)}
+                {aktivitetTypeMap(aktivitet, getAppText)}
               </Checkbox>
               <div className="abdi">
                 <TallInput
@@ -110,7 +110,7 @@ export function AktivitetCheckboxes({
             data-testid={`aktivitet-radio-${aktivitet}`}
             name={name}
           >
-            {aktivitetTypeMap(aktivitet)}
+            {aktivitetTypeMap(aktivitet, getAppText)}
           </Checkbox>
         );
       })}

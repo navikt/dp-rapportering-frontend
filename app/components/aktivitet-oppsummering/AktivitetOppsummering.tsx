@@ -30,8 +30,8 @@ export function AktivitetOppsummering(props: IProps) {
 
     const formattertTimer = timer.toString().replace(/\./g, ",");
 
-    // TODO: Hent tekst fra sanity og alltid vise "timer"
-    return `${formattertTimer} ${timer > 1 ? "timer" : "time"}`;
+    // TODO: Alltid vis "timer"?
+    return `${formattertTimer} ${timer > 1 ? getAppText("rapportering-timer") : getAppText("rapportering-time")}`;
   }
 
   function hentTotaltFravaerTekstMedType(aktivitetType: AktivitetType): string {
@@ -39,8 +39,8 @@ export function AktivitetOppsummering(props: IProps) {
       (aktivitet) => aktivitet.type === aktivitetType
     );
 
-    // TODO: Hent tekst fra sanity
-    return `${filtertAktiviteter.length} ${filtertAktiviteter.length > 1 ? "dager" : "dag"}`;
+    // TODO: Alltid vis "dager"?
+    return `${filtertAktiviteter.length} ${filtertAktiviteter.length > 1 ? getAppText("rapportering-dager") : getAppText("rapportering-dag")}`;
   }
 
   return (

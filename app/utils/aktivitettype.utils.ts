@@ -1,14 +1,16 @@
 export const aktivitetType = ["Arbeid", "Syk", "Fravaer", "Utdanning"] as const;
 
-// TODO: Hent tekster fra Sanity
-export const aktivitetTypeMap = (id: (typeof aktivitetType)[number]) => {
+export const aktivitetTypeMap = (
+  id: (typeof aktivitetType)[number],
+  getAppText: (textId: string) => string
+) => {
   switch (id) {
     case "Fravaer":
-      return "Ferie eller fravær";
+      return getAppText("rapportering-fraevaer");
     case "Utdanning":
-      return "Tiltak / kurs / utdanning";
+      return getAppText("rapportering-utdanning");
     case "Arbeid":
-      return "Jobb";
+      return getAppText("rapportering-arbeid");
     default:
       return id;
   }
