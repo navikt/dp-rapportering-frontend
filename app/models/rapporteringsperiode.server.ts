@@ -17,6 +17,7 @@ export interface IRapporteringsperiode {
   kanEndres: boolean;
   begrunnelseEndring?: string;
   registrertArbeidssoker: boolean | null;
+  html?: string;
 }
 
 export interface IRapporteringsperiodeDag {
@@ -66,6 +67,10 @@ export async function sendInnPeriode(
   rapporteringsperiode: IRapporteringsperiode
 ): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
+
+  if (rapporteringsperiode != null) {
+    rapporteringsperiode.html = (await request.formData()).get("_html")?.toString()
+  }
 
   return await fetch(url, {
     method: "POST",
