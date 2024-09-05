@@ -85,7 +85,7 @@ export function AktivitetCheckboxes({
               <div>
                 <TallInput
                   name="timer"
-                  label={`${getAppText("rapportering-antall-timer")}:`}
+                  label={`${getAppText("rapportering-antall-timer")}`}
                   className={styles.timer}
                   verdi={periodeSomTimer(
                     aktiviteter?.find((aktivitet) => aktivitet.type === "Arbeid")?.timer ?? ""
@@ -95,6 +95,7 @@ export function AktivitetCheckboxes({
             </div>
           );
         }
+
         return (
           <Checkbox
             key={aktivitet}
