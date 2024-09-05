@@ -68,8 +68,6 @@ export function samleHtmlForPeriode(
   const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
   const harAktivitet = atob(getCookie("rapporteringstype") || "").indexOf("harAktivitet") > -1
 
-  // Begrunnelse for endring?
-
   let html = "<div>"
 
   if (!periode.begrunnelseEndring) {
@@ -180,5 +178,5 @@ export function samleHtmlForPeriode(
 function getCookie(name) {
   const re = new RegExp(name + "=([^;]+)");
   const value = re.exec(document.cookie);
-  return (value != null) ? decodeURIComponent(value[1]) : null;
+  return (value !== null) ? decodeURIComponent(value[1]) : null;
 }

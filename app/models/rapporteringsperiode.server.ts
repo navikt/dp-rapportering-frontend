@@ -68,7 +68,7 @@ export async function sendInnPeriode(
 ): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
-  if (rapporteringsperiode != null) {
+  if (rapporteringsperiode !== null) {
     rapporteringsperiode.html = (await request.formData()).get("_html")?.toString()
   }
 
