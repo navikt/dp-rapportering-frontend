@@ -68,8 +68,11 @@ export async function sendInnPeriode(
 ): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
-  if (rapporteringsperiode !== null) {
-    rapporteringsperiode.html = (await request.formData()).get("_html")?.toString()
+  try {
+    const formData = await request.formData()
+    rapporteringsperiode.html = formData.get("_html")?.toString()
+  } catch (e) {
+    console.error(e)
   }
 
   return await fetch(url, {
@@ -82,10 +85,8 @@ export async function sendInnPeriode(
 export async function lagEndringsperiode(request: Request, periodeId: string) {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/endre`;
 
-  const response = await fetch(url, {
+  return await fetch(url, {
     method: "POST",
     headers: await getHeaders(request),
   });
-
-  return response;
 }
