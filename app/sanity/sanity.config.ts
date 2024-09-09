@@ -1,5 +1,5 @@
 export const sanityConfig = {
-  dataset: "migrering-test",
+  dataset: "production",
   projectId: "rt6o382n",
   useCdn: true,
   token: "",
