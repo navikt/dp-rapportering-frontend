@@ -11,8 +11,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const response = await lagEndringsperiode(request, periodeId);
 
   if (response.ok) {
-    const endringsperiode: IRapporteringsperiode = await response.json();
-    return redirect(`/periode/${endringsperiode.id}/endring/fyll-ut`);
+    const { id }: IRapporteringsperiode = await response.json();
+    return redirect(`/periode/${id}/endring/fyll-ut`);
   } else {
     throw new Response(`Klarte ikke endre periode med id: ${periodeId}`, { status: 500 });
   }

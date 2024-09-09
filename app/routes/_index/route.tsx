@@ -65,6 +65,7 @@ export default function Landingsside() {
     rapporteringstype === Rapporteringstype.harIngenAktivitet &&
     forstePeriode &&
     forstePeriode.registrertArbeidssoker !== null;
+
   return (
     <>
       <div className="rapportering-header">

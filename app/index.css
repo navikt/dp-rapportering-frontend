@@ -68,6 +68,11 @@ body {
   justify-content: space-between;
 }
 
+.navigasjon-container-en-knapp {
+  display: flex;
+  justify-content: center;
+}
+
 .registert-meldeperiode-container {
   margin-top: var(--a-spacing-10);
 }

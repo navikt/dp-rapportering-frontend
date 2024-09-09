@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { redirect } from "@remix-run/node";
-import { HttpResponse, http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
@@ -21,7 +21,9 @@ describe("Send inn rapporteringsperiode", () => {
 
   describe("Action", () => {
     describe("Send inn periode", () => {
-      const testBody = {};
+      const testBody = {
+        "_html": "<div />"
+      };
       const testParams = {
         ident: "1234",
         rapporteringsperiodeId: rapporteringsperioderResponse[0].id,
@@ -29,6 +31,44 @@ describe("Send inn rapporteringsperiode", () => {
 
       test("burde feile hvis bruker ikke er autentisert", async () => {
         const body = new URLSearchParams(testBody);
+
+        const request = new Request("http://localhost:3000", {
+          method: "POST",
+          body,
+        });
+
+        const response = await catchErrorResponse(() =>
+          action({
+            request,
+            params: testParams,
+            context: {},
+          })
+        );
+
+        expect(response.status).toBe(500);
+      });
+
+      test("burde feile hvis _html er null", async () => {
+        const body = new URLSearchParams({});
+
+        const request = new Request("http://localhost:3000", {
+          method: "POST",
+          body,
+        });
+
+        const response = await catchErrorResponse(() =>
+          action({
+            request,
+            params: testParams,
+            context: {},
+          })
+        );
+
+        expect(response.status).toBe(500);
+      });
+
+      test("burde feile hvis _html er tom", async () => {
+        const body = new URLSearchParams({ "_html": "" });
 
         const request = new Request("http://localhost:3000", {
           method: "POST",
@@ -88,15 +128,6 @@ describe("Send inn rapporteringsperiode", () => {
               });
             },
             { once: true }
-          )
-        );
-
-        server.use(
-          http.get(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
-            () => {
-              return HttpResponse.json(null, { status: 500 });
-            }
           )
         );
 

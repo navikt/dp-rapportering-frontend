@@ -25,7 +25,10 @@ export function hentForstePeriodeTekst(rapporteringsperioder: IRapporteringsperi
   return `Uke ${ukenummer} (${dato})`;
 }
 
-export function hentTotaltArbeidstimerTekst(rapporteringsperiode: IRapporteringsperiode): string {
+export function hentTotaltArbeidstimerTekst(
+  rapporteringsperiode: IRapporteringsperiode,
+  getAppText: (textId: string) => string,
+): string {
   const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
   const filtertAktiviteter = flatMapAktiviteter.filter(
     (aktivitet) => aktivitet.type === "Arbeid"
@@ -40,10 +43,14 @@ export function hentTotaltArbeidstimerTekst(rapporteringsperiode: IRapporterings
 
   const formattertTimer = timer.toString().replace(/\./g, ",");
 
-  return `${formattertTimer} ${timer > 1 ? "timer" : "time"}`;
+  // TODO: Alltid vis "timer"?
+  return `${formattertTimer} ${timer > 1 ? getAppText("rapportering-timer") : getAppText("rapportering-time")}`;
 }
 
-export function hentTotaltFravaerTekstMedType(rapporteringsperiode: IRapporteringsperiode, aktivitetType: AktivitetType): string {
+export function hentTotaltFravaerTekstMedType(
+  rapporteringsperiode: IRapporteringsperiode,
+  aktivitetType: AktivitetType,
+): string {
   const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
   const filtertAktiviteter = flatMapAktiviteter.filter(
     (aktivitet) => aktivitet.type === aktivitetType
@@ -55,8 +62,8 @@ export function hentTotaltFravaerTekstMedType(rapporteringsperiode: IRapporterin
 export function samleHtmlForPeriode(
   rapporteringsperioder: IRapporteringsperiode[],
   periode: IRapporteringsperiode,
-  getAppText:  (textId: string) => string,
-  getRichText: (slug: string) => (TypedObject | TypedObject[])
+  getAppText: (textId: string) => string,
+  getRichText: (slug: string) => (TypedObject | TypedObject[]),
 ): string {
   const antallPerioder = rapporteringsperioder.length
   const rapporteringstypeFormLabel =
@@ -162,7 +169,7 @@ export function samleHtmlForPeriode(
     + "<br>"
     // Sammenlagt
     + "<b>" + getAppText("rapportering-oppsummering-tittel") + "</b><br>"
-    + getAppText("rapportering-arbeid") + " " + hentTotaltArbeidstimerTekst(periode) + "<br>"
+    + getAppText("rapportering-arbeid") + " " + hentTotaltArbeidstimerTekst(periode, getAppText) + "<br>"
     + getAppText("rapportering-syk") + " " + hentTotaltFravaerTekstMedType(periode, "Syk") + "<br>"
     + getAppText("rapportering-fraevaer") + " " + hentTotaltFravaerTekstMedType(periode, "Fravaer") + "<br>"
     + getAppText("rapportering-utdanning") + " " + hentTotaltFravaerTekstMedType(periode, "Utdanning") + "<br>"

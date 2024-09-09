@@ -20,7 +20,7 @@ export function AktivitetOppsummering(props: IProps) {
         <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
           <p>
             {getAppText("rapportering-arbeid")}
-            <span>{hentTotaltArbeidstimerTekst(rapporteringsperiode)}</span>
+            <span>{hentTotaltArbeidstimerTekst(rapporteringsperiode, getAppText)}</span>
           </p>
         </div>
         <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>

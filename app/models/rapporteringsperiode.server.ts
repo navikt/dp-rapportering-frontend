@@ -17,6 +17,7 @@ export interface IRapporteringsperiode {
   kanEndres: boolean;
   begrunnelseEndring?: string;
   registrertArbeidssoker: boolean | null;
+  originalId?: string;
   html?: string;
 }
 
@@ -74,13 +75,15 @@ export async function sendInnPeriode(
     throw new Error("Kunne ikke finne HTML med tekstene");
   }
 
-  rapporteringsperiode.html = html.toString().trim()
-
+  const rapporteringsperiodeWithHtml = {
+    ...rapporteringsperiode,
+    "html": html.toString().trim()
+  }
 
   return await fetch(url, {
     method: "POST",
     headers: await getHeaders(request),
-    body: JSON.stringify(rapporteringsperiode),
+    body: JSON.stringify(rapporteringsperiodeWithHtml),
   });
 }
 
