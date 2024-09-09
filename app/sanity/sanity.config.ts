@@ -1,7 +1,7 @@
 export const sanityConfig = {
-  dataset: "production",
+  dataset: "migrering-test",
   projectId: "rt6o382n",
   useCdn: true,
   token: "",
-  apiVersion: "2021-06-06",
+  apiVersion: "2022-03-07",
 };

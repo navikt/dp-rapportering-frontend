@@ -31,17 +31,23 @@ const linkFields = `{
   linkDescription
 }`;
 
-const appTextsGroq = `* [_type=="rapporteringAppText" && __i18n_lang==$baseLang]{
-    ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${appTextsFields}, ${appTextsFields})
-    }`;
+const appTextsGroq = `* [_type=="rapporteringAppText" && language==$baseLang]{
+  ...coalesce(
+    *[_id==^._id && language == $lang][0]${appTextsFields},${appTextsFields}
+  ),
+}`;
 
-const infoTextsGroq = `* [_type=="rapporteringRichText"  && __i18n_lang==$baseLang]{
-      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${infoTextsFields}, ${infoTextsFields})
-      }`;
+const infoTextsGroq = `* [_type=="rapporteringRichText" && language==$baseLang]{
+  ...coalesce(
+    *[_id==^._id && language == $lang][0]${infoTextsFields},${infoTextsFields}
+  ),
+}`;
 
-const linksGroq = `* [_type=="rapporteringLink"  && __i18n_lang==$baseLang]{
-      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${linkFields}, ${linkFields})
-      }`;
+const linksGroq = `* [_type=="rapporteringLink" && language==$baseLang]{
+  ...coalesce(
+    *[_id==^._id && language == $lang][0]${linkFields},${linkFields}
+  ),
+}`;
 
 export const allTextsQuery = groq`{
     "appTexts": ${appTextsGroq},
