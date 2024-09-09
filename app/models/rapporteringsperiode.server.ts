@@ -68,12 +68,14 @@ export async function sendInnPeriode(
 ): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
-  try {
-    const formData = await request.formData()
-    rapporteringsperiode.html = formData.get("_html")?.toString()
-  } catch (e) {
-    console.error(e)
+  const formData = await request.formData()
+  const html = formData.get("_html")
+  if (html === null || html.toString().trim() === "") {
+    throw new Error("Kunne ikke finne HTML med tekstene");
   }
+
+  rapporteringsperiode.html = html.toString().trim()
+
 
   return await fetch(url, {
     method: "POST",
