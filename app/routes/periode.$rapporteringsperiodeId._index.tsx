@@ -11,6 +11,7 @@ export default function RapporteringsPeriodeSide() {
 
   useEffect(() => {
     if (periode) {
+      // Skal denne redirecten være til /meldekort/periode/${periode.id}/fyll-ut?
       navigate(`/rapportering/periode/${periode.id}/fyll-ut`, { replace: true });
     } else {
       console.log("ingen periode i $rapporteringsperiode._index! :scream:");

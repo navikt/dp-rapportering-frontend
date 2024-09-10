@@ -59,6 +59,7 @@ export const handlers = [
       }
 
       db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
+
       return HttpResponse.json({ id: periode.id }, { status: 200 });
     })
   ),

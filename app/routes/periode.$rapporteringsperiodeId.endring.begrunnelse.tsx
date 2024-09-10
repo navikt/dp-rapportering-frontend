@@ -97,6 +97,16 @@ export default function RapporteringsPeriodeFyllUtSide() {
             {getAppText("rapportering-knapp-neste")}
           </RemixLink>
         </div>
+        <div className="navigasjon-container-en-knapp my-4">
+          <RemixLink
+            as="Link"
+            to={getLink("rapportering-endre-avbryt").linkUrl}
+            variant="primary"
+            className="py-4 px-8"
+          >
+            {getLink("rapportering-endre-avbryt").linkText}
+          </RemixLink>
+        </div>
 
         <LagretAutomatisk />
       </div>
