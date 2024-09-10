@@ -19,7 +19,7 @@ export function TallInput(props: IProps) {
     <div>
       <TextField
         type="text"
-        inputMode="numeric"
+        inputMode="decimal"
         name={props.name}
         className={props.className}
         defaultValue={props.verdi}
