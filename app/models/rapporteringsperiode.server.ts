@@ -18,6 +18,7 @@ export interface IRapporteringsperiode {
   begrunnelseEndring?: string;
   registrertArbeidssoker: boolean | null;
   originalId?: string;
+  html?: string;
 }
 
 export interface IRapporteringsperiodeDag {
@@ -68,20 +69,29 @@ export async function sendInnPeriode(
 ): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
+  const formData = await request.formData()
+  const html = formData.get("_html")
+  if (html === null || html.toString().trim() === "") {
+    throw new Error("Kunne ikke finne HTML med tekstene");
+  }
+
+  const rapporteringsperiodeWithHtml = {
+    ...rapporteringsperiode,
+    "html": html.toString().trim()
+  }
+
   return await fetch(url, {
     method: "POST",
     headers: await getHeaders(request),
-    body: JSON.stringify(rapporteringsperiode),
+    body: JSON.stringify(rapporteringsperiodeWithHtml),
   });
 }
 
 export async function lagEndringsperiode(request: Request, periodeId: string) {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/endre`;
 
-  const response = await fetch(url, {
+  return await fetch(url, {
     method: "POST",
     headers: await getHeaders(request),
   });
-
-  return response;
 }

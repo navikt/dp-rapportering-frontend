@@ -10,7 +10,7 @@ export function initInstrumentation(): void {
 }
 
 export function getFaro(): Faro | null {
-  if (faro != null) return faro;
+  if (faro !== null) return faro;
   faro = initializeFaro({
     url: getEnv("FARO_URL"), // required, see below
     app: {
