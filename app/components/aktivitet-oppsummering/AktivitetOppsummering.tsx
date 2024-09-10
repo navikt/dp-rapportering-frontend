@@ -1,8 +1,7 @@
 import styles from "./AktivitetOppsummering.module.css";
 import classNames from "classnames";
-import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { periodeSomTimer } from "~/utils/periode.utils";
+import { hentTotaltArbeidstimerTekst, hentTotaltFravaerTekstMedType } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
 
 interface IProps {
@@ -14,35 +13,6 @@ export function AktivitetOppsummering(props: IProps) {
 
   const rapporteringsperiode = props.rapporteringsperiode;
 
-  const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
-
-  function hentTotaltArbeidstimerTekst(): string {
-    const filtertAktiviteter = flatMapAktiviteter.filter(
-      (aktivitet) => aktivitet.type === "Arbeid"
-    );
-
-    const timer = filtertAktiviteter.reduce((accumulator, current) => {
-      if (current.timer) {
-        return accumulator + (periodeSomTimer(current.timer) ?? 0);
-      }
-      return accumulator + 1;
-    }, 0);
-
-    const formattertTimer = timer.toString().replace(/\./g, ",");
-
-    // TODO: Hent tekst fra sanity og alltid vise "timer"
-    return `${formattertTimer} ${timer > 1 ? "timer" : "time"}`;
-  }
-
-  function hentTotaltFravaerTekstMedType(aktivitetType: AktivitetType): string {
-    const filtertAktiviteter = flatMapAktiviteter.filter(
-      (aktivitet) => aktivitet.type === aktivitetType
-    );
-
-    // TODO: Hent tekst fra sanity
-    return `${filtertAktiviteter.length} ${filtertAktiviteter.length > 1 ? "dager" : "dag"}`;
-  }
-
   return (
     <>
       <div className={styles.aktivitetOppsummeringKontainer}>
@@ -50,25 +20,25 @@ export function AktivitetOppsummering(props: IProps) {
         <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
           <p>
             {getAppText("rapportering-arbeid")}
-            <span>{hentTotaltArbeidstimerTekst()}</span>
+            <span>{hentTotaltArbeidstimerTekst(rapporteringsperiode, getAppText)}</span>
           </p>
         </div>
         <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
           <p>
             {getAppText("rapportering-syk")}
-            <span>{hentTotaltFravaerTekstMedType("Syk")}</span>
+            <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Syk")}</span>
           </p>
         </div>
         <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
           <p>
             {getAppText("rapportering-fraevaer")}
-            <span>{hentTotaltFravaerTekstMedType("Fravaer")}</span>
+            <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Fravaer")}</span>
           </p>
         </div>
         <div className={classNames(styles.aktivitetOppsummeringData, styles.utdanning)}>
           <p>
             {getAppText("rapportering-utdanning")}
-            <span>{hentTotaltFravaerTekstMedType("Utdanning")}</span>
+            <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Utdanning")}</span>
           </p>
         </div>
       </div>

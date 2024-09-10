@@ -80,12 +80,12 @@ export function AktivitetCheckboxes({
                 data-testid={`aktivitet-radio-${aktivitet}`}
                 name={name}
               >
-                {aktivitetTypeMap(aktivitet)}
+                {aktivitetTypeMap(aktivitet, getAppText)}
               </Checkbox>
               <div>
                 <TallInput
                   name="timer"
-                  label={`${getAppText("rapportering-antall-timer")}:`}
+                  label={`${getAppText("rapportering-antall-timer")}`}
                   className={styles.timer}
                   verdi={periodeSomTimer(
                     aktiviteter?.find((aktivitet) => aktivitet.type === "Arbeid")?.timer ?? ""
@@ -95,6 +95,7 @@ export function AktivitetCheckboxes({
             </div>
           );
         }
+
         return (
           <Checkbox
             key={aktivitet}
@@ -110,7 +111,7 @@ export function AktivitetCheckboxes({
             data-testid={`aktivitet-radio-${aktivitet}`}
             name={name}
           >
-            {aktivitetTypeMap(aktivitet)}
+            {aktivitetTypeMap(aktivitet, getAppText)}
           </Checkbox>
         );
       })}

@@ -69,9 +69,9 @@ describe("AktivitetModal", () => {
   it("viser checkboxes og håndterer tilstandsendringer riktig", () => {
     render(<AktivitetModal {...defaultProps} />);
 
-    const arbeidCheckbox = screen.getByLabelText("Jobb");
-    const utdanningCheckbox = screen.getByLabelText("Tiltak / kurs / utdanning");
-    const sykCheckbox = screen.getByLabelText("Syk");
+    const arbeidCheckbox = screen.getByLabelText("rapportering-arbeid");
+    const utdanningCheckbox = screen.getByLabelText("rapportering-utdanning");
+    const sykCheckbox = screen.getByLabelText("rapportering-fraevaer");
 
     expect(arbeidCheckbox).toBeInTheDocument();
     expect(utdanningCheckbox).toBeInTheDocument();
