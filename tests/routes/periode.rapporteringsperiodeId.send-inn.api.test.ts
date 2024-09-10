@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { redirect } from "@remix-run/node";
-import { HttpResponse, http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
@@ -8,6 +8,7 @@ import { rapporteringsperioderResponse } from "../../mocks/responses/rapporterin
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
+import { IPeriode, IRapporteringsperiode, IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 const rapporteringsperiodeResponse = rapporteringsperioderResponse[0];
 
@@ -21,7 +22,9 @@ describe("Send inn rapporteringsperiode", () => {
 
   describe("Action", () => {
     describe("Send inn periode", () => {
-      const testBody = {};
+      const testBody = {
+        "_html": "<div />"
+      };
       const testParams = {
         ident: "1234",
         rapporteringsperiodeId: rapporteringsperioderResponse[0].id,
@@ -46,6 +49,44 @@ describe("Send inn rapporteringsperiode", () => {
         expect(response.status).toBe(500);
       });
 
+      test("burde feile hvis _html er null", async () => {
+        const body = new URLSearchParams({});
+
+        const request = new Request("http://localhost:3000", {
+          method: "POST",
+          body,
+        });
+
+        const response = await catchErrorResponse(() =>
+          action({
+            request,
+            params: testParams,
+            context: {},
+          })
+        );
+
+        expect(response.status).toBe(500);
+      });
+
+      test("burde feile hvis _html er tom", async () => {
+        const body = new URLSearchParams({ "_html": "" });
+
+        const request = new Request("http://localhost:3000", {
+          method: "POST",
+          body,
+        });
+
+        const response = await catchErrorResponse(() =>
+          action({
+            request,
+            params: testParams,
+            context: {},
+          })
+        );
+
+        expect(response.status).toBe(500);
+      });
+
       test("burde kunne sende inn og redirecte til riktig side", async () => {
         const body = new URLSearchParams(testBody);
 
@@ -53,6 +94,30 @@ describe("Send inn rapporteringsperiode", () => {
           method: "POST",
           body,
         });
+
+        server.use(
+          http.get(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
+            () => {
+              return HttpResponse.json({ "id": "1" }, { status: 500 });
+            }
+          )
+        );
+
+        server.use(
+          http.post(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`,
+            async ({request}) => {
+              const sentRequest = await request.text();
+              expect(sentRequest).toBe("{\"id\":\"1\",\"html\":\"<div />\"}");
+
+              return HttpResponse.json(null, {
+                status: 200,
+              });
+            },
+            { once: true }
+          )
+        );
 
         mockSession();
 
@@ -88,15 +153,6 @@ describe("Send inn rapporteringsperiode", () => {
               });
             },
             { once: true }
-          )
-        );
-
-        server.use(
-          http.get(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
-            () => {
-              return HttpResponse.json(null, { status: 500 });
-            }
           )
         );
 

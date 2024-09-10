@@ -4,7 +4,7 @@ import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import { hentPeriode, hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -25,7 +25,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw new Response("Fant ikke meldekortet", { status: 404 });
   }
 
-  return json({ periode });
+  const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
+
+  if (!rapporteringsperioderResponse.ok) {
+    throw new Response("Feil i uthenting av rapporteringsperiode", { status: 500 });
+  }
+
+  const rapporteringsperioder = await rapporteringsperioderResponse.json();
+
+  return json({ periode, rapporteringsperioder });
 }
 
 export default function RapporteringsPeriodeSide() {
