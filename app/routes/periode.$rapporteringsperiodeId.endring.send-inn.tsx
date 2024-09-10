@@ -3,8 +3,8 @@ import { Alert, BodyShort, Button, Checkbox, Detail, Heading } from "@navikt/ds-
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useNavigate, useNavigation } from "@remix-run/react";
-import { useState } from "react";
+import { Form, useActionData, useNavigate, useNavigation, useSubmit } from "@remix-run/react";
+import React, { useState } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import { hentPeriode, sendInnPeriode } from "~/models/rapporteringsperiode.server";
@@ -16,6 +16,7 @@ import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
+import { samleHtmlForPeriode } from "~/utils/periode.utils";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -51,12 +52,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function RapporteringsPeriodeSendInnSide() {
+  const submit = useSubmit();
   const navigation = useNavigation();
   const navigate = useNavigate();
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
-  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const { periode, rapporteringsperioder } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
@@ -77,6 +79,17 @@ export default function RapporteringsPeriodeSendInnSide() {
     navigation.state !== "idle" &&
     navigation.formData &&
     navigation.formData.get("_action") === "send-inn";
+
+  const addHtml = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const html = samleHtmlForPeriode(rapporteringsperioder, periode, getAppText, getRichText)
+    formData.set("_html", html);
+
+    submit(formData, { method: "post" });
+  }
 
   return (
     <div className="rapportering-container">
@@ -117,7 +130,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" className="navigasjon-container-to-knapper my-4">
+      <Form method="post" onSubmit={addHtml} className="navigasjon-container-to-knapper my-4">
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
