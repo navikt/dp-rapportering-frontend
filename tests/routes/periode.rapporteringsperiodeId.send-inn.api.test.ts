@@ -8,6 +8,7 @@ import { rapporteringsperioderResponse } from "../../mocks/responses/rapporterin
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
+import { IPeriode, IRapporteringsperiode, IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 const rapporteringsperiodeResponse = rapporteringsperioderResponse[0];
 
@@ -93,6 +94,30 @@ describe("Send inn rapporteringsperiode", () => {
           method: "POST",
           body,
         });
+
+        server.use(
+          http.get(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
+            () => {
+              return HttpResponse.json({ "id": "1" }, { status: 500 });
+            }
+          )
+        );
+
+        server.use(
+          http.post(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`,
+            async ({request}) => {
+              const sentRequest = await request.text();
+              expect(sentRequest).toBe("{\"id\":\"1\",\"html\":\"<div />\"}");
+
+              return HttpResponse.json(null, {
+                status: 200,
+              });
+            },
+            { once: true }
+          )
+        );
 
         mockSession();
 
