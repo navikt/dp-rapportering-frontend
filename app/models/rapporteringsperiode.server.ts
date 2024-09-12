@@ -80,9 +80,19 @@ export async function sendInnPeriode(
     "html": html.toString().trim()
   }
 
+  const standardHeaders= await getHeaders(request)
+  const naisAppImage = process.env.NAIS_APP_IMAGE
+  const userAgent = request.headers.get("User-Agent")
+
+  const headers = {
+    ...standardHeaders,
+    naisAppImage,
+    userAgent
+  }
+
   return await fetch(url, {
     method: "POST",
-    headers: await getHeaders(request),
+    headers: headers,
     body: JSON.stringify(rapporteringsperiodeWithHtml),
   });
 }
