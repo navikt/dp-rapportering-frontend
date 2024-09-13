@@ -34,7 +34,7 @@ export function useSanity() {
       return richText.textId === textId;
     });
 
-    return (richText?.body as TypedObject | TypedObject[]) ?? createSanityRichTextObject(slug);
+    return (richText?.body as TypedObject | TypedObject[]) ?? createSanityRichTextObject(textId);
   }
 
   function getLink(linkId: string): ISanityLink {
