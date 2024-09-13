@@ -3,3 +3,4 @@ base_path: "/rapportering"
 idporten:
   level: Level4
 faro_url: "https://telemetry.nav.no/collect"
+sanity_datasett: "kopi-av-prod"
