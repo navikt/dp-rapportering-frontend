@@ -55,6 +55,8 @@ spec:
       value: {{faro_url}}
     - name: RUNTIME_ENVIRONMENT
       value: {{RUNTIME_ENVIRONMENT}}
+    - name: SANITY_DATASETT
+      value: {{sanity_datasett}}
   accessPolicy:
     outbound:
       external:
