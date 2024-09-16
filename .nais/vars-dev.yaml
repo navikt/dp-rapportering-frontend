@@ -8,4 +8,4 @@ dekorator:
   url: https://dekoratoren.dev.nav.no/
   env: dev
 faro_url: "https://telemetry.ekstern.dev.nav.no/collect"
-sanity_datasett: "kopi-av-prod"
+sanity_datasett: "development"
