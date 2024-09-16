@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { redirect } from "@remix-run/node";
-import { http, HttpResponse } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
@@ -22,7 +22,7 @@ describe("Send inn rapporteringsperiode", () => {
   describe("Action", () => {
     describe("Send inn periode", () => {
       const testBody = {
-        "_html": "<div />"
+        _html: "<div />",
       };
       const testParams = {
         ident: "1234",
@@ -68,7 +68,7 @@ describe("Send inn rapporteringsperiode", () => {
       });
 
       test("burde feile hvis _html er tom", async () => {
-        const body = new URLSearchParams({ "_html": "" });
+        const body = new URLSearchParams({ _html: "" });
 
         const request = new Request("http://localhost:3000", {
           method: "POST",
@@ -98,7 +98,7 @@ describe("Send inn rapporteringsperiode", () => {
           http.get(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
             () => {
-              return HttpResponse.json({ "id": "1" }, { status: 500 });
+              return HttpResponse.json({ id: "1" }, { status: 500 });
             }
           )
         );
@@ -106,9 +106,9 @@ describe("Send inn rapporteringsperiode", () => {
         server.use(
           http.post(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`,
-            async ({request}) => {
+            async ({ request }) => {
               const sentRequest = await request.text();
-              expect(sentRequest).toBe("{\"id\":\"1\",\"html\":\"<div />\"}");
+              expect(sentRequest).toBe('{"id":"1","html":"<div />"}');
 
               return HttpResponse.json(null, {
                 status: 200,
