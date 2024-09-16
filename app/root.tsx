@@ -97,6 +97,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       USE_MSW: process.env.USE_MSW,
       FARO_URL: process.env.FARO_URL,
       RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
+      SANITY_DATASETT: process.env.SANITY_DATASETT,
     },
     isLocalOrDemo: process.env.RUNTIME_ENVIRONMENT === "demo" || process.env.USE_MSW === "true",
     fragments,

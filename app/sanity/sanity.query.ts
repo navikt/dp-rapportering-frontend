@@ -5,8 +5,8 @@ const appTextsFields = `{
   valueText
 }`;
 
-const infoTextsFields = `{
-  "slug": slug.current,
+const richTextsFields = `{
+  textId,
   body[]{
     ...,
     _type == "block" => {
@@ -31,20 +31,26 @@ const linkFields = `{
   linkDescription
 }`;
 
-const appTextsGroq = `* [_type=="rapporteringAppText" && __i18n_lang==$baseLang]{
-    ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${appTextsFields}, ${appTextsFields})
-    }`;
+const appTextsGroq = `* [_type=="rapporteringAppText" && language==$baseLang]{
+  ...coalesce(
+    *[textId==^.textId && language==$lang][0]${appTextsFields},${appTextsFields}
+  ),
+}`;
 
-const infoTextsGroq = `* [_type=="rapporteringRichText"  && __i18n_lang==$baseLang]{
-      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${infoTextsFields}, ${infoTextsFields})
-      }`;
+const richTextsGroq = `* [_type=="rapporteringRichText" && language==$baseLang]{
+  ...coalesce(
+    *[textId==^.textId && language==$lang][0]${richTextsFields},${richTextsFields}
+  ),
+}`;
 
-const linksGroq = `* [_type=="rapporteringLink"  && __i18n_lang==$baseLang]{
-      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${linkFields}, ${linkFields})
-      }`;
+const linksGroq = `* [_type=="rapporteringLink" && language==$baseLang]{
+  ...coalesce(
+    *[linkId==^.linkId && language==$lang][0]${linkFields},${linkFields}
+  ),
+}`;
 
 export const allTextsQuery = groq`{
     "appTexts": ${appTextsGroq},
-    "richTexts": ${infoTextsGroq},
+    "richTexts": ${richTextsGroq},
     "links": ${linksGroq}
 }`;

@@ -63,7 +63,7 @@ export function samleHtmlForPeriode(
   rapporteringsperioder: IRapporteringsperiode[],
   periode: IRapporteringsperiode,
   getAppText: (textId: string) => string,
-  getRichText: (slug: string) => (TypedObject | TypedObject[]),
+  getRichText: (textId: string) => (TypedObject | TypedObject[]),
 ): string {
   const antallPerioder = rapporteringsperioder.length
   const rapporteringstypeFormLabel =
@@ -182,7 +182,7 @@ export function samleHtmlForPeriode(
   return html;
 }
 
-function getCookie(name) {
+function getCookie(name: string) {
   const re = new RegExp(name + "=([^;]+)");
   const value = re.exec(document.cookie);
   return (value !== null) ? decodeURIComponent(value[1]) : null;

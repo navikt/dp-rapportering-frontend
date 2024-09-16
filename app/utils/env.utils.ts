@@ -16,6 +16,7 @@ interface IEnv {
   FARO_URL: string;
   DEKORATOR_ENV: string;
   RUNTIME_ENVIRONMENT: string;
+  SANITY_DATASETT: string;
 }
 
 export function getEnv(value: keyof IEnv) {
