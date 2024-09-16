@@ -81,8 +81,8 @@ export async function sendInnPeriode(
   }
 
   const standardHeaders= await getHeaders(request)
-  const naisAppImage = process.env.NAIS_APP_IMAGE
-  const userAgent = request.headers.get("User-Agent")
+  const naisAppImage = process.env.NAIS_APP_IMAGE || ""
+  const userAgent = request.headers.get("User-Agent") || ""
 
   const headers = {
     ...standardHeaders,

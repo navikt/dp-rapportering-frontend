@@ -8,7 +8,6 @@ import { rapporteringsperioderResponse } from "../../mocks/responses/rapporterin
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
-import { IPeriode, IRapporteringsperiode, IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 const rapporteringsperiodeResponse = rapporteringsperioderResponse[0];
 
