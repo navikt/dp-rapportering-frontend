@@ -11,12 +11,12 @@ import { hentPeriode, sendInnPeriode } from "~/models/rapporteringsperiode.serve
 import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { samleHtmlForPeriode } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { samleHtmlForPeriode } from "~/utils/periode.utils";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -58,7 +58,9 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
-  const { periode, rapporteringsperioder } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const { periode, rapporteringsperioder } = useTypedRouteLoaderData(
+    "routes/periode.$rapporteringsperiodeId"
+  );
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
@@ -85,11 +87,11 @@ export default function RapporteringsPeriodeSendInnSide() {
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    const html = samleHtmlForPeriode(rapporteringsperioder, periode, getAppText, getRichText)
+    const html = samleHtmlForPeriode(rapporteringsperioder, periode, getAppText, getRichText);
     formData.set("_html", html);
 
     submit(formData, { method: "post" });
-  }
+  };
 
   return (
     <div className="rapportering-container">
