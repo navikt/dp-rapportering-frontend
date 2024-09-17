@@ -81,12 +81,12 @@ export async function sendInnPeriode(
   };
 
   const standardHeaders = await getHeaders(request);
-  const naisAppImage = process.env.NAIS_APP_IMAGE || "";
+  const githubSha = process.env.GITHUB_SHA || "";
   const userAgent = request.headers.get("User-Agent") || "";
 
   const headers = {
     ...standardHeaders,
-    naisAppImage,
+    githubSha,
     userAgent,
   };
 

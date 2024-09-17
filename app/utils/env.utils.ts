@@ -11,8 +11,7 @@ interface IEnv {
   DP_RAPPORTERING_TOKEN: string;
   NAIS_CLUSTER_NAME: string;
   USE_MSW: string;
-  NAIS_APP_IMAGE: string;
-  COMMIT: string;
+  GITHUB_SHA: string;
   FARO_URL: string;
   DEKORATOR_ENV: string;
   RUNTIME_ENVIRONMENT: string;
