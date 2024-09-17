@@ -1,13 +1,24 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Alert, BodyShort, Button, Checkbox, Detail, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useNavigate, useNavigation, useSubmit } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+  useSubmit,
+} from "@remix-run/react";
 import React, { useState } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
-import { hentPeriode, sendInnPeriode } from "~/models/rapporteringsperiode.server";
+import {
+  hentPeriode,
+  hentRapporteringsperioder,
+  sendInnPeriode,
+} from "~/models/rapporteringsperiode.server";
 import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
@@ -18,12 +29,25 @@ import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 
+// TODO: Denne er lik som i periode.$rapporteringsperiodeId.send-inn.tsx
+export async function loader({ request }: LoaderFunctionArgs) {
+  const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
+
+  if (!rapporteringsperioderResponse.ok) {
+    throw new Response("Feil i uthenting av rapporteringsperiode", { status: 500 });
+  }
+
+  const rapporteringsperioder = await rapporteringsperioderResponse.json();
+
+  return json({ rapporteringsperioder });
+}
+
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
 
-  const periodeResponse = await hentPeriode(request, periodeId);
+  const periodeResponse = await hentPeriode(request, periodeId, false);
   const periode = await periodeResponse.json();
 
   const response = await sendInnPeriode(request, periode);
@@ -58,9 +82,8 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
-  const { periode, rapporteringsperioder } = useTypedRouteLoaderData(
-    "routes/periode.$rapporteringsperiodeId"
-  );
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
