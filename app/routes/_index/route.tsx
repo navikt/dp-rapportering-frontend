@@ -27,6 +27,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request);
   const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
 
+  if (rapporteringsperioderResponse.status === 204) {
+    throw new Response("Ingen rapporteringsperioder funnet", { status: 404 });
+  }
+
   if (rapporteringsperioderResponse.ok) {
     const rapporteringsperioder = await rapporteringsperioderResponse.json();
     return json({ rapporteringstype, rapporteringsperioder, session });

@@ -45,12 +45,18 @@ export async function hentRapporteringsperioder(request: Request): Promise<Respo
   });
 }
 
-export async function hentPeriode(request: Request, periodeId: string): Promise<Response> {
+export async function hentPeriode(
+  request: Request,
+  periodeId: string,
+  hentOriginal: boolean = true
+): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}`;
 
   return await fetch(url, {
     method: "GET",
-    headers: await getHeaders(request),
+    headers: await getHeaders(request, {
+      "Hent-Original": hentOriginal,
+    }),
   });
 }
 
