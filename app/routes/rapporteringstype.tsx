@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { Alert, BodyShort, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import type { action as RapporteringstypeAction } from "./api.rapporteringstype";
 import type { action as StartAction } from "./api.start";
-import { hentForstePeriodeTekst } from "~/utils/periode.utils";
+import { hentPeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
@@ -30,7 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
-
+  console.log(rapporteringsperioder);
   const { getAppText, getLink, getRichText } = useSanity();
 
   const startFetcher = useFetcher<typeof StartAction>();
@@ -70,10 +70,11 @@ export default function RapporteringstypeSide() {
 
     if (type) {
       rapporteringstypeFetcher.submit(
-        { rapporteringstype: type },
+        { rapporteringstype: type, rapporteringsperiodeId: forstePeriode.id },
         { method: "post", action: "/api/rapporteringstype" }
       );
     }
+
     // Hvis du inkluderer rapporteringstypeFetcher i dep. array får du en uendelig løkke
   }, [type]);
 
@@ -81,7 +82,7 @@ export default function RapporteringstypeSide() {
     <>
       {harFlerePerioder && (
         <>
-          <Alert variant="warning" className="my-8">
+          <Alert variant="info" className="my-8">
             <Heading spacing size="small" level="2">
               {getAppText("rapportering-flere-perioder-tittel").replace(
                 "{antall}",
@@ -90,17 +91,25 @@ export default function RapporteringstypeSide() {
             </Heading>
             {getAppText("rapportering-flere-perioder-innledning")}
           </Alert>
-
-          <Heading spacing size="small" level="2">
-            {getAppText("rapportering-forste-periode")}
-          </Heading>
-          <p></p>
         </>
       )}
 
+      <div className="my-8">
+        {rapporteringsperioder.map((periode, index) => (
+          <div key={periode.id} className="my-4">
+            <Heading size="small" level="2">
+              {index === 0 && getAppText("rapportering-naavaerende-periode")}
+              {index === 1 && getAppText("rapportering-neste-periode")}
+              {index > 1 && getAppText("rapportering-senere-periode")}
+            </Heading>
+            <BodyShort size="small">{hentPeriodeTekst(periode, getAppText)}</BodyShort>
+          </div>
+        ))}
+      </div>
+
       <RadioGroup
         legend={rapporteringstypeFormLabel}
-        description={hentForstePeriodeTekst(forstePeriode, getAppText)}
+        description={hentPeriodeTekst(forstePeriode, getAppText)}
         onChange={endreRapporteringstype}
         value={type}
       >

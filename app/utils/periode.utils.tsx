@@ -17,7 +17,7 @@ export function periodeSomTimer(periode: string): number | undefined {
   return timer + minutt / 60;
 }
 
-export function hentForstePeriodeTekst(
+export function hentPeriodeTekst(
   rapporteringsperiode: IRapporteringsperiode,
   getAppText: (textId: string) => string
 ): string {
@@ -314,4 +314,8 @@ function getCookie(name: string) {
   const re = new RegExp(name + "=([^;]+)");
   const value = re.exec(document.cookie);
   return value !== null ? decodeURIComponent(value[1]) : null;
+}
+
+export function harAktiviteter(periode: IRapporteringsperiode): boolean {
+  return periode.dager.some((dag) => dag.aktiviteter.length > 0);
 }

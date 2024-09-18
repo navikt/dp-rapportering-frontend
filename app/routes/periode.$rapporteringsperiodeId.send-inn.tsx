@@ -19,7 +19,6 @@ import {
   hentRapporteringsperioder,
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
-import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { samleHtmlForPeriode } from "~/utils/periode.utils";
@@ -30,16 +29,11 @@ import {
   AvregistertArbeidssokerAlert,
   RegistertArbeidssokerAlert,
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { Kalender } from "~/components/kalender/Kalender";
 
 // TODO: Denne er lik som i periode.$rapporteringsperiodeId.endring.send-inn.tsx
 export async function loader({ request }: LoaderFunctionArgs) {
-  const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
-
-  if (!rapporteringsperioderResponse.ok) {
-    throw new Response("Feil i uthenting av rapporteringsperiode", { status: 500 });
-  }
-
-  const rapporteringsperioder = await rapporteringsperioderResponse.json();
+  const rapporteringsperioder = await hentRapporteringsperioder(request);
 
   return json({ rapporteringsperioder });
 }
@@ -55,11 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const response = await sendInnPeriode(request, periode);
 
   if (response.ok) {
-    return redirect(`/periode/${periodeId}/bekreftelse`, {
-      headers: {
-        "Set-Cookie": await resetRapporteringstypeCookie(),
-      },
-    });
+    return redirect(`/periode/${periodeId}/bekreftelse`);
   } else {
     logger.warn(`Klarte ikke sende inn rapportering med id: ${periodeId}`, {
       statustext: response.statusText,
@@ -85,6 +75,8 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
+
+  console.log(periode);
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
@@ -130,7 +122,10 @@ export default function RapporteringsPeriodeSendInnSide() {
         <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
       </div>
 
-      <AktivitetOppsummering rapporteringsperiode={periode} />
+      <div className="oppsummering">
+        <Kalender rapporteringsperiode={periode} readonly={true} aapneModal={() => {}} />
+        <AktivitetOppsummering rapporteringsperiode={periode} />
+      </div>
 
       {periode.registrertArbeidssoker ? (
         <RegistertArbeidssokerAlert />

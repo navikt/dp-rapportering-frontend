@@ -19,7 +19,6 @@ import {
   hentRapporteringsperioder,
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
-import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { samleHtmlForPeriode } from "~/utils/periode.utils";
@@ -48,11 +47,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   if (response.ok) {
     const { id } = await response.json();
-    return redirect(`/periode/${id}/endring/bekreftelse`, {
-      headers: {
-        "Set-Cookie": await resetRapporteringstypeCookie(),
-      },
-    });
+    return redirect(`/periode/${id}/endring/bekreftelse`);
   } else {
     logger.warn(`Klarte ikke sende inn rapportering med id: ${periodeId}`, {
       statustext: response.statusText,
@@ -99,16 +94,16 @@ export default function RapporteringsPeriodeSendInnSide() {
     navigation.formData &&
     navigation.formData.get("_action") === "send-inn";
 
-  const addHtml = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
+  // const addHtml = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const form = event.currentTarget;
+  //   const formData = new FormData(form);
 
-    const html = samleHtmlForPeriode(rapporteringsperioder, periode, getAppText, getRichText);
-    formData.set("_html", html);
+  //   const html = samleHtmlForPeriode(rapporteringsperioder, periode, getAppText, getRichText);
+  //   formData.set("_html", html);
 
-    submit(formData, { method: "post" });
-  };
+  //   submit(formData, { method: "post" });
+  // };
 
   return (
     <>
@@ -149,7 +144,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" onSubmit={addHtml} className="navigasjon-container-to-knapper my-4">
+      <Form method="post" className="navigasjon-container-to-knapper my-4">
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"

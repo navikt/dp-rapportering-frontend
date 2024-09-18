@@ -2,7 +2,6 @@
 import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
@@ -127,11 +126,7 @@ describe("Send inn rapporteringsperiode", () => {
         });
 
         expect(response).toEqual(
-          redirect(`/periode/${rapporteringsperiodeResponse.id}/bekreftelse`, {
-            headers: {
-              "Set-Cookie": await resetRapporteringstypeCookie(),
-            },
-          })
+          redirect(`/periode/${rapporteringsperiodeResponse.id}/bekreftelse`)
         );
       });
 

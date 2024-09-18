@@ -7,7 +7,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
   const rapporteringstype = formData.get("rapporteringstype") as string;
-  console.log(rapporteringsperiodeId, rapporteringstype);
 
   try {
     await startUtfylling(request, rapporteringsperiodeId);

@@ -1,4 +1,5 @@
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { Rapporteringstype } from "~/utils/types";
 
 export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
   {
@@ -11,6 +12,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
     kanSendesFra: "2023-05-13",
     kanSendes: true,
     kanEndres: true,
+    rapporteringstype: Rapporteringstype.harAktivitet,
     registrertArbeidssoker: true,
     dager: [
       {
@@ -132,6 +134,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
     status: "Innsendt",
     kanSendesFra: "2023-05-13",
     kanSendes: true,
+    rapporteringstype: Rapporteringstype.harAktivitet,
     kanEndres: true,
     registrertArbeidssoker: true,
     dager: [
