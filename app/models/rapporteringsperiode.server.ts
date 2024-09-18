@@ -1,6 +1,7 @@
 import type { IAktivitet } from "./aktivitet.server";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
+import { Rapporteringstype } from "~/utils/types";
 
 export interface IPeriode {
   fraOgMed: string;
@@ -15,6 +16,7 @@ export interface IRapporteringsperiode {
   kanSendesFra: string;
   kanSendes: boolean;
   kanEndres: boolean;
+  rapporteringstype: Rapporteringstype | null;
   begrunnelseEndring?: string;
   registrertArbeidssoker: boolean | null;
   originalId?: string;

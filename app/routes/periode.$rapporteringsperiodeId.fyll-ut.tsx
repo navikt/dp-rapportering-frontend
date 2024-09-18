@@ -111,8 +111,9 @@ export default function RapporteringsPeriodeFyllUtSide() {
       </Heading>
       <BodyLong className="tekst-subtil" spacing>
         {getAppText("rapportering-periode-fyll-ut-beskrivelse")}
-        <LesMer />
       </BodyLong>
+
+      <LesMer />
 
       <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
       <AktivitetModal

@@ -8,6 +8,7 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
+import { RapporteringstypeSvar } from "~/models/rapporteringstype.server";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 
 interface RequestHandler {
@@ -123,6 +124,18 @@ export const handlers = [
       const { begrunnelseEndring } = (await request.json()) as BegrunnelseSvar;
 
       db.updateRapporteringsperiode(rapporteringsperioderId, { begrunnelseEndring });
+
+      return HttpResponse.json(null, { status: 204 });
+    })
+  ),
+
+  http.post(
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/rapporteringstype`,
+    withDbHandler(async ({ db, params, request }) => {
+      const rapporteringsperioderId = params.rapporteringsperioderId as string;
+      const { rapporteringstype } = (await request.json()) as RapporteringstypeSvar;
+
+      db.updateRapporteringsperiode(rapporteringsperioderId, { rapporteringstype });
 
       return HttpResponse.json(null, { status: 204 });
     })

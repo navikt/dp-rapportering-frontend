@@ -36,6 +36,7 @@ class SessionRecord {
         status: faker.string.alpha,
         kanSendesFra: () => faker.date.recent().toISOString(),
         kanSendes: faker.datatype.boolean,
+        rapporteringstype: nullable(faker.string.alpha),
         kanEndres: faker.datatype.boolean,
         begrunnelseEndring: faker.datatype.string,
         registrertArbeidssoker: nullable(faker.datatype.boolean),

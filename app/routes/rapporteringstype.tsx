@@ -5,7 +5,7 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
-import { hentRapporteringstype, settRapporteringstype } from "~/models/rapporteringstype.server";
+import type { action as RapporteringstypeAction } from "./api.rapporteringstype";
 import type { action as StartAction } from "./api.start";
 import { hentForstePeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
@@ -15,10 +15,9 @@ import Center from "~/components/center/Center";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
-    const rapporteringstype = await hentRapporteringstype(request);
     const rapporteringsperioder = await hentRapporteringsperioder(request);
 
-    return json({ rapporteringstype, rapporteringsperioder });
+    return json({ rapporteringsperioder });
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;
@@ -28,38 +27,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 }
 
-export async function action({ request }: LoaderFunctionArgs) {
-  const cookieHeader = request.headers.get("Cookie") || "";
-  const formData = await request.formData();
-
-  const rapporteringstype = formData.get("rapporteringstype") as Rapporteringstype;
-
-  return json(
-    { status: "success" },
-    {
-      headers: {
-        "Set-Cookie": await settRapporteringstype(cookieHeader, rapporteringstype),
-      },
-    }
-  );
-}
-
 export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
-  const { rapporteringsperioder, rapporteringstype } = useLoaderData<typeof loader>();
+  const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const { getAppText, getLink, getRichText } = useSanity();
 
   const startFetcher = useFetcher<typeof StartAction>();
-  const rapporteringstypeFetcher = useFetcher<typeof action>();
-
-  const [type, setType] = useState<Rapporteringstype>(
-    rapporteringstype || Rapporteringstype.harAktivitet
-  );
+  const rapporteringstypeFetcher = useFetcher<typeof RapporteringstypeAction>();
 
   const antallPerioder = rapporteringsperioder.length;
   const harFlerePerioder = antallPerioder > 1;
   const forstePeriode = rapporteringsperioder[0];
+
+  const [type, setType] = useState<Rapporteringstype | null>(forstePeriode.rapporteringstype);
 
   const rapporteringstypeFormLabel =
     rapporteringsperioder.length === 1
@@ -67,7 +48,7 @@ export default function RapporteringstypeSide() {
       : getAppText("rapportering-ikke-utfylte-rapporter-tittel");
 
   const nesteKnappTekst =
-    rapporteringstype === Rapporteringstype.harIngenAktivitet
+    type === Rapporteringstype.harIngenAktivitet
       ? getAppText("rapportering-neste")
       : getAppText("rapportering-til-utfylling");
 
@@ -83,8 +64,15 @@ export default function RapporteringstypeSide() {
   }
 
   useEffect(() => {
+    if (!type) {
+      setType(Rapporteringstype.harAktivitet);
+    }
+
     if (type) {
-      rapporteringstypeFetcher.submit({ rapporteringstype: type }, { method: "post" });
+      rapporteringstypeFetcher.submit(
+        { rapporteringstype: type },
+        { method: "post", action: "/api/rapporteringstype" }
+      );
     }
     // Hvis du inkluderer rapporteringstypeFetcher i dep. array får du en uendelig løkke
   }, [type]);

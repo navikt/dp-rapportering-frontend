@@ -20,6 +20,7 @@ export function lagRapporteringsperiode(
     kanSendes: true,
     kanEndres: true,
     begrunnelseEndring: "",
+    rapporteringstype: null,
     registrertArbeidssoker: null,
     dager: times(14, (i) => ({
       dagIndex: i,
