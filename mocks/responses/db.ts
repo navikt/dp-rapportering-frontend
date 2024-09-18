@@ -130,6 +130,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
       break;
     }
+
     case ScenarioType.fremtidig: {
       deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
 
@@ -147,35 +148,21 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       );
       break;
     }
+
+    case ScenarioType.reset:
     case ScenarioType.en: {
       deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
       db.rapporteringsperioder.create(lagForstRapporteringsperiode());
       break;
     }
+
     case ScenarioType.to: {
-      const rapporteringsperioder = findAllRapporteringsperioder(db);
-
-      if (rapporteringsperioder.length === 0) {
-        db.rapporteringsperioder.create(lagForstRapporteringsperiode());
-        db.rapporteringsperioder.create(
-          leggTilForrigeRapporteringsperiode(findAllRapporteringsperioder(db)[0].periode)
-        );
-      }
-
-      if (rapporteringsperioder.length === 1) {
-        db.rapporteringsperioder.create(
-          leggTilForrigeRapporteringsperiode(rapporteringsperioder[0].periode)
-        );
-      }
-      break;
-    }
-
-    case ScenarioType.reset: {
-      deleteAllInnsendteperioder(db);
       deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
       db.rapporteringsperioder.create(lagForstRapporteringsperiode());
-
-      return findAllRapporteringsperioder(db);
+      db.rapporteringsperioder.create(
+        leggTilForrigeRapporteringsperiode(findAllRapporteringsperioder(db)[0].periode)
+      );
+      break;
     }
   }
 }
@@ -205,5 +192,6 @@ export const withDb = (db: Database) => {
       lagreAktivitet(db, rapporteringsperiodeId, dag),
     updateRapporteringsperioder: (scenario: ScenarioType) =>
       updateRapporteringsperioder(db, scenario),
+    deleteAllInnsendteperioder: () => deleteAllInnsendteperioder(db),
   };
 };

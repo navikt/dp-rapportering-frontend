@@ -1,6 +1,6 @@
 import { Scenario } from "./Scenario";
 import { ArrowsCirclepathIcon, SandboxIcon } from "@navikt/aksel-icons";
-import { Button, Heading, Modal, Tooltip } from "@navikt/ds-react";
+import { Button, Modal, Tooltip } from "@navikt/ds-react";
 import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
 import { INetworkResponse } from "~/utils/types";
@@ -48,10 +48,10 @@ export function DevTools() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <Tooltip content="Verktøy for testing">
+        <Tooltip content="Scenario-velger">
           <Button
             onClick={() => ref.current?.showModal()}
-            icon={<SandboxIcon title="Åpne testverktøy" />}
+            icon={<SandboxIcon title="Åpne scenarioer-velgeren" />}
             variant="tertiary-neutral"
           />
         </Tooltip>
@@ -59,7 +59,7 @@ export function DevTools() {
       <div>
         <Modal
           ref={ref}
-          header={{ heading: "Testverktøy" }}
+          header={{ heading: "Scenarioer" }}
           style={{
             height: "100%",
             left: "auto",
@@ -68,10 +68,6 @@ export function DevTools() {
           width={400}
         >
           <Modal.Body>
-            <hr />
-            <Heading level="2" size="small">
-              Scenario
-            </Heading>
             <fetcher.Form method="post" onSubmit={(e) => e.preventDefault()}>
               {scenarios.map((scenario) => {
                 return (
@@ -95,7 +91,7 @@ export function DevTools() {
                   onClick={() => changeHandler(ScenarioType.reset)}
                   icon={<ArrowsCirclepathIcon aria-hidden />}
                 >
-                  Reset testdata
+                  Tilbakestill testdata
                 </Button>
               </div>
             </fetcher.Form>

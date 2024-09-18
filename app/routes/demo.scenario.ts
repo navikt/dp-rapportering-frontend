@@ -5,9 +5,9 @@ import { ScenarioType } from "~/devTools";
 import { isLocalOrDemo } from "~/utils/env.utils";
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-
   if (isLocalOrDemo) {
+    const formData = await request.formData();
+
     const { type: scenario } = Object.fromEntries(formData);
     const sessionId = getSessionId(request);
 
