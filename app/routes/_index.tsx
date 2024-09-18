@@ -53,7 +53,7 @@ export default function Landingsside() {
       )}
 
       {forstePeriode?.kanSendes === false && (
-        <Alert variant="info" className="my-8">
+        <Alert variant="info" className="my-8 first-p-mt-0 last-p-mb-0">
           <PortableText
             components={getSanityPortableTextComponents({
               dato: forstePeriode.kanSendesFra,

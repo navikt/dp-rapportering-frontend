@@ -108,6 +108,18 @@ body {
   border-radius: var(--a-border-radius-medium);
 }
 
+.feilmelding {
+  margin-top: var(--a-spacing-10);
+}
+
+.first-p-mt-0 div p:first-child {
+  margin-top: 0;
+}
+
+.last-p-mb-0 div p:last-child {
+  margin-bottom: 0;
+}
+
 @media screen and (min-width: 768px) {
   .rapportering-container {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);

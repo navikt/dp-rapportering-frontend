@@ -27,16 +27,10 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
             {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
           </Accordion.Header>
           <Accordion.Content>
-            <div className="graa-bakgrunn">
+            <div className="oppsummering">
               <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-              <div className="registert-meldeperiode-container">
-                <AktivitetOppsummering rapporteringsperiode={periode} />
-              </div>
+              <AktivitetOppsummering rapporteringsperiode={periode} />
             </div>
-
-            <RemixLink className="mt-10" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
-              {getLink("rapportering-se-og-endre").linkText}
-            </RemixLink>
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>

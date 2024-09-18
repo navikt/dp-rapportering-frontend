@@ -4,14 +4,14 @@ import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
+  // useLoaderData,
+  // useSubmit,
   Form,
   useActionData,
-  useLoaderData,
   useNavigate,
   useNavigation,
-  useSubmit,
 } from "@remix-run/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import {
@@ -19,9 +19,8 @@ import {
   hentRapporteringsperioder,
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
-import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { samleHtmlForPeriode } from "~/utils/periode.utils";
+// import { samleHtmlForPeriode } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
@@ -89,6 +88,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
   }
 
+  // TODO: Det må vel finnes en bedre måte å sette isSubmitting på?
   const isSubmitting =
     navigation.state !== "idle" &&
     navigation.formData &&
@@ -139,7 +139,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Checkbox>
 
       {actionData?.error && (
-        <Alert variant="error" className={styles.feilmelding}>
+        <Alert variant="error" className="feilmelding">
           {actionData.error}
         </Alert>
       )}

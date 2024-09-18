@@ -19,7 +19,6 @@ import {
   hentRapporteringsperioder,
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
-import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { samleHtmlForPeriode } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
@@ -136,7 +135,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Checkbox>
 
       {actionData?.error && (
-        <Alert variant="error" className={styles.feilmelding}>
+        <Alert variant="error" className="feilmelding">
           {actionData.error}
         </Alert>
       )}

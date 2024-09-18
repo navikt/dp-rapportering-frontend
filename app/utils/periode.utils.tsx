@@ -98,7 +98,7 @@ export function samleHtmlForPeriode(
       "<b>" +
       rapporteringstypeFormLabel +
       "</b><br>" +
-      hentForstePeriodeTekst(rapporteringsperioder) +
+      hentPeriodeTekst(rapporteringsperioder[0], getAppText) +
       "<br>" +
       "<br>" +
       '<div style="display: flex; align-items: center; column-gap: 10px;">' +
@@ -134,7 +134,7 @@ export function samleHtmlForPeriode(
       ) +
       "<br>" +
       "<h3>" +
-      hentForstePeriodeTekst(rapporteringsperioder) +
+      hentPeriodeTekst(rapporteringsperioder[0], getAppText) +
       "</h3>" +
       // Popup
       "<b>" +
@@ -275,7 +275,7 @@ export function samleHtmlForPeriode(
     "<b>" +
     getAppText("rapportering-send-inn-periode-tittel") +
     "</b><br>" +
-    hentForstePeriodeTekst(rapporteringsperioder) +
+    hentPeriodeTekst(rapporteringsperioder[0], getAppText) +
     "<br>" +
     "<br>" +
     // Sammenlagt
