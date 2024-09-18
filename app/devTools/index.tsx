@@ -1,33 +1,38 @@
-import { Scenerio } from "./Scenerio";
+import { Scenario } from "./Scenario";
 import { ArrowsCirclepathIcon, SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Heading, Modal, Tooltip } from "@navikt/ds-react";
 import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
 import { INetworkResponse } from "~/utils/types";
 
-export enum ScenerioType {
+export enum ScenarioType {
   ingen = "ingen",
   en = "en",
   to = "to",
   reset = "reset",
+  fremtidig = "fremtidig",
 }
-interface IScenerio {
-  type: ScenerioType;
+interface IScenario {
+  type: ScenarioType;
   tittel: string;
 }
 
-const scenerios: IScenerio[] = [
+const scenarios: IScenario[] = [
   {
-    type: ScenerioType.ingen,
-    tittel: "Ingen perioder",
+    type: ScenarioType.ingen,
+    tittel: "Ingen meldekort",
   },
   {
-    type: ScenerioType.en,
-    tittel: "Én periode",
+    type: ScenarioType.fremtidig,
+    tittel: "Fremtidig meldekort",
   },
   {
-    type: ScenerioType.to,
-    tittel: "To perioder",
+    type: ScenarioType.en,
+    tittel: "Ett meldekort",
+  },
+  {
+    type: ScenarioType.to,
+    tittel: "To meldekort",
   },
 ];
 
@@ -35,8 +40,8 @@ export function DevTools() {
   const fetcher = useFetcher<INetworkResponse>();
   const ref = useRef<HTMLDialogElement>(null);
 
-  const changeHandler = (type: ScenerioType) => {
-    fetcher.submit({ type }, { method: "post", action: "demo/scenerio" });
+  const changeHandler = (type: ScenarioType) => {
+    fetcher.submit({ type }, { method: "post", action: "demo/scenario" });
     ref.current?.close();
   };
 
@@ -46,7 +51,7 @@ export function DevTools() {
         <Tooltip content="Verktøy for testing">
           <Button
             onClick={() => ref.current?.showModal()}
-            icon={<SandboxIcon title="Åpne testdataverktøy" />}
+            icon={<SandboxIcon title="Åpne testverktøy" />}
             variant="tertiary-neutral"
           />
         </Tooltip>
@@ -54,25 +59,26 @@ export function DevTools() {
       <div>
         <Modal
           ref={ref}
-          header={{ heading: "Testdataverktøy" }}
+          header={{ heading: "Testverktøy" }}
           style={{
             height: "100%",
             left: "auto",
+            right: "1rem",
           }}
           width={400}
         >
           <Modal.Body>
             <hr />
             <Heading level="2" size="small">
-              Scenerio:
+              Scenario
             </Heading>
             <fetcher.Form method="post" onSubmit={(e) => e.preventDefault()}>
-              {scenerios.map((scenerio) => {
+              {scenarios.map((scenario) => {
                 return (
-                  <Scenerio
-                    key={scenerio.type}
-                    tittel={scenerio.tittel}
-                    onClick={() => changeHandler(scenerio.type)}
+                  <Scenario
+                    key={scenario.type}
+                    tittel={scenario.tittel}
+                    onClick={() => changeHandler(scenario.type)}
                   />
                 );
               })}
@@ -86,7 +92,7 @@ export function DevTools() {
                 <Button
                   size="medium"
                   variant="secondary"
-                  onClick={() => changeHandler(ScenerioType.reset)}
+                  onClick={() => changeHandler(ScenarioType.reset)}
                   icon={<ArrowsCirclepathIcon aria-hidden />}
                 >
                   Reset testdata

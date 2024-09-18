@@ -4,19 +4,17 @@ import { times } from "remeda";
 import { uuidv7 as uuid } from "uuidv7";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
-export function lagRapporteringsperiode(
-  id: string,
-  fraOgMed: string,
-  tilOgMed: string
-): IRapporteringsperiode {
-  return {
-    id,
+export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
+  const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
+
+  const meldekort: IRapporteringsperiode = {
+    id: uuid(),
     status: "TilUtfylling",
     periode: {
       fraOgMed,
       tilOgMed,
     },
-    kanSendesFra: format(subDays(new Date(tilOgMed), 1), "yyyy-MM-dd"),
+    kanSendesFra: "",
     kanSendes: true,
     kanEndres: true,
     begrunnelseEndring: "",
@@ -24,22 +22,31 @@ export function lagRapporteringsperiode(
     registrertArbeidssoker: null,
     dager: times(14, (i) => ({
       dagIndex: i,
-      dato: format(addDays(new Date(fraOgMed), i), "yyyy-MM-dd"),
+      dato: "",
       aktiviteter: [],
     })),
+    ...props,
   };
+
+  meldekort.kanSendesFra = format(subDays(new Date(meldekort.periode.tilOgMed), 1), "yyyy-MM-dd");
+  meldekort.dager = meldekort.dager.map((dag, index) => ({
+    ...dag,
+    dato: format(addDays(new Date(meldekort.periode.fraOgMed), index), "yyyy-MM-dd"),
+  }));
+
+  return meldekort;
 }
 
 export function lagForstRapporteringsperiode() {
   const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
-  return lagRapporteringsperiode(uuid(), fraOgMed, tilOgMed);
+  return lagRapporteringsperiode({ periode: { fraOgMed, tilOgMed } });
 }
 
 export function leggTilForrigeRapporteringsperiode(
   navaerendePeriode: IRapporteringsperiode["periode"]
 ) {
   const { fraOgMed, tilOgMed } = beregnForrigePeriodeDato(navaerendePeriode.fraOgMed);
-  return lagRapporteringsperiode(uuid(), fraOgMed, tilOgMed);
+  return lagRapporteringsperiode({ id: uuid(), periode: { fraOgMed, tilOgMed } });
 }
 
 export function startEndring(navaerendePeriode: IRapporteringsperiode): IRapporteringsperiode {

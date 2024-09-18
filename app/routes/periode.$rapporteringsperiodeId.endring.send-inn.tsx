@@ -65,14 +65,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function RapporteringsPeriodeSendInnSide() {
-  const submit = useSubmit();
+  // const submit = useSubmit();
   const navigation = useNavigation();
   const navigate = useNavigate();
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-  const { rapporteringsperioder } = useLoaderData<typeof loader>();
+  // const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();

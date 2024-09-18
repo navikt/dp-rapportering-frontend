@@ -1,12 +1,11 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, BodyShort, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { Alert, BodyShort, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import type { action as RapporteringstypeAction } from "./api.rapporteringstype";
-import type { action as StartAction } from "./api.start";
 import { hentPeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
@@ -30,10 +29,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
-  console.log(rapporteringsperioder);
+
   const { getAppText, getLink, getRichText } = useSanity();
 
-  const startFetcher = useFetcher<typeof StartAction>();
   const rapporteringstypeFetcher = useFetcher<typeof RapporteringstypeAction>();
 
   const antallPerioder = rapporteringsperioder.length;
@@ -52,12 +50,10 @@ export default function RapporteringstypeSide() {
       ? getAppText("rapportering-neste")
       : getAppText("rapportering-til-utfylling");
 
-  function startUtfylling() {
-    startFetcher.submit(
-      { rapporteringsperiodeId: forstePeriode.id, rapporteringstype: type },
-      { method: "post", action: "/api/start" }
-    );
-  }
+  const nesteKnappLink =
+    type === Rapporteringstype.harIngenAktivitet
+      ? `/periode/${forstePeriode.id}/arbeidssoker`
+      : `/periode/${forstePeriode.id}/fyll-ut`;
 
   function endreRapporteringstype(valgtType: Rapporteringstype): void {
     setType(valgtType);
@@ -126,15 +122,16 @@ export default function RapporteringstypeSide() {
       </RadioGroup>
 
       <Center>
-        <Button
-          size="medium"
-          className="my-18 py4 px-16"
-          icon={<ArrowRightIcon aria-hidden />}
+        <RemixLink
+          as="Button"
+          to={nesteKnappLink}
+          variant="primary"
           iconPosition="right"
-          onClick={startUtfylling}
+          className="py-4 px-8"
+          icon={<ArrowRightIcon aria-hidden />}
         >
           {nesteKnappTekst}
-        </Button>
+        </RemixLink>
       </Center>
 
       <Center>

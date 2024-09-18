@@ -1,11 +1,12 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-react";
+import { Alert, Button, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
+import type { action as StartAction } from "./api.start";
 import { useSanity } from "~/hooks/useSanity";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
@@ -30,10 +31,18 @@ export default function Landingsside() {
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const { getAppText, getLink, getRichText } = useSanity();
+  const startFetcher = useFetcher<typeof StartAction>();
 
   const [samtykker, setSamtykker] = useState(false);
 
-  const nesteMeldekort = rapporteringsperioder[0];
+  const forstePeriode = rapporteringsperioder[0];
+
+  function startUtfylling() {
+    startFetcher.submit(
+      { rapporteringsperiodeId: forstePeriode.id },
+      { method: "post", action: "/api/start" }
+    );
+  }
 
   return (
     <>
@@ -43,11 +52,11 @@ export default function Landingsside() {
         </Alert>
       )}
 
-      {nesteMeldekort?.kanSendes === false && (
+      {forstePeriode?.kanSendes === false && (
         <Alert variant="info" className="my-8">
           <PortableText
             components={getSanityPortableTextComponents({
-              dato: nesteMeldekort.kanSendesFra,
+              dato: forstePeriode.kanSendesFra,
             })}
             value={getRichText("rapportering-for-tidlig-a-sende-meldekort")}
           />
@@ -58,7 +67,7 @@ export default function Landingsside() {
 
       <LesMer />
 
-      {nesteMeldekort?.kanSendes === true && (
+      {forstePeriode?.kanSendes === true && (
         <>
           <Heading size="small" level="2">
             {getAppText("rapportering-samtykke-tittel")}
@@ -76,17 +85,16 @@ export default function Landingsside() {
           </CheckboxGroup>
 
           <Center>
-            <RemixLink
+            <Button
               size="medium"
-              as="Button"
               className="my-18 py4 px-16"
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
-              to={"/rapporteringstype"}
+              onClick={startUtfylling}
               disabled={!samtykker}
             >
               {getAppText("rapportering-neste")}
-            </RemixLink>
+            </Button>
           </Center>
         </>
       )}

@@ -1,12 +1,12 @@
-import styles from "./Scenerio.module.css";
+import styles from "./Scenario.module.css";
 import { ChevronRightIcon } from "@navikt/aksel-icons";
 
-interface IScenerio {
+interface IScenario {
   tittel: string;
   onClick: () => void;
 }
 
-export function Scenerio({ tittel, onClick }: IScenerio) {
+export function Scenario({ tittel, onClick }: IScenario) {
   return (
     <div className={styles.buttonContainer}>
       <button onClick={onClick} className={styles.button}>

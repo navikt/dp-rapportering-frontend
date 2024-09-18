@@ -138,7 +138,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       <div className="navigasjon-container-to-knapper my-4">
         <RemixLink
           as="Button"
-          to={"/rapporteringstype"}
+          to={`/periode/${periode.id}/rapporteringstype`}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}

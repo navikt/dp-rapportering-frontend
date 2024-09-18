@@ -1,7 +1,10 @@
+import { format, getWeek, getYear, subDays } from "date-fns";
 import { Database } from "mocks/session";
-import { ScenerioType } from "~/devTools";
+import { ScenarioType } from "~/devTools";
+import { lagPeriodeDatoFor } from "~/devTools/periodedato";
 import {
   lagForstRapporteringsperiode,
+  lagRapporteringsperiode,
   leggTilForrigeRapporteringsperiode,
 } from "~/devTools/rapporteringsperiode";
 import {
@@ -121,28 +124,35 @@ const deleteAllInnsendteperioder = (db: Database) => {
   });
 };
 
-export function updateRapporteringsperioder(db: Database, scenerio: ScenerioType) {
-  switch (scenerio) {
-    case ScenerioType.ingen: {
+export function updateRapporteringsperioder(db: Database, scenario: ScenarioType) {
+  switch (scenario) {
+    case ScenarioType.ingen: {
       deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
       break;
     }
-    case ScenerioType.en: {
-      const perioder = findAllRapporteringsperioder(db);
+    case ScenarioType.fremtidig: {
+      deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
 
-      if (perioder.length === 0) {
-        db.rapporteringsperioder.create(lagForstRapporteringsperiode());
-      }
+      const uke = getWeek(new Date(), { weekStartsOn: 1 });
+      const år = getYear(new Date());
 
-      if (perioder.length > 1) {
-        deleteAllRapporteringsperioder(
-          db,
-          perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
-        );
-      }
+      const periode = lagPeriodeDatoFor(uke, år);
+
+      db.rapporteringsperioder.create(
+        lagRapporteringsperiode({
+          kanSendes: false,
+          periode,
+          kanSendesFra: format(subDays(new Date(periode.tilOgMed), 1), "yyyy-MM-dd"),
+        })
+      );
       break;
     }
-    case ScenerioType.to: {
+    case ScenarioType.en: {
+      deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
+      db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+      break;
+    }
+    case ScenarioType.to: {
       const rapporteringsperioder = findAllRapporteringsperioder(db);
 
       if (rapporteringsperioder.length === 0) {
@@ -160,7 +170,7 @@ export function updateRapporteringsperioder(db: Database, scenerio: ScenerioType
       break;
     }
 
-    case ScenerioType.reset: {
+    case ScenarioType.reset: {
       deleteAllInnsendteperioder(db);
       deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
       db.rapporteringsperioder.create(lagForstRapporteringsperiode());
@@ -193,7 +203,7 @@ export const withDb = (db: Database) => {
     deleteRapporteringsperiode: (id: string) => deleteRapporteringsperiode(db, id),
     lagreAktivitet: (rapporteringsperiodeId: string, dag: IRapporteringsperiodeDag) =>
       lagreAktivitet(db, rapporteringsperiodeId, dag),
-    updateRapporteringsperioder: (scenerio: ScenerioType) =>
-      updateRapporteringsperioder(db, scenerio),
+    updateRapporteringsperioder: (scenario: ScenarioType) =>
+      updateRapporteringsperioder(db, scenario),
   };
 };
