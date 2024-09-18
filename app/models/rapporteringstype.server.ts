@@ -2,7 +2,7 @@ import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import { INetworkResponse, Rapporteringstype } from "~/utils/types";
 
-export interface RapporteringstypeSvar {
+export interface IRapporteringstypeSvar {
   rapporteringstype: Rapporteringstype;
 }
 

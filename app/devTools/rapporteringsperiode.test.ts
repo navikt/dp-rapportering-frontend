@@ -7,7 +7,7 @@ describe("lagRapporteringsperiode", () => {
     const fraOgMed = "2024-06-08";
     const tilOgMed = "2024-06-21";
 
-    const rapporteringsperiode = lagRapporteringsperiode(id, fraOgMed, tilOgMed);
+    const rapporteringsperiode = lagRapporteringsperiode({ id, periode: { fraOgMed, tilOgMed } });
 
     expect(rapporteringsperiode.dager).toHaveLength(14);
     rapporteringsperiode.dager.forEach((dag, index) => {
@@ -22,7 +22,7 @@ describe("lagRapporteringsperiode", () => {
     const fraOgMed = "2024-06-08";
     const tilOgMed = "2024-06-21";
 
-    const rapporteringsperiode = lagRapporteringsperiode(id, fraOgMed, tilOgMed);
+    const rapporteringsperiode = lagRapporteringsperiode({ id, periode: { fraOgMed, tilOgMed } });
 
     const expectedKanSendesFra = new Date(tilOgMed);
     expectedKanSendesFra.setDate(expectedKanSendesFra.getDate() - 1);
@@ -41,8 +41,14 @@ describe("lagRapporteringsperiode", () => {
     const fraOgMed2 = "2024-10-01";
     const tilOgMed2 = "2024-10-14";
 
-    const rapporteringsperiode1 = lagRapporteringsperiode(id1, fraOgMed1, tilOgMed1);
-    const rapporteringsperiode2 = lagRapporteringsperiode(id2, fraOgMed2, tilOgMed2);
+    const rapporteringsperiode1 = lagRapporteringsperiode({
+      id: id1,
+      periode: { fraOgMed1, tilOgMed1 },
+    });
+    const rapporteringsperiode2 = lagRapporteringsperiode({
+      id: id2,
+      periode: { fraOgMed2, tilOgMed2 },
+    });
 
     expect(rapporteringsperiode1.id).not.toBe(rapporteringsperiode2.id);
   });

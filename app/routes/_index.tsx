@@ -4,6 +4,7 @@ import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
+import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as StartAction } from "./api.start";
@@ -15,8 +16,9 @@ import Center from "~/components/center/Center";
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
+    const session = await getSession(request);
 
-    return json({ rapporteringsperioder });
+    return json({ rapporteringsperioder, session });
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;

@@ -2,11 +2,13 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import type { AktivitetType, IAktivitet } from "~/models/aktivitet.server";
-import type {
-  IPeriode,
-  IRapporteringsperiode,
-  IRapporteringsperiodeDag,
+import {
+  type IPeriode,
+  type IRapporteringsperiode,
+  type IRapporteringsperiodeDag,
+  IRapporteringsperiodeStatus,
 } from "~/models/rapporteringsperiode.server";
+import { Rapporteringstype } from "~/utils/types";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 
 vi.mock("remix-validated-form", () => ({
@@ -42,7 +44,8 @@ const mockRapporteringsperiode: IRapporteringsperiode = {
   id: "1",
   periode: mockPeriode,
   dager: [mockRapporteringsperiodeDag],
-  status: "TilUtfylling",
+  status: IRapporteringsperiodeStatus.TilUtfylling,
+  rapporteringstype: Rapporteringstype.harAktivitet,
   kanSendesFra: "2024-06-01",
   kanSendes: true,
   kanEndres: false,

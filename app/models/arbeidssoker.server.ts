@@ -2,14 +2,14 @@ import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
 
-export interface ArbeidssokerSvar {
+export interface IArbeidssokerSvar {
   registrertArbeidssoker: boolean;
 }
 
 export async function lagreArbeidssokerSvar(
   request: Request,
   rapporteringsperiodeId: string,
-  svar: ArbeidssokerSvar
+  svar: IArbeidssokerSvar
 ): Promise<INetworkResponse> {
   const url = `${getEnv(
     "DP_RAPPORTERING_URL"

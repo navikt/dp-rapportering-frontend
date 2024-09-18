@@ -2,7 +2,10 @@
 import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  IRapporteringsperiodeStatus,
+} from "~/models/rapporteringsperiode.server";
 import { loader } from "~/routes/periode.$rapporteringsperiodeId.endre";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
@@ -26,7 +29,7 @@ describe("Start endring", () => {
       const endringsPeriode: IRapporteringsperiode = {
         ...rapporteringsperioderResponse[0],
         id: rapporteringsperioderResponse[0].id + 1,
-        status: "Endret",
+        status: IRapporteringsperiodeStatus.Endret,
       };
       server.use(
         http.post(
