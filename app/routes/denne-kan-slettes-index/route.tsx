@@ -11,7 +11,7 @@ import {
   IRapporteringsperiode,
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
-import { getRapporteringstype, setRapporteringstype } from "~/models/rapporteringstype.server";
+import { hentRapporteringstype, setRapporteringstype } from "~/models/rapporteringstype.server";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -23,7 +23,7 @@ import { DevelopmentContainer } from "~/components/development-container/Develop
 import { SessionModal } from "~/components/session-modal/SessionModal";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const rapporteringstype = await getRapporteringstype(request);
+  const rapporteringstype = await hentRapporteringstype(request);
   const session = await getSession(request);
   const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
 

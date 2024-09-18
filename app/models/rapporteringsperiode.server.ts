@@ -36,13 +36,27 @@ export async function startUtfylling(request: Request, periodeId: string): Promi
   });
 }
 
-export async function hentRapporteringsperioder(request: Request): Promise<Response> {
+export async function hentRapporteringsperioder(
+  request: Request
+): Promise<IRapporteringsperiode[]> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperioder`;
 
-  return await fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: await getHeaders(request),
   });
+
+  if (!response.ok) {
+    throw new Response("Feil i uthenting av rapporteringsperioder", { status: 500 });
+  }
+
+  if (response.status === 204) {
+    throw new Response("Ingen rapporteringsperioder funnet", { status: 404 });
+  }
+
+  const rapporteringsperioder: IRapporteringsperiode[] = await response.json();
+
+  return rapporteringsperioder;
 }
 
 export async function hentPeriode(

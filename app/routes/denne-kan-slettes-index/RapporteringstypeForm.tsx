@@ -1,6 +1,8 @@
+import type { action as RapporteringstypeAction } from "./route";
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useFetcher } from "@remix-run/react";
+import type { action as StartAction } from "../api.start";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 
@@ -19,8 +21,8 @@ export function RapporteringstypeForm({
 }: RapporteringstypeFormProps) {
   const { getAppText, getRichText } = useSanity();
 
-  const startFetcher = useFetcher();
-  const rapporteringstypeFetcher = useFetcher();
+  const startFetcher = useFetcher<typeof StartAction>();
+  const rapporteringstypeFetcher = useFetcher<typeof RapporteringstypeAction>();
 
   const handleChange = async (valgtType: Rapporteringstype) => {
     if (rapporteringstype === undefined) {

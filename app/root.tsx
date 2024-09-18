@@ -1,11 +1,12 @@
 /* eslint-disable */
 import { getDecoratorHTML } from "./dekorator/dekorator.server";
+import { DevTools } from "./devTools";
 import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanity } from "./sanity/sanity.types";
 import favicon16 from "/favicon-16x16.png";
 import favicon32 from "/favicon-32x32.png";
 import favicon from "/favicon.ico";
-import { Alert } from "@navikt/ds-react";
+import { Alert, Heading } from "@navikt/ds-react";
 import { json, redirect } from "@remix-run/node";
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from "@remix-run/react";
@@ -16,6 +17,7 @@ import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
 import { isLocalOrDemo } from "./utils/env.utils";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
+import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import Center from "./components/center/Center";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
@@ -143,7 +145,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const { getAppText } = useSanity();
+
+  return (
+    <>
+      <div className="rapportering-header">
+        <div className="rapportering-header-innhold">
+          <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
+            {getAppText("rapportering-tittel")}
+          </Heading>
+          {isLocalOrDemo && <DevTools />}
+        </div>
+      </div>
+      <div className="rapportering-container">
+        <Outlet />
+      </div>
+    </>
+  );
 }
 
 export function ErrorBoundary() {

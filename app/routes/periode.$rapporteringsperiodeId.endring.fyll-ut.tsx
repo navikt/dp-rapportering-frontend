@@ -90,69 +90,67 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   return (
     <>
-      <div className="rapportering-container">
-        <Heading tabIndex={-1} size={"large"} level={"2"} className="vo-fokus">
-          {getAppText("rapportering-periode-endre-tittel")}
-        </Heading>
-        <BodyLong className="tekst-subtil" spacing>
-          <PortableText value={getRichText("rapportering-periode-endre-beskrivelse")} />
-        </BodyLong>
+      <Heading tabIndex={-1} size={"large"} level={"2"} className="vo-fokus">
+        {getAppText("rapportering-periode-endre-tittel")}
+      </Heading>
+      <BodyLong className="tekst-subtil" spacing>
+        <PortableText value={getRichText("rapportering-periode-endre-beskrivelse")} />
+      </BodyLong>
 
-        <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
-        <AktivitetModal
-          rapporteringsperiode={periode}
-          valgtDato={valgtDato}
-          valgteAktiviteter={valgteAktiviteter}
-          setValgteAktiviteter={setValgteAktiviteter}
-          modalAapen={modalAapen}
-          lukkModal={lukkModal}
-        />
-        <div className="registert-meldeperiode-container">
-          <AktivitetOppsummering rapporteringsperiode={periode} />
-        </div>
-        <PortableText
-          components={getSanityPortableTextComponents({
-            "fra-dato": tidligstInnsendingDato,
-            "til-dato": senestInnsendingDato,
-          })}
-          value={getRichText("rapportering-periode-innsending-og-frist-dato")}
-        />
-        <div className="navigasjon-container-to-knapper my-4">
-          <RemixLink
-            as="Button"
-            to={`/innsendt`}
-            variant="secondary"
-            className="py-4 px-8"
-            icon={<ArrowLeftIcon aria-hidden />}
-            iconPosition="left"
-          >
-            {getLink("rapportering-knapp-tilbake").linkText}
-          </RemixLink>
-
-          <RemixLink
-            as="Button"
-            to={`/periode/${periode.id}/endring/begrunnelse`}
-            variant="primary"
-            icon={<ArrowRightIcon aria-hidden />}
-            iconPosition="right"
-            className="py-4 px-8"
-          >
-            {getAppText("rapportering-knapp-neste")}
-          </RemixLink>
-        </div>
-        <div className="navigasjon-container-en-knapp my-4">
-          <RemixLink
-            as="Link"
-            to={getLink("rapportering-endre-avbryt").linkUrl}
-            variant="primary"
-            className="py-4 px-8"
-          >
-            {getLink("rapportering-endre-avbryt").linkText}
-          </RemixLink>
-        </div>
-
-        <LagretAutomatisk />
+      <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
+      <AktivitetModal
+        rapporteringsperiode={periode}
+        valgtDato={valgtDato}
+        valgteAktiviteter={valgteAktiviteter}
+        setValgteAktiviteter={setValgteAktiviteter}
+        modalAapen={modalAapen}
+        lukkModal={lukkModal}
+      />
+      <div className="registert-meldeperiode-container">
+        <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
+      <PortableText
+        components={getSanityPortableTextComponents({
+          "fra-dato": tidligstInnsendingDato,
+          "til-dato": senestInnsendingDato,
+        })}
+        value={getRichText("rapportering-periode-innsending-og-frist-dato")}
+      />
+      <div className="navigasjon-container-to-knapper my-4">
+        <RemixLink
+          as="Button"
+          to={`/innsendt`}
+          variant="secondary"
+          className="py-4 px-8"
+          icon={<ArrowLeftIcon aria-hidden />}
+          iconPosition="left"
+        >
+          {getLink("rapportering-knapp-tilbake").linkText}
+        </RemixLink>
+
+        <RemixLink
+          as="Button"
+          to={`/periode/${periode.id}/endring/begrunnelse`}
+          variant="primary"
+          icon={<ArrowRightIcon aria-hidden />}
+          iconPosition="right"
+          className="py-4 px-8"
+        >
+          {getAppText("rapportering-knapp-neste")}
+        </RemixLink>
+      </div>
+      <div className="navigasjon-container-en-knapp my-4">
+        <RemixLink
+          as="Link"
+          to={getLink("rapportering-endre-avbryt").linkUrl}
+          variant="primary"
+          className="py-4 px-8"
+        >
+          {getLink("rapportering-endre-avbryt").linkText}
+        </RemixLink>
+      </div>
+
+      <LagretAutomatisk />
     </>
   );
 }

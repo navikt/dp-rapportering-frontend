@@ -31,13 +31,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 
 // TODO: Denne er lik som i periode.$rapporteringsperiodeId.send-inn.tsx
 export async function loader({ request }: LoaderFunctionArgs) {
-  const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
-
-  if (!rapporteringsperioderResponse.ok) {
-    throw new Response("Feil i uthenting av rapporteringsperiode", { status: 500 });
-  }
-
-  const rapporteringsperioder = await rapporteringsperioderResponse.json();
+  const rapporteringsperioder = await hentRapporteringsperioder(request);
 
   return json({ rapporteringsperioder });
 }
@@ -117,7 +111,7 @@ export default function RapporteringsPeriodeSendInnSide() {
   };
 
   return (
-    <div className="rapportering-container">
+    <>
       <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
         {getAppText("rapportering-endring-send-inn-tittel")}
       </Heading>
@@ -190,6 +184,6 @@ export default function RapporteringsPeriodeSendInnSide() {
           {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>
       </div>
-    </div>
+    </>
   );
 }

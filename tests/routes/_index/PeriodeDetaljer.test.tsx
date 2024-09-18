@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { PeriodeDetaljer } from "~/routes/_index/PeriodeDetaljer";
+import { PeriodeDetaljer } from "~/routes/denne-kan-slettes-index/PeriodeDetaljer";
 
 vi.mock("~/hooks/useSanity", () => ({
   useSanity: () => ({

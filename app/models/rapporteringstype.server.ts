@@ -1,13 +1,9 @@
 import { createCookie } from "@remix-run/node";
+import { Rapporteringstype } from "~/utils/types";
 
 export const rapporteringstypeCookie = createCookie("rapporteringstype");
 
-export enum Rapporteringstype {
-  harAktivitet = "harAktivitet",
-  harIngenAktivitet = "harIngenAktivitet",
-}
-
-export async function getRapporteringstype(
+export async function hentRapporteringstype(
   request: Request
 ): Promise<Rapporteringstype | undefined> {
   const cookieHeader = request.headers.get("Cookie");
@@ -16,7 +12,7 @@ export async function getRapporteringstype(
   return cookie["rapporteringstype"];
 }
 
-export async function setRapporteringstype(
+export async function settRapporteringstype(
   cookieHeader: string,
   rapporteringstype: Rapporteringstype | undefined
 ): Promise<string> {

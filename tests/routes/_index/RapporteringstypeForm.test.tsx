@@ -1,7 +1,7 @@
 import { useFetcher } from "@remix-run/react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { Mock, beforeEach, describe, expect, it, vi } from "vitest";
-import { RapporteringstypeForm } from "~/routes/_index/RapporteringstypeForm";
+import { RapporteringstypeForm } from "~/routes/denne-kan-slettes-index/RapporteringstypeForm";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 

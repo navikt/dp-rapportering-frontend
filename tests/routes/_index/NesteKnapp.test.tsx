@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, test, vi } from "vitest";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { NesteKnapp } from "~/routes/_index/NesteKnapp";
+import { NesteKnapp } from "~/routes/denne-kan-slettes-index/NesteKnapp";
 import { Rapporteringstype } from "~/utils/types";
 
 vi.mock("~/hooks/useSanity", () => ({

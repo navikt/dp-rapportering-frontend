@@ -40,51 +40,40 @@ export default function InnsendteRapporteringsPerioderSide() {
 
   return (
     <>
-      <div className="rapportering-header">
-        <div className="rapportering-header-innhold">
-          <Heading tabIndex={-1} className="vo-fokus" level="1" size="xlarge">
-            {getAppText("rapportering-innsendt-tittel")}
-          </Heading>
-        </div>
-      </div>
-      <div className="rapportering-container">
-        <Heading size={"medium"} level={"2"}>
-          {getAppText("rapportering-innsendt-beskrivelse-tittel")}
-        </Heading>
-        <BodyLong className="tekst-subtil" spacing>
-          {getAppText("rapportering-innsendt-beskrivelse-innhold")}
-        </BodyLong>
-        {innsendtPerioder.length === 0 && (
-          <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
-        )}
-        {innsendtPerioder.map((periode) => {
-          const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
-          return (
-            <div key={periode.id}>
-              <div className="graa-bakgrunn">
-                <Kalender
-                  key={periode.id}
-                  rapporteringsperiode={periode}
-                  visEndringslenke={periode.kanEndres}
-                  aapneModal={() => {}}
-                  readonly
-                />
-                {flatMapAktiviteter.length < 1 && (
-                  <p>{getAppText("rapportering-innsendt-ikke-fravaer")}</p>
-                )}
-              </div>
-              <AktivitetOppsummering rapporteringsperiode={periode} />
-              <br />
-              <hr aria-hidden />
+      <Heading size={"medium"} level={"2"}>
+        {getAppText("rapportering-innsendt-beskrivelse-tittel")}
+      </Heading>
+      <BodyLong className="tekst-subtil" spacing>
+        {getAppText("rapportering-innsendt-beskrivelse-innhold")}
+      </BodyLong>
+      {innsendtPerioder.length === 0 && (
+        <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
+      )}
+      {innsendtPerioder.map((periode) => {
+        const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
+        return (
+          <div key={periode.id}>
+            <div className="graa-bakgrunn">
+              <Kalender
+                key={periode.id}
+                rapporteringsperiode={periode}
+                visEndringslenke={periode.kanEndres}
+                aapneModal={() => {}}
+                readonly
+              />
+              {flatMapAktiviteter.length < 1 && (
+                <p>{getAppText("rapportering-innsendt-ikke-fravaer")}</p>
+              )}
             </div>
-          );
-        })}
+            <AktivitetOppsummering rapporteringsperiode={periode} />
+          </div>
+        );
+      })}
 
-        <div className="navigasjon-container">
-          <RemixLink as="Button" to="/" className="py-4 px-8">
-            {getAppText("rapportering-knapp-tilbake-til-start")}
-          </RemixLink>
-        </div>
+      <div className="navigasjon-container">
+        <RemixLink as="Button" to="/" className="py-4 px-8">
+          {getAppText("rapportering-knapp-tilbake-til-start")}
+        </RemixLink>
       </div>
     </>
   );
