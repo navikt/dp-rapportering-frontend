@@ -8,11 +8,17 @@ export interface IPeriode {
   tilOgMed: string;
 }
 
+export enum IRapporteringsperiodeStatus {
+  TilUtfylling = "TilUtfylling",
+  Innsendt = "Innsendt",
+  Endret = "Endret",
+}
+
 export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
-  status: "TilUtfylling" | "Innsendt" | "Endret";
+  status: IRapporteringsperiodeStatus;
   kanSendesFra: string;
   kanSendes: boolean;
   kanEndres: boolean;
@@ -91,15 +97,15 @@ export async function sendInnPeriode(
 ): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
-  const formData = await request.formData();
-  const html = formData.get("_html");
-  if (html === null || html.toString().trim() === "") {
-    throw new Error("Kunne ikke finne HTML med tekstene");
-  }
+  // const formData = await request.formData();
+  // const html = formData.get("_html");
+  // if (html === null || html.toString().trim() === "") {
+  //   throw new Error("Kunne ikke finne HTML med tekstene");
+  // }
 
   const rapporteringsperiodeWithHtml = {
     ...rapporteringsperiode,
-    html: html.toString().trim(),
+    // html: html.toString().trim(),
   };
 
   const standardHeaders = await getHeaders(request);

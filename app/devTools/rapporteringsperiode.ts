@@ -2,14 +2,17 @@ import { beregnForrigePeriodeDato, beregnNåværendePeriodeDato } from "./period
 import { addDays, format, subDays } from "date-fns";
 import { times } from "remeda";
 import { uuidv7 as uuid } from "uuidv7";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  IRapporteringsperiodeStatus,
+} from "~/models/rapporteringsperiode.server";
 
 export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
   const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
 
   const meldekort: IRapporteringsperiode = {
     id: uuid(),
-    status: "TilUtfylling",
+    status: IRapporteringsperiodeStatus.TilUtfylling,
     periode: {
       fraOgMed,
       tilOgMed,
@@ -54,7 +57,7 @@ export function startEndring(navaerendePeriode: IRapporteringsperiode): IRapport
     ...navaerendePeriode,
     id: uuid(),
     originalId: navaerendePeriode.id,
-    status: "Endret",
+    status: IRapporteringsperiodeStatus.Endret,
     kanEndres: false,
   };
 }
