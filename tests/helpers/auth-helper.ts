@@ -15,5 +15,5 @@ export function mockSession() {
 }
 
 export function endSessionMock() {
-  getRapporteringOboTokenSpy && getRapporteringOboTokenSpy.mockRestore();
+  getRapporteringOboTokenSpy?.mockRestore();
 }
