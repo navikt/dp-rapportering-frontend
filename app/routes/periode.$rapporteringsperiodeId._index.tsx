@@ -13,7 +13,7 @@ export default function RapporteringsPeriodeSide() {
     if (periode) {
       navigate(`/periode/${periode.id}/fyll-ut`, { replace: true });
     } else {
-      console.log("ingen periode i $rapporteringsperiode._index! :scream:");
+      navigate(`/`, { replace: true });
     }
   }, [navigate, periode]);
 

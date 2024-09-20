@@ -55,11 +55,11 @@ export async function hentRapporteringsperioder(
   });
 
   if (!response.ok) {
-    throw new Response("Feil i uthenting av rapporteringsperioder", { status: 500 });
+    throw new Response("Feil i uthenting av meldekort", { status: 500 });
   }
 
   if (response.status === 204) {
-    throw new Response("Ingen rapporteringsperioder funnet", { status: 404 });
+    throw new Response("Ingen meldekort funnet", { status: 404 });
   }
 
   const rapporteringsperioder: IRapporteringsperiode[] = await response.json();
@@ -71,24 +71,47 @@ export async function hentPeriode(
   request: Request,
   periodeId: string,
   hentOriginal: boolean = true
-): Promise<Response> {
+): Promise<IRapporteringsperiode> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}`;
 
-  return await fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: await getHeaders(request, {
       "Hent-Original": hentOriginal,
     }),
   });
+
+  if (!response.ok) {
+    throw new Response("Feil i uthenting av meldekort", { status: 500 });
+  }
+
+  const periode: IRapporteringsperiode = await response.json();
+
+  if (!periode) {
+    throw new Response("Fant ikke meldekortet", { status: 404 });
+  }
+
+  return periode;
 }
 
-export async function hentInnsendtePerioder(request: Request): Promise<Response> {
+export async function hentInnsendtePerioder(request: Request): Promise<IRapporteringsperiode[]> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`;
 
-  return await fetch(url, {
+  const respone = await fetch(url, {
     method: "GET",
     headers: await getHeaders(request),
   });
+
+  if (!respone.ok) {
+    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
+      status: 500,
+    });
+  }
+  if (respone.status === 204) {
+    return [];
+  }
+
+  return await respone.json();
 }
 
 export async function sendInnPeriode(
@@ -97,15 +120,15 @@ export async function sendInnPeriode(
 ): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
-  // const formData = await request.formData();
-  // const html = formData.get("_html");
-  // if (html === null || html.toString().trim() === "") {
-  //   throw new Error("Kunne ikke finne HTML med tekstene");
-  // }
+  const formData = await request.formData();
+  const html = formData.get("_html");
+  if (html === null || html.toString().trim() === "") {
+    throw new Error("Kunne ikke finne HTML med tekstene");
+  }
 
   const rapporteringsperiodeWithHtml = {
     ...rapporteringsperiode,
-    // html: html.toString().trim(),
+    html: html.toString().trim(),
   };
 
   const standardHeaders = await getHeaders(request);

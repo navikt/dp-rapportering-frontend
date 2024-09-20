@@ -3,7 +3,6 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 
@@ -11,19 +10,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const response = await hentPeriode(request, periodeId, false);
-
-  if (!response.ok) {
-    throw new Response("Feil i uthenting av rapporteringsperiode", { status: 500 });
-  }
-
-  const periode: IRapporteringsperiode = await response.json();
-
-  // TODO: Hvis periode er null, kast en 404
-
-  if (!periode) {
-    throw new Response("Fant ikke meldekortet", { status: 404 });
-  }
+  const periode = await hentPeriode(request, periodeId, false);
 
   return json({ periode });
 }

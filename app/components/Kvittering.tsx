@@ -14,7 +14,7 @@ interface Ikvittering {
 export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink } = useSanity();
   return (
-    <div>
+    <>
       <Alert variant="success" className="my-4">
         <Heading spacing size="small" level="3">
           {tittel}
@@ -45,6 +45,6 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
             : getLink("rapportering-periode-bekreftelse-tilbake").linkText}
         </RemixLink>
       </div>
-    </div>
+    </>
   );
 }

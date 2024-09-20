@@ -23,6 +23,7 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.u
 import { samleHtmlForPeriode } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import {
   AvregistertArbeidssokerAlert,
@@ -30,7 +31,6 @@ import {
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 
-// TODO: Denne er lik som i periode.$rapporteringsperiodeId.endring.send-inn.tsx
 export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
 
@@ -42,8 +42,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const periodeId = params.rapporteringsperiodeId;
 
-  const periodeResponse = await hentPeriode(request, periodeId, false);
-  const periode = await periodeResponse.json();
+  const periode = await hentPeriode(request, periodeId, false);
 
   const response = await sendInnPeriode(request, periode);
 
@@ -107,7 +106,11 @@ export default function RapporteringsPeriodeSendInnSide() {
   };
 
   return (
-    <div className="rapportering-container">
+    <>
+      <KanIkkeSendes kanSendes={periode.kanSendes}>
+        {getAppText("rapportering-periode-kan-ikke-sendes")}
+      </KanIkkeSendes>
+
       <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
         {getAppText("rapportering-send-inn-tittel")}
       </Heading>
@@ -155,7 +158,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           type="submit"
           variant="primary"
           iconPosition="right"
-          disabled={!confirmed || isSubmitting}
+          disabled={!periode.kanSendes || !confirmed || isSubmitting}
           className="py-4 px-8"
           name="_action"
           value="send-inn"
@@ -165,6 +168,6 @@ export default function RapporteringsPeriodeSendInnSide() {
             : getLink("rapportering-periode-send-inn-bekreft").linkText}
         </Button>
       </Form>
-    </div>
+    </>
   );
 }

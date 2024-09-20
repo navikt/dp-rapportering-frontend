@@ -49,13 +49,13 @@ export default function Landingsside() {
   return (
     <>
       {rapporteringsperioder.length === 0 && (
-        <Alert variant="info" className="my-8">
+        <Alert variant="info" className="my-8 alert-with-rich-text">
           <PortableText value={getRichText("rapportering-ingen-meldekort")} />
         </Alert>
       )}
 
       {forstePeriode?.kanSendes === false && (
-        <Alert variant="info" className="my-8 first-p-mt-0 last-p-mb-0">
+        <Alert variant="info" className="my-8 alert-with-rich-text">
           <PortableText
             components={getSanityPortableTextComponents({
               dato: forstePeriode.kanSendesFra,

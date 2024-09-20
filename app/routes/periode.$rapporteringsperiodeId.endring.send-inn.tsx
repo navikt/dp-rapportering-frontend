@@ -4,12 +4,12 @@ import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
-  // useLoaderData,
-  // useSubmit,
   Form,
   useActionData,
+  useLoaderData,
   useNavigate,
   useNavigation,
+  useSubmit,
 } from "@remix-run/react";
 import { useState } from "react";
 import invariant from "tiny-invariant";
@@ -20,14 +20,13 @@ import {
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-// import { samleHtmlForPeriode } from "~/utils/periode.utils";
+import { samleHtmlForPeriode } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 
-// TODO: Denne er lik som i periode.$rapporteringsperiodeId.send-inn.tsx
 export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
 
@@ -39,8 +38,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const periodeId = params.rapporteringsperiodeId;
 
-  const periodeResponse = await hentPeriode(request, periodeId, false);
-  const periode = await periodeResponse.json();
+  const periode = await hentPeriode(request, periodeId, false);
 
   const response = await sendInnPeriode(request, periode);
 
@@ -64,14 +62,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function RapporteringsPeriodeSendInnSide() {
-  // const submit = useSubmit();
+  const submit = useSubmit();
   const navigation = useNavigation();
   const navigate = useNavigate();
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-  // const { rapporteringsperioder } = useLoaderData<typeof loader>();
+  const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
@@ -94,16 +92,16 @@ export default function RapporteringsPeriodeSendInnSide() {
     navigation.formData &&
     navigation.formData.get("_action") === "send-inn";
 
-  // const addHtml = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const form = event.currentTarget;
-  //   const formData = new FormData(form);
+  const addHtml = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
 
-  //   const html = samleHtmlForPeriode(rapporteringsperioder, periode, getAppText, getRichText);
-  //   formData.set("_html", html);
+    const html = samleHtmlForPeriode(rapporteringsperioder, periode, getAppText, getRichText);
+    formData.set("_html", html);
 
-  //   submit(formData, { method: "post" });
-  // };
+    submit(formData, { method: "post" });
+  };
 
   return (
     <>
@@ -144,7 +142,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" className="navigasjon-container-to-knapper my-4">
+      <Form method="post" onSubmit={addHtml} className="navigasjon-container-to-knapper my-4">
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"

@@ -2,31 +2,14 @@ import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import {
-  type IRapporteringsperiode,
-  hentInnsendtePerioder,
-} from "~/models/rapporteringsperiode.server";
+import { hentInnsendtePerioder } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  let innsendtPerioder: IRapporteringsperiode[] = [];
-
-  const allePerioderResponse = await hentInnsendtePerioder(request);
-
-  if (!allePerioderResponse.ok) {
-    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
-      status: 500,
-    });
-  } else {
-    if (allePerioderResponse.status === 204) {
-      innsendtPerioder = [];
-    } else {
-      innsendtPerioder = await allePerioderResponse.json();
-    }
-  }
+  const innsendtPerioder = await hentInnsendtePerioder(request);
 
   return json({ innsendtPerioder });
 }
@@ -53,7 +36,7 @@ export default function InnsendteRapporteringsPerioderSide() {
         const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
         return (
           <div key={periode.id}>
-            <div className="graa-bakgrunn">
+            <div className="oppsummering">
               <Kalender
                 key={periode.id}
                 rapporteringsperiode={periode}

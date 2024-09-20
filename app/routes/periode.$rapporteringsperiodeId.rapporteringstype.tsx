@@ -9,6 +9,7 @@ import type { action as RapporteringstypeAction } from "./api.rapporteringstype"
 import { hentPeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import Center from "~/components/center/Center";
 
@@ -29,6 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
   const { getAppText, getLink, getRichText } = useSanity();
 
@@ -36,9 +38,8 @@ export default function RapporteringstypeSide() {
 
   const antallPerioder = rapporteringsperioder.length;
   const harFlerePerioder = antallPerioder > 1;
-  const forstePeriode = rapporteringsperioder[0];
 
-  const [type, setType] = useState<Rapporteringstype | null>(forstePeriode.rapporteringstype);
+  const [type, setType] = useState<Rapporteringstype | null>(periode.rapporteringstype);
 
   const rapporteringstypeFormLabel =
     rapporteringsperioder.length === 1
@@ -52,8 +53,8 @@ export default function RapporteringstypeSide() {
 
   const nesteKnappLink =
     type === Rapporteringstype.harIngenAktivitet
-      ? `/periode/${forstePeriode.id}/arbeidssoker`
-      : `/periode/${forstePeriode.id}/fyll-ut`;
+      ? `/periode/${periode.id}/arbeidssoker`
+      : `/periode/${periode.id}/fyll-ut`;
 
   function endreRapporteringstype(valgtType: Rapporteringstype): void {
     setType(valgtType);
@@ -66,7 +67,7 @@ export default function RapporteringstypeSide() {
 
     if (type) {
       rapporteringstypeFetcher.submit(
-        { rapporteringstype: type, rapporteringsperiodeId: forstePeriode.id },
+        { rapporteringstype: type, rapporteringsperiodeId: periode.id },
         { method: "post", action: "/api/rapporteringstype" }
       );
     }
@@ -105,7 +106,7 @@ export default function RapporteringstypeSide() {
 
       <RadioGroup
         legend={rapporteringstypeFormLabel}
-        description={hentPeriodeTekst(forstePeriode, getAppText)}
+        description={hentPeriodeTekst(periode, getAppText)}
         onChange={endreRapporteringstype}
         value={type}
       >

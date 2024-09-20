@@ -59,11 +59,16 @@ export const handlers = [
         db.addRapporteringsperioder({
           ...endretPeriode,
           status: IRapporteringsperiodeStatus.Innsendt,
+          kanEndres: false,
+          kanSendes: false,
         });
         return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
       }
 
-      db.updateRapporteringsperiode(periode.id, { status: IRapporteringsperiodeStatus.Innsendt });
+      db.updateRapporteringsperiode(periode.id, {
+        status: IRapporteringsperiodeStatus.Innsendt,
+        kanSendes: false,
+      });
 
       return HttpResponse.json({ id: periode.id }, { status: 200 });
     })
