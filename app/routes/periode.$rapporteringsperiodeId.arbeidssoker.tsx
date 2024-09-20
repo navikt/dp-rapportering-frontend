@@ -31,38 +31,36 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   return (
     <>
-      <div className="rapportering-container">
-        <ArbeidssokerRegisterering
-          rapporteringsperiodeId={periode.id}
-          registrertArbeidssoker={periode.registrertArbeidssoker}
-        />
-        <div className="navigasjon-container-to-knapper my-4">
-          <RemixLink
-            as="Button"
-            to={""}
-            onClick={() => navigate(-1)}
-            variant="secondary"
-            iconPosition="left"
-            icon={<ArrowLeftIcon aria-hidden />}
-            className="py-4 px-8"
-          >
-            {getLink("rapportering-periode-send-inn-tilbake").linkText}
-          </RemixLink>
+      <ArbeidssokerRegisterering
+        rapporteringsperiodeId={periode.id}
+        registrertArbeidssoker={periode.registrertArbeidssoker}
+      />
+      <div className="navigasjon-container-to-knapper my-4">
+        <RemixLink
+          as="Button"
+          to={""}
+          onClick={() => navigate(-1)}
+          variant="secondary"
+          iconPosition="left"
+          icon={<ArrowLeftIcon aria-hidden />}
+          className="py-4 px-8"
+        >
+          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+        </RemixLink>
 
-          <RemixLink
-            as="Button"
-            to={`/periode/${periode.id}/send-inn`}
-            variant="primary"
-            iconPosition="right"
-            icon={<ArrowRightIcon aria-hidden />}
-            className="py-4 px-8"
-            disabled={periode.registrertArbeidssoker === null}
-          >
-            {getAppText("rapportering-knapp-neste")}
-          </RemixLink>
-        </div>
-        <LagretAutomatisk />
+        <RemixLink
+          as="Button"
+          to={`/periode/${periode.id}/send-inn`}
+          variant="primary"
+          iconPosition="right"
+          icon={<ArrowRightIcon aria-hidden />}
+          className="py-4 px-8"
+          disabled={periode.registrertArbeidssoker === null}
+        >
+          {getAppText("rapportering-knapp-neste")}
+        </RemixLink>
       </div>
+      <LagretAutomatisk />
     </>
   );
 }

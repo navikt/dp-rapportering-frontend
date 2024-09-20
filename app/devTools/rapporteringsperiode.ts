@@ -2,43 +2,54 @@ import { beregnForrigePeriodeDato, beregnNåværendePeriodeDato } from "./period
 import { addDays, format, subDays } from "date-fns";
 import { times } from "remeda";
 import { uuidv7 as uuid } from "uuidv7";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  IRapporteringsperiodeStatus,
+} from "~/models/rapporteringsperiode.server";
 
-export function lagRapporteringsperiode(
-  id: string,
-  fraOgMed: string,
-  tilOgMed: string
-): IRapporteringsperiode {
-  return {
-    id,
-    status: "TilUtfylling",
+export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
+  const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
+
+  const meldekort: IRapporteringsperiode = {
+    id: uuid(),
+    status: IRapporteringsperiodeStatus.TilUtfylling,
     periode: {
       fraOgMed,
       tilOgMed,
     },
-    kanSendesFra: format(subDays(new Date(tilOgMed), 1), "yyyy-MM-dd"),
+    kanSendesFra: "",
     kanSendes: true,
     kanEndres: true,
     begrunnelseEndring: "",
+    rapporteringstype: null,
     registrertArbeidssoker: null,
     dager: times(14, (i) => ({
       dagIndex: i,
-      dato: format(addDays(new Date(fraOgMed), i), "yyyy-MM-dd"),
+      dato: "",
       aktiviteter: [],
     })),
+    ...props,
   };
+
+  meldekort.kanSendesFra = format(subDays(new Date(meldekort.periode.tilOgMed), 1), "yyyy-MM-dd");
+  meldekort.dager = meldekort.dager.map((dag, index) => ({
+    ...dag,
+    dato: format(addDays(new Date(meldekort.periode.fraOgMed), index), "yyyy-MM-dd"),
+  }));
+
+  return meldekort;
 }
 
 export function lagForstRapporteringsperiode() {
   const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
-  return lagRapporteringsperiode(uuid(), fraOgMed, tilOgMed);
+  return lagRapporteringsperiode({ periode: { fraOgMed, tilOgMed } });
 }
 
 export function leggTilForrigeRapporteringsperiode(
   navaerendePeriode: IRapporteringsperiode["periode"]
 ) {
   const { fraOgMed, tilOgMed } = beregnForrigePeriodeDato(navaerendePeriode.fraOgMed);
-  return lagRapporteringsperiode(uuid(), fraOgMed, tilOgMed);
+  return lagRapporteringsperiode({ id: uuid(), periode: { fraOgMed, tilOgMed } });
 }
 
 export function startEndring(navaerendePeriode: IRapporteringsperiode): IRapporteringsperiode {
@@ -46,7 +57,7 @@ export function startEndring(navaerendePeriode: IRapporteringsperiode): IRapport
     ...navaerendePeriode,
     id: uuid(),
     originalId: navaerendePeriode.id,
-    status: "Endret",
+    status: IRapporteringsperiodeStatus.Endret,
     kanEndres: false,
   };
 }

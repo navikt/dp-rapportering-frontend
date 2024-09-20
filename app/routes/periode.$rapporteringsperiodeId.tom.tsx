@@ -12,7 +12,10 @@ export default function TomRapporteringsPeriodeSide() {
 
   const navigate = useNavigate();
   return (
-    <div className="rapportering-container">
+    <>
+      {periode.kanSendes === false && (
+        <Alert variant="warning">{getAppText("rapportering-periode-kan-ikke-sendes")}</Alert>
+      )}
       <Alert variant="info">
         <Heading spacing size="small" level="3">
           {getAppText("rapportering-tom-periode-tittel")}
@@ -49,6 +52,6 @@ export default function TomRapporteringsPeriodeSide() {
           {getAppText("rapportering-knapp-neste")}
         </RemixLink>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,13 +1,22 @@
+import { format, getWeek, getYear, subDays } from "date-fns";
 import { Database } from "mocks/session";
-import { ScenerioType } from "~/devTools";
+import { ScenarioType } from "~/devTools";
+import {
+  beregnNåværendePeriodeDato,
+  formatereDato,
+  lagPeriodeDatoFor,
+} from "~/devTools/periodedato";
 import {
   lagForstRapporteringsperiode,
+  lagRapporteringsperiode,
   leggTilForrigeRapporteringsperiode,
 } from "~/devTools/rapporteringsperiode";
 import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
+  IRapporteringsperiodeStatus,
 } from "~/models/rapporteringsperiode.server";
+import { Rapporteringstype } from "~/utils/types";
 
 function seedRapporteringsperioder(db: Database) {
   db.rapporteringsperioder.create(lagForstRapporteringsperiode());
@@ -37,6 +46,11 @@ function findAllInnsendtePerioder(db: Database) {
     where: {
       status: {
         equals: "Innsendt",
+      },
+    },
+    orderBy: {
+      periode: {
+        fraOgMed: "desc",
       },
     },
   }) as IRapporteringsperiode[];
@@ -95,7 +109,9 @@ function lagreAktivitet(
   }
 }
 
-function deleteAllRapporteringsperioder(db: Database, perioder: IRapporteringsperiode[]) {
+function deleteAllRapporteringsperioder(db: Database) {
+  const perioder = db.rapporteringsperioder.findMany({}) as IRapporteringsperiode[];
+
   perioder.forEach((periode) => {
     db.rapporteringsperioder.delete({
       where: {
@@ -121,51 +137,90 @@ const deleteAllInnsendteperioder = (db: Database) => {
   });
 };
 
-export function updateRapporteringsperioder(db: Database, scenerio: ScenerioType) {
-  switch (scenerio) {
-    case ScenerioType.ingen: {
-      deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
-      break;
-    }
-    case ScenerioType.en: {
-      const perioder = findAllRapporteringsperioder(db);
-
-      if (perioder.length === 0) {
-        db.rapporteringsperioder.create(lagForstRapporteringsperiode());
-      }
-
-      if (perioder.length > 1) {
-        deleteAllRapporteringsperioder(
-          db,
-          perioder.filter((periode) => periode.id !== perioder.reverse()[0].id)
-        );
-      }
-      break;
-    }
-    case ScenerioType.to: {
-      const rapporteringsperioder = findAllRapporteringsperioder(db);
-
-      if (rapporteringsperioder.length === 0) {
-        db.rapporteringsperioder.create(lagForstRapporteringsperiode());
-        db.rapporteringsperioder.create(
-          leggTilForrigeRapporteringsperiode(findAllRapporteringsperioder(db)[0].periode)
-        );
-      }
-
-      if (rapporteringsperioder.length === 1) {
-        db.rapporteringsperioder.create(
-          leggTilForrigeRapporteringsperiode(rapporteringsperioder[0].periode)
-        );
-      }
+export function updateRapporteringsperioder(db: Database, scenario: ScenarioType) {
+  switch (scenario) {
+    case ScenarioType.ingen: {
+      deleteAllRapporteringsperioder(db);
       break;
     }
 
-    case ScenerioType.reset: {
-      deleteAllInnsendteperioder(db);
-      deleteAllRapporteringsperioder(db, findAllRapporteringsperioder(db));
+    case ScenarioType.fremtidig: {
+      deleteAllRapporteringsperioder(db);
+
+      const uke = getWeek(new Date(), { weekStartsOn: 1 });
+      const år = getYear(new Date());
+
+      const periode = lagPeriodeDatoFor(uke, år);
+
+      db.rapporteringsperioder.create(
+        lagRapporteringsperiode({
+          kanSendes: false,
+          periode,
+          kanSendesFra: format(subDays(new Date(periode.tilOgMed), 1), "yyyy-MM-dd"),
+        })
+      );
+      break;
+    }
+
+    case ScenarioType.reset:
+    case ScenarioType.en: {
+      deleteAllRapporteringsperioder(db);
       db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+      break;
+    }
 
-      return findAllRapporteringsperioder(db);
+    case ScenarioType.to: {
+      deleteAllRapporteringsperioder(db);
+      db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+      db.rapporteringsperioder.create(
+        leggTilForrigeRapporteringsperiode(findAllRapporteringsperioder(db)[0].periode)
+      );
+      break;
+    }
+
+    case ScenarioType.innsendte: {
+      deleteAllRapporteringsperioder(db);
+
+      const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
+
+      const periode1 = {
+        fraOgMed: formatereDato(subDays(new Date(fraOgMed), 14)),
+        tilOgMed: formatereDato(subDays(new Date(fraOgMed), 1)),
+      };
+
+      const periode2 = {
+        fraOgMed: formatereDato(subDays(new Date(fraOgMed), 28)),
+        tilOgMed: formatereDato(subDays(new Date(fraOgMed), 15)),
+      };
+
+      db.rapporteringsperioder.create(
+        lagRapporteringsperiode({
+          kanSendes: false,
+          status: IRapporteringsperiodeStatus.Innsendt,
+          rapporteringstype: Rapporteringstype.harAktivitet,
+          periode: periode1,
+          kanSendesFra: format(subDays(new Date(periode1.tilOgMed), 1), "yyyy-MM-dd"),
+        })
+      );
+
+      db.rapporteringsperioder.create(
+        lagRapporteringsperiode({
+          kanSendes: false,
+          rapporteringstype: Rapporteringstype.harAktivitet,
+          status: IRapporteringsperiodeStatus.Innsendt,
+          periode: periode2,
+          kanSendesFra: format(subDays(new Date(periode2.fraOgMed), 1), "yyyy-MM-dd"),
+        })
+      );
+
+      db.rapporteringsperioder.create(
+        lagRapporteringsperiode({
+          periode: {
+            fraOgMed,
+            tilOgMed,
+          },
+        })
+      );
     }
   }
 }
@@ -193,7 +248,8 @@ export const withDb = (db: Database) => {
     deleteRapporteringsperiode: (id: string) => deleteRapporteringsperiode(db, id),
     lagreAktivitet: (rapporteringsperiodeId: string, dag: IRapporteringsperiodeDag) =>
       lagreAktivitet(db, rapporteringsperiodeId, dag),
-    updateRapporteringsperioder: (scenerio: ScenerioType) =>
-      updateRapporteringsperioder(db, scenerio),
+    deleteAllInnsendteperioder: () => deleteAllInnsendteperioder(db),
+    updateRapporteringsperioder: (scenario: ScenarioType) =>
+      updateRapporteringsperioder(db, scenario),
   };
 };

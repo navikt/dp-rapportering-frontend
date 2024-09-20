@@ -1,31 +1,35 @@
-import { createCookie } from "@remix-run/node";
+import { getEnv } from "~/utils/env.utils";
+import { getHeaders } from "~/utils/fetch.utils";
+import { INetworkResponse, Rapporteringstype } from "~/utils/types";
 
-export const rapporteringstypeCookie = createCookie("rapporteringstype");
-
-export enum Rapporteringstype {
-  harAktivitet = "harAktivitet",
-  harIngenAktivitet = "harIngenAktivitet",
+export interface IRapporteringstypeSvar {
+  rapporteringstype: Rapporteringstype;
 }
 
-export async function getRapporteringstype(
-  request: Request
-): Promise<Rapporteringstype | undefined> {
-  const cookieHeader = request.headers.get("Cookie");
+export async function lagreRapporteringstype(
+  request: Request,
+  rapporteringsperiodeId: string,
+  rapporteringstype: Rapporteringstype
+): Promise<INetworkResponse> {
+  const url = `${getEnv(
+    "DP_RAPPORTERING_URL"
+  )}/rapporteringsperiode/${rapporteringsperiodeId}/rapporteringstype`;
 
-  const cookie = (await rapporteringstypeCookie.parse(cookieHeader)) || {};
-  return cookie["rapporteringstype"];
-}
+  const response = await fetch(url, {
+    method: "POST",
+    headers: await getHeaders(request),
+    body: JSON.stringify({ rapporteringstype }),
+  });
 
-export async function setRapporteringstype(
-  cookieHeader: string,
-  rapporteringstype: Rapporteringstype | undefined
-): Promise<string> {
-  const cookie = (await rapporteringstypeCookie.parse(cookieHeader)) || {};
+  if (!response.ok) {
+    return {
+      status: "error",
+      error: {
+        statusCode: response.status,
+        statusText: "Det har skjedd en feil ved lagring av rapporteringstype, prøv igjen.",
+      },
+    };
+  }
 
-  cookie["rapporteringstype"] = rapporteringstype;
-  return rapporteringstypeCookie.serialize(cookie);
-}
-
-export async function resetRapporteringstypeCookie() {
-  return rapporteringstypeCookie.serialize("", { maxAge: 0 });
+  return { status: "success" };
 }

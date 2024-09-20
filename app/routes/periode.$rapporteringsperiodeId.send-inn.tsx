@@ -19,27 +19,20 @@ import {
   hentRapporteringsperioder,
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
-import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
-import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { samleHtmlForPeriode } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import {
   AvregistertArbeidssokerAlert,
   RegistertArbeidssokerAlert,
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { Kalender } from "~/components/kalender/Kalender";
 
-// TODO: Denne er lik som i periode.$rapporteringsperiodeId.endring.send-inn.tsx
 export async function loader({ request }: LoaderFunctionArgs) {
-  const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
-
-  if (!rapporteringsperioderResponse.ok) {
-    throw new Response("Feil i uthenting av rapporteringsperiode", { status: 500 });
-  }
-
-  const rapporteringsperioder = await rapporteringsperioderResponse.json();
+  const rapporteringsperioder = await hentRapporteringsperioder(request);
 
   return json({ rapporteringsperioder });
 }
@@ -49,17 +42,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const periodeId = params.rapporteringsperiodeId;
 
-  const periodeResponse = await hentPeriode(request, periodeId, false);
-  const periode = await periodeResponse.json();
+  const periode = await hentPeriode(request, periodeId, false);
 
   const response = await sendInnPeriode(request, periode);
 
   if (response.ok) {
-    return redirect(`/periode/${periodeId}/bekreftelse`, {
-      headers: {
-        "Set-Cookie": await resetRapporteringstypeCookie(),
-      },
-    });
+    return redirect(`/periode/${periodeId}/bekreftelse`);
   } else {
     logger.warn(`Klarte ikke sende inn rapportering med id: ${periodeId}`, {
       statustext: response.statusText,
@@ -118,7 +106,11 @@ export default function RapporteringsPeriodeSendInnSide() {
   };
 
   return (
-    <div className="rapportering-container">
+    <>
+      <KanIkkeSendes kanSendes={periode.kanSendes}>
+        {getAppText("rapportering-periode-kan-ikke-sendes")}
+      </KanIkkeSendes>
+
       <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
         {getAppText("rapportering-send-inn-tittel")}
       </Heading>
@@ -130,7 +122,10 @@ export default function RapporteringsPeriodeSendInnSide() {
         <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
       </div>
 
-      <AktivitetOppsummering rapporteringsperiode={periode} />
+      <div className="oppsummering">
+        <Kalender rapporteringsperiode={periode} readonly={true} aapneModal={() => {}} />
+        <AktivitetOppsummering rapporteringsperiode={periode} />
+      </div>
 
       {periode.registrertArbeidssoker ? (
         <RegistertArbeidssokerAlert />
@@ -143,7 +138,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Checkbox>
 
       {actionData?.error && (
-        <Alert variant="error" className={styles.feilmelding}>
+        <Alert variant="error" className="feilmelding">
           {actionData.error}
         </Alert>
       )}
@@ -163,7 +158,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           type="submit"
           variant="primary"
           iconPosition="right"
-          disabled={!confirmed || isSubmitting}
+          disabled={!periode.kanSendes || !confirmed || isSubmitting}
           className="py-4 px-8"
           name="_action"
           value="send-inn"
@@ -173,6 +168,6 @@ export default function RapporteringsPeriodeSendInnSide() {
             : getLink("rapportering-periode-send-inn-bekreft").linkText}
         </Button>
       </Form>
-    </div>
+    </>
   );
 }

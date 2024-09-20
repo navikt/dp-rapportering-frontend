@@ -2,7 +2,7 @@ import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
 
-export interface BegrunnelseSvar {
+export interface IBegrunnelseSvar {
   begrunnelseEndring: string;
 }
 

@@ -8,40 +8,36 @@ interface IProps {
   rapporteringsperiode: IRapporteringsperiode;
 }
 
-export function AktivitetOppsummering(props: IProps) {
+export function AktivitetOppsummering({ rapporteringsperiode }: IProps) {
   const { getAppText } = useSanity();
 
-  const rapporteringsperiode = props.rapporteringsperiode;
-
   return (
-    <>
-      <div className={styles.aktivitetOppsummeringKontainer}>
-        <p className="tekst-subtil">{getAppText("rapportering-oppsummering-tittel")}</p>
-        <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
-          <p>
-            {getAppText("rapportering-arbeid")}
-            <span>{hentTotaltArbeidstimerTekst(rapporteringsperiode, getAppText)}</span>
-          </p>
-        </div>
-        <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
-          <p>
-            {getAppText("rapportering-syk")}
-            <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Syk")}</span>
-          </p>
-        </div>
-        <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
-          <p>
-            {getAppText("rapportering-fraevaer")}
-            <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Fravaer")}</span>
-          </p>
-        </div>
-        <div className={classNames(styles.aktivitetOppsummeringData, styles.utdanning)}>
-          <p>
-            {getAppText("rapportering-utdanning")}
-            <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Utdanning")}</span>
-          </p>
-        </div>
+    <div className={styles.aktivitetOppsummeringKontainer}>
+      <p className="tekst-subtil">{getAppText("rapportering-oppsummering-tittel")}</p>
+      <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
+        <p>
+          {getAppText("rapportering-arbeid")}
+          <span>{hentTotaltArbeidstimerTekst(rapporteringsperiode, getAppText)}</span>
+        </p>
       </div>
-    </>
+      <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
+        <p>
+          {getAppText("rapportering-syk")}
+          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Syk")}</span>
+        </p>
+      </div>
+      <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
+        <p>
+          {getAppText("rapportering-fraevaer")}
+          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Fravaer")}</span>
+        </p>
+      </div>
+      <div className={classNames(styles.aktivitetOppsummeringData, styles.utdanning)}>
+        <p>
+          {getAppText("rapportering-utdanning")}
+          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Utdanning")}</span>
+        </p>
+      </div>
+    </div>
   );
 }

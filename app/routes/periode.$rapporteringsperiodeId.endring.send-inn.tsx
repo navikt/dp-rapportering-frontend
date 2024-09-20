@@ -11,7 +11,7 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import invariant from "tiny-invariant";
 import { logger } from "~/models/logger.server";
 import {
@@ -19,8 +19,6 @@ import {
   hentRapporteringsperioder,
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
-import { resetRapporteringstypeCookie } from "~/models/rapporteringstype.server";
-import styles from "~/routes-styles/rapportering.module.css";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { samleHtmlForPeriode } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
@@ -29,15 +27,8 @@ import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 
-// TODO: Denne er lik som i periode.$rapporteringsperiodeId.send-inn.tsx
 export async function loader({ request }: LoaderFunctionArgs) {
-  const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
-
-  if (!rapporteringsperioderResponse.ok) {
-    throw new Response("Feil i uthenting av rapporteringsperiode", { status: 500 });
-  }
-
-  const rapporteringsperioder = await rapporteringsperioderResponse.json();
+  const rapporteringsperioder = await hentRapporteringsperioder(request);
 
   return json({ rapporteringsperioder });
 }
@@ -47,18 +38,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const periodeId = params.rapporteringsperiodeId;
 
-  const periodeResponse = await hentPeriode(request, periodeId, false);
-  const periode = await periodeResponse.json();
+  const periode = await hentPeriode(request, periodeId, false);
 
   const response = await sendInnPeriode(request, periode);
 
   if (response.ok) {
     const { id } = await response.json();
-    return redirect(`/periode/${id}/endring/bekreftelse`, {
-      headers: {
-        "Set-Cookie": await resetRapporteringstypeCookie(),
-      },
-    });
+    return redirect(`/periode/${id}/endring/bekreftelse`);
   } else {
     logger.warn(`Klarte ikke sende inn rapportering med id: ${periodeId}`, {
       statustext: response.statusText,
@@ -100,6 +86,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
   }
 
+  // TODO: Det må vel finnes en bedre måte å sette isSubmitting på?
   const isSubmitting =
     navigation.state !== "idle" &&
     navigation.formData &&
@@ -117,7 +104,7 @@ export default function RapporteringsPeriodeSendInnSide() {
   };
 
   return (
-    <div className="rapportering-container">
+    <>
       <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
         {getAppText("rapportering-endring-send-inn-tittel")}
       </Heading>
@@ -150,7 +137,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Checkbox>
 
       {actionData?.error && (
-        <Alert variant="error" className={styles.feilmelding}>
+        <Alert variant="error" className="feilmelding">
           {actionData.error}
         </Alert>
       )}
@@ -190,6 +177,6 @@ export default function RapporteringsPeriodeSendInnSide() {
           {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>
       </div>
-    </div>
+    </>
   );
 }

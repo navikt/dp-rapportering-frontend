@@ -6,15 +6,10 @@ import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { Kvittering } from "~/components/Kvittering";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const rapporteringsperioderResponse = await hentRapporteringsperioder(request);
+  const rapporteringsperioder = await hentRapporteringsperioder(request);
+  const harNestePeriode = rapporteringsperioder.length > 0;
 
-  if (rapporteringsperioderResponse.ok) {
-    const rapporteringsperioder = await rapporteringsperioderResponse.json();
-    const harNestePeriode = rapporteringsperioder.length > 0;
-    return json({ harNestePeriode });
-  }
-
-  return json({ harNestePeriode: false });
+  return json({ harNestePeriode });
 }
 
 export default function RapporteringsPeriodesBekreftelsesSide() {
@@ -23,12 +18,10 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
   const { getAppText } = useSanity();
 
   return (
-    <div className="rapportering-container">
-      <Kvittering
-        tittel={getAppText("rapportering-periode-bekreftelse-tittel")}
-        periode={periode}
-        harNestePeriode={harNestePeriode}
-      />
-    </div>
+    <Kvittering
+      tittel={getAppText("rapportering-periode-bekreftelse-tittel")}
+      periode={periode}
+      harNestePeriode={harNestePeriode}
+    />
   );
 }

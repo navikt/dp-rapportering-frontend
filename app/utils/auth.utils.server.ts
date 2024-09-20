@@ -15,7 +15,8 @@ export function sessionExpiresIn(request: Request) {
 
   try {
     return expiresIn(token);
-  } catch (e) {
+    // eslint-disable-next-line
+  } catch (e: unknown) {
     return 0;
   }
 }

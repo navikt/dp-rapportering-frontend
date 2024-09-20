@@ -1,20 +1,28 @@
 import type { IAktivitet } from "./aktivitet.server";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
+import { Rapporteringstype } from "~/utils/types";
 
 export interface IPeriode {
   fraOgMed: string;
   tilOgMed: string;
 }
 
+export enum IRapporteringsperiodeStatus {
+  TilUtfylling = "TilUtfylling",
+  Innsendt = "Innsendt",
+  Endret = "Endret",
+}
+
 export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
-  status: "TilUtfylling" | "Innsendt" | "Endret";
+  status: IRapporteringsperiodeStatus;
   kanSendesFra: string;
   kanSendes: boolean;
   kanEndres: boolean;
+  rapporteringstype: Rapporteringstype | null;
   begrunnelseEndring?: string;
   registrertArbeidssoker: boolean | null;
   originalId?: string;
@@ -36,37 +44,74 @@ export async function startUtfylling(request: Request, periodeId: string): Promi
   });
 }
 
-export async function hentRapporteringsperioder(request: Request): Promise<Response> {
+export async function hentRapporteringsperioder(
+  request: Request
+): Promise<IRapporteringsperiode[]> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperioder`;
 
-  return await fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: await getHeaders(request),
   });
+
+  if (!response.ok) {
+    throw new Response("Feil i uthenting av meldekort", { status: 500 });
+  }
+
+  if (response.status === 204) {
+    throw new Response("Ingen meldekort funnet", { status: 404 });
+  }
+
+  const rapporteringsperioder: IRapporteringsperiode[] = await response.json();
+
+  return rapporteringsperioder;
 }
 
 export async function hentPeriode(
   request: Request,
   periodeId: string,
   hentOriginal: boolean = true
-): Promise<Response> {
+): Promise<IRapporteringsperiode> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}`;
 
-  return await fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: await getHeaders(request, {
       "Hent-Original": hentOriginal,
     }),
   });
+
+  if (!response.ok) {
+    throw new Response("Feil i uthenting av meldekort", { status: 500 });
+  }
+
+  const periode: IRapporteringsperiode = await response.json();
+
+  if (!periode) {
+    throw new Response("Fant ikke meldekortet", { status: 404 });
+  }
+
+  return periode;
 }
 
-export async function hentInnsendtePerioder(request: Request): Promise<Response> {
+export async function hentInnsendtePerioder(request: Request): Promise<IRapporteringsperiode[]> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`;
 
-  return await fetch(url, {
+  const respone = await fetch(url, {
     method: "GET",
     headers: await getHeaders(request),
   });
+
+  if (!respone.ok) {
+    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
+      status: 500,
+    });
+  }
+  if (respone.status === 204) {
+    return [];
+  }
+
+  return await respone.json();
 }
 
 export async function sendInnPeriode(

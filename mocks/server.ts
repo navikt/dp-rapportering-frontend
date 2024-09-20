@@ -14,5 +14,5 @@ export const start = (server: SetupServerApi) => {
   process.once("SIGINT", () => server.close());
   process.once("SIGTERM", () => server.close());
 
-  console.info("🔶 Mock server");
+  console.info("🤫 Mock server");
 };

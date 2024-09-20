@@ -9,6 +9,7 @@ import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { validator } from "~/utils/validering.util";
 import { useSanity } from "~/hooks/useSanity";
 import { FormattertDato } from "../FormattertDato";
+import { LesMer } from "../LesMer";
 import { AktivitetCheckboxes } from "../aktivitet-checkbox/AktivitetCheckboxes";
 
 interface IProps {
@@ -69,6 +70,8 @@ export function AktivitetModal({
                 aktiviteter={dag.aktiviteter}
               />
             </div>
+
+            <LesMer />
 
             {actionData?.status === "error" && actionData?.error && (
               <Alert variant="error" className={styles.feilmelding}>

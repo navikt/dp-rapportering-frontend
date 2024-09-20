@@ -1,4 +1,7 @@
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  type IRapporteringsperiode,
+  IRapporteringsperiodeStatus,
+} from "~/models/rapporteringsperiode.server";
 
 export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
   {
@@ -7,8 +10,9 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       fraOgMed: "2023-05-01",
       tilOgMed: "2023-05-14",
     },
-    status: "TilUtfylling",
+    status: IRapporteringsperiodeStatus.TilUtfylling,
     kanSendesFra: "2023-05-13",
+    rapporteringstype: null,
     kanSendes: true,
     kanEndres: true,
     registrertArbeidssoker: false,
@@ -91,8 +95,9 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
       fraOgMed: "2023-05-15",
       tilOgMed: "2023-05-28",
     },
-    status: "Innsendt",
+    status: IRapporteringsperiodeStatus.Innsendt,
     kanSendesFra: "2023-05-27",
+    rapporteringstype: null,
     kanSendes: false,
     kanEndres: true,
     registrertArbeidssoker: null,

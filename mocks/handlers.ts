@@ -2,12 +2,14 @@ import { withDb } from "./responses/db";
 import { sessionRecord } from "./session";
 import { HttpResponse, JsonBodyType, PathParams, bypass, http } from "msw";
 import { hentEndringsId, startEndring } from "~/devTools/rapporteringsperiode";
-import { ArbeidssokerSvar } from "~/models/arbeidssoker.server";
-import { BegrunnelseSvar } from "~/models/begrunnelse.server";
+import { IArbeidssokerSvar } from "~/models/arbeidssoker.server";
+import { IBegrunnelseSvar } from "~/models/begrunnelse.server";
 import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
+  IRapporteringsperiodeStatus,
 } from "~/models/rapporteringsperiode.server";
+import { IRapporteringstypeSvar } from "~/models/rapporteringstype.server";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 
 interface RequestHandler {
@@ -49,16 +51,24 @@ export const handlers = [
     withDbHandler(async ({ db, request }) => {
       const periode = (await request.json()) as IRapporteringsperiode;
 
-      if (periode.status === "Endret") {
+      if (periode.status === IRapporteringsperiodeStatus.Endret) {
         const originalPeriode = db.findRapporteringsperiodeById(periode.originalId as string);
         db.updateRapporteringsperiode(originalPeriode.id, { kanEndres: false });
 
         const endretPeriode = hentEndringsId(periode);
-        db.addRapporteringsperioder({ ...endretPeriode, status: "Innsendt" });
+        db.addRapporteringsperioder({
+          ...endretPeriode,
+          status: IRapporteringsperiodeStatus.Innsendt,
+          kanEndres: false,
+          kanSendes: false,
+        });
         return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
       }
 
-      db.updateRapporteringsperiode(periode.id, { status: "Innsendt" });
+      db.updateRapporteringsperiode(periode.id, {
+        status: IRapporteringsperiodeStatus.Innsendt,
+        kanSendes: false,
+      });
 
       return HttpResponse.json({ id: periode.id }, { status: 200 });
     })
@@ -108,7 +118,7 @@ export const handlers = [
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/arbeidssoker`,
     withDbHandler(async ({ db, params, request }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
-      const { registrertArbeidssoker } = (await request.json()) as ArbeidssokerSvar;
+      const { registrertArbeidssoker } = (await request.json()) as IArbeidssokerSvar;
 
       db.updateRapporteringsperiode(rapporteringsperioderId, { registrertArbeidssoker });
 
@@ -120,9 +130,21 @@ export const handlers = [
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/begrunnelse`,
     withDbHandler(async ({ db, params, request }) => {
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
-      const { begrunnelseEndring } = (await request.json()) as BegrunnelseSvar;
+      const { begrunnelseEndring } = (await request.json()) as IBegrunnelseSvar;
 
       db.updateRapporteringsperiode(rapporteringsperioderId, { begrunnelseEndring });
+
+      return HttpResponse.json(null, { status: 204 });
+    })
+  ),
+
+  http.post(
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/rapporteringstype`,
+    withDbHandler(async ({ db, params, request }) => {
+      const rapporteringsperioderId = params.rapporteringsperioderId as string;
+      const { rapporteringstype } = (await request.json()) as IRapporteringstypeSvar;
+
+      db.updateRapporteringsperiode(rapporteringsperioderId, { rapporteringstype });
 
       return HttpResponse.json(null, { status: 204 });
     })
