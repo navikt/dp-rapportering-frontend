@@ -14,7 +14,6 @@ export async function getDecoratorHTML(): Promise<DecoratorElements> {
       language: "nb",
       context: "privatperson",
       chatbot: false,
-      enforceLogin: false,
       redirectToApp: true,
       level: "Level4",
       breadcrumbs: [
