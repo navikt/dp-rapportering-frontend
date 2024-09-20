@@ -43,11 +43,11 @@ describe("lagRapporteringsperiode", () => {
 
     const rapporteringsperiode1 = lagRapporteringsperiode({
       id: id1,
-      periode: { fraOgMed1, tilOgMed1 },
+      periode: { fraOgMed: fraOgMed1, tilOgMed: tilOgMed1 },
     });
     const rapporteringsperiode2 = lagRapporteringsperiode({
       id: id2,
-      periode: { fraOgMed2, tilOgMed2 },
+      periode: { fraOgMed: fraOgMed2, tilOgMed: tilOgMed2 },
     });
 
     expect(rapporteringsperiode1.id).not.toBe(rapporteringsperiode2.id);
