@@ -2,16 +2,18 @@ import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
 import { useState } from "react";
 import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as StartAction } from "./api.start";
 import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import Center from "~/components/center/Center";
+import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
@@ -108,4 +110,48 @@ export default function Landingsside() {
       </Center>
     </>
   );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const { getAppText } = useSanity();
+
+  const { env } = useTypedRouteLoaderData("root");
+
+  if (isRouteErrorResponse(error)) {
+    if (env.IS_LOCALHOST && error.status === 440) {
+      return (
+        <DevelopmentContainer>
+          <>
+            Sesjonen er utløpt! &nbsp;
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering"
+            >
+              Klikk på lenken for å hente ny token
+            </a>
+          </>
+        </DevelopmentContainer>
+      );
+    }
+
+    return (
+      <main>
+        <div className="rapportering-header">
+          <div className="rapportering-header-innhold">
+            <Heading level="1" size="xlarge">
+              {getAppText("rapportering-tittel")}
+            </Heading>
+          </div>
+        </div>
+        <div className="rapportering-container">
+          <Heading level="2" size="medium">
+            {error.status} {error.statusText}
+          </Heading>
+          <p>{error.data}</p>
+        </div>
+      </main>
+    );
+  }
 }
