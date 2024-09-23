@@ -67,6 +67,7 @@ export function samleHtmlForPeriode(
   getRichText: (textId: string) => TypedObject | TypedObject[]
 ): string {
   const antallPerioder = rapporteringsperioder.length;
+
   const rapporteringstypeFormLabel =
     antallPerioder === 1
       ? getAppText("rapportering-rapporter-navarende-tittel")
@@ -98,7 +99,7 @@ export function samleHtmlForPeriode(
       "<b>" +
       rapporteringstypeFormLabel +
       "</b><br>" +
-      hentPeriodeTekst(rapporteringsperioder[0], getAppText) +
+      (antallPerioder > 0 ? hentPeriodeTekst(rapporteringsperioder[0], getAppText) : "") +
       "<br>" +
       "<br>" +
       '<div style="display: flex; align-items: center; column-gap: 10px;">' +
@@ -134,7 +135,7 @@ export function samleHtmlForPeriode(
       ) +
       "<br>" +
       "<h3>" +
-      hentPeriodeTekst(rapporteringsperioder[0], getAppText) +
+      (antallPerioder > 0 ? hentPeriodeTekst(rapporteringsperioder[0], getAppText) : "") +
       "</h3>" +
       // Popup
       "<b>" +
@@ -275,7 +276,7 @@ export function samleHtmlForPeriode(
     "<b>" +
     getAppText("rapportering-send-inn-periode-tittel") +
     "</b><br>" +
-    hentPeriodeTekst(rapporteringsperioder[0], getAppText) +
+    (antallPerioder > 0 ? hentPeriodeTekst(rapporteringsperioder[0], getAppText) : "") +
     "<br>" +
     "<br>" +
     // Sammenlagt
