@@ -35,19 +35,17 @@ export default function InnsendteRapporteringsPerioderSide() {
       {innsendtPerioder.map((periode) => {
         const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
         return (
-          <div key={periode.id}>
-            <div className="oppsummering">
-              <Kalender
-                key={periode.id}
-                rapporteringsperiode={periode}
-                visEndringslenke={periode.kanEndres}
-                aapneModal={() => {}}
-                readonly
-              />
-              {flatMapAktiviteter.length < 1 && (
-                <p>{getAppText("rapportering-innsendt-ikke-fravaer")}</p>
-              )}
-            </div>
+          <div className="oppsummering" key={periode.id}>
+            <Kalender
+              key={periode.id}
+              rapporteringsperiode={periode}
+              visEndringslenke={periode.kanEndres}
+              aapneModal={() => {}}
+              readonly
+            />
+            {flatMapAktiviteter.length < 1 && (
+              <p>{getAppText("rapportering-innsendt-ikke-fravaer")}</p>
+            )}
             <AktivitetOppsummering rapporteringsperiode={periode} />
           </div>
         );

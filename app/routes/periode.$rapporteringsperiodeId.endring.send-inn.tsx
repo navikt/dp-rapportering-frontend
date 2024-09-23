@@ -116,9 +116,10 @@ export default function RapporteringsPeriodeSendInnSide() {
         <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
       </div>
 
-      <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
-
-      <AktivitetOppsummering rapporteringsperiode={periode} />
+      <div className="oppsummering">
+        <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
+        <AktivitetOppsummering rapporteringsperiode={periode} />
+      </div>
 
       {periode.begrunnelseEndring && (
         <div>
