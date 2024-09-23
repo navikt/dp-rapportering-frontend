@@ -114,7 +114,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           "fra-dato": tidligstInnsendingDato,
           "til-dato": senestInnsendingDato,
         })}
-        value={getRichText("rapportering-periode-innsending-og-frist-dato")}
+        value={getRichText("rapportering-fyll-ut-frister")}
       />
       <div className="navigasjon-container-to-knapper my-4">
         <RemixLink

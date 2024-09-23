@@ -8,6 +8,7 @@ import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as StartAction } from "./api.start";
+import { formaterDato } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LesMer } from "~/components/LesMer";
@@ -60,7 +61,7 @@ export default function Landingsside() {
         <Alert variant="info" className="my-8 alert-with-rich-text">
           <PortableText
             components={getSanityPortableTextComponents({
-              dato: forstePeriode.kanSendesFra,
+              dato: formaterDato(new Date(forstePeriode.kanSendesFra)),
             })}
             value={getRichText("rapportering-for-tidlig-a-sende-meldekort")}
           />
