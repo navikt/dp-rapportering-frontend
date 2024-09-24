@@ -18,19 +18,15 @@ export interface IProps {
 }
 
 export function erIkkeAktiv(aktiviteter: AktivitetType[], aktivitet: AktivitetType) {
-  if (aktivitet === "Utdanning") {
-    return false;
-  }
-
-  if (aktiviteter.includes("Arbeid") && aktivitet !== "Arbeid") {
+  if (aktiviteter.includes("Arbeid") && ["Syk", "Fravaer"].includes(aktivitet)) {
     return true;
   }
 
-  if (aktiviteter.includes("Syk") && aktivitet !== "Syk") {
+  if (aktiviteter.includes("Syk") && aktivitet === "Arbeid") {
     return true;
   }
 
-  if (aktiviteter.includes("Fravaer") && aktivitet !== "Fravaer") {
+  if (aktiviteter.includes("Fravaer") && aktivitet === "Arbeid") {
     return true;
   }
 
