@@ -17,6 +17,22 @@ export interface IProps {
   aktiviteter: IAktivitet[];
 }
 
+export function erIkkeAktiv(aktiviteter: AktivitetType[], aktivitet: AktivitetType) {
+  if (aktiviteter.includes("Arbeid") && ["Syk", "Fravaer"].includes(aktivitet)) {
+    return true;
+  }
+
+  if (aktiviteter.includes("Syk") && aktivitet === "Arbeid") {
+    return true;
+  }
+
+  if (aktiviteter.includes("Fravaer") && aktivitet === "Arbeid") {
+    return true;
+  }
+
+  return false;
+}
+
 export function AktivitetCheckboxes({
   name,
   label,
@@ -41,25 +57,6 @@ export function AktivitetCheckboxes({
       default:
         return "";
     }
-  };
-
-  const erIkkeAktiv = (aktiviteter: AktivitetType[], aktivitet: AktivitetType) => {
-    if (
-      (aktiviteter.includes("Arbeid") || aktiviteter.includes("Utdanning")) &&
-      !["Arbeid", "Utdanning"].includes(aktivitet)
-    ) {
-      return true;
-    }
-
-    if (aktiviteter.includes("Syk") && aktivitet !== "Syk") {
-      return true;
-    }
-
-    if (aktiviteter.includes("Fravaer") && aktivitet !== "Fravaer") {
-      return true;
-    }
-
-    return false;
   };
 
   return (
