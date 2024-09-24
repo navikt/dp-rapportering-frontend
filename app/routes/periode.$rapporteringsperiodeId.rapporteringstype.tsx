@@ -3,9 +3,12 @@ import { Alert, BodyShort, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
+import { addDays } from "date-fns";
 import { useEffect, useState } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as RapporteringstypeAction } from "./api.rapporteringstype";
+import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
@@ -73,7 +76,11 @@ export default function RapporteringstypeSide() {
     }
 
     // Hvis du inkluderer rapporteringstypeFetcher i dep. array får du en uendelig løkke
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
+
+  const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
+  const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
 
   return (
     <>
@@ -92,17 +99,22 @@ export default function RapporteringstypeSide() {
       )}
 
       <div className="my-8">
-        {rapporteringsperioder.map((periode, index) => (
-          <div key={periode.id} className="my-4">
-            <Heading size="small" level="2">
-              {index === 0 && getAppText("rapportering-naavaerende-periode")}
-              {index === 1 && getAppText("rapportering-neste-periode")}
-              {index > 1 && getAppText("rapportering-senere-periode")}
-            </Heading>
-            <BodyShort size="small">{hentPeriodeTekst(periode, getAppText)}</BodyShort>
-          </div>
-        ))}
+        <Heading size="small" level="2">
+          {rapporteringsperioder.length > 1 && getAppText("rapportering-foerste-periode")}
+          {rapporteringsperioder.length === 1 && getAppText("rapportering-naavaerende-periode")}
+        </Heading>
+        <BodyShort size="small">{hentPeriodeTekst(periode, getAppText)}</BodyShort>
       </div>
+
+      <BodyShort size="small">
+        <PortableText
+          components={getSanityPortableTextComponents({
+            "fra-dato": tidligstInnsendingDato,
+            "til-dato": senestInnsendingDato,
+          })}
+          value={getRichText("rapportering-fyll-ut-frister")}
+        />
+      </BodyShort>
 
       <RadioGroup
         legend={rapporteringstypeFormLabel}
