@@ -3,7 +3,7 @@ import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    exclude: [...configDefaults.exclude, "tests/*", "e2e/*"],
+    exclude: [...configDefaults.exclude],
     setupFiles: ["tests/helpers/setup.ts"],
     environment: "jsdom",
     watch: false,

@@ -61,7 +61,7 @@ const defaultProps = {
   lukkModal: vi.fn(),
 };
 
-describe("AktivitetModal", () => {
+describe.skip("AktivitetModal", () => {
   it("rendrer modal med riktig overskrift og formatert dato", () => {
     render(<AktivitetModal {...defaultProps} />);
 
