@@ -1,9 +1,9 @@
 import styles from "./Kalender.module.css";
+import { hentAktivitetSummenTekst, hentSkjermleserDatoTekst } from "./kalender.utils";
 import classNames from "classnames";
 import { format } from "date-fns";
 import { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-import { periodeSomTimer } from "~/utils/periode.utils";
 
 interface IProps {
   aapneModal: (dato: string) => void;
@@ -14,42 +14,6 @@ interface IProps {
 
 export function Uke(props: IProps) {
   const { rapporteringUke, readonly, aapneModal, spacing } = props;
-
-  function hentAktivitetSummenTekst(dag: IRapporteringsperiodeDag, lang?: boolean) {
-    const arbeid = dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid");
-
-    if (arbeid) {
-      const timer = dag.aktiviteter.reduce((accumulator, current) => {
-        if (current.timer) {
-          return accumulator + (periodeSomTimer(current.timer) ?? 0);
-        }
-        return accumulator;
-      }, 0);
-
-      return `${timer.toString().replace(/\./g, ",")}${lang ? " timer" : "t"}`;
-    } else {
-      return lang ? "1 dag" : "1d";
-    }
-  }
-
-  function hentSkjermleserDatoTekst(dag: IRapporteringsperiodeDag) {
-    const locale = "no-NO";
-
-    const options: Intl.DateTimeFormatOptions = {
-      day: "numeric",
-      weekday: "long",
-      month: "long",
-    };
-
-    const formattertDato = new Date(dag.dato).toLocaleDateString(locale, options);
-
-    if (dag.aktiviteter.length > 0) {
-      const aktivitetType = dag.aktiviteter[0].type;
-      return `${formattertDato}, ${aktivitetType} ${hentAktivitetSummenTekst(dag, true)}`;
-    }
-
-    return formattertDato;
-  }
 
   function erAktivStil(dag: IRapporteringsperiodeDag, typer: AktivitetType[]): boolean {
     const dagenHarAktivitet = dag.aktiviteter.length > 0;
