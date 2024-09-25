@@ -3,6 +3,7 @@ import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { hentInnsendtePerioder } from "~/models/rapporteringsperiode.server";
+import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -17,9 +18,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function InnsendteRapporteringsPerioderSide() {
   const { innsendtPerioder } = useLoaderData<typeof loader>();
 
-  // TODO: "Implementer brødsmulesti /innsendt"
-
   const { getAppText } = useSanity();
+
+  setBreadcrumbs(
+    [
+      {
+        title: "rapportering-brodsmule-innsendte-meldekort",
+        url: `${baseUrl}/periode/innsendt`,
+        handleInApp: true,
+      },
+    ],
+    getAppText
+  );
 
   return (
     <>

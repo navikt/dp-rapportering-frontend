@@ -1,20 +1,37 @@
 /* eslint-disable */
 import { getDecoratorHTML } from "./dekorator/dekorator.server";
 import { DevTools } from "./devTools";
+import { getLanguage, setLanguage } from "./models/language.server";
 import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanity } from "./sanity/sanity.types";
 import favicon16 from "/favicon-16x16.png";
 import favicon32 from "/favicon-32x32.png";
 import favicon from "/favicon.ico";
 import { Alert, Heading } from "@navikt/ds-react";
+import { setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
+import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
 import { json, redirect } from "@remix-run/node";
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from "@remix-run/react";
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useFetcher,
+  useRouteError,
+} from "@remix-run/react";
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
 import { hasSession } from "mocks/session";
 import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
+import {
+  DecoratorLocale,
+  availableLanguages,
+  getLocale,
+  setBreadcrumbs,
+} from "./utils/dekoratoren.utils";
 import { isLocalOrDemo } from "./utils/env.utils";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
@@ -74,13 +91,14 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const fragments = await getDecoratorHTML();
+  const locale: DecoratorLocale = (await getLanguage(request)) as DecoratorLocale;
+  const fragments = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
 
   if (!fragments) throw json({ error: "Kunne ikke hente dekoratør" }, { status: 500 });
 
   const sanityTexts = await sanityClient.fetch<ISanity>(allTextsQuery, {
-    baseLang: "nb",
-    lang: "nb",
+    baseLang: DecoratorLocale.NB,
+    lang: getLocale(locale),
   });
 
   if (isLocalOrDemo && !hasSession(request)) {
@@ -101,13 +119,28 @@ export async function loader({ request }: LoaderFunctionArgs) {
       RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
       SANITY_DATASETT: process.env.SANITY_DATASETT,
     },
-    isLocalOrDemo: process.env.RUNTIME_ENVIRONMENT === "demo" || process.env.USE_MSW === "true",
     fragments,
   });
 }
 
+export async function action({ request }: LoaderFunctionArgs) {
+  const cookieHeader = request.headers.get("Cookie") || "";
+  const formData = await request.formData();
+
+  const locale = formData.get("locale") as DecoratorLocale;
+
+  return json(
+    { status: "success" },
+    {
+      headers: {
+        "Set-Cookie": await setLanguage(cookieHeader, locale),
+      },
+    }
+  );
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { fragments, env, isLocalOrDemo } = useTypedRouteLoaderData("root");
+  const { fragments, env } = useTypedRouteLoaderData("root");
 
   useInjectDecoratorScript(fragments.DECORATOR_SCRIPTS);
 
@@ -146,6 +179,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { getAppText } = useSanity();
+
+  const fetcher = useFetcher();
+  if (typeof document !== "undefined") {
+    setAvailableLanguages(availableLanguages);
+
+    onLanguageSelect((language) => {
+      fetcher.submit({ locale: language.locale }, { method: "post" });
+    });
+  }
+
+  setBreadcrumbs([], getAppText);
 
   return (
     <>

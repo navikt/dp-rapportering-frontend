@@ -4,6 +4,8 @@ import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
+import { useSanity } from "~/hooks/useSanity";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -18,7 +20,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function RapporteringsPeriodeSide() {
   const { periode } = useLoaderData<typeof loader>();
 
-  // TODO: Lag brødsmulesti for /periode/${periode.id}
+  const { getAppText } = useSanity();
+
+  setBreadcrumbs(
+    [
+      {
+        title: "rapportering-brodsmule-fyll-ut-meldekort",
+        url: `${baseUrl}/periode/${periode.id}`,
+        handleInApp: true,
+      },
+    ],
+    getAppText
+  );
 
   return (
     <>
