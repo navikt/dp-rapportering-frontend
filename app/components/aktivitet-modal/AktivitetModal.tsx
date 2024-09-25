@@ -6,7 +6,7 @@ import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { aktivitetType } from "~/utils/aktivitettype.utils";
-import { validator } from "~/utils/validering.util";
+import { validator } from "~/utils/validering.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { FormattertDato } from "../FormattertDato";
 import { LesMer } from "../LesMer";
@@ -75,7 +75,7 @@ export function AktivitetModal({
 
             {actionData?.status === "error" && actionData?.error && (
               <Alert variant="error" className={styles.feilmelding}>
-                {actionData.error.statusText}
+                {getAppText(actionData.error.statusText)}
               </Alert>
             )}
 

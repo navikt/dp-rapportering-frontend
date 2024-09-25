@@ -103,7 +103,7 @@ export async function hentInnsendtePerioder(request: Request): Promise<IRapporte
   });
 
   if (!respone.ok) {
-    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
+    throw new Response("rapportering-feilmelding-rapporteringsperioder-kunne-ikke-hente", {
       status: 500,
     });
   }
@@ -141,6 +141,7 @@ export async function sendInnPeriode(
     userAgent,
   };
 
+  // TODO: Denne kan i hvert fall feile!
   return await fetch(url, {
     method: "POST",
     headers: headers,
@@ -151,6 +152,7 @@ export async function sendInnPeriode(
 export async function lagEndringsperiode(request: Request, periodeId: string) {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/endre`;
 
+  // TODO: Kan denne feile?
   return await fetch(url, {
     method: "POST",
     headers: await getHeaders(request),

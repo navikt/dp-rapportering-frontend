@@ -1,6 +1,6 @@
 import { oppdaterAktiviteter } from "./aktivitet.action.utils";
 import type { INetworkResponse } from "./types";
-import { validator } from "./validering.util";
+import { validator } from "./validering.utils";
 import { validationError } from "remix-validated-form";
 import { type AktivitetType, lagreAktivitet } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";

@@ -1,5 +1,5 @@
 import type { INetworkResponse } from "./types";
-import { begrunnelseEndringValidator } from "./validering.util";
+import { begrunnelseEndringValidator } from "./validering.utils";
 import { validationError } from "remix-validated-form";
 import { lagreAktivitet } from "~/models/aktivitet.server";
 
