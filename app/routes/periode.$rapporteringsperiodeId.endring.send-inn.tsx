@@ -20,7 +20,8 @@ import {
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { samleHtmlForPeriode } from "~/utils/periode.utils";
+import { useAddHtml } from "~/utils/journalforing.utils";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
@@ -63,8 +64,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function RapporteringsPeriodeSendInnSide() {
   const submit = useSubmit();
-  const navigation = useNavigation();
   const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isSubmitting = useIsSubmitting(navigation);
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
@@ -73,6 +75,8 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
+
+  const addHtml = useAddHtml({ rapporteringsperioder, periode, getAppText, getRichText, submit });
 
   let invaerendePeriodeTekst;
 
@@ -85,23 +89,6 @@ export default function RapporteringsPeriodeSendInnSide() {
 
     invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
   }
-
-  // TODO: Det må vel finnes en bedre måte å sette isSubmitting på?
-  const isSubmitting =
-    navigation.state !== "idle" &&
-    navigation.formData &&
-    navigation.formData.get("_action") === "send-inn";
-
-  const addHtml = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-
-    const html = samleHtmlForPeriode(rapporteringsperioder, periode, getAppText, getRichText);
-    formData.set("_html", html);
-
-    submit(formData, { method: "post" });
-  };
 
   return (
     <>

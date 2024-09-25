@@ -3,13 +3,10 @@ import { BodyLong, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
-import { addDays } from "date-fns";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType } from "~/models/aktivitet.server";
-import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
-import { formaterDato } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
@@ -85,9 +82,6 @@ export default function RapporteringsPeriodeFyllUtSide() {
     setModalAapen(false);
   }
 
-  const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
-  const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
-
   return (
     <>
       <Heading tabIndex={-1} size={"large"} level={"2"} className="vo-fokus">
@@ -109,13 +103,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       <div className="registert-meldeperiode-container">
         <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
-      <PortableText
-        components={getSanityPortableTextComponents({
-          "fra-dato": tidligstInnsendingDato,
-          "til-dato": senestInnsendingDato,
-        })}
-        value={getRichText("rapportering-fyll-ut-frister")}
-      />
+
       <div className="navigasjon-container-to-knapper my-4">
         <RemixLink
           as="Button"
