@@ -2,11 +2,12 @@ import {
   DecoratorElements,
   DecoratorEnvProps,
   type DecoratorFetchProps,
+  type DecoratorParams,
   fetchDecoratorHtml,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { getEnv } from "~/utils/env.utils";
 
-export async function getDecoratorHTML(): Promise<DecoratorElements> {
+export async function getDecoratorHTML(params: DecoratorParams): Promise<DecoratorElements> {
   const config: DecoratorFetchProps = {
     env: (getEnv("DEKORATOR_ENV") || "localhost") as DecoratorEnvProps["env"],
     localUrl: "https://dekoratoren.ekstern.dev.nav.no",
@@ -16,13 +17,8 @@ export async function getDecoratorHTML(): Promise<DecoratorElements> {
       chatbot: false,
       redirectToApp: true,
       level: "Level4",
-      breadcrumbs: [
-        { title: "Min side", url: "https://www.nav.no/minside" },
-        {
-          title: "Meldekort",
-          url: "https://www.nav.no/arbeid/dagpenger/meldekort",
-        },
-      ],
+      breadcrumbs: [],
+      ...params,
     },
   };
 
