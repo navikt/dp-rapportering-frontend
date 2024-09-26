@@ -16,7 +16,7 @@
     "pre-commit": "lint-staged && npm run typecheck"
   },
   "dependencies": {
-    "@faker-js/faker": "8.4.1",
+    "@faker-js/faker": "9.0.3",
     "@grafana/faro-web-sdk": "1.10.0",
     "@mswjs/data": "0.16.2",
     "@navikt/aksel-icons": "7.1.0",
@@ -52,7 +52,7 @@
     "zod-form-data": "2.0.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "9.0.2",
+    "@faker-js/faker": "9.0.3",
     "@mswjs/data": "0.16.2",
     "@remix-run/dev": "2.12.1",
     "@remix-run/eslint-config": "2.12.1",
