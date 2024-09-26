@@ -24,6 +24,7 @@ import {
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
 import { hasSession } from "mocks/session";
+import { useEffect } from "react";
 import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
 import {
@@ -189,7 +190,9 @@ export default function App() {
     });
   }
 
-  setBreadcrumbs([], getAppText);
+  useEffect(() => {
+    setBreadcrumbs([], getAppText);
+  }, [getAppText]);
 
   return (
     <main id="maincontent" role="main" tabIndex={-1}>

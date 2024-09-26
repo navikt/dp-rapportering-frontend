@@ -2,6 +2,7 @@ import { Alert, BodyLong, Heading } from "@navikt/ds-react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useEffect } from "react";
 import { hentInnsendtePerioder } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
@@ -20,16 +21,18 @@ export default function InnsendteRapporteringsPerioderSide() {
 
   const { getAppText } = useSanity();
 
-  setBreadcrumbs(
-    [
-      {
-        title: "rapportering-brodsmule-innsendte-meldekort",
-        url: `${baseUrl}/periode/innsendt`,
-        handleInApp: true,
-      },
-    ],
-    getAppText
-  );
+  useEffect(() => {
+    setBreadcrumbs(
+      [
+        {
+          title: "rapportering-brodsmule-innsendte-meldekort",
+          url: `${baseUrl}/periode/innsendt`,
+          handleInApp: true,
+        },
+      ],
+      getAppText
+    );
+  }, [getAppText]);
 
   return (
     <>

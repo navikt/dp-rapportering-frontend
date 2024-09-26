@@ -1,7 +1,14 @@
 import { Accordion } from "@navikt/ds-react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import {
+  Outlet,
+  isRouteErrorResponse,
+  useLoaderData,
+  useLocation,
+  useRouteError,
+} from "@remix-run/react";
+import { useEffect } from "react";
 import invariant from "tiny-invariant";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
@@ -19,19 +26,21 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function RapporteringsPeriodeSide() {
   const { periode } = useLoaderData<typeof loader>();
+  const { pathname } = useLocation();
 
   const { getAppText } = useSanity();
 
-  setBreadcrumbs(
-    [
-      {
-        title: "rapportering-brodsmule-fyll-ut-meldekort",
-        url: `${baseUrl}/periode/${periode.id}`,
-        handleInApp: true,
-      },
-    ],
-    getAppText
-  );
+  useEffect(() => {
+    setBreadcrumbs(
+      [
+        {
+          title: "rapportering-brodsmule-fyll-ut-meldekort",
+          url: `${baseUrl}${pathname}`,
+        },
+      ],
+      getAppText
+    );
+  }, [getAppText, pathname]);
 
   return (
     <>
@@ -50,4 +59,14 @@ export default function RapporteringsPeriodeSide() {
       </div>
     </>
   );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return <div>Oh no{error.statusText}</div>;
+  }
+
+  return <div>Neeei {(error as Error).message}</div>;
 }
