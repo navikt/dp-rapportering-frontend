@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading, Select } from "@navikt/ds-react";
+import { Heading, Select } from "@navikt/ds-react";
 import { useFetcher } from "@remix-run/react";
 import { ChangeEvent } from "react";
 import { useSanity } from "~/hooks/useSanity";
@@ -30,15 +30,6 @@ export default function RapporteringsPeriodeFyllUtSide() {
       <Heading tabIndex={-1} size={"large"} level={"2"} className="vo-fokus">
         {getAppText("rapportering-periode-endre-tittel")}
       </Heading>
-
-      <Heading size="medium" level="3" className="my-4">
-        {getAppText("rapportering-endring-begrunnelse-tittel")}
-      </Heading>
-
-      <BodyLong className="mb-4">
-        {getAppText("rapportering-endring-begrunnelse-beskrivelse")}
-      </BodyLong>
-      <fetcher.Form></fetcher.Form>
 
       <Select
         label={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-label")}

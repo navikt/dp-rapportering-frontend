@@ -13,6 +13,7 @@ import { hentPeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import Center from "~/components/center/Center";
 
@@ -35,7 +36,7 @@ export default function RapporteringstypeSide() {
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
-  const { getAppText, getLink, getRichText } = useSanity();
+  const { getAppText, getRichText } = useSanity();
 
   const rapporteringstypeFetcher = useFetcher<typeof RapporteringstypeAction>();
 
@@ -106,15 +107,15 @@ export default function RapporteringstypeSide() {
         <BodyShort size="small">{hentPeriodeTekst(periode, getAppText)}</BodyShort>
       </div>
 
-      <BodyShort size="small">
-        <PortableText
-          components={getSanityPortableTextComponents({
-            "fra-dato": tidligstInnsendingDato,
-            "til-dato": senestInnsendingDato,
-          })}
-          value={getRichText("rapportering-fyll-ut-frister")}
-        />
-      </BodyShort>
+      <PortableText
+        components={getSanityPortableTextComponents({
+          "fra-dato": tidligstInnsendingDato,
+          "til-dato": senestInnsendingDato,
+        })}
+        value={getRichText("rapportering-fyll-ut-frister")}
+      />
+
+      <LesMer />
 
       <RadioGroup
         legend={rapporteringstypeFormLabel}
@@ -144,12 +145,6 @@ export default function RapporteringstypeSide() {
           icon={<ArrowRightIcon aria-hidden />}
         >
           {nesteKnappTekst}
-        </RemixLink>
-      </Center>
-
-      <Center>
-        <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
-          {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
       </Center>
     </>

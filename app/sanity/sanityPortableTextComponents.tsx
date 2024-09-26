@@ -8,11 +8,7 @@ export function getSanityPortableTextComponents(replaceWithValue: {
       }: {
         value: { dynamiskFelt: { textId: string; type: string } };
       }) => {
-        return (
-          <strong>
-            {replaceWithValue[value.dynamiskFelt.textId] ?? value.dynamiskFelt.textId}
-          </strong>
-        );
+        return replaceWithValue[value.dynamiskFelt.textId] ?? value.dynamiskFelt.textId;
       },
     },
   };

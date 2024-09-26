@@ -11,7 +11,6 @@ import type { action as StartAction } from "./api.start";
 import { formaterDato } from "~/utils/dato.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import Center from "~/components/center/Center";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
@@ -69,8 +68,6 @@ export default function Landingsside() {
       )}
 
       <PortableText value={getRichText("rapportering-innledning")} />
-
-      <LesMer />
 
       {forstePeriode?.kanSendes === true && (
         <>

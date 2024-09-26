@@ -1,3 +1,4 @@
+import Center from "./center/Center";
 import { Accordion, Alert, Heading } from "@navikt/ds-react";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
@@ -44,6 +45,12 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
             ? getLink("rapportering-periode-bekreftelse-neste").linkText
             : getLink("rapportering-periode-bekreftelse-tilbake").linkText}
         </RemixLink>
+
+        <Center>
+          <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
+            {getLink("rapportering-se-og-endre").linkText}
+          </RemixLink>
+        </Center>
       </div>
     </>
   );
