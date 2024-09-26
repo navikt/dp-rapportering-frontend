@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "8.4.1",
-    "@grafana/faro-web-sdk": "1.10.0",
+    "@grafana/faro-web-sdk": "1.10.1",
     "@mswjs/data": "0.16.2",
     "@navikt/aksel-icons": "7.1.0",
     "@navikt/ds-css": "7.1.0",
