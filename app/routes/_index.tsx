@@ -115,7 +115,6 @@ export default function Landingsside() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  const { getAppText } = useSanity();
 
   const { env } = useTypedRouteLoaderData("root");
 
@@ -138,21 +137,12 @@ export function ErrorBoundary() {
     }
 
     return (
-      <main id="maincontent" role="main" tabIndex={-1}>
-        <div className="rapportering-header">
-          <div className="rapportering-header-innhold">
-            <Heading level="1" size="xlarge">
-              {getAppText("rapportering-tittel")}
-            </Heading>
-          </div>
-        </div>
-        <div className="rapportering-container">
-          <Heading level="2" size="medium">
-            {error.status} {error.statusText}
-          </Heading>
-          <p>{error.data}</p>
-        </div>
-      </main>
+      <>
+        <Heading level="2" size="medium">
+          {error.status} {error.statusText}
+        </Heading>
+        <p>{error.data}</p>
+      </>
     );
   }
 }
