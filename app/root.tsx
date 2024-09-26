@@ -192,7 +192,7 @@ export default function App() {
   setBreadcrumbs([], getAppText);
 
   return (
-    <>
+    <main id="maincontent" role="main" tabIndex={-1}>
       <div className="rapportering-header">
         <div className="rapportering-header-innhold">
           <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
@@ -204,7 +204,7 @@ export default function App() {
       <div className="rapportering-container">
         <Outlet />
       </div>
-    </>
+    </main>
   );
 }
 

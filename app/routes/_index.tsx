@@ -138,7 +138,7 @@ export function ErrorBoundary() {
     }
 
     return (
-      <main>
+      <main id="maincontent" role="main" tabIndex={-1}>
         <div className="rapportering-header">
           <div className="rapportering-header-innhold">
             <Heading level="1" size="xlarge">
