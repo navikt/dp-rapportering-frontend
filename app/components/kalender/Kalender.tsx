@@ -15,6 +15,7 @@ interface IProps {
 export function Kalender(props: IProps) {
   const { rapporteringsperiode, aapneModal, readonly = false, visEndringslenke = false } = props;
 
+  // TODO: Skal denne alltid være norsk?
   const ukedager = getWeekDays("nb-NO");
 
   const { fraOgMed, tilOgMed } = rapporteringsperiode.periode;
@@ -22,6 +23,7 @@ export function Kalender(props: IProps) {
   const forsteUke = [...rapporteringsperiode.dager].splice(0, 7);
   const andreUke = [...rapporteringsperiode.dager].splice(7, 7);
 
+  // TODO: Må Sanityfiseres
   const periodeUkenummerTekst = `Uke ${formaterPeriodeTilUkenummer(
     rapporteringsperiode.periode.fraOgMed,
     rapporteringsperiode.periode.tilOgMed

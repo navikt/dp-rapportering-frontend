@@ -2,6 +2,8 @@ import { IAktivitet } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { periodeSomTimer } from "~/utils/periode.utils";
 
+// TODO: Denne må Sanityfiseres
+
 export function hentAktivitetSummenTekst(dag: IRapporteringsperiodeDag, lang?: boolean) {
   const arbeid = dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid");
 
