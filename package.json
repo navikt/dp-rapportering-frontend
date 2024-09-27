@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "8.4.1",
-    "@grafana/faro-web-sdk": "1.10.0",
+    "@grafana/faro-web-sdk": "1.10.1",
     "@mswjs/data": "0.16.2",
     "@navikt/aksel-icons": "7.1.0",
     "@navikt/ds-css": "7.1.0",
@@ -52,7 +52,7 @@
     "zod-form-data": "2.0.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "9.0.2",
+    "@faker-js/faker": "9.0.3",
     "@mswjs/data": "0.16.2",
     "@remix-run/dev": "2.12.1",
     "@remix-run/eslint-config": "2.12.1",
@@ -65,7 +65,7 @@
     "@types/compression": "1.7.5",
     "@types/express": "5.0.0",
     "@types/morgan": "1.9.9",
-    "@types/node": "22.7.2",
+    "@types/node": "22.7.3",
     "@types/react": "18.3.9",
     "@types/react-dom": "18.3.0",
     "@typescript-eslint/eslint-plugin": "8.7.0",
@@ -78,7 +78,7 @@
     "eslint-plugin-import": "2.30.0",
     "eslint-plugin-jsx-a11y": "6.10.0",
     "eslint-plugin-prettier": "5.2.1",
-    "eslint-plugin-react": "7.36.1",
+    "eslint-plugin-react": "7.37.0",
     "eslint-plugin-react-hooks": "4.6.2",
     "husky": "9.1.6",
     "jsdom": "25.0.1",
