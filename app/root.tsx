@@ -181,14 +181,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   const { getAppText } = useSanity();
 
-  const fetcher = useFetcher();
-  if (typeof document !== "undefined") {
-    setAvailableLanguages(availableLanguages);
+  // const fetcher = useFetcher();
+  // if (typeof document !== "undefined") {
+  //   setAvailableLanguages(availableLanguages);
 
-    onLanguageSelect((language) => {
-      fetcher.submit({ locale: language.locale }, { method: "post" });
-    });
-  }
+  //   onLanguageSelect((language) => {
+  //     fetcher.submit({ locale: language.locale }, { method: "post" });
+  //   });
+  // }
 
   useEffect(() => {
     setBreadcrumbs([], getAppText);
