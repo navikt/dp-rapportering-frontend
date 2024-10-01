@@ -1,7 +1,7 @@
 import { samleHtmlForPeriode } from "./periode.utils";
-import type { TypedObject } from "@portabletext/types";
 import type { SubmitFunction } from "@remix-run/react";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { GetAppText, GetRichText } from "~/hooks/useSanity";
 
 export function useAddHtml({
   rapporteringsperioder,
@@ -12,8 +12,8 @@ export function useAddHtml({
 }: {
   rapporteringsperioder: IRapporteringsperiode[];
   periode: IRapporteringsperiode;
-  getAppText: (textId: string) => string;
-  getRichText: (textId: string) => TypedObject | TypedObject[];
+  getAppText: GetAppText;
+  getRichText: GetRichText;
   submit: SubmitFunction;
 }) {
   return (event: React.FormEvent<HTMLFormElement>) => {

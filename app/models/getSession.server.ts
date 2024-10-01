@@ -32,7 +32,7 @@ export async function getSession(req: Request): Promise<INetworkResponse<ISessio
       status: "error",
       error: {
         statusCode: 401,
-        statusText: "Token not found",
+        statusText: "rapportering-feilmelding-token-ikke-funnet",
       },
     };
   }
@@ -43,7 +43,7 @@ export async function getSession(req: Request): Promise<INetworkResponse<ISessio
       status: "error",
       error: {
         statusCode: 401,
-        statusText: "Invalid token",
+        statusText: "rapportering-feilmelding-ugyldig-token",
       },
     };
   }

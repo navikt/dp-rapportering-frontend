@@ -11,13 +11,13 @@ export const aktivitetsvalidering = z.object({
       (timer) => String(timer).replace(/,/g, "."),
       z.coerce
         .number({
-          required_error: "Du må skrive et tall",
-          invalid_type_error: "Det må være et gyldig tall",
+          required_error: "rapportering-feilmelding-ma-skrive-tall",
+          invalid_type_error: "rapportering-feilmelding-ugyldig-tall",
         })
-        .positive({ message: "Du må skrive et tall mellom 0,5 og 24 timer" })
-        .min(0.5, { message: "Du må skrive et tall mellom 0,5 og 24 timer" })
-        .max(24, { message: "Du må skrive et tall mellom 0,5 og 24 timer" })
-        .step(0.5, { message: "Du kan bare føre hel eller halv time" })
+        .positive({ message: "rapportering-feilmelding-ma-skrive-positivt-tall" })
+        .min(0.5, { message: "rapportering-feilmelding-ma-skrive-positivt-tall" })
+        .max(24, { message: "rapportering-feilmelding-ma-skrive-positivt-tall" })
+        .step(0.5, { message: "rapportering-feilmelding-hel-halv-time" })
     )
     .optional(),
 });
@@ -28,6 +28,8 @@ export function validator() {
 
 export function begrunnelseEndringValidator() {
   return withZod(
-    z.object({ begrunnelseEndring: z.string().min(1, "Du må skrive en begrunnelse") })
+    z.object({
+      begrunnelseEndring: z.string().min(1, "rapportering-feilmelding-ma-ha-begrunnelse"),
+    })
   );
 }

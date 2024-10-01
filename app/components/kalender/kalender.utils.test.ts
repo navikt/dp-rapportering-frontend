@@ -55,24 +55,28 @@ const arbeidOgUtdanning = {
   ],
 };
 
+function mockGetAppText(textId: string) {
+  return textId;
+}
+
 describe("hentSkjermleserDatoTekst", () => {
   it("skal vise tekst for ingen aktiviteter", () => {
-    const tekst = hentSkjermleserDatoTekst(ingenAktiviteter);
+    const tekst = hentSkjermleserDatoTekst(ingenAktiviteter, mockGetAppText);
     expect(tekst).toBe("mandag 9. september");
   });
 
   it("skal vise tekst for én aktivitet", () => {
-    const tekst = hentSkjermleserDatoTekst(syk);
+    const tekst = hentSkjermleserDatoTekst(syk, mockGetAppText);
     expect(tekst).toBe("mandag 9. september, Syk 1 dag");
   });
 
   it("skal vise tekst for to aktiviteter", () => {
-    const tekst = hentSkjermleserDatoTekst(sykOgUtdanning);
+    const tekst = hentSkjermleserDatoTekst(sykOgUtdanning, mockGetAppText);
     expect(tekst).toBe("søndag 22. september, Syk 1 dag og Utdanning 1 dag");
   });
 
   it("skal vise tekst for én aktivitet heldag og én aktivitet med timer", () => {
-    const tekst = hentSkjermleserDatoTekst(arbeidOgUtdanning);
+    const tekst = hentSkjermleserDatoTekst(arbeidOgUtdanning, mockGetAppText);
     expect(tekst).toBe("søndag 22. september, Utdanning 1 dag og Arbeid 5 timer");
   });
 });

@@ -55,11 +55,13 @@ export async function hentRapporteringsperioder(
   });
 
   if (!response.ok) {
-    throw new Response("Feil i uthenting av meldekort", { status: 500 });
+    throw new Response(`rapportering-feilmelding-hent-perioder-${response.status}`, {
+      status: response.status,
+    });
   }
 
   if (response.status === 204) {
-    throw new Response("Ingen meldekort funnet", { status: 404 });
+    throw new Response("rapportering-feilmelding-hent-perioder-404", { status: 404 });
   }
 
   const rapporteringsperioder: IRapporteringsperiode[] = await response.json();
@@ -82,13 +84,13 @@ export async function hentPeriode(
   });
 
   if (!response.ok) {
-    throw new Response("Feil i uthenting av meldekort", { status: 500 });
+    throw new Response("rapportering-feilmelding-hent-meldekort-500", { status: 500 });
   }
 
   const periode: IRapporteringsperiode = await response.json();
 
   if (!periode) {
-    throw new Response("Fant ikke meldekortet", { status: 404 });
+    throw new Response("rapportering-feilmelding-hent-meldekort-404", { status: 404 });
   }
 
   return periode;
@@ -103,7 +105,7 @@ export async function hentInnsendtePerioder(request: Request): Promise<IRapporte
   });
 
   if (!respone.ok) {
-    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
+    throw new Response("rapportering-feilmelding-hent-innsendte-meldekort-500", {
       status: 500,
     });
   }

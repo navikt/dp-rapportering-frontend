@@ -56,7 +56,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     return json(
       {
-        error: "Det har skjedd noe feil med innsendingen din, prøv igjen.",
+          error: "rapportering-feilmelding-feil-ved-innsending",
       },
       {
         status: 500,
@@ -89,7 +89,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     );
     const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed);
 
-    invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
+    invaerendePeriodeTekst = `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
   }
 
   return (

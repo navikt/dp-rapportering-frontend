@@ -4,6 +4,8 @@ import classNames from "classnames";
 import { format } from "date-fns";
 import { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 interface IProps {
   aapneModal: (dato: string) => void;
@@ -13,7 +15,9 @@ interface IProps {
 }
 
 export function Uke(props: IProps) {
+  const { locale } = useTypedRouteLoaderData("root");
   const { rapporteringUke, readonly, aapneModal, spacing } = props;
+  const { getAppText } = useSanity();
 
   function erAktivStil(dag: IRapporteringsperiodeDag, typer: AktivitetType[]): boolean {
     const dagenHarAktivitet = dag.aktiviteter.length > 0;
@@ -57,7 +61,7 @@ export function Uke(props: IProps) {
             {ikkeRapporteringspliktig && !readonly && (
               <button
                 className={classNames(styles.dato, styles.ikkeRapporteringspliktig)}
-                aria-label={hentSkjermleserDatoTekst(dag)}
+                aria-label={hentSkjermleserDatoTekst(dag, getAppText, locale)}
                 disabled
               >
                 {`${format(new Date(dag.dato), "d")}.`}
@@ -67,7 +71,7 @@ export function Uke(props: IProps) {
             {!ikkeRapporteringspliktig && !readonly && (
               <button
                 className={classNames(styles.dato, dagKnappStyle)}
-                aria-label={hentSkjermleserDatoTekst(dag)}
+                aria-label={hentSkjermleserDatoTekst(dag, getAppText, locale)}
                 onClick={() => aapneModal(dag.dato)}
               >
                 {`${format(new Date(dag.dato), "d")}.`}
@@ -76,7 +80,7 @@ export function Uke(props: IProps) {
 
             {dagenHarAktivitet && erAktivStil(dag, ["Arbeid"]) && (
               <div className={classNames(styles.datoMedAktivitet)} aria-hidden>
-                {hentAktivitetSummenTekst(dag)}
+                {hentAktivitetSummenTekst(dag, getAppText)}
               </div>
             )}
           </td>

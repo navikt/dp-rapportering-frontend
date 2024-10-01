@@ -20,6 +20,10 @@ const createSanityRichTextObject = (text: string) => [
   },
 ];
 
+export type GetAppText = (textId: string) => string;
+export type GetRichText = (textId: string) => TypedObject | TypedObject[];
+export type GetLink = (linkId: string) => ISanityLink;
+
 export function useSanity() {
   const { sanityTexts } = useTypedRouteLoaderData("root");
 

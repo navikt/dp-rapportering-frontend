@@ -23,19 +23,21 @@ export function AktivitetOppsummering({ rapporteringsperiode }: IProps) {
       <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
         <p>
           {getAppText("rapportering-syk")}
-          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Syk")}</span>
+          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Syk", getAppText)}</span>
         </p>
       </div>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
         <p>
           {getAppText("rapportering-fraevaer")}
-          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Fravaer")}</span>
+          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Fravaer", getAppText)}</span>
         </p>
       </div>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.utdanning)}>
         <p>
           {getAppText("rapportering-utdanning")}
-          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Utdanning")}</span>
+          <span>
+            {hentTotaltFravaerTekstMedType(rapporteringsperiode, "Utdanning", getAppText)}
+          </span>
         </p>
       </div>
     </div>

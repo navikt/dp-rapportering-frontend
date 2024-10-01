@@ -26,7 +26,7 @@ export async function lagreBegrunnelse(
       status: "error",
       error: {
         statusCode: response.status,
-        statusText: "Det har skjedd en feil ved lagring av begrunnelse, prøv igjen.",
+        statusText: `rapportering-feilmelding-lagre-begrunnelse-${response.status}`,
       },
     };
   }
