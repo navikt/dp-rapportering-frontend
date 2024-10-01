@@ -8,12 +8,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
 
   const periodeId = params.rapporteringsperiodeId;
-  const response = await lagEndringsperiode(request, periodeId);
 
-  if (response.ok) {
-    const { id }: IRapporteringsperiode = await response.json();
-    return redirect(`/periode/${id}/endring/fyll-ut`);
-  } else {
-    throw new Response(`Klarte ikke endre periode med id: ${periodeId}`, { status: 500 });
-  }
+  const response = await lagEndringsperiode(request, periodeId);
+  const { id }: IRapporteringsperiode = response;
+  return redirect(`/periode/${id}/endring/fyll-ut`);
 }

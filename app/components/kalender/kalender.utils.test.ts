@@ -67,16 +67,20 @@ describe("hentSkjermleserDatoTekst", () => {
 
   it("skal vise tekst for én aktivitet", () => {
     const tekst = hentSkjermleserDatoTekst(syk, mockGetAppText);
-    expect(tekst).toBe("mandag 9. september, Syk 1 dag");
+    expect(tekst).toBe("mandag 9. september, Syk 1 rapportering-dag");
   });
 
   it("skal vise tekst for to aktiviteter", () => {
     const tekst = hentSkjermleserDatoTekst(sykOgUtdanning, mockGetAppText);
-    expect(tekst).toBe("søndag 22. september, Syk 1 dag og Utdanning 1 dag");
+    expect(tekst).toBe(
+      "søndag 22. september, Syk 1 rapportering-dag og Utdanning 1 rapportering-dag"
+    );
   });
 
   it("skal vise tekst for én aktivitet heldag og én aktivitet med timer", () => {
     const tekst = hentSkjermleserDatoTekst(arbeidOgUtdanning, mockGetAppText);
-    expect(tekst).toBe("søndag 22. september, Utdanning 1 dag og Arbeid 5 timer");
+    expect(tekst).toBe(
+      "søndag 22. september, Utdanning 1 rapportering-dag og Arbeid 5 rapportering-timer"
+    );
   });
 });
