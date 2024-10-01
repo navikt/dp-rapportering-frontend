@@ -32,7 +32,7 @@ export async function lagreAktivitet(
       status: "error",
       error: {
         statusCode: response.status,
-        statusText: "Det har skjedd en feil ved lagring av aktivitet, prøv igjen.",
+        statusText: `rapportering-feilmelding-lagre-aktivitet-${response.status}`,
       },
     };
   }

@@ -24,11 +24,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   switch (submitKnapp) {
     case "slette": {
-      return await slettAlleAktiviteter(request, periodeId, formdata);
+      return slettAlleAktiviteter(request, periodeId, formdata);
     }
 
     case "lagre": {
-      return await validerOgLagreAktivitet(request, periodeId, formdata);
+      return validerOgLagreAktivitet(request, periodeId, formdata);
     }
 
     default: {

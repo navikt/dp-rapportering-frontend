@@ -13,7 +13,6 @@ import {
 } from "@remix-run/react";
 import { useState } from "react";
 import invariant from "tiny-invariant";
-import { logger } from "~/models/logger.server";
 import {
   hentPeriode,
   hentRapporteringsperioder,
@@ -43,20 +42,28 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const periodeId = params.rapporteringsperiodeId;
 
-  const periode = await hentPeriode(request, periodeId, false);
-
-  const response = await sendInnPeriode(request, periode);
-
-  if (response.ok) {
-    return redirect(`/periode/${periodeId}/bekreftelse`);
-  } else {
-    logger.warn(`Klarte ikke sende inn rapportering med id: ${periodeId}`, {
-      statustext: response.statusText,
-    });
+  try {
+    const periode = await hentPeriode(request, periodeId, false);
+    const response = await sendInnPeriode(request, periode);
+    const { id } = response;
+    return redirect(`/periode/${id}/endring/bekreftelse`);
+  } catch (error: unknown) {
+    // TODO: Her ønsker vi å vise en modal, ikke en ny side
+    // TODO: Feilen er en network error
+    if (error instanceof Error) {
+      return json(
+        {
+          error: "rapportering-feilmelding-feil-ved-innsending",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
 
     return json(
       {
-        error: "Det har skjedd noe feil med innsendingen din, prøv igjen.",
+        error: "rapportering-feilmelding-feil-ved-innsending",
       },
       {
         status: 500,
@@ -89,7 +96,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     );
     const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed);
 
-    invaerendePeriodeTekst = `Uke ${ukenummer} (${dato})`;
+    invaerendePeriodeTekst = `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
   }
 
   return (

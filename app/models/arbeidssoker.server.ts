@@ -26,7 +26,7 @@ export async function lagreArbeidssokerSvar(
       status: "error",
       error: {
         statusCode: response.status,
-        statusText: "Det har skjedd en feil ved lagring av arbeidssøker svar, prøv igjen.",
+        statusText: `rapportering-feilmelding-lagre-arbeidssoker-svar-${response.status}`,
       },
     };
   }
