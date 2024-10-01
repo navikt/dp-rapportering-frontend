@@ -26,7 +26,7 @@ export async function lagreRapporteringstype(
       status: "error",
       error: {
         statusCode: response.status,
-        statusText: "Det har skjedd en feil ved lagring av rapporteringstype, prøv igjen.",
+        statusText: `rapportering-feilmelding-lagre-rapporteringstype-${response.status}`,
       },
     };
   }

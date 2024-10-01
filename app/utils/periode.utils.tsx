@@ -1,12 +1,12 @@
 import { formaterDato, formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 import { PortableText } from "@portabletext/react";
-import { TypedObject } from "@portabletext/types";
 import { addDays } from "date-fns";
 import { renderToString } from "react-dom/server";
 import { parse } from "tinyduration";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { aktivitetTypeMap } from "~/utils/aktivitettype.utils";
+import type { GetAppText, GetRichText } from "~/hooks/useSanity";
 
 export function periodeSomTimer(periode: string): number | undefined {
   if (!periode) return undefined;
@@ -19,7 +19,7 @@ export function periodeSomTimer(periode: string): number | undefined {
 
 export function hentPeriodeTekst(
   rapporteringsperiode: IRapporteringsperiode,
-  getAppText: (textId: string) => string
+  getAppText: GetAppText
 ): string {
   const { fraOgMed, tilOgMed } = rapporteringsperiode.periode;
   const ukenummer = formaterPeriodeTilUkenummer(fraOgMed, tilOgMed);
@@ -30,7 +30,7 @@ export function hentPeriodeTekst(
 
 export function hentTotaltArbeidstimerTekst(
   rapporteringsperiode: IRapporteringsperiode,
-  getAppText: (textId: string) => string
+  getAppText: GetAppText
 ): string {
   const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
   const filtertAktiviteter = flatMapAktiviteter.filter((aktivitet) => aktivitet.type === "Arbeid");
@@ -45,26 +45,27 @@ export function hentTotaltArbeidstimerTekst(
   const formattertTimer = timer.toString().replace(/\./g, ",");
 
   // TODO: Alltid vis "timer"?
-  return `${formattertTimer} ${timer > 1 ? getAppText("rapportering-timer") : getAppText("rapportering-time")}`;
+  return `${formattertTimer} ${timer === 1 ? getAppText("rapportering-time") : getAppText("rapportering-timer")}`;
 }
 
 export function hentTotaltFravaerTekstMedType(
   rapporteringsperiode: IRapporteringsperiode,
-  aktivitetType: AktivitetType
+  aktivitetType: AktivitetType,
+  getAppText: GetAppText
 ): string {
   const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
   const filtertAktiviteter = flatMapAktiviteter.filter(
     (aktivitet) => aktivitet.type === aktivitetType
   );
 
-  return `${filtertAktiviteter.length} ${filtertAktiviteter.length > 1 ? "dager" : "dag"}`;
+  return `${filtertAktiviteter.length} ${filtertAktiviteter.length === 1 ? getAppText("rapportering-dag") : getAppText("rapportering-dager")}`;
 }
 
 export function samleHtmlForPeriode(
   rapporteringsperioder: IRapporteringsperiode[],
   periode: IRapporteringsperiode,
-  getAppText: (textId: string) => string,
-  getRichText: (textId: string) => TypedObject | TypedObject[]
+  getAppText: GetAppText,
+  getRichText: GetRichText
 ): string {
   const antallPerioder = rapporteringsperioder.length;
 
@@ -289,15 +290,15 @@ export function samleHtmlForPeriode(
     "<br>" +
     getAppText("rapportering-syk") +
     " " +
-    hentTotaltFravaerTekstMedType(periode, "Syk") +
+    hentTotaltFravaerTekstMedType(periode, "Syk", getAppText) +
     "<br>" +
     getAppText("rapportering-fraevaer") +
     " " +
-    hentTotaltFravaerTekstMedType(periode, "Fravaer") +
+    hentTotaltFravaerTekstMedType(periode, "Fravaer", getAppText) +
     "<br>" +
     getAppText("rapportering-utdanning") +
     " " +
-    hentTotaltFravaerTekstMedType(periode, "Utdanning") +
+    hentTotaltFravaerTekstMedType(periode, "Utdanning", getAppText) +
     "<br>" +
     "<br>" +
     "X " +

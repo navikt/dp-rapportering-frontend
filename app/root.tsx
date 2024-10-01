@@ -95,7 +95,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const locale: DecoratorLocale = (await getLanguage(request)) as DecoratorLocale;
   const fragments = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
 
-  if (!fragments) throw json({ error: "Kunne ikke hente dekoratør" }, { status: 500 });
+  if (!fragments)
+    throw json({ error: "rapportering-feilmelding-kunne-ikke-hente-dekoratoren" }, { status: 500 });
 
   const sanityTexts = await sanityClient.fetch<ISanity>(allTextsQuery, {
     baseLang: DecoratorLocale.NB,
@@ -112,6 +113,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return json({
     sanityTexts,
+    locale: getLocale(locale),
     env: {
       BASE_PATH: process.env.BASE_PATH,
       IS_LOCALHOST: process.env.IS_LOCALHOST,
@@ -181,14 +183,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   const { getAppText } = useSanity();
 
-  // const fetcher = useFetcher();
-  // if (typeof document !== "undefined") {
-  //   setAvailableLanguages(availableLanguages);
+  const fetcher = useFetcher();
+  const useLanguageSelector = false;
+  if (useLanguageSelector && typeof document !== "undefined") {
+    setAvailableLanguages(availableLanguages);
 
-  //   onLanguageSelect((language) => {
-  //     fetcher.submit({ locale: language.locale }, { method: "post" });
-  //   });
-  // }
+    onLanguageSelect((language) => {
+      fetcher.submit({ locale: language.locale }, { method: "post" });
+    });
+  }
 
   useEffect(() => {
     setBreadcrumbs([], getAppText);

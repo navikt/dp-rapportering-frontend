@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs } from "@remix-run/node";
 import { startUtfylling } from "~/models/rapporteringsperiode.server";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -6,16 +6,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
 
-  try {
-    await startUtfylling(request, rapporteringsperiodeId);
+  await startUtfylling(request, rapporteringsperiodeId);
 
-    return new Response(null, {
-      status: 303,
-      headers: {
-        Location: `/periode/${rapporteringsperiodeId}/rapporteringstype`,
-      },
-    });
-  } catch (error) {
-    return json({ status: "error", error });
-  }
+  return new Response(null, {
+    status: 303,
+    headers: {
+      Location: `/periode/${rapporteringsperiodeId}/rapporteringstype`,
+    },
+  });
 }

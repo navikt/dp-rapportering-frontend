@@ -46,7 +46,7 @@ describe("lagreBegrunnelse", () => {
       status: "error",
       error: {
         statusCode: 500,
-        statusText: "Det har skjedd en feil ved lagring av begrunnelse, prøv igjen.",
+        statusText: "rapportering-feilmelding-lagre-begrunnelse-500",
       },
     });
   });

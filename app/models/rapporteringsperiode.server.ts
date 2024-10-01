@@ -14,6 +14,12 @@ export enum IRapporteringsperiodeStatus {
   Endret = "Endret",
 }
 
+export interface IRapporteringsperiodeDag {
+  dagIndex: number;
+  dato: string;
+  aktiviteter: IAktivitet[];
+}
+
 export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;
@@ -29,19 +35,37 @@ export interface IRapporteringsperiode {
   html?: string;
 }
 
-export interface IRapporteringsperiodeDag {
-  dagIndex: number;
-  dato: string;
-  aktiviteter: IAktivitet[];
+export interface IInnsendtRapporteringsperiodeResponse {
+  id: string;
+  status: InnsendtRapporteringsperiodeStatus;
+  feil: IInnsendtRapporteringsperiodeFeil[];
+}
+
+export interface IInnsendtRapporteringsperiodeFeil {
+  kode: string;
+  params: string[];
+}
+
+export enum InnsendtRapporteringsperiodeStatus {
+  OK = "OK",
+  FEIL = "FEIL",
 }
 
 export async function startUtfylling(request: Request, periodeId: string): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/start`;
 
-  return await fetch(url, {
+  const response = await fetch(url, {
     method: "POST",
     headers: await getHeaders(request),
   });
+
+  if (!response.ok) {
+    throw new Response(`rapportering-feilmelding-start-utfylling-${response.status}`, {
+      status: response.status,
+    });
+  }
+
+  return response;
 }
 
 export async function hentRapporteringsperioder(
@@ -55,11 +79,13 @@ export async function hentRapporteringsperioder(
   });
 
   if (!response.ok) {
-    throw new Response("Feil i uthenting av meldekort", { status: 500 });
+    throw new Response(`rapportering-feilmelding-hent-perioder-${response.status}`, {
+      status: response.status,
+    });
   }
 
   if (response.status === 204) {
-    throw new Response("Ingen meldekort funnet", { status: 404 });
+    throw new Response("rapportering-feilmelding-hent-perioder-404", { status: 404 });
   }
 
   const rapporteringsperioder: IRapporteringsperiode[] = await response.json();
@@ -82,13 +108,13 @@ export async function hentPeriode(
   });
 
   if (!response.ok) {
-    throw new Response("Feil i uthenting av meldekort", { status: 500 });
+    throw new Response("rapportering-feilmelding-hent-meldekort-500", { status: 500 });
   }
 
   const periode: IRapporteringsperiode = await response.json();
 
   if (!periode) {
-    throw new Response("Fant ikke meldekortet", { status: 404 });
+    throw new Response("rapportering-feilmelding-hent-meldekort-404", { status: 404 });
   }
 
   return periode;
@@ -103,10 +129,11 @@ export async function hentInnsendtePerioder(request: Request): Promise<IRapporte
   });
 
   if (!respone.ok) {
-    throw new Response("Feil i uthenting av alle rapporteringsperioder", {
+    throw new Response("rapportering-feilmelding-hent-innsendte-meldekort-500", {
       status: 500,
     });
   }
+
   if (respone.status === 204) {
     return [];
   }
@@ -117,7 +144,7 @@ export async function hentInnsendtePerioder(request: Request): Promise<IRapporte
 export async function sendInnPeriode(
   request: Request,
   rapporteringsperiode: IRapporteringsperiode
-): Promise<Response> {
+): Promise<IInnsendtRapporteringsperiodeResponse> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
   const formData = await request.formData();
@@ -141,18 +168,37 @@ export async function sendInnPeriode(
     userAgent,
   };
 
-  return await fetch(url, {
+  const response = await fetch(url, {
     method: "POST",
     headers: headers,
     body: JSON.stringify(rapporteringsperiodeWithHtml),
   });
+
+  if (!response.ok) {
+    throw new Response(`rapportering-feilmelding-send-inn-periode-${response.status}`, {
+      status: response.status,
+    });
+  }
+
+  return response.json();
 }
 
-export async function lagEndringsperiode(request: Request, periodeId: string) {
+export async function lagEndringsperiode(
+  request: Request,
+  periodeId: string
+): Promise<IRapporteringsperiode> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/endre`;
 
-  return await fetch(url, {
+  const response = await fetch(url, {
     method: "POST",
     headers: await getHeaders(request),
   });
+
+  if (!response.ok) {
+    throw new Response(`rapportering-feilmelding-lag-endringsperiode-${response.status}`, {
+      status: response.status,
+    });
+  }
+
+  return response.json();
 }

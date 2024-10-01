@@ -53,20 +53,20 @@ export function SessionModal() {
         open={open}
         onClose={() => setOpen(false)}
         header={{
-          heading: getAppText("utlopt-sessjon.modal-tittel"),
+          heading: getAppText("rapportering-utlopt-sessjon.modal-tittel"),
           size: "medium",
           closeButton: false,
         }}
         width="medium"
       >
         <Modal.Body>
-          {getAppText("utlopt-sessjon.modal-detaljer")}
+          {getAppText("rapportering-utlopt-sessjon.modal-detaljer")}
           <div className={styles.actionButtonsContainer}>
             <Button variant={"primary"} onClick={login}>
-              {getAppText("utlopt-sessjon.logg-inn-pa-nytt.knapp-tekst")}
+              {getAppText("rapportering-utlopt-sessjon.logg-inn-pa-nytt.knapp-tekst")}
             </Button>
             <Button variant={"tertiary"} onClick={nagivateToNavHomePage} loading={isNagivating}>
-              {getAppText("utlopt-sessjon.ga-til-forsiden.knapp-tekst")}
+              {getAppText("rapportering-utlopt-sessjon.ga-til-forsiden.knapp-tekst")}
             </Button>
           </div>
         </Modal.Body>

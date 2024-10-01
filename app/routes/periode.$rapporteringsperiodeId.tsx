@@ -1,19 +1,14 @@
 import { Accordion } from "@navikt/ds-react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import {
-  Outlet,
-  isRouteErrorResponse,
-  useLoaderData,
-  useLocation,
-  useRouteError,
-} from "@remix-run/react";
+import { Outlet, useLoaderData, useLocation, useRouteError } from "@remix-run/react";
 import { useEffect } from "react";
 import invariant from "tiny-invariant";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
+import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
@@ -63,10 +58,5 @@ export default function RapporteringsPeriodeSide() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-
-  if (isRouteErrorResponse(error)) {
-    return <div>Oh no{error.statusText}</div>;
-  }
-
-  return <div>Neeei {(error as Error).message}</div>;
+  return <GeneralErrorBoundary error={error} />;
 }
