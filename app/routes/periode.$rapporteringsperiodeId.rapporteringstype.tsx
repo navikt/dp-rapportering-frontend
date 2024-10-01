@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, BodyShort, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
@@ -99,13 +99,11 @@ export default function RapporteringstypeSide() {
         </>
       )}
 
-      <div className="my-8">
-        <Heading size="small" level="2">
-          {rapporteringsperioder.length > 1 && getAppText("rapportering-foerste-periode")}
-          {rapporteringsperioder.length === 1 && getAppText("rapportering-naavaerende-periode")}
-        </Heading>
-        <BodyShort size="small">{hentPeriodeTekst(periode, getAppText)}</BodyShort>
-      </div>
+      <Heading size="large" level="2">
+        {rapporteringsperioder.length > 1 && getAppText("rapportering-foerste-periode")}
+        {rapporteringsperioder.length === 1 && getAppText("rapportering-naavaerende-periode")}
+      </Heading>
+      <p>{hentPeriodeTekst(periode, getAppText)}</p>
 
       <PortableText
         components={getSanityPortableTextComponents({
