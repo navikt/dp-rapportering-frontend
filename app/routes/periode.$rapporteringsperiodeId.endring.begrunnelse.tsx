@@ -10,6 +10,7 @@ import { RemixLink } from "~/components/RemixLink";
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const fetcher = useFetcher();
+  const { getAppText, getLink } = useSanity();
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
@@ -22,8 +23,6 @@ export default function RapporteringsPeriodeFyllUtSide() {
       { method: "post", action: "/api/begrunnelse" }
     );
   };
-
-  const { getAppText, getLink } = useSanity();
 
   return (
     <>

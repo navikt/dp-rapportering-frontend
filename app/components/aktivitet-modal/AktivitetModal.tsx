@@ -75,7 +75,7 @@ export function AktivitetModal({
 
             {actionData?.status === "error" && actionData?.error && (
               <Alert variant="error" className={styles.feilmelding}>
-                {actionData.error.statusText}
+                {getAppText(actionData.error.statusText)}
               </Alert>
             )}
 

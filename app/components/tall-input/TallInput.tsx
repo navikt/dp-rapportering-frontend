@@ -1,5 +1,4 @@
-import style from "./Tallinput.module.css";
-import { BodyShort, TextField } from "@navikt/ds-react";
+import { TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useField } from "remix-validated-form";
 import { useSanity } from "~/hooks/useSanity";
@@ -13,7 +12,7 @@ export interface IProps {
 
 export function TallInput(props: IProps) {
   const { error, getInputProps } = useField(props.name);
-  const { getRichText } = useSanity();
+  const { getRichText, getAppText } = useSanity();
 
   return (
     <div>
@@ -23,16 +22,14 @@ export function TallInput(props: IProps) {
         name={props.name}
         className={props.className}
         defaultValue={props.verdi}
-        error={error}
+        error={error ? getAppText(error) : undefined}
         {...getInputProps({
           id: props.name,
-          label: <>{props.label}</>,
+          label: props.label,
         })}
       />
 
-      <BodyShort className={style.tallInputBeskrivelse} textColor="subtle">
-        <PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />
-      </BodyShort>
+      <PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />
     </div>
   );
 }
