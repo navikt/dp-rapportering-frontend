@@ -46,7 +46,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const periode = await hentPeriode(request, periodeId, false);
     const response = await sendInnPeriode(request, periode);
     const { id } = response;
-    return redirect(`/periode/${id}/endring/bekreftelse`);
+    return redirect(`/periode/${id}/bekreftelse`);
   } catch (error: unknown) {
     // TODO: Her ønsker vi å vise en modal, ikke en ny side
     // TODO: Feilen er en network error
