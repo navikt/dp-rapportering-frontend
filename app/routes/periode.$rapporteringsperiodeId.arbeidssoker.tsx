@@ -35,7 +35,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         rapporteringsperiodeId={periode.id}
         registrertArbeidssoker={periode.registrertArbeidssoker}
       />
-      <div className="navigasjon-container-to-knapper my-4">
+      <div className="navigasjon-container my-4">
         <RemixLink
           as="Button"
           to={""}

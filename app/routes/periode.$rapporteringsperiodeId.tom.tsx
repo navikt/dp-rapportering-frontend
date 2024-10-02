@@ -28,7 +28,7 @@ export default function TomRapporteringsPeriodeSide() {
         <PortableText value={getRichText("rapportering-tom-ingen-å-rapportere")} />
       </div>
 
-      <div className="navigasjon-container-to-knapper my-4">
+      <div className="navigasjon-container my-4">
         <RemixLink
           as="Button"
           to=""

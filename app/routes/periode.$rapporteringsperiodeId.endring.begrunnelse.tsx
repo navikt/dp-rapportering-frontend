@@ -63,7 +63,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         </option>
       </Select>
 
-      <div className="navigasjon-container-to-knapper my-4">
+      <div className="navigasjon-container my-4">
         <RemixLink
           as="Button"
           to={`/periode/${periode.id}/endring/fyll-ut`}
@@ -87,7 +87,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           {getAppText("rapportering-knapp-neste")}
         </RemixLink>
       </div>
-      <div className="navigasjon-container-en-knapp my-4">
+      <div className="navigasjon-container my-4">
         <RemixLink
           as="Link"
           to={getLink("rapportering-endre-avbryt").linkUrl}
