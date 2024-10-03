@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyLong, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, BodyLong, BodyShort, Heading } from "@navikt/ds-react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -67,7 +67,9 @@ export default function InnsendteRapporteringsPerioderSide() {
                   <div
                     className={`innsendt-periode-header-status ${periode.status.toLocaleLowerCase()}`}
                   >
-                    {getAppText(`rapportering-status-${periode.status.toLocaleLowerCase()}`)}
+                    <BodyShort>
+                      {getAppText(`rapportering-status-${periode.status.toLocaleLowerCase()}`)}
+                    </BodyShort>
                   </div>
                 </div>
               </Accordion.Header>
