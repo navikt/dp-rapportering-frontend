@@ -26,17 +26,17 @@ export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
-  sisteFristForTrekk?: string;
+  sisteFristForTrekk: string | null;
   kanSendesFra: string;
   kanSendes: boolean;
   kanEndres: boolean;
-  bruttoBelop?: number;
-  begrunnelseEndring?: string;
+  bruttoBelop: number | null;
+  begrunnelseEndring: string | null;
   status: IRapporteringsperiodeStatus;
-  mottattDato?: string;
+  mottattDato: string | null;
   registrertArbeidssoker: boolean | null;
-  originalId?: string;
-  html?: string;
+  originalId: string | null;
+  html: string | null;
   rapporteringstype: Rapporteringstype | null;
 }
 

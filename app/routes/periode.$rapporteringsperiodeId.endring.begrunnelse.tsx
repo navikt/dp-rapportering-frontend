@@ -34,7 +34,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         label={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-label")}
         description={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-description")}
         name="begrunnelseEndring"
-        value={periode.begrunnelseEndring}
+        value={periode.begrunnelseEndring ?? undefined}
         onChange={handleChange}
       >
         <option value="">

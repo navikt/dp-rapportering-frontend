@@ -1,4 +1,4 @@
-import { format, getWeek, getYear, subDays } from "date-fns";
+import { addDays, format, getWeek, getYear, subDays } from "date-fns";
 import { Database } from "mocks/session";
 import { ScenarioType } from "~/devTools";
 import {
@@ -45,13 +45,11 @@ function findAllInnsendtePerioder(db: Database) {
   return db.rapporteringsperioder.findMany({
     where: {
       status: {
-        equals: "Innsendt",
+        in: ["Innsendt", "Endret", "Ferdig", "Feilet"],
       },
     },
     orderBy: {
-      periode: {
-        fraOgMed: "desc",
-      },
+      mottattDato: "desc",
     },
   }) as IRapporteringsperiode[];
 }
@@ -188,28 +186,71 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
         tilOgMed: formatereDato(subDays(new Date(fraOgMed), 1)),
       };
 
+      const periode1KanSendesFra = format(subDays(new Date(periode1.fraOgMed), 1), "yyyy-MM-dd");
+
       const periode2 = {
         fraOgMed: formatereDato(subDays(new Date(fraOgMed), 28)),
         tilOgMed: formatereDato(subDays(new Date(fraOgMed), 15)),
       };
 
+      const periode2KanSendesFra = format(subDays(new Date(periode2.fraOgMed), 1), "yyyy-MM-dd");
+
+      const periode3 = {
+        fraOgMed: formatereDato(subDays(new Date(fraOgMed), 42)),
+        tilOgMed: formatereDato(subDays(new Date(fraOgMed), 29)),
+      };
+
+      const periode3KanSendesFra = format(subDays(new Date(periode3.fraOgMed), 1), "yyyy-MM-dd");
+
+      // Endret
+      const endretPeriode = lagRapporteringsperiode({
+        kanSendes: false,
+        status: IRapporteringsperiodeStatus.Endret,
+        rapporteringstype: Rapporteringstype.harAktivitet,
+        periode: periode1,
+        kanEndres: false,
+        kanSendesFra: periode1KanSendesFra,
+        mottattDato: periode1KanSendesFra,
+      });
+      db.rapporteringsperioder.create(endretPeriode);
+
+      // Innsendt (erstatter endret)
       db.rapporteringsperioder.create(
         lagRapporteringsperiode({
           kanSendes: false,
-          status: IRapporteringsperiodeStatus.Innsendt,
           rapporteringstype: Rapporteringstype.harAktivitet,
+          status: IRapporteringsperiodeStatus.Innsendt,
           periode: periode1,
-          kanSendesFra: format(subDays(new Date(periode1.tilOgMed), 1), "yyyy-MM-dd"),
+          kanEndres: false,
+          kanSendesFra: periode1KanSendesFra,
+          originalId: endretPeriode.id,
+          mottattDato: format(addDays(new Date(periode1.fraOgMed), 7), "yyyy-MM-dd"),
+          begrunnelseEndring: "Glemt å registrere aktivitet",
         })
       );
 
+      // Ferdig
       db.rapporteringsperioder.create(
         lagRapporteringsperiode({
           kanSendes: false,
+          bruttoBelop: 8632,
+          status: IRapporteringsperiodeStatus.Ferdig,
           rapporteringstype: Rapporteringstype.harAktivitet,
-          status: IRapporteringsperiodeStatus.Innsendt,
           periode: periode2,
-          kanSendesFra: format(subDays(new Date(periode2.fraOgMed), 1), "yyyy-MM-dd"),
+          kanSendesFra: periode2KanSendesFra,
+          mottattDato: periode2KanSendesFra,
+        })
+      );
+
+      // Feilet
+      db.rapporteringsperioder.create(
+        lagRapporteringsperiode({
+          kanSendes: false,
+          status: IRapporteringsperiodeStatus.Feilet,
+          rapporteringstype: Rapporteringstype.harAktivitet,
+          periode: periode3,
+          kanSendesFra: periode3KanSendesFra,
+          mottattDato: periode3KanSendesFra,
         })
       );
 

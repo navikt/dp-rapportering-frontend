@@ -44,12 +44,18 @@ const mockRapporteringsperiode: IRapporteringsperiode = {
   id: "1",
   periode: mockPeriode,
   dager: [mockRapporteringsperiodeDag],
-  status: IRapporteringsperiodeStatus.TilUtfylling,
-  rapporteringstype: Rapporteringstype.harAktivitet,
+  sisteFristForTrekk: null,
   kanSendesFra: "2024-06-01",
   kanSendes: true,
   kanEndres: false,
+  bruttoBelop: null,
+  begrunnelseEndring: null,
+  status: IRapporteringsperiodeStatus.TilUtfylling,
+  mottattDato: null,
   registrertArbeidssoker: false,
+  originalId: null,
+  html: null,
+  rapporteringstype: Rapporteringstype.harAktivitet,
 };
 
 const defaultProps = {

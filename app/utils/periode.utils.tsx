@@ -17,6 +17,13 @@ export function periodeSomTimer(periode: string): number | undefined {
   return timer + minutt / 60;
 }
 
+export function hentUkeTekst(
+  { periode: { fraOgMed, tilOgMed } }: IRapporteringsperiode,
+  getAppText: GetAppText
+): string {
+  return `${getAppText("rapportering-uke")} ${formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}`;
+}
+
 export function hentPeriodeTekst(
   rapporteringsperiode: IRapporteringsperiode,
   getAppText: GetAppText
