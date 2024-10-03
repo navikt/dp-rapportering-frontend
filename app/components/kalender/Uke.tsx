@@ -48,6 +48,8 @@ export function Uke(props: IProps) {
           [styles.fravaer]: erAktivStil(dag, ["Fravaer"]),
           [styles.utdanning]: erAktivStil(dag, ["Utdanning"]),
           [styles.arbeidOgUtdanning]: erAktivStil(dag, ["Arbeid", "Utdanning"]),
+          [styles.sykOgUtdanning]: erAktivStil(dag, ["Syk", "Utdanning"]),
+          [styles.fravaerOgUtdanning]: erAktivStil(dag, ["Fravaer", "Utdanning"]),
         };
 
         return (
