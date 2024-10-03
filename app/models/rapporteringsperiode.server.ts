@@ -12,6 +12,8 @@ export enum IRapporteringsperiodeStatus {
   TilUtfylling = "TilUtfylling",
   Innsendt = "Innsendt",
   Endret = "Endret",
+  Ferdig = "Ferdig",
+  Feilet = "Feilet",
 }
 
 export interface IRapporteringsperiodeDag {
@@ -24,15 +26,18 @@ export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
-  status: IRapporteringsperiodeStatus;
+  sisteFristForTrekk?: string;
   kanSendesFra: string;
   kanSendes: boolean;
   kanEndres: boolean;
-  rapporteringstype: Rapporteringstype | null;
+  bruttoBelop?: number;
   begrunnelseEndring?: string;
+  status: IRapporteringsperiodeStatus;
+  mottattDato?: string;
   registrertArbeidssoker: boolean | null;
   originalId?: string;
   html?: string;
+  rapporteringstype: Rapporteringstype | null;
 }
 
 export interface IInnsendtRapporteringsperiodeResponse {
