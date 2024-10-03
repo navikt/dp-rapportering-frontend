@@ -36,10 +36,6 @@
   transition: all ease-in-out 200ms;
 }
 
-.spacing {
-  gap: var(--a-spacing-10);
-}
-
 .ukeRadKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
