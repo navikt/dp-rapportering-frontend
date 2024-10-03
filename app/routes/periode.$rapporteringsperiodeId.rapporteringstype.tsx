@@ -99,7 +99,7 @@ export default function RapporteringstypeSide() {
         </>
       )}
 
-      <Heading size="large" level="2">
+      <Heading size="medium" level="2">
         {rapporteringsperioder.length > 1 && getAppText("rapportering-foerste-periode")}
         {rapporteringsperioder.length === 1 && getAppText("rapportering-naavaerende-periode")}
       </Heading>

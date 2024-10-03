@@ -45,7 +45,7 @@ export default function InnsendteRapporteringsPerioderSide() {
 
   return (
     <>
-      <Heading size={"medium"} level={"2"}>
+      <Heading size="medium" level="2">
         {getAppText("rapportering-innsendt-beskrivelse-tittel")}
       </Heading>
       <BodyLong className="tekst-subtil" spacing>

@@ -71,7 +71,7 @@ export default function Landingsside() {
 
       {forstePeriode?.kanSendes === true && (
         <>
-          <Heading size="small" level="2">
+          <Heading size="medium" level="2">
             {getAppText("rapportering-samtykke-tittel")}
           </Heading>
 

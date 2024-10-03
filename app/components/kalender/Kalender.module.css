@@ -214,10 +214,10 @@
 }
 
 @media screen and (min-width: 768px) {
-  .kalender {
+  /* .kalender {
     margin-left: calc(var(--a-spacing-6) * -1);
     width: calc(var(--a-spacing-12) + 100%);
-  }
+  } */
 
   .ukedag {
     font-size: var(--a-font-size-medium);

@@ -105,7 +105,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         {getAppText("rapportering-periode-kan-ikke-sendes")}
       </KanIkkeSendes>
 
-      <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
+      <Heading tabIndex={-1} level="2" size="medium" spacing className="vo-fokus">
         {getAppText("rapportering-send-inn-tittel")}
       </Heading>
 
