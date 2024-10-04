@@ -31,13 +31,9 @@
 
 .ukerKontainer {
   display: grid;
-  gap: var(--a-spacing-6);
+  gap: var(--a-spacing-10);
   grid-auto-flow: row;
   transition: all ease-in-out 200ms;
-}
-
-.spacing {
-  gap: var(--a-spacing-10);
 }
 
 .ukeRadKontainer {
@@ -143,7 +139,6 @@
   background-color: var(--a-purple-50);
 }
 
-/* TODO: Endre bakgrunn når arbeid og utdanning er aktivt */
 .datoMedAktivitetArbeidOgUtdanning {
   background-color: var(--a-blue-50);
 }
@@ -156,6 +151,8 @@
   background-color: var(--a-blue-300);
 }
 
+.sykOgUtdanning::after,
+.fravaerOgUtdanning::after,
 .arbeidOgUtdanning::after {
   content: '';
   position: absolute;
@@ -165,6 +162,22 @@
   border-radius: 50%;
   height: 50%;
   width: 50%;
+}
+
+.arbeidOgUtdanning:hover::after {
+  background-color: var(--a-purple-300);
+}
+
+.utdanning {
+  background-color: var(--a-purple-200);
+}
+
+.utdanning:hover {
+  background-color: var(--a-purple-300);
+}
+
+.timerUtdanning {
+  background-color: var(--a-purple-50);
 }
 
 .sykdom {
@@ -191,17 +204,6 @@
   background-color: var(--a-green-50);
 }
 
-.utdanning {
-  background-color: var(--a-purple-200);
-}
-
-.utdanning:hover {
-  background-color: var(--a-purple-300);
-}
-
-.timerUtdanning {
-  background-color: var(--a-purple-50);
-}
 
 
 .knappKontainer {
@@ -212,10 +214,10 @@
 }
 
 @media screen and (min-width: 768px) {
-  .kalender {
+  /* .kalender {
     margin-left: calc(var(--a-spacing-6) * -1);
     width: calc(var(--a-spacing-12) + 100%);
-  }
+  } */
 
   .ukedag {
     font-size: var(--a-font-size-medium);

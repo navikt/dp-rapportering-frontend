@@ -92,7 +92,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   return (
     <>
-      <Heading tabIndex={-1} size={"large"} level={"2"} className="vo-fokus">
+      <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
         {getAppText("rapportering-periode-fyll-ut-tittel")}
       </Heading>
       <BodyLong className="tekst-subtil" spacing>
