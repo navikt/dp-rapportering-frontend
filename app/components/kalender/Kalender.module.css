@@ -180,14 +180,6 @@
   background-color: var(--a-purple-50);
 }
 
-.sykdom {
-  background-color: var(--a-orange-200);
-}
-
-.sykdom:hover {
-  background-color: var(--a-orange-300);
-}
-
 .timerSykdom {
   background-color: var(--a-orange-50);
 }
@@ -204,7 +196,13 @@
   background-color: var(--a-green-50);
 }
 
+.sykdom, .sykOgFravaer {
+  background-color: var(--a-orange-200);
+}
 
+.sykdom:hover, .sykOgFravaer:hover {
+  background-color: var(--a-orange-300);
+}
 
 .knappKontainer {
   display: flex;
