@@ -142,7 +142,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           type="submit"
           variant="primary"
           iconPosition="right"
-          disabled={!confirmed || isSubmitting}
+          disabled={!periode.kanSendes || !confirmed || isSubmitting}
           className="py-4 px-8"
           name="_action"
           value="send-inn"
