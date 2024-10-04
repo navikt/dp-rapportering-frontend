@@ -83,7 +83,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                           {new Intl.DateTimeFormat(locale).format(new Date(periode.mottattDato))}
                         </div>
                       )}
-                      {periode.bruttoBelop && (
+                      {periode.bruttoBelop !== null && (
                         <div>
                           <strong>Bruttobeløp:</strong>{" "}
                           {new Intl.NumberFormat(locale, {
