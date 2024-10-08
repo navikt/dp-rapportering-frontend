@@ -51,7 +51,7 @@ export const handlers = [
     withDbHandler(async ({ db, request }) => {
       const periode = (await request.json()) as IRapporteringsperiode;
 
-      if (periode.status === IRapporteringsperiodeStatus.Endret) {
+      if (periode.originalId) {
         const originalPeriode = db.findRapporteringsperiodeById(periode.originalId as string);
         db.updateRapporteringsperiode(originalPeriode.id, { kanEndres: false });
 
