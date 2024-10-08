@@ -24,15 +24,9 @@ import {
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
 import { hasSession } from "mocks/session";
-import { useEffect } from "react";
 import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
-import {
-  DecoratorLocale,
-  availableLanguages,
-  getLocale,
-  setBreadcrumbs,
-} from "./utils/dekoratoren.utils";
+import { DecoratorLocale, availableLanguages, getLocale } from "./utils/dekoratoren.utils";
 import { isLocalOrDemo } from "./utils/env.utils";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
@@ -192,10 +186,6 @@ export default function App() {
       fetcher.submit({ locale: language.locale }, { method: "post" });
     });
   }
-
-  useEffect(() => {
-    setBreadcrumbs([], getAppText);
-  }, [getAppText]);
 
   return (
     <main id="maincontent" role="main" tabIndex={-1}>

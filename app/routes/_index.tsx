@@ -3,12 +3,13 @@ import { Alert, Button, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-reac
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as StartAction } from "./api.start";
 import { formaterDato } from "~/utils/dato.utils";
+import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
@@ -41,6 +42,10 @@ export default function Landingsside() {
 
   const forstePeriode = rapporteringsperioder[0];
 
+  useEffect(() => {
+    setBreadcrumbs([], getAppText);
+  }, [getAppText]);
+
   function startUtfylling() {
     startFetcher.submit(
       { rapporteringsperiodeId: forstePeriode.id },
@@ -66,11 +71,12 @@ export default function Landingsside() {
           />
         </Alert>
       )}
-
-      <PortableText value={getRichText("rapportering-innledning")} />
+      <div>
+        <PortableText value={getRichText("rapportering-innledning")} />
+      </div>
 
       {forstePeriode?.kanSendes === true && (
-        <>
+        <div>
           <Heading size="medium" level="2">
             {getAppText("rapportering-samtykke-tittel")}
           </Heading>
@@ -98,7 +104,7 @@ export default function Landingsside() {
               {getAppText("rapportering-neste")}
             </Button>
           </Center>
-        </>
+        </div>
       )}
 
       <Center>
