@@ -2,6 +2,7 @@
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
+import { action as slettAction } from "~/routes/api.slett";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
@@ -115,7 +116,7 @@ describe("Fyll ut rapporteringsperiode", () => {
 
         mockSession();
 
-        const response = await action({
+        const response = await slettAction({
           request,
           params: testParams,
           context: {},
