@@ -3,7 +3,7 @@ ingresses:
   - https://arbeid.ansatt.dev.nav.no/arbeid/dagpenger/meldekort
 base_path: "/arbeid/dagpenger/meldekort"
 idporten:
-  level: idporten-loa-high
+  level: idporten-loa-substantial
 dekorator:
   url: https://dekoratoren.dev.nav.no/
   env: dev

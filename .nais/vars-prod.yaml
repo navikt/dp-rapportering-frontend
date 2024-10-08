@@ -1,6 +1,6 @@
 ingress: "https://dagpenger.nav.no/rapportering"
 base_path: "/rapportering"
 idporten:
-  level: Level4
+  level: idporten-loa-substantial
 faro_url: "https://telemetry.nav.no/collect"
 sanity_datasett: "production"
