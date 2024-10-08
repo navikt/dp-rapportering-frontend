@@ -51,6 +51,7 @@ body {
   display: flex;
   gap: var(--a-spacing-4);
   margin: var(--a-spacing-4) 0;
+  justify-content: space-between; 
 }
 
 .innsendt-accordion-header span.navds-accordion__header-content {
@@ -147,6 +148,10 @@ body {
 @media screen and (min-width: 768px) {
   .rapportering-container {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);
+  }
+
+  .navigasjon-container {
+    justify-content: flex-start; 
   }
 }
 
