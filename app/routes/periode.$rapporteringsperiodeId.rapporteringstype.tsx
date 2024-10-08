@@ -4,7 +4,7 @@ import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { addDays } from "date-fns";
-import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as RapporteringstypeAction } from "./api.rapporteringstype";
@@ -12,7 +12,6 @@ import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import Center from "~/components/center/Center";
@@ -20,8 +19,8 @@ import Center from "~/components/center/Center";
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
-
-    return json({ rapporteringsperioder });
+    const gjeldendePeriode = rapporteringsperioder[0];
+    return json({ rapporteringsperioder, gjeldendePeriode });
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;
@@ -33,9 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
-  const { rapporteringsperioder } = useLoaderData<typeof loader>();
-  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-
+  const { gjeldendePeriode, rapporteringsperioder } = useLoaderData<typeof loader>();
   const { getAppText, getRichText } = useSanity();
 
   const rapporteringstypeFetcher = useFetcher<typeof RapporteringstypeAction>();
@@ -43,7 +40,7 @@ export default function RapporteringstypeSide() {
   const antallPerioder = rapporteringsperioder.length;
   const harFlerePerioder = antallPerioder > 1;
 
-  const [type, setType] = useState<Rapporteringstype | null>(periode.rapporteringstype);
+  const type = gjeldendePeriode.rapporteringstype;
 
   const rapporteringstypeFormLabel =
     rapporteringsperioder.length === 1
@@ -57,31 +54,23 @@ export default function RapporteringstypeSide() {
 
   const nesteKnappLink =
     type === Rapporteringstype.harIngenAktivitet
-      ? `/periode/${periode.id}/arbeidssoker`
-      : `/periode/${periode.id}/fyll-ut`;
+      ? `/periode/${gjeldendePeriode.id}/arbeidssoker`
+      : `/periode/${gjeldendePeriode.id}/fyll-ut`;
 
-  function endreRapporteringstype(valgtType: Rapporteringstype): void {
-    setType(valgtType);
-  }
-
-  useEffect(() => {
-    if (!type) {
-      setType(Rapporteringstype.harAktivitet);
-    }
-
-    if (type) {
+  const endreRapporteringstype = useCallback(
+    (valgtType: Rapporteringstype) => {
       rapporteringstypeFetcher.submit(
-        { rapporteringstype: type, rapporteringsperiodeId: periode.id },
+        { rapporteringstype: valgtType, rapporteringsperiodeId: gjeldendePeriode.id },
         { method: "post", action: "/api/rapporteringstype" }
       );
-    }
+    },
+    [gjeldendePeriode.id, rapporteringstypeFetcher]
+  );
 
-    // Hvis du inkluderer rapporteringstypeFetcher i dep. array får du en uendelig løkke
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type]);
-
-  const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
-  const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
+  const tidligstInnsendingDato = formaterDato(new Date(gjeldendePeriode.kanSendesFra));
+  const senestInnsendingDato = formaterDato(
+    addDays(new Date(gjeldendePeriode.periode.fraOgMed), 21)
+  );
 
   return (
     <>
@@ -103,7 +92,7 @@ export default function RapporteringstypeSide() {
         {rapporteringsperioder.length > 1 && getAppText("rapportering-foerste-periode")}
         {rapporteringsperioder.length === 1 && getAppText("rapportering-naavaerende-periode")}
       </Heading>
-      <p>{hentPeriodeTekst(periode, getAppText)}</p>
+      <p>{hentPeriodeTekst(gjeldendePeriode, getAppText)}</p>
 
       <PortableText
         components={getSanityPortableTextComponents({
@@ -117,7 +106,7 @@ export default function RapporteringstypeSide() {
 
       <RadioGroup
         legend={rapporteringstypeFormLabel}
-        description={hentPeriodeTekst(periode, getAppText)}
+        description={hentPeriodeTekst(gjeldendePeriode, getAppText)}
         onChange={endreRapporteringstype}
         value={type}
       >
