@@ -28,6 +28,7 @@ import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
 import { DecoratorLocale, availableLanguages, getLocale } from "./utils/dekoratoren.utils";
 import { isLocalOrDemo } from "./utils/env.utils";
+import { initInstrumentation } from "./utils/faro";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
@@ -115,6 +116,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       FARO_URL: process.env.FARO_URL,
       RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
       SANITY_DATASETT: process.env.SANITY_DATASETT,
+      GITHUB_SHA: process.env.GITHUB_SHA,
     },
     fragments,
   });
@@ -176,6 +178,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { getAppText } = useSanity();
+
+  initInstrumentation();
 
   const fetcher = useFetcher();
   const useLanguageSelector = false;
