@@ -143,7 +143,7 @@ export function getDag(
   return `<li>${ukedag.lang} ${format(new Date(dag.dato), "d")}. ${dag.aktiviteter.length ? dag.aktiviteter.map((aktivitet) => getAktivitet(aktivitet, getAppText)).join(", ") : ""}</li>`;
 }
 
-function getKalender(props: IProps, showModal: boolean = true): string {
+export function getKalender(props: IProps, showModal: boolean = true): string {
   const { periode, getAppText, locale } = props;
 
   if (!periode) {
@@ -201,18 +201,14 @@ export function getOppsummering({
 
 export function getInput({
   type,
-  name,
-  value,
   checked,
   label,
 }: {
   type: string;
-  name: string;
-  value: string | boolean;
   checked: boolean;
   label: string;
 }): string {
-  return `<input type="${type}" name="${name}" value="${value}" id="${value}" ${checked ? "checked" : ""} /><label for="${value}">${label}</label>`;
+  return `<input type="${type}" ${checked ? "checked" : ""} /><label>${label}</label>`;
 }
 
 export function htmlForEndringBegrunnelse(props: IProps): string {
@@ -352,8 +348,6 @@ export function htmlForRapporteringstype(props: IProps): string {
     .map((option) =>
       getInput({
         type: "radio",
-        name: "rapporteringstype",
-        value: option.value,
         checked: periode.rapporteringstype === option.value,
         label: option.label,
       })
@@ -423,17 +417,15 @@ export function htmlForArbeidssoker(props: IProps): string {
   ]
     .map((option) => {
       return getInput({
-        type: "checkbox",
-        name: "erRegistrertSomArbeidssoker",
-        value: option.value,
+        type: "radio",
         checked: option.value === periode.registrertArbeidssoker,
         label: getAppText(option.label),
       });
     })
     .join("");
 
-  const checkboxGroup = `<form><fieldset><legend>${legend}</legend><p>${description}</p>${options}</fieldset></form>`;
-  seksjoner.push(checkboxGroup);
+  const radioGroup = `<form><fieldset><legend>${legend}</legend><p>${description}</p>${options}</fieldset></form>`;
+  seksjoner.push(radioGroup);
   seksjoner.push(getArbeidssokerAlert(periode, getAppText, getRichText));
 
   return seksjoner.join("");

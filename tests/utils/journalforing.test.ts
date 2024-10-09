@@ -9,9 +9,18 @@ import {
   getArbeidssokerAlert,
   getDag,
   getHeader,
+  getInput,
+  getKalender,
   getLesMer,
+  getOppsummering,
+  htmlForArbeidssoker,
+  htmlForEndringBegrunnelse,
+  htmlForFyllUt,
   htmlForLandingsside,
+  htmlForOppsummering,
   htmlForRapporteringstype,
+  htmlForTom,
+  samleHtmlForPeriode,
 } from "~/utils/journalforing.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { createSanityRichTextObject } from "~/hooks/useSanity";
@@ -138,20 +147,85 @@ describe("getDag", () => {
 });
 
 describe("getKalender", () => {
-  it("TODO", () => {
-    expect(true).toBe(true);
+  it("viser liste med dager", () => {
+    const kalender = getKalender(
+      {
+        rapporteringsperioder: innsendtRapporteringsperioderResponse,
+        periode: innsendtRapporteringsperioderResponse[0],
+        getAppText: mockGetAppText,
+        getRichText: mockGetRichText,
+        locale,
+      },
+      false
+    );
+
+    expect(kalender).toContain("<ul>");
+  });
+
+  it("viser ikke modal", () => {
+    const kalender = getKalender(
+      {
+        rapporteringsperioder: innsendtRapporteringsperioderResponse,
+        periode: innsendtRapporteringsperioderResponse[0],
+        getAppText: mockGetAppText,
+        getRichText: mockGetRichText,
+        locale,
+      },
+      false
+    );
+
+    expect(kalender).not.toContain("rapportering-hva-vil-du-lagre");
+  });
+
+  it("viser modal", () => {
+    const kalender = getKalender(
+      {
+        rapporteringsperioder: innsendtRapporteringsperioderResponse,
+        periode: innsendtRapporteringsperioderResponse[0],
+        getAppText: mockGetAppText,
+        getRichText: mockGetRichText,
+        locale,
+      },
+      true
+    );
+
+    expect(kalender).toContain("rapportering-hva-vil-du-lagre");
   });
 });
 
 describe("getOppsummering", () => {
-  it("TODO", () => {
-    expect(true).toBe(true);
+  it("viser oppsummering med arbeid", () => {
+    const oppsummering = getOppsummering({
+      getAppText: mockGetAppText,
+      periode: innsendtRapporteringsperioderResponse[0],
+    });
+
+    expect(oppsummering).toContain("rapportering-arbeid: 23 rapportering-timer");
+    expect(oppsummering).toContain("rapportering-syk: 3 rapportering-dager");
+    expect(oppsummering).toContain("rapportering-fraevaer: 0 rapportering-dager");
   });
 });
 
 describe("getInput", () => {
-  it("TODO", () => {
-    expect(true).toBe(true);
+  const checkboxProps = {
+    type: "checkbox",
+    checked: true,
+    label: "test",
+  };
+
+  it("viser avhuket checkbox", () => {
+    const checkbox = getInput(checkboxProps);
+    expect(checkbox).toContain("checked");
+  });
+
+  it("viser checkbox som ikke er avhuket", () => {
+    const checkbox = getInput({ ...checkboxProps, checked: false });
+    expect(checkbox).toContain('type="checkbox"  />');
+  });
+
+  it("viser radiobutton som er valgt", () => {
+    const checkbox = getInput({ ...checkboxProps, type: "radio", checked: true });
+    expect(checkbox).toContain('type="radio" checked />');
   });
 });
 
@@ -235,7 +309,7 @@ describe("htmlForRapporteringstype", () => {
       locale,
     });
 
-    expect(html).toContain('id="harIngenAktivitet" checked');
+    expect(html).toContain("checked /><label>rapportering-ingen-å-rapportere");
   });
 
   it("viser at harAktivitet er valgt", () => {
@@ -250,42 +324,218 @@ describe("htmlForRapporteringstype", () => {
       locale,
     });
 
-    expect(html).toContain('id="harAktivitet" checked');
+    expect(html).toContain("checked /><label>rapportering-noe-å-rapportere");
   });
 });
 
 describe("htmlForArbeidssoker", () => {
-  it("TODO", () => {
-    expect(true).toBe(true);
+  const html = htmlForArbeidssoker({
+    rapporteringsperioder: innsendtRapporteringsperioderResponse,
+    periode: innsendtRapporteringsperioderResponse[0],
+    getAppText: mockGetAppText,
+    getRichText: mockGetRichText,
+    locale,
+  });
+
+  it("viser radio buttons", () => {
+    expect(html).toContain('type="radio"');
+  });
+
+  it("viser at bruker skal forbli arbeidssøker", () => {
+    expect(html).toContain("checked /><label>rapportering-arbeidssokerregister-svar-ja");
+  });
+
+  const html2 = htmlForArbeidssoker({
+    rapporteringsperioder: innsendtRapporteringsperioderResponse,
+    periode: { ...innsendtRapporteringsperioderResponse[0], registrertArbeidssoker: false },
+    getAppText: mockGetAppText,
+    getRichText: mockGetRichText,
+    locale,
+  });
+
+  it("viser at bruker skal avregistreres som arbeidssøker", () => {
+    expect(html2).toContain("checked /><label>rapportering-arbeidssokerregister-svar-nei");
   });
 });
 
 describe("htmlForOppsummering", () => {
-  it("TODO", () => {
-    expect(true).toBe(true);
+  const begrunnelseEndring = "Annet";
+  const endretMeldekort = htmlForOppsummering({
+    rapporteringsperioder: innsendtRapporteringsperioderResponse,
+    periode: {
+      ...innsendtRapporteringsperioderResponse[0],
+      originalId: "123",
+      begrunnelseEndring,
+    },
+    getAppText: mockGetAppText,
+    getRichText: mockGetRichText,
+    locale,
+  });
+
+  it("viser oppsummering for endret meldekort", () => {
+    expect(endretMeldekort).toContain("<h3>rapportering-endring-begrunnelse-tittel</h3>");
+    expect(endretMeldekort).toContain(`<p>${begrunnelseEndring}</p>`);
+  });
+
+  it("viser checkbox for å godta endret meldekort", () => {
+    expect(endretMeldekort).toContain("rapportering-endring-send-inn-bekreft-opplysning");
+  });
+
+  const nyttMeldekort = htmlForOppsummering({
+    rapporteringsperioder: innsendtRapporteringsperioderResponse,
+    periode: innsendtRapporteringsperioderResponse[0],
+    getAppText: mockGetAppText,
+    getRichText: mockGetRichText,
+    locale,
+  });
+
+  it("viser oppsummering for nytt meldekort", () => {
+    const alert = getArbeidssokerAlert(
+      innsendtRapporteringsperioderResponse[0],
+      mockGetAppText,
+      mockGetRichText
+    );
+
+    expect(nyttMeldekort).toContain(alert);
+  });
+
+  it("viser checkbox for å godta opplysninger", () => {
+    expect(nyttMeldekort).toContain("rapportering-send-inn-bekreft-opplysning");
   });
 });
 
 describe("htmlForFyllUt", () => {
-  it("TODO", () => {
-    expect(true).toBe(true);
+  it("viser fyll ut for endret meldekort", () => {
+    const html = htmlForFyllUt({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        originalId: "123",
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
+
+    expect(html).toContain("rapportering-periode-endre-tittel");
+    expect(html).toContain("rapportering-periode-endre-beskrivelse");
+  });
+
+  it("viser fyll ut for nytt meldekort", () => {
+    const html = htmlForFyllUt({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: innsendtRapporteringsperioderResponse[0],
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
+
+    expect(html).toContain("rapportering-periode-fyll-ut-tittel");
+    expect(html).toContain("rapportering-periode-fyll-ut-beskrivelse");
   });
 });
 
 describe("htmlForTom", () => {
-  it("TODO", () => {
-    expect(true).toBe(true);
+  it("viser siden tom med informasjon", () => {
+    const html = htmlForTom({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: innsendtRapporteringsperioderResponse[0],
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
+
+    expect(html).toContain("<h2>rapportering-tom-periode-tittel</h2>");
   });
 });
 
 describe("htmlForEndringBegrunnelse", () => {
-  it("TODO", () => {
-    expect(true).toBe(true);
+  const html = htmlForEndringBegrunnelse({
+    rapporteringsperioder: innsendtRapporteringsperioderResponse,
+    periode: {
+      ...innsendtRapporteringsperioderResponse[0],
+      begrunnelseEndring: "rapportering-endring-begrunnelse-nedtrekksmeny-option-3",
+    },
+    getAppText: mockGetAppText,
+    getRichText: mockGetRichText,
+    locale,
+  });
+
+  it("viser liste over mulige begrunnelser", () => {
+    expect(html).toContain("<li>rapportering-endring-begrunnelse-nedtrekksmeny-option-1</li>");
+  });
+
+  it("viser valgt begurnnelse som strong", () => {
+    expect(html).toContain(
+      "<li><strong>rapportering-endring-begrunnelse-nedtrekksmeny-option-3</strong></li>"
+    );
   });
 });
 
 describe("samleHtmlForPeriode", () => {
-  it("TODO", () => {
-    expect(true).toBe(true);
+  it("viser html for endret meldekort", () => {
+    const props = {
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        begrunnelseEndring: "rapportering-endring-begrunnelse-nedtrekksmeny-option-3",
+        originalId: "123",
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    };
+
+    const endringBegurnnelse = htmlForEndringBegrunnelse(props);
+    const html = samleHtmlForPeriode(
+      props.rapporteringsperioder,
+      props.periode,
+      mockGetAppText,
+      mockGetRichText,
+      locale
+    );
+
+    expect(html).toContain(endringBegurnnelse);
+  });
+
+  const props = {
+    rapporteringsperioder: innsendtRapporteringsperioderResponse,
+    periode: {
+      ...innsendtRapporteringsperioderResponse[0],
+      dager: innsendtRapporteringsperioderResponse[0].dager.map((dag) => ({
+        ...dag,
+        aktiviteter: [],
+      })),
+
+      Rapporteringstype: Rapporteringstype.harAktivitet,
+    },
+    getAppText: mockGetAppText,
+    getRichText: mockGetRichText,
+    locale,
+  };
+
+  const html = samleHtmlForPeriode(
+    props.rapporteringsperioder,
+    props.periode,
+    mockGetAppText,
+    mockGetRichText,
+    locale
+  );
+
+  it("viser html for nytt meldekort", () => {
+    const landingsside = htmlForLandingsside(props);
+    expect(html).toContain(landingsside);
+  });
+
+  it("viser fyll ut hvis brukeren har registrert at hen harAktivitet", () => {
+    const fyllUt = htmlForFyllUt(props);
+
+    expect(html).toContain(fyllUt);
+  });
+
+  it("viser tom hvis brukeren har registrert at hen harAktivitet, men ikke registrert noen", () => {
+    const tom = htmlForTom(props);
+
+    expect(html).toContain(tom);
   });
 });
