@@ -29,12 +29,13 @@ interface IProps {
   locale: DecoratorLocale;
   getAppText: GetAppText;
   getRichText: GetRichText;
-  periode: IRapporteringsperiode;
+  periode: IRapporteringsperiode | null;
   rapporteringsperioder: IRapporteringsperiode[];
 }
 
 interface IUseAddHtml extends IProps {
   submit: SubmitFunction;
+  periode: IRapporteringsperiode;
 }
 
 export function useAddHtml({
@@ -144,6 +145,11 @@ export function getDag(
 
 function getKalender(props: IProps, showModal: boolean = true): string {
   const { periode, getAppText, locale } = props;
+
+  if (!periode) {
+    return "";
+  }
+
   const ukedager = getWeekDays(locale);
   const forsteUke = [...periode.dager].splice(0, 7);
   const andreUke = [...periode.dager].splice(7, 7);
@@ -211,6 +217,11 @@ export function getInput({
 
 export function htmlForEndringBegrunnelse(props: IProps): string {
   const { getAppText, periode } = props;
+
+  if (!periode) {
+    return "";
+  }
+
   const options = [
     "rapportering-endring-begrunnelse-nedtrekksmeny-select",
     "rapportering-endring-begrunnelse-nedtrekksmeny-option-1",
@@ -238,13 +249,14 @@ export function htmlForEndringBegrunnelse(props: IProps): string {
 
 export function htmlForLandingsside(props: IProps): string {
   const { getAppText, getRichText, rapporteringsperioder, periode } = props;
+
   const seksjoner: string[] = [getHeader({ text: getAppText("rapportering-tittel"), level: "1" })];
 
   if (rapporteringsperioder.length === 0) {
     seksjoner.push(`<p>${getAppText("rapportering-ingen-meldekort")}</p>`);
   }
 
-  if (!periode.kanSendes) {
+  if (periode && !periode.kanSendes) {
     seksjoner.push(
       renderToString(
         <PortableText
@@ -259,7 +271,7 @@ export function htmlForLandingsside(props: IProps): string {
 
   seksjoner.push(renderToString(<PortableText value={getRichText("rapportering-innledning")} />));
 
-  if (periode.kanSendes) {
+  if (periode?.kanSendes) {
     seksjoner.push(getHeader({ text: getAppText("rapportering-samtykke-tittel"), level: "2" }));
     seksjoner.push(
       renderToString(<PortableText value={getRichText("rapportering-samtykke-beskrivelse")} />)
@@ -274,6 +286,11 @@ export function htmlForLandingsside(props: IProps): string {
 
 export function htmlForRapporteringstype(props: IProps): string {
   const { rapporteringsperioder, getAppText, getRichText, periode } = props;
+
+  if (!periode) {
+    return "";
+  }
+
   const harFlerePerioder = rapporteringsperioder.length > 1;
 
   const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
@@ -303,7 +320,7 @@ export function htmlForRapporteringstype(props: IProps): string {
       level: "2",
     })
   );
-  seksjoner.push(`<p>${hentPeriodeTekst(props.periode, getAppText)}</p>`);
+  seksjoner.push(`<p>${hentPeriodeTekst(periode, getAppText)}</p>`);
   seksjoner.push(
     renderToString(
       <PortableText
@@ -329,7 +346,7 @@ export function htmlForRapporteringstype(props: IProps): string {
       value: Rapporteringstype.harIngenAktivitet,
       label: renderToString(
         <PortableText value={getRichText("rapportering-ingen-å-rapportere")} />
-      ),
+      ).replaceAll(/<\/?p>/g, ""),
     },
   ]
     .map((option) =>
@@ -353,10 +370,14 @@ export function htmlForRapporteringstype(props: IProps): string {
 export function htmlForFyllUt(props: IProps): string {
   const { getAppText, getRichText, periode } = props;
 
-  const tittel = props.periode.originalId
+  if (!periode) {
+    return "";
+  }
+
+  const tittel = periode.originalId
     ? "rapportering-periode-endre-tittel"
     : "rapportering-periode-fyll-ut-tittel";
-  const beskrivelse = props.periode.originalId
+  const beskrivelse = periode.originalId
     ? "rapportering-periode-endre-beskrivelse"
     : "rapportering-periode-fyll-ut-beskrivelse";
 
@@ -387,6 +408,11 @@ export function htmlForTom(props: IProps): string {
 
 export function htmlForArbeidssoker(props: IProps): string {
   const { getAppText, getRichText, periode } = props;
+
+  if (!periode) {
+    return "";
+  }
+
   const seksjoner: string[] = [getHeader({ text: getAppText("rapportering-tittel"), level: "1" })];
 
   const legend = getAppText("rapportering-arbeidssokerregister-tittel");
@@ -416,15 +442,19 @@ export function htmlForArbeidssoker(props: IProps): string {
 export function htmlForOppsummering(props: IProps): string {
   const { getAppText, getRichText, periode } = props;
 
+  if (!periode) {
+    return "";
+  }
+
   const ukenummer = formaterPeriodeTilUkenummer(periode.periode.fraOgMed, periode.periode.tilOgMed);
   const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed);
 
   const invaerendePeriodeTekst = `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
 
-  const tittel = props.periode.originalId
+  const tittel = periode.originalId
     ? "rapportering-endring-send-inn-tittel"
     : "rapportering-send-inn-tittel";
-  const beskrivelse = props.periode.originalId
+  const beskrivelse = periode.originalId
     ? "rapportering-endring-send-inn-innhold"
     : "rapportering-send-inn-innhold";
 

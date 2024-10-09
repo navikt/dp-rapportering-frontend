@@ -9,9 +9,11 @@ import {
   getArbeidssokerAlert,
   getDag,
   getHeader,
-  getLesMer, //   htmlForLandingsside,
-  //   samleHtmlForPeriode,
+  getLesMer,
+  htmlForLandingsside,
+  htmlForRapporteringstype,
 } from "~/utils/journalforing.utils";
+import { Rapporteringstype } from "~/utils/types";
 import { createSanityRichTextObject } from "~/hooks/useSanity";
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 
@@ -135,29 +137,155 @@ describe("getDag", () => {
   });
 });
 
-// describe("getKalender", () => {});
+describe("getKalender", () => {
+  it("TODO", () => {
+    expect(true).toBe(true);
+  });
+});
 
-// describe("getOppsummering", () => {});
+describe("getOppsummering", () => {
+  it("TODO", () => {
+    expect(true).toBe(true);
+  });
+});
 
-// describe("getInput", () => {});
+describe("getInput", () => {
+  it("TODO", () => {
+    expect(true).toBe(true);
+  });
+});
 
-// describe("samleHtmlForPeriode", () => {
-//   const html = samleHtmlForPeriode(
-//     innsendtRapporteringsperioderResponse,
-//     innsendtRapporteringsperioderResponse[0],
-//     mockGetAppText,
-//     mockGetRichText,
-//     locale
-//   );
-// });
+describe("htmlForLandingsside", () => {
+  it("viser checkbox hvis det er en periode å fylle ut", () => {
+    const html = htmlForLandingsside({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: innsendtRapporteringsperioderResponse[0],
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
 
-// describe("htmlForLandingsside", () => {
-//   const html = htmlForLandingsside({
-//     rapporteringsperioder: innsendtRapporteringsperioderResponse,
-//     periode: innsendtRapporteringsperioderResponse[0],
-//     getAppText: mockGetAppText,
-//     getRichText: mockGetRichText,
-//     locale,
-//   });
+    expect(html).toContain(
+      '<form><input type="checkbox" checked/><label>rapportering-samtykke-checkbox</label></form>'
+    );
+  });
 
-// });
+  it("viser alert hvis det ikke er noen rapporteringsperioder", () => {
+    const html = htmlForLandingsside({
+      rapporteringsperioder: [],
+      periode: null,
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
+
+    expect(html).toContain("rapportering-ingen-meldekort");
+  });
+
+  it("viser alert hvis det er for tidlig å sende inn rapporteringsperioden", () => {
+    const html = htmlForLandingsside({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        kanSendes: false,
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
+
+    expect(html).toContain("rapportering-for-tidlig-a-sende-meldekort");
+  });
+});
+
+describe("htmlForRapporteringstype", () => {
+  it("viser alert hvis det er flere perioder som skal sendes inn", () => {
+    const html = htmlForRapporteringstype({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: innsendtRapporteringsperioderResponse[0],
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
+
+    expect(html).toContain("rapportering-flere-perioder-tittel");
+  });
+
+  it("viser ikke alert hvis det bare er én periode som skal sendes inn", () => {
+    const html = htmlForRapporteringstype({
+      rapporteringsperioder: [innsendtRapporteringsperioderResponse[0]],
+      periode: innsendtRapporteringsperioderResponse[0],
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
+
+    expect(html).not.toContain("rapportering-flere-perioder-tittel");
+  });
+
+  it("viser at harIngenAktivitet er valgt", () => {
+    const html = htmlForRapporteringstype({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        rapporteringstype: Rapporteringstype.harIngenAktivitet,
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
+
+    expect(html).toContain('id="harIngenAktivitet" checked');
+  });
+
+  it("viser at harAktivitet er valgt", () => {
+    const html = htmlForRapporteringstype({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        rapporteringstype: Rapporteringstype.harAktivitet,
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    });
+
+    expect(html).toContain('id="harAktivitet" checked');
+  });
+});
+
+describe("htmlForArbeidssoker", () => {
+  it("TODO", () => {
+    expect(true).toBe(true);
+  });
+});
+
+describe("htmlForOppsummering", () => {
+  it("TODO", () => {
+    expect(true).toBe(true);
+  });
+});
+
+describe("htmlForFyllUt", () => {
+  it("TODO", () => {
+    expect(true).toBe(true);
+  });
+});
+
+describe("htmlForTom", () => {
+  it("TODO", () => {
+    expect(true).toBe(true);
+  });
+});
+
+describe("htmlForEndringBegrunnelse", () => {
+  it("TODO", () => {
+    expect(true).toBe(true);
+  });
+});
+
+describe("samleHtmlForPeriode", () => {
+  it("TODO", () => {
+    expect(true).toBe(true);
+  });
+});
