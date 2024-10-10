@@ -2,14 +2,16 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Heading, Select } from "@navikt/ds-react";
 import { useFetcher } from "@remix-run/react";
 import { ChangeEvent } from "react";
+import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
+import { Error } from "~/components/error/Error";
 
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<INetworkResponse>();
   const { getAppText, getLink } = useSanity();
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -62,6 +64,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
           {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-other")}
         </option>
       </Select>
+
+      {fetcher.data?.status === "error" && (
+        <Error title={getAppText(fetcher.data.error.statusText)} />
+      )}
 
       <div className="navigasjon-container my-4">
         <RemixLink

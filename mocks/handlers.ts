@@ -30,7 +30,6 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     if (periode.originalId) {
       const originalPeriode = db.findRapporteringsperiodeById(periode.originalId as string);
       db.updateRapporteringsperiode(originalPeriode.id, { kanEndres: false });
-
       const endretPeriode = hentEndringsId(periode);
       db.addRapporteringsperioder({
         ...endretPeriode,
@@ -40,6 +39,13 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       });
       return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
     }
+
+    db.updateRapporteringsperiode(periode.id, {
+      status: IRapporteringsperiodeStatus.Innsendt,
+      kanSendes: false,
+    });
+
+    return HttpResponse.json({ id: periode.id }, { status: 200 });
   }),
 
   http.get(
@@ -76,13 +82,10 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.post(
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
     async ({ cookies, request, params }) => {
-      console.log(`🔥: lagrer :`);
       const db = database || getDatabase(cookies);
 
       const rapporteringsperioderId = params.rapporteringsperioderId as string;
       const dag = (await request.json()) as IRapporteringsperiodeDag;
-
-      console.log(`🔥: dag :`, dag);
 
       db.lagreAktivitet(rapporteringsperioderId, dag);
 
