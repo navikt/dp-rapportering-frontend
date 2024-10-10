@@ -20,7 +20,7 @@ body {
   margin: var(--a-spacing-4) auto var(--a-spacing-18);
 }
 
-.rapportering-container .navds-alert:first-of-type {
+.rapportering-container .navds-alert:first-child {
   margin-top: 0;
 }
 
