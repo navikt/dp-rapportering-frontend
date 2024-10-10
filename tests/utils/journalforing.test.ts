@@ -81,13 +81,13 @@ describe("getLesMer", () => {
 describe("getAktivitetCheckbox", () => {
   it("viser checkbox for arbeid", () => {
     const checkbox = getAktivitetCheckbox("Arbeid", mockGetAppText, mockGetRichText);
-    expect(checkbox).toContain("<h2>rapportering-arbeid</h2>");
-    expect(checkbox).toContain("<h3>rapportering-antall-timer</h3>");
+    expect(checkbox).toContain("<h4>rapportering-arbeid</h4>");
+    expect(checkbox).toContain("<h5>rapportering-antall-timer</h5>");
   });
 
   it("viser checkbox for annen aktivitet", () => {
     const checkbox = getAktivitetCheckbox("Utdanning", mockGetAppText, mockGetRichText);
-    expect(checkbox).toContain("<h2>rapportering-utdanning</h2>");
+    expect(checkbox).toContain("<h4>rapportering-utdanning</h4>");
   });
 });
 

@@ -88,7 +88,13 @@ export function getArbeidssokerAlert(
   ].join("");
 }
 
-export function getHeader({ text, level }: { text: string; level: "1" | "2" | "3" | "4" }): string {
+export function getHeader({
+  text,
+  level,
+}: {
+  text: string;
+  level: "1" | "2" | "3" | "4" | "5";
+}): string {
   return `<h${level}>${text}</h${level}>`;
 }
 
@@ -111,20 +117,28 @@ export function getAktivitetCheckbox(
   let arbeid = "";
 
   if (aktivitet === "Arbeid") {
-    arbeid = `<h3>${getAppText("rapportering-antall-timer")}</h3><p>${renderToString(<PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />)}</p>`;
+    arbeid = `${getHeader({ text: getAppText("rapportering-antall-timer"), level: "5" })}<p>${renderToString(<PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />)}</p>`;
   }
 
-  return `<h2>${aktivitetTypeMap(aktivitet, getAppText)}</h2><p>${hentAktivitetBeskrivelse(aktivitet, getAppText)}</p>${arbeid}`;
+  return `${getHeader({ text: aktivitetTypeMap(aktivitet, getAppText), level: "4" })}<p>${hentAktivitetBeskrivelse(aktivitet, getAppText)}</p>${arbeid}`;
 }
 
 export function getAktivitetModal(props: IProps): string {
   const { getAppText, getRichText } = props;
-  const modalHeader = `${getHeader({ text: getAppText("rapportering-hva-vil-du-lagre"), level: "1" })}`;
+  const modalHeader = `${getHeader({ text: getAppText("rapportering-hva-vil-du-lagre"), level: "3" })}`;
   const modalBody = aktivitetType
     .map((aktivitet) => getAktivitetCheckbox(aktivitet, getAppText, getRichText))
     .join("");
 
-  return ["// popup", "<dialog>", modalHeader, "<div>", modalBody, "</div>", "</dialog>"].join("");
+  return [
+    "// popup",
+    "<dialog style='border: 1px solid black; padding: 10px;'>",
+    modalHeader,
+    "<div>",
+    modalBody,
+    "</div>",
+    "</dialog>",
+  ].join("");
 }
 
 export function getAktivitet(aktivitet: IAktivitet, getAppText: GetAppText): string {
@@ -193,7 +207,7 @@ export function getOppsummering({
 
   return [
     "<div>",
-    `<h3>${getAppText("rapportering-oppsummering-tittel")}</h3>`,
+    getHeader({ text: getAppText("rapportering-oppsummering-tittel"), level: "3" }),
     oppsummering,
     "</div>",
   ].join("");
@@ -353,7 +367,7 @@ export function htmlForRapporteringstype(props: IProps): string {
     )
     .join("</div><div>");
 
-  const radioGroup = `<fieldset><legend>${legend}</legend><p>${description}</p><form><div>${options}</div></form></fieldset>`;
+  const radioGroup = `<fieldset><legend>${getHeader({ text: legend, level: "2" })}</legend><p>${description}</p><form><div>${options}</div></form></fieldset>`;
 
   seksjoner.push(radioGroup);
 
@@ -517,5 +531,6 @@ export function samleHtmlForPeriode(
     );
   }
 
-  return `<div class="melding-om-vedtak">${getHeader({ text: getAppText("rapportering-tittel"), level: "1" })}${pages.join('</div><div class="melding-om-vedtak">')}</div>`;
+  const html = `<div class="melding-om-vedtak">${getHeader({ text: getAppText("rapportering-tittel"), level: "1" })}${pages.join('</div><div class="melding-om-vedtak">')}</div>`;
+  return html;
 }
