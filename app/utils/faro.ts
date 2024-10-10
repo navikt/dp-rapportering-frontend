@@ -10,7 +10,6 @@ export function initInstrumentation(): void {
 }
 
 export function getFaro(): Faro | null {
-  console.log(getEnv("GITHUB_SHA"));
   if (faro !== null) return faro;
   faro = initializeFaro({
     url: getEnv("FARO_URL"),

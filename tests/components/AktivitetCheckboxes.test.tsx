@@ -61,7 +61,7 @@ describe("AktivitetCheckboxes", () => {
 
     expect(screen.getByLabelText("rapportering-arbeid")).not.toBeDisabled();
     // expect(screen.getByLabelText("Utdanning")).not.toBeDisabled();
-    expect(screen.getByLabelText("Syk")).toBeDisabled();
+    expect(screen.getByLabelText("rapportering-syk")).toBeDisabled();
     // expect(screen.getByLabelText("Fravaer")).toBeDisabled();
   });
 
