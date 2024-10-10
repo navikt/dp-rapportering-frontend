@@ -1,9 +1,9 @@
 import { useTypedRouteLoaderData } from "./useTypedRouteLoaderData";
-import type { TypedObject } from "@portabletext/types";
+import type { PortableTextBlock, TypedObject } from "@portabletext/types";
 import { useCallback } from "react";
 import type { ISanity, ISanityAppText, ISanityLink, ISanityRichText } from "~/sanity/sanity.types";
 
-const createSanityRichTextObject = (text: string) => [
+export const createSanityRichTextObject = (text: string): PortableTextBlock[] => [
   {
     markDefs: [],
     children: [

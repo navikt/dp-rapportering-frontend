@@ -10,6 +10,8 @@ export const aktivitetTypeMap = (id: (typeof aktivitetType)[number], getAppText:
       return getAppText("rapportering-utdanning");
     case "Arbeid":
       return getAppText("rapportering-arbeid");
+    case "Syk":
+      return getAppText("rapportering-syk");
     default:
       return id;
   }

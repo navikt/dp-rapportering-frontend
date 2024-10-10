@@ -67,13 +67,21 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
+  const { locale } = useTypedRouteLoaderData("root");
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
 
-  const addHtml = useAddHtml({ rapporteringsperioder, periode, getAppText, getRichText, submit });
+  const addHtml = useAddHtml({
+    rapporteringsperioder,
+    periode,
+    getAppText,
+    getRichText,
+    submit,
+    locale,
+  });
 
   let invaerendePeriodeTekst;
 
