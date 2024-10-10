@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@navikt/aksel-icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
@@ -14,7 +14,6 @@ import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
-import Center from "~/components/center/Center";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
@@ -33,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { gjeldendePeriode, rapporteringsperioder } = useLoaderData<typeof loader>();
-  const { getAppText, getRichText } = useSanity();
+  const { getAppText, getRichText, getLink } = useSanity();
 
   const rapporteringstypeFetcher = useFetcher<typeof RapporteringstypeAction>();
 
@@ -122,7 +121,18 @@ export default function RapporteringstypeSide() {
         </Radio>
       </RadioGroup>
 
-      <Center>
+      <div className="navigasjon-container">
+        <RemixLink
+          as="Button"
+          to={`/`}
+          variant="secondary"
+          iconPosition="left"
+          icon={<ArrowLeftIcon aria-hidden />}
+          className="py-4 px-8"
+        >
+          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+        </RemixLink>
+
         <RemixLink
           as="Button"
           to={nesteKnappLink}
@@ -133,7 +143,7 @@ export default function RapporteringstypeSide() {
         >
           {nesteKnappTekst}
         </RemixLink>
-      </Center>
+      </div>
     </>
   );
 }

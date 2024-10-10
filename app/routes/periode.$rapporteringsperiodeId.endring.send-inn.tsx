@@ -131,7 +131,7 @@ export default function RapporteringsPeriodeSendInnSide() {
 
       {actionData?.error && (
         <Alert variant="error" className="feilmelding">
-          {actionData.error}
+          {getAppText(actionData.error)}
         </Alert>
       )}
 
