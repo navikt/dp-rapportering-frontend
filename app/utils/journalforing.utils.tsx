@@ -230,7 +230,6 @@ export function htmlForEndringBegrunnelse(props: IProps): string {
   ];
 
   const seksjoner = [
-    getHeader({ text: getAppText("rapportering-tittel"), level: "1" }),
     getHeader({ text: getAppText("rapportering-periode-endre-tittel"), level: "2" }),
     getHeader({
       text: getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-label"),
@@ -246,7 +245,7 @@ export function htmlForEndringBegrunnelse(props: IProps): string {
 export function htmlForLandingsside(props: IProps): string {
   const { getAppText, getRichText, rapporteringsperioder, periode } = props;
 
-  const seksjoner: string[] = [getHeader({ text: getAppText("rapportering-tittel"), level: "1" })];
+  const seksjoner: string[] = [];
 
   if (rapporteringsperioder.length === 0) {
     seksjoner.push(`<p>${getAppText("rapportering-ingen-meldekort")}</p>`);
@@ -292,7 +291,7 @@ export function htmlForRapporteringstype(props: IProps): string {
   const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
   const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
 
-  const seksjoner: string[] = [getHeader({ text: getAppText("rapportering-tittel"), level: "1" })];
+  const seksjoner: string[] = [];
 
   if (harFlerePerioder) {
     seksjoner.push(
@@ -376,7 +375,6 @@ export function htmlForFyllUt(props: IProps): string {
     : "rapportering-periode-fyll-ut-beskrivelse";
 
   const seksjoner: string[] = [
-    getHeader({ text: getAppText("rapportering-tittel"), level: "1" }),
     getHeader({ text: getAppText(tittel), level: "2" }),
     renderToString(<PortableText value={getRichText(beskrivelse)} />),
     getKalender(props),
@@ -407,7 +405,7 @@ export function htmlForArbeidssoker(props: IProps): string {
     return "";
   }
 
-  const seksjoner: string[] = [getHeader({ text: getAppText("rapportering-tittel"), level: "1" })];
+  const seksjoner: string[] = [];
 
   const legend = getAppText("rapportering-arbeidssokerregister-tittel");
   const description = getAppText("rapportering-arbeidssokerregister-subtittel");
@@ -422,9 +420,9 @@ export function htmlForArbeidssoker(props: IProps): string {
         label: getAppText(option.label),
       });
     })
-    .join("");
+    .join("</div><div>");
 
-  const radioGroup = `<form><fieldset><legend>${legend}</legend><p>${description}</p>${options}</fieldset></form>`;
+  const radioGroup = `<form><fieldset><legend>${legend}</legend><p>${description}</p><div>${options}</div></fieldset></form>`;
   seksjoner.push(radioGroup);
   seksjoner.push(getArbeidssokerAlert(periode, getAppText, getRichText));
 
@@ -451,7 +449,6 @@ export function htmlForOppsummering(props: IProps): string {
     : "rapportering-send-inn-innhold";
 
   const seksjoner: string[] = [
-    getHeader({ text: getAppText("rapportering-tittel"), level: "1" }),
     getHeader({ text: getAppText(tittel), level: "2" }),
     renderToString(<PortableText value={getRichText(beskrivelse)} />),
     getHeader({ text: getAppText("rapportering-send-inn-periode-tittel"), level: "3" }),
@@ -520,5 +517,5 @@ export function samleHtmlForPeriode(
     );
   }
 
-  return `<div class="melding-om-vedtak">${pages.join('</div><div class="melding-om-vedtak">')}</div>`;
+  return `<div class="melding-om-vedtak">${getHeader({ text: getAppText("rapportering-tittel"), level: "1" })}${pages.join('</div><div class="melding-om-vedtak">')}</div>`;
 }
