@@ -6,7 +6,6 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeStatus,
 } from "~/models/rapporteringsperiode.server";
-import { Rapporteringstype } from "~/utils/types";
 
 export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
   const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
@@ -33,7 +32,7 @@ export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
     registrertArbeidssoker: null,
     originalId: null,
     html: null,
-    rapporteringstype: Rapporteringstype.harAktivitet,
+    rapporteringstype: null,
     ...props,
   };
 

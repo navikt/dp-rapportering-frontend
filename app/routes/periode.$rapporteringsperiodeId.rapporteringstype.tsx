@@ -1,19 +1,30 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useCallback } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
-import type { action as RapporteringstypeAction } from "./api.rapporteringstype";
 import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
+import { Error } from "~/components/error/Error";
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
+  const rapporteringstype: Rapporteringstype = formData.get(
+    "rapporteringstype"
+  ) as Rapporteringstype;
+
+  return await lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
@@ -34,7 +45,7 @@ export default function RapporteringstypeSide() {
   const { gjeldendePeriode, rapporteringsperioder } = useLoaderData<typeof loader>();
   const { getAppText, getRichText, getLink } = useSanity();
 
-  const rapporteringstypeFetcher = useFetcher<typeof RapporteringstypeAction>();
+  const rapporteringstypeFetcher = useFetcher<typeof action>();
 
   const antallPerioder = rapporteringsperioder.length;
   const harFlerePerioder = antallPerioder > 1;
@@ -60,7 +71,7 @@ export default function RapporteringstypeSide() {
     (valgtType: Rapporteringstype) => {
       rapporteringstypeFetcher.submit(
         { rapporteringstype: valgtType, rapporteringsperiodeId: gjeldendePeriode.id },
-        { method: "post", action: "/api/rapporteringstype" }
+        { method: "post" }
       );
     },
     [gjeldendePeriode.id, rapporteringstypeFetcher]
@@ -120,6 +131,10 @@ export default function RapporteringstypeSide() {
           <PortableText value={getRichText("rapportering-ingen-å-rapportere")} />
         </Radio>
       </RadioGroup>
+
+      {rapporteringstypeFetcher.data?.status === "error" && (
+        <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
+      )}
 
       <div className="navigasjon-container">
         <RemixLink
