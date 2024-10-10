@@ -290,7 +290,12 @@ export const withDb = (db: Database) => {
     lagreAktivitet: (rapporteringsperiodeId: string, dag: IRapporteringsperiodeDag) =>
       lagreAktivitet(db, rapporteringsperiodeId, dag),
     deleteAllInnsendteperioder: () => deleteAllInnsendteperioder(db),
+    deleteAllRapporteringsperioder: () => deleteAllRapporteringsperioder(db),
     updateRapporteringsperioder: (scenario: ScenarioType) =>
       updateRapporteringsperioder(db, scenario),
+    clear: () => {
+      deleteAllRapporteringsperioder(db);
+      deleteAllInnsendteperioder(db);
+    },
   };
 };

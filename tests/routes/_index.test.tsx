@@ -1,11 +1,12 @@
 import { createRemixStub } from "@remix-run/testing";
 import { render, screen } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
-import { afterAll, afterEach, beforeAll, describe, expect, test, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import Landingsside, { loader } from "~/routes/_index";
+import { createHandlers } from "../../mocks/handlers";
+import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
+import { sessionRecord } from "../../mocks/session";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 
 vi.mock("~/hooks/useSanity", () => ({
@@ -50,20 +51,17 @@ describe("Hovedside rapportering", () => {
     render(<RemixStub />);
   };
 
-  const mockResponse = (rapporteringsperioder: IRapporteringsperiode[]) => {
-    server.use(
-      http.get(
-        `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`,
-        () => HttpResponse.json(rapporteringsperioder, { status: 200 }),
-        { once: true }
-      )
-    );
-  };
+  const testDb = withDb(sessionRecord.getDatabase("123"));
+  const mockResponse = () => server.use(...createHandlers(testDb));
+
+  beforeEach(() => {
+    testDb.clear();
+  });
 
   describe("Landingsside", () => {
     test("Skal vise at bruker har ingen rapporteringsperiode", async () => {
       mockSession();
-      mockResponse([]);
+      mockResponse();
 
       renderLandingsside();
 
@@ -72,8 +70,10 @@ describe("Hovedside rapportering", () => {
 
     test("Skal vise at bruker har en fremtidig rapporteringsperiode", async () => {
       mockSession();
-      const rapporteringsperioder = [lagRapporteringsperiode({ kanSendes: false })];
-      mockResponse(rapporteringsperioder);
+      const rapporteringsperiode = lagRapporteringsperiode({ kanSendes: false });
+      testDb.addRapporteringsperioder(rapporteringsperiode);
+
+      mockResponse();
 
       renderLandingsside();
 
@@ -84,8 +84,10 @@ describe("Hovedside rapportering", () => {
 
     test("Skal vise samtykke hvis bruker har minst en rapporteringsperiode", async () => {
       mockSession();
-      const rapporteringsperioder = [lagRapporteringsperiode({ kanSendes: true })];
-      mockResponse(rapporteringsperioder);
+      const rapporteringsperiode = lagRapporteringsperiode({ kanSendes: true });
+      testDb.addRapporteringsperioder(rapporteringsperiode);
+
+      mockResponse();
 
       renderLandingsside();
 
@@ -100,8 +102,9 @@ describe("Hovedside rapportering", () => {
 
     test("kan trykke neste-knapp etter å ha krysset av for samtykke checkbox.", async () => {
       mockSession();
-      const rapporteringsperioder = [lagRapporteringsperiode({ kanSendes: true })];
-      mockResponse(rapporteringsperioder);
+      const rapporteringsperiode = lagRapporteringsperiode({ kanSendes: true });
+      testDb.addRapporteringsperioder(rapporteringsperiode);
+      mockResponse();
 
       renderLandingsside();
 
