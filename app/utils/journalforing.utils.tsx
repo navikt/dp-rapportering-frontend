@@ -102,10 +102,12 @@ export function getLesMer(props: IProps): string {
   const { getAppText, getRichText } = props;
   return [
     "// Les mer",
+    "<div style='border: 1px solid black; padding: 10px;'>",
     getHeader({ text: getAppText("rapportering-les-mer-hva-skal-rapporteres-tittel"), level: "2" }),
     renderToString(
       <PortableText value={getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold")} />
     ),
+    "</div>",
   ].join("");
 }
 
