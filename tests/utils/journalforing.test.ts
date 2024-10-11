@@ -211,6 +211,7 @@ describe("getInput", () => {
     type: "checkbox",
     checked: true,
     label: "test",
+    name: "test",
   };
 
   it("viser avhuket checkbox", () => {
@@ -220,12 +221,12 @@ describe("getInput", () => {
 
   it("viser checkbox som ikke er avhuket", () => {
     const checkbox = getInput({ ...checkboxProps, checked: false });
-    expect(checkbox).toContain('type="checkbox"  />');
+    expect(checkbox).toContain('type="checkbox" name="test"  />');
   });
 
   it("viser radiobutton som er valgt", () => {
     const checkbox = getInput({ ...checkboxProps, type: "radio", checked: true });
-    expect(checkbox).toContain('type="radio" checked />');
+    expect(checkbox).toContain('type="radio" name="test" checked />');
   });
 });
 
@@ -240,7 +241,7 @@ describe("htmlForLandingsside", () => {
     });
 
     expect(html).toContain(
-      '<form><input type="checkbox" checked/><label>rapportering-samtykke-checkbox</label></form>'
+      '<form><input type="checkbox" name="rapportering-samtykke-checkbox" checked/><label>rapportering-samtykke-checkbox</label></form>'
     );
   });
 
