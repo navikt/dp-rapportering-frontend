@@ -46,7 +46,7 @@ describe("lagreBegrunnelse", () => {
       status: "error",
       error: {
         statusCode: 500,
-        statusText: "rapportering-feilmelding-lagre-begrunnelse-500",
+        statusText: "rapportering-feilmelding-lagre-begrunnelse",
       },
     });
   });

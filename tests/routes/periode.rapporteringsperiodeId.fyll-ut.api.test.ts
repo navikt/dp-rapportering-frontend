@@ -51,6 +51,15 @@ describe("Fyll ut rapporteringsperiode", () => {
         });
 
         mockSession();
+        server.use(
+          http.post(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
+            () => HttpResponse.json(null, { status: 200 }),
+            {
+              once: true,
+            }
+          )
+        );
 
         const response = await action({
           request,
@@ -115,6 +124,15 @@ describe("Fyll ut rapporteringsperiode", () => {
         });
 
         mockSession();
+        server.use(
+          http.post(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
+            () => HttpResponse.json(null, { status: 200 }),
+            {
+              once: true,
+            }
+          )
+        );
 
         const response = await slettAction({
           request,

@@ -23,7 +23,7 @@ export default function TomRapporteringsPeriodeSide() {
         {getAppText("rapportering-tom-periode-innhold")}
       </Alert>
 
-      <div className="my-10">
+      <div className="my-8">
         <p>{getAppText("rapportering-tom-noe-å-rapportere")}</p>
         <PortableText value={getRichText("rapportering-tom-ingen-å-rapportere")} />
       </div>

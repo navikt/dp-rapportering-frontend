@@ -1,20 +1,30 @@
-import { ArrowRightIcon } from "@navikt/aksel-icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useCallback } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
-import type { action as RapporteringstypeAction } from "./api.rapporteringstype";
 import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
-import Center from "~/components/center/Center";
+import { Error } from "~/components/error/Error";
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
+  const rapporteringstype: Rapporteringstype = formData.get(
+    "rapporteringstype"
+  ) as Rapporteringstype;
+
+  return await lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
@@ -33,9 +43,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { gjeldendePeriode, rapporteringsperioder } = useLoaderData<typeof loader>();
-  const { getAppText, getRichText } = useSanity();
+  const { getAppText, getRichText, getLink } = useSanity();
 
-  const rapporteringstypeFetcher = useFetcher<typeof RapporteringstypeAction>();
+  const rapporteringstypeFetcher = useFetcher<typeof action>();
 
   const antallPerioder = rapporteringsperioder.length;
   const harFlerePerioder = antallPerioder > 1;
@@ -61,7 +71,7 @@ export default function RapporteringstypeSide() {
     (valgtType: Rapporteringstype) => {
       rapporteringstypeFetcher.submit(
         { rapporteringstype: valgtType, rapporteringsperiodeId: gjeldendePeriode.id },
-        { method: "post", action: "/api/rapporteringstype" }
+        { method: "post" }
       );
     },
     [gjeldendePeriode.id, rapporteringstypeFetcher]
@@ -122,7 +132,22 @@ export default function RapporteringstypeSide() {
         </Radio>
       </RadioGroup>
 
-      <Center>
+      {rapporteringstypeFetcher.data?.status === "error" && (
+        <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
+      )}
+
+      <div className="navigasjon-container">
+        <RemixLink
+          as="Button"
+          to={`/`}
+          variant="secondary"
+          iconPosition="left"
+          icon={<ArrowLeftIcon aria-hidden />}
+          className="py-4 px-8"
+        >
+          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+        </RemixLink>
+
         <RemixLink
           as="Button"
           to={nesteKnappLink}
@@ -133,7 +158,7 @@ export default function RapporteringstypeSide() {
         >
           {nesteKnappTekst}
         </RemixLink>
-      </Center>
+      </div>
     </>
   );
 }

@@ -65,7 +65,7 @@ export async function startUtfylling(request: Request, periodeId: string): Promi
   });
 
   if (!response.ok) {
-    throw new Response(`rapportering-feilmelding-start-utfylling-${response.status}`, {
+    throw new Response(`rapportering-feilmelding-start-utfylling`, {
       status: response.status,
     });
   }
@@ -84,7 +84,7 @@ export async function hentRapporteringsperioder(
   });
 
   if (!response.ok) {
-    throw new Response(`rapportering-feilmelding-hent-perioder-${response.status}`, {
+    throw new Response(`rapportering-feilmelding-hent-perioder`, {
       status: response.status,
     });
   }
@@ -180,7 +180,7 @@ export async function sendInnPeriode(
   });
 
   if (!response.ok) {
-    throw new Response(`rapportering-feilmelding-send-inn-periode-${response.status}`, {
+    throw new Response(`rapportering-feilmelding-send-inn-periode`, {
       status: response.status,
     });
   }
@@ -200,7 +200,7 @@ export async function lagEndringsperiode(
   });
 
   if (!response.ok) {
-    throw new Response(`rapportering-feilmelding-lag-endringsperiode-${response.status}`, {
+    throw new Response(`rapportering-feilmelding-lag-endringsperiode`, {
       status: response.status,
     });
   }

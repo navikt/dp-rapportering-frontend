@@ -26,7 +26,7 @@ export async function lagreBegrunnelse(
       status: "error",
       error: {
         statusCode: response.status,
-        statusText: `rapportering-feilmelding-lagre-begrunnelse-${response.status}`,
+        statusText: `rapportering-feilmelding-lagre-begrunnelse`,
       },
     };
   }

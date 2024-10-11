@@ -20,7 +20,11 @@ body {
   margin: var(--a-spacing-4) auto var(--a-spacing-18);
 }
 
-.rapportering-container .navds-alert {
+.rapportering-container .navds-alert:first-child {
+  margin-top: 0;
+}
+
+.rapportering-container p:first-child {
   margin-top: 0;
 }
 
@@ -50,8 +54,8 @@ body {
 .navigasjon-container {
   display: flex;
   gap: var(--a-spacing-4);
-  margin: var(--a-spacing-4) 0;
-  justify-content: space-between; 
+  margin: var(--a-spacing-8) 0;
+  justify-content: center;
 }
 
 .innsendt-accordion-header span.navds-accordion__header-content {
@@ -69,7 +73,6 @@ body {
   align-items: center;
 }
 
-
 .innsendt-periode-header-status {
   font-weight: normal;
   border: 1px solid var(--a-gray-900);
@@ -77,12 +80,12 @@ body {
   padding: var(--a-spacing-1) var(--a-spacing-2);
 }
 
-.tilutfylling, .innsendt, .endret {
+.tilutfylling,
+.innsendt,
+.endret {
   background-color: var(--a-lightblue-100);
   border-color: var(--a-lightblue-700);
 }
-
-
 
 .feilet {
   background-color: var(--a-red-100);
@@ -113,7 +116,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: var(--a-spacing-10);
 }
 
 .les-mer-container {
@@ -149,10 +151,6 @@ body {
   .rapportering-container {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);
   }
-
-  .navigasjon-container {
-    justify-content: flex-start; 
-  }
 }
 
 /* Voice-over focus */
@@ -160,9 +158,14 @@ body {
   outline: none;
 }
 
+.mt-8 {
+  margin-top: var(--a-spacing-8);
+}
+
 .mt-10 {
   margin-top: var(--a-spacing-10);
 }
+
 .my-18 {
   margin: var(--a-spacing-18) 0;
 }

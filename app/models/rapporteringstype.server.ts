@@ -26,7 +26,7 @@ export async function lagreRapporteringstype(
       status: "error",
       error: {
         statusCode: response.status,
-        statusText: `rapportering-feilmelding-lagre-rapporteringstype-${response.status}`,
+        statusText: `rapportering-feilmelding-lagre-rapporteringstype`,
       },
     };
   }

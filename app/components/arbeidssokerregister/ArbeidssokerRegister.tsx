@@ -3,20 +3,17 @@ import { PortableText } from "@portabletext/react";
 import { useFetcher } from "@remix-run/react";
 import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
+import { Error } from "../error/Error";
 
 export function ArbeidssokerRegisterering({
   rapporteringsperiodeId,
-  registrertArbeidssoker: initialRegistrertArbeidssoker,
+  registrertArbeidssoker,
 }: {
   rapporteringsperiodeId: string;
   registrertArbeidssoker: boolean | null;
 }) {
   const { getAppText } = useSanity();
   const fetcher = useFetcher<INetworkResponse>();
-
-  const registrertArbeidssoker = fetcher.formData
-    ? fetcher.formData.get("registrertArbeidssoker") === "true"
-    : initialRegistrertArbeidssoker;
 
   const handleChange = (registrertArbeidssokerSvar: boolean) => {
     fetcher.submit(
@@ -53,6 +50,10 @@ export function ArbeidssokerRegisterering({
           </Radio>
         </RadioGroup>
       </fetcher.Form>
+
+      {fetcher.data?.status === "error" && (
+        <Error title={getAppText(fetcher.data.error.statusText)} />
+      )}
 
       {registrertArbeidssoker !== null &&
         (registrertArbeidssoker ? (
