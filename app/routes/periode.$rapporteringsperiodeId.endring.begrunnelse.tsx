@@ -1,16 +1,36 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Heading, Select } from "@navikt/ds-react";
-import { useFetcher } from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { ChangeEvent } from "react";
+import invariant from "tiny-invariant";
+import { lagreBegrunnelse } from "~/models/begrunnelse.server";
+import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
 import { Error } from "~/components/error/Error";
 
-export default function RapporteringsPeriodeFyllUtSide() {
-  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
+  const begrunnelseEndring: string = formData.get("begrunnelseEndring") as string;
+
+  return await lagreBegrunnelse(request, rapporteringsperiodeId, begrunnelseEndring);
+}
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+
+  const periodeId = params.rapporteringsperiodeId;
+  const periode = await hentPeriode(request, periodeId, false);
+
+  return json({ periode });
+}
+
+export default function BegrunnelseSide() {
+  const { periode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<INetworkResponse>();
   const { getAppText, getLink } = useSanity();
 
@@ -22,9 +42,20 @@ export default function RapporteringsPeriodeFyllUtSide() {
         rapporteringsperiodeId: periode.id,
         begrunnelseEndring: value,
       },
-      { method: "post", action: "/api/begrunnelse" }
+      { method: "post" }
     );
   };
+
+  const begrunnelser = [
+    { value: "", label: "rapportering-endring-begrunnelse-nedtrekksmeny-select" },
+    { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-1" },
+    { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-2" },
+    { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-3" },
+    { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-4" },
+    { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-5" },
+    { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-6" },
+    { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-other" },
+  ];
 
   return (
     <>
@@ -39,30 +70,11 @@ export default function RapporteringsPeriodeFyllUtSide() {
         value={periode.begrunnelseEndring ?? undefined}
         onChange={handleChange}
       >
-        <option value="">
-          {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-select")}
-        </option>
-        <option value={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-1")}>
-          {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-1")}
-        </option>
-        <option value={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-2")}>
-          {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-2")}
-        </option>
-        <option value={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-3")}>
-          {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-3")}
-        </option>
-        <option value={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-4")}>
-          {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-4")}
-        </option>
-        <option value={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-5")}>
-          {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-5")}
-        </option>
-        <option value={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-6")}>
-          {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-6")}
-        </option>
-        <option value={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-other")}>
-          {getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-option-other")}
-        </option>
+        {begrunnelser.map((begrunnelse) => (
+          <option key={begrunnelse.value} value={begrunnelse.value}>
+            {getAppText(begrunnelse.label || begrunnelse.value)}
+          </option>
+        ))}
       </Select>
 
       {fetcher.data?.status === "error" && (
