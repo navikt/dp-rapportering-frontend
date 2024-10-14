@@ -182,8 +182,7 @@ export default function App() {
   initInstrumentation();
 
   const fetcher = useFetcher();
-  const useLanguageSelector = false;
-  if (useLanguageSelector && typeof document !== "undefined") {
+  if (typeof document !== "undefined") {
     setAvailableLanguages(availableLanguages);
 
     onLanguageSelect((language) => {
