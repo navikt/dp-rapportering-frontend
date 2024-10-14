@@ -5,7 +5,7 @@ import { useField } from "remix-validated-form";
 import type { AktivitetType, IAktivitet } from "~/models/aktivitet.server";
 import { aktivitetTypeMap } from "~/utils/aktivitettype.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
-import { useSanity } from "~/hooks/useSanity";
+import { type GetAppText, useSanity } from "~/hooks/useSanity";
 import { TallInput } from "../tall-input/TallInput";
 
 export interface IProps {
@@ -33,6 +33,21 @@ export function erIkkeAktiv(aktiviteter: AktivitetType[], aktivitet: AktivitetTy
   return false;
 }
 
+export function hentAktivitetBeskrivelse(aktivitet: AktivitetType, getAppText: GetAppText) {
+  switch (aktivitet) {
+    case "Arbeid":
+      return getAppText("rapportering-aktivitet-radio-arbeid-beskrivelse");
+    case "Utdanning":
+      return getAppText("rapportering-aktivitet-radio-utdanning-beskrivelse");
+    case "Syk":
+      return getAppText("rapportering-aktivitet-radio-syk-beskrivelse");
+    case "Fravaer":
+      return getAppText("rapportering-aktivitet-radio-fravaer-beskrivelse");
+    default:
+      return "";
+  }
+}
+
 export function AktivitetCheckboxes({
   name,
   label,
@@ -43,21 +58,6 @@ export function AktivitetCheckboxes({
 }: IProps) {
   const { error } = useField(name);
   const { getAppText } = useSanity();
-
-  const hentAktivitetBeskrivelse = (aktivitet: AktivitetType) => {
-    switch (aktivitet) {
-      case "Arbeid":
-        return getAppText("rapportering-aktivitet-radio-arbeid-beskrivelse");
-      case "Utdanning":
-        return getAppText("rapportering-aktivitet-radio-utdanning-beskrivelse");
-      case "Syk":
-        return getAppText("rapportering-aktivitet-radio-syk-beskrivelse");
-      case "Fravaer":
-        return getAppText("rapportering-aktivitet-radio-fravaer-beskrivelse");
-      default:
-        return "";
-    }
-  };
 
   return (
     <CheckboxGroup legend={label} error={error || undefined} value={verdi} onChange={onChange}>
@@ -73,7 +73,7 @@ export function AktivitetCheckboxes({
               <Checkbox
                 disabled={erIkkeAktiv(verdi, aktivitet)}
                 value={aktivitet}
-                description={hentAktivitetBeskrivelse(aktivitet)}
+                description={hentAktivitetBeskrivelse(aktivitet, getAppText)}
                 data-testid={`aktivitet-radio-${aktivitet}`}
                 name={name}
               >
@@ -104,7 +104,7 @@ export function AktivitetCheckboxes({
             })}
             disabled={erIkkeAktiv(verdi, aktivitet)}
             value={aktivitet}
-            description={hentAktivitetBeskrivelse(aktivitet)}
+            description={hentAktivitetBeskrivelse(aktivitet, getAppText)}
             data-testid={`aktivitet-radio-${aktivitet}`}
             name={name}
           >

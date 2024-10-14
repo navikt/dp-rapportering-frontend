@@ -1,9 +1,9 @@
 import { useTypedRouteLoaderData } from "./useTypedRouteLoaderData";
-import type { TypedObject } from "@portabletext/types";
+import type { PortableTextBlock, TypedObject } from "@portabletext/types";
 import { useCallback } from "react";
 import type { ISanity, ISanityAppText, ISanityLink, ISanityRichText } from "~/sanity/sanity.types";
 
-const createSanityRichTextObject = (text: string) => [
+export const createSanityRichTextObject = (text: string): PortableTextBlock[] => [
   {
     markDefs: [],
     children: [
@@ -30,7 +30,7 @@ export function getAppText(sanityTexts: ISanity, textId: string): string {
     textId;
 
   if (text === textId) {
-    // TODO: Logg til logs
+    console.warn(`Fant ikke appText med ID: ${textId}`);
   }
 
   return text;
@@ -42,7 +42,7 @@ export function getRichText(sanityTexts: ISanity, textId: string): TypedObject |
   });
 
   if (!richText?.body) {
-    // TODO: Logg til logs
+    console.warn(`Fant ikke richText med ID: ${textId}`);
   }
 
   return (richText?.body as TypedObject | TypedObject[]) ?? createSanityRichTextObject(textId);
@@ -57,7 +57,7 @@ export function getLink(sanityTexts: ISanity, linkId: string): ISanityLink {
   };
 
   if (link.linkText === linkId) {
-    // TODO: Logg til logs
+    console.warn(`Fant ikke link med ID: ${linkId}`);
   }
 
   return link as ISanityLink;

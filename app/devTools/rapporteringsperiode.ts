@@ -62,8 +62,9 @@ export function startEndring(navaerendePeriode: IRapporteringsperiode): IRapport
     ...navaerendePeriode,
     id: uuid(),
     originalId: navaerendePeriode.id,
-    status: IRapporteringsperiodeStatus.Endret,
+    status: IRapporteringsperiodeStatus.TilUtfylling,
     kanEndres: false,
+    kanSendes: true,
   };
 }
 

@@ -59,7 +59,7 @@ describe("rapporteringsperiode.server", () => {
       await hentRapporteringsperioder(request);
     } catch (error) {
       expect((error as Response).status).toBe(500);
-      expect(await (error as Response).text()).toBe("rapportering-feilmelding-hent-perioder-500");
+      expect(await (error as Response).text()).toBe("rapportering-feilmelding-hent-perioder");
     }
   });
 });

@@ -12,10 +12,10 @@ export function initInstrumentation(): void {
 export function getFaro(): Faro | null {
   if (faro !== null) return faro;
   faro = initializeFaro({
-    url: getEnv("FARO_URL"), // required, see below
+    url: getEnv("FARO_URL"),
     app: {
-      name: "dp-rapportering-frontend", // required
-      version: "0.1", // optional; useful in Grafana to get diff between versions
+      name: "dp-rapportering-frontend",
+      version: getEnv("GITHUB_SHA"),
     },
     instrumentations: [
       ...getWebInstrumentations({

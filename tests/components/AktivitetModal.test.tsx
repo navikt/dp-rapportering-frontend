@@ -16,13 +16,6 @@ vi.mock("remix-validated-form", () => ({
   useField: () => ({ error: null, getInputProps: () => {} }),
 }));
 
-vi.mock("~/hooks/useSanity", () => ({
-  useSanity: () => ({
-    getAppText: (key: string) => key,
-  }),
-}));
-
-// Define mock data conforming to the interfaces
 const mockPeriode: IPeriode = {
   fraOgMed: "2024-01-01",
   tilOgMed: "2024-01-31",

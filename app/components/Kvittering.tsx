@@ -2,8 +2,7 @@ import {
   AvregistertArbeidssokerAlert,
   RegistertArbeidssokerAlert,
 } from "./arbeidssokerregister/ArbeidssokerRegister";
-import Center from "./center/Center";
-import { Accordion, Alert, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
@@ -44,22 +43,23 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
-      <Center>
-        <RemixLink
-          as="Button"
-          to={getLink("rapportering-periode-bekreftelse-tilbake").linkUrl}
-          className="py-4 px-8"
-        >
-          {harNestePeriode
-            ? getLink("rapportering-periode-bekreftelse-neste").linkText
-            : getLink("rapportering-periode-bekreftelse-tilbake").linkText}
-        </RemixLink>
-      </Center>
-      <Center>
-        <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
+      <div className="navigasjon-container">
+        {harNestePeriode ? (
+          <RemixLink as="Button" to={"/"} className="py-4 px-8">
+            {getLink("rapportering-periode-bekreftelse-neste").linkText}
+          </RemixLink>
+        ) : (
+          <Button as="a" className="px-16" href={getLink("ga-til-mine-dagpenger").linkUrl}>
+            {getLink("ga-til-mine-dagpenger").linkText}
+          </Button>
+        )}
+      </div>
+
+      <div className="navigasjon-container">
+        <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
-      </Center>
+      </div>
     </>
   );
 }

@@ -102,7 +102,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
 
-      <div className="navigasjon-container my-4">
+      <div className="navigasjon-container">
         <RemixLink
           as="Button"
           to={`/innsendt`}
@@ -125,7 +125,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           {getAppText("rapportering-knapp-neste")}
         </RemixLink>
       </div>
-      <div className="navigasjon-container my-4">
+      <div className="navigasjon-container">
         <RemixLink
           as="Link"
           to={getLink("rapportering-endre-avbryt").linkUrl}

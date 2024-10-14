@@ -9,17 +9,6 @@ vi.mock("remix-validated-form", () => {
   };
 });
 
-vi.mock("@portabletext/react", () => ({
-  PortableText: ({ value }: { value: string }) => value,
-}));
-
-vi.mock("~/hooks/useSanity", () => ({
-  useSanity: () => ({
-    getAppText: (key: string) => key,
-    getRichText: (key: string) => key,
-  }),
-}));
-
 describe("AktivitetCheckboxes", () => {
   const defaultProps = {
     name: "aktiviteter",
@@ -61,7 +50,7 @@ describe("AktivitetCheckboxes", () => {
 
     expect(screen.getByLabelText("rapportering-arbeid")).not.toBeDisabled();
     // expect(screen.getByLabelText("Utdanning")).not.toBeDisabled();
-    expect(screen.getByLabelText("Syk")).toBeDisabled();
+    expect(screen.getByLabelText("rapportering-syk")).toBeDisabled();
     // expect(screen.getByLabelText("Fravaer")).toBeDisabled();
   });
 

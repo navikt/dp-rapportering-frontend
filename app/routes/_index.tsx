@@ -3,12 +3,13 @@ import { Alert, Button, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-reac
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as StartAction } from "./api.start";
-import { formaterDato } from "~/utils/dato.utils";
+import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
@@ -41,6 +42,10 @@ export default function Landingsside() {
 
   const forstePeriode = rapporteringsperioder[0];
 
+  useEffect(() => {
+    setBreadcrumbs([], getAppText);
+  }, [getAppText]);
+
   function startUtfylling() {
     startFetcher.submit(
       { rapporteringsperiodeId: forstePeriode.id },
@@ -61,17 +66,20 @@ export default function Landingsside() {
           <PortableText
             components={getSanityPortableTextComponents({
               dato: formaterDato(new Date(forstePeriode.kanSendesFra)),
+              "fra-og-til-uke": formaterPeriodeTilUkenummer(
+                forstePeriode.periode.fraOgMed,
+                forstePeriode.periode.tilOgMed
+              ),
             })}
             value={getRichText("rapportering-for-tidlig-a-sende-meldekort")}
           />
         </Alert>
       )}
-
       <PortableText value={getRichText("rapportering-innledning")} />
 
       {forstePeriode?.kanSendes === true && (
         <>
-          <Heading size="medium" level="2">
+          <Heading size="small" level="2" className="mt-8">
             {getAppText("rapportering-samtykke-tittel")}
           </Heading>
 
@@ -86,10 +94,10 @@ export default function Landingsside() {
             <Checkbox value={true}>{getAppText("rapportering-samtykke-checkbox")}</Checkbox>
           </CheckboxGroup>
 
-          <Center>
+          <div className="navigasjon-container">
             <Button
               size="medium"
-              className="my-18 py4 px-16"
+              className="px-16"
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               onClick={startUtfylling}
@@ -97,12 +105,12 @@ export default function Landingsside() {
             >
               {getAppText("rapportering-neste")}
             </Button>
-          </Center>
+          </div>
         </>
       )}
 
       <Center>
-        <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
+        <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
       </Center>

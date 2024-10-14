@@ -1,6 +1,6 @@
 import styles from "./AktivitetModal.module.css";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { useActionData } from "@remix-run/react";
+import { useActionData, useFetcher } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -35,6 +35,20 @@ export function AktivitetModal({
   const dag = rapporteringsperiode.dager.find(
     (rapporteringsdag) => rapporteringsdag.dato === valgtDato
   );
+
+  const fetcher = useFetcher();
+
+  const slettHandler = () => {
+    fetcher.submit(
+      {
+        rapporteringsperiodeId: rapporteringsperiode.id,
+        dag: JSON.stringify(dag),
+      },
+      { method: "post", action: "/api/slett" }
+    );
+
+    lukkModal();
+  };
 
   return (
     <Modal
@@ -80,7 +94,7 @@ export function AktivitetModal({
             )}
 
             <div className={styles.knappKontainer}>
-              <Button variant="secondary" type="submit" name="submit" value="slette">
+              <Button variant="secondary" type="button" name="submit" onClick={slettHandler}>
                 {getAppText("rapportering-slett")}
               </Button>
               <Button type="submit" name="submit" value="lagre">
