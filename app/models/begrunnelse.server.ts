@@ -1,3 +1,4 @@
+import { logErrorResponse } from "~/models/logger.server";
 import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
@@ -22,6 +23,7 @@ export async function lagreBegrunnelse(
   });
 
   if (!response.ok) {
+    logErrorResponse(response, `Feil ved lagring av begrunnelse`);
     return {
       status: "error",
       error: {
