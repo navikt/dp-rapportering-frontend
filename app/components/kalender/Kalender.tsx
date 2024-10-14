@@ -3,7 +3,10 @@ import styles from "./Kalender.module.css";
 import { Uke } from "./Uke";
 import classNames from "classnames";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer, getWeekDays } from "~/utils/dato.utils";
+import { formaterPeriodeDato, getWeekDays } from "~/utils/dato.utils";
+import { hentUkeTekst } from "~/utils/periode.utils";
+import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 interface IProps {
   aapneModal: (dato: string) => void;
@@ -14,23 +17,19 @@ interface IProps {
 
 export function Kalender(props: IProps) {
   const { rapporteringsperiode, aapneModal, readonly = false, visEndringslenke = false } = props;
+  const { locale } = useTypedRouteLoaderData("root");
+  const { getAppText } = useSanity();
 
-  // TODO: Skal denne alltid være norsk?
-  const ukedager = getWeekDays("nb-NO");
+  const ukedager = getWeekDays(locale);
 
   const { fraOgMed, tilOgMed } = rapporteringsperiode.periode;
 
   const forsteUke = [...rapporteringsperiode.dager].splice(0, 7);
   const andreUke = [...rapporteringsperiode.dager].splice(7, 7);
 
-  // TODO: Må Sanityfiseres
-  const periodeUkenummerTekst = `Uke ${formaterPeriodeTilUkenummer(
-    rapporteringsperiode.periode.fraOgMed,
-    rapporteringsperiode.periode.tilOgMed
-  )}`;
+  const periodeUkenummerTekst = hentUkeTekst(rapporteringsperiode, getAppText);
 
   const periodeFomTomDatoTekst = formaterPeriodeDato(fraOgMed, tilOgMed);
-  const forsteUkeHarMinstEnAktivitet = forsteUke.some((dag) => dag.aktiviteter.length > 0);
 
   return (
     <>
@@ -63,11 +62,7 @@ export function Kalender(props: IProps) {
             })}
           </tr>
         </thead>
-        <tbody
-          className={classNames(styles.ukerKontainer, {
-            [styles.spacing]: forsteUkeHarMinstEnAktivitet,
-          })}
-        >
+        <tbody className={classNames(styles.ukerKontainer)}>
           <Uke rapporteringUke={forsteUke} readonly={readonly} aapneModal={aapneModal} />
           <Uke rapporteringUke={andreUke} readonly={readonly} aapneModal={aapneModal} />
         </tbody>

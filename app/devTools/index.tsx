@@ -37,7 +37,7 @@ const scenarios: IScenario[] = [
   },
   {
     type: ScenarioType.innsendte,
-    tittel: "Har to innsendte meldekort",
+    tittel: "Har innsendte meldekort",
   },
 ];
 

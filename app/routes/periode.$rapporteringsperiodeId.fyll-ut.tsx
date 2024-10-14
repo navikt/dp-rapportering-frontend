@@ -5,7 +5,7 @@ import { useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType } from "~/models/aktivitet.server";
-import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
@@ -23,10 +23,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
-    case "slette": {
-      return await slettAlleAktiviteter(request, periodeId, formdata);
-    }
-
     case "lagre": {
       return await validerOgLagreAktivitet(request, periodeId, formdata);
     }
@@ -92,7 +88,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   return (
     <>
-      <Heading tabIndex={-1} size={"large"} level={"2"} className="vo-fokus">
+      <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
         {getAppText("rapportering-periode-fyll-ut-tittel")}
       </Heading>
       <BodyLong className="tekst-subtil" spacing>
@@ -114,7 +110,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
 
-      <div className="navigasjon-container-to-knapper my-4">
+      <div className="navigasjon-container">
         <RemixLink
           as="Button"
           to={`/periode/${periode.id}/rapporteringstype`}

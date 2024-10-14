@@ -46,7 +46,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     const periode = await hentPeriode(request, periodeId, false);
     const response = await sendInnPeriode(request, periode);
     const { id } = response;
-    return redirect(`/periode/${id}/endring/bekreftelse`);
+    return redirect(`/periode/${id}/bekreftelse`);
   } catch (error: unknown) {
     // TODO: Her ønsker vi å vise en modal, ikke en ny side
     // TODO: Feilen er en network error
@@ -80,12 +80,20 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
+  const { locale } = useTypedRouteLoaderData("root");
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
-  const addHtml = useAddHtml({ rapporteringsperioder, periode, getAppText, getRichText, submit });
+  const addHtml = useAddHtml({
+    rapporteringsperioder,
+    periode,
+    getAppText,
+    getRichText,
+    submit,
+    locale,
+  });
 
   let invaerendePeriodeTekst;
 
@@ -105,7 +113,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         {getAppText("rapportering-periode-kan-ikke-sendes")}
       </KanIkkeSendes>
 
-      <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
+      <Heading tabIndex={-1} level="2" size="medium" spacing className="vo-fokus">
         {getAppText("rapportering-send-inn-tittel")}
       </Heading>
 
@@ -137,7 +145,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" onSubmit={addHtml} className="navigasjon-container-to-knapper my-4">
+      <Form method="post" onSubmit={addHtml} className="navigasjon-container my-4">
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"

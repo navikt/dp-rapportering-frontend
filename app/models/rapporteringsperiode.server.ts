@@ -12,6 +12,8 @@ export enum IRapporteringsperiodeStatus {
   TilUtfylling = "TilUtfylling",
   Innsendt = "Innsendt",
   Endret = "Endret",
+  Ferdig = "Ferdig",
+  Feilet = "Feilet",
 }
 
 export interface IRapporteringsperiodeDag {
@@ -24,15 +26,18 @@ export interface IRapporteringsperiode {
   id: string;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
-  status: IRapporteringsperiodeStatus;
+  sisteFristForTrekk: string | null;
   kanSendesFra: string;
   kanSendes: boolean;
   kanEndres: boolean;
-  rapporteringstype: Rapporteringstype | null;
-  begrunnelseEndring?: string;
+  bruttoBelop: number | null;
+  begrunnelseEndring: string | null;
+  status: IRapporteringsperiodeStatus;
+  mottattDato: string | null;
   registrertArbeidssoker: boolean | null;
-  originalId?: string;
-  html?: string;
+  originalId: string | null;
+  html: string | null;
+  rapporteringstype: Rapporteringstype | null;
 }
 
 export interface IInnsendtRapporteringsperiodeResponse {
@@ -60,7 +65,7 @@ export async function startUtfylling(request: Request, periodeId: string): Promi
   });
 
   if (!response.ok) {
-    throw new Response(`rapportering-feilmelding-start-utfylling-${response.status}`, {
+    throw new Response(`rapportering-feilmelding-start-utfylling`, {
       status: response.status,
     });
   }
@@ -79,7 +84,7 @@ export async function hentRapporteringsperioder(
   });
 
   if (!response.ok) {
-    throw new Response(`rapportering-feilmelding-hent-perioder-${response.status}`, {
+    throw new Response(`rapportering-feilmelding-hent-perioder`, {
       status: response.status,
     });
   }
@@ -175,7 +180,7 @@ export async function sendInnPeriode(
   });
 
   if (!response.ok) {
-    throw new Response(`rapportering-feilmelding-send-inn-periode-${response.status}`, {
+    throw new Response(`rapportering-feilmelding-send-inn-periode`, {
       status: response.status,
     });
   }
@@ -195,7 +200,7 @@ export async function lagEndringsperiode(
   });
 
   if (!response.ok) {
-    throw new Response(`rapportering-feilmelding-lag-endringsperiode-${response.status}`, {
+    throw new Response(`rapportering-feilmelding-lag-endringsperiode`, {
       status: response.status,
     });
   }

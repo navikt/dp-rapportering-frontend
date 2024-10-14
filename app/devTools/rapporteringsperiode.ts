@@ -12,22 +12,27 @@ export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
 
   const meldekort: IRapporteringsperiode = {
     id: uuid(),
-    status: IRapporteringsperiodeStatus.TilUtfylling,
     periode: {
       fraOgMed,
       tilOgMed,
     },
-    kanSendesFra: "",
-    kanSendes: true,
-    kanEndres: true,
-    begrunnelseEndring: "",
-    rapporteringstype: null,
-    registrertArbeidssoker: null,
     dager: times(14, (i) => ({
       dagIndex: i,
       dato: "",
       aktiviteter: [],
     })),
+    sisteFristForTrekk: null,
+    kanSendesFra: "",
+    kanSendes: true,
+    kanEndres: true,
+    bruttoBelop: null,
+    begrunnelseEndring: "",
+    status: IRapporteringsperiodeStatus.TilUtfylling,
+    mottattDato: null,
+    registrertArbeidssoker: null,
+    originalId: null,
+    html: null,
+    rapporteringstype: null,
     ...props,
   };
 
@@ -57,8 +62,9 @@ export function startEndring(navaerendePeriode: IRapporteringsperiode): IRapport
     ...navaerendePeriode,
     id: uuid(),
     originalId: navaerendePeriode.id,
-    status: IRapporteringsperiodeStatus.Endret,
+    status: IRapporteringsperiodeStatus.TilUtfylling,
     kanEndres: false,
+    kanSendes: true,
   };
 }
 

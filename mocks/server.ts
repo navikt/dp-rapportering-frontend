@@ -1,11 +1,11 @@
-import { handlers } from "./handlers";
+import { createHandlers } from "./handlers";
 import type { SetupServerApi } from "msw/node";
 import { setupServer } from "msw/node";
 
-export const server = setupServer(...handlers);
+export const server = setupServer(...createHandlers());
 
 export const setup = () => {
-  return setupServer(...handlers) as SetupServerApi;
+  return setupServer(...createHandlers()) as SetupServerApi;
 };
 
 export const start = (server: SetupServerApi) => {

@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
@@ -84,12 +84,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   return (
     <>
-      <Heading tabIndex={-1} size={"large"} level={"2"} className="vo-fokus">
+      <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
         {getAppText("rapportering-periode-endre-tittel")}
       </Heading>
-      <BodyLong className="tekst-subtil" spacing>
-        <PortableText value={getRichText("rapportering-periode-endre-beskrivelse")} />
-      </BodyLong>
+      <PortableText value={getRichText("rapportering-periode-endre-beskrivelse")} />
 
       <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
       <AktivitetModal
@@ -104,7 +102,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
 
-      <div className="navigasjon-container-to-knapper my-4">
+      <div className="navigasjon-container">
         <RemixLink
           as="Button"
           to={`/innsendt`}
@@ -127,7 +125,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           {getAppText("rapportering-knapp-neste")}
         </RemixLink>
       </div>
-      <div className="navigasjon-container-en-knapp my-4">
+      <div className="navigasjon-container">
         <RemixLink
           as="Link"
           to={getLink("rapportering-endre-avbryt").linkUrl}

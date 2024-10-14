@@ -1,13 +1,24 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { useNavigate } from "@remix-run/react";
+import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import invariant from "tiny-invariant";
+import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+
+  const periodeId = params.rapporteringsperiodeId;
+  const periode = await hentPeriode(request, periodeId, false);
+
+  return json({ periode });
+}
+
 export default function TomRapporteringsPeriodeSide() {
-  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const { periode } = useLoaderData<typeof loader>();
   const { getAppText, getRichText, getLink } = useSanity();
 
   const navigate = useNavigate();
@@ -23,12 +34,12 @@ export default function TomRapporteringsPeriodeSide() {
         {getAppText("rapportering-tom-periode-innhold")}
       </Alert>
 
-      <div className="my-10">
+      <div className="my-8">
         <p>{getAppText("rapportering-tom-noe-å-rapportere")}</p>
         <PortableText value={getRichText("rapportering-tom-ingen-å-rapportere")} />
       </div>
 
-      <div className="navigasjon-container-to-knapper my-4">
+      <div className="navigasjon-container my-4">
         <RemixLink
           as="Button"
           to=""

@@ -1,5 +1,8 @@
-import Center from "./center/Center";
-import { Accordion, Alert, Heading } from "@navikt/ds-react";
+import {
+  AvregistertArbeidssokerAlert,
+  RegistertArbeidssokerAlert,
+} from "./arbeidssokerregister/ArbeidssokerRegister";
+import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
@@ -31,26 +34,31 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
             <div className="oppsummering">
               <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
               <AktivitetOppsummering rapporteringsperiode={periode} />
+              {periode.registrertArbeidssoker ? (
+                <RegistertArbeidssokerAlert />
+              ) : (
+                <AvregistertArbeidssokerAlert />
+              )}
             </div>
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
       <div className="navigasjon-container">
-        <RemixLink
-          as="Button"
-          to={getLink("rapportering-periode-bekreftelse-tilbake").linkUrl}
-          className="py-4 px-8"
-        >
-          {harNestePeriode
-            ? getLink("rapportering-periode-bekreftelse-neste").linkText
-            : getLink("rapportering-periode-bekreftelse-tilbake").linkText}
-        </RemixLink>
-
-        <Center>
-          <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
-            {getLink("rapportering-se-og-endre").linkText}
+        {harNestePeriode ? (
+          <RemixLink as="Button" to={"/"} className="py-4 px-8">
+            {getLink("rapportering-periode-bekreftelse-neste").linkText}
           </RemixLink>
-        </Center>
+        ) : (
+          <Button as="a" className="px-16" href={getLink("ga-til-mine-dagpenger").linkUrl}>
+            {getLink("ga-til-mine-dagpenger").linkText}
+          </Button>
+        )}
+      </div>
+
+      <div className="navigasjon-container">
+        <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
+          {getLink("rapportering-se-og-endre").linkText}
+        </RemixLink>
       </div>
     </>
   );

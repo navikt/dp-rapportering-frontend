@@ -67,13 +67,21 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>();
 
+  const { locale } = useTypedRouteLoaderData("root");
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
 
-  const addHtml = useAddHtml({ rapporteringsperioder, periode, getAppText, getRichText, submit });
+  const addHtml = useAddHtml({
+    rapporteringsperioder,
+    periode,
+    getAppText,
+    getRichText,
+    submit,
+    locale,
+  });
 
   let invaerendePeriodeTekst;
 
@@ -123,11 +131,11 @@ export default function RapporteringsPeriodeSendInnSide() {
 
       {actionData?.error && (
         <Alert variant="error" className="feilmelding">
-          {actionData.error}
+          {getAppText(actionData.error)}
         </Alert>
       )}
 
-      <Form method="post" onSubmit={addHtml} className="navigasjon-container-to-knapper my-4">
+      <Form method="post" onSubmit={addHtml} className="navigasjon-container my-4">
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
@@ -142,7 +150,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           type="submit"
           variant="primary"
           iconPosition="right"
-          disabled={!confirmed || isSubmitting}
+          disabled={!periode.kanSendes || !confirmed || isSubmitting}
           className="py-4 px-8"
           name="_action"
           value="send-inn"
@@ -152,7 +160,7 @@ export default function RapporteringsPeriodeSendInnSide() {
             : getLink("rapportering-endring-send-inn-bekreft").linkText}
         </Button>
       </Form>
-      <div className="navigasjon-container-en-knapp my-4">
+      <div className="navigasjon-container my-4">
         <RemixLink
           as="Link"
           to={getLink("rapportering-endre-avbryt").linkUrl}

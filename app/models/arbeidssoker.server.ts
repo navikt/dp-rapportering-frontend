@@ -26,7 +26,7 @@ export async function lagreArbeidssokerSvar(
       status: "error",
       error: {
         statusCode: response.status,
-        statusText: `rapportering-feilmelding-lagre-arbeidssoker-svar-${response.status}`,
+        statusText: `rapportering-feilmelding-lagre-arbeidssoker-svar`,
       },
     };
   }
