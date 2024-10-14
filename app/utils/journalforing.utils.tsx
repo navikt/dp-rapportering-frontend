@@ -102,10 +102,12 @@ export function getLesMer(props: IProps): string {
   const { getAppText, getRichText } = props;
   return [
     "// Les mer",
+    "<div style='border: 1px solid black; padding: 10px;'>",
     getHeader({ text: getAppText("rapportering-les-mer-hva-skal-rapporteres-tittel"), level: "2" }),
     renderToString(
       <PortableText value={getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold")} />
     ),
+    "</div>",
   ].join("");
 }
 
@@ -131,7 +133,7 @@ export function getAktivitetModal(props: IProps): string {
     .join("");
 
   return [
-    "// popup",
+    "// Popup",
     "<dialog style='border: 1px solid black; padding: 10px;'>",
     modalHeader,
     "<div>",
@@ -217,12 +219,14 @@ export function getInput({
   type,
   checked,
   label,
+  name,
 }: {
   type: string;
   checked: boolean;
   label: string;
+  name: string;
 }): string {
-  return `<input type="${type}" ${checked ? "checked" : ""} /><label>${label}</label>`;
+  return `<input type="${type}" name="${name}" ${checked ? "checked" : ""} /><label>${label}</label>`;
 }
 
 export function htmlForEndringBegrunnelse(props: IProps): string {
@@ -286,7 +290,7 @@ export function htmlForLandingsside(props: IProps): string {
       renderToString(<PortableText value={getRichText("rapportering-samtykke-beskrivelse")} />)
     );
     seksjoner.push(
-      `<form><input type="checkbox" checked/><label>${getAppText("rapportering-samtykke-checkbox")}</label></form>`
+      `<form><input type="checkbox" name="rapportering-samtykke-checkbox" checked/><label>${getAppText("rapportering-samtykke-checkbox")}</label></form>`
     );
   }
 
@@ -363,6 +367,7 @@ export function htmlForRapporteringstype(props: IProps): string {
         type: "radio",
         checked: periode.rapporteringstype === option.value,
         label: option.label,
+        name: "rapportering-ingen-å-rapportere-" + option.value,
       })
     )
     .join("</div><div>");
@@ -432,11 +437,16 @@ export function htmlForArbeidssoker(props: IProps): string {
         type: "radio",
         checked: option.value === periode.registrertArbeidssoker,
         label: getAppText(option.label),
+        name: option.label,
       });
     })
     .join("</div><div>");
 
-  const radioGroup = `<form><fieldset><legend>${legend}</legend><p>${description}</p><div>${options}</div></fieldset></form>`;
+  const radioGroup = `
+    <form>
+      <fieldset><legend>${legend}</legend><p>${description}</p><div>${options}</div></fieldset>
+    </form>
+  `;
   seksjoner.push(radioGroup);
   seksjoner.push(getArbeidssokerAlert(periode, getAppText, getRichText));
 
@@ -482,11 +492,17 @@ export function htmlForOppsummering(props: IProps): string {
 
   if (periode.originalId) {
     seksjoner.push(
-      `<form><input type="checkbox" checked/><label>${getAppText("rapportering-endring-send-inn-bekreft-opplysning")}</label></form>`
+      `<form>
+        <input type="checkbox" name="rapportering-send-inn-bekreft-opplysning" checked/>
+        <label>${getAppText("rapportering-endring-send-inn-bekreft-opplysning")}</label>
+      </form>`
     );
   } else {
     seksjoner.push(
-      `<form><input type="checkbox" checked/><label>${getAppText("rapportering-send-inn-bekreft-opplysning")}</label></form>`
+      `<form>
+        <input type="checkbox" name="rapportering-send-inn-bekreft-opplysning" checked/>
+        <label>${getAppText("rapportering-send-inn-bekreft-opplysning")}</label>
+      </form>`
     );
   }
 
