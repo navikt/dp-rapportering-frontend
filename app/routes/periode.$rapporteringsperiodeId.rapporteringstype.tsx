@@ -155,6 +155,7 @@ export default function RapporteringstypeSide() {
           iconPosition="right"
           className="py-4 px-8"
           icon={<ArrowRightIcon aria-hidden />}
+          disabled={type === null}
         >
           {nesteKnappTekst}
         </RemixLink>
