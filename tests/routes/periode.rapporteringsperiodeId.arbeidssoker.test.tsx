@@ -1,6 +1,6 @@
 import { createRemixStub } from "@remix-run/testing";
 import { render as TLRender, screen, waitFor } from "@testing-library/react";
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import ArbeidssøkerRegisterSide, {
@@ -12,18 +12,6 @@ import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
-
-vi.mock("~/hooks/useSanity", () => ({
-  useSanity: () => ({
-    getAppText: (key: string) => key,
-    getLink: (key: string) => ({ linkText: key, href: key }),
-    getRichText: (key: string) => key,
-  }),
-}));
-
-vi.mock("@portabletext/react", () => ({
-  PortableText: ({ value }: { value: string }) => value,
-}));
 
 const testDb = withDb(sessionRecord.getDatabase("123"));
 const rapporteringsperiode: IRapporteringsperiode = {

@@ -1,6 +1,6 @@
 import { createRemixStub } from "@remix-run/testing";
 import { render, screen } from "@testing-library/react";
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import Landingsside, { loader } from "~/routes/_index";
 import { createHandlers } from "../../mocks/handlers";
@@ -8,18 +8,6 @@ import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
-
-vi.mock("~/hooks/useSanity", () => ({
-  useSanity: () => ({
-    getAppText: (key: string) => key,
-    getLink: (key: string) => key,
-    getRichText: (key: string) => key,
-  }),
-}));
-
-vi.mock("@portabletext/react", () => ({
-  PortableText: ({ value }: { value: string }) => value,
-}));
 
 describe("Hovedside rapportering", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
