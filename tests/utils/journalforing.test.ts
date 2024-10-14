@@ -1,5 +1,5 @@
 import { TypedObject } from "@portabletext/types";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 // import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import {
@@ -25,6 +25,9 @@ import {
 import { Rapporteringstype } from "~/utils/types";
 import { createSanityRichTextObject } from "~/hooks/useSanity";
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
+
+vi.unmock("~/hooks/useSanity");
+vi.unmock("@portabletext/react");
 
 function mockGetAppText(textId: string): string {
   return textId;
