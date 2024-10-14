@@ -1,5 +1,4 @@
 import { IRapporteringsperiodeDag } from "./rapporteringsperiode.server";
-import { logErrorResponse } from "~/models/logger.server";
 import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
@@ -28,10 +27,7 @@ export async function lagreAktivitet(
     body: JSON.stringify({ ...dag }),
   });
 
-  logErrorResponse(response, "Dette er en test");
-
   if (!response.ok) {
-    logErrorResponse(response, "Klarte ikke å lagre aktivitet");
     return {
       status: "error",
       error: {
