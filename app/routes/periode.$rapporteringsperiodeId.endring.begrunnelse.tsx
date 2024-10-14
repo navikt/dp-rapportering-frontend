@@ -71,7 +71,7 @@ export default function BegrunnelseSide() {
         onChange={handleChange}
       >
         {begrunnelser.map((begrunnelse) => (
-          <option key={begrunnelse.value} value={begrunnelse.value}>
+          <option key={begrunnelse.value} value={getAppText(begrunnelse.value)}>
             {getAppText(begrunnelse.label || begrunnelse.value)}
           </option>
         ))}
