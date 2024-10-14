@@ -380,7 +380,7 @@ export function htmlForRapporteringstype(props: IProps): string {
 }
 
 export function htmlForFyllUt(props: IProps): string {
-  const { getAppText, getRichText, periode } = props;
+  const { getAppText, periode } = props;
 
   if (!periode) {
     return "";
@@ -395,7 +395,7 @@ export function htmlForFyllUt(props: IProps): string {
 
   const seksjoner: string[] = [
     getHeader({ text: getAppText(tittel), level: "2" }),
-    renderToString(<PortableText value={getRichText(beskrivelse)} />),
+    renderToString(getAppText(beskrivelse)),
     getKalender(props),
     getOppsummering({ getAppText, periode }),
   ];
