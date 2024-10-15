@@ -251,7 +251,6 @@ export function htmlForEndringBegrunnelse(props: IProps): string {
   ];
 
   const seksjoner = [
-    getHeader({ text: getAppText("rapportering-periode-endre-tittel"), level: "2" }),
     getHeader({
       text: getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-label"),
       level: "3",
