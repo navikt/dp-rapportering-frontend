@@ -1,6 +1,7 @@
 import { withDb } from "./responses/db";
 import { getDatabase } from "./responses/db.utils";
 import { HttpResponse, bypass, http } from "msw";
+import { formatereDato } from "~/devTools/periodedato";
 import { hentEndringsId, startEndring } from "~/devTools/rapporteringsperiode";
 import { IArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { IBegrunnelseSvar } from "~/models/begrunnelse.server";
@@ -27,6 +28,8 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     const db = database || getDatabase(cookies);
     const periode = (await request.json()) as IRapporteringsperiode;
 
+    const mottattDato = formatereDato(new Date());
+
     if (periode.originalId) {
       const originalPeriode = db.findRapporteringsperiodeById(periode.originalId as string);
       db.updateRapporteringsperiode(originalPeriode.id, { kanEndres: false });
@@ -36,6 +39,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
         status: IRapporteringsperiodeStatus.Innsendt,
         kanEndres: false,
         kanSendes: false,
+        mottattDato,
       });
       return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
     }
@@ -43,6 +47,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     db.updateRapporteringsperiode(periode.id, {
       status: IRapporteringsperiodeStatus.Innsendt,
       kanSendes: false,
+      mottattDato,
     });
 
     return HttpResponse.json({ id: periode.id }, { status: 200 });

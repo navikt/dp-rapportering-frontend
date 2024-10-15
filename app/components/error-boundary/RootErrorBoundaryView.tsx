@@ -15,19 +15,11 @@ interface IProps {
   error: unknown | IError;
 }
 
-export function RootErrorBoundaryView({ meta, links, error }: IProps) {
+export function RootErrorBoundaryView({ error }: IProps) {
   return (
-    <html lang="nb">
-      <head>
-        {meta}
-        {links}
-      </head>
-      <body>
-        <div className={styles.container}>
-          <ErrorMessageComponent error={error} />
-        </div>
-      </body>
-    </html>
+    <div className={styles.container}>
+      <ErrorMessageComponent error={error} />
+    </div>
   );
 }
 

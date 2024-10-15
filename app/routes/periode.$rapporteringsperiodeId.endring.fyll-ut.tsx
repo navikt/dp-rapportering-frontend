@@ -130,7 +130,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           as="Link"
           to={getLink("rapportering-endre-avbryt").linkUrl}
           variant="primary"
-          className="py-4 px-8"
+          className="px-8"
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>

@@ -34,12 +34,13 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
             <div className="oppsummering">
               <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
               <AktivitetOppsummering rapporteringsperiode={periode} />
-              {periode.registrertArbeidssoker ? (
-                <RegistertArbeidssokerAlert />
-              ) : (
-                <AvregistertArbeidssokerAlert />
-              )}
             </div>
+
+            {periode.registrertArbeidssoker ? (
+              <RegistertArbeidssokerAlert />
+            ) : (
+              <AvregistertArbeidssokerAlert />
+            )}
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
@@ -47,14 +48,18 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         {harNestePeriode ? (
           <RemixLink
             as="Button"
-            to={getLink("ga-til-neste-meldekort").linkUrl}
+            to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
             className="py-4 px-8"
           >
-            {getLink("ga-til-neste-meldekort").linkText}
+            {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </RemixLink>
         ) : (
-          <Button as="a" className="px-16" href={getLink("ga-til-mine-dagpenger").linkUrl}>
-            {getLink("ga-til-mine-dagpenger").linkText}
+          <Button
+            as="a"
+            className="px-16"
+            href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
+          >
+            {getLink("rapportering-ga-til-mine-dagpenger").linkText}
           </Button>
         )}
       </div>

@@ -1,4 +1,5 @@
-import { Accordion, Alert, BodyLong, BodyShort, Button, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -59,7 +60,7 @@ export default function InnsendteRapporteringsPerioderSide() {
     .map((nokkel) => gruppertePerioder[nokkel])
     .map(sorterGrupper);
 
-  const { getAppText, getLink } = useSanity();
+  const { getAppText, getLink, getRichText } = useSanity();
 
   useEffect(() => {
     setBreadcrumbs(
@@ -84,12 +85,13 @@ export default function InnsendteRapporteringsPerioderSide() {
       <Heading size="medium" level="2">
         {getAppText("rapportering-innsendt-beskrivelse-tittel")}
       </Heading>
-      <BodyLong className="tekst-subtil" spacing>
-        {getAppText("rapportering-innsendt-beskrivelse-innhold")}
-      </BodyLong>
+
+      <PortableText value={getRichText("rapportering-innsendt-beskrivelse-innhold")} />
+
       {innsendtPerioder.length === 0 && (
         <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
       )}
+
       {sortertePerioder.map((perioder) => {
         const nyestePeriode = perioder[0];
         return (
@@ -103,15 +105,15 @@ export default function InnsendteRapporteringsPerioderSide() {
                   <div
                     className={`innsendt-periode-header-status ${nyestePeriode.status.toLocaleLowerCase()}`}
                   >
-                    <BodyShort>
+                    <BodyLong>
                       {getAppText(
                         `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`
                       )}
-                    </BodyShort>
+                    </BodyLong>
                   </div>
                 </div>
               </Accordion.Header>
-              <Accordion.Content>
+              <Accordion.Content className="innsendt-accordion-content">
                 {perioder.map((periode) => {
                   const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
                   return (
@@ -171,14 +173,18 @@ export default function InnsendteRapporteringsPerioderSide() {
         {harFlerePerioder ? (
           <RemixLink
             as="Button"
-            to={getLink("ga-til-neste-meldekort").linkUrl}
+            to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
             className="py-4 px-8"
           >
-            {getLink("ga-til-neste-meldekort").linkText}
+            {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </RemixLink>
         ) : (
-          <Button as="a" className="px-16" href={getLink("ga-til-mine-dagpenger").linkUrl}>
-            {getLink("ga-til-mine-dagpenger").linkText}
+          <Button
+            as="a"
+            className="px-16"
+            href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
+          >
+            {getLink("rapportering-ga-til-mine-dagpenger").linkText}
           </Button>
         )}
       </div>

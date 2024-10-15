@@ -105,7 +105,9 @@ export function getLesMer(props: IProps & { tittel: string; innhold: string }): 
     "// Les mer",
     "<div style='border: 1px solid black; padding: 10px;'>",
     getHeader({ text: getAppText(tittel), level: "2" }),
-    renderToString(<PortableText value={getRichText(innhold)} />),
+    renderToString(
+      <PortableText components={getSanityPortableTextComponents()} value={getRichText(innhold)} />
+    ),
     "</div>",
   ].join("");
 }

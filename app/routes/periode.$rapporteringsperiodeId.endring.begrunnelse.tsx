@@ -81,7 +81,7 @@ export default function BegrunnelseSide() {
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
 
-      <div className="navigasjon-container my-4">
+      <div className="navigasjon-container">
         <RemixLink
           as="Button"
           to={`/periode/${periode.id}/endring/fyll-ut`}
@@ -105,12 +105,12 @@ export default function BegrunnelseSide() {
           {getAppText("rapportering-knapp-neste")}
         </RemixLink>
       </div>
-      <div className="navigasjon-container my-4">
+      <div className="navigasjon-container">
         <RemixLink
           as="Link"
           to={getLink("rapportering-endre-avbryt").linkUrl}
           variant="primary"
-          className="py-4 px-8"
+          className="px-8"
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>
