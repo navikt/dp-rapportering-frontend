@@ -481,10 +481,14 @@ export function htmlForOppsummering(props: IProps): string {
   const beskrivelse = periode.originalId
     ? "rapportering-endring-send-inn-innhold"
     : "rapportering-send-inn-innhold";
+  const alert = periode.originalId
+    ? "rapportering-endring-ikke-sendt-enda"
+    : "rapportering-meldekort-ikke-sendt-enda";
 
   const seksjoner: string[] = [
     getHeader({ text: getAppText(tittel), level: "2" }),
     renderToString(<PortableText value={getRichText(beskrivelse)} />),
+    `<p>${getRichText(alert)}</p>`,
     getHeader({ text: getAppText("rapportering-send-inn-periode-tittel"), level: "3" }),
     `<p>${invaerendePeriodeTekst}</p>`,
     getKalender(props, false),
