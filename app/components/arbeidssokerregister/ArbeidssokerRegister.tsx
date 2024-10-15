@@ -21,7 +21,7 @@ export function ArbeidssokerRegisterering({
         registrertArbeidssoker: registrertArbeidssokerSvar,
         rapporteringsperiodeId,
       },
-      { method: "post", action: "/api/arbeidssoker" }
+      { method: "post" }
     );
   };
 

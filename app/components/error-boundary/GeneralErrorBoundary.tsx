@@ -3,7 +3,6 @@ import { PortableText } from "@portabletext/react";
 import { isRouteErrorResponse } from "@remix-run/react";
 import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "../RemixLink";
-import Center from "../center/Center";
 
 interface IError {
   statusText: string;
@@ -38,17 +37,17 @@ export function GeneralErrorBoundary({ error }: IProps) {
 
       <PortableText value={getRichText(body)} />
 
-      <Center className="my-8">
+      <div className="navigasjon-container">
         <RemixLink as="Button" to="/">
           {getAppText("rapportering-tilbake-til-startside")}
         </RemixLink>
-      </Center>
+      </div>
 
-      <Center>
+      <div className="navigasjon-container">
         <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
-      </Center>
+      </div>
     </>
   );
 }

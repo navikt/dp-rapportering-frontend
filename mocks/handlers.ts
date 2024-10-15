@@ -102,7 +102,9 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.updateRapporteringsperiode(rapporteringsperioderId, { registrertArbeidssoker });
 
-      return HttpResponse.json(null, { status: 204 });
+      return new HttpResponse(null, {
+        status: 204,
+      });
     }
   ),
 

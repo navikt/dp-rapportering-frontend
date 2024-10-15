@@ -1,7 +1,7 @@
 import { createRemixStub } from "@remix-run/testing";
 import { render as TLRender, screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
-import { afterAll, afterEach, beforeAll, describe, expect, test, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import RapporteringstypeSide, {
@@ -10,18 +10,6 @@ import RapporteringstypeSide, {
 import { Rapporteringstype } from "~/utils/types";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
-
-vi.mock("~/hooks/useSanity", () => ({
-  useSanity: () => ({
-    getAppText: (key: string) => key,
-    getLink: (key: string) => key,
-    getRichText: (key: string) => key,
-  }),
-}));
-
-vi.mock("@portabletext/react", () => ({
-  PortableText: ({ value }: { value: string }) => value,
-}));
 
 describe("RapporteringstypeSide", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));

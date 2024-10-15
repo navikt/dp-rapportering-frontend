@@ -11,6 +11,7 @@ import {
   hentTotaltFravaerTekstMedType,
   hentUkeTekst,
   periodeSomTimer,
+  perioderSomKanSendes,
 } from "./periode.utils";
 import { Rapporteringstype } from "./types";
 import { PortableText } from "@portabletext/react";
@@ -98,38 +99,38 @@ export function getHeader({
   return `<h${level}>${text}</h${level}>`;
 }
 
-export function getLesMer(props: IProps): string {
-  const { getAppText, getRichText } = props;
+export function getLesMer(props: IProps & { tittel: string; innhold: string }): string {
+  const { getAppText, getRichText, tittel, innhold } = props;
   return [
     "// Les mer",
     "<div style='border: 1px solid black; padding: 10px;'>",
-    getHeader({ text: getAppText("rapportering-les-mer-hva-skal-rapporteres-tittel"), level: "2" }),
-    renderToString(
-      <PortableText value={getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold")} />
-    ),
+    getHeader({ text: getAppText(tittel), level: "2" }),
+    renderToString(<PortableText value={getRichText(innhold)} />),
     "</div>",
   ].join("");
 }
 
-export function getAktivitetCheckbox(
-  aktivitet: AktivitetType,
-  getAppText: GetAppText,
-  getRichText: GetRichText
-): string {
+export function getAktivitetCheckbox(props: IProps & { aktivitet: AktivitetType }): string {
+  const { aktivitet, getAppText, getRichText } = props;
   let arbeid = "";
 
   if (aktivitet === "Arbeid") {
-    arbeid = `${getHeader({ text: getAppText("rapportering-antall-timer"), level: "5" })}<p>${renderToString(<PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />)}</p>`;
+    const lesMer = getLesMer({
+      ...props,
+      tittel: "rapportering-aktivitet-jobb-prosentstilling-tittel",
+      innhold: "rapportering-aktivitet-jobb-prosentstilling-tittel",
+    });
+    arbeid = `${getHeader({ text: getAppText("rapportering-antall-timer"), level: "5" })}<p>${renderToString(<PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />)}</p>${lesMer}`;
   }
 
   return `${getHeader({ text: aktivitetTypeMap(aktivitet, getAppText), level: "4" })}<p>${hentAktivitetBeskrivelse(aktivitet, getAppText)}</p>${arbeid}`;
 }
 
 export function getAktivitetModal(props: IProps): string {
-  const { getAppText, getRichText } = props;
+  const { getAppText } = props;
   const modalHeader = `${getHeader({ text: getAppText("rapportering-hva-vil-du-lagre"), level: "3" })}`;
   const modalBody = aktivitetType
-    .map((aktivitet) => getAktivitetCheckbox(aktivitet, getAppText, getRichText))
+    .map((aktivitet) => getAktivitetCheckbox({ ...props, aktivitet }))
     .join("");
 
   return [
@@ -209,7 +210,7 @@ export function getOppsummering({
 
   return [
     "<div>",
-    getHeader({ text: getAppText("rapportering-oppsummering-tittel"), level: "3" }),
+    getHeader({ text: getAppText("rapportering-oppsummering-tittel"), level: "4" }),
     oppsummering,
     "</div>",
   ].join("");
@@ -304,7 +305,8 @@ export function htmlForRapporteringstype(props: IProps): string {
     return "";
   }
 
-  const harFlerePerioder = rapporteringsperioder.length > 1;
+  const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
+  const harFlerePerioder = antallPerioder > 1;
 
   const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
   const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
@@ -316,7 +318,7 @@ export function htmlForRapporteringstype(props: IProps): string {
       getHeader({
         text: getAppText("rapportering-flere-perioder-tittel").replace(
           "{antall}",
-          rapporteringsperioder.length.toString()
+          antallPerioder.toString()
         ),
         level: "2",
       })
@@ -345,7 +347,13 @@ export function htmlForRapporteringstype(props: IProps): string {
       />
     )
   );
-  seksjoner.push(getLesMer(props));
+  seksjoner.push(
+    getLesMer({
+      ...props,
+      tittel: "rapportering-les-mer-hva-skal-rapporteres-tittel",
+      innhold: "rapportering-les-mer-hva-skal-rapporteres-innhold",
+    })
+  );
 
   const legend =
     rapporteringsperioder.length === 1
@@ -380,7 +388,7 @@ export function htmlForRapporteringstype(props: IProps): string {
 }
 
 export function htmlForFyllUt(props: IProps): string {
-  const { getAppText, periode } = props;
+  const { getAppText, getRichText, periode } = props;
 
   if (!periode) {
     return "";
@@ -395,7 +403,7 @@ export function htmlForFyllUt(props: IProps): string {
 
   const seksjoner: string[] = [
     getHeader({ text: getAppText(tittel), level: "2" }),
-    renderToString(getAppText(beskrivelse)),
+    renderToString(<PortableText value={getRichText(beskrivelse)} />),
     getKalender(props),
     getOppsummering({ getAppText, periode }),
   ];

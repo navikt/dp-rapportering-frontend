@@ -51,6 +51,7 @@ export function Uke(props: IProps) {
           [styles.sykOgUtdanning]: erAktivStil(dag, ["Syk", "Utdanning"]),
           [styles.fravaerOgUtdanning]: erAktivStil(dag, ["Fravaer", "Utdanning"]),
           [styles.sykOgFravaer]: erAktivStil(dag, ["Syk", "Fravaer"]),
+          [styles.sykFravaerOgUtdanning]: erAktivStil(dag, ["Syk", "Fravaer", "Utdanning"]),
         };
 
         return (
