@@ -164,7 +164,24 @@
   width: 50%;
 }
 
-.arbeidOgUtdanning:hover::after {
+.arbeidOgUtdanning:hover::after,
+.fravaerOgUtdanning:hover::after,
+.sykOgUtdanning:hover::after {
+  background-color: var(--a-purple-300);
+}
+
+.sykFravaerOgUtdanning::before {
+  content: '';
+  position: absolute;
+  left: -12.5%;
+  top: -12.5%;
+  background-color: var(--a-purple-200);
+  border-radius: 50%;
+  height: 50%;
+  width: 50%;
+}
+
+.sykFravaerOgUtdanning:hover::before {
   background-color: var(--a-purple-300);
 }
 
@@ -202,6 +219,21 @@
 
 .sykdom:hover, .sykOgFravaer:hover {
   background-color: var(--a-orange-300);
+}
+
+.sykOgFravaer::after {
+  content: '';
+  position: absolute;
+  right: -12.5%;
+  top: -12.5%;
+  background-color: var(--a-green-200);
+  border-radius: 50%;
+  height: 50%;
+  width: 50%;
+}
+
+.sykOgFravaer:hover::after {
+  background-color: var(--a-green-300);
 }
 
 .knappKontainer {

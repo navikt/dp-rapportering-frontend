@@ -9,7 +9,7 @@ import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server"
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { formaterDato } from "~/utils/dato.utils";
-import { hentPeriodeTekst } from "~/utils/periode.utils";
+import { hentPeriodeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { LesMer } from "~/components/LesMer";
@@ -47,7 +47,7 @@ export default function RapporteringstypeSide() {
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
 
-  const antallPerioder = rapporteringsperioder.length;
+  const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
 
   const type = gjeldendePeriode.rapporteringstype;

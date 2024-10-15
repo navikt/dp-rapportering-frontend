@@ -13,7 +13,6 @@ import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
-import Center from "~/components/center/Center";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -109,11 +108,11 @@ export default function Landingsside() {
         </>
       )}
 
-      <Center>
+      <div className="navigasjon-container">
         <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
-      </Center>
+      </div>
     </>
   );
 }
