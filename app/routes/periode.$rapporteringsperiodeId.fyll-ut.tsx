@@ -1,5 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { BodyLong, Heading } from "@navikt/ds-react";
+import { Heading } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
@@ -42,7 +43,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
-  const { getAppText, getLink } = useSanity();
+  const { getAppText, getLink, getRichText } = useSanity();
   const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
@@ -91,9 +92,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
         {getAppText("rapportering-periode-fyll-ut-tittel")}
       </Heading>
-      <BodyLong className="tekst-subtil" spacing>
-        {getAppText("rapportering-periode-fyll-ut-beskrivelse")}
-      </BodyLong>
+      <PortableText value={getRichText("rapportering-periode-fyll-ut-beskrivelse")} />
 
       <LesMer />
 
