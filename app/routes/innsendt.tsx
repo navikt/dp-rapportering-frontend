@@ -1,4 +1,5 @@
-import { Accordion, Alert, BodyLong, BodyShort, Button, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -59,7 +60,7 @@ export default function InnsendteRapporteringsPerioderSide() {
     .map((nokkel) => gruppertePerioder[nokkel])
     .map(sorterGrupper);
 
-  const { getAppText, getLink } = useSanity();
+  const { getAppText, getLink, getRichText } = useSanity();
 
   useEffect(() => {
     setBreadcrumbs(
@@ -84,12 +85,13 @@ export default function InnsendteRapporteringsPerioderSide() {
       <Heading size="medium" level="2">
         {getAppText("rapportering-innsendt-beskrivelse-tittel")}
       </Heading>
-      <BodyLong className="tekst-subtil" spacing>
-        {getAppText("rapportering-innsendt-beskrivelse-innhold")}
-      </BodyLong>
+
+      <PortableText value={getRichText("rapportering-innsendt-beskrivelse-innhold")} />
+
       {innsendtPerioder.length === 0 && (
         <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
       )}
+
       {sortertePerioder.map((perioder) => {
         const nyestePeriode = perioder[0];
         return (
@@ -103,11 +105,11 @@ export default function InnsendteRapporteringsPerioderSide() {
                   <div
                     className={`innsendt-periode-header-status ${nyestePeriode.status.toLocaleLowerCase()}`}
                   >
-                    <BodyShort>
+                    <BodyLong>
                       {getAppText(
                         `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`
                       )}
-                    </BodyShort>
+                    </BodyLong>
                   </div>
                 </div>
               </Accordion.Header>
