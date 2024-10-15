@@ -32,7 +32,6 @@ import { initInstrumentation } from "./utils/faro";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
-import Center from "./components/center/Center";
 import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
 
 /* eslint-enable */
@@ -160,11 +159,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         {parse(fragments.DECORATOR_HEADER, { trim: true })}
         {isLocalOrDemo && (
-          <Center>
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <Alert variant="warning">
               Dette er en demoside og inneholder ikke dine personlige data.
             </Alert>
-          </Center>
+          </div>
         )}
 
         {children}
