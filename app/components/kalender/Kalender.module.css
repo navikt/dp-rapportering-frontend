@@ -1,3 +1,7 @@
+:root {
+  --dato-strl: 35px;
+}
+
 .kalender {
   margin-left: calc(var(--a-spacing-2) * -1);
   padding-bottom: var(--a-spacing-8);
@@ -67,8 +71,8 @@
   justify-content: center;
   align-items: center;
   background-color: var(--a-bg-subtle);
-  width: 35px;
-  height: 35px;
+  width: var(--dato-strl);
+  height: var(--dato-strl);
   border-radius: 50%;
   font-size: var(--a-font-size-medium);
   line-height: var(--a-font-size-medium);
@@ -88,16 +92,16 @@
 
 .datoMedAktivitet {
   position: absolute;
-  top: 15px;
-  left: 1px;
+  top: calc(var(--dato-strl) * 0.45);
+  left: calc((calc(var(--dato-strl)) - calc(var(--dato-strl) - 1px)) / 2);
   display: flex;
   border-radius: 0 0 5px 5px;
-  padding-top: 20px;
+  padding-top: calc(var(--dato-strl) * 0.6);
   justify-content: center;
   align-items: center;
   background-color: var(--a-surface-selected);
-  width: 34px;
-  height: 40px;
+  width: calc(var(--dato-strl) - 1px);
+  height: calc(calc(var(--dato-strl) * 1.15));
   font-size: var(--a-font-size-small);
   color: var(--a-text-subtle);
   z-index: 0;
@@ -244,11 +248,6 @@
 }
 
 @media screen and (min-width: 768px) {
-  /* .kalender {
-    margin-left: calc(var(--a-spacing-6) * -1);
-    width: calc(var(--a-spacing-12) + 100%);
-  } */
-
   .ukedag {
     font-size: var(--a-font-size-medium);
   }
@@ -272,9 +271,8 @@
   }
 
   .dato {
-    width: 60px;
-    height: 60px;
-    padding-right: 2px;
+    width: calc(var(--dato-strl) * 2);
+    height: calc(var(--dato-strl) * 2);
     font-size: var(--a-font-size-large);
     line-height: var(--a-font-size-large);
   }
@@ -284,12 +282,14 @@
   }
 
   .datoMedAktivitet {
-    top: 40px;
-    left: 3px;
+    top: calc(var(--dato-strl) * 1.625);
+    left: calc((calc(var(--dato-strl) * 2) - calc(var(--dato-strl) * 1.5)) / 2);
     border-radius: 0 0 10px 10px;
-    padding-top: 15px;
+    padding-top: calc(var(--dato-strl) * 0.3);
     font-size: var(--a-font-size-medium);
-    width: 56px;
-    height: 50px;
+    width: calc(var(--dato-strl) * 1.5);
+    height: calc(var(--dato-strl) * 1.4);
   }
 }
+
+
