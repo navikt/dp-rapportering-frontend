@@ -3,13 +3,17 @@ import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
-import { hentInnsendtePerioder } from "~/models/rapporteringsperiode.server";
+import { IRapporteringsperiode, hentInnsendtePerioder } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { hentUkeTekst } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import {
+  AvregistertArbeidssokerAlert,
+  RegistertArbeidssokerAlert,
+} from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import Center from "~/components/center/Center";
 import { Kalender } from "~/components/kalender/Kalender";
 
@@ -19,9 +23,34 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ innsendtPerioder });
 }
 
+function grupperPerioder(
+  perioder: { [key: string]: IRapporteringsperiode[] },
+  periode: IRapporteringsperiode
+): { [key: string]: IRapporteringsperiode[] } {
+  const { fraOgMed } = periode.periode;
+
+  if (!perioder[fraOgMed]) {
+    perioder[fraOgMed] = [];
+  }
+
+  perioder[fraOgMed].push(periode);
+
+  return perioder;
+}
+
+function sorterGrupper(gruppe: IRapporteringsperiode[]): IRapporteringsperiode[] {
+  return gruppe.sort((a, b) => (b.mottattDato || "").localeCompare(a.mottattDato || ""));
+}
+
 export default function InnsendteRapporteringsPerioderSide() {
   const { innsendtPerioder } = useLoaderData<typeof loader>();
   const { locale } = useTypedRouteLoaderData("root");
+
+  const gruppertePerioder = innsendtPerioder.reduce(grupperPerioder, {});
+  const sortertePeriodeNokler = Object.keys(gruppertePerioder).sort((a, b) => b.localeCompare(a));
+  const sortertePerioder = sortertePeriodeNokler
+    .map((nokkel) => gruppertePerioder[nokkel])
+    .map(sorterGrupper);
 
   const { getAppText } = useSanity();
 
@@ -54,58 +83,77 @@ export default function InnsendteRapporteringsPerioderSide() {
       {innsendtPerioder.length === 0 && (
         <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
       )}
-      {innsendtPerioder.map((periode) => {
-        const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
+      {sortertePerioder.map((perioder) => {
+        const nyestePeriode = perioder[0];
         return (
-          <Accordion key={periode.id} headingSize="medium">
+          <Accordion key={nyestePeriode.periode.fraOgMed} headingSize="medium">
             <Accordion.Item>
               <Accordion.Header className="innsendt-accordion-header">
                 <div className="innsendt-periode-header">
                   <div className="innsendt-periode-header-uke">
-                    {hentUkeTekst(periode, getAppText)}
+                    {hentUkeTekst(nyestePeriode, getAppText)}
                   </div>
                   <div
-                    className={`innsendt-periode-header-status ${periode.status.toLocaleLowerCase()}`}
+                    className={`innsendt-periode-header-status ${nyestePeriode.status.toLocaleLowerCase()}`}
                   >
                     <BodyShort>
-                      {getAppText(`rapportering-status-${periode.status.toLocaleLowerCase()}`)}
+                      {getAppText(
+                        `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`
+                      )}
                     </BodyShort>
                   </div>
                 </div>
               </Accordion.Header>
               <Accordion.Content>
-                <div className="oppsummering">
-                  {(periode.mottattDato || periode.bruttoBelop) && (
-                    <div className="my-4">
-                      {periode.mottattDato && (
-                        <div>
-                          <strong>Sendt:</strong>{" "}
-                          {new Intl.DateTimeFormat(locale).format(new Date(periode.mottattDato))}
+                {perioder.map((periode) => {
+                  const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
+                  return (
+                    <div key={periode.id} className="oppsummering">
+                      {(periode.mottattDato || periode.bruttoBelop) && (
+                        <div className="my-4">
+                          {periode.mottattDato && (
+                            <div>
+                              <strong>
+                                {periode.originalId
+                                  ? getAppText("rapportering-endret")
+                                  : getAppText("rapportering-sendt")}
+                                :{" "}
+                              </strong>
+                              {new Intl.DateTimeFormat(locale).format(
+                                new Date(periode.mottattDato)
+                              )}
+                            </div>
+                          )}
+                          {periode.bruttoBelop !== null && (
+                            <div>
+                              <strong>{getAppText("rapportering-bruttobelop")}: </strong>
+                              {new Intl.NumberFormat(locale, {
+                                style: "currency",
+                                currency: "NOK",
+                              }).format(periode.bruttoBelop)}
+                            </div>
+                          )}
                         </div>
                       )}
-                      {periode.bruttoBelop !== null && (
-                        <div>
-                          <strong>Bruttobeløp:</strong>{" "}
-                          {new Intl.NumberFormat(locale, {
-                            style: "currency",
-                            currency: "NOK",
-                          }).format(periode.bruttoBelop)}
-                        </div>
+                      <Kalender
+                        key={periode.id}
+                        rapporteringsperiode={periode}
+                        visEndringslenke={periode.kanEndres}
+                        aapneModal={() => {}}
+                        readonly
+                      />
+                      {flatMapAktiviteter.length < 1 && (
+                        <p>{getAppText("rapportering-innsendt-ikke-fravaer")}</p>
+                      )}
+                      <AktivitetOppsummering rapporteringsperiode={periode} />
+                      {periode.registrertArbeidssoker ? (
+                        <RegistertArbeidssokerAlert />
+                      ) : (
+                        <AvregistertArbeidssokerAlert />
                       )}
                     </div>
-                  )}
-                  <Kalender
-                    key={periode.id}
-                    rapporteringsperiode={periode}
-                    visEndringslenke={periode.kanEndres}
-                    aapneModal={() => {}}
-                    readonly
-                  />
-                  {flatMapAktiviteter.length < 1 && (
-                    <p>{getAppText("rapportering-innsendt-ikke-fravaer")}</p>
-                  )}
-                  <AktivitetOppsummering rapporteringsperiode={periode} />
-                </div>
+                  );
+                })}
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>
