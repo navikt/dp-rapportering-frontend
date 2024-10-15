@@ -1,5 +1,6 @@
 import styles from "./AktivitetCheckboxes.module.css";
-import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
+import { Checkbox, CheckboxGroup, ReadMore } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import classNames from "classnames";
 import { useField } from "remix-validated-form";
 import type { AktivitetType, IAktivitet } from "~/models/aktivitet.server";
@@ -57,7 +58,7 @@ export function AktivitetCheckboxes({
   onChange,
 }: IProps) {
   const { error } = useField(name);
-  const { getAppText } = useSanity();
+  const { getAppText, getRichText } = useSanity();
 
   return (
     <CheckboxGroup legend={label} error={error || undefined} value={verdi} onChange={onChange}>
@@ -79,15 +80,21 @@ export function AktivitetCheckboxes({
               >
                 {aktivitetTypeMap(aktivitet, getAppText)}
               </Checkbox>
-              <div>
+              <div className={styles.timer}>
                 <TallInput
                   name="timer"
                   label={`${getAppText("rapportering-antall-timer")}`}
-                  className={styles.timer}
                   verdi={periodeSomTimer(
                     aktiviteter?.find((aktivitet) => aktivitet.type === "Arbeid")?.timer ?? ""
                   )}
                 />
+                <PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />
+
+                <ReadMore header={getAppText("rapportering-aktivitet-jobb-prosentstilling-tittel")}>
+                  <PortableText
+                    value={getRichText("rapportering-aktivitet-jobb-prosentstilling-innhold")}
+                  />
+                </ReadMore>
               </div>
             </div>
           );
