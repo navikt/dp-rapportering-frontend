@@ -34,12 +34,13 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
             <div className="oppsummering">
               <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
               <AktivitetOppsummering rapporteringsperiode={periode} />
-              {periode.registrertArbeidssoker ? (
-                <RegistertArbeidssokerAlert />
-              ) : (
-                <AvregistertArbeidssokerAlert />
-              )}
             </div>
+
+            {periode.registrertArbeidssoker ? (
+              <RegistertArbeidssokerAlert />
+            ) : (
+              <AvregistertArbeidssokerAlert />
+            )}
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
