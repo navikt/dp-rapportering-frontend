@@ -135,7 +135,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" onSubmit={addHtml} className="navigasjon-container my-4">
+      <Form method="post" onSubmit={addHtml} className="navigasjon-container">
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
@@ -160,12 +160,12 @@ export default function RapporteringsPeriodeSendInnSide() {
             : getLink("rapportering-endring-send-inn-bekreft").linkText}
         </Button>
       </Form>
-      <div className="navigasjon-container my-4">
+      <div className="navigasjon-container">
         <RemixLink
           as="Link"
           to={getLink("rapportering-endre-avbryt").linkUrl}
           variant="primary"
-          className="py-4 px-8"
+          className="px-8"
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>

@@ -128,11 +128,14 @@ body {
 }
 
 .oppsummering {
-  margin-top: var(--a-spacing-6);
-  margin-bottom: var(--a-spacing-12);
+  margin: var(--a-spacing-6) 0;
   background-color: var(--a-bg-subtle);
   padding: var(--a-spacing-6) var(--a-spacing-4);
   border-radius: var(--a-border-radius-medium);
+}
+
+.oppsummering .navds-alert:last-of-type {
+  margin-bottom: 0;
 }
 
 .feilmelding {

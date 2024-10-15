@@ -38,13 +38,17 @@ export function GeneralErrorBoundary({ error }: IProps) {
       <PortableText value={getRichText(body)} />
 
       <div className="navigasjon-container">
-        <RemixLink as="Button" to="/">
-          {getAppText("rapportering-tilbake-til-startside")}
+        <RemixLink
+          className="px-16"
+          as="Button"
+          to={getLink("rapportering-ga-til-mine-meldekort").linkUrl}
+        >
+          {getLink("rapportering-ga-til-mine-meldekort").linkText}
         </RemixLink>
       </div>
 
       <div className="navigasjon-container">
-        <RemixLink className="my-8" as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
+        <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
       </div>
