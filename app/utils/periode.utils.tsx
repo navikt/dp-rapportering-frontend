@@ -67,3 +67,7 @@ export function hentTotaltFravaerTekstMedType(
 export function harAktiviteter(periode: IRapporteringsperiode): boolean {
   return periode.dager.some((dag) => dag.aktiviteter.length > 0);
 }
+
+export function perioderSomKanSendes(perioder: IRapporteringsperiode[]): IRapporteringsperiode[] {
+  return perioder.filter((periode) => periode.kanSendes);
+}

@@ -11,6 +11,7 @@ import {
   hentTotaltFravaerTekstMedType,
   hentUkeTekst,
   periodeSomTimer,
+  perioderSomKanSendes,
 } from "./periode.utils";
 import { Rapporteringstype } from "./types";
 import { PortableText } from "@portabletext/react";
@@ -304,7 +305,8 @@ export function htmlForRapporteringstype(props: IProps): string {
     return "";
   }
 
-  const harFlerePerioder = rapporteringsperioder.length > 1;
+  const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
+  const harFlerePerioder = antallPerioder > 1;
 
   const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
   const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
@@ -316,7 +318,7 @@ export function htmlForRapporteringstype(props: IProps): string {
       getHeader({
         text: getAppText("rapportering-flere-perioder-tittel").replace(
           "{antall}",
-          rapporteringsperioder.length.toString()
+          antallPerioder.toString()
         ),
         level: "2",
       })
