@@ -76,20 +76,40 @@ describe("getLesMer", () => {
       locale,
       getAppText: mockGetAppText,
       getRichText: mockGetRichText,
+      tittel: "",
+      innhold: "rapportering-les-mer-hva-skal-rapporteres-innhold",
     });
+
     expect(lesMer).toContain("rapportering-les-mer-hva-skal-rapporteres-innhold");
   });
 });
 
 describe("getAktivitetCheckbox", () => {
+  const periode = innsendtRapporteringsperioderResponse[0];
+
   it("viser checkbox for arbeid", () => {
-    const checkbox = getAktivitetCheckbox("Arbeid", mockGetAppText, mockGetRichText);
+    const checkbox = getAktivitetCheckbox({
+      rapporteringsperioder: [],
+      periode,
+      locale,
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      aktivitet: "Arbeid",
+    });
     expect(checkbox).toContain("<h4>rapportering-arbeid</h4>");
     expect(checkbox).toContain("<h5>rapportering-antall-timer</h5>");
+    expect(checkbox).toContain("rapportering-aktivitet-jobb-prosentstilling-tittel");
   });
 
   it("viser checkbox for annen aktivitet", () => {
-    const checkbox = getAktivitetCheckbox("Utdanning", mockGetAppText, mockGetRichText);
+    const checkbox = getAktivitetCheckbox({
+      rapporteringsperioder: [],
+      periode,
+      locale,
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      aktivitet: "Utdanning",
+    });
     expect(checkbox).toContain("<h4>rapportering-utdanning</h4>");
   });
 });
