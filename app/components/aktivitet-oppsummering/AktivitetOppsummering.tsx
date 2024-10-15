@@ -13,7 +13,7 @@ export function AktivitetOppsummering({ rapporteringsperiode }: IProps) {
 
   return (
     <div className={styles.aktivitetOppsummeringKontainer}>
-      <p className="tekst-subtil">{getAppText("rapportering-oppsummering-tittel")}</p>
+      <h4>{getAppText("rapportering-oppsummering-tittel")}</h4>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
         <p>
           {getAppText("rapportering-arbeid")}

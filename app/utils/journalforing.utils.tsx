@@ -209,7 +209,7 @@ export function getOppsummering({
 
   return [
     "<div>",
-    getHeader({ text: getAppText("rapportering-oppsummering-tittel"), level: "3" }),
+    getHeader({ text: getAppText("rapportering-oppsummering-tittel"), level: "4" }),
     oppsummering,
     "</div>",
   ].join("");
