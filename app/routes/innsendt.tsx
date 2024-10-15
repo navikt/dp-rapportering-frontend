@@ -3,9 +3,13 @@ import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
-import { IRapporteringsperiode, hentInnsendtePerioder } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  hentInnsendtePerioder,
+  hentRapporteringsperioder,
+} from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { hentUkeTekst } from "~/utils/periode.utils";
+import { hentUkeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
@@ -14,13 +18,13 @@ import {
   AvregistertArbeidssokerAlert,
   RegistertArbeidssokerAlert,
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
-import Center from "~/components/center/Center";
 import { Kalender } from "~/components/kalender/Kalender";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const rapporteringsperioder = await hentRapporteringsperioder(request);
   const innsendtPerioder = await hentInnsendtePerioder(request);
 
-  return json({ innsendtPerioder });
+  return json({ innsendtPerioder, rapporteringsperioder });
 }
 
 function grupperPerioder(
@@ -43,8 +47,11 @@ function sorterGrupper(gruppe: IRapporteringsperiode[]): IRapporteringsperiode[]
 }
 
 export default function InnsendteRapporteringsPerioderSide() {
-  const { innsendtPerioder } = useLoaderData<typeof loader>();
+  const { innsendtPerioder, rapporteringsperioder } = useLoaderData<typeof loader>();
   const { locale } = useTypedRouteLoaderData("root");
+
+  const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
+  const harFlerePerioder = antallPerioder >= 1;
 
   const gruppertePerioder = innsendtPerioder.reduce(grupperPerioder, {});
   const sortertePeriodeNokler = Object.keys(gruppertePerioder).sort((a, b) => b.localeCompare(a));
@@ -52,7 +59,7 @@ export default function InnsendteRapporteringsPerioderSide() {
     .map((nokkel) => gruppertePerioder[nokkel])
     .map(sorterGrupper);
 
-  const { getAppText } = useSanity();
+  const { getAppText, getLink } = useSanity();
 
   useEffect(() => {
     setBreadcrumbs(
@@ -160,11 +167,25 @@ export default function InnsendteRapporteringsPerioderSide() {
         );
       })}
 
-      <Center className="my-8">
-        <RemixLink as="Button" to="/" className="py-4 px-8">
-          {getAppText("rapportering-knapp-tilbake-til-start")}
-        </RemixLink>
-      </Center>
+      <div className="navigasjon-container">
+        {harFlerePerioder ? (
+          <RemixLink
+            as="Button"
+            to={getLink("ga-til-neste-meldekort").linkUrl}
+            className="py-4 px-8"
+          >
+            {getLink("ga-til-neste-meldekort").linkText}
+          </RemixLink>
+        ) : (
+          <RemixLink
+            as="Button"
+            to={getLink("ga-til-mine-dagpenger").linkUrl}
+            className="py-4 px-8"
+          >
+            {getLink("ga-til-mine-dagpenger").linkText}
+          </RemixLink>
+        )}
+      </div>
     </>
   );
 }

@@ -45,8 +45,12 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
       </Accordion>
       <div className="navigasjon-container">
         {harNestePeriode ? (
-          <RemixLink as="Button" to={"/"} className="py-4 px-8">
-            {getLink("rapportering-periode-bekreftelse-neste").linkText}
+          <RemixLink
+            as="Button"
+            to={getLink("ga-til-neste-meldekort").linkUrl}
+            className="py-4 px-8"
+          >
+            {getLink("ga-til-neste-meldekort").linkText}
           </RemixLink>
         ) : (
           <Button as="a" className="px-16" href={getLink("ga-til-mine-dagpenger").linkUrl}>

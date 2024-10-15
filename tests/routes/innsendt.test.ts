@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { innsendtRapporteringsperioderResponse } from "mocks/responses/innsendtRapporteringsperioderResponse";
+import { rapporteringsperioderResponse } from "mocks/responses/rapporteringsperioderResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/innsendt";
@@ -66,6 +67,13 @@ describe("Liste ut alle rapporteringsperioder", () => {
             return HttpResponse.json(innsendtRapporteringsperioderResponse, { status: 200 });
           },
           { once: true }
+        ),
+        http.get(
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`,
+          () => {
+            return HttpResponse.json(rapporteringsperioderResponse, { status: 200 });
+          },
+          { once: true }
         )
       );
 
@@ -80,6 +88,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
       expect(response.status).toBe(200);
       expect(data).toEqual({
         innsendtPerioder: innsendtRapporteringsperioderResponse,
+        rapporteringsperioder: rapporteringsperioderResponse,
       });
     });
   });
