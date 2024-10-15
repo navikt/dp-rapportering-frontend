@@ -34,6 +34,7 @@ export async function lagreAktivitet(
         statusCode: response.status,
         statusText: `rapportering-feilmelding-lagre-aktivitet`,
       },
+      id: JSON.stringify(response.body),
     };
   }
 
