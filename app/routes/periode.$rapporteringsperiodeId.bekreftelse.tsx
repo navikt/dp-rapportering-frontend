@@ -7,6 +7,7 @@ import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { Kvittering } from "~/components/Kvittering";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  // TODO: Er listen med rapporteringsperioder med eller uten den innsendte perioden?
   const rapporteringsperioder = await hentRapporteringsperioder(request);
   const harNestePeriode = perioderSomKanSendes(rapporteringsperioder).length > 0;
 
