@@ -11,12 +11,11 @@ interface IProps {
   aapneModal: (dato: string) => void;
   readonly?: boolean;
   rapporteringUke: IRapporteringsperiodeDag[];
-  spacing?: boolean;
 }
 
 export function Uke(props: IProps) {
   const { locale } = useTypedRouteLoaderData("root");
-  const { rapporteringUke, readonly, aapneModal, spacing } = props;
+  const { rapporteringUke, readonly, aapneModal } = props;
   const { getAppText } = useSanity();
 
   function erAktivStil(dag: IRapporteringsperiodeDag, typer: AktivitetType[]): boolean {
@@ -32,11 +31,7 @@ export function Uke(props: IProps) {
   }
 
   return (
-    <tr
-      className={classNames(styles.ukeRadKontainer, {
-        [styles.spacing]: spacing,
-      })}
-    >
+    <tr className={styles.ukeRadKontainer}>
       {rapporteringUke.map((dag) => {
         const dagenHarAktivitet = dag.aktiviteter.length > 0;
 
