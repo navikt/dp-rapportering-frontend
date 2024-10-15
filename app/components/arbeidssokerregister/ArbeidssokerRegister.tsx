@@ -26,7 +26,7 @@ export function ArbeidssokerRegisterering({
   };
 
   return (
-    <div>
+    <>
       <fetcher.Form method="post">
         <RadioGroup
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
@@ -61,7 +61,7 @@ export function ArbeidssokerRegisterering({
         ) : (
           <AvregistertArbeidssokerAlert />
         ))}
-    </div>
+    </>
   );
 }
 
