@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@navikt/aksel-icons";
 import { ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useSanity } from "~/hooks/useSanity";
@@ -16,6 +17,7 @@ const components = {
       return blank ? (
         <a href={href} target="_blank" rel="noreferrer">
           {children}
+          <ExternalLinkIcon title="a11y-title" />
         </a>
       ) : (
         <a href={href}>{children}</a>
