@@ -1,6 +1,6 @@
 import { logErrorResponse } from "~/models/logger.server";
 import { getEnv } from "~/utils/env.utils";
-import { getHeaders } from "~/utils/fetch.utils";
+import { getCorrelationId, getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
 
 export interface IBegrunnelseSvar {
@@ -23,6 +23,7 @@ export async function lagreBegrunnelse(
   });
 
   if (!response.ok) {
+    const id = await getCorrelationId(response);
     logErrorResponse(response, `Feil ved lagring av begrunnelse`);
     return {
       status: "error",
@@ -30,6 +31,7 @@ export async function lagreBegrunnelse(
         statusCode: response.status,
         statusText: `rapportering-feilmelding-lagre-begrunnelse`,
       },
+      id,
     };
   }
 
