@@ -113,7 +113,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                   </div>
                 </div>
               </Accordion.Header>
-              <Accordion.Content>
+              <Accordion.Content className="innsendt-accordion-content">
                 {perioder.map((periode) => {
                   const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
                   return (

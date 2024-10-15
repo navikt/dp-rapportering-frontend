@@ -58,9 +58,18 @@ body {
   justify-content: center;
 }
 
+.innsendt-accordion-header {
+  background-color: var(--a-bg-subtle);
+}
+
 .innsendt-accordion-header span.navds-accordion__header-content {
   display: block;
   width: 100%;
+}
+
+.innsendt-accordion-content {
+  background-color: var(--a-bg-subtle);
+  margin-bottom: var(--a-spacing-4);
 }
 
 .innsendt-periode-header {
