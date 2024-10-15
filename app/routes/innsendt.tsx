@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyLong, BodyShort, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, BodyLong, BodyShort, Button, Heading } from "@navikt/ds-react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -177,13 +177,9 @@ export default function InnsendteRapporteringsPerioderSide() {
             {getLink("ga-til-neste-meldekort").linkText}
           </RemixLink>
         ) : (
-          <RemixLink
-            as="Button"
-            to={getLink("ga-til-mine-dagpenger").linkUrl}
-            className="py-4 px-8"
-          >
+          <Button as="a" className="px-16" href={getLink("ga-til-mine-dagpenger").linkUrl}>
             {getLink("ga-til-mine-dagpenger").linkText}
-          </RemixLink>
+          </Button>
         )}
       </div>
     </>

@@ -1,4 +1,5 @@
 import { IRapporteringsperiodeDag } from "./rapporteringsperiode.server";
+import { logErrorResponse } from "~/models/logger.server";
 import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
@@ -28,6 +29,7 @@ export async function lagreAktivitet(
   });
 
   if (!response.ok) {
+    logErrorResponse(response, `Feil ved lagring av aktivitet`);
     return {
       status: "error",
       error: {
