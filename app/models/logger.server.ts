@@ -1,4 +1,3 @@
-import type { RequestHandler } from "express";
 import fs from "fs";
 import winston from "winston";
 
@@ -23,22 +22,11 @@ export const sikkerLogger = winston.createLogger({
         ],
 });
 
-export const logErrorResponse = (errorResponse: Response, message?: string) => {
+export function logErrorResponse(errorResponse: Response, message?: string) {
   sikkerLogger.error(
     `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${JSON.stringify(errorResponse.body)}`
   );
   logger.error(
     `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`
   );
-};
-
-export const logRequests: RequestHandler = (request, res, next) => {
-  const method = request.method;
-  const url = request.url;
-
-  if (process.env.NODE_ENV === "development") {
-    logger.info(`${method} ${url}`);
-  }
-
-  next();
-};
+}
