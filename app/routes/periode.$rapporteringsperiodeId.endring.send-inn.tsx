@@ -172,9 +172,9 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Form>
       <div className="navigasjon-container">
         <RemixLink
-          as="Link"
+          as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
-          variant="primary"
+          variant="tertiary"
           className="px-8"
         >
           {getLink("rapportering-endre-avbryt").linkText}

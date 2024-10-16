@@ -52,7 +52,10 @@ export function Uke(props: IProps) {
         return (
           <td key={dag.dagIndex} className={styles.datoKontainer}>
             {readonly && (
-              <span className={classNames(styles.dato, dagKnappStyle, styles.readonly)}>
+              <span
+                className={classNames(styles.dato, dagKnappStyle, styles.readonly)}
+                aria-label={hentSkjermleserDatoTekst(dag, getAppText, locale)}
+              >
                 {`${format(new Date(dag.dato), "d")}. `}
               </span>
             )}
