@@ -5,6 +5,7 @@ import {
   type DecoratorParams,
   fetchDecoratorHtml,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { getEnv } from "~/utils/env.utils";
 
 export async function getDecoratorHTML(params: DecoratorParams): Promise<DecoratorElements> {
@@ -12,7 +13,7 @@ export async function getDecoratorHTML(params: DecoratorParams): Promise<Decorat
     env: (getEnv("DEKORATOR_ENV") || "localhost") as DecoratorEnvProps["env"],
     localUrl: "https://dekoratoren.ekstern.dev.nav.no",
     params: {
-      language: "nb",
+      language: DecoratorLocale.NB,
       context: "privatperson",
       chatbot: false,
       redirectToApp: true,

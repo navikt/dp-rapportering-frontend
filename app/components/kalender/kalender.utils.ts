@@ -1,5 +1,6 @@
 import { IAktivitet } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import type { GetAppText } from "~/hooks/useSanity";
 
@@ -42,7 +43,7 @@ export function hentAktivitetSumTekst(
 export function hentSkjermleserDatoTekst(
   dag: IRapporteringsperiodeDag,
   getAppText: GetAppText,
-  locale: string = "no-NO"
+  locale: string = DecoratorLocale.NB
 ) {
   const lf = new Intl.ListFormat(locale);
 

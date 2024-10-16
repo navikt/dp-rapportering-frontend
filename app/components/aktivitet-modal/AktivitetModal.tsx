@@ -8,6 +8,7 @@ import type { action as rapporteringAction } from "~/routes/periode.$rapporterin
 import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { validator } from "~/utils/validering.util";
 import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { FormattertDato } from "../FormattertDato";
 import { LesMer } from "../LesMer";
 import { AktivitetCheckboxes } from "../aktivitet-checkbox/AktivitetCheckboxes";
@@ -29,6 +30,8 @@ export function AktivitetModal({
   setValgteAktiviteter,
   valgtDato,
 }: IProps) {
+  const { locale } = useTypedRouteLoaderData("root");
+
   const { getAppText } = useSanity();
   const actionData = useActionData<typeof rapporteringAction>();
 
@@ -63,7 +66,7 @@ export function AktivitetModal({
           className={styles.modalHeader}
           aria-label={getAppText("rapportering-rapporter-aktivitet")}
         >
-          {valgtDato && <FormattertDato dato={valgtDato} ukedag />}
+          {valgtDato && <FormattertDato locale={locale} dato={valgtDato} ukedag />}
         </Heading>
       </Modal.Header>
       <Modal.Body>

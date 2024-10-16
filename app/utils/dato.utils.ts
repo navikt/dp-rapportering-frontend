@@ -1,8 +1,11 @@
+import { DecoratorLocale } from "./dekoratoren.utils";
 import { format, getISOWeek } from "date-fns";
-import { nb } from "date-fns/locale";
+import { enGB, nb } from "date-fns/locale";
 
-export function formaterDato(date: Date) {
-  return format(date, "d. MMMM", { locale: nb });
+export function formaterDato(date: Date, language: DecoratorLocale = DecoratorLocale.NB) {
+  const locale = [DecoratorLocale.NB, DecoratorLocale.NN].includes(language) ? nb : enGB;
+
+  return format(date, "d. MMMM", { locale });
 }
 
 export function formaterPeriodeDato(fraOgMed: string, tilOgMed: string) {
