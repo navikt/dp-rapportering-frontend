@@ -1,25 +1,14 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData, useNavigate } from "@remix-run/react";
-import invariant from "tiny-invariant";
-import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import { useNavigate } from "@remix-run/react";
 import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { RemixLink } from "~/components/RemixLink";
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
-
-  const periodeId = params.rapporteringsperiodeId;
-  const periode = await hentPeriode(request, periodeId, false);
-
-  return json({ periode });
-}
-
 export default function TomRapporteringsPeriodeSide() {
-  const { periode } = useLoaderData<typeof loader>();
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText, getRichText, getLink } = useSanity();
 
   const navigate = useNavigate();

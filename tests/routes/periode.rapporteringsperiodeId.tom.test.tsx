@@ -2,7 +2,10 @@ import { createRemixStub } from "@remix-run/testing";
 import { render as TLRender, screen } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
-import TomRapporteringsPeriodeSide, { loader } from "~/routes/periode.$rapporteringsperiodeId.tom";
+import RapporteringsPeriodeSide, {
+  loader as rapporteringsperiodeLoader,
+} from "~/routes/periode.$rapporteringsperiodeId";
+import TomRapporteringsPeriodeSide from "~/routes/periode.$rapporteringsperiodeId.tom";
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
@@ -29,20 +32,25 @@ describe("TomRapporteringsPeriodeSide", () => {
     periode: { fraOgMed: "2024-01-01", tilOgMed: "2024-01-14" },
   };
 
-  const tomRapporteringsPeriodeSide = `/periode/${rapporteringsperiode.id}/tom`;
-
   const render = () => {
     const RemixStub = createRemixStub([
       {
-        path: "/periode/:rapporteringsperiodeId/tom",
-        Component: TomRapporteringsPeriodeSide,
-        loader,
-        handle: {
-          params: { rapporteringsperiodeId: rapporteringsperiode.id },
-        },
+        path: "/periode/:rapporteringsperiodeId",
+        Component: RapporteringsPeriodeSide,
+        loader: rapporteringsperiodeLoader,
+        id: "routes/periode.$rapporteringsperiodeId",
+
+        children: [
+          {
+            path: "/periode/:rapporteringsperiodeId/tom",
+            Component: TomRapporteringsPeriodeSide,
+          },
+        ],
       },
     ]);
-    TLRender(<RemixStub initialEntries={[tomRapporteringsPeriodeSide]} />);
+
+    const initialEntries = [`/periode/${rapporteringsperiode.id}/tom`];
+    TLRender(<RemixStub initialEntries={initialEntries} />);
   };
 
   test("Skal vise alert om at brukeren ikke har meldt noe ", async () => {
