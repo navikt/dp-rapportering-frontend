@@ -16,7 +16,7 @@ describe("<AktivitetOppsummering/>", () => {
     const rapporteringsperiode: IRapporteringsperiode = lagRapporteringsperiode();
 
     test("Viser 0 timer og dager", () => {
-      render(<AktivitetOppsummering rapporteringsperiode={rapporteringsperiode} />);
+      render(<AktivitetOppsummering periode={rapporteringsperiode} />);
 
       bekreftAktivitet(/rapportering-arbeid/, /0 rapportering-time/);
       bekreftAktivitet(/rapportering-syk/, /0 rapportering-dag/);
@@ -41,7 +41,7 @@ describe("<AktivitetOppsummering/>", () => {
     const rapporteringsperiode: IRapporteringsperiode = lagRapporteringsperiode({ dager });
 
     beforeEach(() => {
-      render(<AktivitetOppsummering rapporteringsperiode={rapporteringsperiode} />);
+      render(<AktivitetOppsummering periode={rapporteringsperiode} />);
     });
 
     test("Viser riktig antall arbeidstimer", () => {

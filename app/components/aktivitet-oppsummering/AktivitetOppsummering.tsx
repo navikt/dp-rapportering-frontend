@@ -5,10 +5,10 @@ import { hentTotaltArbeidstimerTekst, hentTotaltFravaerTekstMedType } from "~/ut
 import { useSanity } from "~/hooks/useSanity";
 
 interface IProps {
-  rapporteringsperiode: IRapporteringsperiode;
+  periode: IRapporteringsperiode;
 }
 
-export function AktivitetOppsummering({ rapporteringsperiode }: IProps) {
+export function AktivitetOppsummering({ periode }: IProps) {
   const { getAppText } = useSanity();
 
   return (
@@ -17,27 +17,25 @@ export function AktivitetOppsummering({ rapporteringsperiode }: IProps) {
       <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
         <p>
           {getAppText("rapportering-arbeid")}
-          <span>{hentTotaltArbeidstimerTekst(rapporteringsperiode, getAppText)}</span>
+          <span>{hentTotaltArbeidstimerTekst(periode, getAppText)}</span>
         </p>
       </div>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
         <p>
           {getAppText("rapportering-syk")}
-          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Syk", getAppText)}</span>
+          <span>{hentTotaltFravaerTekstMedType(periode, "Syk", getAppText)}</span>
         </p>
       </div>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
         <p>
           {getAppText("rapportering-fraevaer")}
-          <span>{hentTotaltFravaerTekstMedType(rapporteringsperiode, "Fravaer", getAppText)}</span>
+          <span>{hentTotaltFravaerTekstMedType(periode, "Fravaer", getAppText)}</span>
         </p>
       </div>
       <div className={classNames(styles.aktivitetOppsummeringData, styles.utdanning)}>
         <p>
           {getAppText("rapportering-utdanning")}
-          <span>
-            {hentTotaltFravaerTekstMedType(rapporteringsperiode, "Utdanning", getAppText)}
-          </span>
+          <span>{hentTotaltFravaerTekstMedType(periode, "Utdanning", getAppText)}</span>
         </p>
       </div>
     </div>

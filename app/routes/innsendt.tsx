@@ -154,7 +154,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                       {flatMapAktiviteter.length < 1 && (
                         <p>{getAppText("rapportering-innsendt-ikke-fravaer")}</p>
                       )}
-                      <AktivitetOppsummering rapporteringsperiode={periode} />
+                      <AktivitetOppsummering periode={periode} />
                       {periode.registrertArbeidssoker ? (
                         <RegistertArbeidssokerAlert />
                       ) : (
