@@ -24,7 +24,7 @@ describe("RapporteringstypeSide", () => {
     periode: { fraOgMed: "2024-01-01", tilOgMed: "2024-01-14" },
   };
 
-  const path = `/periode/${rapporteringsperiode.id}/rapporteringstype`;
+  const path = `/periode/:rapporteringsperiodeId/rapporteringstype`;
 
   const render = () => {
     const RemixStub = createRemixStub([{ path, Component: RapporteringstypeSide, loader }]);
@@ -38,7 +38,7 @@ describe("RapporteringstypeSide", () => {
         return HttpResponse.json(rapporteringsperioder, { status: 200 });
       }),
       http.get(
-        `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
+        `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
         () => HttpResponse.json(rapporteringsperioder[0], { status: 200 })
       )
     );
@@ -69,6 +69,7 @@ describe("RapporteringstypeSide", () => {
       ...lagRapporteringsperiode({ kanSendes: true }),
       periode: { fraOgMed: "2024-01-01", tilOgMed: "2024-01-14" },
     };
+
     const rapporteringsperiode2 = {
       ...lagRapporteringsperiode({ kanSendes: true }),
       periode: { fraOgMed: "2024-01-15", tilOgMed: "2024-01-28" },
@@ -93,31 +94,30 @@ describe("RapporteringstypeSide", () => {
       expect(await screen.findByText(/rapportering-flere-perioder-tittel/)).toBeInTheDocument();
       expect(await screen.findByText(/rapportering-flere-perioder-innledning/)).toBeInTheDocument();
     });
-  });
 
-  test("Viser alternativer for rapporteringstype", async () => {
-    mockApiResponses([rapporteringsperiode]);
-    render();
+    test("Viser alternativer for rapporteringstype", async () => {
+      mockApiResponses([rapporteringsperiode]);
+      render();
 
-    expect(await screen.findByText(/rapportering-rapporter-navarende-tittel/)).toBeInTheDocument();
+      expect(
+        await screen.findByText(/rapportering-rapporter-navarende-tittel/)
+      ).toBeInTheDocument();
 
-    const [harAktiviteterRadio, harIngenAktiviteterRadio] = await Promise.all([
-      screen.findByRole("radio", { name: /rapportering-noe-å-rapportere/i }),
-      screen.findByRole("radio", { name: /rapportering-ingen-å-rapportere/i }),
-    ]);
+      const [harAktiviteterRadio, harIngenAktiviteterRadio] = await Promise.all([
+        screen.findByRole("radio", { name: /rapportering-noe-å-rapportere/i }),
+        screen.findByRole("radio", { name: /rapportering-ingen-å-rapportere/i }),
+      ]);
 
-    expect(harAktiviteterRadio).toBeInTheDocument();
-    expect(harIngenAktiviteterRadio).toBeInTheDocument();
+      expect(harAktiviteterRadio).toBeInTheDocument();
+      expect(harIngenAktiviteterRadio).toBeInTheDocument();
 
-    const tilUtfyllingKnapp = await screen.findByRole("button", {
-      name: /rapportering-til-utfylling/i,
+      const tilUtfyllingKnapp = await screen.findByRole("button", {
+        name: /rapportering-til-utfylling/i,
+      });
+      expect(tilUtfyllingKnapp).toBeInTheDocument();
+
+      mockApiRapporteringstype();
+      harIngenAktiviteterRadio.click();
     });
-    expect(tilUtfyllingKnapp).toBeInTheDocument();
-
-    mockApiRapporteringstype();
-    harIngenAktiviteterRadio.click();
-
-    // const nesteKnapp = await screen.findByRole("button", { name: /rapportering-neste/i });
-    // expect(nesteKnapp).toBeInTheDocument();
   });
 });

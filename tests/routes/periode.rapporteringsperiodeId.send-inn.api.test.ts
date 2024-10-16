@@ -95,7 +95,7 @@ describe.skip("Send inn rapporteringsperiode", () => {
 
         server.use(
           http.get(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
             () => {
               return HttpResponse.json({ id: "1" }, { status: 500 });
             }
