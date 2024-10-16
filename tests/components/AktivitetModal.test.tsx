@@ -6,9 +6,8 @@ import {
   type IPeriode,
   type IRapporteringsperiode,
   type IRapporteringsperiodeDag,
-  IRapporteringsperiodeStatus,
 } from "~/models/rapporteringsperiode.server";
-import { Rapporteringstype } from "~/utils/types";
+import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 
 vi.mock("remix-validated-form", () => ({

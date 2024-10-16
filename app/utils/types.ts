@@ -19,3 +19,11 @@ export enum Rapporteringstype {
   harAktivitet = "harAktivitet",
   harIngenAktivitet = "harIngenAktivitet",
 }
+
+export enum IRapporteringsperiodeStatus {
+  TilUtfylling = "TilUtfylling",
+  Innsendt = "Innsendt",
+  Endret = "Endret",
+  Ferdig = "Ferdig",
+  Feilet = "Feilet",
+}

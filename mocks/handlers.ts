@@ -8,10 +8,10 @@ import { IBegrunnelseSvar } from "~/models/begrunnelse.server";
 import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
-  IRapporteringsperiodeStatus,
 } from "~/models/rapporteringsperiode.server";
 import { IRapporteringstypeSvar } from "~/models/rapporteringstype.server";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
+import { IRapporteringsperiodeStatus } from "~/utils/types";
 
 export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder`, ({ cookies }) => {
@@ -32,8 +32,14 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
     if (periode.originalId) {
       const originalPeriode = db.findRapporteringsperiodeById(periode.originalId as string);
-      db.updateRapporteringsperiode(originalPeriode.id, { kanEndres: false });
+
+      db.updateRapporteringsperiode(originalPeriode.id, {
+        kanEndres: false,
+        status: IRapporteringsperiodeStatus.Endret,
+      });
+
       const endretPeriode = hentEndringsId(periode);
+
       db.addRapporteringsperioder({
         ...endretPeriode,
         status: IRapporteringsperiodeStatus.Innsendt,
@@ -41,6 +47,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
         kanSendes: false,
         mottattDato,
       });
+
       return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
     }
 
