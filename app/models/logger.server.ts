@@ -1,4 +1,3 @@
-import type { RequestHandler } from "express";
 import fs from "fs";
 import winston from "winston";
 
@@ -23,22 +22,18 @@ export const sikkerLogger = winston.createLogger({
         ],
 });
 
-export const logErrorResponse = (errorResponse: Response, message?: string) => {
+export async function logErrorResponse(errorResponse: Response, message?: string) {
+  let body = null;
+  try {
+    body = await errorResponse.text();
+  } catch (e: unknown) {
+    logger.error(`Klarte ikke å lese body ${e}`);
+    body = null;
+  }
   sikkerLogger.error(
-    `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${errorResponse.body}`
+    `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${body}`
   );
   logger.error(
     `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`
   );
-};
-
-export const logRequests: RequestHandler = (request, res, next) => {
-  const method = request.method;
-  const url = request.url;
-
-  if (process.env.NODE_ENV === "development") {
-    logger.info(`${method} ${url}`);
-  }
-
-  next();
-};
+}
