@@ -3,9 +3,11 @@ import { render as TLRender, fireEvent, screen, waitFor } from "@testing-library
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import RapporteringsPeriodeSide, {
+  loader as rapporteringsperiodeLoader,
+} from "~/routes/periode.$rapporteringsperiodeId";
 import BegrunnelseSide, {
-  action,
-  loader,
+  action as begrunnelseAction,
 } from "~/routes/periode.$rapporteringsperiodeId.endring.begrunnelse";
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
@@ -24,13 +26,18 @@ const mockResponse = () => server.use(...createHandlers(testDb));
 const render = () => {
   const RemixStub = createRemixStub([
     {
-      path: "/periode/:rapporteringsperiodeId/endring/begrunnelse",
-      Component: BegrunnelseSide,
-      loader,
-      action,
-      handle: {
-        params: { rapporteringsperiodeId: rapporteringsperiode.id },
-      },
+      path: "/periode/:rapporteringsperiodeId",
+      Component: RapporteringsPeriodeSide,
+      loader: rapporteringsperiodeLoader,
+      id: "routes/periode.$rapporteringsperiodeId",
+
+      children: [
+        {
+          path: "/periode/:rapporteringsperiodeId/endring/begrunnelse",
+          Component: BegrunnelseSide,
+          action: begrunnelseAction,
+        },
+      ],
     },
   ]);
   TLRender(<RemixStub initialEntries={[begrunnelseSide]} />);

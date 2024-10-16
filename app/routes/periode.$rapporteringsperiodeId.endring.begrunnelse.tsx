@@ -1,14 +1,13 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Select } from "@navikt/ds-react";
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { ActionFunctionArgs } from "@remix-run/node";
+import { useFetcher } from "@remix-run/react";
 import { ChangeEvent } from "react";
-import invariant from "tiny-invariant";
 import { lagreBegrunnelse } from "~/models/begrunnelse.server";
-import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { kanSendes } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
@@ -22,17 +21,8 @@ export async function action({ request }: ActionFunctionArgs) {
   return await lagreBegrunnelse(request, rapporteringsperiodeId, begrunnelseEndring);
 }
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
-
-  const periodeId = params.rapporteringsperiodeId;
-  const periode = await hentPeriode(request, periodeId, false);
-
-  return json({ periode });
-}
-
 export default function BegrunnelseSide() {
-  const { periode } = useLoaderData<typeof loader>();
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const fetcher = useFetcher<INetworkResponse>();
   const { getAppText, getLink } = useSanity();
 
