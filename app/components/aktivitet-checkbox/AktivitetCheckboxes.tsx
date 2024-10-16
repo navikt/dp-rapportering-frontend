@@ -63,23 +63,27 @@ export function AktivitetCheckboxes({
   return (
     <CheckboxGroup legend={label} error={error || undefined} value={verdi} onChange={onChange}>
       {muligeAktiviteter.map((aktivitet) => {
-        if (verdi.includes("Arbeid") && aktivitet === "Arbeid") {
-          return (
-            <div
+        return (
+          <div
+            key={aktivitet}
+            className={classNames(styles.checkbox, {
+              [styles.arbeid]: aktivitet === "Arbeid",
+              [styles.syk]: aktivitet === "Syk",
+              [styles.fravaer]: aktivitet === "Fravaer",
+              [styles.utdanning]: aktivitet === "Utdanning",
+            })}
+          >
+            <Checkbox
               key={aktivitet}
-              className={classNames(styles.checkbox, {
-                [styles.arbeid]: aktivitet === "Arbeid",
-              })}
+              disabled={erIkkeAktiv(verdi, aktivitet)}
+              value={aktivitet}
+              description={hentAktivitetBeskrivelse(aktivitet, getAppText)}
+              data-testid={`aktivitet-radio-${aktivitet}`}
+              name={name}
             >
-              <Checkbox
-                disabled={erIkkeAktiv(verdi, aktivitet)}
-                value={aktivitet}
-                description={hentAktivitetBeskrivelse(aktivitet, getAppText)}
-                data-testid={`aktivitet-radio-${aktivitet}`}
-                name={name}
-              >
-                {aktivitetTypeMap(aktivitet, getAppText)}
-              </Checkbox>
+              {aktivitetTypeMap(aktivitet, getAppText)}
+            </Checkbox>
+            {verdi.includes("Arbeid") && aktivitet === "Arbeid" && (
               <div className={styles.timer}>
                 <TallInput
                   name="timer"
@@ -99,27 +103,8 @@ export function AktivitetCheckboxes({
                   />
                 </ReadMore>
               </div>
-            </div>
-          );
-        }
-
-        return (
-          <Checkbox
-            key={aktivitet}
-            className={classNames(styles.checkbox, {
-              [styles.arbeid]: aktivitet === "Arbeid",
-              [styles.syk]: aktivitet === "Syk",
-              [styles.fravaer]: aktivitet === "Fravaer",
-              [styles.utdanning]: aktivitet === "Utdanning",
-            })}
-            disabled={erIkkeAktiv(verdi, aktivitet)}
-            value={aktivitet}
-            description={hentAktivitetBeskrivelse(aktivitet, getAppText)}
-            data-testid={`aktivitet-radio-${aktivitet}`}
-            name={name}
-          >
-            {aktivitetTypeMap(aktivitet, getAppText)}
-          </Checkbox>
+            )}
+          </div>
         );
       })}
     </CheckboxGroup>
