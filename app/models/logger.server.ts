@@ -32,13 +32,14 @@ export async function logErrorResponse(errorResponse: Response, message?: string
   if (correlationId) {
     logMap.set(MDC_CORRELATION_ID, correlationId);
   }
+  const meta = Object.fromEntries(logMap);
   sikkerLogger.error(
     `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${body}`,
-    logMap
+    meta
   );
   logger.error(
     `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`,
-    logMap
+    { logMap }
   );
 }
 
