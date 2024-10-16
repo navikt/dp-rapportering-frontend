@@ -10,7 +10,7 @@ import { hentPeriode, hentRapporteringsperioder } from "~/models/rapporteringspe
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { formaterDato } from "~/utils/dato.utils";
-import { hentPeriodeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
+import { hentPeriodeTekst, kanSendes, perioderSomKanSendes } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -107,9 +107,11 @@ export default function RapporteringstypeSide() {
       )}
 
       <Heading size="medium" level="2">
-        {rapporteringsperioder.length > 1 && getAppText("rapportering-foerste-periode")}
-        {rapporteringsperioder.length === 1 && getAppText("rapportering-naavaerende-periode")}
+        {rapporteringsperioder.length > 1
+          ? getAppText("rapportering-foerste-periode")
+          : getAppText("rapportering-naavaerende-periode")}
       </Heading>
+
       <p>{hentPeriodeTekst(periode, getAppText)}</p>
 
       <PortableText
@@ -123,6 +125,7 @@ export default function RapporteringstypeSide() {
       <LesMer />
 
       <RadioGroup
+        disabled={!kanSendes(periode)}
         legend={rapporteringstypeFormLabel}
         description={hentPeriodeTekst(periode, getAppText)}
         onChange={endreRapporteringstype}

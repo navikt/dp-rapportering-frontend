@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { type AktivitetType } from "~/models/aktivitet.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { kanSendes } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -71,7 +72,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   }, [valgtDato, periode.dager]);
 
   function aapneModal(dato: string) {
-    if (periode.status === "TilUtfylling" || periode.status === "Endret") {
+    if (kanSendes(periode)) {
       setValgtDato(dato);
       setModalAapen(true);
     }
@@ -95,13 +96,14 @@ export default function RapporteringsPeriodeFyllUtSide() {
       <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
         {getAppText("rapportering-periode-fyll-ut-tittel")}
       </Heading>
+
       <PortableText value={getRichText("rapportering-periode-fyll-ut-beskrivelse")} />
 
       <LesMer />
 
-      <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
+      <Kalender periode={periode} aapneModal={aapneModal} />
       <AktivitetModal
-        rapporteringsperiode={periode}
+        periode={periode}
         valgtDato={valgtDato}
         valgteAktiviteter={valgteAktiviteter}
         setValgteAktiviteter={setValgteAktiviteter}

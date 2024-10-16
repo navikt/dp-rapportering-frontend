@@ -6,6 +6,7 @@ import { ChangeEvent } from "react";
 import invariant from "tiny-invariant";
 import { lagreBegrunnelse } from "~/models/begrunnelse.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import { kanSendes } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -68,6 +69,7 @@ export default function BegrunnelseSide() {
         name="begrunnelseEndring"
         value={periode.begrunnelseEndring ?? undefined}
         onChange={handleChange}
+        disabled={!kanSendes(periode)}
       >
         {begrunnelser.map((begrunnelse) => (
           <option key={begrunnelse.value} value={getAppText(begrunnelse.value)}>

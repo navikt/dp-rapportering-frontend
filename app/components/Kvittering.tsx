@@ -32,7 +32,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           </Accordion.Header>
           <Accordion.Content>
             <div className="oppsummering">
-              <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
+              <Kalender periode={periode} aapneModal={() => {}} readonly />
               <AktivitetOppsummering rapporteringsperiode={periode} />
             </div>
 

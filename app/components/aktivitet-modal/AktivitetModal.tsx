@@ -13,7 +13,7 @@ import { LesMer } from "../LesMer";
 import { AktivitetCheckboxes } from "../aktivitet-checkbox/AktivitetCheckboxes";
 
 interface IProps {
-  rapporteringsperiode: IRapporteringsperiode;
+  periode: IRapporteringsperiode;
   valgtDato?: string;
   valgteAktiviteter: AktivitetType[];
   setValgteAktiviteter: (aktiviteter: AktivitetType[]) => void;
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 export function AktivitetModal({
-  rapporteringsperiode,
+  periode,
   modalAapen,
   lukkModal,
   valgteAktiviteter,
@@ -32,16 +32,14 @@ export function AktivitetModal({
   const { getAppText } = useSanity();
   const actionData = useActionData<typeof rapporteringAction>();
 
-  const dag = rapporteringsperiode.dager.find(
-    (rapporteringsdag) => rapporteringsdag.dato === valgtDato
-  );
+  const dag = periode.dager.find((dag) => dag.dato === valgtDato);
 
   const fetcher = useFetcher();
 
   const slettHandler = () => {
     fetcher.submit(
       {
-        rapporteringsperiodeId: rapporteringsperiode.id,
+        rapporteringsperiodeId: periode.id,
         dag: JSON.stringify(dag),
       },
       { method: "post", action: "/api/slett" }

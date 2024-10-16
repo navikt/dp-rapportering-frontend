@@ -1,50 +1,49 @@
 import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useFetcher } from "@remix-run/react";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { kanSendes } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
 import { Error } from "../error/Error";
 
-export function ArbeidssokerRegisterering({
-  rapporteringsperiodeId,
-  registrertArbeidssoker,
-}: {
-  rapporteringsperiodeId: string;
-  registrertArbeidssoker: boolean | null;
-}) {
+export function ArbeidssokerRegisterering({ periode }: { periode: IRapporteringsperiode }) {
   const { getAppText } = useSanity();
   const fetcher = useFetcher<INetworkResponse>();
 
   const handleChange = (registrertArbeidssokerSvar: boolean) => {
-    fetcher.submit(
-      {
-        registrertArbeidssoker: registrertArbeidssokerSvar,
-        rapporteringsperiodeId,
-      },
-      { method: "post" }
-    );
+    if (kanSendes(periode)) {
+      fetcher.submit(
+        {
+          registrertArbeidssoker: registrertArbeidssokerSvar,
+          rapporteringsperiodeId: periode.id,
+        },
+        { method: "post" }
+      );
+    }
   };
 
   return (
     <>
       <fetcher.Form method="post">
         <RadioGroup
+          disabled={!kanSendes(periode)}
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
-          value={registrertArbeidssoker}
+          value={periode.registrertArbeidssoker}
         >
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={true}
-            checked={registrertArbeidssoker === true}
+            checked={periode.registrertArbeidssoker === true}
           >
             {getAppText("rapportering-arbeidssokerregister-svar-ja")}
           </Radio>
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={false}
-            checked={registrertArbeidssoker === false}
+            checked={periode.registrertArbeidssoker === false}
           >
             {getAppText("rapportering-arbeidssokerregister-svar-nei")}
           </Radio>
@@ -55,8 +54,8 @@ export function ArbeidssokerRegisterering({
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
 
-      {registrertArbeidssoker !== null &&
-        (registrertArbeidssoker ? (
+      {periode.registrertArbeidssoker !== null &&
+        (periode.registrertArbeidssoker ? (
           <RegistertArbeidssokerAlert />
         ) : (
           <AvregistertArbeidssokerAlert />

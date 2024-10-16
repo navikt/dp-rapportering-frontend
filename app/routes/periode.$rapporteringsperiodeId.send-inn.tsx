@@ -20,6 +20,7 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
+import { kanSendes } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -73,16 +74,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function RapporteringsPeriodeSendInnSide() {
+  const { locale } = useTypedRouteLoaderData("root");
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const { rapporteringsperioder } = useLoaderData<typeof loader>();
+
   const submit = useSubmit();
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = useIsSubmitting(navigation);
 
-  const [confirmed, setConfirmed] = useState<boolean | undefined>();
-
-  const { locale } = useTypedRouteLoaderData("root");
-  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-  const { rapporteringsperioder } = useLoaderData<typeof loader>();
+  const [confirmed, setConfirmed] = useState<boolean | undefined>(!kanSendes(periode));
 
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
@@ -109,16 +110,14 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   return (
     <>
-      <KanIkkeSendes periode={periode} />
-
       <Heading tabIndex={-1} level="2" size="medium" spacing className="vo-fokus">
         {getAppText("rapportering-send-inn-tittel")}
       </Heading>
 
       {kanSendes(periode) ? (
-      <Alert variant="warning" className="my-4 alert-with-rich-text">
-        <PortableText value={getRichText("rapportering-meldekort-ikke-sendt-enda")} />
-      </Alert>
+        <Alert variant="warning" className="my-4 alert-with-rich-text">
+          <PortableText value={getRichText("rapportering-meldekort-ikke-sendt-enda")} />
+        </Alert>
       ) : (
         <KanIkkeSendes periode={periode} />
       )}
@@ -131,7 +130,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </div>
 
       <div className="oppsummering">
-        <Kalender rapporteringsperiode={periode} readonly={true} aapneModal={() => {}} />
+        <Kalender periode={periode} readonly={true} aapneModal={() => {}} />
         <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
 
@@ -141,7 +140,11 @@ export default function RapporteringsPeriodeSendInnSide() {
         <AvregistertArbeidssokerAlert />
       )}
 
-      <Checkbox onChange={() => setConfirmed((prev) => !prev)}>
+      <Checkbox
+        disabled={!kanSendes(periode)}
+        checked={confirmed}
+        onChange={() => setConfirmed((prev) => !prev)}
+      >
         {getAppText("rapportering-send-inn-bekreft-opplysning")}
       </Checkbox>
 

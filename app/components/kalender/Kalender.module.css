@@ -8,6 +8,10 @@
   width: calc(var(--a-spacing-4) + 100%);
 }
 
+.kalender[aria-disabled="true"] {
+  pointer-events: none;
+}
+
 .headerKontainer {
   display: flex;
   justify-content: space-between;

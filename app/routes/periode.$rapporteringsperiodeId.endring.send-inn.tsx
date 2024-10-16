@@ -104,9 +104,9 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Heading>
 
       {kanSendes(periode) ? (
-      <Alert variant="warning" className="my-4 alert-with-rich-text">
-        <PortableText value={getRichText("rapportering-endring-ikke-sendt-enda")} />
-      </Alert>
+        <Alert variant="warning" className="my-4 alert-with-rich-text">
+          <PortableText value={getRichText("rapportering-endring-ikke-sendt-enda")} />
+        </Alert>
       ) : (
         <KanIkkeSendes periode={periode} />
       )}
@@ -121,7 +121,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </div>
 
       <div className="oppsummering">
-        <Kalender rapporteringsperiode={periode} aapneModal={() => {}} readonly />
+        <Kalender periode={periode} aapneModal={() => {}} readonly />
         <AktivitetOppsummering rapporteringsperiode={periode} />
       </div>
 

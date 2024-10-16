@@ -92,9 +92,9 @@ export default function RapporteringsPeriodeFyllUtSide() {
       </Heading>
       <PortableText value={getRichText("rapportering-periode-endre-beskrivelse")} />
 
-      <Kalender rapporteringsperiode={periode} aapneModal={aapneModal} />
+      <Kalender periode={periode} aapneModal={aapneModal} />
       <AktivitetModal
-        rapporteringsperiode={periode}
+        periode={periode}
         valgtDato={valgtDato}
         valgteAktiviteter={valgteAktiviteter}
         setValgteAktiviteter={setValgteAktiviteter}
