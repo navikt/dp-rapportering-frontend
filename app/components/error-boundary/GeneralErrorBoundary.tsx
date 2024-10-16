@@ -1,6 +1,8 @@
 import { Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { isRouteErrorResponse } from "@remix-run/react";
+import { useEffect } from "react";
+import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "../RemixLink";
 
@@ -17,6 +19,10 @@ interface IProps {
 
 export function GeneralErrorBoundary({ error }: IProps) {
   const { getRichText, getAppText, getLink } = useSanity();
+
+  useEffect(() => {
+    setBreadcrumbs([], getAppText);
+  }, [getAppText]);
 
   let title: string = "";
   let body: string = "";
