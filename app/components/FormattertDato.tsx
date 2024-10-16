@@ -1,12 +1,15 @@
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
+
 interface IProps {
   dato: string;
   kort?: boolean;
   ukedag?: boolean;
   arr?: boolean;
+  locale: DecoratorLocale;
 }
 
 export function FormattertDato(props: IProps) {
-  const locale = "no-NO";
+  const locale = props.locale ?? DecoratorLocale.NB;
 
   const options: Intl.DateTimeFormatOptions = {
     month: props.kort ? "2-digit" : "long",

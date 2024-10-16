@@ -108,8 +108,13 @@ export async function hentPeriode(
     }),
   });
 
-  if (!response.ok) {
+  if (response.status === 404) {
     await logErrorResponse(response, `Klarte ikke å hente periode`);
+    throw new Response("rapportering-feilmelding-hent-meldekort-404", { status: response.status });
+  }
+
+  if (!response.ok) {
+    await logErrorResponse(response, `Feil ved henting av periode`);
     throw new Response("rapportering-feilmelding-hent-meldekort-500", { status: 500 });
   }
 

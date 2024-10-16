@@ -67,7 +67,7 @@ export default function RapporteringstypeSide() {
 
   const nesteKnappTekst =
     type === Rapporteringstype.harIngenAktivitet
-      ? getAppText("rapportering-neste")
+      ? getAppText("rapportering-knapp-neste")
       : getAppText("rapportering-til-utfylling");
 
   const nesteKnappLink =

@@ -21,7 +21,6 @@ export async function action({ request }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie") || "";
   const formData = await request.formData();
 
-  console.log(formData.get("infoAlertStatus"));
   const showInfoAlert: boolean = formData.get("infoAlertStatus") === "true";
 
   return json(
@@ -136,7 +135,7 @@ export default function Landingsside() {
               onClick={startUtfylling}
               disabled={!samtykker}
             >
-              {getAppText("rapportering-neste")}
+              {getAppText("rapportering-knapp-neste")}
             </Button>
           </div>
         </>
