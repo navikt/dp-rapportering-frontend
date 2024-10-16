@@ -2,7 +2,7 @@ import fs from "fs";
 import winston from "winston";
 import { IHttpProblem } from "~/utils/types";
 
-const MDC_CORRELATION_ID = "x_correlationId";
+// const MDC_CORRELATION_ID = "x_correlationId";
 
 const sikkerLogPath = () =>
   fs.existsSync("/secure-logs/") ? "/secure-logs/secure.log" : "./secure.log";
@@ -28,18 +28,17 @@ export const sikkerLogger = winston.createLogger({
 export async function logErrorResponse(errorResponse: Response, message?: string) {
   const body = await getHttpProblem(errorResponse);
   const correlationId = await getCorrelationId(errorResponse);
-  const logMap = new Map();
+  /*  const logMap = new Map();
   if (correlationId) {
     logMap.set(MDC_CORRELATION_ID, correlationId);
-  }
-  const meta = Object.fromEntries(logMap);
+  }*/
   sikkerLogger.error(
     `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${body}`,
-    meta
+    { x_correlationId: correlationId }
   );
   logger.error(
     `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`,
-    { logMap }
+    { x_correlationId: correlationId }
   );
 }
 
