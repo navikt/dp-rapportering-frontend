@@ -2,8 +2,6 @@ import fs from "fs";
 import winston from "winston";
 import { IHttpProblem } from "~/utils/types";
 
-// const MDC_CORRELATION_ID = "x_correlationId";
-
 const sikkerLogPath = () =>
   fs.existsSync("/secure-logs/") ? "/secure-logs/secure.log" : "./secure.log";
 export const logger = winston.createLogger({
@@ -27,37 +25,21 @@ export const sikkerLogger = winston.createLogger({
 
 export async function logErrorResponse(errorResponse: Response, message?: string) {
   const body = await getHttpProblem(errorResponse);
-  const correlationId = await getCorrelationId(errorResponse);
-  /*  const logMap = new Map();
-  if (correlationId) {
-    logMap.set(MDC_CORRELATION_ID, correlationId);
-  }*/
   sikkerLogger.error(
-    `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${body}`,
-    { x_correlationId: correlationId }
+    `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${JSON.stringify(body)}`,
+    { x_correlationId: body?.correlationId }
   );
   logger.error(
     `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`,
-    { x_correlationId: correlationId }
+    { x_correlationId: body?.correlationId }
   );
 }
 
-async function getHttpProblem(response: Response): Promise<string | null> {
+async function getHttpProblem(response: Response): Promise<IHttpProblem | null> {
   try {
-    return await response.text();
+    return await response.json();
   } catch (e: unknown) {
     logger.error(`Klarte ikke å lese body ${e}`);
     return null;
-  }
-}
-
-async function getCorrelationId(errorResponse: Response) {
-  try {
-    const errorBody: IHttpProblem = await errorResponse.json();
-    if (errorBody && errorBody.correlationId) {
-      return errorBody.correlationId;
-    }
-  } catch {
-    return "";
   }
 }
