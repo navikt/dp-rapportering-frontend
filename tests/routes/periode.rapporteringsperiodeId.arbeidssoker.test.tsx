@@ -1,11 +1,8 @@
-import { createRemixStub } from "@remix-run/testing";
-import { render as TLRender, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import RapporteringsPeriodeSide, {
-  loader as rapporteringsperiodeLoader,
-} from "~/routes/periode.$rapporteringsperiodeId";
+import { loader as rapporteringsperiodeLoader } from "~/routes/periode.$rapporteringsperiodeId";
 import ArbeidssøkerRegisterSide, {
   action as arbeidssokerregisterAction,
 } from "~/routes/periode.$rapporteringsperiodeId.arbeidssoker";
@@ -13,6 +10,7 @@ import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
+import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 
 const testDb = withDb(sessionRecord.getDatabase("123"));
@@ -24,25 +22,13 @@ const rapporteringsperiode: IRapporteringsperiode = {
 const mockResponse = () => server.use(...createHandlers(testDb));
 
 const render = () => {
-  const RemixStub = createRemixStub([
-    {
-      path: "/periode/:rapporteringsperiodeId",
-      Component: RapporteringsPeriodeSide,
-      loader: rapporteringsperiodeLoader,
-      id: "routes/periode.$rapporteringsperiodeId",
-
-      children: [
-        {
-          path: "/periode/:rapporteringsperiodeId/arbeidssoker",
-          Component: ArbeidssøkerRegisterSide,
-          action: arbeidssokerregisterAction,
-        },
-      ],
-    },
-  ]);
-
-  const initialEntries = [`/periode/${rapporteringsperiode.id}/arbeidssoker`];
-  TLRender(<RemixStub initialEntries={initialEntries} />);
+  withNestedRapporteringsperiode({
+    path: "/periode/:rapporteringsperiodeId/arbeidssoker",
+    Component: ArbeidssøkerRegisterSide,
+    action: arbeidssokerregisterAction,
+    loader: rapporteringsperiodeLoader,
+    initialEntry: `/periode/${rapporteringsperiode.id}/arbeidssoker`,
+  });
 };
 
 beforeEach(() => {

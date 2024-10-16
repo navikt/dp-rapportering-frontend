@@ -1,18 +1,15 @@
-import { createRemixStub } from "@remix-run/testing";
-import { render as TLRender, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import RapporteringsPeriodeSide, {
-  loader as rapporteringsperiodeLoader,
-} from "~/routes/periode.$rapporteringsperiodeId";
 import RapporteringstypeSide, {
   action as rapporteringstypeAction,
   loader as rapporteringstypeLoader,
 } from "~/routes/periode.$rapporteringsperiodeId.rapporteringstype";
 import { Rapporteringstype } from "~/utils/types";
 import { server } from "../../mocks/server";
+import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 
 describe("RapporteringstypeSide", () => {
@@ -28,26 +25,14 @@ describe("RapporteringstypeSide", () => {
     periode: { fraOgMed: "2024-01-01", tilOgMed: "2024-01-14" },
   };
 
-  const initialEntries = [`/periode/${rapporteringsperiode.id}/rapporteringstype`];
-
   const render = () => {
-    const RemixStub = createRemixStub([
-      {
-        path: "/periode/:rapporteringsperiodeId",
-        Component: RapporteringsPeriodeSide,
-        loader: rapporteringsperiodeLoader,
-        id: "routes/periode.$rapporteringsperiodeId",
-        children: [
-          {
-            path: "/periode/:rapporteringsperiodeId/rapporteringstype",
-            Component: RapporteringstypeSide,
-            loader: rapporteringstypeLoader,
-            action: rapporteringstypeAction,
-          },
-        ],
-      },
-    ]);
-    TLRender(<RemixStub initialEntries={initialEntries} />);
+    withNestedRapporteringsperiode({
+      path: "/periode/:rapporteringsperiodeId/rapporteringstype",
+      Component: RapporteringstypeSide,
+      loader: rapporteringstypeLoader,
+      action: rapporteringstypeAction,
+      initialEntry: `/periode/${rapporteringsperiode.id}/rapporteringstype`,
+    });
   };
 
   const mockApiResponses = (rapporteringsperioder: IRapporteringsperiode[]) => {

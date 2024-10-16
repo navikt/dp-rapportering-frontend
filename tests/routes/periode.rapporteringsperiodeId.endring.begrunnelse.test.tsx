@@ -1,11 +1,7 @@
-import { createRemixStub } from "@remix-run/testing";
-import { render as TLRender, fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import RapporteringsPeriodeSide, {
-  loader as rapporteringsperiodeLoader,
-} from "~/routes/periode.$rapporteringsperiodeId";
 import BegrunnelseSide, {
   action as begrunnelseAction,
 } from "~/routes/periode.$rapporteringsperiodeId.endring.begrunnelse";
@@ -13,34 +9,23 @@ import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
+import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 
 const testDb = withDb(sessionRecord.getDatabase("123"));
 const rapporteringsperiode: IRapporteringsperiode = {
   ...lagRapporteringsperiode({ kanSendes: true }),
 };
-const begrunnelseSide = `/periode/${rapporteringsperiode.id}/endring/begrunnelse`;
 
 const mockResponse = () => server.use(...createHandlers(testDb));
 
 const render = () => {
-  const RemixStub = createRemixStub([
-    {
-      path: "/periode/:rapporteringsperiodeId",
-      Component: RapporteringsPeriodeSide,
-      loader: rapporteringsperiodeLoader,
-      id: "routes/periode.$rapporteringsperiodeId",
-
-      children: [
-        {
-          path: "/periode/:rapporteringsperiodeId/endring/begrunnelse",
-          Component: BegrunnelseSide,
-          action: begrunnelseAction,
-        },
-      ],
-    },
-  ]);
-  TLRender(<RemixStub initialEntries={[begrunnelseSide]} />);
+  withNestedRapporteringsperiode({
+    path: "/periode/:rapporteringsperiodeId/endring/begrunnelse",
+    Component: BegrunnelseSide,
+    action: begrunnelseAction,
+    initialEntry: `/periode/${rapporteringsperiode.id}/endring/begrunnelse`,
+  });
 };
 
 beforeEach(() => {

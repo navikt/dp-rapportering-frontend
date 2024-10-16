@@ -1,15 +1,12 @@
-import { createRemixStub } from "@remix-run/testing";
-import { render as TLRender, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
-import RapporteringsPeriodeSide, {
-  loader as rapporteringsperiodeLoader,
-} from "~/routes/periode.$rapporteringsperiodeId";
 import TomRapporteringsPeriodeSide from "~/routes/periode.$rapporteringsperiodeId.tom";
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
+import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 
 const testDb = withDb(sessionRecord.getDatabase("123"));
@@ -33,24 +30,11 @@ describe("TomRapporteringsPeriodeSide", () => {
   };
 
   const render = () => {
-    const RemixStub = createRemixStub([
-      {
-        path: "/periode/:rapporteringsperiodeId",
-        Component: RapporteringsPeriodeSide,
-        loader: rapporteringsperiodeLoader,
-        id: "routes/periode.$rapporteringsperiodeId",
-
-        children: [
-          {
-            path: "/periode/:rapporteringsperiodeId/tom",
-            Component: TomRapporteringsPeriodeSide,
-          },
-        ],
-      },
-    ]);
-
-    const initialEntries = [`/periode/${rapporteringsperiode.id}/tom`];
-    TLRender(<RemixStub initialEntries={initialEntries} />);
+    withNestedRapporteringsperiode({
+      path: "/periode/:rapporteringsperiodeId/tom",
+      Component: TomRapporteringsPeriodeSide,
+      initialEntry: `/periode/${rapporteringsperiode.id}/tom`,
+    });
   };
 
   test("Skal vise alert om at brukeren ikke har meldt noe ", async () => {
