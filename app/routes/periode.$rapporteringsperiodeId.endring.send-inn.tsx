@@ -35,7 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
 

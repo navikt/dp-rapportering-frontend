@@ -26,6 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       throw error;
     }
 
+    // TODO: Sanityfy
     throw new Response("Feil i uthenting av rapporteringsperioder", { status: 500 });
   }
 }

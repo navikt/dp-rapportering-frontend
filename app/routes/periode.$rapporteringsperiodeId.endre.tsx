@@ -5,7 +5,7 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import { lagEndringsperiode } from "~/models/rapporteringsperiode.server";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
 

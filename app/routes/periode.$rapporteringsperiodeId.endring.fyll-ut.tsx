@@ -16,7 +16,7 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
   const formdata = await request.formData();
