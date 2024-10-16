@@ -3,9 +3,11 @@ import { render as TLRender, screen, waitFor } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import RapporteringsPeriodeSide, {
+  loader as rapporteringsperiodeLoader,
+} from "~/routes/periode.$rapporteringsperiodeId";
 import ArbeidssøkerRegisterSide, {
-  action,
-  loader,
+  action as arbeidssokerregisterAction,
 } from "~/routes/periode.$rapporteringsperiodeId.arbeidssoker";
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
@@ -18,23 +20,29 @@ const rapporteringsperiode: IRapporteringsperiode = {
   ...lagRapporteringsperiode({ kanSendes: true }),
   registrertArbeidssoker: null,
 };
-const tomRapporteringsPeriodeSide = `/periode/${rapporteringsperiode.id}/arbeidssoker`;
 
 const mockResponse = () => server.use(...createHandlers(testDb));
 
 const render = () => {
   const RemixStub = createRemixStub([
     {
-      path: "/periode/:rapporteringsperiodeId/arbeidssoker",
-      Component: ArbeidssøkerRegisterSide,
-      loader,
-      action,
-      handle: {
-        params: { rapporteringsperiodeId: rapporteringsperiode.id },
-      },
+      path: "/periode/:rapporteringsperiodeId",
+      Component: RapporteringsPeriodeSide,
+      loader: rapporteringsperiodeLoader,
+      id: "routes/periode.$rapporteringsperiodeId",
+
+      children: [
+        {
+          path: "/periode/:rapporteringsperiodeId/arbeidssoker",
+          Component: ArbeidssøkerRegisterSide,
+          action: arbeidssokerregisterAction,
+        },
+      ],
     },
   ]);
-  TLRender(<RemixStub initialEntries={[tomRapporteringsPeriodeSide]} />);
+
+  const initialEntries = [`/periode/${rapporteringsperiode.id}/arbeidssoker`];
+  TLRender(<RemixStub initialEntries={initialEntries} />);
 };
 
 beforeEach(() => {

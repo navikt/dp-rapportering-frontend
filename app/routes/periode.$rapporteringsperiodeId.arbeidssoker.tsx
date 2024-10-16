@@ -1,11 +1,10 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { useNavigate } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
-import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
@@ -25,17 +24,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 }
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
-
-  const periodeId = params.rapporteringsperiodeId;
-  const periode = await hentPeriode(request, periodeId, false);
-
-  return json({ periode });
-}
-
 export default function ArbeidssøkerRegisterSide() {
-  const { periode } = useLoaderData<typeof loader>();
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText, getLink } = useSanity();
 
   const navigate = useNavigate();
