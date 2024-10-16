@@ -5,14 +5,14 @@ import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useCallback } from "react";
-import invariant from "tiny-invariant";
-import { hentPeriode, hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst, kanSendes, perioderSomKanSendes } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
@@ -28,16 +28,11 @@ export async function action({ request }: ActionFunctionArgs) {
   return await lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
 }
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
-
-  const periodeId = params.rapporteringsperiodeId;
-
+export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
-    const periode = await hentPeriode(request, periodeId, false);
 
-    return json({ rapporteringsperioder, periode });
+    return json({ rapporteringsperioder });
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;
@@ -50,7 +45,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
-  const { periode, rapporteringsperioder } = useLoaderData<typeof loader>();
+  const { rapporteringsperioder } = useLoaderData<typeof loader>();
+  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText, getRichText, getLink } = useSanity();
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();

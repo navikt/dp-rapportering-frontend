@@ -4,8 +4,12 @@ import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import RapporteringsPeriodeSide, {
+  loader as rapporteringsperiodeLoader,
+} from "~/routes/periode.$rapporteringsperiodeId";
 import RapporteringstypeSide, {
-  loader,
+  action as rapporteringstypeAction,
+  loader as rapporteringstypeLoader,
 } from "~/routes/periode.$rapporteringsperiodeId.rapporteringstype";
 import { Rapporteringstype } from "~/utils/types";
 import { server } from "../../mocks/server";
@@ -24,11 +28,26 @@ describe("RapporteringstypeSide", () => {
     periode: { fraOgMed: "2024-01-01", tilOgMed: "2024-01-14" },
   };
 
-  const path = `/periode/:rapporteringsperiodeId/rapporteringstype`;
+  const initialEntries = [`/periode/${rapporteringsperiode.id}/rapporteringstype`];
 
   const render = () => {
-    const RemixStub = createRemixStub([{ path, Component: RapporteringstypeSide, loader }]);
-    TLRender(<RemixStub initialEntries={[path]} />);
+    const RemixStub = createRemixStub([
+      {
+        path: "/periode/:rapporteringsperiodeId",
+        Component: RapporteringsPeriodeSide,
+        loader: rapporteringsperiodeLoader,
+        id: "routes/periode.$rapporteringsperiodeId",
+        children: [
+          {
+            path: "/periode/:rapporteringsperiodeId/rapporteringstype",
+            Component: RapporteringstypeSide,
+            loader: rapporteringstypeLoader,
+            action: rapporteringstypeAction,
+          },
+        ],
+      },
+    ]);
+    TLRender(<RemixStub initialEntries={initialEntries} />);
   };
 
   const mockApiResponses = (rapporteringsperioder: IRapporteringsperiode[]) => {
