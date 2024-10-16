@@ -39,17 +39,26 @@ export async function getRapporteringOboToken(request: Request) {
 
   const token = getToken(request);
   if (!token) {
-    throw new Response(null, { status: 500, statusText: "Feil ved henting av token" });
+    throw new Response(null, {
+      status: 500,
+      statusText: "rapportering-feilmelding-henting-av-token",
+    });
   }
 
   const validation = await validateToken(token);
   if (!validation.ok) {
-    throw new Response(null, { status: 500, statusText: "Feil ved validering av token" });
+    throw new Response(null, {
+      status: 500,
+      statusText: "rapportering-feilmelding-validering-av-token",
+    });
   }
 
   const obo = await requestOboToken(token, audienceDPRapportering);
   if (!obo.ok) {
-    throw new Response(null, { status: 500, statusText: "Feil ved henting av obo token" });
+    throw new Response(null, {
+      status: 500,
+      statusText: "rapportering-feilmelding-henting-av-obo-token",
+    });
   }
 
   return obo.token;
