@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Heading, Select } from "@navikt/ds-react";
+import { Select } from "@navikt/ds-react";
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { ChangeEvent } from "react";
@@ -59,10 +59,6 @@ export default function BegrunnelseSide() {
 
   return (
     <>
-      <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
-        {getAppText("rapportering-periode-endre-tittel")}
-      </Heading>
-
       <Select
         label={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-label")}
         description={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-description")}

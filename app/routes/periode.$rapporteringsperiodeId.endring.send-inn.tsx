@@ -1,5 +1,5 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Alert, BodyShort, Button, Checkbox, Detail, Heading } from "@navikt/ds-react";
+import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
@@ -101,10 +101,16 @@ export default function RapporteringsPeriodeSendInnSide() {
         {getAppText("rapportering-endring-send-inn-tittel")}
       </Heading>
 
+      <Alert variant="warning" className="my-4 alert-with-rich-text">
+        <PortableText value={getRichText("rapportering-endring-ikke-sendt-enda")} />
+      </Alert>
+
       <PortableText value={getRichText("rapportering-endring-send-inn-innhold")} />
 
       <div className="my-4">
-        <Heading size="xsmall">{getAppText("rapportering-send-inn-periode-tittel")}</Heading>
+        <Heading size="xsmall" level="3">
+          {getAppText("rapportering-send-inn-periode-tittel")}
+        </Heading>
         <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
       </div>
 
@@ -115,13 +121,11 @@ export default function RapporteringsPeriodeSendInnSide() {
 
       {periode.begrunnelseEndring && (
         <div>
-          <Heading size="small" className="my-4">
+          <Heading size="small" className="my-4" level="3">
             {getAppText("rapportering-endring-begrunnelse-tittel")}
           </Heading>
 
-          <Detail weight="semibold" className="ml-4">
-            {periode.begrunnelseEndring}
-          </Detail>
+          <p>{periode.begrunnelseEndring}</p>
         </div>
       )}
 

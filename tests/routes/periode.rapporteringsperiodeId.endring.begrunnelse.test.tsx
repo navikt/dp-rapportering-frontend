@@ -53,10 +53,6 @@ describe("BegrunnelseSide", () => {
 
   test("Skal vise alle alternativer i begrunnelsesvalg", async () => {
     render();
-
-    expect(
-      await screen.findByRole("heading", { name: /rapportering-periode-endre-tittel/ })
-    ).toBeInTheDocument();
     expect(
       await screen.findByText(/rapportering-endring-begrunnelse-nedtrekksmeny-label/)
     ).toBeInTheDocument();

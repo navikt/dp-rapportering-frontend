@@ -117,6 +117,10 @@ export default function RapporteringsPeriodeSendInnSide() {
         {getAppText("rapportering-send-inn-tittel")}
       </Heading>
 
+      <Alert variant="warning" className="my-4 alert-with-rich-text">
+        <PortableText value={getRichText("rapportering-meldekort-ikke-sendt-enda")} />
+      </Alert>
+
       <PortableText value={getRichText("rapportering-send-inn-innhold")} />
 
       <div className="my-4">

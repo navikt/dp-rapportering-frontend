@@ -441,7 +441,6 @@ describe("htmlForFyllUt", () => {
       locale,
     });
 
-    expect(html).toContain("rapportering-periode-endre-tittel");
     expect(html).toContain("rapportering-periode-endre-beskrivelse");
   });
 
