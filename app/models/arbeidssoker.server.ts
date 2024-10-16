@@ -24,7 +24,7 @@ export async function lagreArbeidssokerSvar(
 
   if (!response.ok) {
     const id = await getCorrelationId(response);
-    logErrorResponse(response, `Feil ved lagring av arbeidssokersvar`);
+    await logErrorResponse(response, `Feil ved lagring av arbeidssokersvar`);
     return {
       status: "error",
       error: {

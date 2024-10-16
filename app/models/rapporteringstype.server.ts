@@ -24,7 +24,7 @@ export async function lagreRapporteringstype(
 
   if (!response.ok) {
     const id = await getCorrelationId(response);
-    logErrorResponse(response, `Feil ved lagring av rapporteringstype`);
+    await logErrorResponse(response, `Feil ved lagring av rapporteringstype`);
     return {
       status: "error",
       error: {

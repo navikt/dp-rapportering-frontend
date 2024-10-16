@@ -30,7 +30,7 @@ export async function lagreAktivitet(
 
   if (!response.ok) {
     const id = await getCorrelationId(response);
-    logErrorResponse(response, `Feil ved lagring av aktivitet`);
+    await logErrorResponse(response, `Feil ved lagring av aktivitet`);
     return {
       status: "error",
       error: {

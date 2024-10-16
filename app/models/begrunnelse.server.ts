@@ -24,7 +24,7 @@ export async function lagreBegrunnelse(
 
   if (!response.ok) {
     const id = await getCorrelationId(response);
-    logErrorResponse(response, `Feil ved lagring av begrunnelse`);
+    await logErrorResponse(response, `Feil ved lagring av begrunnelse`);
     return {
       status: "error",
       error: {
