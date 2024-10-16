@@ -6,6 +6,7 @@ import invariant from "tiny-invariant";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
+import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
 import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
@@ -41,10 +42,9 @@ export default function ArbeidssøkerRegisterSide() {
 
   return (
     <>
-      <ArbeidssokerRegisterering
-        rapporteringsperiodeId={periode.id}
-        registrertArbeidssoker={periode.registrertArbeidssoker}
-      />
+      <KanIkkeSendes periode={periode} />
+
+      <ArbeidssokerRegisterering periode={periode} />
       <div className="navigasjon-container">
         <RemixLink
           as="Button"

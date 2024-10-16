@@ -8,6 +8,7 @@ import { lagreBegrunnelse } from "~/models/begrunnelse.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { INetworkResponse } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
+import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
 import { Error } from "~/components/error/Error";
@@ -59,6 +60,8 @@ export default function BegrunnelseSide() {
 
   return (
     <>
+      <KanIkkeSendes periode={periode} />
+
       <Select
         label={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-label")}
         description={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-description")}

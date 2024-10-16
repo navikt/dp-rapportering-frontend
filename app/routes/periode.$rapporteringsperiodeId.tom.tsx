@@ -6,6 +6,7 @@ import { useLoaderData, useNavigate } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
+import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { RemixLink } from "~/components/RemixLink";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -24,9 +25,8 @@ export default function TomRapporteringsPeriodeSide() {
   const navigate = useNavigate();
   return (
     <>
-      {periode.kanSendes === false && (
-        <Alert variant="warning">{getAppText("rapportering-periode-kan-ikke-sendes")}</Alert>
-      )}
+      <KanIkkeSendes periode={periode} />
+
       <Alert variant="info">
         <Heading spacing size="small" level="3">
           {getAppText("rapportering-tom-periode-tittel")}

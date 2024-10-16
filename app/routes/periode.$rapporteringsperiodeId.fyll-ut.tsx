@@ -9,6 +9,7 @@ import { type AktivitetType } from "~/models/aktivitet.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
@@ -89,6 +90,8 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   return (
     <>
+      <KanIkkeSendes periode={periode} />
+
       <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
         {getAppText("rapportering-periode-fyll-ut-tittel")}
       </Heading>

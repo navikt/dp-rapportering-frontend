@@ -13,6 +13,7 @@ import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useSanity } from "~/hooks/useSanity";
+import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import { Error } from "~/components/error/Error";
@@ -89,6 +90,8 @@ export default function RapporteringstypeSide() {
 
   return (
     <>
+      <KanIkkeSendes periode={periode} />
+
       {harFlerePerioder && (
         <>
           <Alert variant="info" className="my-8">

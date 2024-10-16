@@ -20,6 +20,7 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
+import { kanSendes } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -98,15 +99,17 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   return (
     <>
-      <KanIkkeSendes periode={periode} />
-
       <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
         {getAppText("rapportering-endring-send-inn-tittel")}
       </Heading>
 
+      {kanSendes(periode) ? (
       <Alert variant="warning" className="my-4 alert-with-rich-text">
         <PortableText value={getRichText("rapportering-endring-ikke-sendt-enda")} />
       </Alert>
+      ) : (
+        <KanIkkeSendes periode={periode} />
+      )}
 
       <PortableText value={getRichText("rapportering-endring-send-inn-innhold")} />
 

@@ -1,4 +1,5 @@
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
+import { IRapporteringsperiodeStatus } from "./types";
 import { parse } from "tinyduration";
 import type { AktivitetType } from "~/models/aktivitet.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -70,4 +71,8 @@ export function harAktiviteter(periode: IRapporteringsperiode): boolean {
 
 export function perioderSomKanSendes(perioder: IRapporteringsperiode[]): IRapporteringsperiode[] {
   return perioder.filter((periode) => periode.kanSendes);
+}
+
+export function kanSendes(periode: IRapporteringsperiode): boolean {
+  return periode.status === IRapporteringsperiodeStatus.TilUtfylling && periode.kanSendes;
 }
