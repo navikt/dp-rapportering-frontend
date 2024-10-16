@@ -51,7 +51,7 @@ const mockRapporteringsperiode: IRapporteringsperiode = {
 };
 
 const defaultProps = {
-  rapporteringsperiode: mockRapporteringsperiode,
+  periode: mockRapporteringsperiode,
   valgtDato: mockRapporteringsperiodeDag.dato,
   valgteAktiviteter: [] as AktivitetType[],
   setValgteAktiviteter: vi.fn(),

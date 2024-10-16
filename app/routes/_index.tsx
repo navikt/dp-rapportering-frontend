@@ -37,6 +37,7 @@ export default function Landingsside() {
 
   const { getAppText, getLink, getRichText } = useSanity();
   const startFetcher = useFetcher<typeof StartAction>();
+  const [showInfo, setShowInfo] = useState(true);
 
   const [samtykker, setSamtykker] = useState(false);
 
@@ -55,6 +56,17 @@ export default function Landingsside() {
 
   return (
     <>
+      {showInfo && (
+        <Alert
+          closeButton
+          onClose={() => setShowInfo(false)}
+          variant="info"
+          className="my-8 alert-with-rich-text"
+        >
+          <PortableText value={getRichText("rapportering-informasjon-nytt-meldekort")} />
+        </Alert>
+      )}
+
       {rapporteringsperioder.length === 0 && (
         <Alert variant="info" className="my-8 alert-with-rich-text">
           <PortableText value={getRichText("rapportering-ingen-meldekort")} />
