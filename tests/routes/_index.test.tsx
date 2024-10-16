@@ -85,7 +85,9 @@ describe("Hovedside rapportering", () => {
         await screen.findByRole("checkbox", { name: /rapportering-samtykke-checkbox/ })
       ).toBeInTheDocument();
 
-      expect(await screen.findByRole("button", { name: /rapportering-neste/ })).toBeDisabled();
+      expect(
+        await screen.findByRole("button", { name: /rapportering-knapp-neste/ })
+      ).toBeDisabled();
     });
 
     test("kan trykke neste-knapp etter å ha krysset av for samtykke checkbox.", async () => {
@@ -103,10 +105,14 @@ describe("Hovedside rapportering", () => {
         name: /rapportering-samtykke-checkbox/,
       });
       expect(samtykkeCheckbox).toBeInTheDocument();
-      expect(await screen.findByRole("button", { name: /rapportering-neste/ })).toBeDisabled();
+      expect(
+        await screen.findByRole("button", { name: /rapportering-knapp-neste/ })
+      ).toBeDisabled();
 
       samtykkeCheckbox.click();
-      expect(await screen.findByRole("button", { name: /rapportering-neste/ })).not.toBeDisabled();
+      expect(
+        await screen.findByRole("button", { name: /rapportering-knapp-neste/ })
+      ).not.toBeDisabled();
     });
   });
 });
