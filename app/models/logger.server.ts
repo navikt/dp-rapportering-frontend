@@ -25,7 +25,7 @@ export const sikkerLogger = winston.createLogger({
 
 export const logErrorResponse = (errorResponse: Response, message?: string) => {
   sikkerLogger.error(
-    `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${errorResponse.body}`
+    `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${JSON.stringify(errorResponse.body)}`
   );
   logger.error(
     `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`

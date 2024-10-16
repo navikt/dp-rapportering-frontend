@@ -85,8 +85,6 @@ export async function hentRapporteringsperioder(
     headers: await getHeaders(request),
   });
 
-  logErrorResponse(response, `Hentet rapporteringsperioder`);
-
   if (!response.ok) {
     logErrorResponse(response, `Klarte ikke å hente rapporteringsperioder`);
     throw new Response(`rapportering-feilmelding-hent-perioder`, {
