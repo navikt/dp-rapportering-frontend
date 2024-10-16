@@ -1,5 +1,6 @@
 import fs from "fs";
 import winston from "winston";
+import { IHttpProblem } from "~/utils/types";
 
 const sikkerLogPath = () =>
   fs.existsSync("/secure-logs/") ? "/secure-logs/secure.log" : "./secure.log";
@@ -23,17 +24,22 @@ export const sikkerLogger = winston.createLogger({
 });
 
 export async function logErrorResponse(errorResponse: Response, message?: string) {
-  let body = null;
-  try {
-    body = await errorResponse.text();
-  } catch (e: unknown) {
-    logger.error(`Klarte ikke å lese body ${e}`);
-    body = null;
-  }
+  const body = await getHttpProblem(errorResponse);
   sikkerLogger.error(
-    `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${body}`
+    `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${JSON.stringify(body)}`,
+    { x_correlationId: body?.correlationId }
   );
   logger.error(
-    `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`
+    `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`,
+    { x_correlationId: body?.correlationId }
   );
+}
+
+async function getHttpProblem(response: Response): Promise<IHttpProblem | null> {
+  try {
+    return await response.json();
+  } catch (e: unknown) {
+    logger.error(`Klarte ikke å lese body ${e}`);
+    return null;
+  }
 }
