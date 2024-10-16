@@ -21,7 +21,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
   const periode = await hentPeriode(request, periodeId, false);

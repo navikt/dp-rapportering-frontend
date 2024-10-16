@@ -20,6 +20,14 @@ export enum Rapporteringstype {
   harIngenAktivitet = "harIngenAktivitet",
 }
 
+export enum IRapporteringsperiodeStatus {
+  TilUtfylling = "TilUtfylling",
+  Innsendt = "Innsendt",
+  Endret = "Endret",
+  Ferdig = "Ferdig",
+  Feilet = "Feilet",
+}
+
 export interface IHttpProblem {
   type: string;
   title: string;

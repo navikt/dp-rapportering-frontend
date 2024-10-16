@@ -90,7 +90,10 @@ export function AktivitetCheckboxes({
                 />
                 <PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />
 
-                <ReadMore header={getAppText("rapportering-aktivitet-jobb-prosentstilling-tittel")}>
+                <ReadMore
+                  header={getAppText("rapportering-aktivitet-jobb-prosentstilling-tittel")}
+                  className={styles.prosentstilling}
+                >
                   <PortableText
                     value={getRichText("rapportering-aktivitet-jobb-prosentstilling-innhold")}
                   />

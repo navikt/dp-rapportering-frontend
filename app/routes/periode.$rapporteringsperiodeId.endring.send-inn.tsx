@@ -23,6 +23,7 @@ import { useAddHtml } from "~/utils/journalforing.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
@@ -34,7 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
 
@@ -97,6 +98,8 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   return (
     <>
+      <KanIkkeSendes periode={periode} />
+
       <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
         {getAppText("rapportering-endring-send-inn-tittel")}
       </Heading>

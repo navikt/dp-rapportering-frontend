@@ -2,19 +2,11 @@ import type { IAktivitet } from "./aktivitet.server";
 import { logErrorResponse } from "~/models/logger.server";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
-import { Rapporteringstype } from "~/utils/types";
+import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
 
 export interface IPeriode {
   fraOgMed: string;
   tilOgMed: string;
-}
-
-export enum IRapporteringsperiodeStatus {
-  TilUtfylling = "TilUtfylling",
-  Innsendt = "Innsendt",
-  Endret = "Endret",
-  Ferdig = "Ferdig",
-  Feilet = "Feilet",
 }
 
 export interface IRapporteringsperiodeDag {

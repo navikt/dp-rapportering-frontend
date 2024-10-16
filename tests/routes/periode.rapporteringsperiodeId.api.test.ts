@@ -37,7 +37,7 @@ describe("Hent en rapporteringsperiode", () => {
     test("skal hente ut rapporteringsperiode", async () => {
       server.use(
         http.get(
-          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId`,
+          `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
           () => {
             return HttpResponse.json(rapporteringsperiodeResponse, { status: 200 });
           }

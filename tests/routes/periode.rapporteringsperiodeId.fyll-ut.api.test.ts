@@ -53,7 +53,7 @@ describe("Fyll ut rapporteringsperiode", () => {
         mockSession();
         server.use(
           http.post(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/aktivitet`,
             () => HttpResponse.json(null, { status: 200 }),
             {
               once: true,
@@ -80,7 +80,7 @@ describe("Fyll ut rapporteringsperiode", () => {
 
         server.use(
           http.post(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/aktivitet`,
             () => {
               return HttpResponse.json({ errorMessage: `Server Error` }, { status: 500 });
             },
@@ -126,7 +126,7 @@ describe("Fyll ut rapporteringsperiode", () => {
         mockSession();
         server.use(
           http.post(
-            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperioderId/aktivitet`,
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/aktivitet`,
             () => HttpResponse.json(null, { status: 200 }),
             {
               once: true,

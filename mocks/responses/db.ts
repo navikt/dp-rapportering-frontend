@@ -14,9 +14,8 @@ import {
 import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
-  IRapporteringsperiodeStatus,
 } from "~/models/rapporteringsperiode.server";
-import { Rapporteringstype } from "~/utils/types";
+import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
 
 function seedRapporteringsperioder(db: Database) {
   db.rapporteringsperioder.create(lagForstRapporteringsperiode());

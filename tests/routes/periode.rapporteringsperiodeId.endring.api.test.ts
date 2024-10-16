@@ -2,11 +2,9 @@
 import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import {
-  IRapporteringsperiode,
-  IRapporteringsperiodeStatus,
-} from "~/models/rapporteringsperiode.server";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { loader } from "~/routes/periode.$rapporteringsperiodeId.endre";
+import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";

@@ -5,7 +5,8 @@ import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useCallback } from "react";
-import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import invariant from "tiny-invariant";
+import { hentPeriode, hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { formaterDato } from "~/utils/dato.utils";
@@ -26,23 +27,29 @@ export async function action({ request }: ActionFunctionArgs) {
   return await lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
+
+  const periodeId = params.rapporteringsperiodeId;
+
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
-    const gjeldendePeriode = rapporteringsperioder[0];
-    return json({ rapporteringsperioder, gjeldendePeriode });
+    const periode = await hentPeriode(request, periodeId, false);
+
+    return json({ rapporteringsperioder, periode });
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;
     }
 
+    // TODO: Sanityfy
     throw new Response("Feil i uthenting av rapporteringsperioder", { status: 500 });
   }
 }
 
 export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
-  const { gjeldendePeriode, rapporteringsperioder } = useLoaderData<typeof loader>();
+  const { periode, rapporteringsperioder } = useLoaderData<typeof loader>();
   const { getAppText, getRichText, getLink } = useSanity();
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
@@ -50,7 +57,7 @@ export default function RapporteringstypeSide() {
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
 
-  const type = gjeldendePeriode.rapporteringstype;
+  const type = periode.rapporteringstype;
 
   const rapporteringstypeFormLabel =
     rapporteringsperioder.length === 1
@@ -64,23 +71,21 @@ export default function RapporteringstypeSide() {
 
   const nesteKnappLink =
     type === Rapporteringstype.harIngenAktivitet
-      ? `/periode/${gjeldendePeriode.id}/arbeidssoker`
-      : `/periode/${gjeldendePeriode.id}/fyll-ut`;
+      ? `/periode/${periode.id}/arbeidssoker`
+      : `/periode/${periode.id}/fyll-ut`;
 
   const endreRapporteringstype = useCallback(
     (valgtType: Rapporteringstype) => {
       rapporteringstypeFetcher.submit(
-        { rapporteringstype: valgtType, rapporteringsperiodeId: gjeldendePeriode.id },
+        { rapporteringstype: valgtType, rapporteringsperiodeId: periode.id },
         { method: "post" }
       );
     },
-    [gjeldendePeriode.id, rapporteringstypeFetcher]
+    [periode.id, rapporteringstypeFetcher]
   );
 
-  const tidligstInnsendingDato = formaterDato(new Date(gjeldendePeriode.kanSendesFra));
-  const senestInnsendingDato = formaterDato(
-    addDays(new Date(gjeldendePeriode.periode.fraOgMed), 21)
-  );
+  const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
+  const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
 
   return (
     <>
@@ -102,7 +107,7 @@ export default function RapporteringstypeSide() {
         {rapporteringsperioder.length > 1 && getAppText("rapportering-foerste-periode")}
         {rapporteringsperioder.length === 1 && getAppText("rapportering-naavaerende-periode")}
       </Heading>
-      <p>{hentPeriodeTekst(gjeldendePeriode, getAppText)}</p>
+      <p>{hentPeriodeTekst(periode, getAppText)}</p>
 
       <PortableText
         components={getSanityPortableTextComponents({
@@ -116,7 +121,7 @@ export default function RapporteringstypeSide() {
 
       <RadioGroup
         legend={rapporteringstypeFormLabel}
-        description={hentPeriodeTekst(gjeldendePeriode, getAppText)}
+        description={hentPeriodeTekst(periode, getAppText)}
         onChange={endreRapporteringstype}
         value={type}
       >

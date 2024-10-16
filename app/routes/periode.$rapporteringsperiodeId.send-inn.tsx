@@ -38,7 +38,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  invariant(params.rapporteringsperiodeId, "params.rapporteringsperiode er påkrevd");
+  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
 
@@ -95,7 +95,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     locale,
   });
 
-  let invaerendePeriodeTekst;
+  let invaerendePeriodeTekst = "";
 
   if (periode) {
     const ukenummer = formaterPeriodeTilUkenummer(
@@ -109,9 +109,7 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   return (
     <>
-      <KanIkkeSendes kanSendes={periode.kanSendes}>
-        {getAppText("rapportering-periode-kan-ikke-sendes")}
-      </KanIkkeSendes>
+      <KanIkkeSendes periode={periode} />
 
       <Heading tabIndex={-1} level="2" size="medium" spacing className="vo-fokus">
         {getAppText("rapportering-send-inn-tittel")}

@@ -2,10 +2,8 @@ import { beregnForrigePeriodeDato, beregnNåværendePeriodeDato } from "./period
 import { addDays, format, subDays } from "date-fns";
 import { times } from "remeda";
 import { uuidv7 as uuid } from "uuidv7";
-import {
-  IRapporteringsperiode,
-  IRapporteringsperiodeStatus,
-} from "~/models/rapporteringsperiode.server";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { IRapporteringsperiodeStatus } from "~/utils/types";
 
 export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
   const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
