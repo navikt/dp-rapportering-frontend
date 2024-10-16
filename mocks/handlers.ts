@@ -65,8 +65,13 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     ({ cookies, params }) => {
       const db = database || getDatabase(cookies);
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
+      const periode = db.findRapporteringsperiodeById(rapporteringsperiodeId);
 
-      return HttpResponse.json(db.findRapporteringsperiodeById(rapporteringsperiodeId));
+      if (!periode) {
+        return HttpResponse.json(null, { status: 404 });
+      }
+
+      return HttpResponse.json(periode);
     }
   ),
 
