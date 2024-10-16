@@ -1,6 +1,6 @@
 import { logErrorResponse } from "~/models/logger.server";
 import { getEnv } from "~/utils/env.utils";
-import { getHeaders } from "~/utils/fetch.utils";
+import { getCorrelationId, getHeaders } from "~/utils/fetch.utils";
 import { INetworkResponse, Rapporteringstype } from "~/utils/types";
 
 export interface IRapporteringstypeSvar {
@@ -23,6 +23,7 @@ export async function lagreRapporteringstype(
   });
 
   if (!response.ok) {
+    const id = await getCorrelationId(response);
     logErrorResponse(response, `Feil ved lagring av rapporteringstype`);
     return {
       status: "error",
@@ -30,6 +31,7 @@ export async function lagreRapporteringstype(
         statusCode: response.status,
         statusText: `rapportering-feilmelding-lagre-rapporteringstype`,
       },
+      id,
     };
   }
 

@@ -1,6 +1,6 @@
 import { logErrorResponse } from "~/models/logger.server";
 import { getEnv } from "~/utils/env.utils";
-import { getHeaders } from "~/utils/fetch.utils";
+import { getCorrelationId, getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
 
 export interface IArbeidssokerSvar {
@@ -23,6 +23,7 @@ export async function lagreArbeidssokerSvar(
   });
 
   if (!response.ok) {
+    const id = await getCorrelationId(response);
     logErrorResponse(response, `Feil ved lagring av arbeidssokersvar`);
     return {
       status: "error",
@@ -30,6 +31,7 @@ export async function lagreArbeidssokerSvar(
         statusCode: response.status,
         statusText: `rapportering-feilmelding-lagre-arbeidssoker-svar`,
       },
+      id,
     };
   }
 
