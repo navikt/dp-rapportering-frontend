@@ -5,6 +5,7 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { getSession } from "~/models/getSession.server";
+import { getInfoAlertStatus, setInfoAlertStatus } from "~/models/info.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as StartAction } from "./api.start";
@@ -14,32 +15,50 @@ import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
+import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
+
+export async function action({ request }: LoaderFunctionArgs) {
+  const cookieHeader = request.headers.get("Cookie") || "";
+  const formData = await request.formData();
+
+  console.log(formData.get("infoAlertStatus"));
+  const showInfoAlert: boolean = formData.get("infoAlertStatus") === "true";
+
+  return json(
+    { status: "success" },
+    {
+      headers: {
+        "Set-Cookie": await setInfoAlertStatus(cookieHeader, showInfoAlert),
+      },
+    }
+  );
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
     const session = await getSession(request);
+    const showInfoAlert = (await getInfoAlertStatus(request)) as boolean;
 
-    return json({ rapporteringsperioder, session });
+    return json({ rapporteringsperioder, session, showInfoAlert });
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;
     }
 
-    // TODO: Sanityfy
-    throw new Response("Feil i uthenting av rapporteringsperioder", { status: 500 });
+    throw new Response("rapportering-feilmelding-henting-av-perioder", { status: 500 });
   }
 }
 
 export default function Landingsside() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
-  const { rapporteringsperioder } = useLoaderData<typeof loader>();
+  const { rapporteringsperioder, showInfoAlert } = useLoaderData<typeof loader>();
 
   const { getAppText, getLink, getRichText } = useSanity();
   const startFetcher = useFetcher<typeof StartAction>();
-  const [showInfo, setShowInfo] = useState(true);
+  const showInfoAlertFetcher = useFetcher();
 
-  const [samtykker, setSamtykker] = useState(false);
+  const [samtykker, setSamtykker] = useState(showInfoAlert);
 
   const forstePeriode = rapporteringsperioder[0];
 
@@ -56,10 +75,12 @@ export default function Landingsside() {
 
   return (
     <>
-      {showInfo && (
+      {showInfoAlert ?? (
         <Alert
           closeButton
-          onClose={() => setShowInfo(false)}
+          onClose={() => {
+            showInfoAlertFetcher.submit({ infoAlertStatus: false }, { method: "post" });
+          }}
           variant="info"
           className="my-8 alert-with-rich-text"
         >
@@ -153,13 +174,6 @@ export function ErrorBoundary() {
       );
     }
 
-    return (
-      <>
-        <Heading level="2" size="medium">
-          {error.status} {error.statusText}
-        </Heading>
-        <p>{error.data}</p>
-      </>
-    );
+    return <GeneralErrorBoundary error={error} />;
   }
 }
