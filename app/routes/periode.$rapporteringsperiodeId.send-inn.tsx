@@ -95,7 +95,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     locale,
   });
 
-  let invaerendePeriodeTekst;
+  let invaerendePeriodeTekst = "";
 
   if (periode) {
     const ukenummer = formaterPeriodeTilUkenummer(
@@ -109,9 +109,7 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   return (
     <>
-      <KanIkkeSendes kanSendes={periode.kanSendes}>
-        {getAppText("rapportering-periode-kan-ikke-sendes")}
-      </KanIkkeSendes>
+      <KanIkkeSendes periode={periode} />
 
       <Heading tabIndex={-1} level="2" size="medium" spacing className="vo-fokus">
         {getAppText("rapportering-send-inn-tittel")}

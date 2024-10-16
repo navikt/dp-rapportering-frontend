@@ -1,16 +1,22 @@
-import styles from "./KanIkkeSendes.module.css";
 import { Alert } from "@navikt/ds-react";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { IRapporteringsperiodeStatus } from "~/utils/types";
+import { useSanity } from "~/hooks/useSanity";
 
 interface IProps {
-  kanSendes: boolean;
-  children: React.ReactNode;
+  periode: IRapporteringsperiode;
 }
 
 export function KanIkkeSendes(props: IProps): JSX.Element | undefined {
-  if (!props.kanSendes) {
+  const { getAppText } = useSanity();
+
+  if (
+    props.periode.status !== IRapporteringsperiodeStatus.TilUtfylling &&
+    !props.periode.kanSendes
+  ) {
     return (
-      <Alert variant="warning" className={styles.margin}>
-        {props.children}
+      <Alert variant="warning" className="my-4">
+        {getAppText("rapportering-periode-kan-ikke-sendes")}
       </Alert>
     );
   }
