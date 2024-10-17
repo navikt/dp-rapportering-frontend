@@ -1,5 +1,6 @@
 import { TypedObject } from "@portabletext/types";
 import { describe, expect, it, vi } from "vitest";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
 // import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import {
@@ -94,7 +95,7 @@ describe("getAktivitetCheckbox", () => {
       locale,
       getAppText: mockGetAppText,
       getRichText: mockGetRichText,
-      aktivitet: "Arbeid",
+      aktivitet: AktivitetType.Arbeid,
     });
     expect(checkbox).toContain("<h4>rapportering-arbeid</h4>");
     expect(checkbox).toContain("<h5>rapportering-antall-timer</h5>");
@@ -108,7 +109,7 @@ describe("getAktivitetCheckbox", () => {
       locale,
       getAppText: mockGetAppText,
       getRichText: mockGetRichText,
-      aktivitet: "Utdanning",
+      aktivitet: AktivitetType.Utdanning,
     });
     expect(checkbox).toContain("<h4>rapportering-utdanning</h4>");
   });
@@ -131,12 +132,12 @@ describe("getAktivitetModal", () => {
 
 describe("getAktivitet", () => {
   it("viser aktivtet for arbeid med timer", () => {
-    const aktivitet = getAktivitet({ type: "Arbeid", timer: "PT8H" }, mockGetAppText);
+    const aktivitet = getAktivitet({ type: AktivitetType.Arbeid, timer: "PT8H" }, mockGetAppText);
     expect(aktivitet).toContain("rapportering-arbeid (8)");
   });
 
   it("viser aktivtet for annen aktivitet", () => {
-    const aktivitet = getAktivitet({ type: "Syk" }, mockGetAppText);
+    const aktivitet = getAktivitet({ type: AktivitetType.Syk }, mockGetAppText);
     expect(aktivitet).toContain("rapportering-syk");
   });
 });
@@ -147,7 +148,10 @@ describe("getDag", () => {
       {
         dagIndex: 0,
         dato: "2024-06-13",
-        aktiviteter: [{ type: "Arbeid", timer: "PT8H15M" }, { type: "Utdanning" }],
+        aktiviteter: [
+          { type: AktivitetType.Arbeid, timer: "PT8H15M" },
+          { type: AktivitetType.Utdanning },
+        ],
       },
       { kort: "man", lang: "mandag" },
       mockGetAppText

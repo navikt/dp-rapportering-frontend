@@ -1,5 +1,5 @@
-import { IAktivitet } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import type { GetAppText } from "~/hooks/useSanity";

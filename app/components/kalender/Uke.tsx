@@ -2,8 +2,8 @@ import styles from "./Kalender.module.css";
 import { hentAktivitetSummenTekst, hentSkjermleserDatoTekst } from "./kalender.utils";
 import classNames from "classnames";
 import { format } from "date-fns";
-import { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
 
@@ -36,15 +36,25 @@ export function Uke(props: IProps) {
         const dagenHarAktivitet = dag.aktiviteter.length > 0;
 
         const dagKnappStyle = {
-          [styles.arbeid]: erAktivStil(dag, ["Arbeid"]),
-          [styles.sykdom]: erAktivStil(dag, ["Syk"]),
-          [styles.fravaer]: erAktivStil(dag, ["Fravaer"]),
-          [styles.utdanning]: erAktivStil(dag, ["Utdanning"]),
-          [styles.arbeidOgUtdanning]: erAktivStil(dag, ["Arbeid", "Utdanning"]),
-          [styles.sykOgUtdanning]: erAktivStil(dag, ["Syk", "Utdanning"]),
-          [styles.fravaerOgUtdanning]: erAktivStil(dag, ["Fravaer", "Utdanning"]),
-          [styles.sykOgFravaer]: erAktivStil(dag, ["Syk", "Fravaer"]),
-          [styles.sykFravaerOgUtdanning]: erAktivStil(dag, ["Syk", "Fravaer", "Utdanning"]),
+          [styles.arbeid]: erAktivStil(dag, [AktivitetType.Arbeid]),
+          [styles.sykdom]: erAktivStil(dag, [AktivitetType.Syk]),
+          [styles.fravaer]: erAktivStil(dag, [AktivitetType.Fravaer]),
+          [styles.utdanning]: erAktivStil(dag, [AktivitetType.Utdanning]),
+          [styles.arbeidOgUtdanning]: erAktivStil(dag, [
+            AktivitetType.Arbeid,
+            AktivitetType.Utdanning,
+          ]),
+          [styles.sykOgUtdanning]: erAktivStil(dag, [AktivitetType.Syk, AktivitetType.Utdanning]),
+          [styles.fravaerOgUtdanning]: erAktivStil(dag, [
+            AktivitetType.Fravaer,
+            AktivitetType.Utdanning,
+          ]),
+          [styles.sykOgFravaer]: erAktivStil(dag, [AktivitetType.Syk, AktivitetType.Fravaer]),
+          [styles.sykFravaerOgUtdanning]: erAktivStil(dag, [
+            AktivitetType.Syk,
+            AktivitetType.Fravaer,
+            AktivitetType.Utdanning,
+          ]),
         };
 
         return (
@@ -68,7 +78,7 @@ export function Uke(props: IProps) {
               </button>
             )}
 
-            {dagenHarAktivitet && erAktivStil(dag, ["Arbeid"]) && (
+            {dagenHarAktivitet && erAktivStil(dag, [AktivitetType.Arbeid]) && (
               <div className={classNames(styles.datoMedAktivitet)} aria-hidden>
                 {hentAktivitetSummenTekst(dag, getAppText)}
               </div>

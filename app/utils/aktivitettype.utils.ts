@@ -1,16 +1,34 @@
 import type { GetAppText } from "~/hooks/useSanity";
 
-export const aktivitetType = ["Arbeid", "Syk", "Fravaer", "Utdanning"] as const;
+export enum AktivitetType {
+  Arbeid = "Arbeid",
+  Syk = "Syk",
+  Fravaer = "Fravaer",
+  Utdanning = "Utdanning",
+}
 
-export const aktivitetTypeMap = (id: (typeof aktivitetType)[number], getAppText: GetAppText) => {
+export const aktivitetType = [
+  AktivitetType.Arbeid,
+  AktivitetType.Syk,
+  AktivitetType.Fravaer,
+  AktivitetType.Utdanning,
+];
+
+export interface IAktivitet {
+  id?: string;
+  type: AktivitetType;
+  timer?: string;
+}
+
+export const aktivitetTypeMap = (id: AktivitetType, getAppText: GetAppText) => {
   switch (id) {
-    case "Fravaer":
+    case AktivitetType.Fravaer:
       return getAppText("rapportering-fraevaer");
-    case "Utdanning":
+    case AktivitetType.Utdanning:
       return getAppText("rapportering-utdanning");
-    case "Arbeid":
+    case AktivitetType.Arbeid:
       return getAppText("rapportering-arbeid");
-    case "Syk":
+    case AktivitetType.Syk:
       return getAppText("rapportering-syk");
     default:
       return id;

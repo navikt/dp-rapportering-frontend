@@ -1,5 +1,5 @@
-import type { IAktivitet } from "./aktivitet.server";
 import { logErrorResponse } from "~/models/logger.server";
+import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";

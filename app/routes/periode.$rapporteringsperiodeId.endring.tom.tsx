@@ -18,13 +18,13 @@ export default function TomRapporteringsPeriodeSide() {
 
       <Alert variant="info" className="alert-with-rich-text">
         <Heading spacing size="small" level="3">
-          {getAppText("rapportering-tom-periode-tittel")}
+          {getAppText("rapportering-endre-tom-periode-tittel")}
         </Heading>
-        <PortableText value={getRichText("rapportering-tom-periode-innhold")} />
+        <PortableText value={getRichText("rapportering-endre-tom-periode-innhold")} />
       </Alert>
 
       <div className="my-8">
-        <PortableText value={getRichText("rapportering-tom-ingen-å-rapportere")} />
+        <PortableText value={getRichText("rapportering-endre-tom-ingen-å-rapportere")} />
       </div>
 
       <div className="navigasjon-container my-4">
@@ -42,13 +42,25 @@ export default function TomRapporteringsPeriodeSide() {
 
         <RemixLink
           as="Button"
-          to={`/periode/${periode.id}/arbeidssoker`}
+          to="/"
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
           className="py-4 px-8"
+          disabled={true}
         >
           {getAppText("rapportering-knapp-neste")}
+        </RemixLink>
+      </div>
+
+      <div className="navigasjon-container">
+        <RemixLink
+          as="Button"
+          to={getLink("rapportering-endre-avbryt").linkUrl}
+          variant="tertiary"
+          className="px-8"
+        >
+          {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>
       </div>
     </>
