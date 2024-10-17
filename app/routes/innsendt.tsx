@@ -115,7 +115,6 @@ export default function InnsendteRapporteringsPerioderSide() {
               </Accordion.Header>
               <Accordion.Content className="innsendt-accordion-content">
                 {perioder.map((periode) => {
-                  const flatMapAktiviteter = periode.dager.flatMap((d) => d.aktiviteter);
                   return (
                     <div key={periode.id} className="oppsummering">
                       {(periode.mottattDato || periode.bruttoBelop) && (
@@ -151,9 +150,6 @@ export default function InnsendteRapporteringsPerioderSide() {
                         aapneModal={() => {}}
                         readonly
                       />
-                      {flatMapAktiviteter.length < 1 && (
-                        <p>{getAppText("rapportering-innsendt-ikke-fravaer")}</p>
-                      )}
                       <AktivitetOppsummering periode={periode} />
                       {periode.registrertArbeidssoker ? (
                         <RegistertArbeidssokerAlert />

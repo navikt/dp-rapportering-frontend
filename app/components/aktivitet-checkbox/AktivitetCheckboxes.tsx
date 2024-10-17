@@ -3,8 +3,7 @@ import { Checkbox, CheckboxGroup, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import classNames from "classnames";
 import { useField } from "remix-validated-form";
-import type { AktivitetType, IAktivitet } from "~/models/aktivitet.server";
-import { aktivitetTypeMap } from "~/utils/aktivitettype.utils";
+import { AktivitetType, IAktivitet, aktivitetTypeMap } from "~/utils/aktivitettype.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import { type GetAppText, useSanity } from "~/hooks/useSanity";
 import { TallInput } from "../tall-input/TallInput";
@@ -19,15 +18,18 @@ export interface IProps {
 }
 
 export function erIkkeAktiv(aktiviteter: AktivitetType[], aktivitet: AktivitetType) {
-  if (aktiviteter.includes("Arbeid") && ["Syk", "Fravaer"].includes(aktivitet)) {
+  if (
+    aktiviteter.includes(AktivitetType.Arbeid) &&
+    [AktivitetType.Syk, AktivitetType.Fravaer].includes(aktivitet)
+  ) {
     return true;
   }
 
-  if (aktiviteter.includes("Syk") && aktivitet === "Arbeid") {
+  if (aktiviteter.includes(AktivitetType.Syk) && aktivitet === AktivitetType.Arbeid) {
     return true;
   }
 
-  if (aktiviteter.includes("Fravaer") && aktivitet === "Arbeid") {
+  if (aktiviteter.includes(AktivitetType.Fravaer) && aktivitet === AktivitetType.Arbeid) {
     return true;
   }
 
@@ -83,7 +85,7 @@ export function AktivitetCheckboxes({
             >
               {aktivitetTypeMap(aktivitet, getAppText)}
             </Checkbox>
-            {verdi.includes("Arbeid") && aktivitet === "Arbeid" && (
+            {verdi.includes(AktivitetType.Arbeid) && aktivitet === "Arbeid" && (
               <div className={styles.timer}>
                 <TallInput
                   name="timer"

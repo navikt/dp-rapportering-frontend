@@ -18,11 +18,15 @@ import { PortableText } from "@portabletext/react";
 import type { SubmitFunction } from "@remix-run/react";
 import { addDays, format } from "date-fns";
 import { renderToString } from "react-dom/server";
-import type { AktivitetType, IAktivitet } from "~/models/aktivitet.server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
-import { aktivitetType, aktivitetTypeMap } from "~/utils/aktivitettype.utils";
+import {
+  AktivitetType,
+  IAktivitet,
+  aktivitetType,
+  aktivitetTypeMap,
+} from "~/utils/aktivitettype.utils";
 import { type GetAppText, type GetRichText } from "~/hooks/useSanity";
 import { hentAktivitetBeskrivelse } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
 

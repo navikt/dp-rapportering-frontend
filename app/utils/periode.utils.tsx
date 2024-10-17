@@ -1,8 +1,11 @@
+import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 import { IRapporteringsperiodeStatus } from "./types";
 import { parse } from "tinyduration";
-import type { AktivitetType } from "~/models/aktivitet.server";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  IRapporteringsperiodeDag,
+} from "~/models/rapporteringsperiode.server";
 import { type GetAppText } from "~/hooks/useSanity";
 
 export function periodeSomTimer(periode?: string): number | undefined {
@@ -75,4 +78,79 @@ export function perioderSomKanSendes(perioder: IRapporteringsperiode[]): IRappor
 
 export function kanSendes(periode: IRapporteringsperiode): boolean {
   return periode.status === IRapporteringsperiodeStatus.TilUtfylling && periode.kanSendes;
+}
+
+export function sorterAktiviteter(aktivitet1: IAktivitet, aktivitet2: IAktivitet): number {
+  if (aktivitet1.timer && aktivitet2.timer) {
+    return aktivitet1.timer.localeCompare(aktivitet2.timer);
+  }
+
+  return aktivitet1.type.localeCompare(aktivitet2.type);
+}
+
+export function erAktivitetenLik(aktivitet: IAktivitet, originalAktivitet: IAktivitet) {
+  if (aktivitet.type !== originalAktivitet.type) {
+    return false;
+  }
+
+  if (aktivitet.timer !== originalAktivitet.timer) {
+    return false;
+  }
+
+  return true;
+}
+
+export function erAktiviteteneLike(
+  aktiviteter: IAktivitet[],
+  originaleAktiviteter: IAktivitet[]
+): boolean {
+  if (aktiviteter.length !== originaleAktiviteter.length) {
+    return false;
+  }
+
+  const sorterteAktiviteter = aktiviteter.sort(sorterAktiviteter);
+  const sorterteOriginaleAktiviteter = originaleAktiviteter.sort(sorterAktiviteter);
+
+  if (JSON.stringify(sorterteAktiviteter) !== JSON.stringify(sorterteOriginaleAktiviteter)) {
+    return false;
+  }
+
+  return true;
+}
+
+export function erDageneLike(
+  dag: IRapporteringsperiodeDag,
+  originalDag: IRapporteringsperiodeDag
+): boolean {
+  if (dag.dato !== originalDag.dato) {
+    return false;
+  }
+
+  if (dag.aktiviteter.length !== originalDag.aktiviteter.length) {
+    return false;
+  }
+
+  if (!erAktiviteteneLike(dag.aktiviteter, originalDag.aktiviteter)) {
+    return false;
+  }
+
+  return true;
+}
+
+export function erPeriodeneLike(
+  periode: IRapporteringsperiode,
+  originalPeriode: IRapporteringsperiode
+): boolean {
+  if (
+    periode.periode.fraOgMed !== originalPeriode.periode.fraOgMed ||
+    periode.periode.tilOgMed !== originalPeriode.periode.tilOgMed
+  ) {
+    return false;
+  }
+
+  if (!periode.dager.every((dag, index) => erDageneLike(dag, originalPeriode.dager[index]))) {
+    return false;
+  }
+
+  return true;
 }

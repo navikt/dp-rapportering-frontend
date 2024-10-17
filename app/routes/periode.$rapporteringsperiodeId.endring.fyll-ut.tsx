@@ -1,14 +1,15 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs } from "@remix-run/node";
-import { useActionData } from "@remix-run/react";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { json, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { type AktivitetType } from "~/models/aktivitet.server";
+import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
+import { erPeriodeneLike } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
@@ -44,8 +45,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 }
 
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
+
+  const periodeId = params.rapporteringsperiodeId;
+  const periode = await hentPeriode(request, periodeId, false);
+  const originalPeriode = await hentPeriode(request, periode.originalId as string, true);
+
+  return json({ periode, originalPeriode });
+}
+
 export default function RapporteringsPeriodeFyllUtSide() {
-  const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const { periode, originalPeriode } = useLoaderData<typeof loader>();
 
   const { getAppText, getRichText, getLink } = useSanity();
   const actionData = useActionData<typeof action>();
@@ -83,6 +94,12 @@ export default function RapporteringsPeriodeFyllUtSide() {
     setModalAapen(false);
   }
 
+  const periodeneErLike = erPeriodeneLike(periode, originalPeriode);
+
+  const nextLink = periodeneErLike
+    ? `/periode/${periode.id}/endring/tom`
+    : `/periode/${periode.id}/endring/begrunnelse`;
+
   return (
     <>
       <KanIkkeSendes periode={periode} />
@@ -119,7 +136,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
         <RemixLink
           as="Button"
-          to={`/periode/${periode.id}/endring/begrunnelse`}
+          to={nextLink}
           variant="primary"
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"

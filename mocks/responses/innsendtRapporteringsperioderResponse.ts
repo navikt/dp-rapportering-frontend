@@ -1,4 +1,5 @@
 import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
 
 export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
@@ -15,12 +16,12 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
-            type: "Arbeid",
+            type: AktivitetType.Arbeid,
             timer: "PT5H",
           },
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
-            type: "Arbeid",
+            type: AktivitetType.Arbeid,
             timer: "PT5H",
           },
         ],
@@ -31,7 +32,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9b",
-            type: "Arbeid",
+            type: AktivitetType.Arbeid,
             timer: "PT5H30M",
           },
         ],
@@ -42,7 +43,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9c",
-            type: "Syk",
+            type: AktivitetType.Syk,
           },
         ],
       },
@@ -52,7 +53,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9d",
-            type: "Syk",
+            type: AktivitetType.Syk,
           },
         ],
       },
@@ -62,7 +63,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
-            type: "Arbeid",
+            type: AktivitetType.Arbeid,
             timer: "PT7H30M",
           },
         ],
@@ -108,7 +109,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
-            type: "Syk",
+            type: AktivitetType.Syk,
           },
         ],
       },
@@ -144,12 +145,12 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
-            type: "Arbeid",
+            type: AktivitetType.Arbeid,
             timer: "PT5H",
           },
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9a",
-            type: "Arbeid",
+            type: AktivitetType.Arbeid,
             timer: "PT5H",
           },
         ],
@@ -160,7 +161,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9b",
-            type: "Arbeid",
+            type: AktivitetType.Arbeid,
             timer: "PT5H30M",
           },
         ],
@@ -171,7 +172,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9c",
-            type: "Fravaer",
+            type: AktivitetType.Fravaer,
           },
         ],
       },
@@ -181,7 +182,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9d",
-            type: "Syk",
+            type: AktivitetType.Syk,
           },
         ],
       },
@@ -191,7 +192,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
-            type: "Arbeid",
+            type: AktivitetType.Arbeid,
             timer: "PT7H30M",
           },
         ],
@@ -237,7 +238,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
         aktiviteter: [
           {
             id: "4a49e571-6384-4eab-9c2e-3f4d48d30b9e",
-            type: "Syk",
+            type: AktivitetType.Syk,
           },
         ],
       },

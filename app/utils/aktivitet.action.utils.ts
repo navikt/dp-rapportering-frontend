@@ -1,6 +1,6 @@
+import { AktivitetType } from "./aktivitettype.utils";
 import { hentISO8601DurationString } from "./duration.utils";
 import { uuidv7 } from "uuidv7";
-import { AktivitetType } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 interface IAktivtetData {
