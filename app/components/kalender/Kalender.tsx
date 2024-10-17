@@ -35,11 +35,10 @@ export function Kalender(props: IProps) {
     <>
       <div className={styles.headerKontainer}>
         <div>
-          <p className={styles.header} aria-hidden>
+          <p className={styles.header}>
             {periodeUkenummerTekst}
             <span className="tekst-subtil">{periodeFomTomDatoTekst}</span>
           </p>
-          <span className="navds-sr-only">{`${periodeUkenummerTekst} (${periodeFomTomDatoTekst})`}</span>
         </div>
         {visEndringslenke && <EndringsLenke id={periode.id} status={periode.status} />}
       </div>
