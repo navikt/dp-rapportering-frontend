@@ -59,7 +59,6 @@ describe("TomRapporteringsPeriodeSide", () => {
 
     render();
 
-    expect(await screen.findByText(/rapportering-tom-noe-å-rapportere/)).toBeInTheDocument();
     expect(await screen.findByText(/rapportering-tom-ingen-å-rapportere/)).toBeInTheDocument();
   });
 

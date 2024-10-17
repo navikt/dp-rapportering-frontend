@@ -16,15 +16,14 @@ export default function TomRapporteringsPeriodeSide() {
     <>
       <KanIkkeSendes periode={periode} />
 
-      <Alert variant="info">
+      <Alert variant="info" className="alert-with-rich-text">
         <Heading spacing size="small" level="3">
           {getAppText("rapportering-tom-periode-tittel")}
         </Heading>
-        {getAppText("rapportering-tom-periode-innhold")}
+        <PortableText value={getRichText("rapportering-tom-periode-innhold")} />
       </Alert>
 
       <div className="my-8">
-        <p>{getAppText("rapportering-tom-noe-å-rapportere")}</p>
         <PortableText value={getRichText("rapportering-tom-ingen-å-rapportere")} />
       </div>
 

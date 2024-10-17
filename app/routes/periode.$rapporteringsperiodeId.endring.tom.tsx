@@ -16,15 +16,14 @@ export default function TomRapporteringsPeriodeSide() {
     <>
       <KanIkkeSendes periode={periode} />
 
-      <Alert variant="info">
+      <Alert variant="info" className="alert-with-rich-text">
         <Heading spacing size="small" level="3">
           {getAppText("rapportering-endre-tom-periode-tittel")}
         </Heading>
-        {getAppText("rapportering-endre-tom-periode-innhold")}
+        <PortableText value={getRichText("rapportering-endre-tom-periode-innhold")} />
       </Alert>
 
       <div className="my-8">
-        <p>{getAppText("rapportering-endre-tom-noe-å-rapportere")}</p>
         <PortableText value={getRichText("rapportering-endre-tom-ingen-å-rapportere")} />
       </div>
 
@@ -43,7 +42,7 @@ export default function TomRapporteringsPeriodeSide() {
 
         <RemixLink
           as="Button"
-          to={`/periode/${periode.id}/arbeidssoker`}
+          to="/"
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
