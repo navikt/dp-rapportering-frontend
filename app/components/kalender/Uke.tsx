@@ -4,18 +4,18 @@ import classNames from "classnames";
 import { format } from "date-fns";
 import { AktivitetType } from "~/models/aktivitet.server";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 interface IProps {
   aapneModal: (dato: string) => void;
   readonly?: boolean;
   rapporteringUke: IRapporteringsperiodeDag[];
+  locale?: DecoratorLocale;
 }
 
 export function Uke(props: IProps) {
-  const { locale } = useTypedRouteLoaderData("root");
-  const { rapporteringUke, readonly, aapneModal } = props;
+  const { rapporteringUke, readonly, aapneModal, locale = DecoratorLocale.NB } = props;
   const { getAppText } = useSanity();
 
   function erAktivStil(dag: IRapporteringsperiodeDag, typer: AktivitetType[]): boolean {
@@ -34,8 +34,6 @@ export function Uke(props: IProps) {
     <tr className={styles.ukeRadKontainer}>
       {rapporteringUke.map((dag) => {
         const dagenHarAktivitet = dag.aktiviteter.length > 0;
-
-        const ikkeRapporteringspliktig = false;
 
         const dagKnappStyle = {
           [styles.arbeid]: erAktivStil(dag, ["Arbeid"]),
@@ -60,17 +58,7 @@ export function Uke(props: IProps) {
               </span>
             )}
 
-            {ikkeRapporteringspliktig && !readonly && (
-              <button
-                className={classNames(styles.dato, styles.ikkeRapporteringspliktig)}
-                aria-label={hentSkjermleserDatoTekst(dag, getAppText, locale)}
-                disabled
-              >
-                {`${format(new Date(dag.dato), "d")}.`}
-              </button>
-            )}
-
-            {!ikkeRapporteringspliktig && !readonly && (
+            {!readonly && (
               <button
                 className={classNames(styles.dato, dagKnappStyle)}
                 aria-label={hentSkjermleserDatoTekst(dag, getAppText, locale)}
