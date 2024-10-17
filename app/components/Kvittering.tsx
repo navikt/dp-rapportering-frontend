@@ -5,6 +5,7 @@ import {
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
@@ -17,6 +18,7 @@ interface Ikvittering {
 
 export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink } = useSanity();
+  const { locale } = useTypedRouteLoaderData("root");
   return (
     <>
       <Alert variant="success" className="my-4">
@@ -32,7 +34,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           </Accordion.Header>
           <Accordion.Content>
             <div className="oppsummering">
-              <Kalender periode={periode} aapneModal={() => {}} readonly />
+              <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
               <AktivitetOppsummering periode={periode} />
             </div>
 

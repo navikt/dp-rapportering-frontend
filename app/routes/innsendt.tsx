@@ -148,6 +148,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                         periode={periode}
                         visEndringslenke={periode.kanEndres}
                         aapneModal={() => {}}
+                        locale={locale}
                         readonly
                       />
                       <AktivitetOppsummering periode={periode} />

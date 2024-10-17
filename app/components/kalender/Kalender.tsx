@@ -4,20 +4,20 @@ import { Uke } from "./Uke";
 import classNames from "classnames";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, getWeekDays } from "~/utils/dato.utils";
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { hentUkeTekst, kanSendes } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
 interface IProps {
   aapneModal: (dato: string) => void;
   periode: IRapporteringsperiode;
   visEndringslenke?: boolean;
   readonly?: boolean;
+  locale: DecoratorLocale;
 }
 
 export function Kalender(props: IProps) {
-  const { periode, aapneModal, readonly = false, visEndringslenke = false } = props;
-  const { locale } = useTypedRouteLoaderData("root");
+  const { periode, aapneModal, readonly = false, visEndringslenke = false, locale } = props;
   const { getAppText } = useSanity();
 
   const ukedager = getWeekDays(locale);
@@ -61,8 +61,18 @@ export function Kalender(props: IProps) {
           </tr>
         </thead>
         <tbody className={classNames(styles.ukerKontainer)}>
-          <Uke rapporteringUke={forsteUke} readonly={readonly} aapneModal={aapneModal} />
-          <Uke rapporteringUke={andreUke} readonly={readonly} aapneModal={aapneModal} />
+          <Uke
+            rapporteringUke={forsteUke}
+            readonly={readonly}
+            aapneModal={aapneModal}
+            locale={locale}
+          />
+          <Uke
+            rapporteringUke={andreUke}
+            readonly={readonly}
+            aapneModal={aapneModal}
+            locale={locale}
+          />
         </tbody>
       </table>
     </>

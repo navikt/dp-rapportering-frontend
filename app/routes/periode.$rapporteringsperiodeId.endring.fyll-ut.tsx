@@ -10,6 +10,7 @@ import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
 import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
@@ -57,6 +58,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode, originalPeriode } = useLoaderData<typeof loader>();
+  const { locale } = useTypedRouteLoaderData("root");
 
   const { getAppText, getRichText, getLink } = useSanity();
   const actionData = useActionData<typeof action>();
@@ -109,7 +111,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       </Heading>
       <PortableText value={getRichText("rapportering-periode-endre-beskrivelse")} />
 
-      <Kalender periode={periode} aapneModal={aapneModal} />
+      <Kalender periode={periode} aapneModal={aapneModal} locale={locale} />
       <AktivitetModal
         periode={periode}
         valgtDato={valgtDato}
