@@ -121,7 +121,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </div>
 
       <div className="oppsummering">
-        <Kalender periode={periode} aapneModal={() => {}} readonly />
+        <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
         <AktivitetOppsummering periode={periode} />
       </div>
 

@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { Uke } from "~/components/kalender/Uke";
 
 const formaterDato = (dato: string) => `${format(new Date(dato), "d")}.`;
@@ -12,8 +13,17 @@ const setupPeriode = (from: string, to: string) =>
 
 const aapneModal = vi.fn();
 
+const locale = DecoratorLocale.NB;
+
 const renderUke = (periode: IRapporteringsperiode, readonly: boolean) => {
-  render(<Uke aapneModal={aapneModal} readonly={readonly} rapporteringUke={periode.dager} />);
+  render(
+    <Uke
+      aapneModal={aapneModal}
+      readonly={readonly}
+      rapporteringUke={periode.dager}
+      locale={locale}
+    />
+  );
 };
 
 describe("<Uke/>", () => {

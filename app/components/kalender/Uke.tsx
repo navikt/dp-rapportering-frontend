@@ -11,7 +11,7 @@ interface IProps {
   aapneModal: (dato: string) => void;
   readonly?: boolean;
   rapporteringUke: IRapporteringsperiodeDag[];
-  locale?: DecoratorLocale;
+  locale: DecoratorLocale;
 }
 
 export function Uke(props: IProps) {

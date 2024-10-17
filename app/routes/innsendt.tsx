@@ -149,6 +149,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                         periode={periode}
                         visEndringslenke={periode.kanEndres}
                         aapneModal={() => {}}
+                        locale={locale}
                         readonly
                       />
                       {flatMapAktiviteter.length < 1 && (

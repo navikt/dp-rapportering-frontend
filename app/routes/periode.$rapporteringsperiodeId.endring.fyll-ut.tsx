@@ -45,6 +45,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function RapporteringsPeriodeFyllUtSide() {
+  const { locale } = useTypedRouteLoaderData("root");
+
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
   const { getAppText, getRichText, getLink } = useSanity();
@@ -92,7 +94,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       </Heading>
       <PortableText value={getRichText("rapportering-periode-endre-beskrivelse")} />
 
-      <Kalender periode={periode} aapneModal={aapneModal} />
+      <Kalender periode={periode} aapneModal={aapneModal} locale={locale} />
       <AktivitetModal
         periode={periode}
         valgtDato={valgtDato}
