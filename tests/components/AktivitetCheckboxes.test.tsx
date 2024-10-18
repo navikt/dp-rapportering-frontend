@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import type { AktivitetType } from "~/models/aktivitet.server";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { AktivitetCheckboxes } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
 
 vi.mock("remix-validated-form", () => {
@@ -45,7 +45,7 @@ describe("AktivitetCheckboxes", () => {
   });
 
   it("disabler chekboxes korrekt basert på valgte aktiviteter", () => {
-    const selectedAktiviteter: AktivitetType[] = ["Arbeid"];
+    const selectedAktiviteter: AktivitetType[] = [AktivitetType.Arbeid];
     render(<AktivitetCheckboxes {...defaultProps} verdi={selectedAktiviteter} />);
 
     expect(screen.getByLabelText("rapportering-arbeid")).not.toBeDisabled();

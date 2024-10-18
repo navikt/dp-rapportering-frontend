@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { Uke } from "~/components/kalender/Uke";
 
@@ -38,11 +39,14 @@ describe("<Uke/>", () => {
     rapporteringUkeMedAktiviteter = [
       {
         ...periode.dager[0],
-        aktiviteter: [{ type: "Arbeid", timer: "PT7H30M" }, { type: "Utdanning" }],
+        aktiviteter: [
+          { type: AktivitetType.Arbeid, timer: "PT7H30M" },
+          { type: AktivitetType.Utdanning },
+        ],
       },
       {
         ...periode.dager[1],
-        aktiviteter: [{ type: "Arbeid", timer: "PT7H30M" }],
+        aktiviteter: [{ type: AktivitetType.Arbeid, timer: "PT7H30M" }],
       },
       ...periode.dager.slice(2),
     ];

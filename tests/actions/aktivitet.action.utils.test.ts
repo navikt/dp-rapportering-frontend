@@ -1,8 +1,8 @@
 import { uuidv7 } from "uuidv7";
 import { describe, expect, it, vi } from "vitest";
-import { AktivitetType } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { oppdaterAktiviteter } from "~/utils/aktivitet.action.utils";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
 
 vi.mock("uuidv7", () => ({
   uuidv7: vi.fn(() => "mocked_uuid"),
@@ -15,9 +15,12 @@ describe("oppdaterAktiviteter", () => {
     const dag: IRapporteringsperiodeDag = {
       dato,
       dagIndex: 0,
-      aktiviteter: [{ type: "Arbeid", timer: "PT8H" }, { type: "Utdanning" }],
+      aktiviteter: [
+        { type: AktivitetType.Arbeid, timer: "PT8H" },
+        { type: AktivitetType.Utdanning },
+      ],
     };
-    const aktivitetsTyper: AktivitetType[] = ["Utdanning"];
+    const aktivitetsTyper: AktivitetType[] = [AktivitetType.Utdanning];
 
     const oppdatertDag = oppdaterAktiviteter(dag, aktivitetsTyper, dato, "");
 
@@ -31,9 +34,12 @@ describe("oppdaterAktiviteter", () => {
     const dag: IRapporteringsperiodeDag = {
       dato,
       dagIndex: 0,
-      aktiviteter: [{ type: "Arbeid", timer: "PT8H" }, { type: "Utdanning" }],
+      aktiviteter: [
+        { type: AktivitetType.Arbeid, timer: "PT8H" },
+        { type: AktivitetType.Utdanning },
+      ],
     };
-    const aktivitetsTyper: AktivitetType[] = ["Arbeid", "Utdanning"];
+    const aktivitetsTyper: AktivitetType[] = [AktivitetType.Arbeid, AktivitetType.Utdanning];
     const varighet = "5";
 
     const oppdatertDag = oppdaterAktiviteter(dag, aktivitetsTyper, dato, varighet);
@@ -53,7 +59,7 @@ describe("oppdaterAktiviteter", () => {
       dagIndex: 0,
       aktiviteter: [],
     };
-    const aktivitetsTyper: AktivitetType[] = ["Syk"];
+    const aktivitetsTyper: AktivitetType[] = [AktivitetType.Syk];
 
     const oppdatertDag = oppdaterAktiviteter(dag, aktivitetsTyper, dato, "");
 

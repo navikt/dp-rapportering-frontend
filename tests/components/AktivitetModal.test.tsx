@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
-import type { AktivitetType, IAktivitet } from "~/models/aktivitet.server";
 import {
   type IPeriode,
   type IRapporteringsperiode,
   type IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
+import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
 import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 
@@ -22,7 +22,7 @@ const mockPeriode: IPeriode = {
 
 const mockAktivitet: IAktivitet = {
   id: "1",
-  type: "Arbeid",
+  type: AktivitetType.Arbeid,
   timer: "PT5H",
 };
 
@@ -83,7 +83,7 @@ describe.skip("AktivitetModal", () => {
   });
 
   it.skip("viser TallInput-komponenten når 'Jobb' er valgt", () => {
-    render(<AktivitetModal {...defaultProps} valgteAktiviteter={["Arbeid"]} />);
+    render(<AktivitetModal {...defaultProps} valgteAktiviteter={[AktivitetType.Arbeid]} />);
 
     expect(screen.getByLabelText("rapportering-antall-timer:")).toBeInTheDocument();
   });
@@ -103,7 +103,7 @@ describe.skip("AktivitetModal", () => {
   });
 
   it.skip("sender form med riktige data", () => {
-    render(<AktivitetModal {...defaultProps} valgteAktiviteter={["Arbeid"]} />);
+    render(<AktivitetModal {...defaultProps} valgteAktiviteter={[AktivitetType.Arbeid]} />);
 
     const submitButton = screen.getByRole("button", { name: "rapportering-lagre" });
     fireEvent.click(submitButton);
