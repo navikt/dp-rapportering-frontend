@@ -122,7 +122,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="py-4 px-8"
+          className="navigasjonsknapp"
           disabled={searchParams.has("endring")}
         >
           {getLink("rapportering-periode-send-inn-tilbake").linkText}
@@ -134,7 +134,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          className="py-4 px-8"
+          className="navigasjonsknapp"
         >
           {getAppText("rapportering-knapp-neste")}
         </RemixLink>

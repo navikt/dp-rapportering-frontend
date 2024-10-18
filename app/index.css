@@ -58,6 +58,12 @@ body {
   justify-content: center;
 }
 
+.navigasjonsknapp {
+  text-wrap: nowrap;
+  padding: var(--a-spacing-4) var(--a-spacing-12);
+  
+}
+
 .innsendt-accordion-header {
   background-color: var(--a-bg-subtle);
 }

@@ -150,7 +150,7 @@ export default function RapporteringstypeSide() {
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="py-4 px-8"
+          className="navigasjonsknapp"
         >
           {getLink("rapportering-periode-send-inn-tilbake").linkText}
         </RemixLink>
@@ -160,7 +160,7 @@ export default function RapporteringstypeSide() {
           to={nesteKnappLink}
           variant="primary"
           iconPosition="right"
-          className="py-4 px-8"
+          className="navigasjonsknapp"
           icon={<ArrowRightIcon aria-hidden />}
           disabled={type === null}
         >

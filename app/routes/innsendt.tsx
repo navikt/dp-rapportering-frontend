@@ -171,14 +171,14 @@ export default function InnsendteRapporteringsPerioderSide() {
           <RemixLink
             as="Button"
             to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
-            className="py-4 px-8"
+            className="navigasjonsknapp"
           >
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </RemixLink>
         ) : (
           <Button
             as="a"
-            className="px-16"
+            className="navigasjonsknapp"
             href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
           >
             {getLink("rapportering-ga-til-mine-dagpenger").linkText}

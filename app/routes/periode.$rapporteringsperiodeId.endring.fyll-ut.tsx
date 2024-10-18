@@ -129,7 +129,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           as="Button"
           to={`/innsendt`}
           variant="secondary"
-          className="py-4 px-8"
+          className="navigasjonsknapp"
           icon={<ArrowLeftIcon aria-hidden />}
           iconPosition="left"
         >
@@ -142,7 +142,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           variant="primary"
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
-          className="py-4 px-8"
+          className="navigasjonsknapp"
         >
           {getAppText("rapportering-knapp-neste")}
         </RemixLink>
