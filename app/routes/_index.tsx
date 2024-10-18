@@ -129,7 +129,7 @@ export default function Landingsside() {
           <div className="navigasjon-container">
             <Button
               size="medium"
-              className="px-16"
+              className="navigasjonsknapp"
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               onClick={startUtfylling}

@@ -58,7 +58,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         ) : (
           <Button
             as="a"
-            className="px-16"
+            className="navigasjonsknapp"
             href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
           >
             {getLink("rapportering-ga-til-mine-dagpenger").linkText}

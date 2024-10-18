@@ -60,8 +60,8 @@ body {
 
 .navigasjonsknapp {
   text-wrap: nowrap;
-  padding: var(--a-spacing-4) var(--a-spacing-12);
-  
+  padding: var(--a-spacing-3) var(--a-spacing-8);
+  flex: 1;
 }
 
 .innsendt-accordion-header {
@@ -169,6 +169,20 @@ body {
   .rapportering-container {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);
   }
+
+  .navigasjon-container {
+    justify-content: center;
+  }
+
+  .navigasjonsknapp {
+    padding: var(--a-spacing-4) var(--a-spacing-12);
+    flex: none;
+  }
+
+  .navigasjonsknapp span {
+    font-size: var(--a-font-size-large)
+  }
+
 }
 
 /* Voice-over focus */
