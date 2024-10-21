@@ -83,6 +83,9 @@ export default function Landingsside() {
           variant="info"
           className="my-8 alert-with-rich-text"
         >
+          <Heading spacing size="small" level="3">
+            {getAppText("rapportering-informasjon-nytt-meldekort-tittel")}
+          </Heading>
           <PortableText value={getRichText("rapportering-informasjon-nytt-meldekort")} />
         </Alert>
       )}
