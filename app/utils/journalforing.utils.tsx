@@ -417,13 +417,11 @@ export function htmlForFyllUt(props: IProps): string {
 }
 
 export function htmlForTom(props: IProps): string {
-  const { getAppText, getRichText } = props;
+  const { getRichText } = props;
 
   const seksjoner: string[] = [
-    getHeader({ text: props.getAppText("rapportering-tittel"), level: "1" }),
     getHeader({ text: props.getAppText("rapportering-tom-periode-tittel"), level: "2" }),
-    `<p>${getAppText("rapportering-tom-periode-innhold")}</p>`,
-    `<p>${getAppText("rapportering-tom-noe-å-rapportere")}</p>`,
+    renderToString(<PortableText value={getRichText("rapportering-tom-periode-innhold")} />),
     renderToString(<PortableText value={getRichText("rapportering-tom-ingen-å-rapportere")} />),
   ];
 
