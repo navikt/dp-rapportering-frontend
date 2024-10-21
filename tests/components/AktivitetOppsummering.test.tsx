@@ -3,12 +3,48 @@ import { times } from "remeda";
 import { beforeEach, describe, expect, test } from "vitest";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
+import { hentTotaltArbeidstimer, hentTotaltDagerMedAktivitetstype } from "~/utils/periode.utils";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 
 const bekreftAktivitet = (label: RegExp, antall: RegExp) => {
   const element = screen.getByText(label);
   expect(element).toBeInTheDocument();
   expect(within(element).getByText(antall)).toBeInTheDocument();
+};
+
+export const testAktivitetOppsummering = (rapporteringsperiode: IRapporteringsperiode) => {
+  const harAktiviteter = rapporteringsperiode.dager.some((dag) => dag.aktiviteter.length > 0);
+
+  if (harAktiviteter) {
+    console.log(`🔥: case harAktiviteter :`);
+    const antallArbeidstimer = hentTotaltArbeidstimer(rapporteringsperiode);
+    const antallSykDager = hentTotaltDagerMedAktivitetstype(
+      rapporteringsperiode,
+      AktivitetType.Syk
+    );
+    const antallFravaerDager = hentTotaltDagerMedAktivitetstype(
+      rapporteringsperiode,
+      AktivitetType.Fravaer
+    );
+    const antallUtdanningDager = hentTotaltDagerMedAktivitetstype(
+      rapporteringsperiode,
+      AktivitetType.Utdanning
+    );
+
+    bekreftAktivitet(/rapportering-arbeid/, new RegExp(`${antallArbeidstimer} rapportering-time`));
+    bekreftAktivitet(/rapportering-syk/, new RegExp(`${antallSykDager} rapportering-dag`));
+    bekreftAktivitet(/rapportering-fraevaer/, new RegExp(`${antallFravaerDager} rapportering-dag`));
+    bekreftAktivitet(
+      /rapportering-utdanning/,
+      new RegExp(`${antallUtdanningDager} rapportering-dag`)
+    );
+  } else {
+    bekreftAktivitet(/rapportering-arbeid/, /0 rapportering-time/);
+    bekreftAktivitet(/rapportering-syk/, /0 rapportering-dag/);
+    bekreftAktivitet(/rapportering-fraevaer/, /0 rapportering-dag/);
+    bekreftAktivitet(/rapportering-utdanning/, /0 rapportering-dag/);
+  }
 };
 
 describe("<AktivitetOppsummering/>", () => {
