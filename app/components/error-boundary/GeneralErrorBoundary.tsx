@@ -45,7 +45,7 @@ export function GeneralErrorBoundary({ error }: IProps) {
 
       <div className="navigasjon-container">
         <RemixLink
-          className="px-16"
+          className="navigasjonsknapp"
           as="Button"
           to={getLink("rapportering-ga-til-mine-meldekort").linkUrl}
         >

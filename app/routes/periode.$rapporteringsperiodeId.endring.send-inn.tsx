@@ -151,7 +151,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="py-4 px-8"
+          className="navigasjonsknapp"
         >
           {getLink("rapportering-knapp-tilbake").linkText}
         </Button>
@@ -161,7 +161,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           variant="primary"
           iconPosition="right"
           disabled={!periode.kanSendes || !confirmed || isSubmitting}
-          className="py-4 px-8"
+          className="navigasjonsknapp"
           name="_action"
           value="send-inn"
         >

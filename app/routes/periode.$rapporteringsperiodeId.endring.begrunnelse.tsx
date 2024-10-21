@@ -77,7 +77,7 @@ export default function BegrunnelseSide() {
           as="Button"
           to={`/periode/${periode.id}/endring/fyll-ut`}
           variant="secondary"
-          className="py-4 px-8"
+          className="navigasjonsknapp"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
         >
@@ -90,7 +90,7 @@ export default function BegrunnelseSide() {
           variant="primary"
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
-          className="py-4 px-8"
+          className="navigasjonsknapp"
           disabled={!periode.begrunnelseEndring}
         >
           {getAppText("rapportering-knapp-neste")}
@@ -101,7 +101,7 @@ export default function BegrunnelseSide() {
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
           variant="tertiary"
-          className="px-8"
+          className="navigasjonsknapp"
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>

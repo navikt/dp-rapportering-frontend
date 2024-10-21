@@ -43,7 +43,7 @@ export default function ArbeidssøkerRegisterSide() {
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="py-4 px-8"
+          className="navigasjonsknapp"
         >
           {getLink("rapportering-periode-send-inn-tilbake").linkText}
         </RemixLink>
@@ -54,7 +54,7 @@ export default function ArbeidssøkerRegisterSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          className="py-4 px-8"
+          className="navigasjonsknapp"
           disabled={periode.registrertArbeidssoker === null}
         >
           {getAppText("rapportering-knapp-neste")}

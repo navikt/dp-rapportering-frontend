@@ -154,13 +154,13 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" onSubmit={addHtml} className="navigasjon-container my-4">
+      <Form method="post" onSubmit={addHtml} className="navigasjon-container">
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="py-4 px-8"
+          className="navigasjonsknapp"
         >
           {getLink("rapportering-periode-send-inn-tilbake").linkText}
         </Button>
@@ -170,7 +170,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           variant="primary"
           iconPosition="right"
           disabled={!periode.kanSendes || !confirmed || isSubmitting}
-          className="py-4 px-8"
+          className="navigasjonsknapp"
           name="_action"
           value="send-inn"
         >

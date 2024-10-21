@@ -83,6 +83,9 @@ export default function Landingsside() {
           variant="info"
           className="my-8 alert-with-rich-text"
         >
+          <Heading spacing size="small" level="3">
+            {getAppText("rapportering-informasjon-nytt-meldekort-tittel")}
+          </Heading>
           <PortableText value={getRichText("rapportering-informasjon-nytt-meldekort")} />
         </Alert>
       )}
@@ -129,7 +132,7 @@ export default function Landingsside() {
           <div className="navigasjon-container">
             <Button
               size="medium"
-              className="px-16"
+              className="navigasjonsknapp"
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               onClick={startUtfylling}
