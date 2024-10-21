@@ -16,7 +16,8 @@ const aapneModal = vi.fn();
 
 const locale = DecoratorLocale.NB;
 
-const renderUke = (rapporteringUke: IRapporteringsperiodeDag[], readonly: boolean) => {
+const renderUke = (rapporteringUke: IRapporteringsperiodeDag[], props?: { readonly: boolean }) => {
+  const { readonly } = props || {};
   render(
     <Uke
       aapneModal={aapneModal}
@@ -53,7 +54,7 @@ describe("<Uke/>", () => {
 
   describe("Skal kunne ikke redigere (readonly)", () => {
     test("Skal liste alle dager", () => {
-      renderUke(rapporteringUke, true);
+      renderUke(rapporteringUke, { readonly: true });
 
       rapporteringUke.forEach((dag) => {
         expect(screen.getByText(formaterDato(dag.dato))).toBeInTheDocument();
@@ -61,7 +62,7 @@ describe("<Uke/>", () => {
     });
 
     test("Skal vise sum arbeidstimer", () => {
-      renderUke(rapporteringUkeMedAktiviteter, true);
+      renderUke(rapporteringUkeMedAktiviteter, { readonly: true });
 
       const dag1 = screen.getAllByRole("cell")[0];
       const dag2 = screen.getAllByRole("cell")[1];
@@ -73,7 +74,7 @@ describe("<Uke/>", () => {
 
   describe("Skal kunne redigere", () => {
     test("Skal liste alle dager som knapper", () => {
-      renderUke(rapporteringUke, false);
+      renderUke(rapporteringUke);
 
       rapporteringUke.forEach((dag) => {
         const dagElement = screen.getByText(formaterDato(dag.dato));
@@ -84,7 +85,7 @@ describe("<Uke/>", () => {
     });
 
     test("Skal kunne åpne modal ved klikk", () => {
-      renderUke(rapporteringUke, false);
+      renderUke(rapporteringUke);
 
       rapporteringUke.forEach((dag) => {
         screen.getByText(formaterDato(dag.dato)).click();

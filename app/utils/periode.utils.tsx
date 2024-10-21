@@ -35,6 +35,20 @@ export function hentPeriodeTekst(
   return `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
 }
 
+export function hentTotaltArbeidstimer(rapporteringsperiode: IRapporteringsperiode): number {
+  const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
+  const filtertAktiviteter = flatMapAktiviteter.filter((aktivitet) => aktivitet.type === "Arbeid");
+
+  const timer = filtertAktiviteter.reduce((accumulator, current) => {
+    if (current.timer) {
+      return accumulator + (periodeSomTimer(current.timer) ?? 0);
+    }
+    return accumulator + 1;
+  }, 0);
+
+  return timer;
+}
+
 export function hentTotaltArbeidstimerTekst(
   rapporteringsperiode: IRapporteringsperiode,
   getAppText: GetAppText
@@ -53,6 +67,18 @@ export function hentTotaltArbeidstimerTekst(
 
   // TODO: Alltid vis "timer"?
   return `${formattertTimer} ${timer === 1 ? getAppText("rapportering-time") : getAppText("rapportering-timer")}`;
+}
+
+export function hentTotaltDagerMedAktivitetstype(
+  rapporteringsperiode: IRapporteringsperiode,
+  aktivitetType: AktivitetType
+): number {
+  const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
+  const filtertAktiviteter = flatMapAktiviteter.filter(
+    (aktivitet) => aktivitet.type === aktivitetType
+  );
+
+  return filtertAktiviteter.length;
 }
 
 export function hentTotaltFravaerTekstMedType(

@@ -5,7 +5,7 @@ import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 
-const bekreftAktivitet = (label: RegExp, antall: RegExp) => {
+const bekreftAktivitet = async (label: RegExp, antall: RegExp) => {
   const element = screen.getByText(label);
   expect(element).toBeInTheDocument();
   expect(within(element).getByText(antall)).toBeInTheDocument();

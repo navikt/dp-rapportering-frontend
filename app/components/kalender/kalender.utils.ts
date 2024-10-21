@@ -25,6 +25,22 @@ export function hentAktivitetSummenTekst(
   }
 }
 
+export function hentAktivitetSummenTekstUtenLabel(dag: IRapporteringsperiodeDag): number {
+  const arbeid = dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid");
+
+  if (arbeid) {
+    const timer = dag.aktiviteter.reduce((accumulator, current) => {
+      if (current.timer) {
+        return accumulator + (periodeSomTimer(current.timer) ?? 0);
+      }
+      return accumulator;
+    }, 0);
+
+    return timer;
+  }
+  return 0;
+}
+
 export function hentAktivitetSumTekst(
   aktivitet: IAktivitet,
   getAppText: GetAppText,
