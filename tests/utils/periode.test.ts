@@ -170,7 +170,6 @@ describe("erPeriodeneLike", () => {
       ...originalPeriode.dager[0].aktiviteter.map((aktivitet: IAktivitet) => ({ ...aktivitet })),
     ].reverse();
 
-    // console.log(periode.dager[0].aktiviteter, originalPeriode.dager[0].aktiviteter);
     expect(erPeriodeneLike(periode, originalPeriode)).toBe(true);
 
     // Rydd opp

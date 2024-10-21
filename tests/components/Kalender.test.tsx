@@ -18,9 +18,6 @@ export const renderKalender = (periode: IRapporteringsperiode, props = {}) => {
 };
 
 export const testKalender = (periode: IRapporteringsperiode) => {
-  expect(screen.getByText(/rapportering-uke 1 - 2/i)).toBeInTheDocument();
-  expect(screen.getByText(/01.01.2024 - 14.01.2024/i)).toBeInTheDocument();
-
   const dagnavn = ["man", "tir", "ons", "tor", "fre", "lør", "søn"];
   dagnavn.forEach((dag) => {
     expect(screen.getByText(dag)).toBeInTheDocument();

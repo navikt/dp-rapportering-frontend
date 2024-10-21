@@ -22,6 +22,7 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.u
 import { useAddHtml } from "~/utils/journalforing.utils";
 import { kanSendes } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
+import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -74,7 +75,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function RapporteringsPeriodeSendInnSide() {
-  const { locale } = useTypedRouteLoaderData("root");
+  const { locale } = useLocale();
+
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
