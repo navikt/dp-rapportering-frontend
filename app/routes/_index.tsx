@@ -90,6 +90,7 @@ export default function Landingsside() {
         <Alert variant="info" className="my-8 alert-with-rich-text">
           <PortableText
             components={getSanityPortableTextComponents({
+              "rapportering-apnes-i-ny-fane": getAppText("rapportering-apnes-i-ny-fane"),
               dato: formaterDato(new Date(forstePeriode.kanSendesFra)),
               "fra-og-til-uke": formaterPeriodeTilUkenummer(
                 forstePeriode.periode.fraOgMed,
@@ -100,6 +101,7 @@ export default function Landingsside() {
           />
         </Alert>
       )}
+
       <PortableText value={getRichText("rapportering-innledning")} />
 
       {forstePeriode?.kanSendes === true && (
