@@ -9,6 +9,7 @@ import { getInfoAlertStatus } from "~/models/info.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as StartAction } from "./api.start";
+import { trackSkjemaStartet } from "~/utils/amplitude.tracking";
 import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
@@ -50,6 +51,7 @@ export default function Landingsside() {
   }, [getAppText]);
 
   function startUtfylling() {
+    trackSkjemaStartet("dagpenger-rapportering", forstePeriode.id);
     startFetcher.submit(
       { rapporteringsperiodeId: forstePeriode.id },
       { method: "post", action: "/api/start" }
