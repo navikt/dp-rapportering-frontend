@@ -1,7 +1,7 @@
 ingresses:
   - "https://dagpenger.nav.no/meldekort"
   - "https://www.nav.no/arbeid/dagpenger/meldekort"
-base_path: "/rapportering"
+base_path: "/arbeid/dagpenger/meldekort"
 idporten:
   level: idporten-loa-substantial
 dekorator:
