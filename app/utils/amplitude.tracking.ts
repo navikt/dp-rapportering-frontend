@@ -1,6 +1,6 @@
 import { getAmplitudeInstance } from "@navikt/nav-dekoratoren-moduler";
 
-const track = getAmplitudeInstance("dekoatoren");
+const track = getAmplitudeInstance("dekoratoren");
 
 export function trackSkjemaStartet(skjemanavn: string, skjemaId: string) {
   track("skjema startet", {

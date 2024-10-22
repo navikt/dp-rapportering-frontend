@@ -15,6 +15,14 @@ if (typeof window !== "undefined") {
   window.env.DP_RAPPORTERING_URL = "https://dp-rapportering.intern.dev.nav.no";
 }
 
+vi.mock("@navikt/nav-dekoratoren-moduler", async () => {
+  const actualModule = await import("@navikt/nav-dekoratoren-moduler");
+  return {
+    ...actualModule,
+    getAmplitudeInstance: vi.fn(),
+  };
+});
+
 vi.mock("~/hooks/useSanity", () => ({
   useSanity: () => ({
     getAppText: (key: string) => key,
