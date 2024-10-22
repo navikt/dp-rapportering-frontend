@@ -54,7 +54,7 @@ export function useAmplitude() {
 
   const trackSkjemaSteg = useCallback(
     ({ skjemaId, stegnavn, steg, rapporteringstype }: ISkjemaSteg) => {
-      track("skjema steg fullført", {
+      track("skjemasteg fullført", {
         skjemanavn,
         skjemaId,
         stegnavn,
