@@ -1,7 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Heading } from "@navikt/ds-react";
+import { Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useNavigate } from "@remix-run/react";
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -12,6 +13,18 @@ export default function TomRapporteringsPeriodeSide() {
   const { getAppText, getRichText } = useSanity();
 
   const navigate = useNavigate();
+  const { trackSkjemaSteg } = useAmplitude();
+
+  const neste = () => {
+    trackSkjemaSteg({
+      skjemaId: periode.id,
+      stegnavn: "tom",
+      rapporteringstype: periode.rapporteringstype,
+      steg: 3,
+    });
+
+    navigate(`/periode/${periode.id}/arbeidssoker`);
+  };
   return (
     <>
       <KanIkkeSendes periode={periode} />
@@ -40,16 +53,16 @@ export default function TomRapporteringsPeriodeSide() {
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
-        <RemixLink
-          as="Button"
-          to={`/periode/${periode.id}/arbeidssoker`}
+        <Button
+          size="medium"
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
           className="navigasjonsknapp"
+          onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
-        </RemixLink>
+        </Button>
       </div>
     </>
   );

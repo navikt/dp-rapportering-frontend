@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 
 // runs a cleanup after each test case (e.g. clearing jsdom)
 afterEach(() => {
@@ -22,6 +23,19 @@ vi.mock("@navikt/nav-dekoratoren-moduler", async () => {
     getAmplitudeInstance: vi.fn(),
   };
 });
+
+vi.mock("~/hooks/useLocale", () => ({
+  locale: DecoratorLocale.NB,
+}));
+
+vi.mock("~/hooks/useAmplitude", () => ({
+  useAmplitude: () => ({
+    trackSkjemaStartet: vi.fn(),
+    trackSkjemaFullført: vi.fn(),
+    trackSkjemaInnsendingFeilet: vi.fn(),
+    trackSkjemaSteg: vi.fn(),
+  }),
+}));
 
 vi.mock("~/hooks/useSanity", () => ({
   useSanity: () => ({

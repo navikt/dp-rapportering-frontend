@@ -1,7 +1,8 @@
 import { useTypedRouteLoaderData } from "./useTypedRouteLoaderData";
+import { useMemo } from "react";
 
 export function useLocale() {
   const { locale } = useTypedRouteLoaderData("root");
 
-  return { locale };
+  return useMemo(() => ({ locale }), [locale]);
 }

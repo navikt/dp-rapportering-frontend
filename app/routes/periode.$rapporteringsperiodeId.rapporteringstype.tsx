@@ -1,8 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useCallback } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
@@ -11,6 +11,7 @@ import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComp
 import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst, kanSendes, perioderSomKanSendes } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -44,6 +45,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function RapporteringstypeSide() {
+  const navigate = useNavigate();
+  const { trackSkjemaSteg } = useAmplitude();
+
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
@@ -66,11 +70,6 @@ export default function RapporteringstypeSide() {
       ? getAppText("rapportering-knapp-neste")
       : getAppText("rapportering-til-utfylling");
 
-  const nesteKnappLink =
-    type === Rapporteringstype.harIngenAktivitet
-      ? `/periode/${periode.id}/arbeidssoker`
-      : `/periode/${periode.id}/fyll-ut`;
-
   const endreRapporteringstype = useCallback(
     (valgtType: Rapporteringstype) => {
       rapporteringstypeFetcher.submit(
@@ -83,6 +82,21 @@ export default function RapporteringstypeSide() {
 
   const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
   const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
+
+  const neste = () => {
+    trackSkjemaSteg({
+      skjemaId: periode.id,
+      stegnavn: "rapporteringstype",
+      rapporteringstype: type,
+      steg: 1,
+    });
+
+    const nesteKnappLink =
+      type === Rapporteringstype.harIngenAktivitet
+        ? `/periode/${periode.id}/arbeidssoker`
+        : `/periode/${periode.id}/fyll-ut`;
+    navigate(nesteKnappLink);
+  };
 
   return (
     <>
@@ -156,9 +170,9 @@ export default function RapporteringstypeSide() {
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
-        <RemixLink
-          as="Button"
-          to={nesteKnappLink}
+        <Button
+          size="medium"
+          onClick={neste}
           variant="primary"
           iconPosition="right"
           className="navigasjonsknapp"
@@ -166,7 +180,7 @@ export default function RapporteringstypeSide() {
           disabled={type === null}
         >
           {nesteKnappTekst}
-        </RemixLink>
+        </Button>
       </div>
     </>
   );
