@@ -9,8 +9,8 @@ import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
+import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
@@ -58,7 +58,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode, originalPeriode } = useLoaderData<typeof loader>();
-  const { locale } = useTypedRouteLoaderData("root");
+  const { locale } = useLocale();
 
   const { getAppText, getRichText, getLink } = useSanity();
   const actionData = useActionData<typeof action>();

@@ -6,8 +6,8 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { AktivitetType, aktivitetType } from "~/utils/aktivitettype.utils";
 import { validator } from "~/utils/validering.util";
+import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { FormattertDato } from "../FormattertDato";
 import { LesMer } from "../LesMer";
 import { AktivitetCheckboxes } from "../aktivitet-checkbox/AktivitetCheckboxes";
@@ -29,7 +29,7 @@ export function AktivitetModal({
   setValgteAktiviteter,
   valgtDato,
 }: IProps) {
-  const { locale } = useTypedRouteLoaderData("root");
+  const { locale } = useLocale();
 
   const { getAppText } = useSanity();
   const actionData = useActionData<typeof rapporteringAction>();

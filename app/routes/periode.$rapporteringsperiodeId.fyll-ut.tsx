@@ -8,6 +8,7 @@ import invariant from "tiny-invariant";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { kanSendes } from "~/utils/periode.utils";
+import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -43,7 +44,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function RapporteringsPeriodeFyllUtSide() {
-  const { locale } = useTypedRouteLoaderData("root");
+  const { locale } = useLocale();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
   const { getAppText, getRichText } = useSanity();

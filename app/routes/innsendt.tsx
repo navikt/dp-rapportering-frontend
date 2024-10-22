@@ -11,8 +11,8 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { hentUkeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
+import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import {
@@ -49,7 +49,7 @@ function sorterGrupper(gruppe: IRapporteringsperiode[]): IRapporteringsperiode[]
 
 export default function InnsendteRapporteringsPerioderSide() {
   const { innsendtPerioder, rapporteringsperioder } = useLoaderData<typeof loader>();
-  const { locale } = useTypedRouteLoaderData("root");
+  const { locale } = useLocale();
 
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder >= 1;

@@ -4,8 +4,8 @@ import {
 } from "./arbeidssokerregister/ArbeidssokerRegister";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
@@ -18,7 +18,7 @@ interface Ikvittering {
 
 export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink } = useSanity();
-  const { locale } = useTypedRouteLoaderData("root");
+  const { locale } = useLocale();
   return (
     <>
       <Alert variant="success" className="my-4">

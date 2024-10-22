@@ -5,7 +5,7 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { getSession } from "~/models/getSession.server";
-import { getInfoAlertStatus, setInfoAlertStatus } from "~/models/info.server";
+import { getInfoAlertStatus } from "~/models/info.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as StartAction } from "./api.start";
@@ -16,22 +16,6 @@ import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
-
-export async function action({ request }: LoaderFunctionArgs) {
-  const cookieHeader = request.headers.get("Cookie") || "";
-  const formData = await request.formData();
-
-  const showInfoAlert: boolean = formData.get("infoAlertStatus") === "true";
-
-  return json(
-    { status: "success" },
-    {
-      headers: {
-        "Set-Cookie": await setInfoAlertStatus(cookieHeader, showInfoAlert),
-      },
-    }
-  );
-}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
@@ -78,7 +62,10 @@ export default function Landingsside() {
         <Alert
           closeButton
           onClose={() => {
-            showInfoAlertFetcher.submit({ infoAlertStatus: false }, { method: "post" });
+            showInfoAlertFetcher.submit(
+              { infoAlertStatus: false },
+              { method: "post", action: "/api/infoalert" }
+            );
           }}
           variant="info"
           className="my-8 alert-with-rich-text"
