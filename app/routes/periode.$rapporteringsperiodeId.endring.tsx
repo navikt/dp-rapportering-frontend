@@ -11,10 +11,6 @@ export default function RapporteringsPeriodeSide() {
   setBreadcrumbs(
     [
       {
-        title: "rapportering-brodsmule-innsendte-meldekort",
-        url: `${baseUrl}/innsendt`,
-      },
-      {
         title: "rapportering-brodsmule-endre-meldekort",
         url: `${baseUrl}/periode/endring/${periode.id}`,
         handleInApp: true,

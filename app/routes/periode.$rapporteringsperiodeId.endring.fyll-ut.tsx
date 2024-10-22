@@ -133,7 +133,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           icon={<ArrowLeftIcon aria-hidden />}
           iconPosition="left"
         >
-          {getLink("rapportering-knapp-tilbake").linkText}
+          {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
         <RemixLink

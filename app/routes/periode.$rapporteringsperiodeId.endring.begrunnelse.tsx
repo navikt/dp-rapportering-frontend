@@ -81,7 +81,7 @@ export default function BegrunnelseSide() {
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
         >
-          {getLink("rapportering-knapp-tilbake").linkText}
+          {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
         <RemixLink
