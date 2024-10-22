@@ -1,20 +1,6 @@
-import { isLocalhost } from "./env.utils";
-import { init, track } from "@amplitude/analytics-browser";
+import { getAmplitudeInstance } from "@navikt/nav-dekoratoren-moduler";
 
-export const initAmplitude = () => {
-  console.log(`🔥: init :`);
-  if (isLocalhost) return;
-
-  console.log(`🔥: case ikke localhost :`);
-
-  init("default", undefined, {
-    useBatch: true,
-    serverUrl: "https://amplitude.nav.no/collect-auto",
-    ingestionMetadata: {
-      sourceName: window.location.toString(),
-    },
-  });
-};
+const track = getAmplitudeInstance("dekoatoren");
 
 export function trackSkjemaStartet(skjemanavn: string, skjemaId: string) {
   track("skjema startet", {

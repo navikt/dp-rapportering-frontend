@@ -24,10 +24,8 @@ import {
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
 import { hasSession } from "mocks/session";
-import { useEffect } from "react";
 import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
-import { initAmplitude } from "./utils/amplitude.tracking";
 import { DecoratorLocale, availableLanguages, getLocale } from "./utils/dekoratoren.utils";
 import { isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "./utils/faro";
@@ -179,10 +177,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { getAppText } = useSanity();
-
-  useEffect(() => {
-    initAmplitude();
-  }, []);
 
   initInstrumentation();
 
