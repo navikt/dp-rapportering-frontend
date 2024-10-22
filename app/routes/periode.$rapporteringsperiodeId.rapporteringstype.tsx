@@ -112,6 +112,7 @@ export default function RapporteringstypeSide() {
 
       <PortableText
         components={getSanityPortableTextComponents({
+          "rapportering-apnes-i-ny-fane": getAppText("rapportering-apnes-i-ny-fane"),
           "fra-dato": tidligstInnsendingDato,
           "til-dato": senestInnsendingDato,
         })}

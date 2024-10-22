@@ -9,7 +9,9 @@ export function LesMer() {
     <div className="les-mer-container">
       <ReadMore header={getAppText("rapportering-les-mer-hva-skal-rapporteres-tittel")}>
         <PortableText
-          components={getSanityPortableTextComponents()}
+          components={getSanityPortableTextComponents({
+            "rapportering-apnes-i-ny-fane": getAppText("rapportering-apnes-i-ny-fane"),
+          })}
           value={getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold")}
         />
       </ReadMore>
