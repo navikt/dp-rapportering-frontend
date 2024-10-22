@@ -52,6 +52,7 @@ export default function Landingsside() {
 
   function startUtfylling() {
     trackSkjemaStartet("dagpenger-rapportering", forstePeriode.id);
+    console.info("Sendt skjema startet til Amplitude");
     startFetcher.submit(
       { rapporteringsperiodeId: forstePeriode.id },
       { method: "post", action: "/api/start" }
