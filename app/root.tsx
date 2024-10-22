@@ -32,7 +32,7 @@ import { initInstrumentation } from "./utils/faro";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
-import { RootErrorBoundaryView } from "./components/error-boundary/RootErrorBoundaryView";
+import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBoundary";
 
 /* eslint-enable */
 import navStyles from "@navikt/ds-css/dist/index.css?url";
@@ -208,6 +208,21 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  const { getAppText } = useSanity();
 
-  return <RootErrorBoundaryView links={<Links />} meta={<Meta />} error={error} />;
+  return (
+    <main id="maincontent" role="main" tabIndex={-1}>
+      <div className="rapportering-header">
+        <div className="rapportering-header-innhold">
+          <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
+            {getAppText("rapportering-tittel")}
+          </Heading>
+          {isLocalOrDemo && <DevTools />}
+        </div>
+      </div>
+      <div className="rapportering-container">
+        <GeneralErrorBoundary error={error} />
+      </div>
+    </main>
+  );
 }

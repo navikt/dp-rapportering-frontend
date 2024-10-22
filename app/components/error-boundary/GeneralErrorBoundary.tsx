@@ -1,10 +1,9 @@
-import { Heading } from "@navikt/ds-react";
+import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { isRouteErrorResponse } from "@remix-run/react";
 import { useEffect } from "react";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
-import { RemixLink } from "../RemixLink";
 
 interface IError {
   statusText: string;
@@ -44,19 +43,13 @@ export function GeneralErrorBoundary({ error }: IProps) {
       <PortableText value={getRichText(body)} />
 
       <div className="navigasjon-container">
-        <RemixLink
+        <Button
+          as="a"
           className="navigasjonsknapp"
-          as="Button"
-          to={getLink("rapportering-ga-til-mine-meldekort").linkUrl}
+          href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
         >
-          {getLink("rapportering-ga-til-mine-meldekort").linkText}
-        </RemixLink>
-      </div>
-
-      <div className="navigasjon-container">
-        <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
-          {getLink("rapportering-se-og-endre").linkText}
-        </RemixLink>
+          {getLink("rapportering-ga-til-mine-dagpenger").linkText}
+        </Button>
       </div>
     </>
   );
