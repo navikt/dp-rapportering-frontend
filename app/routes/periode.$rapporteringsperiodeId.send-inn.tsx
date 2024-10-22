@@ -125,8 +125,6 @@ export default function RapporteringsPeriodeSendInnSide() {
   };
 
   useEffect(() => {
-    console.log(`🔥: actionData ERROR. TIME TO SEND EVENT :`, periode.id);
-
     trackSkjemaInnsendingFeilet(periode.id);
   }, [actionData?.error, periode.id, trackSkjemaInnsendingFeilet]);
 
