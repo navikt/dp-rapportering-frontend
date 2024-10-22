@@ -153,7 +153,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           icon={<ArrowLeftIcon aria-hidden />}
           className="navigasjonsknapp"
         >
-          {getLink("rapportering-knapp-tilbake").linkText}
+          {getAppText("rapportering-knapp-tilbake")}
         </Button>
 
         <Button
@@ -167,7 +167,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         >
           {isSubmitting
             ? getAppText("rapportering-periode-send-inn-bekreft-loading")
-            : getLink("rapportering-endring-send-inn-bekreft").linkText}
+            : getAppText("rapportering-endring-send-inn")}
         </Button>
       </Form>
       <div className="navigasjon-container">

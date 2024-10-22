@@ -47,7 +47,7 @@ export default function RapporteringstypeSide() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-  const { getAppText, getRichText, getLink } = useSanity();
+  const { getAppText, getRichText } = useSanity();
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
 
@@ -152,7 +152,7 @@ export default function RapporteringstypeSide() {
           icon={<ArrowLeftIcon aria-hidden />}
           className="navigasjonsknapp"
         >
-          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+          {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
         <RemixLink

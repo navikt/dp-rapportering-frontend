@@ -46,7 +46,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const { locale } = useTypedRouteLoaderData("root");
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
-  const { getAppText, getLink, getRichText } = useSanity();
+  const { getAppText, getRichText } = useSanity();
   const actionData = useActionData<typeof action>();
 
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
@@ -125,7 +125,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           className="navigasjonsknapp"
           disabled={searchParams.has("endring")}
         >
-          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+          {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
         <RemixLink

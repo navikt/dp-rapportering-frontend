@@ -26,7 +26,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ArbeidssøkerRegisterSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-  const { getAppText, getLink } = useSanity();
+  const { getAppText } = useSanity();
 
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ export default function ArbeidssøkerRegisterSide() {
           icon={<ArrowLeftIcon aria-hidden />}
           className="navigasjonsknapp"
         >
-          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+          {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
         <RemixLink

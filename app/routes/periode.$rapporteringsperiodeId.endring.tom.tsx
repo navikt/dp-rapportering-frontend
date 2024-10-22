@@ -37,7 +37,7 @@ export default function TomRapporteringsPeriodeSide() {
           icon={<ArrowLeftIcon aria-hidden />}
           className="navigasjonsknapp"
         >
-          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+          {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
         <RemixLink

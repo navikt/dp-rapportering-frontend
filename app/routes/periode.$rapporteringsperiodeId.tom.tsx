@@ -9,7 +9,7 @@ import { RemixLink } from "~/components/RemixLink";
 
 export default function TomRapporteringsPeriodeSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-  const { getAppText, getRichText, getLink } = useSanity();
+  const { getAppText, getRichText } = useSanity();
 
   const navigate = useNavigate();
   return (
@@ -37,7 +37,7 @@ export default function TomRapporteringsPeriodeSide() {
           icon={<ArrowLeftIcon aria-hidden />}
           className="navigasjonsknapp"
         >
-          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+          {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
         <RemixLink

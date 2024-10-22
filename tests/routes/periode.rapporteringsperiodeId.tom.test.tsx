@@ -71,7 +71,7 @@ describe("TomRapporteringsPeriodeSide", () => {
     render();
 
     expect(
-      await screen.findByRole("button", { name: /rapportering-periode-send-inn-tilbake/ })
+      await screen.findByRole("button", { name: /rapportering-knapp-tilbake/ })
     ).toBeInTheDocument();
     expect(
       await screen.findByRole("button", { name: /rapportering-knapp-neste/ })

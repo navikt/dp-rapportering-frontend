@@ -88,7 +88,7 @@ export default function RapporteringsPeriodeSendInnSide() {
   const [confirmed, setConfirmed] = useState<boolean | undefined>(!kanSendes(periode));
 
   const actionData = useActionData<typeof action>();
-  const { getAppText, getRichText, getLink } = useSanity();
+  const { getAppText, getRichText } = useSanity();
   const addHtml = useAddHtml({
     rapporteringsperioder,
     periode,
@@ -164,7 +164,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           icon={<ArrowLeftIcon aria-hidden />}
           className="navigasjonsknapp"
         >
-          {getLink("rapportering-periode-send-inn-tilbake").linkText}
+          {getAppText("rapportering-knapp-tilbake")}
         </Button>
 
         <Button
@@ -178,7 +178,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         >
           {isSubmitting
             ? getAppText("rapportering-periode-send-inn-bekreft-loading")
-            : getLink("rapportering-periode-send-inn-bekreft").linkText}
+            : getAppText("rapportering-periode-send-inn")}
         </Button>
       </Form>
     </>
