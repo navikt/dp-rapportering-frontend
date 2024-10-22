@@ -76,6 +76,8 @@ body {
 .innsendt-accordion-content {
   background-color: var(--a-bg-subtle);
   margin-bottom: var(--a-spacing-4);
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .innsendt-periode-header {
