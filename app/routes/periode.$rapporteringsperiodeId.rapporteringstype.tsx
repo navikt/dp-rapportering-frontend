@@ -87,6 +87,7 @@ export default function RapporteringstypeSide() {
     trackSkjemaSteg({
       skjemaId: periode.id,
       stegnavn: "rapporteringstype",
+      rapporteringstype: type,
       steg: 1,
     });
 

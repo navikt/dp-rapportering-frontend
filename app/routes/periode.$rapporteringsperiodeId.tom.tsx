@@ -19,6 +19,7 @@ export default function TomRapporteringsPeriodeSide() {
     trackSkjemaSteg({
       skjemaId: periode.id,
       stegnavn: "tom",
+      rapporteringstype: periode.rapporteringstype,
       steg: 3,
     });
 

@@ -23,8 +23,8 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
   const { trackSkjemaFullført } = useAmplitude();
 
   useEffect(() => {
-    trackSkjemaFullført(periode.id);
-  }, [periode.id, trackSkjemaFullført]);
+    trackSkjemaFullført(periode.id, periode.rapporteringstype);
+  }, [periode.id, trackSkjemaFullført, periode.rapporteringstype]);
 
   return (
     <Kvittering

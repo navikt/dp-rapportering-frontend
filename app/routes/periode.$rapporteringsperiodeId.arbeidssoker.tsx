@@ -37,6 +37,7 @@ export default function ArbeidssøkerRegisterSide() {
     trackSkjemaSteg({
       skjemaId: periode.id,
       stegnavn: "arbeidssoker",
+      rapporteringstype: periode.rapporteringstype,
       steg: 4,
     });
 

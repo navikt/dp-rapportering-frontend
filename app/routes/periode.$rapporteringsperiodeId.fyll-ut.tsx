@@ -96,6 +96,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
     trackSkjemaSteg({
       skjemaId: periode.id,
       stegnavn: "fyll-ut",
+      rapporteringstype: periode.rapporteringstype,
       steg: 2,
     });
 

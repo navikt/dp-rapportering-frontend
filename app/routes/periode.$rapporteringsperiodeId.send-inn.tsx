@@ -118,6 +118,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     trackSkjemaSteg({
       skjemaId: periode.id,
       stegnavn: "oppsummering",
+      rapporteringstype: periode.rapporteringstype,
       steg: 5,
     });
 
@@ -125,8 +126,8 @@ export default function RapporteringsPeriodeSendInnSide() {
   };
 
   useEffect(() => {
-    trackSkjemaInnsendingFeilet(periode.id);
-  }, [actionData?.error, periode.id, trackSkjemaInnsendingFeilet]);
+    trackSkjemaInnsendingFeilet(periode.id, periode.rapporteringstype);
+  }, [actionData?.error, periode.id, periode.rapporteringstype, trackSkjemaInnsendingFeilet]);
 
   return (
     <>
