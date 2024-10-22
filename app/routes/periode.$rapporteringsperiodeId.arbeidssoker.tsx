@@ -1,8 +1,10 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
+import { Button } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -29,6 +31,17 @@ export default function ArbeidssøkerRegisterSide() {
   const { getAppText } = useSanity();
 
   const navigate = useNavigate();
+  const { trackSkjemaSteg } = useAmplitude();
+
+  const neste = () => {
+    trackSkjemaSteg({
+      skjemaId: periode.id,
+      stegnavn: "arbeidssoker",
+      steg: 4,
+    });
+
+    navigate(`/periode/${periode.id}/send-inn`);
+  };
 
   return (
     <>
@@ -48,17 +61,17 @@ export default function ArbeidssøkerRegisterSide() {
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
-        <RemixLink
-          as="Button"
-          to={`/periode/${periode.id}/send-inn`}
+        <Button
+          size="medium"
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
           className="navigasjonsknapp"
           disabled={periode.registrertArbeidssoker === null}
+          onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
-        </RemixLink>
+        </Button>
       </div>
       <LagretAutomatisk />
     </>

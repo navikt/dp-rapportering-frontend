@@ -23,6 +23,15 @@ vi.mock("@navikt/nav-dekoratoren-moduler", async () => {
   };
 });
 
+vi.mock("~/hooks/useAmplitude", () => ({
+  useAmplitude: () => ({
+    trackSkjemaStartet: vi.fn(),
+    trackSkjemaFullført: vi.fn(),
+    trackSkjemaInnsendingFeilet: vi.fn(),
+    trackSkjemaSteg: vi.fn(),
+  }),
+}));
+
 vi.mock("~/hooks/useSanity", () => ({
   useSanity: () => ({
     getAppText: (key: string) => key,

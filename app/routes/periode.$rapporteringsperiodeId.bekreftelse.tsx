@@ -1,7 +1,9 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useEffect } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { perioderSomKanSendes } from "~/utils/periode.utils";
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { Kvittering } from "~/components/Kvittering";
@@ -18,6 +20,11 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
   const { harNestePeriode } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText } = useSanity();
+  const { trackSkjemaFullført } = useAmplitude();
+
+  useEffect(() => {
+    trackSkjemaFullført(periode.id);
+  }, [periode.id, trackSkjemaFullført]);
 
   return (
     <Kvittering

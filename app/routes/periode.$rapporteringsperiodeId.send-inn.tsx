@@ -11,7 +11,7 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import {
   hentPeriode,
@@ -22,6 +22,7 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.u
 import { useAddHtml } from "~/utils/journalforing.utils";
 import { kanSendes } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -76,6 +77,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function RapporteringsPeriodeSendInnSide() {
   const { locale } = useLocale();
+  const { trackSkjemaSteg } = useAmplitude();
 
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
@@ -84,6 +86,8 @@ export default function RapporteringsPeriodeSendInnSide() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = useIsSubmitting(navigation);
+
+  const { trackSkjemaInnsendingFeilet } = useAmplitude();
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>(!kanSendes(periode));
 
@@ -109,6 +113,22 @@ export default function RapporteringsPeriodeSendInnSide() {
 
     invaerendePeriodeTekst = `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
   }
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    trackSkjemaSteg({
+      skjemaId: periode.id,
+      stegnavn: "oppsummering",
+      steg: 5,
+    });
+
+    addHtml(event);
+  };
+
+  useEffect(() => {
+    console.log(`🔥: actionData ERROR. TIME TO SEND EVENT :`, periode.id);
+
+    trackSkjemaInnsendingFeilet(periode.id);
+  }, [actionData?.error, periode.id, trackSkjemaInnsendingFeilet]);
 
   return (
     <>
@@ -156,7 +176,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" onSubmit={addHtml} className="navigasjon-container">
+      <Form method="post" onSubmit={onSubmit} className="navigasjon-container">
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
