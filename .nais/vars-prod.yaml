@@ -4,5 +4,8 @@ ingresses:
 base_path: "/rapportering"
 idporten:
   level: idporten-loa-substantial
+dekorator:
+  url: https://www.nav.no/dekoratoren
+  env: prod
 faro_url: "https://telemetry.nav.no/collect"
 sanity_datasett: "production"
