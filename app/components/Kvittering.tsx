@@ -32,7 +32,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           <Accordion.Header>
             {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
           </Accordion.Header>
-          <Accordion.Content>
+          <Accordion.Content className="kvittering-innhold">
             <div className="oppsummering">
               <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
               <AktivitetOppsummering periode={periode} />
