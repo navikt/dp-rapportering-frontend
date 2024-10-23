@@ -37,6 +37,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Landingsside() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder, showInfoAlert } = useLoaderData<typeof loader>();
+  console.log(rapporteringsperioder);
 
   const { getAppText, getLink, getRichText } = useSanity();
   const startFetcher = useFetcher<typeof StartAction>();
