@@ -496,7 +496,7 @@ export function htmlForOppsummering(props: IProps): string {
   const seksjoner: string[] = [
     getHeader({ text: getAppText(tittel), level: "2" }),
     renderToString(<PortableText value={getRichText(beskrivelse)} />),
-    `<p>${getRichText(alert)}</p>`,
+    renderToString(<PortableText value={getRichText(alert)} />),
     getHeader({ text: getAppText("rapportering-send-inn-periode-tittel"), level: "3" }),
     `<p>${invaerendePeriodeTekst}</p>`,
     getKalender(props, false),
