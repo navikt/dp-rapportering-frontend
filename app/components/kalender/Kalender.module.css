@@ -47,14 +47,14 @@
 .ukeRadKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--a-spacing-4);
+  gap: var(--a-spacing-2);
   justify-items: center;
 }
 
 .ukedagKontainer {
   display: grid;
   margin-top: var(--a-spacing-4);
-  gap: var(--a-spacing-4);
+  gap: var(--a-spacing-2);
   grid-template-columns: repeat(7, 1fr);
   justify-items: center;
   margin-bottom: var(--a-spacing-2);
