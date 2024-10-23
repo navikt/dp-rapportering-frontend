@@ -71,7 +71,7 @@ export const availableLanguages = [
 export const baseUrl: string = "/arbeid/dagpenger/meldekort";
 
 export const defaultBreadcrumbs: Breadcrumb[] = [
-  { title: "rapportering-mine-dagpenger", url: "https://www.nav.no/minside/mine-dagpenger" },
+  { title: "rapportering-brodsmule-min-side", url: "https://www.nav.no/minside" },
   {
     title: "rapportering-brodsmule-meldekort",
     url: `${baseUrl}/`,
