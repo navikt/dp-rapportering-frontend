@@ -57,8 +57,6 @@ export default function InnsendteRapporteringsPerioderSide() {
     .map((nokkel) => gruppertePerioder[nokkel])
     .map(sorterGrupper);
 
-  console.log(sortertePerioder);
-
   const { getAppText, getLink, getRichText } = useSanity();
 
   useEffect(() => {
