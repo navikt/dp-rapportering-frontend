@@ -400,6 +400,10 @@ describe("htmlForOppsummering", () => {
     locale,
   });
 
+  it("viser alert for endret meldekort", () => {
+    expect(endretMeldekort).toContain("rapportering-endring-ikke-sendt-enda");
+  });
+
   it("viser oppsummering for endret meldekort", () => {
     expect(endretMeldekort).toContain("<h3>rapportering-endring-begrunnelse-tittel</h3>");
     expect(endretMeldekort).toContain(`<p>${begrunnelseEndring}</p>`);
@@ -415,6 +419,10 @@ describe("htmlForOppsummering", () => {
     getAppText: mockGetAppText,
     getRichText: mockGetRichText,
     locale,
+  });
+
+  it("viser alert for nytt meldekort", () => {
+    expect(nyttMeldekort).toContain("rapportering-meldekort-ikke-sendt-enda");
   });
 
   it("viser oppsummering for nytt meldekort", () => {
