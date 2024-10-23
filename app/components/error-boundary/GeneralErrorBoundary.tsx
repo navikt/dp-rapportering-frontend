@@ -34,6 +34,8 @@ export function GeneralErrorBoundary({ error }: IProps) {
     body = `${error.message}-beskrivelse`;
   }
 
+  console.error(error);
+
   return (
     <>
       <Heading spacing size="medium" level="2">
