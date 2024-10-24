@@ -129,7 +129,7 @@ export function getAktivitetCheckbox(props: IProps & { aktivitet: AktivitetType 
     const lesMer = getLesMer({
       ...props,
       tittel: "rapportering-aktivitet-jobb-prosentstilling-tittel",
-      innhold: "rapportering-aktivitet-jobb-prosentstilling-tittel",
+      innhold: "rapportering-aktivitet-jobb-prosentstilling-innhold",
     });
     arbeid = `${getHeader({ text: getAppText("rapportering-antall-timer"), level: "5" })}<p>${renderToString(<PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />)}</p>${lesMer}`;
   }
