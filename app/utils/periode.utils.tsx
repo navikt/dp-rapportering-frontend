@@ -11,6 +11,8 @@ import { type GetAppText } from "~/hooks/useSanity";
 export function periodeSomTimer(periode?: string): number | undefined {
   if (!periode) return undefined;
 
+  periode = periode.replace(/\s/g, "");
+
   const parsed = parse(periode);
   const timer = parsed.hours || 0;
   const minutt = parsed.minutes || 0;
