@@ -9,3 +9,6 @@ dekorator:
   env: prod
 faro_url: "https://telemetry.nav.no/collect"
 sanity_datasett: "production"
+replicas:
+  min: 2
+  max: 2

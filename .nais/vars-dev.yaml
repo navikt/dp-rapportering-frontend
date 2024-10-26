@@ -9,3 +9,7 @@ dekorator:
   env: dev
 faro_url: "https://telemetry.ekstern.dev.nav.no/collect"
 sanity_datasett: "development"
+replicas:
+  min: 0
+  max: 0
+  
