@@ -21,6 +21,7 @@ import {
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
 import { kanSendes } from "~/utils/periode.utils";
+import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -43,6 +44,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   try {
     const periode = await hentPeriode(request, periodeId, false);
+
+    if (!periode.kanSendes && periode.status === IRapporteringsperiodeStatus.Innsendt) {
+      redirect(`/periode/${periodeId}/endring/bekreftelse`);
+    } else if (!periode.kanSendes) {
+      return json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
+    }
+
     const response = await sendInnPeriode(request, periode);
     const { id } = response;
     return redirect(`/periode/${id}/endring/bekreftelse`);
