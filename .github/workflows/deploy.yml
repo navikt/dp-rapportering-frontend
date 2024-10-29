@@ -63,9 +63,6 @@ jobs:
           key: modules-${{ hashFiles('package-lock.json') }}
       - run: npm run build
 
-      - name: prune dev dependencies
-        run: npm prune --production
-
       # Bygg docker image
       - name: docker-build-push
         uses: nais/docker-build-push@v0
