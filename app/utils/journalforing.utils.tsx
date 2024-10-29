@@ -129,7 +129,7 @@ export function getAktivitetCheckbox(props: IProps & { aktivitet: AktivitetType 
     const lesMer = getLesMer({
       ...props,
       tittel: "rapportering-aktivitet-jobb-prosentstilling-tittel",
-      innhold: "rapportering-aktivitet-jobb-prosentstilling-tittel",
+      innhold: "rapportering-aktivitet-jobb-prosentstilling-innhold",
     });
     arbeid = `${getHeader({ text: getAppText("rapportering-antall-timer"), level: "5" })}<p>${renderToString(<PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />)}</p>${lesMer}`;
   }
@@ -496,7 +496,7 @@ export function htmlForOppsummering(props: IProps): string {
   const seksjoner: string[] = [
     getHeader({ text: getAppText(tittel), level: "2" }),
     renderToString(<PortableText value={getRichText(beskrivelse)} />),
-    `<p>${getRichText(alert)}</p>`,
+    renderToString(<PortableText value={getRichText(alert)} />),
     getHeader({ text: getAppText("rapportering-send-inn-periode-tittel"), level: "3" }),
     `<p>${invaerendePeriodeTekst}</p>`,
     getKalender(props, false),

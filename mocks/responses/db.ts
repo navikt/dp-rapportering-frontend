@@ -47,9 +47,14 @@ function findAllInnsendtePerioder(db: Database) {
         in: ["Innsendt", "Endret", "Ferdig", "Feilet"],
       },
     },
-    orderBy: {
-      mottattDato: "desc",
-    },
+    orderBy: [
+      {
+        mottattDato: "desc",
+      },
+      {
+        originalId: "asc",
+      },
+    ],
   }) as IRapporteringsperiode[];
 }
 

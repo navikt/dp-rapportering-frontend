@@ -1,7 +1,7 @@
 import { serialize } from "tinyduration";
 
 export function hentISO8601DurationString(varighet: string): string {
-  const delt = varighet.replace(/\./g, ",").split(",");
+  const delt = varighet.trim().replace(/\./g, ",").split(",");
   const timer = delt[0] || 0;
   const minutter = delt[1] || 0;
   const minutterProsent = parseFloat(`0.${minutter}`);

@@ -10,6 +10,7 @@ import {
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
+import { sorterGrupper } from "~/utils/innsendt.utils";
 import { hentUkeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -41,10 +42,6 @@ function grupperPerioder(
   perioder[fraOgMed].push(periode);
 
   return perioder;
-}
-
-function sorterGrupper(gruppe: IRapporteringsperiode[]): IRapporteringsperiode[] {
-  return gruppe.sort((a, b) => (b.mottattDato || "").localeCompare(a.mottattDato || ""));
 }
 
 export default function InnsendteRapporteringsPerioderSide() {

@@ -8,6 +8,10 @@ body {
   margin: 0;
 }
 
+d-breadcrumbs {
+  font-size: var(--a-font-size-small);
+}
+
 .dp-rapportering-frontend {
   max-width: var(--app-max-width);
   padding: var(--app-padding);
@@ -173,6 +177,10 @@ body {
 }
 
 @media screen and (min-width: 768px) {
+  d-breadcrumbs {
+    font-size: var(--a-font-size-large); 
+  }
+
   .rapportering-container {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);
   }

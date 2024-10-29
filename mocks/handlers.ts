@@ -31,9 +31,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     const mottattDato = formatereDato(new Date());
 
     if (periode.originalId) {
-      const originalPeriode = db.findRapporteringsperiodeById(periode.originalId as string);
-
-      db.updateRapporteringsperiode(originalPeriode.id, {
+      db.updateRapporteringsperiode(periode.originalId, {
         kanEndres: false,
         status: IRapporteringsperiodeStatus.Endret,
       });
@@ -47,6 +45,8 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
         kanSendes: false,
         mottattDato,
       });
+
+      db.deleteRapporteringsperiode(periode.id);
 
       return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
     }
