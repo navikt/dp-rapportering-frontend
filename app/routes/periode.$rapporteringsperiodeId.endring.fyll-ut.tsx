@@ -50,8 +50,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
-  const periode = await hentPeriode(request, periodeId, false);
-  const originalPeriode = await hentPeriode(request, periode.originalId as string, true);
+  const { periode } = await hentPeriode(request, periodeId, false);
+  const { periode: originalPeriode } = await hentPeriode(
+    request,
+    periode.originalId as string,
+    true
+  );
 
   return json({ periode, originalPeriode });
 }

@@ -3,6 +3,7 @@ import { redirect } from "@remix-run/node";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
+import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
@@ -10,7 +11,7 @@ import { catchErrorResponse } from "../helpers/response-helper";
 
 const rapporteringsperiodeResponse = rapporteringsperioderResponse[0];
 
-describe.skip("Send inn rapporteringsperiode", () => {
+describe("Send inn rapporteringsperiode", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "bypass" }));
   afterAll(() => server.close());
   afterEach(() => {
@@ -97,7 +98,14 @@ describe.skip("Send inn rapporteringsperiode", () => {
           http.get(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
             () => {
-              return HttpResponse.json({ id: "1" }, { status: 500 });
+              return HttpResponse.json(
+                {
+                  id: rapporteringsperiodeResponse.id,
+                  status: IRapporteringsperiodeStatus.TilUtfylling,
+                  kanSendes: true,
+                },
+                { status: 200 }
+              );
             }
           )
         );
@@ -107,13 +115,16 @@ describe.skip("Send inn rapporteringsperiode", () => {
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`,
             async ({ request }) => {
               const sentRequest = await request.text();
-              expect(sentRequest).toBe('{"id":"1","html":"<div />"}');
 
-              return HttpResponse.json(null, {
-                status: 200,
+              expect(JSON.parse(sentRequest)).toEqual({
+                id: rapporteringsperiodeResponse.id,
+                status: "TilUtfylling",
+                kanSendes: true,
+                html: "<div />",
               });
-            },
-            { once: true }
+
+              return HttpResponse.json({ id: rapporteringsperiodeResponse.id }, { status: 200 });
+            }
           )
         );
 
@@ -161,7 +172,105 @@ describe.skip("Send inn rapporteringsperiode", () => {
         const data = await response.json();
         expect(response.status).toBe(500);
 
-        expect(data.error).toBe("Det har skjedd noe feil med innsendingen din, prøv igjen.");
+        expect(data.error).toBe("rapportering-feilmelding-feil-ved-innsending");
+      });
+
+      test("burde redirecte til bekreftelsesside hvis rapporteringen allerede er sendt inn", async () => {
+        const body = new URLSearchParams(testBody);
+
+        const request = new Request("http://localhost:3000", {
+          method: "POST",
+          body,
+        });
+
+        server.use(
+          http.get(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
+            () => {
+              return HttpResponse.json(
+                { id: "1", kanSendes: false, status: IRapporteringsperiodeStatus.Innsendt },
+                { status: 200 }
+              );
+            }
+          )
+        );
+
+        server.use(
+          http.post(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`,
+            async ({ request }) => {
+              const sentRequest = await request.text();
+              expect(sentRequest).toBe(
+                `{"id":"1","kanSendes":true,"status":${IRapporteringsperiodeStatus.TilUtfylling},"html":"<div />"}`
+              );
+
+              return HttpResponse.json(null, {
+                status: 400,
+              });
+            },
+            { once: true }
+          )
+        );
+
+        mockSession();
+
+        const response = await action({
+          request,
+          params: testParams,
+          context: {},
+        });
+
+        expect(response).toEqual(
+          redirect(`/periode/${rapporteringsperiodeResponse.id}/bekreftelse`)
+        );
+      });
+
+      test("burde vise feilmelding hvis perioden ikke kan sendes inn", async () => {
+        const body = new URLSearchParams(testBody);
+
+        const request = new Request("http://localhost:3000", {
+          method: "POST",
+          body,
+        });
+
+        server.use(
+          http.get(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
+            () => {
+              return HttpResponse.json({ id: "1", kanSendes: false }, { status: 200 });
+            }
+          )
+        );
+
+        server.use(
+          http.post(
+            `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`,
+            async ({ request }) => {
+              const sentRequest = await request.text();
+              expect(sentRequest).toBe(
+                `{"id":"1","kanSendes":true,"status":${IRapporteringsperiodeStatus.TilUtfylling},"html":"<div />"}`
+              );
+
+              return HttpResponse.json(null, {
+                status: 400,
+              });
+            },
+            { once: true }
+          )
+        );
+
+        mockSession();
+
+        const response = await action({
+          request,
+          params: testParams,
+          context: {},
+        });
+
+        const data = await response.json();
+        expect(response.status).toBe(400);
+
+        expect(data.error).toBe("rapportering-feilmelding-kan-ikke-sendes");
       });
     });
   });
