@@ -1,11 +1,12 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Select } from "@navikt/ds-react";
+import { Button, Select } from "@navikt/ds-react";
 import { ActionFunctionArgs } from "@remix-run/node";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher, useNavigate } from "@remix-run/react";
 import { ChangeEvent } from "react";
 import { lagreBegrunnelse } from "~/models/begrunnelse.server";
 import { kanSendes } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -25,6 +26,9 @@ export default function BegrunnelseSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const fetcher = useFetcher<INetworkResponse>();
   const { getAppText, getLink } = useSanity();
+
+  const navigate = useNavigate();
+  const { trackSkjemaSteg } = useAmplitude();
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
@@ -48,6 +52,17 @@ export default function BegrunnelseSide() {
     { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-6" },
     { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-other" },
   ];
+
+  const neste = () => {
+    trackSkjemaSteg({
+      periode,
+      stegnavn: "endring-begrunnelse",
+      steg: 2,
+      endring: true,
+    });
+
+    navigate(`/periode/${periode.id}/endring/send-inn`);
+  };
 
   return (
     <>
@@ -84,17 +99,17 @@ export default function BegrunnelseSide() {
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
-        <RemixLink
-          as="Button"
-          to={`/periode/${periode.id}/endring/send-inn`}
+        <Button
+          size="medium"
           variant="primary"
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
           className="navigasjonsknapp"
           disabled={!periode.begrunnelseEndring}
+          onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
-        </RemixLink>
+        </Button>
       </div>
       <div className="navigasjon-container">
         <RemixLink

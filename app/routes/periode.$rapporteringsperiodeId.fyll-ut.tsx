@@ -94,15 +94,15 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   const neste = () => {
     trackSkjemaSteg({
-      skjemaId: periode.id,
+      periode,
       stegnavn: "fyll-ut",
-      rapporteringstype: periode.rapporteringstype,
       steg: 2,
     });
 
     const nextLink = harIngenAktiviteter
       ? `/periode/${periode.id}/tom`
       : `/periode/${periode.id}/arbeidssoker`;
+
     navigate(nextLink);
   };
 

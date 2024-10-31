@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { perioderSomKanSendes } from "~/utils/periode.utils";
 import { useAmplitude } from "~/hooks/useAmplitude";
@@ -20,10 +20,15 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
   const { harNestePeriode } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText } = useSanity();
+
   const { trackSkjemaFullført } = useAmplitude();
+  const tracked = useRef(false);
 
   useEffect(() => {
-    trackSkjemaFullført(periode.id, periode.rapporteringstype);
+    if (!tracked.current) {
+      trackSkjemaFullført(periode.id, periode.rapporteringstype);
+      tracked.current = true;
+    }
   }, [periode.id, trackSkjemaFullført, periode.rapporteringstype]);
 
   return (

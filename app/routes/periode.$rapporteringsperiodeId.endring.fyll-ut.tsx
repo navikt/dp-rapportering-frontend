@@ -1,14 +1,15 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Heading } from "@navikt/ds-react";
+import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, useActionData, useLoaderData } from "@remix-run/react";
+import { json, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
@@ -71,6 +72,9 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
 
+  const { trackSkjemaSteg } = useAmplitude();
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (actionData?.status === "success") {
       lukkModal();
@@ -102,9 +106,19 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   const periodeneErLike = erPeriodeneLike(periode, originalPeriode);
 
-  const nextLink = periodeneErLike
-    ? `/periode/${periode.id}/endring/tom`
-    : `/periode/${periode.id}/endring/begrunnelse`;
+  const neste = () => {
+    trackSkjemaSteg({
+      periode,
+      stegnavn: "endring-fyll-ut",
+      steg: 1,
+      endring: true,
+    });
+
+    const nextLink = periodeneErLike
+      ? `/periode/${periode.id}/endring/tom`
+      : `/periode/${periode.id}/endring/begrunnelse`;
+    navigate(nextLink);
+  };
 
   return (
     <>
@@ -140,16 +154,16 @@ export default function RapporteringsPeriodeFyllUtSide() {
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
 
-        <RemixLink
-          as="Button"
-          to={nextLink}
+        <Button
+          size="medium"
           variant="primary"
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
           className="navigasjonsknapp"
+          onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
-        </RemixLink>
+        </Button>
       </div>
       <div className="navigasjon-container">
         <RemixLink
