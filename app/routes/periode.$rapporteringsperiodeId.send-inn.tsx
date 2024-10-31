@@ -77,7 +77,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function RapporteringsPeriodeSendInnSide() {
   const { locale } = useLocale();
-  const { trackSkjemaSteg } = useAmplitude();
+  const [hasTrackedError, setHasTrackedError] = useState(false);
+  const { trackSkjemaSteg, trackSkjemaInnsendingFeilet } = useAmplitude();
 
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
@@ -86,8 +87,6 @@ export default function RapporteringsPeriodeSendInnSide() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = useIsSubmitting(navigation);
-
-  const { trackSkjemaInnsendingFeilet } = useAmplitude();
 
   const [confirmed, setConfirmed] = useState<boolean | undefined>(!kanSendes(periode));
 
@@ -125,8 +124,23 @@ export default function RapporteringsPeriodeSendInnSide() {
   };
 
   useEffect(() => {
-    trackSkjemaInnsendingFeilet(periode.id, periode.rapporteringstype);
-  }, [actionData?.error, periode.id, periode.rapporteringstype, trackSkjemaInnsendingFeilet]);
+    if (actionData?.error && !hasTrackedError) {
+      trackSkjemaInnsendingFeilet(periode.id, periode.rapporteringstype);
+      setHasTrackedError(true);
+    }
+  }, [
+    actionData?.error,
+    hasTrackedError,
+    periode.id,
+    periode.rapporteringstype,
+    trackSkjemaInnsendingFeilet,
+  ]);
+
+  useEffect(() => {
+    if (actionData && !actionData.error) {
+      setHasTrackedError(false);
+    }
+  }, [actionData]);
 
   return (
     <>
