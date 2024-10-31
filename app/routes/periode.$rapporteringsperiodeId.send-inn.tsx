@@ -13,13 +13,14 @@ import {
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { logErrorResponse, logg } from "~/models/logger.server";
+import { logg } from "~/models/logger.server";
 import {
   hentPeriode,
   hentRapporteringsperioder,
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { getCorralationId } from "~/utils/fetch.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
 import { kanSendes } from "~/utils/periode.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
@@ -48,13 +49,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const periodeId = params.rapporteringsperiodeId;
 
   try {
-    const { periode } = await hentPeriode(request, periodeId, false);
+    const { periode, response } = await hentPeriode(request, periodeId, false);
 
     if (!periode.kanSendes && periode.status === IRapporteringsperiodeStatus.Innsendt) {
       logg({
         type: "warn",
         message: `Feil i innsending av periode: perioden er allerede innsendt, ID: ${periodeId}`,
-        correlationId: null,
+        correlationId: getCorralationId(response.headers),
         body: periode,
       });
 
@@ -63,34 +64,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
       logg({
         type: "error",
         message: `Feil i innsending av periode: perioden kan ikke sendes inn, ID: ${periodeId}`,
-        correlationId: null,
+        correlationId: getCorralationId(response.headers),
         body: periode,
       });
 
       return json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
     }
 
-    const response = await sendInnPeriode(request, periode);
-    const { id } = response;
+    const innsendtPeriode = await sendInnPeriode(request, periode);
+    const { id } = innsendtPeriode;
+
     return redirect(`/periode/${id}/bekreftelse`);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      logg({
-        type: "error",
-        message: `Feil i innsending av periode: ${error.message}, ID: ${periodeId}`,
-        correlationId: null,
-        body: null,
-      });
-    } else if (error instanceof Response) {
-      logErrorResponse(error, `Klarte ikke å sende inn periode, ID: ${periodeId}`);
-    } else {
-      logg({
-        type: "error",
-        message: `Ukjent feil i innsending av periode, ID: ${periodeId}`,
-        correlationId: null,
-        body: error,
-      });
-    }
     return json(
       {
         error: "rapportering-feilmelding-feil-ved-innsending",

@@ -98,7 +98,7 @@ export async function hentPeriode(
   request: Request,
   periodeId: string,
   hentOriginal: boolean = true
-): Promise<{ periode: IRapporteringsperiode }> {
+): Promise<{ periode: IRapporteringsperiode; response: Response }> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}`;
 
   // TODO: Legg til x_corralationId som header
@@ -122,7 +122,7 @@ export async function hentPeriode(
   const periode: IRapporteringsperiode = await response.json();
 
   // Forberedelse til å sende ved response, slik at kallende funksjon kan hente ut headers og x_corralationId
-  return { periode };
+  return { periode, response };
 }
 
 export async function hentInnsendtePerioder(request: Request): Promise<IRapporteringsperiode[]> {

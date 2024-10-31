@@ -4,6 +4,10 @@ import { uuidv7 } from "uuidv7";
 import { getSessionId } from "~/../mocks/session";
 import { IHttpProblem } from "~/utils/types";
 
+export function getCorralationId(headers: Headers) {
+  return headers.get("X-Request-ID") ?? "";
+}
+
 function generateCorralationId() {
   // https://github.com/navikt/dp-rapportering-frontend/pull/242#pullrequestreview-2403834306
   // korralasjon_id i dp-rappoortering kan være på maks 54 tegn
