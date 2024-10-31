@@ -35,9 +35,8 @@ export default function ArbeidssøkerRegisterSide() {
 
   const neste = () => {
     trackSkjemaSteg({
-      skjemaId: periode.id,
+      periode,
       stegnavn: "arbeidssoker",
-      rapporteringstype: periode.rapporteringstype,
       steg: 4,
     });
 

@@ -17,9 +17,8 @@ export default function TomRapporteringsPeriodeSide() {
 
   const neste = () => {
     trackSkjemaSteg({
-      skjemaId: periode.id,
+      periode,
       stegnavn: "tom",
-      rapporteringstype: periode.rapporteringstype,
       steg: 3,
     });
 

@@ -116,9 +116,8 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     trackSkjemaSteg({
-      skjemaId: periode.id,
+      periode,
       stegnavn: "oppsummering",
-      rapporteringstype: periode.rapporteringstype,
       steg: 5,
     });
 

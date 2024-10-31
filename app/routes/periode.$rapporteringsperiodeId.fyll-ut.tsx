@@ -94,9 +94,8 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   const neste = () => {
     trackSkjemaSteg({
-      skjemaId: periode.id,
+      periode,
       stegnavn: "fyll-ut",
-      rapporteringstype: periode.rapporteringstype,
       steg: 2,
     });
 
