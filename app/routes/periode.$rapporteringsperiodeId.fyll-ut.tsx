@@ -102,6 +102,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
     const nextLink = harIngenAktiviteter
       ? `/periode/${periode.id}/tom`
       : `/periode/${periode.id}/arbeidssoker`;
+
     navigate(nextLink);
   };
 

@@ -18,11 +18,11 @@ export function useAmplitude() {
   const { locale: språk } = useLocale();
 
   const trackEvent = useCallback(
-    <T extends object>(event: string, additionalData: T = {} as T) => {
+    <T extends object>(event: string, props: T = {} as T) => {
       track(event, {
         skjemanavn,
         språk,
-        ...additionalData,
+        ...props,
       });
     },
     [track, språk]
