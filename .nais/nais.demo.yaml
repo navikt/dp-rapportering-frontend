@@ -14,10 +14,7 @@ spec:
   port: 3000
   liveness:
     path: "{{base_path}}/api/internal/isalive"
-    initialDelay: 3
-    timeout: 1
-    periodSeconds: 5
-    failureThreshold: 10
+    initialDelay: 10
   readiness:
     path: "{{base_path}}/api/internal/isready"
     initialDelay: 3
