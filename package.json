@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@grafana/faro-web-sdk": "1.11.0",
-    "@mswjs/data": "0.16.2",
     "@navikt/aksel-icons": "7.3.1",
     "@navikt/ds-css": "7.3.1",
     "@navikt/ds-react": "7.3.1",
@@ -52,7 +51,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.1.0",
-    "@mswjs/data": "0.16.2",
+    "@mswjs/data": "^0.16.2",
     "@remix-run/dev": "2.13.1",
     "@remix-run/eslint-config": "2.13.1",
     "@remix-run/testing": "2.13.1",
