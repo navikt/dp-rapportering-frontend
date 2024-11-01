@@ -13,14 +13,17 @@ import {
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
+import { logg } from "~/models/logger.server";
 import {
   hentPeriode,
   hentRapporteringsperioder,
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { getCorralationId } from "~/utils/fetch.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
 import { kanSendes } from "~/utils/periode.utils";
+import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useLocale } from "~/hooks/useLocale";
@@ -46,24 +49,34 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const periodeId = params.rapporteringsperiodeId;
 
   try {
-    const periode = await hentPeriode(request, periodeId, false);
-    const response = await sendInnPeriode(request, periode);
-    const { id } = response;
-    return redirect(`/periode/${id}/bekreftelse`);
-  } catch (error: unknown) {
-    // TODO: Her ønsker vi å vise en modal, ikke en ny side
-    // TODO: Feilen er en network error
-    if (error instanceof Error) {
-      return json(
-        {
-          error: "rapportering-feilmelding-feil-ved-innsending",
-        },
-        {
-          status: 500,
-        }
-      );
+    const { periode, response } = await hentPeriode(request, periodeId, false);
+
+    if (!periode.kanSendes && periode.status === IRapporteringsperiodeStatus.Innsendt) {
+      logg({
+        type: "warn",
+        message: `Feil i innsending av periode: perioden er allerede innsendt, ID: ${periodeId}`,
+        correlationId: getCorralationId(response.headers),
+        body: periode,
+      });
+
+      return redirect(`/periode/${periodeId}/bekreftelse`);
+    } else if (!periode.kanSendes) {
+      logg({
+        type: "error",
+        message: `Feil i innsending av periode: perioden kan ikke sendes inn, ID: ${periodeId}`,
+        correlationId: getCorralationId(response.headers),
+        body: periode,
+      });
+
+      return json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
     }
 
+    const innsendtPeriode = await sendInnPeriode(request, periode);
+    const { id } = innsendtPeriode;
+
+    return redirect(`/periode/${id}/bekreftelse`);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error: unknown) {
     return json(
       {
         error: "rapportering-feilmelding-feil-ved-innsending",

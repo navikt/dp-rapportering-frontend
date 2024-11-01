@@ -43,3 +43,20 @@ async function getHttpProblem(response: Response): Promise<IHttpProblem | null> 
     return null;
   }
 }
+
+export async function logg({
+  type,
+  message,
+  correlationId = null,
+  body,
+}: {
+  type: "error" | "warn" | "info" | "debug";
+  message: string;
+  correlationId: string | null;
+  body: unknown;
+}) {
+  sikkerLogger[type](`${message}, body: ${JSON.stringify(body)}`, {
+    x_correlationId: correlationId,
+  });
+  logger[type](`${message}. Se sikker logg for data.`, { x_correlationId: correlationId });
+}

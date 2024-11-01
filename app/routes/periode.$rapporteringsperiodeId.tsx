@@ -18,7 +18,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const skalHenteOriginal = ["endre"];
   const hentOriginal = skalHenteOriginal.some((url) => request.url.includes(url));
 
-  const periode = await hentPeriode(request, periodeId, hentOriginal);
+  const { periode } = await hentPeriode(request, periodeId, false);
 
   return json({ periode });
 }
