@@ -34,7 +34,7 @@ export function GeneralErrorBoundary({ error }: IProps) {
     body = `${error.message}-beskrivelse`;
   }
 
-  console.error(error);
+  console.error(title, error);
 
   return (
     <>
