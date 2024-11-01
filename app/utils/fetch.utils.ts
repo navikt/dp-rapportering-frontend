@@ -17,13 +17,11 @@ function generateCorralationId() {
 export async function getHeaders(request: Request, customHeaders = {}) {
   const onBehalfOfToken = await getRapporteringOboToken(request);
 
-  const corralationId = request.headers.get("X-Request-ID") ?? generateCorralationId();
-
   const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
     Authorization: `Bearer ${onBehalfOfToken}`,
-    "X-Request-ID": corralationId,
+    "X-Request-ID": generateCorralationId(),
     ...customHeaders,
   };
 
