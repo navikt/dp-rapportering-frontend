@@ -165,8 +165,8 @@ export async function sendInnPeriode(
   };
 
   const standardHeaders = await getHeaders(request);
-  const githubSha = process.env.GITHUB_SHA || "";
-  const userAgent = request.headers.get("User-Agent") || "";
+  const githubSha = process.env.GITHUB_SHA || "UKJENT";
+  const userAgent = request.headers.get("User-Agent") || "UKJENT";
 
   const headers = {
     ...standardHeaders,
