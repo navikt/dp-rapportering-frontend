@@ -22,6 +22,7 @@ export async function getHeaders(request: Request, customHeaders = {}) {
     Accept: "application/json",
     Authorization: `Bearer ${onBehalfOfToken}`,
     "X-Request-ID": generateCorralationId(),
+    connection: "keep-alive",
     ...customHeaders,
   };
 
