@@ -14,7 +14,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
-  const periode = await hentPeriode(request, periodeId, false);
+
+  const skalHenteOriginal = ["endre"];
+  const hentOriginal = skalHenteOriginal.some((url) => request.url.includes(url));
+
+  const { periode } = await hentPeriode(request, periodeId, hentOriginal);
 
   return json({ periode });
 }
