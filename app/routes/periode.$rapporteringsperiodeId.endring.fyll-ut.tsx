@@ -51,11 +51,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
-  const { periode } = await hentPeriode(request, periodeId, false);
+  const { periode } = await hentPeriode(request, periodeId, false, "loader-endring-fyll-ut");
   const { periode: originalPeriode } = await hentPeriode(
     request,
     periode.originalId as string,
-    true
+    true,
+    "loader-endring-fyll-ut-original"
   );
 
   return json({ periode, originalPeriode });
