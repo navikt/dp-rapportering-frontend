@@ -97,7 +97,8 @@ export async function hentRapporteringsperioder(
 export async function hentPeriode(
   request: Request,
   periodeId: string,
-  hentOriginal: boolean = true
+  hentOriginal: boolean = true,
+  operasjon: string = ""
 ): Promise<{ periode: IRapporteringsperiode; response: Response }> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}`;
 
@@ -106,6 +107,7 @@ export async function hentPeriode(
     method: "GET",
     headers: await getHeaders(request, {
       "Hent-Original": hentOriginal,
+      Operasjon: operasjon,
     }),
   });
 
