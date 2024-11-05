@@ -41,7 +41,6 @@ export default function Landingsside() {
   const { getAppText, getLink, getRichText } = useSanity();
   const startFetcher = useFetcher<typeof StartAction>();
   const showInfoAlertFetcher = useFetcher();
-
   const [samtykker, setSamtykker] = useState(showInfoAlert);
   const { trackSkjemaStartet } = useAmplitude();
 
@@ -71,9 +70,9 @@ export default function Landingsside() {
             );
           }}
           variant="info"
-          className="my-8 alert-with-rich-text"
+          className="my-4 alert-with-rich-text"
         >
-          <Heading spacing size="small" level="3">
+          <Heading spacing size="small" level="2">
             {getAppText("rapportering-informasjon-nytt-meldekort-tittel")}
           </Heading>
           <PortableText value={getRichText("rapportering-informasjon-nytt-meldekort")} />
@@ -81,13 +80,13 @@ export default function Landingsside() {
       )}
 
       {rapporteringsperioder.length === 0 && (
-        <Alert variant="info" className="my-8 alert-with-rich-text">
+        <Alert variant="info" className="my-4 alert-with-rich-text">
           <PortableText value={getRichText("rapportering-ingen-meldekort")} />
         </Alert>
       )}
 
       {forstePeriode?.kanSendes === false && (
-        <Alert variant="info" className="my-8 alert-with-rich-text">
+        <Alert variant="info" className="my-4 alert-with-rich-text">
           <PortableText
             components={getSanityPortableTextComponents({
               "rapportering-apnes-i-ny-fane": getAppText("rapportering-apnes-i-ny-fane"),

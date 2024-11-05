@@ -14,10 +14,10 @@ import { Rapporteringstype } from "~/utils/types";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import { Error } from "~/components/error/Error";
+import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();

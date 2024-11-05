@@ -18,6 +18,12 @@ d-breadcrumbs {
   margin: 0 auto;
 }
 
+.service-messages {
+  max-width: var(--app-max-width);
+  padding: 0 var(--app-padding);
+  margin: 0 auto;
+}
+
 .rapportering-container {
   max-width: var(--app-max-width);
   padding: var(--app-padding);

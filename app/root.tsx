@@ -33,6 +33,7 @@ import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBoundary";
+import { ServiceMessage } from "./components/service-message/ServiceMessage";
 
 /* eslint-enable */
 import navStyles from "@navikt/ds-css/dist/index.css?url";
@@ -139,6 +140,9 @@ export async function action({ request }: LoaderFunctionArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { fragments, env } = useTypedRouteLoaderData("root");
+  const { getMessages } = useSanity();
+
+  const serviceMessages = getMessages();
 
   useInjectDecoratorScript(fragments.DECORATOR_SCRIPTS);
 
@@ -158,11 +162,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
         {parse(fragments.DECORATOR_HEADER, { trim: true })}
+
         {isLocalOrDemo && (
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div className="service-messages">
             <Alert variant="warning">
               Dette er en demoside og inneholder ikke dine personlige data.
             </Alert>
+          </div>
+        )}
+
+        {serviceMessages.length > 0 && (
+          <div className="service-messages">
+            {serviceMessages.map((message) => (
+              <ServiceMessage key={message.textId} message={message} />
+            ))}
           </div>
         )}
 

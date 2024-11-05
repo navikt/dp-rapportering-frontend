@@ -59,8 +59,8 @@ const linksGroq = `* [_type=="rapporteringLink" && language==$baseLang]{
   ),
 }`;
 
-// Henter aktive meldinger som ikke er utløpt
-const messagesGroq = `* [_type=="rapporteringMessage" && language==$baseLang && enabled==true && to>=now()]{
+// Henter aktive meldinger som har startet og ikke er utløpt
+const messagesGroq = `* [_type=="rapporteringMessage" && language==$baseLang && enabled==true && from<=now() && to>=now()]{
   ...coalesce(
     *[textId==^.textId && language==$lang][0]${messageFields},${messageFields}
   ),

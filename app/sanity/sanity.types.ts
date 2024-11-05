@@ -23,6 +23,7 @@ export interface ISanityMessage {
   body: TypedObject | TypedObject[];
   from: string;
   to: string;
+  variant: "success" | "info" | "warning" | "error";
   enabled: boolean;
 }
 

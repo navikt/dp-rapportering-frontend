@@ -33,6 +33,7 @@ export const createSanityMessageObject = (textId: string): ISanityMessage => ({
   from: new Date().toISOString(),
   to: new Date().toISOString(),
   enabled: false,
+  variant: "info",
 });
 
 export type GetAppText = (textId: string) => string;
@@ -77,6 +78,10 @@ export function getMessage(sanityTexts: ISanity, textId: string): ISanityMessage
   return message;
 }
 
+export function getMessages(sanityTexts: ISanity): ISanityMessage[] {
+  return sanityTexts?.messages ?? [];
+}
+
 export function getLink(sanityTexts: ISanity, linkId: string): ISanityLink {
   const link = sanityTexts?.links?.find((link) => link.linkId === linkId) || {
     linkId: linkId,
@@ -98,14 +103,20 @@ export function useSanity() {
   const hookGetAppText = (textId: string) => getAppText(sanityTexts, textId);
   const hookGetRichText = (textId: string) => getRichText(sanityTexts, textId);
   const hookGetLink = (linkId: string) => getLink(sanityTexts, linkId);
+  const hookGetMessage = (textId: string) => getMessage(sanityTexts, textId);
+  const hookGetMessages = () => getMessages(sanityTexts);
 
   const cachedGetAppText = useCallback(hookGetAppText, [sanityTexts]);
   const cachedGetRichText = useCallback(hookGetRichText, [sanityTexts]);
-  const cachedgetLink = useCallback(hookGetLink, [sanityTexts]);
+  const cachedGetLink = useCallback(hookGetLink, [sanityTexts]);
+  const cachedGetMessage = useCallback(hookGetMessage, [sanityTexts]);
+  const cachedGetMessages = useCallback(hookGetMessages, [sanityTexts]);
 
   return {
     getAppText: cachedGetAppText,
     getRichText: cachedGetRichText,
-    getLink: cachedgetLink,
+    getLink: cachedGetLink,
+    getMessage: cachedGetMessage,
+    getMessages: cachedGetMessages,
   };
 }
