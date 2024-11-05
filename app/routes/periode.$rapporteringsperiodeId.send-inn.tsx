@@ -49,7 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const periodeId = params.rapporteringsperiodeId;
 
   try {
-    const { periode, response } = await hentPeriode(request, periodeId, false);
+    const { periode, response } = await hentPeriode(request, periodeId, false, "action-send-inn");
 
     if (!periode.kanSendes && periode.status === IRapporteringsperiodeStatus.Innsendt) {
       logg({
