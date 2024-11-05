@@ -12,12 +12,12 @@ import { erPeriodeneLike } from "~/utils/periode.utils";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
-import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
+import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");

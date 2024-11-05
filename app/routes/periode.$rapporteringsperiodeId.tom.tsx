@@ -5,8 +5,8 @@ import { useNavigate } from "@remix-run/react";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { KanIkkeSendes } from "~/components/KanIkkeSendes/KanIkkeSendes";
 import { RemixLink } from "~/components/RemixLink";
+import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 
 export default function TomRapporteringsPeriodeSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
