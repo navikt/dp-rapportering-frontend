@@ -31,6 +31,16 @@ const linkFields = `{
   linkDescription
 }`;
 
+const messageFields = `{
+  textId,
+  title,
+  body,
+  from,
+  to,
+  variant,
+  enabled
+}`;
+
 const appTextsGroq = `* [_type=="rapporteringAppText" && language==$baseLang]{
   ...coalesce(
     *[textId==^.textId && language==$lang][0]${appTextsFields},${appTextsFields}
@@ -49,8 +59,16 @@ const linksGroq = `* [_type=="rapporteringLink" && language==$baseLang]{
   ),
 }`;
 
+// Henter aktive meldinger som ikke er utløpt
+const messagesGroq = `* [_type=="rapporteringMessage" && language==$baseLang && enabled==true && to>=now()]{
+  ...coalesce(
+    *[textId==^.textId && language==$lang][0]${messageFields},${messageFields}
+  ),
+}`;
+
 export const allTextsQuery = groq`{
     "appTexts": ${appTextsGroq},
     "richTexts": ${richTextsGroq},
-    "links": ${linksGroq}
+    "links": ${linksGroq},
+    "messages": ${messagesGroq}
 }`;

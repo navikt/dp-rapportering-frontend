@@ -17,8 +17,18 @@ export interface ISanityLink {
   linkDescription: string;
 }
 
+export interface ISanityMessage {
+  textId: string;
+  title: string;
+  body: TypedObject | TypedObject[];
+  from: string;
+  to: string;
+  enabled: boolean;
+}
+
 export interface ISanity {
   appTexts: ISanityAppText[];
   richTexts: ISanityRichText[];
   links: ISanityLink[];
+  messages: ISanityMessage[];
 }

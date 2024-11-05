@@ -1,7 +1,13 @@
 import { useTypedRouteLoaderData } from "./useTypedRouteLoaderData";
 import type { PortableTextBlock, TypedObject } from "@portabletext/types";
 import { useCallback } from "react";
-import type { ISanity, ISanityAppText, ISanityLink, ISanityRichText } from "~/sanity/sanity.types";
+import type {
+  ISanity,
+  ISanityAppText,
+  ISanityLink,
+  ISanityMessage,
+  ISanityRichText,
+} from "~/sanity/sanity.types";
 
 export const createSanityRichTextObject = (text: string): PortableTextBlock[] => [
   {
@@ -20,9 +26,19 @@ export const createSanityRichTextObject = (text: string): PortableTextBlock[] =>
   },
 ];
 
+export const createSanityMessageObject = (textId: string): ISanityMessage => ({
+  textId,
+  title: textId,
+  body: createSanityRichTextObject(textId),
+  from: new Date().toISOString(),
+  to: new Date().toISOString(),
+  enabled: false,
+});
+
 export type GetAppText = (textId: string) => string;
 export type GetRichText = (textId: string) => TypedObject | TypedObject[];
-export type GetLink = (linkId: string) => ISanityLink;
+export type GetMessage = (textId: string) => ISanityLink;
+export type GetLink = (linkId: string) => ISanityMessage;
 
 export function getAppText(sanityTexts: ISanity, textId: string): string {
   const text =
@@ -46,6 +62,19 @@ export function getRichText(sanityTexts: ISanity, textId: string): TypedObject |
   }
 
   return (richText?.body as TypedObject | TypedObject[]) ?? createSanityRichTextObject(textId);
+}
+
+export function getMessage(sanityTexts: ISanity, textId: string): ISanityMessage {
+  const message =
+    sanityTexts?.messages?.find((m: ISanityMessage) => {
+      return m.textId === textId;
+    }) || createSanityMessageObject(textId);
+
+  if (message?.title === textId) {
+    console.warn(`Fant ikke message med ID: ${textId}`);
+  }
+
+  return message;
 }
 
 export function getLink(sanityTexts: ISanity, linkId: string): ISanityLink {
