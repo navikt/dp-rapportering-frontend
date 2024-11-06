@@ -23,6 +23,7 @@ export async function getHeaders(request: Request, customHeaders = {}) {
     Authorization: `Bearer ${onBehalfOfToken}`,
     "X-Request-ID": generateCorralationId(),
     connection: "keep-alive",
+    Referer: request.url,
     ...customHeaders,
   };
 

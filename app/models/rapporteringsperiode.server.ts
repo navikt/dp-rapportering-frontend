@@ -101,8 +101,6 @@ export async function hentPeriode(
   operasjon: string = ""
 ): Promise<{ periode: IRapporteringsperiode; response: Response }> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}`;
-
-  // TODO: Legg til x_corralationId som header
   const response = await fetch(url, {
     method: "GET",
     headers: await getHeaders(request, {

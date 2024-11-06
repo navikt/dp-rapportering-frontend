@@ -66,7 +66,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       return json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
     }
-
     const response = await sendInnPeriode(request, periode);
     const { id } = response;
     return redirect(`/periode/${id}/endring/bekreftelse`);

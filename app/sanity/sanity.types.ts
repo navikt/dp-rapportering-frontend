@@ -1,4 +1,4 @@
-import type { TypedObject } from "@portabletext/types";
+import type { PortableTextBlock, TypedObject } from "@portabletext/types";
 
 export interface ISanityAppText {
   textId: string;
@@ -7,7 +7,7 @@ export interface ISanityAppText {
 
 export interface ISanityRichText {
   textId: string;
-  body: TypedObject | TypedObject[];
+  body: PortableTextBlock[];
 }
 
 export interface ISanityLink {
