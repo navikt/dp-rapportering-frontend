@@ -2,6 +2,7 @@ import { Button, Heading } from "@navikt/ds-react";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 import { ErrorResponse, isRouteErrorResponse } from "@remix-run/react";
 import { useEffect } from "react";
+import { renderToString } from "react-dom/server";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { foundAppText, foundRichText, useSanity } from "~/hooks/useSanity";
 
@@ -40,27 +41,29 @@ export function getErrorDescriptionTextId(error: unknown | IError): string {
 }
 
 export function useGetErrorText(error: unknown | IError): {
+  titleId: string;
+  descriptionId: string;
   title: string;
   description: PortableTextBlock[];
 } {
   const { getRichText, getAppText } = useSanity();
 
-  const titleTextId = getErrorTitleTextId(error);
-  const descriptionTextId = getErrorDescriptionTextId(error);
+  const titleId = getErrorTitleTextId(error);
+  const descriptionId = getErrorDescriptionTextId(error);
 
-  const title = getAppText(titleTextId);
-  const description = getRichText(descriptionTextId);
+  const title = getAppText(titleId);
+  const description = getRichText(descriptionId);
 
-  const texts = { title, description };
+  const texts = { titleId, descriptionId, title, description };
 
-  if (!foundAppText(title, titleTextId)) {
+  if (!foundAppText(title, titleId)) {
     texts.title = getAppText(defaultTitle);
-    console.error("Fant ikke tittel for feilmelding", titleTextId);
+    console.error("Fant ikke tittel for feilmelding", titleId);
   }
 
-  if (!foundRichText(description, descriptionTextId)) {
+  if (!foundRichText(description, descriptionId)) {
     texts.description = getRichText(defaultDescription);
-    console.error("Fant ikke beskrivelse for feilmelding", descriptionTextId);
+    console.error("Fant ikke beskrivelse for feilmelding", descriptionId);
   }
 
   return texts;
@@ -68,18 +71,21 @@ export function useGetErrorText(error: unknown | IError): {
 
 export function GeneralErrorBoundary({ error }: IProps) {
   const { getAppText, getLink } = useSanity();
-  const { title, description } = useGetErrorText(error);
+  const { titleId, descriptionId, title, description } = useGetErrorText(error);
 
   useEffect(() => {
     setBreadcrumbs([], getAppText);
   }, [getAppText]);
 
-  console.error(title, description, JSON.stringify(error, Object.getOwnPropertyNames(error)));
+  console.error(
+    `${title} (${titleId}), ${renderToString(<PortableText value={description} />)} (${descriptionId})`,
+    JSON.stringify({ error, properties: Object.getOwnPropertyNames(error) })
+  );
 
   return (
     <>
       <Heading spacing size="medium" level="2">
-        {getAppText(title)}
+        {title}
       </Heading>
 
       <PortableText value={description} />
