@@ -109,14 +109,7 @@ export function getLesMer(props: IProps & { tittel: string; innhold: string }): 
     "// Les mer",
     "<div style='border: 1px solid black; padding: 10px;'>",
     getHeader({ text: getAppText(tittel), level: "2" }),
-    renderToString(
-      <PortableText
-        components={getSanityPortableTextComponents({
-          "rapportering-apnes-i-ny-fane": getAppText("rapportering-apnes-i-ny-fane"),
-        })}
-        value={getRichText(innhold)}
-      />
-    ),
+    renderToString(<PortableText value={getRichText(innhold)} />),
     "</div>",
   ].join("");
 }
@@ -285,7 +278,6 @@ export function htmlForLandingsside(props: IProps): string {
       renderToString(
         <PortableText
           components={getSanityPortableTextComponents({
-            "rapportering-apnes-i-ny-fane": getAppText("rapportering-apnes-i-ny-fane"),
             dato: formaterDato(new Date(periode.kanSendesFra)),
           })}
           value={getRichText("rapportering-for-tidlig-a-sende-meldekort")}
@@ -351,7 +343,6 @@ export function htmlForRapporteringstype(props: IProps): string {
     renderToString(
       <PortableText
         components={getSanityPortableTextComponents({
-          "rapportering-apnes-i-ny-fane": getAppText("rapportering-apnes-i-ny-fane"),
           "fra-dato": tidligstInnsendingDato,
           "til-dato": senestInnsendingDato,
         })}
