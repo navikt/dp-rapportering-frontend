@@ -58,12 +58,12 @@ export function useGetErrorText(error: unknown | IError): {
 
   if (!foundAppText(title, titleId)) {
     texts.title = getAppText(defaultTitle);
-    console.error("Fant ikke tittel for feilmelding", titleId);
+    console.warn("Fant ikke tittel for feilmelding", titleId);
   }
 
   if (!foundRichText(description, descriptionId)) {
     texts.description = getRichText(defaultDescription);
-    console.error("Fant ikke beskrivelse for feilmelding", descriptionId);
+    console.warn("Fant ikke beskrivelse for feilmelding", descriptionId);
   }
 
   return texts;
