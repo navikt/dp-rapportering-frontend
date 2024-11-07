@@ -12,11 +12,12 @@ export function getSanityPortableTextComponents(
       }: {
         value: { dynamiskFelt: { textId: string; type: string } };
       }) => {
-        if (!texts) {
-          return value.dynamiskFelt.textId;
+        if (!texts || !texts[value.dynamiskFelt.textId]) {
+          console.error("Fant ikke dynamiskFelt-tekst for", value.dynamiskFelt.textId);
+          return <span key={value.dynamiskFelt.textId}>{value.dynamiskFelt.textId}</span>;
         }
 
-        return texts[value.dynamiskFelt.textId] ?? value.dynamiskFelt.textId;
+        return <span key={value.dynamiskFelt.textId}>{texts[value.dynamiskFelt.textId]}</span>;
       },
     },
   };
