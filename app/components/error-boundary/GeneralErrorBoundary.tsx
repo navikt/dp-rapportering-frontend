@@ -2,7 +2,6 @@ import { Button, Heading } from "@navikt/ds-react";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 import { ErrorResponse, isRouteErrorResponse } from "@remix-run/react";
 import { useEffect } from "react";
-import { renderToString } from "react-dom/server";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { foundAppText, foundRichText, useSanity } from "~/hooks/useSanity";
 
@@ -77,10 +76,7 @@ export function GeneralErrorBoundary({ error }: IProps) {
     setBreadcrumbs([], getAppText);
   }, [getAppText]);
 
-  console.error(
-    `${title} (${titleId}), ${renderToString(<PortableText value={description} />)} (${descriptionId})`,
-    JSON.stringify({ error, properties: Object.getOwnPropertyNames(error) })
-  );
+  console.error(`${titleId}: ${descriptionId}`, error);
 
   return (
     <>
