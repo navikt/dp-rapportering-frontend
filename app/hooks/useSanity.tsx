@@ -9,6 +9,8 @@ import type {
   ISanityRichText,
 } from "~/sanity/sanity.types";
 
+export type ReplaceTexts = { [key: string]: string | number };
+
 export function createSanityRichTextObject(text: string): PortableTextBlock[] {
   return [
     {
@@ -49,13 +51,17 @@ export function createLinkObject(linkId: string): ISanityLink {
   };
 }
 
-export type GetAppText = (textId: string) => string;
+export type GetAppText = (textId: string, replaceTexts?: ReplaceTexts) => string;
 
 export function foundAppText(text: string, textId: string) {
   return text !== textId;
 }
 
-export function getAppText(sanityTexts: ISanity, textId: string): string {
+export function getAppText(
+  sanityTexts: ISanity,
+  textId: string,
+  replaceTexts?: ReplaceTexts
+): string {
   const text =
     sanityTexts?.appTexts.find((appText: ISanityAppText) => appText.textId === textId)?.valueText ||
     textId;
@@ -64,10 +70,17 @@ export function getAppText(sanityTexts: ISanity, textId: string): string {
     console.warn(`Fant ikke appText med ID: ${textId}`);
   }
 
+  if (replaceTexts) {
+    return replaceKeys(text, replaceTexts);
+  }
+
   return text;
 }
 
-export type GetRichText = (textId: string) => TypedObject | TypedObject[];
+export type GetRichText = (
+  textId: string,
+  replaceTexts?: ReplaceTexts
+) => TypedObject | TypedObject[];
 
 export function foundRichText(text: PortableTextBlock[] | undefined, textId: string) {
   if (!text) return false;
@@ -75,7 +88,21 @@ export function foundRichText(text: PortableTextBlock[] | undefined, textId: str
   return text[0]?.children[0]?.text !== textId;
 }
 
-export function getRichText(sanityTexts: ISanity, textId: string): PortableTextBlock[] {
+export function replaceKeys(text: string, replaceTexts: ReplaceTexts) {
+  let tempText = text;
+
+  Object.keys(replaceTexts).forEach((key) => {
+    tempText = tempText.replaceAll(`{${key}}`, replaceTexts[key].toString());
+  });
+
+  return tempText;
+}
+
+export function getRichText(
+  sanityTexts: ISanity,
+  textId: string,
+  replaceTexts?: ReplaceTexts
+): PortableTextBlock[] {
   const richText = sanityTexts?.richTexts?.find((richText: ISanityRichText) => {
     return richText.textId === textId;
   });
@@ -84,7 +111,21 @@ export function getRichText(sanityTexts: ISanity, textId: string): PortableTextB
     console.warn(`Fant ikke richText med ID: ${textId}`);
   }
 
-  return richText?.body ?? createSanityRichTextObject(textId);
+  if (!richText?.body) {
+    return createSanityRichTextObject(textId);
+  }
+
+  if (replaceTexts) {
+    richText.body = richText.body.map((block) => ({
+      ...block,
+      children: block.children.map((child) => ({
+        ...child,
+        text: replaceKeys(child.text, replaceTexts),
+      })),
+    }));
+  }
+
+  return richText?.body;
 }
 
 export type GetMessage = (textId: string) => ISanityLink;
@@ -130,8 +171,10 @@ export function getLink(sanityTexts: ISanity, linkId: string): ISanityLink {
 export function useSanity() {
   const { sanityTexts } = useTypedRouteLoaderData("root");
 
-  const hookGetAppText = (textId: string) => getAppText(sanityTexts, textId);
-  const hookGetRichText = (textId: string) => getRichText(sanityTexts, textId);
+  const hookGetAppText = (textId: string, replaceTexts?: ReplaceTexts) =>
+    getAppText(sanityTexts, textId, replaceTexts);
+  const hookGetRichText = (textId: string, replaceTexts?: ReplaceTexts) =>
+    getRichText(sanityTexts, textId, replaceTexts);
   const hookGetLink = (linkId: string) => getLink(sanityTexts, linkId);
   const hookGetMessage = (textId: string) => getMessage(sanityTexts, textId);
   const hookGetMessages = () => getMessages(sanityTexts);

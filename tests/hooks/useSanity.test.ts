@@ -11,6 +11,7 @@ import {
   getLink,
   getMessage,
   getRichText,
+  replaceKeys,
 } from "~/hooks/useSanity";
 
 const sanityTexts = {
@@ -117,5 +118,13 @@ describe("useSanity", () => {
   test("getLink returnerer tekstnøkkel når lenken ikke finnes i Sanity", () => {
     const link = getLink(sanityTexts, "lenke-tekstnøkkel-som-ikke-finnes");
     expect(link.linkText).toBe("lenke-tekstnøkkel-som-ikke-finnes");
+  });
+
+  test("replaceKeys erstatter nøkler i tekst", () => {
+    const text = "Dette er en tekst med en {nøkkel}";
+    const replaceTexts = { nøkkel: "nøkkelverdi" };
+    const replacedText = "Dette er en tekst med en nøkkelverdi";
+
+    expect(replaceKeys(text, replaceTexts)).toBe(replacedText);
   });
 });

@@ -20,7 +20,6 @@ import { addDays, format } from "date-fns";
 import { renderToString } from "react-dom/server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import {
   AktivitetType,
   IAktivitet,
@@ -277,10 +276,9 @@ export function htmlForLandingsside(props: IProps): string {
     seksjoner.push(
       renderToString(
         <PortableText
-          components={getSanityPortableTextComponents({
+          value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
             dato: formaterDato(new Date(periode.kanSendesFra)),
           })}
-          value={getRichText("rapportering-for-tidlig-a-sende-meldekort")}
         />
       )
     );
@@ -319,10 +317,7 @@ export function htmlForRapporteringstype(props: IProps): string {
   if (harFlerePerioder) {
     seksjoner.push(
       getHeader({
-        text: getAppText("rapportering-flere-perioder-tittel").replace(
-          "{antall}",
-          antallPerioder.toString()
-        ),
+        text: getAppText("rapportering-flere-perioder-tittel", { antall: antallPerioder }),
         level: "2",
       })
     );
@@ -342,11 +337,10 @@ export function htmlForRapporteringstype(props: IProps): string {
   seksjoner.push(
     renderToString(
       <PortableText
-        components={getSanityPortableTextComponents({
+        value={getRichText("rapportering-fyll-ut-frister", {
           "fra-dato": tidligstInnsendingDato,
           "til-dato": senestInnsendingDato,
         })}
-        value={getRichText("rapportering-fyll-ut-frister")}
       />
     )
   );
