@@ -24,7 +24,7 @@
     "@navikt/oasis": "3.4.0",
     "@portabletext/react": "3.1.0",
     "@portabletext/types": "2.0.13",
-    "@remix-run/css-bundle": "2.13.1",
+    "@remix-run/css-bundle": "2.14.0",
     "@remix-run/express": "2.13.1",
     "@remix-run/node": "2.13.1",
     "@remix-run/react": "2.13.1",
