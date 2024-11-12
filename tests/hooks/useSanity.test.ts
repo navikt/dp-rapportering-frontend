@@ -1,5 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
 import {
+  ReplaceTexts,
   createLinkObject,
   createSanityMessageObject,
   createSanityRichTextObject,
@@ -20,6 +21,10 @@ const sanityTexts = {
     {
       textId: "rik-tekstnøkkel",
       body: createSanityRichTextObject("Rik tekst fra Sanity"),
+    },
+    {
+      textId: "rik-tekstnøkkel-med-tekst-som-skal-erstattes",
+      body: createSanityRichTextObject("Tekst med {nøkkel}"),
     },
   ],
   messages: [{ ...createSanityMessageObject("melding-tekstnøkkel"), title: "Melding fra Sanity" }],
@@ -100,6 +105,18 @@ describe("useSanity", () => {
     expect(text).toEqual(createSanityRichTextObject("rik-tekstnøkkel-som-ikke-finnes"));
   });
 
+  test("getRichText returnerer tekst med der {tekstnøkkel} er erstattet", () => {
+    const text = getRichText(sanityTexts, "rik-tekstnøkkel-med-tekst-som-skal-erstattes", {
+      nøkkel: "nøkkelverdi",
+    });
+    expect(text).toEqual(createSanityRichTextObject("Tekst med nøkkelverdi"));
+  });
+
+  test("getRichText returnerer tekst med der {tekstnøkkel} ikke er erstattet når replaceTexts mangler", () => {
+    const text = getRichText(sanityTexts, "rik-tekstnøkkel-med-tekst-som-skal-erstattes");
+    expect(text).toEqual(createSanityRichTextObject("Tekst med {nøkkel}"));
+  });
+
   test("getMessage returnerer melding fra Sanity", () => {
     const text = getMessage(sanityTexts, "melding-tekstnøkkel");
     expect(text.title).toBe("Melding fra Sanity");
@@ -126,5 +143,27 @@ describe("useSanity", () => {
     const replacedText = "Dette er en tekst med en nøkkelverdi";
 
     expect(replaceKeys(text, replaceTexts)).toBe(replacedText);
+  });
+
+  test("replaceKeys erstatter ikke nøkler som ikke er i replaceTexts", () => {
+    const text = "Dette er en tekst med en {annen nøkkel}";
+    const replaceTexts = { nøkkel: "nøkkelverdi" };
+    const replacedText = "Dette er en tekst med en {annen nøkkel}";
+
+    expect(replaceKeys(text, replaceTexts)).toBe(replacedText);
+  });
+
+  test("replaceKeys returnerer innsendt verdi hvis den ikke er string", () => {
+    const text = 5;
+    const replaceTexts = { nøkkel: "nøkkelverdi" };
+
+    expect(replaceKeys(text as unknown as string, replaceTexts)).toBe(text);
+  });
+
+  test("replaceKeys returnerer innsendt tekst hvis replaceTexts er undefined", () => {
+    const text = "Dette er en tekst med en {nøkkel}";
+    const replaceTexts = undefined;
+
+    expect(replaceKeys(text, replaceTexts as unknown as ReplaceTexts)).toBe(text);
   });
 });

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { getSession } from "~/models/getSession.server";
 import { getInfoAlertStatus } from "~/models/info.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import type { action as StartAction } from "./api.start";
 import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
@@ -87,6 +88,14 @@ export default function Landingsside() {
       {forstePeriode?.kanSendes === false && (
         <Alert variant="info" className="my-4 alert-with-rich-text">
           <PortableText
+            // TODO: Ta vekk components...
+            components={getSanityPortableTextComponents({
+              dato: formaterDato(new Date(forstePeriode.kanSendesFra)),
+              "fra-og-til-uke": formaterPeriodeTilUkenummer(
+                forstePeriode.periode.fraOgMed,
+                forstePeriode.periode.tilOgMed
+              ),
+            })}
             value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
               dato: formaterDato(new Date(forstePeriode.kanSendesFra)),
               "fra-og-til-uke": formaterPeriodeTilUkenummer(

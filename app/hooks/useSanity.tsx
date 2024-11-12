@@ -89,6 +89,10 @@ export function foundRichText(text: PortableTextBlock[] | undefined, textId: str
 }
 
 export function replaceKeys(text: string, replaceTexts: ReplaceTexts) {
+  if (typeof text !== "string") return text;
+
+  if (!replaceTexts) return text;
+
   let tempText = text;
 
   Object.keys(replaceTexts).forEach((key) => {
@@ -116,7 +120,7 @@ export function getRichText(
   }
 
   if (replaceTexts) {
-    richText.body = richText.body.map((block) => ({
+    return richText.body.map((block) => ({
       ...block,
       children: block.children.map((child) => ({
         ...child,
@@ -125,7 +129,7 @@ export function getRichText(
     }));
   }
 
-  return richText?.body;
+  return richText.body;
 }
 
 export type GetMessage = (textId: string) => ISanityLink;

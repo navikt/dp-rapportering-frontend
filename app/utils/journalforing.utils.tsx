@@ -20,6 +20,7 @@ import { addDays, format } from "date-fns";
 import { renderToString } from "react-dom/server";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import {
   AktivitetType,
   IAktivitet,
@@ -276,6 +277,10 @@ export function htmlForLandingsside(props: IProps): string {
     seksjoner.push(
       renderToString(
         <PortableText
+          // TODO: Ta vekk components...
+          components={getSanityPortableTextComponents({
+            dato: formaterDato(new Date(periode.kanSendesFra)),
+          })}
           value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
             dato: formaterDato(new Date(periode.kanSendesFra)),
           })}
@@ -337,6 +342,11 @@ export function htmlForRapporteringstype(props: IProps): string {
   seksjoner.push(
     renderToString(
       <PortableText
+        // TODO: Ta vekk components...
+        components={getSanityPortableTextComponents({
+          "fra-dato": tidligstInnsendingDato,
+          "til-dato": senestInnsendingDato,
+        })}
         value={getRichText("rapportering-fyll-ut-frister", {
           "fra-dato": tidligstInnsendingDato,
           "til-dato": senestInnsendingDato,
