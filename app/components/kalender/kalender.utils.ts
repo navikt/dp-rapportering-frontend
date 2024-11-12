@@ -61,8 +61,6 @@ export function hentSkjermleserDatoTekst(
   getAppText: GetAppText,
   locale: string = DecoratorLocale.NB
 ) {
-  const lf = new Intl.ListFormat(locale);
-
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     weekday: "long",
@@ -79,5 +77,11 @@ export function hentSkjermleserDatoTekst(
     return formattertDato;
   }
 
-  return `${formattertDato}, ${lf.format(aktiviteter)}`;
+  try {
+    const lf = new Intl.ListFormat(locale);
+    return `${formattertDato}, ${lf.format(aktiviteter)}`;
+  } catch (error) {
+    console.error("Feil i hentSkjermleserDatoTekst", error);
+    return `${formattertDato}, ${aktiviteter.join(", ")}`;
+  }
 }
