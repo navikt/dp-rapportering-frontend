@@ -1,11 +1,14 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useCallback } from "react";
-import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import {
+  IRapporteringsperiode,
+  hentRapporteringsperioder,
+} from "~/models/rapporteringsperiode.server";
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { formaterDato } from "~/utils/dato.utils";
@@ -29,11 +32,13 @@ export async function action({ request }: ActionFunctionArgs) {
   return await lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({
+  request,
+}: LoaderFunctionArgs): Promise<TypedResponse<{ rapporteringsperioder: IRapporteringsperiode[] }>> {
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
 
-    return json({ rapporteringsperioder });
+    return Response.json({ rapporteringsperioder });
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;

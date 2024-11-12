@@ -1,16 +1,18 @@
 import { Accordion } from "@navikt/ds-react";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
 import { Outlet, useLoaderData, useLocation, useRouteError } from "@remix-run/react";
 import { useEffect } from "react";
 import invariant from "tiny-invariant";
-import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import { IRapporteringsperiode, hentPeriode } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { useSanity } from "~/hooks/useSanity";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({
+  request,
+  params,
+}: LoaderFunctionArgs): Promise<TypedResponse<{ periode: IRapporteringsperiode }>> {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
@@ -20,7 +22,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const { periode } = await hentPeriode(request, periodeId, hentOriginal, "loader-periode");
 
-  return json({ periode });
+  return Response.json({ periode });
 }
 
 export default function RapporteringsPeriodeSide() {

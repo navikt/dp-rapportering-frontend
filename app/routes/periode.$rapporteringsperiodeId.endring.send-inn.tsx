@@ -1,8 +1,8 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   Form,
   useActionData,
@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { logErrorResponse, logg } from "~/models/logger.server";
 import {
+  IRapporteringsperiode,
   hentPeriode,
   hentRapporteringsperioder,
   sendInnPeriode,
@@ -33,10 +34,12 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({
+  request,
+}: LoaderFunctionArgs): Promise<TypedResponse<{ rapporteringsperioder: IRapporteringsperiode[] }>> {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
 
-  return json({ rapporteringsperioder });
+  return Response.json({ rapporteringsperioder });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -64,7 +67,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         body: periode,
       });
 
-      return json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
+      return Response.json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
     }
     const response = await sendInnPeriode(request, periode);
     const { id } = response;
@@ -88,7 +91,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       });
     }
 
-    return json(
+    return Response.json(
       {
         error: "rapportering-feilmelding-feil-ved-innsending",
       },

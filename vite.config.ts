@@ -3,11 +3,14 @@ import { installGlobals } from "@remix-run/node";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-installGlobals();
+installGlobals({ nativeFetch: true });
 
 export default defineConfig({
   base: "/arbeid/dagpenger/meldekort/",
-  plugins: [remix({ basename: "/arbeid/dagpenger/meldekort/" }), tsconfigPaths()],
+  plugins: [
+    remix({ basename: "/arbeid/dagpenger/meldekort/", future: { v3_singleFetch: true } }),
+    tsconfigPaths(),
+  ],
   server: {
     port: 3000,
   },

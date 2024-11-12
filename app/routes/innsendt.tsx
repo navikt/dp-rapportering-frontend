@@ -1,7 +1,6 @@
 import { Accordion, Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { type LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { type LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import {
@@ -22,11 +21,16 @@ import {
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs): Promise<
+  TypedResponse<{
+    innsendtPerioder: IRapporteringsperiode[];
+    rapporteringsperioder: IRapporteringsperiode[];
+  }>
+> {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
   const innsendtPerioder = await hentInnsendtePerioder(request);
 
-  return json({ innsendtPerioder, rapporteringsperioder });
+  return Response.json({ innsendtPerioder, rapporteringsperioder });
 }
 
 function grupperPerioder(

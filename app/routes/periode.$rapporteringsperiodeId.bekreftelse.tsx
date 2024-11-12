@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
@@ -8,12 +8,14 @@ import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { Kvittering } from "~/components/Kvittering";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({
+  request,
+}: LoaderFunctionArgs): Promise<TypedResponse<{ harNestePeriode: boolean }>> {
   // TODO: Er listen med rapporteringsperioder med eller uten den innsendte perioden?
   const rapporteringsperioder = await hentRapporteringsperioder(request);
   const harNestePeriode = perioderSomKanSendes(rapporteringsperioder).length > 0;
 
-  return json({ harNestePeriode });
+  return Response.json({ harNestePeriode });
 }
 
 export default function RapporteringsPeriodesBekreftelsesSide() {

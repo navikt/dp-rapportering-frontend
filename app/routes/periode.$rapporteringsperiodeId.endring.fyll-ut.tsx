@@ -1,11 +1,11 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import type { ActionFunctionArgs, LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
+import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import { IRapporteringsperiode, hentPeriode } from "~/models/rapporteringsperiode.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
@@ -47,7 +47,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 }
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({
+  request,
+  params,
+}: LoaderFunctionArgs): Promise<
+  TypedResponse<{ periode: IRapporteringsperiode; originalPeriode: IRapporteringsperiode }>
+> {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
@@ -59,7 +64,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     "loader-endring-fyll-ut-original"
   );
 
-  return json({ periode, originalPeriode });
+  return Response.json({ periode, originalPeriode });
 }
 
 export default function RapporteringsPeriodeFyllUtSide() {

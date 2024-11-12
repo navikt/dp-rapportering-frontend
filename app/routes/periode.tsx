@@ -1,10 +1,10 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import type { LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs): Promise<TypedResponse<object>> {
   if (!params.rapporteringsperiodeId) {
     return redirect("/");
   }
 
-  return json({});
+  return Response.json({});
 }
