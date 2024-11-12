@@ -81,7 +81,7 @@ export function hentSkjermleserDatoTekst(
     const lf = new Intl.ListFormat(locale);
     return `${formattertDato}, ${lf.format(aktiviteter)}`;
   } catch (error) {
-    console.error("Feil i hentSkjermleserDatoTekst", error);
+    console.warn("Feil i hentSkjermleserDatoTekst", error);
     return `${formattertDato}, ${aktiviteter.join(", ")}`;
   }
 }
