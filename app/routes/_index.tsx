@@ -88,6 +88,7 @@ export default function Landingsside() {
       {forstePeriode?.kanSendes === false && (
         <Alert variant="info" className="my-4 alert-with-rich-text">
           <PortableText
+            // TODO: Ta vekk components...
             components={getSanityPortableTextComponents({
               dato: formaterDato(new Date(forstePeriode.kanSendesFra)),
               "fra-og-til-uke": formaterPeriodeTilUkenummer(
@@ -95,7 +96,13 @@ export default function Landingsside() {
                 forstePeriode.periode.tilOgMed
               ),
             })}
-            value={getRichText("rapportering-for-tidlig-a-sende-meldekort")}
+            value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
+              dato: formaterDato(new Date(forstePeriode.kanSendesFra)),
+              "fra-og-til-uke": formaterPeriodeTilUkenummer(
+                forstePeriode.periode.fraOgMed,
+                forstePeriode.periode.tilOgMed
+              ),
+            })}
           />
         </Alert>
       )}

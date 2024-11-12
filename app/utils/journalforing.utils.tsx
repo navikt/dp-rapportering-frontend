@@ -277,10 +277,13 @@ export function htmlForLandingsside(props: IProps): string {
     seksjoner.push(
       renderToString(
         <PortableText
+          // TODO: Ta vekk components...
           components={getSanityPortableTextComponents({
             dato: formaterDato(new Date(periode.kanSendesFra)),
           })}
-          value={getRichText("rapportering-for-tidlig-a-sende-meldekort")}
+          value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
+            dato: formaterDato(new Date(periode.kanSendesFra)),
+          })}
         />
       )
     );
@@ -319,10 +322,7 @@ export function htmlForRapporteringstype(props: IProps): string {
   if (harFlerePerioder) {
     seksjoner.push(
       getHeader({
-        text: getAppText("rapportering-flere-perioder-tittel").replace(
-          "{antall}",
-          antallPerioder.toString()
-        ),
+        text: getAppText("rapportering-flere-perioder-tittel", { antall: antallPerioder }),
         level: "2",
       })
     );
@@ -342,11 +342,15 @@ export function htmlForRapporteringstype(props: IProps): string {
   seksjoner.push(
     renderToString(
       <PortableText
+        // TODO: Ta vekk components...
         components={getSanityPortableTextComponents({
           "fra-dato": tidligstInnsendingDato,
           "til-dato": senestInnsendingDato,
         })}
-        value={getRichText("rapportering-fyll-ut-frister")}
+        value={getRichText("rapportering-fyll-ut-frister", {
+          "fra-dato": tidligstInnsendingDato,
+          "til-dato": senestInnsendingDato,
+        })}
       />
     )
   );

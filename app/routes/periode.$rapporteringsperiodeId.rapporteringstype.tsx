@@ -105,10 +105,7 @@ export default function RapporteringstypeSide() {
         <>
           <Alert variant="info" className="my-8">
             <Heading spacing size="small" level="2">
-              {getAppText("rapportering-flere-perioder-tittel").replace(
-                "{antall}",
-                antallPerioder.toString()
-              )}
+              {getAppText("rapportering-flere-perioder-tittel", { antall: antallPerioder })}
             </Heading>
             {getAppText("rapportering-flere-perioder-innledning")}
           </Alert>
@@ -124,11 +121,15 @@ export default function RapporteringstypeSide() {
       <p>{hentPeriodeTekst(periode, getAppText)}</p>
 
       <PortableText
+        // TODO: Ta vekk components...
         components={getSanityPortableTextComponents({
           "fra-dato": tidligstInnsendingDato,
           "til-dato": senestInnsendingDato,
         })}
-        value={getRichText("rapportering-fyll-ut-frister")}
+        value={getRichText("rapportering-fyll-ut-frister", {
+          "fra-dato": tidligstInnsendingDato,
+          "til-dato": senestInnsendingDato,
+        })}
       />
 
       <LesMer />
