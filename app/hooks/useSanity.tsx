@@ -89,9 +89,7 @@ export function foundRichText(text: PortableTextBlock[] | undefined, textId: str
 }
 
 export function replaceKeys(text: string, replaceTexts: ReplaceTexts) {
-  if (typeof text !== "string") return text;
-
-  if (!replaceTexts) return text;
+  if (typeof text !== "string" || !replaceTexts) return text;
 
   let tempText = text;
 
