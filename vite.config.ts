@@ -7,10 +7,7 @@ installGlobals({ nativeFetch: true });
 
 export default defineConfig({
   base: "/arbeid/dagpenger/meldekort/",
-  plugins: [
-    remix({ basename: "/arbeid/dagpenger/meldekort/", future: { v3_singleFetch: true } }),
-    tsconfigPaths(),
-  ],
+  plugins: [remix({ basename: "/arbeid/dagpenger/meldekort/" }), tsconfigPaths()],
   server: {
     port: 3000,
   },
