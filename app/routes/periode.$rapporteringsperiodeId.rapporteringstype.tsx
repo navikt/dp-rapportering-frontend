@@ -10,7 +10,6 @@ import {
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
-import { getSanityPortableTextComponents } from "~/sanity/sanityPortableTextComponents";
 import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst, kanSendes, perioderSomKanSendes } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
@@ -126,11 +125,6 @@ export default function RapporteringstypeSide() {
       <p>{hentPeriodeTekst(periode, getAppText)}</p>
 
       <PortableText
-        // TODO: Ta vekk components...
-        components={getSanityPortableTextComponents({
-          "fra-dato": tidligstInnsendingDato,
-          "til-dato": senestInnsendingDato,
-        })}
         value={getRichText("rapportering-fyll-ut-frister", {
           "fra-dato": tidligstInnsendingDato,
           "til-dato": senestInnsendingDato,
