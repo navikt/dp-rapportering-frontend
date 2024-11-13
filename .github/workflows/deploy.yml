@@ -81,29 +81,22 @@ jobs:
 
       - run: npm run test
 
-  # upload-cdn:
-  #   needs: [build, test]
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: "read"
-  #     id-token: "write"
-  #   steps:
-  #     - uses: actions/cache@v4
-  #       with:
-  #         path: |
-  #           ./build
-  #           ./public
-  #         key: ${{ github.sha }}
-  #         fail-on-cache-miss: true
-
-  #     - name: Upload static files
-  #       uses: nais/deploy/actions/cdn-upload/v2@master
-  #       with:
-  #         team: teamdagpenger
-  #         source: ./public
-  #         destination: "/dp-rapportering-frontend/"
-  #         identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-  #         project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+  upload:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload static files to CDN
+        uses: nais/deploy/actions/cdn-upload/v2@master
+        with:
+          team: teamdagpenger
+          source: ./public
+          destination: "/dp-rapportering-frontend/"
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
   deploy-dev:
     needs: [build, test]
