@@ -93,7 +93,7 @@ jobs:
         uses: nais/deploy/actions/cdn-upload/v2@master
         with:
           team: teamdagpenger
-          source: ./public
+          source: ./build
           destination: "/dp-rapportering-frontend/"
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
