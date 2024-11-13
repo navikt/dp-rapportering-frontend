@@ -3,65 +3,19 @@ name: Build and deploy
 on: [push]
 
 jobs:
-  install:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        id: node_modules
-        with:
-          path: ./node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
-
-      - uses: actions/setup-node@v4
-        if: steps.node_modules.outputs.cache-hit != 'true'
-        with:
-          node-version: "18.x"
-          cache: "npm"
-          registry-url: "https://npm.pkg.github.com"
-
-      - run: npm ci --ignore-scripts
-        if: steps.node_modules.outputs.cache-hit != 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-  test:
-    needs: [install]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "18.x"
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: ./node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
-
-      - run: npm run test
-
   build:
-    needs: [install]
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
       id-token: "write"
       packages: write
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: ./node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
-      - run: npm run build
+          node-version: "22.x"
 
       # Bygg docker image
       - name: docker-build-push
@@ -69,45 +23,26 @@ jobs:
         id: docker-build-push
         with:
           team: teamdagpenger
-          push_image: true # optional, default true
-          dockerfile: Dockerfile # optional, default Dockerfile
-          docker_context: . # optional, default .
+          push_image: true 
+          dockerfile: Dockerfile 
+          docker_context: . 
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-
-      - name: Cache static files
-        uses: actions/cache@v4
-        with:
-          path: |
-            ./build
-            ./public
-          key: ${{ github.sha }}
-    outputs:
-      image: ${{ steps.docker-build-push.outputs.image }}
-  
+          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
 
   build-demo:
-    needs: [install]
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
       id-token: "write"
       packages: write
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
     steps:
        - uses: actions/checkout@v4
        - uses: actions/setup-node@v4
          with:
-          node-version: "18.x"
-
-       - name: Set environment variable
-         run: echo "RUNTIME_ENVIRONMENT=demo" >> $GITHUB_ENV
-      
-       - name: Cache node_modules
-         uses: actions/cache@v4
-         with:
-          path: ./node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
-       - run: npm run build
+          node-version: "22.x"
 
        # Bygg docker image
        - name: docker-build-push
@@ -120,45 +55,58 @@ jobs:
           docker_context: . # optional, default .
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          build_args: RUNTIME_ENVIRONMENT=demo
+          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
 
-
-       - name: Cache static files
-         uses: actions/cache@v4
-         with:
-          path: |
-            ./build
-            ./public
-          key: ${{ github.sha }}
-      
-    outputs:
-      image: ${{ steps.docker-build-push.outputs.image }}
-
-  upload-cdn:
-    needs: [build, test]
+  test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: "read"
-      id-token: "write"
     steps:
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v4
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: node_modules
         with:
-          path: |
-            ./build
-            ./public
-          key: ${{ github.sha }}
-          fail-on-cache-miss: true
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+          registry-url: "https://npm.pkg.github.com"
 
-      - name: Upload static files
-        uses: nais/deploy/actions/cdn-upload/v2@master
-        with:
-          team: teamdagpenger
-          source: ./public
-          destination: "/dp-rapportering-frontend/"
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+      - run: npm ci --ignore-scripts
+        if: steps.node_modules.outputs.cache-hit != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+      - run: npm run test
+
+  # upload-cdn:
+  #   needs: [build, test]
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: "read"
+  #     id-token: "write"
+  #   steps:
+  #     - uses: actions/cache@v4
+  #       with:
+  #         path: |
+  #           ./build
+  #           ./public
+  #         key: ${{ github.sha }}
+  #         fail-on-cache-miss: true
+
+  #     - name: Upload static files
+  #       uses: nais/deploy/actions/cdn-upload/v2@master
+  #       with:
+  #         team: teamdagpenger
+  #         source: ./public
+  #         destination: "/dp-rapportering-frontend/"
+  #         identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+  #         project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
   deploy-dev:
-    needs: [build, test, upload-cdn]
+    needs: [build, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -172,7 +120,7 @@ jobs:
           PRINT_PAYLOAD: true
 
   deploy-demo:
-    needs: [build-demo, test,]
+    needs: [build-demo, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -186,7 +134,7 @@ jobs:
           PRINT_PAYLOAD: true
 
   deploy-prod:
-    needs: [ build, test, upload-cdn ]
+    needs: [build, test]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
