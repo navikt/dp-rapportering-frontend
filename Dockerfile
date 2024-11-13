@@ -6,14 +6,14 @@ COPY node_modules/ node_modules/
 
 CMD ["npm", "run" ,"start"]
 
-FROM node:22-alpine as node
+FROM node:22-alpine AS node
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
 RUN npm config set @navikt:registry=https://npm.pkg.github.com
 
 
 # build app
-FROM node as app-build
+FROM node AS app-build
 WORKDIR /app
 ENV RUNTIME_ENVIRONMENT ${RUNTIME_ENVIRONMENT}
 
@@ -29,7 +29,7 @@ RUN npm run build
 
 
 # install dependencies
-FROM node as app-dependencies
+FROM node AS app-dependencies
 WORKDIR /app
 
 COPY ./package.json ./
@@ -39,7 +39,7 @@ RUN npm ci --ignore-scripts --omit dev
 
 
 # runtime
-FROM gcr.io/distroless/nodejs22-debian12 as runtime
+FROM gcr.io/distroless/nodejs22-debian12 AS runtime
 WORKDIR /app
 
 ARG NODE_ENV=production
@@ -53,3 +53,6 @@ COPY --from=app-build /app/build/ ./build/
 COPY --from=app-dependencies /app/node_modules ./node_modules
 
 CMD ["./node_modules/@remix-run/serve/dist/cli.js", "./build/server/index.js"]
+
+FROM scratch AS export
+COPY --from=builder /app/build /
