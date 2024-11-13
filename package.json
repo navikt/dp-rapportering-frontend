@@ -51,6 +51,7 @@
     "uuidv7": "1.0.2",
     "winston": "3.17.0",
     "zod": "3.23.8",
+    "classnames": "2.5.1",
     "zod-form-data": "2.0.2"
   },
   "devDependencies": {
@@ -71,7 +72,6 @@
     "@typescript-eslint/eslint-plugin": "8.13.0",
     "@vitejs/plugin-react": "4.3.3",
     "@vitest/coverage-istanbul": "2.1.4",
-    "classnames": "2.5.1",
     "dotenv": "16.4.5",
     "eslint": "8.57.1",
     "eslint-config-prettier": "9.1.0",
