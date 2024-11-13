@@ -1,5 +1,4 @@
 import { addDays, format, getWeek, getYear, subDays } from "date-fns";
-import { Database } from "mocks/session";
 import { ScenarioType } from "~/devTools";
 import {
   beregnNåværendePeriodeDato,
@@ -16,6 +15,7 @@ import {
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
 import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
+import { Database } from "../../mocks/session";
 
 function seedRapporteringsperioder(db: Database) {
   db.rapporteringsperioder.create(lagForstRapporteringsperiode());

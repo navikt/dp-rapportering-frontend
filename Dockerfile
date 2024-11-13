@@ -19,6 +19,7 @@ ENV RUNTIME_ENVIRONMENT ${RUNTIME_ENVIRONMENT}
 
 COPY ./app ./app
 COPY ./mocks ./mocks
+COPY ./public ./public
 COPY ./vite.config.ts ./
 COPY ./package.json ./
 COPY ./package-lock.json  ./
