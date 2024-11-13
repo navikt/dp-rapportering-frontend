@@ -1,3 +1,3 @@
 export async function loader() {
-  return Response.json({ status: 200, statusText: "Ready" });
+  return Response.json(null, { status: 200, statusText: "Ready" });
 }
