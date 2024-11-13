@@ -15,7 +15,7 @@ RUN npm config set @navikt:registry=https://npm.pkg.github.com
 # build app
 FROM node as app-build
 WORKDIR /app
-ENV RUNTIME_ENVIRONMENT=${RUNTIME_ENVIRONMENT}
+ENV RUNTIME_ENVIRONMENT ${RUNTIME_ENVIRONMENT}
 
 COPY ./app ./app
 COPY ./mocks ./mocks
