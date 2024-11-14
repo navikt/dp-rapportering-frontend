@@ -54,5 +54,5 @@ COPY --from=app-dependencies /app/node_modules ./node_modules
 
 CMD ["./node_modules/@remix-run/serve/dist/cli.js", "./build/server/index.js"]
 
-FROM scratch AS export
-COPY --from=app-build /app/build /app/build
+FROM node AS export
+COPY --from=app-build /app/build /
