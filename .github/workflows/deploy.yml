@@ -17,15 +17,14 @@ jobs:
         with:
           node-version: "22.x"
 
-      # Bygg docker image
       - name: docker-build-push
         uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
           team: teamdagpenger
-          push_image: true 
-          dockerfile: Dockerfile 
-          docker_context: . 
+          push_image: true
+          dockerfile: Dockerfile
+          docker_context: .
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
@@ -44,15 +43,14 @@ jobs:
          with:
           node-version: "22.x"
 
-       # Bygg docker image
        - name: docker-build-push
          uses: nais/docker-build-push@v0
          id: docker-build-push
          with:
           team: teamdagpenger
-          push_image: true # optional, default true
-          dockerfile: Dockerfile # optional, default Dockerfile
-          docker_context: . # optional, default .
+          push_image: true
+          dockerfile: Dockerfile
+          docker_context: .
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           build_args: RUNTIME_ENVIRONMENT=demo
@@ -98,20 +96,6 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
-  deploy-dev:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
-        env:
-          VAR: image=${{ needs.build.outputs.image }},githubSha=${{ github.sha }}
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/nais.yaml
-          VARS: .nais/vars-dev.yaml
-          PRINT_PAYLOAD: true
-
   deploy-demo:
     needs: [build-demo, test]
     runs-on: ubuntu-latest
@@ -124,6 +108,20 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais.demo.yaml
           VARS: .nais/vars-demo.yaml
+          PRINT_PAYLOAD: true
+
+  deploy-dev:
+    needs: [build, test, upload]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          VAR: image=${{ needs.build.outputs.image }},githubSha=${{ github.sha }}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais.yaml
+          VARS: .nais/vars-dev.yaml
           PRINT_PAYLOAD: true
 
   deploy-prod:
