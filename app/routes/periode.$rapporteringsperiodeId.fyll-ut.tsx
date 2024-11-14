@@ -8,6 +8,7 @@ import invariant from "tiny-invariant";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { kanSendes } from "~/utils/periode.utils";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -47,7 +48,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function RapporteringsPeriodeFyllUtSide() {
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const isSubmitting = useIsSubmitting(navigation);
   const { locale } = useLocale();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 

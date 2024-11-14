@@ -9,6 +9,7 @@ import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -66,7 +67,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const { periode, originalPeriode } = useLoaderData<typeof loader>();
   const { locale } = useLocale();
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const isSubmitting = useIsSubmitting(navigation);
 
   const { getAppText, getRichText, getLink } = useSanity();
   const actionData = useActionData<typeof action>();

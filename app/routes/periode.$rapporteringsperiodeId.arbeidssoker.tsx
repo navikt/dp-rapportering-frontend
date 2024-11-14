@@ -6,6 +6,7 @@ import invariant from "tiny-invariant";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { kanSendes } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -37,7 +38,7 @@ export default function ArbeidssøkerRegisterSide() {
   const { getAppText } = useSanity();
   const navigate = useNavigate();
   const fetcher = useFetcher<INetworkResponse>();
-  const isSubmitting = fetcher.state === "submitting";
+  const isSubmitting = useIsSubmitting(fetcher);
 
   const { trackSkjemaSteg } = useAmplitude();
 
