@@ -1,15 +1,22 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Button } from "@navikt/ds-react";
+import { Button, Radio, RadioGroup } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { useNavigate } from "@remix-run/react";
+import { useFetcher, useNavigate } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
+import { kanSendes } from "~/utils/periode.utils";
+import { INetworkResponse } from "~/utils/types";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { Error } from "../components/error/Error";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
-import { ArbeidssokerRegisterering } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import {
+  AvregistertArbeidssokerAlert,
+  RegistertArbeidssokerAlert,
+} from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -29,11 +36,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function ArbeidssøkerRegisterSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText } = useSanity();
-
   const navigate = useNavigate();
+  const fetcher = useFetcher<INetworkResponse>();
+  const isSubmitting = useIsSubmitting(fetcher);
+
   const { trackSkjemaSteg } = useAmplitude();
 
-  const neste = () => {
+  function neste() {
     trackSkjemaSteg({
       periode,
       stegnavn: "arbeidssoker",
@@ -41,13 +50,61 @@ export default function ArbeidssøkerRegisterSide() {
     });
 
     navigate(`/periode/${periode.id}/send-inn`);
-  };
+  }
+
+  function handleChange(registrertArbeidssokerSvar: boolean) {
+    if (kanSendes(periode)) {
+      fetcher.submit(
+        {
+          registrertArbeidssoker: registrertArbeidssokerSvar,
+          rapporteringsperiodeId: periode.id,
+        },
+        { method: "post" }
+      );
+    }
+  }
 
   return (
     <>
       <KanIkkeSendes periode={periode} />
 
-      <ArbeidssokerRegisterering periode={periode} />
+      <fetcher.Form method="post">
+        <RadioGroup
+          disabled={!kanSendes(periode)}
+          legend={getAppText("rapportering-arbeidssokerregister-tittel")}
+          description={getAppText("rapportering-arbeidssokerregister-subtittel")}
+          onChange={handleChange}
+          name="_action"
+          value={periode.registrertArbeidssoker}
+        >
+          <Radio
+            name="erRegistrertSomArbeidssoker"
+            value={true}
+            checked={periode.registrertArbeidssoker === true}
+          >
+            {getAppText("rapportering-arbeidssokerregister-svar-ja")}
+          </Radio>
+          <Radio
+            name="erRegistrertSomArbeidssoker"
+            value={false}
+            checked={periode.registrertArbeidssoker === false}
+          >
+            {getAppText("rapportering-arbeidssokerregister-svar-nei")}
+          </Radio>
+        </RadioGroup>
+      </fetcher.Form>
+
+      {fetcher.data?.status === "error" && (
+        <Error title={getAppText(fetcher.data.error.statusText)} />
+      )}
+
+      {periode.registrertArbeidssoker !== null &&
+        (periode.registrertArbeidssoker ? (
+          <RegistertArbeidssokerAlert />
+        ) : (
+          <AvregistertArbeidssokerAlert />
+        ))}
+
       <div className="navigasjon-container">
         <RemixLink
           as="Button"
@@ -67,7 +124,7 @@ export default function ArbeidssøkerRegisterSide() {
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
           className="navigasjonsknapp"
-          disabled={periode.registrertArbeidssoker === null}
+          disabled={periode.registrertArbeidssoker === null || isSubmitting}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}

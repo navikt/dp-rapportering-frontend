@@ -2,12 +2,13 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { useActionData, useNavigate, useSearchParams } from "@remix-run/react";
+import { useActionData, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { kanSendes } from "~/utils/periode.utils";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -46,6 +47,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function RapporteringsPeriodeFyllUtSide() {
   const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isSubmitting = useIsSubmitting(navigation);
   const { locale } = useLocale();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
@@ -151,6 +154,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           icon={<ArrowRightIcon aria-hidden />}
           className="navigasjonsknapp"
           onClick={neste}
+          disabled={isSubmitting}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
