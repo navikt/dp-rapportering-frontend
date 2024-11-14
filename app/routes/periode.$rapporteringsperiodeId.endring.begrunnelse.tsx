@@ -26,6 +26,7 @@ export default function BegrunnelseSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const fetcher = useFetcher<INetworkResponse>();
   const { getAppText, getLink } = useSanity();
+  const isSubmitting = fetcher.state === "submitting";
 
   const navigate = useNavigate();
   const { trackSkjemaSteg } = useAmplitude();
@@ -105,7 +106,7 @@ export default function BegrunnelseSide() {
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
           className="navigasjonsknapp"
-          disabled={!periode.begrunnelseEndring}
+          disabled={!periode.begrunnelseEndring || isSubmitting}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}

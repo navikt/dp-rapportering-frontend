@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import { json, useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
@@ -65,6 +65,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function RapporteringsPeriodeFyllUtSide() {
   const { periode, originalPeriode } = useLoaderData<typeof loader>();
   const { locale } = useLocale();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
   const { getAppText, getRichText, getLink } = useSanity();
   const actionData = useActionData<typeof action>();
@@ -162,6 +164,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           iconPosition="right"
           className="navigasjonsknapp"
           onClick={neste}
+          disabled={isSubmitting}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>

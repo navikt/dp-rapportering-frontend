@@ -53,6 +53,7 @@ export default function RapporteringstypeSide() {
   const { getAppText, getRichText } = useSanity();
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
+  const isSubmitting = rapporteringstypeFetcher.state === "submitting";
 
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
@@ -170,7 +171,7 @@ export default function RapporteringstypeSide() {
           iconPosition="right"
           className="navigasjonsknapp"
           icon={<ArrowRightIcon aria-hidden />}
-          disabled={type === null}
+          disabled={type === null || isSubmitting}
         >
           {nesteKnappTekst}
         </Button>
