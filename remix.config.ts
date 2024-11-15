@@ -1,7 +1,7 @@
-import { AppConfig } from "@remix-run/dev";
+// import { AppConfig } from "@remix-run/dev";
 
-const config: AppConfig = {
-  publicPath: "/arbeid/dagpenger/meldekort/",
-};
+// const config: AppConfig = {
+//   publicPath: "/arbeid/dagpenger/meldekort/",
+// };
 
-export default config;
+// export default config;

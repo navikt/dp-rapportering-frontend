@@ -11,19 +11,11 @@ jobs:
       packages: write
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
-      static: ${{ steps.build-static.outputs. }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22.x"
-      - name: Build static files
-        id: build-static
-        uses: docker/build-push-action@v5
-        with:
-         target: export
-         outputs: type=local,dest=static
-         secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: docker-build-push
         uses: nais/docker-build-push@v0
         id: docker-build-push
@@ -49,13 +41,6 @@ jobs:
        - uses: actions/setup-node@v4
          with:
           node-version: "22.x"
-       - name: Build static files
-         uses: docker/build-push-action@v5
-         with:
-          target: export
-          outputs: type=local,dest=static
-          secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
-          build-args: RUNTIME_ENVIRONMENT=demo
        - name: docker-build-push
          uses: nais/docker-build-push@v0
          id: docker-build-push
@@ -93,14 +78,43 @@ jobs:
       - run: npm run test
 
   upload:
-    needs: [build, test]
+    needs: [test]
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
       id-token: "write"
     steps:
       - uses: actions/checkout@v4
+      - name: Build static files
+        uses: docker/build-push-action@v5
+        with:
+          target: export
+          outputs: type=local,dest=static
+          secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
+      - name: Upload static files to NAV CDN
+        uses: nais/deploy/actions/cdn-upload/v2@master
+        with:
+          team: teamdagpenger
+          source: ./static
+          destination: "/dp-rapportering-frontend/"
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
+  upload-demo:
+    needs: [test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build static files
+        uses: docker/build-push-action@v5
+        with:
+          target: export
+          outputs: type=local,dest=static
+          secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
+          build-args: RUNTIME_ENVIRONMENT=demo
       - name: Upload static files to NAV CDN
         uses: nais/deploy/actions/cdn-upload/v2@master
         with:
@@ -111,7 +125,7 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
   deploy-demo:
-    needs: [build-demo, test, upload]
+    needs: [build-demo, test, upload-demo]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
