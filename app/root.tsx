@@ -92,30 +92,16 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export async function loader({ request }: LoaderFunctionArgs): Promise<
-  TypedResponse<{
-    sanityTexts: ISanity;
-    locale: DecoratorLocale;
-    env: {
-      BASE_PATH: string | undefined;
-      IS_LOCALHOST: string | undefined;
-      USE_MSW: string | undefined;
-      FARO_URL: string | undefined;
-      RUNTIME_ENVIRONMENT: string | undefined;
-      SANITY_DATASETT: string | undefined;
-      GITHUB_SHA: string | undefined;
-    };
-    fragments: DecoratorElements;
-  }>
-> {
+export async function loader({ request }: LoaderFunctionArgs) {
   const locale: DecoratorLocale = (await getLanguage(request)) as DecoratorLocale;
   const fragments = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
 
-  if (!fragments)
+  if (!fragments) {
     throw Response.json(
       { error: "rapportering-feilmelding-kunne-ikke-hente-dekoratoren" },
       { status: 500 }
     );
+  }
 
   const sanityTexts = await sanityClient.fetch<ISanity>(allTextsQuery, {
     baseLang: DecoratorLocale.NB,
@@ -130,7 +116,7 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<
     });
   }
 
-  return Response.json({
+  return {
     sanityTexts,
     locale: getLocale(locale),
     env: {
@@ -143,7 +129,7 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<
       GITHUB_SHA: process.env.GITHUB_SHA,
     },
     fragments,
-  });
+  };
 }
 
 export async function action({ request }: LoaderFunctionArgs) {

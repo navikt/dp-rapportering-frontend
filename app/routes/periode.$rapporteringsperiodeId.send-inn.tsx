@@ -1,7 +1,7 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
   Form,
@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { logg } from "~/models/logger.server";
 import {
-  IRapporteringsperiode,
   hentPeriode,
   hentRapporteringsperioder,
   sendInnPeriode,
@@ -38,12 +37,10 @@ import {
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 
-export async function loader({
-  request,
-}: LoaderFunctionArgs): Promise<TypedResponse<{ rapporteringsperioder: IRapporteringsperiode[] }>> {
+export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
 
-  return Response.json({ rapporteringsperioder });
+  return { rapporteringsperioder };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

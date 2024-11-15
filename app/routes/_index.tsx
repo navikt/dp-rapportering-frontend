@@ -1,19 +1,15 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { LoaderFunctionArgs, TypedResponse } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { ISessionData, getSession } from "~/models/getSession.server";
+import { getSession } from "~/models/getSession.server";
 import { getInfoAlertStatus } from "~/models/info.server";
-import {
-  IRapporteringsperiode,
-  hentRapporteringsperioder,
-} from "~/models/rapporteringsperiode.server";
+import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import type { action as StartAction } from "./api.start";
 import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { INetworkResponse } from "~/utils/types";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -21,19 +17,13 @@ import { RemixLink } from "~/components/RemixLink";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
 
-export async function loader({ request }: LoaderFunctionArgs): Promise<
-  TypedResponse<{
-    rapporteringsperioder: IRapporteringsperiode[];
-    session: INetworkResponse<ISessionData>;
-    showInfoAlert: boolean;
-  }>
-> {
+export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
     const session = await getSession(request);
     const showInfoAlert = (await getInfoAlertStatus(request)) as boolean;
 
-    return Response.json({ rapporteringsperioder, session, showInfoAlert });
+    return { rapporteringsperioder, session, showInfoAlert };
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;
