@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
@@ -13,7 +13,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
   const harNestePeriode = perioderSomKanSendes(rapporteringsperioder).length > 0;
 
-  return json({ harNestePeriode });
+  return { harNestePeriode };
 }
 
 export default function RapporteringsPeriodesBekreftelsesSide() {

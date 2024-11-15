@@ -10,8 +10,14 @@ import favicon from "/favicon.ico";
 import { Alert, Heading } from "@navikt/ds-react";
 import { setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
 import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
-import { json, redirect } from "@remix-run/node";
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { DecoratorElements } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { redirect } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+  TypedResponse,
+} from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -90,8 +96,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const locale: DecoratorLocale = (await getLanguage(request)) as DecoratorLocale;
   const fragments = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
 
-  if (!fragments)
-    throw json({ error: "rapportering-feilmelding-kunne-ikke-hente-dekoratoren" }, { status: 500 });
+  if (!fragments) {
+    throw Response.json(
+      { error: "rapportering-feilmelding-kunne-ikke-hente-dekoratoren" },
+      { status: 500 }
+    );
+  }
 
   const sanityTexts = await sanityClient.fetch<ISanity>(allTextsQuery, {
     baseLang: DecoratorLocale.NB,
@@ -106,7 +116,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
-  return json({
+  return {
     sanityTexts,
     locale: getLocale(locale),
     env: {
@@ -119,7 +129,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       GITHUB_SHA: process.env.GITHUB_SHA,
     },
     fragments,
-  });
+  };
 }
 
 export async function action({ request }: LoaderFunctionArgs) {
@@ -128,7 +138,7 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const locale = formData.get("locale") as DecoratorLocale;
 
-  return json(
+  return Response.json(
     { status: "success" },
     {
       headers: {
@@ -198,6 +208,8 @@ export default function App() {
     setAvailableLanguages(availableLanguages);
 
     onLanguageSelect((language) => {
+      // TODO: Logg endring av språk til amplitude
+      document.documentElement.setAttribute("lang", language.locale);
       fetcher.submit({ locale: language.locale }, { method: "post" });
     });
   }
