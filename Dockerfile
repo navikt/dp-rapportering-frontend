@@ -1,11 +1,3 @@
-FROM node:22.11.0-alpine
-
-COPY build/ build/
-COPY ./package.json ./
-COPY node_modules/ node_modules/
-
-CMD ["npm", "run" ,"start"]
-
 FROM node:22-alpine AS node
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
@@ -37,6 +29,8 @@ COPY ./package-lock.json  ./
 
 RUN npm ci --ignore-scripts --omit dev
 
+FROM scratch AS export
+COPY --from=app-build /app/build /
 
 # runtime
 FROM gcr.io/distroless/nodejs22-debian12 AS runtime
@@ -53,6 +47,3 @@ COPY --from=app-build /app/build/ ./build/
 COPY --from=app-dependencies /app/node_modules ./node_modules
 
 CMD ["./node_modules/@remix-run/serve/dist/cli.js", "./build/server/index.js"]
-
-FROM node AS export
-COPY --from=app-build /app/build /
