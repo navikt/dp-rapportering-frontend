@@ -1,6 +1,8 @@
 declare global {
   interface Window {
     env: IEnv;
+
+    hj(event: string, eventName: string): void;
   }
 }
 
