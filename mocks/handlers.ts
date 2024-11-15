@@ -1,6 +1,6 @@
 import { withDb } from "./responses/db";
 import { getDatabase } from "./responses/db.utils";
-import { HttpResponse, bypass, http } from "msw";
+import { HttpResponse, http, passthrough } from "msw";
 import { formatereDato } from "~/devTools/periodedato";
 import { hentEndringsId, startEndring } from "~/devTools/rapporteringsperiode";
 import { IArbeidssokerSvar } from "~/models/arbeidssoker.server";
@@ -16,12 +16,22 @@ import { IRapporteringsperiodeStatus } from "~/utils/types";
 export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder`, ({ cookies }) => {
     const db = database || getDatabase(cookies);
-    return HttpResponse.json(db.findAllRapporteringsperioder());
+    return new HttpResponse(JSON.stringify(db.findAllRapporteringsperioder()), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }),
 
   http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`, ({ cookies }) => {
     const db = database || getDatabase(cookies);
-    return HttpResponse.json(db.findAllInnsendtePerioder());
+    return new HttpResponse(JSON.stringify(db.findAllInnsendtePerioder()), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }),
 
   http.post(`${DP_RAPPORTERING_URL}/rapporteringsperiode`, async ({ cookies, request }) => {
@@ -47,8 +57,12 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       });
 
       db.deleteRapporteringsperiode(periode.id);
-
-      return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
+      return new HttpResponse(JSON.stringify({ id: endretPeriode.id }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
 
     db.updateRapporteringsperiode(periode.id, {
@@ -57,7 +71,12 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       mottattDato,
     });
 
-    return HttpResponse.json({ id: periode.id }, { status: 200 });
+    return new HttpResponse(JSON.stringify({ id: periode.id }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }),
 
   http.get(
@@ -68,15 +87,30 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       const periode = db.findRapporteringsperiodeById(rapporteringsperiodeId);
 
       if (!periode) {
-        return HttpResponse.json(null, { status: 404 });
+        return new HttpResponse(JSON.stringify(periode), {
+          status: 404,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
       }
 
-      return HttpResponse.json(periode);
+      return new HttpResponse(JSON.stringify(periode), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
   ),
 
   http.post(`${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/start`, () => {
-    return HttpResponse.json(null, { status: 200 });
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }),
 
   http.post(
@@ -92,7 +126,12 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.addRapporteringsperioder(endretPeriode);
 
-      return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
+      return new HttpResponse(JSON.stringify({ id: endretPeriode.id }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
   ),
 
@@ -106,7 +145,12 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.lagreAktivitet(rapporteringsperiodeId, dag);
 
-      return HttpResponse.json(null, { status: 204 });
+      return new HttpResponse(null, {
+        status: 204,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
   ),
 
@@ -121,6 +165,9 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       return new HttpResponse(null, {
         status: 204,
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
     }
   ),
@@ -135,7 +182,12 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.updateRapporteringsperiode(rapporteringsperiodeId, { begrunnelseEndring });
 
-      return HttpResponse.json(null, { status: 204 });
+      return new HttpResponse(null, {
+        status: 204,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
   ),
 
@@ -148,14 +200,16 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.updateRapporteringsperiode(rapporteringsperiodeId, { rapporteringstype });
 
-      return HttpResponse.json(null, { status: 204 });
+      return new HttpResponse(null, {
+        status: 204,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
   ),
 
-  http.get("https://rt6o382n.apicdn.sanity.io/*", async ({ request }) => {
-    const bypassResponse = await fetch(bypass(request));
-    const response = await bypassResponse.json();
-
-    return HttpResponse.json(response);
+  http.get("https://rt6o382n.apicdn.sanity.io/*", async () => {
+    return passthrough();
   }),
 ];

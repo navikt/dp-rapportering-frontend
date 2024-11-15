@@ -83,10 +83,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
         context: {},
       });
 
-      const data = await response.json();
-
-      expect(response.status).toBe(200);
-      expect(data).toEqual({
+      expect(response).toEqual({
         innsendtPerioder: innsendtRapporteringsperioderResponse,
         rapporteringsperioder: rapporteringsperioderResponse,
       });
