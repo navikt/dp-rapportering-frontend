@@ -6,6 +6,7 @@ import { ChangeEvent } from "react";
 import { lagreBegrunnelse } from "~/models/begrunnelse.server";
 import { kanSendes } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -26,6 +27,7 @@ export default function BegrunnelseSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const fetcher = useFetcher<INetworkResponse>();
   const { getAppText, getLink } = useSanity();
+  const isSubmitting = useIsSubmitting(fetcher);
 
   const navigate = useNavigate();
   const { trackSkjemaSteg } = useAmplitude();
@@ -105,7 +107,7 @@ export default function BegrunnelseSide() {
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
           className="navigasjonsknapp"
-          disabled={!periode.begrunnelseEndring}
+          disabled={!periode.begrunnelseEndring || isSubmitting}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}

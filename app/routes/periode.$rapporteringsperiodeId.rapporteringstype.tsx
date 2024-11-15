@@ -13,6 +13,7 @@ import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst, kanSendes, perioderSomKanSendes } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -58,6 +59,7 @@ export default function RapporteringstypeSide() {
   const { getAppText, getRichText } = useSanity();
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
+  const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
 
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
@@ -175,7 +177,7 @@ export default function RapporteringstypeSide() {
           iconPosition="right"
           className="navigasjonsknapp"
           icon={<ArrowRightIcon aria-hidden />}
-          disabled={type === null}
+          disabled={type === null || isSubmitting}
         >
           {nesteKnappTekst}
         </Button>
