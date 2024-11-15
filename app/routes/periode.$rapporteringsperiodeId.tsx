@@ -1,5 +1,6 @@
 import { Accordion } from "@navikt/ds-react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Outlet, useLoaderData, useLocation, useRouteError } from "@remix-run/react";
 import { useEffect } from "react";
 import invariant from "tiny-invariant";
@@ -19,7 +20,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const { periode } = await hentPeriode(request, periodeId, hentOriginal, "loader-periode");
 
-  return { periode };
+  return json({ periode });
 }
 
 export default function RapporteringsPeriodeSide() {
