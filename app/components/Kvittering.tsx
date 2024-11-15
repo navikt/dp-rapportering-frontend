@@ -19,6 +19,11 @@ interface Ikvittering {
 export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink } = useSanity();
   const { locale } = useLocale();
+
+  if (window["hj"]) {
+    window.hj("trigger", "nyttmeldekortDP");
+  }
+
   return (
     <>
       <Alert variant="success" className="my-4">
