@@ -52,7 +52,10 @@ describe("Hent en rapporteringsperiode", () => {
         context: {},
       });
 
-      expect(response.periode).toEqual(rapporteringsperiodeResponse);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.periode).toEqual(rapporteringsperiodeResponse);
     });
 
     test("skal gi tilbake feedback til viewet hvis backend-kallet feiler", async () => {

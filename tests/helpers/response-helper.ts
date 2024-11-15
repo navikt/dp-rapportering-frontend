@@ -1,7 +1,7 @@
-export async function catchErrorResponse(fn: () => Promise<unknown>): Promise<Response> {
+export async function catchErrorResponse(fn: () => Promise<Response>): Promise<Response> {
   try {
     const res = await fn();
-    return res as Response;
+    return res;
   } catch (e) {
     if (e instanceof Response) {
       return e;

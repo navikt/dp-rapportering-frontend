@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { setInfoAlertStatus } from "~/models/info.server";
 
 export async function action({ request }: LoaderFunctionArgs) {
@@ -7,7 +7,7 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const showInfoAlert: boolean = formData.get("infoAlertStatus") === "true";
 
-  return Response.json(
+  return json(
     { status: "success" },
     {
       headers: {

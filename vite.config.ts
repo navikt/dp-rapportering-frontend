@@ -4,7 +4,7 @@ import path from "path";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-installGlobals({ nativeFetch: true });
+installGlobals();
 
 export default defineConfig({
   base: "/arbeid/dagpenger/meldekort/",
