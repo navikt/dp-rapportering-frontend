@@ -7,10 +7,10 @@ import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
-import { setup, start } from "mocks/server";
 import { PassThrough } from "node:stream";
 import { renderToPipeableStream } from "react-dom/server";
 import { isLocalOrDemo } from "./utils/env.utils";
+import { setup, start } from "../mocks/server";
 
 const ABORT_DELAY = 5_000;
 
