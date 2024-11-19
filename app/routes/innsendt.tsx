@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -9,6 +9,7 @@ import {
   hentInnsendtePerioder,
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
+import { formaterPeriodeDato } from "~/utils/dato.utils";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { sorterGrupper } from "~/utils/innsendt.utils";
 import { hentUkeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
@@ -96,17 +97,21 @@ export default function InnsendteRapporteringsPerioderSide() {
             <Accordion.Item>
               <Accordion.Header className="innsendt-accordion-header">
                 <div className="innsendt-periode-header">
-                  <div className="innsendt-periode-header-uke">
-                    {hentUkeTekst(nyestePeriode, getAppText)}
+                  <div>
+                    <div className="innsendt-periode-header-uke">
+                      {hentUkeTekst(nyestePeriode, getAppText)}
+                    </div>
+                    <div className="innsendt-periode-header-dato">
+                      {formaterPeriodeDato(
+                        nyestePeriode.periode.fraOgMed,
+                        nyestePeriode.periode.tilOgMed
+                      )}
+                    </div>
                   </div>
                   <div
                     className={`innsendt-periode-header-status ${nyestePeriode.status.toLocaleLowerCase()}`}
                   >
-                    <BodyLong>
-                      {getAppText(
-                        `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`
-                      )}
-                    </BodyLong>
+                    {getAppText(`rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`)}
                   </div>
                 </div>
               </Accordion.Header>
@@ -147,6 +152,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                         aapneModal={() => {}}
                         locale={locale}
                         readonly
+                        visDato={false}
                       />
                       <AktivitetOppsummering periode={periode} />
                       {periode.registrertArbeidssoker ? (
