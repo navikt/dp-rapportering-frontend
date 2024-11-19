@@ -113,7 +113,7 @@ export default function InnsendteRapporteringsPerioderSide() {
               <Accordion.Content className="innsendt-accordion-content">
                 {perioder.map((periode) => {
                   return (
-                    <div key={periode.id} className="oppsummering">
+                    <div key={periode.id} className="innsendt-oppsummering oppsummering">
                       {(periode.mottattDato || periode.bruttoBelop) && (
                         <div className="my-4">
                           {periode.mottattDato && (
