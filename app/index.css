@@ -12,18 +12,20 @@ d-breadcrumbs {
   font-size: var(--a-font-size-small);
 }
 
-.dp-rapportering-frontend {
+/* .dp-rapportering-frontend {
   max-width: var(--app-max-width);
   padding: var(--app-padding);
   margin: 0 auto;
-}
+} */
 
+/*Todo: flytt til root.module.css*/
 .service-messages {
   max-width: var(--app-max-width);
   padding: 0 var(--app-padding);
   margin: 0 auto;
 }
 
+/*Todo: flytt til root.module.css*/
 .rapportering-container {
   max-width: var(--app-max-width);
   padding: var(--app-padding);
@@ -184,7 +186,7 @@ d-breadcrumbs {
 
 @media screen and (min-width: 768px) {
   d-breadcrumbs {
-    font-size: var(--a-font-size-large); 
+    font-size: var(--a-font-size-large);
   }
 
   .rapportering-container {
@@ -201,9 +203,8 @@ d-breadcrumbs {
   }
 
   .navigasjonsknapp span {
-    font-size: var(--a-font-size-large)
+    font-size: var(--a-font-size-large);
   }
-
 }
 
 /* Voice-over focus */
