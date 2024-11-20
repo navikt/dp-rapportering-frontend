@@ -32,6 +32,7 @@ import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import styles from "../styles/send-inn.module.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
@@ -210,7 +211,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Checkbox>
 
       {actionData?.error && (
-        <Alert variant="error" className="feilmelding">
+        <Alert variant="error" className={styles.feilmelding}>
           {getAppText(actionData.error)}
         </Alert>
       )}

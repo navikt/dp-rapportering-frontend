@@ -9,6 +9,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
+import styles from "../styles/kvittering.module.css";
 
 interface Ikvittering {
   tittel: string;
@@ -37,7 +38,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           <Accordion.Header>
             {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
           </Accordion.Header>
-          <Accordion.Content className="kvittering-innhold">
+          <Accordion.Content className={styles.kvitteringInnhold}>
             <div className="oppsummering">
               <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
               <AktivitetOppsummering periode={periode} />

@@ -36,6 +36,7 @@ import {
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import styles from "../styles/send-inn.module.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
@@ -196,7 +197,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Checkbox>
 
       {actionData?.error && (
-        <Alert variant="error" className="feilmelding">
+        <Alert variant="error" className={styles.feilmelding}>
           {actionData.error}
         </Alert>
       )}

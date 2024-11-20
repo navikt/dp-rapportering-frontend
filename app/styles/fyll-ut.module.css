@@ -1,0 +1,7 @@
+.registertMeldeperiodeContainer {
+  margin-top: var(--a-spacing-4);
+}
+
+.registertMeldeperiodeContainer > p {
+  color: var(--a-text-subtle);
+}

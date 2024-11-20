@@ -3,6 +3,7 @@ import { PortableText } from "@portabletext/react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import classNames from "classnames";
 import { useEffect } from "react";
 import {
   IRapporteringsperiode,
@@ -22,6 +23,9 @@ import {
   RegistertArbeidssokerAlert,
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
+import styles from "../styles/innsendt.module.css";
+
+console.log(styles);
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
@@ -89,38 +93,51 @@ export default function InnsendteRapporteringsPerioderSide() {
       {innsendtPerioder.length === 0 && (
         <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
       )}
-      <div className="innsendt-perioder">
+      <div className={styles.innsendtPerioder}>
         {sortertePerioder.map((perioder) => {
           const nyestePeriode = perioder[0];
+          const labelStyle = {
+            [styles.tilutfylling]: nyestePeriode.status.toLocaleLowerCase() === "tilutfylling",
+            [styles.innsendt]: nyestePeriode.status.toLocaleLowerCase() === "innsendt",
+            [styles.endret]: nyestePeriode.status.toLocaleLowerCase() === "endret",
+            [styles.ferdig]: nyestePeriode.status.toLocaleLowerCase() === "ferdig",
+            [styles.feilet]: nyestePeriode.status.toLocaleLowerCase() === "feilet",
+          };
+
+          console.log(nyestePeriode.periode.fraOgMed, labelStyle);
           return (
             <Accordion key={nyestePeriode.periode.fraOgMed} headingSize="medium">
               <Accordion.Item>
-                <Accordion.Header className="innsendt-accordion-header">
-                  <div className="innsendt-periode-header">
+                <Accordion.Header
+                  className={classNames(
+                    "innsendt-accordion-header",
+                    styles.innsendtAccordionHeader
+                  )}
+                >
+                  <div className={styles.innsendtPeriodeHeader}>
                     <div>
-                      <div className="innsendt-periode-header-uke">
-                        {hentUkeTekst(nyestePeriode, getAppText)}
-                      </div>
-                      <div className="innsendt-periode-header-dato">
+                      <div>{hentUkeTekst(nyestePeriode, getAppText)}</div>
+                      <div className={styles.innsendtPeriodeHeaderDato}>
                         {formaterPeriodeDato(
                           nyestePeriode.periode.fraOgMed,
                           nyestePeriode.periode.tilOgMed
                         )}
                       </div>
                     </div>
-                    <div
-                      className={`innsendt-periode-header-status ${nyestePeriode.status.toLocaleLowerCase()}`}
-                    >
+                    <div className={classNames(styles.innsendtPeriodeHeaderStatus, labelStyle)}>
                       {getAppText(
                         `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`
                       )}
                     </div>
                   </div>
                 </Accordion.Header>
-                <Accordion.Content className="innsendt-accordion-content">
+                <Accordion.Content className={styles.innsendtAccordionContent}>
                   {perioder.map((periode) => {
                     return (
-                      <div key={periode.id} className="innsendt-oppsummering oppsummering">
+                      <div
+                        key={periode.id}
+                        className={classNames("oppsummering", styles.innsendtOppsummering)}
+                      >
                         {(periode.mottattDato || periode.bruttoBelop) && (
                           <div className="my-4">
                             {periode.mottattDato && (

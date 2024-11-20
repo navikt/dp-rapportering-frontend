@@ -20,6 +20,7 @@ import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import styles from "../styles/fyll-ut.module.css";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -130,7 +131,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         modalAapen={modalAapen}
         lukkModal={lukkModal}
       />
-      <div className="registert-meldeperiode-container">
+      <div className={styles.registertMeldeperiodeContainer}>
         <AktivitetOppsummering periode={periode} />
       </div>
 
