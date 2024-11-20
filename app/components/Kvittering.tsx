@@ -20,7 +20,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink } = useSanity();
   const { locale } = useLocale();
 
-  if (window["hj"]) {
+  if (typeof window !== "undefined" && window["hj"]) {
     window.hj("trigger", "nyttmeldekortDP");
   }
 

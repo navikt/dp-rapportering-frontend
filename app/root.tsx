@@ -4,9 +4,6 @@ import { DevTools } from "./devTools";
 import { getLanguage, setLanguage } from "./models/language.server";
 import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanity } from "./sanity/sanity.types";
-import favicon16 from "/favicon-16x16.png";
-import favicon32 from "/favicon-32x32.png";
-import favicon from "/favicon.ico";
 import { Alert, Heading } from "@navikt/ds-react";
 import { setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
 import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
@@ -29,11 +26,10 @@ import {
 } from "@remix-run/react";
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
-import { hasSession } from "mocks/session";
 import { uuidv7 } from "uuidv7";
 import { sanityConfig } from "./sanity/sanity.config";
 import { DecoratorLocale, availableLanguages, getLocale } from "./utils/dekoratoren.utils";
-import { isLocalOrDemo } from "./utils/env.utils";
+import { getEnv, isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "./utils/faro";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
@@ -44,6 +40,7 @@ import { ServiceMessage } from "./components/service-message/ServiceMessage";
 /* eslint-enable */
 import navStyles from "@navikt/ds-css/dist/index.css?url";
 import indexStyle from "~/index.css?url";
+import { hasSession } from "../mocks/session";
 
 export const sanityClient = createClient(sanityConfig);
 
@@ -76,18 +73,18 @@ export const links: LinksFunction = () => {
       rel: "icon",
       type: "image/png",
       sizes: "32x32",
-      href: favicon32,
+      href: `${getEnv("BASE_PATH")}/favicon-32x32.png`,
     },
     {
       rel: "icon",
       type: "image/png",
       sizes: "16x16",
-      href: favicon16,
+      href: `${getEnv("BASE_PATH")}/favicon-16x16.png`,
     },
     {
       rel: "icon",
       type: "image/x-icon",
-      href: favicon,
+      href: `${getEnv("BASE_PATH")}/favicon.ico`,
     },
   ];
 };

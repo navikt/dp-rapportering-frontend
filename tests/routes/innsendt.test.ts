@@ -1,9 +1,9 @@
 // @vitest-environment node
-import { innsendtRapporteringsperioderResponse } from "mocks/responses/innsendtRapporteringsperioderResponse";
-import { rapporteringsperioderResponse } from "mocks/responses/rapporteringsperioderResponse";
 import { HttpResponse, http } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { loader } from "~/routes/innsendt";
+import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
+import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
