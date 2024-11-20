@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -9,6 +9,7 @@ import {
   hentInnsendtePerioder,
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
+import { formaterPeriodeDato } from "~/utils/dato.utils";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { sorterGrupper } from "~/utils/innsendt.utils";
 import { hentUkeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
@@ -88,80 +89,88 @@ export default function InnsendteRapporteringsPerioderSide() {
       {innsendtPerioder.length === 0 && (
         <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
       )}
-
-      {sortertePerioder.map((perioder) => {
-        const nyestePeriode = perioder[0];
-        return (
-          <Accordion key={nyestePeriode.periode.fraOgMed} headingSize="medium">
-            <Accordion.Item>
-              <Accordion.Header className="innsendt-accordion-header">
-                <div className="innsendt-periode-header">
-                  <div className="innsendt-periode-header-uke">
-                    {hentUkeTekst(nyestePeriode, getAppText)}
-                  </div>
-                  <div
-                    className={`innsendt-periode-header-status ${nyestePeriode.status.toLocaleLowerCase()}`}
-                  >
-                    <BodyLong>
+      <div className="innsendt-perioder">
+        {sortertePerioder.map((perioder) => {
+          const nyestePeriode = perioder[0];
+          return (
+            <Accordion key={nyestePeriode.periode.fraOgMed} headingSize="medium">
+              <Accordion.Item>
+                <Accordion.Header className="innsendt-accordion-header">
+                  <div className="innsendt-periode-header">
+                    <div>
+                      <div className="innsendt-periode-header-uke">
+                        {hentUkeTekst(nyestePeriode, getAppText)}
+                      </div>
+                      <div className="innsendt-periode-header-dato">
+                        {formaterPeriodeDato(
+                          nyestePeriode.periode.fraOgMed,
+                          nyestePeriode.periode.tilOgMed
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className={`innsendt-periode-header-status ${nyestePeriode.status.toLocaleLowerCase()}`}
+                    >
                       {getAppText(
                         `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`
                       )}
-                    </BodyLong>
-                  </div>
-                </div>
-              </Accordion.Header>
-              <Accordion.Content className="innsendt-accordion-content">
-                {perioder.map((periode) => {
-                  return (
-                    <div key={periode.id} className="oppsummering">
-                      {(periode.mottattDato || periode.bruttoBelop) && (
-                        <div className="my-4">
-                          {periode.mottattDato && (
-                            <div>
-                              <strong>
-                                {periode.originalId
-                                  ? getAppText("rapportering-endret")
-                                  : getAppText("rapportering-sendt")}
-                                :{" "}
-                              </strong>
-                              {new Intl.DateTimeFormat(locale).format(
-                                new Date(periode.mottattDato)
-                              )}
-                            </div>
-                          )}
-                          {periode.bruttoBelop !== null && (
-                            <div>
-                              <strong>{getAppText("rapportering-bruttobelop")}: </strong>
-                              {new Intl.NumberFormat(locale, {
-                                style: "currency",
-                                currency: "NOK",
-                              }).format(periode.bruttoBelop)}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      <Kalender
-                        key={periode.id}
-                        periode={periode}
-                        visEndringslenke={periode.kanEndres}
-                        aapneModal={() => {}}
-                        locale={locale}
-                        readonly
-                      />
-                      <AktivitetOppsummering periode={periode} />
-                      {periode.registrertArbeidssoker ? (
-                        <RegistertArbeidssokerAlert />
-                      ) : (
-                        <AvregistertArbeidssokerAlert />
-                      )}
                     </div>
-                  );
-                })}
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion>
-        );
-      })}
+                  </div>
+                </Accordion.Header>
+                <Accordion.Content className="innsendt-accordion-content">
+                  {perioder.map((periode) => {
+                    return (
+                      <div key={periode.id} className="innsendt-oppsummering oppsummering">
+                        {(periode.mottattDato || periode.bruttoBelop) && (
+                          <div className="my-4">
+                            {periode.mottattDato && (
+                              <div>
+                                <strong>
+                                  {periode.originalId
+                                    ? getAppText("rapportering-endret")
+                                    : getAppText("rapportering-sendt")}
+                                  :{" "}
+                                </strong>
+                                {new Intl.DateTimeFormat(locale).format(
+                                  new Date(periode.mottattDato)
+                                )}
+                              </div>
+                            )}
+                            {periode.bruttoBelop !== null && (
+                              <div>
+                                <strong>{getAppText("rapportering-bruttobelop")}: </strong>
+                                {new Intl.NumberFormat(locale, {
+                                  style: "currency",
+                                  currency: "NOK",
+                                }).format(periode.bruttoBelop)}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        <Kalender
+                          key={periode.id}
+                          periode={periode}
+                          visEndringslenke={periode.kanEndres}
+                          aapneModal={() => {}}
+                          locale={locale}
+                          readonly
+                          visDato={false}
+                        />
+                        <AktivitetOppsummering periode={periode} />
+                        {periode.registrertArbeidssoker ? (
+                          <RegistertArbeidssokerAlert />
+                        ) : (
+                          <AvregistertArbeidssokerAlert />
+                        )}
+                      </div>
+                    );
+                  })}
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          );
+        })}
+      </div>
 
       <div className="navigasjon-container">
         {harFlerePerioder ? (
