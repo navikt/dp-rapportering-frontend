@@ -6,6 +6,7 @@ import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
+import { useUXSignals } from "~/hooks/useUXSignals";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
@@ -23,6 +24,8 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   if (typeof window !== "undefined" && window["hj"]) {
     window.hj("trigger", "nyttmeldekortDP");
   }
+
+  useUXSignals(true);
 
   return (
     <>
@@ -51,6 +54,9 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
+
+      <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--a-spacing-8) auto" }} />
+
       <div className="navigasjon-container">
         {harNestePeriode ? (
           <RemixLink
