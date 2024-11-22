@@ -26,7 +26,7 @@ export async function action({ request }: ActionFunctionArgs) {
     "rapporteringstype"
   ) as Rapporteringstype;
 
-  return await lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
+  return lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
