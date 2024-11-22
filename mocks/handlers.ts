@@ -67,7 +67,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       const periode = db.findRapporteringsperiodeById(rapporteringsperiodeId);
 
       if (!periode) {
-        return HttpResponse.json(periode, { status: 404 });
+        return HttpResponse.json(null, { status: 404 });
       }
 
       return HttpResponse.json(periode);
