@@ -105,7 +105,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.lagreAktivitet(rapporteringsperiodeId, dag);
 
-      return HttpResponse.json(null, { status: 204 });
+      return HttpResponse.json(null);
     }
   ),
 
@@ -118,7 +118,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.updateRapporteringsperiode(rapporteringsperiodeId, { registrertArbeidssoker });
 
-      return HttpResponse.json(null, { status: 204 });
+      return HttpResponse.json(null);
     }
   ),
 
@@ -132,7 +132,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.updateRapporteringsperiode(rapporteringsperiodeId, { begrunnelseEndring });
 
-      return HttpResponse.json(null, { status: 204 });
+      return HttpResponse.json(null);
     }
   ),
 
@@ -145,7 +145,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.updateRapporteringsperiode(rapporteringsperiodeId, { rapporteringstype });
 
-      return HttpResponse.json(null, { status: 204 });
+      return HttpResponse.json(null);
     }
   ),
 
