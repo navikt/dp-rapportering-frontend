@@ -203,7 +203,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" onSubmit={onSubmit} className={navigasjonStyles.navigasjonContainer}>
+      <Form method="post" onSubmit={onSubmit} className={navigasjonStyles.container}>
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
