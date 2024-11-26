@@ -18,6 +18,8 @@ import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import { Error } from "~/components/error/Error";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -153,14 +155,14 @@ export default function RapporteringstypeSide() {
         <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
       )}
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to={`/`}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
@@ -170,13 +172,13 @@ export default function RapporteringstypeSide() {
           onClick={neste}
           variant="primary"
           iconPosition="right"
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           icon={<ArrowRightIcon aria-hidden />}
           disabled={type === null || isSubmitting}
         >
           {nesteKnappTekst}
         </Button>
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }

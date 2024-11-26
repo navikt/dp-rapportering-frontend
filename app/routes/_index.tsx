@@ -16,6 +16,8 @@ import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
@@ -117,10 +119,10 @@ export default function Landingsside() {
             <Checkbox value={true}>{getAppText("rapportering-samtykke-checkbox")}</Checkbox>
           </CheckboxGroup>
 
-          <div className="navigasjon-container">
+          <NavigasjonContainer>
             <Button
               size="medium"
-              className="navigasjonsknapp"
+              className={navigasjonStyles.knapp}
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               onClick={startUtfylling}
@@ -128,15 +130,15 @@ export default function Landingsside() {
             >
               {getAppText("rapportering-knapp-neste")}
             </Button>
-          </div>
+          </NavigasjonContainer>
         </>
       )}
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }

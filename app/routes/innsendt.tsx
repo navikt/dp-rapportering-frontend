@@ -23,6 +23,8 @@ import {
   RegistertArbeidssokerAlert,
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import styles from "../styles/innsendt.module.css";
 
 console.log(styles);
@@ -189,25 +191,25 @@ export default function InnsendteRapporteringsPerioderSide() {
         })}
       </div>
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         {harFlerePerioder ? (
           <RemixLink
             as="Button"
             to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
-            className="navigasjonsknapp"
+            className={navigasjonStyles.knapp}
           >
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </RemixLink>
         ) : (
           <Button
             as="a"
-            className="navigasjonsknapp"
+            className={navigasjonStyles.knapp}
             href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
           >
             {getLink("rapportering-ga-til-mine-dagpenger").linkText}
           </Button>
         )}
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }

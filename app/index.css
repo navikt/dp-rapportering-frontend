@@ -26,26 +26,6 @@ d-breadcrumbs {
   margin-top: 0;
 }
 
-/* TODO: kan denne flytte til root.module.css? */
-.rapportering-header-innhold p {
-  margin-bottom: 0;
-}
-
-/* TODO: gjøre om til egen komponent */
-.navigasjon-container {
-  display: flex;
-  gap: var(--a-spacing-4);
-  margin: var(--a-spacing-8) 0;
-  justify-content: center;
-}
-
-/* TODO: bli med navigasjonskonteiner */
-.navigasjonsknapp {
-  text-wrap: nowrap;
-  padding: var(--a-spacing-3) var(--a-spacing-8);
-  flex: 1;
-}
-
 .innsendt-accordion-header .navds-accordion__icon-wrapper {
   align-self: start;
 }
@@ -100,19 +80,6 @@ d-breadcrumbs {
 
   .rapportering-container {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);
-  }
-
-  .navigasjon-container {
-    justify-content: center;
-  }
-
-  .navigasjonsknapp {
-    padding: var(--a-spacing-4) var(--a-spacing-12);
-    flex: none;
-  }
-
-  .navigasjonsknapp span {
-    font-size: var(--a-font-size-large);
   }
 }
 
@@ -197,10 +164,6 @@ d-breadcrumbs {
 .px-16 {
   padding-left: var(--a-spacing-16);
   padding-right: var(--a-spacing-16);
-}
-
-.tekst-subtil {
-  color: var(--a-text-subtle);
 }
 
 .rapportering-ingen-å-rapportere p {

@@ -32,6 +32,8 @@ import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import styles from "../styles/send-inn.module.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -216,13 +218,13 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" onSubmit={onSubmit} className="navigasjon-container">
+      <Form method="post" onSubmit={onSubmit} className={navigasjonStyles.container}>
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </Button>
@@ -232,7 +234,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           variant="primary"
           iconPosition="right"
           disabled={!periode.kanSendes || !confirmed || isSubmitting}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           name="_action"
           value="send-inn"
         >
@@ -241,7 +243,7 @@ export default function RapporteringsPeriodeSendInnSide() {
             : getAppText("rapportering-endring-send-inn")}
         </Button>
       </Form>
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
@@ -250,7 +252,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }

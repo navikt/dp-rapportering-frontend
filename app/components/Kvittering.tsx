@@ -2,6 +2,7 @@ import {
   AvregistertArbeidssokerAlert,
   RegistertArbeidssokerAlert,
 } from "./arbeidssokerregister/ArbeidssokerRegister";
+import { NavigasjonContainer } from "./navigasjon-container/NavigasjonContainer";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { useLocale } from "~/hooks/useLocale";
@@ -9,6 +10,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import styles from "../styles/kvittering.module.css";
 
 interface Ikvittering {
@@ -52,31 +54,31 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         {harNestePeriode ? (
           <RemixLink
             as="Button"
             to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
-            className="navigasjonsknapp"
+            className={navigasjonStyles.knapp}
           >
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </RemixLink>
         ) : (
           <Button
             as="a"
-            className="navigasjonsknapp"
+            className={navigasjonStyles.knapp}
             href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
           >
             {getLink("rapportering-ga-til-mine-dagpenger").linkText}
           </Button>
         )}
-      </div>
+      </NavigasjonContainer>
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }
