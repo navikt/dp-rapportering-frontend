@@ -133,7 +133,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         modalAapen={modalAapen}
         lukkModal={lukkModal}
       />
-      <div className={styles.registertMeldeperiodeContainer}>
+      <div className={styles.container}>
         <AktivitetOppsummering periode={periode} />
       </div>
 
