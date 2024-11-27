@@ -3,6 +3,7 @@ import { DevTools } from "./devTools";
 import { getLanguage, setLanguage } from "./models/language.server";
 import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanity } from "./sanity/sanity.types";
+import styles from "./styles/root.module.css";
 import { Alert, Heading } from "@navikt/ds-react";
 import { onLanguageSelect, setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
 import { redirect } from "@remix-run/node";
@@ -158,7 +159,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {parse(fragments.DECORATOR_HEADER, { trim: true })}
 
         {isLocalOrDemo && (
-          <div className="service-messages">
+          <div className={styles.serviceMessages}>
             <Alert variant="warning">
               Dette er en demoside og inneholder ikke dine personlige data.
             </Alert>
@@ -166,7 +167,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         )}
 
         {serviceMessages.length > 0 && (
-          <div className="service-messages">
+          <div className={styles.serviceMessages}>
             {serviceMessages.map((message) => (
               <ServiceMessage key={message.textId} message={message} />
             ))}
@@ -200,15 +201,15 @@ export default function App() {
 
   return (
     <main id="maincontent" role="main" tabIndex={-1}>
-      <div className="rapportering-header">
-        <div className="rapportering-header-innhold">
+      <div className={styles.rapporteringHeader}>
+        <div className={styles.rapporteringHeaderInnhold}>
           <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
             {getAppText("rapportering-tittel")}
           </Heading>
           {isLocalOrDemo && <DevTools />}
         </div>
       </div>
-      <div className="rapportering-container">
+      <div className={styles.rapporteringContainer}>
         <Outlet />
       </div>
     </main>
@@ -221,15 +222,15 @@ export function ErrorBoundary() {
 
   return (
     <main id="maincontent" role="main" tabIndex={-1}>
-      <div className="rapportering-header">
-        <div className="rapportering-header-innhold">
+      <div className={styles.rapporteringHeader}>
+        <div className={styles.rapporteringHeaderInnhold}>
           <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
             {getAppText("rapportering-tittel")}
           </Heading>
           {isLocalOrDemo && <DevTools />}
         </div>
       </div>
-      <div className="rapportering-container">
+      <div className={styles.rapporteringContainer}>
         <GeneralErrorBoundary error={error} />
       </div>
     </main>

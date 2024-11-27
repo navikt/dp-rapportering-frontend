@@ -36,6 +36,8 @@ import {
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import styles from "../styles/send-inn.module.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
@@ -196,18 +198,18 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Checkbox>
 
       {actionData?.error && (
-        <Alert variant="error" className="feilmelding">
+        <Alert variant="error" className={styles.feilmelding}>
           {actionData.error}
         </Alert>
       )}
 
-      <Form method="post" onSubmit={onSubmit} className="navigasjon-container">
+      <Form method="post" onSubmit={onSubmit} className={navigasjonStyles.container}>
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </Button>
@@ -217,7 +219,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           variant="primary"
           iconPosition="right"
           disabled={!periode.kanSendes || !confirmed || isSubmitting}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           name="_action"
           value="send-inn"
         >

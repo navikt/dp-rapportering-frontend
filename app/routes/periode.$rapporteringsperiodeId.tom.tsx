@@ -7,6 +7,8 @@ import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { RemixLink } from "~/components/RemixLink";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export default function TomRapporteringsPeriodeSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
@@ -39,7 +41,7 @@ export default function TomRapporteringsPeriodeSide() {
         <PortableText value={getRichText("rapportering-tom-ingen-å-rapportere")} />
       </div>
 
-      <div className="navigasjon-container my-4">
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to=""
@@ -47,7 +49,7 @@ export default function TomRapporteringsPeriodeSide() {
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
@@ -57,12 +59,12 @@ export default function TomRapporteringsPeriodeSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }

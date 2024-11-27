@@ -12,74 +12,12 @@ d-breadcrumbs {
   font-size: var(--a-font-size-small);
 }
 
-.dp-rapportering-frontend {
-  max-width: var(--app-max-width);
-  padding: var(--app-padding);
-  margin: 0 auto;
-}
-
-.service-messages {
-  max-width: var(--app-max-width);
-  padding: 0 var(--app-padding);
-  margin: 0 auto;
-}
-
-.rapportering-container {
-  max-width: var(--app-max-width);
-  padding: var(--app-padding);
-  margin: var(--a-spacing-4) auto var(--a-spacing-18);
-}
-
 .rapportering-container .navds-alert:first-child {
   margin-top: 0;
 }
 
 .rapportering-container p:first-child {
   margin-top: 0;
-}
-
-.debug-container {
-  max-width: var(--app-max-width);
-  padding: var(--app-padding);
-  margin: 0 auto var(--a-spacing-8);
-}
-
-.rapportering-header {
-  margin-top: var(--a-spacing-4);
-  border-bottom: 5px solid var(--a-green-400);
-}
-
-.rapportering-header-innhold {
-  max-width: var(--app-max-width);
-  padding: var(--app-padding);
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-}
-
-.rapportering-header-innhold p {
-  margin-bottom: 0;
-}
-
-.navigasjon-container {
-  display: flex;
-  gap: var(--a-spacing-4);
-  margin: var(--a-spacing-8) 0;
-  justify-content: center;
-}
-
-.navigasjonsknapp {
-  text-wrap: nowrap;
-  padding: var(--a-spacing-3) var(--a-spacing-8);
-  flex: 1;
-}
-
-.innsendt-perioder {
-  margin-top: var(--a-spacing-8);
-}
-
-.innsendt-accordion-header {
-  background-color: var(--a-bg-subtle);
 }
 
 .innsendt-accordion-header .navds-accordion__icon-wrapper {
@@ -103,85 +41,6 @@ d-breadcrumbs {
   width: 100%;
 }
 
-.innsendt-accordion-content {
-  background-color: var(--a-bg-subtle);
-  padding-left: 0;
-  padding-right: 0;
-  border-bottom: 2px solid var(--a-border-divider);
-}
-
-.innsendt-periode-header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.innsendt-periode-header-dato {
-  font-size: var(--a-font-size-medium);
-  font-weight: var(--a-font-weight-regular);
-  line-height: var(--a-spacing-6);
-}
-
-.innsendt-periode-header-status {
-  font-weight: normal;
-  border: 1px solid var(--a-gray-900);
-  border-radius: var(--a-border-radius-medium);
-  padding: 0 var(--a-spacing-2);
-  height: fit-content;
-  font-size: var(--a-font-size-medium);
-}
-
-.tilutfylling,
-.innsendt,
-.endret {
-  background-color: var(--a-lightblue-100);
-  border-color: var(--a-lightblue-700);
-}
-
-.feilet {
-  background-color: var(--a-red-100);
-  border-color: var(--a-red-59);
-}
-
-.ferdig {
-  background-color: var(--a-green-100);
-  border-color: var(--a-green-500);
-}
-
-.registert-meldeperiode-container {
-  margin-top: var(--a-spacing-4);
-}
-
-.registert-meldeperiode-container > p {
-  color: var(--a-text-subtle);
-}
-
-.hva-skal-jeg-rapportere-nav-link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: var(--a-spacing-10);
-}
-
-.lagret-automatisk {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.les-mer-container {
-  margin-top: var(--a-spacing-4);
-  margin-bottom: var(--a-spacing-8);
-}
-
-.alert-margin {
-  margin-bottom: var(--a-spacing-4);
-}
-
-.kvittering-innhold {
-  padding-left: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
-}
-
 .oppsummering {
   margin-bottom: var(--a-spacing-6);
   background-color: var(--a-bg-subtle);
@@ -189,24 +48,8 @@ d-breadcrumbs {
   border-radius: var(--a-border-radius-medium);
 }
 
-.innsendt-oppsummering {
-  margin: 0 var(--a-spacing-4);
-  padding-top: 0;
-  padding-bottom: var(--a-spacing-5);
-}
-
-.innsendt-oppsummering:nth-child(n + 2) {
-  border-top: 2px solid var(--a-border-divider);
-  border-radius: 0;
-  margin-top: var(--a-spacing-5);
-}
-
 .oppsummering .navds-alert:last-of-type {
   margin-bottom: 0;
-}
-
-.feilmelding {
-  margin-top: var(--a-spacing-10);
 }
 
 .alert-with-rich-text div p:first-child {
@@ -224,19 +67,6 @@ d-breadcrumbs {
 
   .rapportering-container {
     margin: var(--a-spacing-8) auto var(--a-spacing-18);
-  }
-
-  .navigasjon-container {
-    justify-content: center;
-  }
-
-  .navigasjonsknapp {
-    padding: var(--a-spacing-4) var(--a-spacing-12);
-    flex: none;
-  }
-
-  .navigasjonsknapp span {
-    font-size: var(--a-font-size-large);
   }
 }
 
@@ -323,15 +153,6 @@ d-breadcrumbs {
   padding-right: var(--a-spacing-16);
 }
 
-.tekst-subtil {
-  color: var(--a-text-subtle);
-}
-
 .rapportering-ingen-å-rapportere p {
   margin: 0;
-}
-
-.navds-checkbox,
-.navds-radio {
-  width: 100%;
 }
