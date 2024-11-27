@@ -20,7 +20,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
   const begrunnelseEndring: string = formData.get("begrunnelseEndring") as string;
 
-  return await lagreBegrunnelse(request, rapporteringsperiodeId, begrunnelseEndring);
+  return lagreBegrunnelse(request, rapporteringsperiodeId, begrunnelseEndring);
 }
 
 export default function BegrunnelseSide() {

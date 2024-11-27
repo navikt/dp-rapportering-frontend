@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   Form,
   useActionData,
@@ -40,7 +40,7 @@ import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
 
-  return json({ rapporteringsperioder });
+  return { rapporteringsperioder };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -68,7 +68,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         body: periode,
       });
 
-      return json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
+      return Response.json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
     }
 
     const innsendtPeriode = await sendInnPeriode(request, periode);
@@ -77,7 +77,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return redirect(`/periode/${id}/bekreftelse`);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error: unknown) {
-    return json(
+    return Response.json(
       {
         error: "rapportering-feilmelding-feil-ved-innsending",
       },

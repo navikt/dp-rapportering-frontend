@@ -28,7 +28,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const registrertArbeidssoker = svar === "true" ? true : false;
 
-  return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
+  return lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
     registrertArbeidssoker,
   });
 }
