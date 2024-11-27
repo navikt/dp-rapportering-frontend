@@ -12,12 +12,6 @@ d-breadcrumbs {
   font-size: var(--a-font-size-small);
 }
 
-/* .dp-rapportering-frontend {
-  max-width: var(--app-max-width);
-  padding: var(--app-padding);
-  margin: 0 auto;
-} */
-
 .rapportering-container .navds-alert:first-child {
   margin-top: 0;
 }
@@ -46,13 +40,6 @@ d-breadcrumbs {
   display: block;
   width: 100%;
 }
-
-/* .hva-skal-jeg-rapportere-nav-link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: var(--a-spacing-10);
-} */
 
 .oppsummering {
   margin-bottom: var(--a-spacing-6);
@@ -169,8 +156,3 @@ d-breadcrumbs {
 .rapportering-ingen-å-rapportere p {
   margin: 0;
 }
-
-/* .navds-checkbox,
-.navds-radio {
-  width: 100%;
-} */
