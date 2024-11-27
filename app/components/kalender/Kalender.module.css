@@ -152,18 +152,22 @@
   background-color: var(--a-blue-50);
 }
 
-.arbeid, .arbeidOgUtdanning, .arbeid.arbeidOgUtdanning {
+.arbeid,
+.arbeidOgUtdanning,
+.arbeid.arbeidOgUtdanning {
   background-color: var(--a-blue-200);
 }
 
-.arbeid:hover, .arbeidOgUtdanning:hover, .arbeid.arbeid.arbeidOgUtdanning:hover {
+.arbeid:hover,
+.arbeidOgUtdanning:hover,
+.arbeid.arbeid.arbeidOgUtdanning:hover {
   background-color: var(--a-blue-300);
 }
 
 .sykOgUtdanning::after,
 .fravaerOgUtdanning::after,
 .arbeidOgUtdanning::after {
-  content: '';
+  content: "";
   position: absolute;
   right: -12.5%;
   top: -12.5%;
@@ -180,7 +184,7 @@
 }
 
 .sykFravaerOgUtdanning::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -12.5%;
   top: -12.5%;
@@ -210,28 +214,33 @@
   background-color: var(--a-orange-50);
 }
 
-.ferie, .fravaer {
+.ferie,
+.fravaer {
   background-color: var(--a-green-200);
 }
 
-.ferie:hover, .fravaer:hover {
+.ferie:hover,
+.fravaer:hover {
   background-color: var(--a-green-300);
 }
 
-.timerFerie, .timerFravaer {
+.timerFerie,
+.timerFravaer {
   background-color: var(--a-green-50);
 }
 
-.sykdom, .sykOgFravaer {
+.sykdom,
+.sykOgFravaer {
   background-color: var(--a-orange-200);
 }
 
-.sykdom:hover, .sykOgFravaer:hover {
+.sykdom:hover,
+.sykOgFravaer:hover {
   background-color: var(--a-orange-300);
 }
 
 .sykOgFravaer::after {
-  content: '';
+  content: "";
   position: absolute;
   right: -12.5%;
   top: -12.5%;
@@ -250,6 +259,10 @@
   justify-content: flex-end;
   gap: var(--a-spacing-2);
   margin-top: var(--a-spacing-8);
+}
+
+.tekstSubtil {
+  color: var(--a-text-subtle);
 }
 
 @media screen and (min-width: 768px) {
@@ -296,5 +309,3 @@
     height: calc(var(--dato-strl) * 1.4);
   }
 }
-
-

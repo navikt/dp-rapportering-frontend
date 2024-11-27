@@ -20,6 +20,9 @@ import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import styles from "../styles/fyll-ut.module.css";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -130,18 +133,18 @@ export default function RapporteringsPeriodeFyllUtSide() {
         modalAapen={modalAapen}
         lukkModal={lukkModal}
       />
-      <div className="registert-meldeperiode-container">
+      <div className={styles.container}>
         <AktivitetOppsummering periode={periode} />
       </div>
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to={`/periode/${periode.id}/rapporteringstype`}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           disabled={searchParams.has("endring")}
         >
           {getAppText("rapportering-knapp-tilbake")}
@@ -152,13 +155,13 @@ export default function RapporteringsPeriodeFyllUtSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           onClick={neste}
           disabled={isSubmitting}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
-      </div>
+      </NavigasjonContainer>
 
       <LagretAutomatisk />
     </>
