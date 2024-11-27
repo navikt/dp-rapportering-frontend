@@ -18,6 +18,8 @@ import {
   RegistertArbeidssokerAlert,
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -28,7 +30,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const registrertArbeidssoker = svar === "true" ? true : false;
 
-  return await lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
+  return lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
     registrertArbeidssoker,
   });
 }
@@ -105,7 +107,7 @@ export default function ArbeidssøkerRegisterSide() {
           <AvregistertArbeidssokerAlert />
         ))}
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to={""}
@@ -113,7 +115,7 @@ export default function ArbeidssøkerRegisterSide() {
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
@@ -123,13 +125,13 @@ export default function ArbeidssøkerRegisterSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           disabled={periode.registrertArbeidssoker === null || isSubmitting}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
-      </div>
+      </NavigasjonContainer>
       <LagretAutomatisk />
     </>
   );

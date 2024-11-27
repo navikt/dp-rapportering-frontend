@@ -14,10 +14,18 @@ interface IProps {
   visEndringslenke?: boolean;
   readonly?: boolean;
   locale: DecoratorLocale;
+  visDato?: boolean;
 }
 
 export function Kalender(props: IProps) {
-  const { periode, aapneModal, readonly = false, visEndringslenke = false, locale } = props;
+  const {
+    periode,
+    aapneModal,
+    readonly = false,
+    visEndringslenke = false,
+    locale,
+    visDato = true,
+  } = props;
   const { getAppText } = useSanity();
 
   const ukedager = getWeekDays(locale);
@@ -35,10 +43,12 @@ export function Kalender(props: IProps) {
     <>
       <div className={styles.headerKontainer}>
         <div>
-          <p className={styles.header}>
-            {periodeUkenummerTekst}
-            <span className="tekst-subtil">{periodeFomTomDatoTekst}</span>
-          </p>
+          {visDato && (
+            <p className={styles.header}>
+              {periodeUkenummerTekst}
+              <span className={styles.tekstSubtil}>{periodeFomTomDatoTekst}</span>
+            </p>
+          )}
         </div>
         {visEndringslenke && <EndringsLenke id={periode.id} status={periode.status} />}
       </div>

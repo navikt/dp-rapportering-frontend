@@ -1,0 +1,24 @@
+.serviceMessages {
+  max-width: var(--app-max-width);
+  padding: 0 var(--app-padding);
+  margin: 0 auto;
+}
+
+.rapporteringContainer {
+  max-width: var(--app-max-width);
+  padding: var(--app-padding);
+  margin: var(--a-spacing-4) auto var(--a-spacing-18);
+}
+
+.rapporteringHeader {
+  margin-top: var(--a-spacing-4);
+  border-bottom: 5px solid var(--a-green-400);
+}
+
+.rapporteringHeaderInnhold {
+  max-width: var(--app-max-width);
+  padding: var(--app-padding);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}

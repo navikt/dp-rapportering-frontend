@@ -1,6 +1,5 @@
 import { Accordion } from "@navikt/ds-react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Outlet, useLoaderData, useLocation, useRouteError } from "@remix-run/react";
 import { useEffect } from "react";
 import invariant from "tiny-invariant";
@@ -20,7 +19,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const { periode } = await hentPeriode(request, periodeId, hentOriginal, "loader-periode");
 
-  return json({ periode });
+  return { periode };
 }
 
 export default function RapporteringsPeriodeSide() {
@@ -44,18 +43,16 @@ export default function RapporteringsPeriodeSide() {
   return (
     <>
       <Outlet />
-      <div className="debug-container">
-        <DevelopmentContainer>
-          <Accordion>
-            <Accordion.Item>
-              <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
-              <Accordion.Content>
-                <pre>${JSON.stringify(periode, null, 2)}</pre>
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion>
-        </DevelopmentContainer>
-      </div>
+      <DevelopmentContainer>
+        <Accordion>
+          <Accordion.Item>
+            <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
+            <Accordion.Content>
+              <pre>${JSON.stringify(periode, null, 2)}</pre>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
+      </DevelopmentContainer>
     </>
   );
 }

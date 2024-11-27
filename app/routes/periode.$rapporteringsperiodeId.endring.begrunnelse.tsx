@@ -14,13 +14,15 @@ import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { RemixLink } from "~/components/RemixLink";
 import { Error } from "~/components/error/Error";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
   const begrunnelseEndring: string = formData.get("begrunnelseEndring") as string;
 
-  return await lagreBegrunnelse(request, rapporteringsperiodeId, begrunnelseEndring);
+  return lagreBegrunnelse(request, rapporteringsperiodeId, begrunnelseEndring);
 }
 
 export default function BegrunnelseSide() {
@@ -89,12 +91,12 @@ export default function BegrunnelseSide() {
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to={`/periode/${periode.id}/endring/fyll-ut`}
           variant="secondary"
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
         >
@@ -106,23 +108,23 @@ export default function BegrunnelseSide() {
           variant="primary"
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           disabled={!periode.begrunnelseEndring || isSubmitting}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
-      </div>
-      <div className="navigasjon-container">
+      </NavigasjonContainer>
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
           variant="tertiary"
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>
-      </div>
+      </NavigasjonContainer>
 
       <LagretAutomatisk />
     </>

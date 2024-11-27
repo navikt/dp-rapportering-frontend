@@ -2,13 +2,17 @@ import {
   AvregistertArbeidssokerAlert,
   RegistertArbeidssokerAlert,
 } from "./arbeidssokerregister/ArbeidssokerRegister";
+import { NavigasjonContainer } from "./navigasjon-container/NavigasjonContainer";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
+import { useUXSignals } from "~/hooks/useUXSignals";
 import { RemixLink } from "~/components/RemixLink";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import styles from "../styles/kvittering.module.css";
 
 interface Ikvittering {
   tittel: string;
@@ -24,6 +28,8 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
     window.hj("trigger", "nyttmeldekortDP");
   }
 
+  useUXSignals(true);
+
   return (
     <>
       <Alert variant="success" className="my-4">
@@ -37,7 +43,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           <Accordion.Header>
             {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
           </Accordion.Header>
-          <Accordion.Content className="kvittering-innhold">
+          <Accordion.Content className={styles.kvitteringInnhold}>
             <div className="oppsummering">
               <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
               <AktivitetOppsummering periode={periode} />
@@ -51,31 +57,32 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
-      <div className="navigasjon-container">
+      <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--a-spacing-8) auto" }} />
+      <NavigasjonContainer>
         {harNestePeriode ? (
           <RemixLink
             as="Button"
             to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
-            className="navigasjonsknapp"
+            className={navigasjonStyles.knapp}
           >
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </RemixLink>
         ) : (
           <Button
             as="a"
-            className="navigasjonsknapp"
+            className={navigasjonStyles.knapp}
             href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
           >
             {getLink("rapportering-ga-til-mine-dagpenger").linkText}
           </Button>
         )}
-      </div>
+      </NavigasjonContainer>
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }

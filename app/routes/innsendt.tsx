@@ -1,14 +1,15 @@
-import { Accordion, Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
+import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import classNames from "classnames";
 import { useEffect } from "react";
 import {
   IRapporteringsperiode,
   hentInnsendtePerioder,
   hentRapporteringsperioder,
 } from "~/models/rapporteringsperiode.server";
+import { formaterPeriodeDato } from "~/utils/dato.utils";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { sorterGrupper } from "~/utils/innsendt.utils";
 import { hentUkeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
@@ -21,12 +22,15 @@ import {
   RegistertArbeidssokerAlert,
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import styles from "../styles/innsendt.module.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
   const innsendtPerioder = await hentInnsendtePerioder(request);
 
-  return json({ innsendtPerioder, rapporteringsperioder });
+  return { innsendtPerioder, rapporteringsperioder };
 }
 
 function grupperPerioder(
@@ -88,100 +92,115 @@ export default function InnsendteRapporteringsPerioderSide() {
       {innsendtPerioder.length === 0 && (
         <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
       )}
+      <div className={styles.innsendtPerioder}>
+        {sortertePerioder.map((perioder) => {
+          const nyestePeriode = perioder[0];
+          const labelStyle = {
+            [styles.tilutfylling]: nyestePeriode.status.toLocaleLowerCase() === "tilutfylling",
+            [styles.innsendt]: nyestePeriode.status.toLocaleLowerCase() === "innsendt",
+            [styles.endret]: nyestePeriode.status.toLocaleLowerCase() === "endret",
+            [styles.ferdig]: nyestePeriode.status.toLocaleLowerCase() === "ferdig",
+            [styles.feilet]: nyestePeriode.status.toLocaleLowerCase() === "feilet",
+          };
 
-      {sortertePerioder.map((perioder) => {
-        const nyestePeriode = perioder[0];
-        return (
-          <Accordion key={nyestePeriode.periode.fraOgMed} headingSize="medium">
-            <Accordion.Item>
-              <Accordion.Header className="innsendt-accordion-header">
-                <div className="innsendt-periode-header">
-                  <div className="innsendt-periode-header-uke">
-                    {hentUkeTekst(nyestePeriode, getAppText)}
-                  </div>
-                  <div
-                    className={`innsendt-periode-header-status ${nyestePeriode.status.toLocaleLowerCase()}`}
-                  >
-                    <BodyLong>
+          return (
+            <Accordion key={nyestePeriode.periode.fraOgMed} headingSize="medium">
+              <Accordion.Item>
+                <Accordion.Header className={classNames(styles.innsendtAccordionHeader)}>
+                  <div className={styles.innsendtPeriodeHeader}>
+                    <div>
+                      <div>{hentUkeTekst(nyestePeriode, getAppText)}</div>
+                      <div className={styles.innsendtPeriodeHeaderDato}>
+                        {formaterPeriodeDato(
+                          nyestePeriode.periode.fraOgMed,
+                          nyestePeriode.periode.tilOgMed
+                        )}
+                      </div>
+                    </div>
+                    <div className={classNames(styles.innsendtPeriodeHeaderStatus, labelStyle)}>
                       {getAppText(
                         `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`
                       )}
-                    </BodyLong>
-                  </div>
-                </div>
-              </Accordion.Header>
-              <Accordion.Content className="innsendt-accordion-content">
-                {perioder.map((periode) => {
-                  return (
-                    <div key={periode.id} className="oppsummering">
-                      {(periode.mottattDato || periode.bruttoBelop) && (
-                        <div className="my-4">
-                          {periode.mottattDato && (
-                            <div>
-                              <strong>
-                                {periode.originalId
-                                  ? getAppText("rapportering-endret")
-                                  : getAppText("rapportering-sendt")}
-                                :{" "}
-                              </strong>
-                              {new Intl.DateTimeFormat(locale).format(
-                                new Date(periode.mottattDato)
-                              )}
-                            </div>
-                          )}
-                          {periode.bruttoBelop !== null && (
-                            <div>
-                              <strong>{getAppText("rapportering-bruttobelop")}: </strong>
-                              {new Intl.NumberFormat(locale, {
-                                style: "currency",
-                                currency: "NOK",
-                              }).format(periode.bruttoBelop)}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      <Kalender
-                        key={periode.id}
-                        periode={periode}
-                        visEndringslenke={periode.kanEndres}
-                        aapneModal={() => {}}
-                        locale={locale}
-                        readonly
-                      />
-                      <AktivitetOppsummering periode={periode} />
-                      {periode.registrertArbeidssoker ? (
-                        <RegistertArbeidssokerAlert />
-                      ) : (
-                        <AvregistertArbeidssokerAlert />
-                      )}
                     </div>
-                  );
-                })}
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion>
-        );
-      })}
+                  </div>
+                </Accordion.Header>
+                <Accordion.Content className={styles.innsendtAccordionContent}>
+                  {perioder.map((periode) => {
+                    return (
+                      <div
+                        key={periode.id}
+                        className={classNames("oppsummering", styles.innsendtOppsummering)}
+                      >
+                        {(periode.mottattDato || periode.bruttoBelop) && (
+                          <div className="my-4">
+                            {periode.mottattDato && (
+                              <div>
+                                <strong>
+                                  {periode.originalId
+                                    ? getAppText("rapportering-endret")
+                                    : getAppText("rapportering-sendt")}
+                                  :{" "}
+                                </strong>
+                                {new Intl.DateTimeFormat(locale).format(
+                                  new Date(periode.mottattDato)
+                                )}
+                              </div>
+                            )}
+                            {periode.bruttoBelop !== null && (
+                              <div>
+                                <strong>{getAppText("rapportering-bruttobelop")}: </strong>
+                                {new Intl.NumberFormat(locale, {
+                                  style: "currency",
+                                  currency: "NOK",
+                                }).format(periode.bruttoBelop)}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        <Kalender
+                          key={periode.id}
+                          periode={periode}
+                          visEndringslenke={periode.kanEndres}
+                          aapneModal={() => {}}
+                          locale={locale}
+                          readonly
+                          visDato={false}
+                        />
+                        <AktivitetOppsummering periode={periode} />
+                        {periode.registrertArbeidssoker ? (
+                          <RegistertArbeidssokerAlert />
+                        ) : (
+                          <AvregistertArbeidssokerAlert />
+                        )}
+                      </div>
+                    );
+                  })}
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          );
+        })}
+      </div>
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         {harFlerePerioder ? (
           <RemixLink
             as="Button"
             to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
-            className="navigasjonsknapp"
+            className={navigasjonStyles.knapp}
           >
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </RemixLink>
         ) : (
           <Button
             as="a"
-            className="navigasjonsknapp"
+            className={navigasjonStyles.knapp}
             href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
           >
             {getLink("rapportering-ga-til-mine-dagpenger").linkText}
           </Button>
         )}
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useCallback } from "react";
@@ -18,6 +18,8 @@ import { LesMer } from "~/components/LesMer";
 import { RemixLink } from "~/components/RemixLink";
 import { Error } from "~/components/error/Error";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -26,14 +28,14 @@ export async function action({ request }: ActionFunctionArgs) {
     "rapporteringstype"
   ) as Rapporteringstype;
 
-  return await lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
+  return lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
 
-    return json({ rapporteringsperioder });
+    return { rapporteringsperioder };
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;
@@ -153,14 +155,14 @@ export default function RapporteringstypeSide() {
         <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
       )}
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to={`/`}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
@@ -170,13 +172,13 @@ export default function RapporteringstypeSide() {
           onClick={neste}
           variant="primary"
           iconPosition="right"
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           icon={<ArrowRightIcon aria-hidden />}
           disabled={type === null || isSubmitting}
         >
           {nesteKnappTekst}
         </Button>
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }

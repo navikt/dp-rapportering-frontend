@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
+import { useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
@@ -19,6 +19,8 @@ import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -60,7 +62,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     "loader-endring-fyll-ut-original"
   );
 
-  return json({ periode, originalPeriode });
+  return { periode, originalPeriode };
 }
 
 export default function RapporteringsPeriodeFyllUtSide() {
@@ -146,12 +148,12 @@ export default function RapporteringsPeriodeFyllUtSide() {
         <AktivitetOppsummering periode={periode} />
       </div>
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to={`/innsendt`}
           variant="secondary"
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           icon={<ArrowLeftIcon aria-hidden />}
           iconPosition="left"
         >
@@ -163,14 +165,14 @@ export default function RapporteringsPeriodeFyllUtSide() {
           variant="primary"
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           onClick={neste}
           disabled={isSubmitting}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
-      </div>
-      <div className="navigasjon-container">
+      </NavigasjonContainer>
+      <NavigasjonContainer>
         <RemixLink
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
@@ -179,7 +181,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </RemixLink>
-      </div>
+      </NavigasjonContainer>
 
       <LagretAutomatisk />
     </>
