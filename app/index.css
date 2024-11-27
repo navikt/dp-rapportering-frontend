@@ -20,10 +20,6 @@ d-breadcrumbs {
   margin-top: 0;
 }
 
-.innsendt-accordion-header .navds-accordion__icon-wrapper {
-  align-self: start;
-}
-
 .navds-accordion:first-child {
   border-top: 2px solid var(--a-border-divider);
 }
@@ -34,11 +30,6 @@ d-breadcrumbs {
 
 .navds-accordion__item--open {
   background-color: var(--a-bg-subtle);
-}
-
-.innsendt-accordion-header span.navds-accordion__header-content {
-  display: block;
-  width: 100%;
 }
 
 .oppsummering {
