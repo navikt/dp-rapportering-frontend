@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
+import { useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
@@ -62,7 +62,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     "loader-endring-fyll-ut-original"
   );
 
-  return json({ periode, originalPeriode });
+  return { periode, originalPeriode };
 }
 
 export default function RapporteringsPeriodeFyllUtSide() {

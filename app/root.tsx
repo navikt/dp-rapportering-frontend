@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { getDecoratorHTML } from "./dekorator/dekorator.server";
 import { DevTools } from "./devTools";
 import { getLanguage, setLanguage } from "./models/language.server";
@@ -6,9 +5,8 @@ import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanity } from "./sanity/sanity.types";
 import styles from "./styles/root.module.css";
 import { Alert, Heading } from "@navikt/ds-react";
-import { setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
-import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
-import { json, redirect } from "@remix-run/node";
+import { onLanguageSelect, setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
+import { redirect } from "@remix-run/node";
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   Links,
@@ -31,8 +29,6 @@ import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBoundary";
 import { ServiceMessage } from "./components/service-message/ServiceMessage";
-
-/* eslint-enable */
 import navStyles from "@navikt/ds-css/dist/index.css?url";
 import indexStyle from "~/index.css?url";
 import { hasSession } from "../mocks/session";
@@ -88,8 +84,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const locale: DecoratorLocale = (await getLanguage(request)) as DecoratorLocale;
   const fragments = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
 
-  if (!fragments)
-    throw json({ error: "rapportering-feilmelding-kunne-ikke-hente-dekoratoren" }, { status: 500 });
+  if (!fragments) {
+    throw new Response("rapportering-feilmelding-kunne-ikke-hente-dekoratoren", { status: 500 });
+  }
 
   const sanityTexts = await sanityClient.fetch<ISanity>(allTextsQuery, {
     baseLang: DecoratorLocale.NB,
@@ -104,7 +101,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
-  return json({
+  return {
     sanityTexts,
     locale: getLocale(locale),
     env: {
@@ -117,7 +114,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       GITHUB_SHA: process.env.GITHUB_SHA,
     },
     fragments,
-  });
+  };
 }
 
 export async function action({ request }: LoaderFunctionArgs) {
@@ -126,7 +123,7 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const locale = formData.get("locale") as DecoratorLocale;
 
-  return json(
+  return Response.json(
     { status: "success" },
     {
       headers: {
@@ -196,6 +193,8 @@ export default function App() {
     setAvailableLanguages(availableLanguages);
 
     onLanguageSelect((language) => {
+      // TODO: Logg endring av språk til amplitude
+      document.documentElement.setAttribute("lang", language.locale);
       fetcher.submit({ locale: language.locale }, { method: "post" });
     });
   }

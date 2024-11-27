@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { getSession } from "~/models/getSession.server";
@@ -25,7 +25,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
     const showInfoAlert = (await getInfoAlertStatus(request)) as boolean;
 
-    return json({ rapporteringsperioder, session, showInfoAlert });
+    return { rapporteringsperioder, session, showInfoAlert };
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;

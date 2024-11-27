@@ -1,7 +1,6 @@
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { type LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { useEffect } from "react";
@@ -33,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
   const innsendtPerioder = await hentInnsendtePerioder(request);
 
-  return json({ innsendtPerioder, rapporteringsperioder });
+  return { innsendtPerioder, rapporteringsperioder };
 }
 
 function grupperPerioder(

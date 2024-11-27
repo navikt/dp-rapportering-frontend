@@ -1,6 +1,6 @@
 import { withDb } from "./responses/db";
 import { getDatabase } from "./responses/db.utils";
-import { HttpResponse, bypass, http } from "msw";
+import { HttpResponse, http, passthrough } from "msw";
 import { formatereDato } from "~/devTools/periodedato";
 import { hentEndringsId, startEndring } from "~/devTools/rapporteringsperiode";
 import { IArbeidssokerSvar } from "~/models/arbeidssoker.server";
@@ -47,8 +47,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       });
 
       db.deleteRapporteringsperiode(periode.id);
-
-      return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
+      return HttpResponse.json({ id: endretPeriode.id });
     }
 
     db.updateRapporteringsperiode(periode.id, {
@@ -57,7 +56,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       mottattDato,
     });
 
-    return HttpResponse.json({ id: periode.id }, { status: 200 });
+    return HttpResponse.json({ id: periode.id });
   }),
 
   http.get(
@@ -76,7 +75,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   ),
 
   http.post(`${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/start`, () => {
-    return HttpResponse.json(null, { status: 200 });
+    return HttpResponse.json(undefined, { status: 204 });
   }),
 
   http.post(
@@ -92,7 +91,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.addRapporteringsperioder(endretPeriode);
 
-      return HttpResponse.json({ id: endretPeriode.id }, { status: 200 });
+      return HttpResponse.json({ id: endretPeriode.id });
     }
   ),
 
@@ -106,7 +105,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.lagreAktivitet(rapporteringsperiodeId, dag);
 
-      return HttpResponse.json(null, { status: 204 });
+      return HttpResponse.json(undefined, { status: 204 });
     }
   ),
 
@@ -119,9 +118,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.updateRapporteringsperiode(rapporteringsperiodeId, { registrertArbeidssoker });
 
-      return new HttpResponse(null, {
-        status: 204,
-      });
+      return HttpResponse.json(undefined, { status: 204 });
     }
   ),
 
@@ -135,7 +132,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.updateRapporteringsperiode(rapporteringsperiodeId, { begrunnelseEndring });
 
-      return HttpResponse.json(null, { status: 204 });
+      return HttpResponse.json(undefined, { status: 204 });
     }
   ),
 
@@ -148,14 +145,11 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       db.updateRapporteringsperiode(rapporteringsperiodeId, { rapporteringstype });
 
-      return HttpResponse.json(null, { status: 204 });
+      return HttpResponse.json(undefined, { status: 204 });
     }
   ),
 
-  http.get("https://rt6o382n.apicdn.sanity.io/*", async ({ request }) => {
-    const bypassResponse = await fetch(bypass(request));
-    const response = await bypassResponse.json();
-
-    return HttpResponse.json(response);
+  http.get("https://rt6o382n.apicdn.sanity.io/*", async () => {
+    return passthrough();
   }),
 ];
