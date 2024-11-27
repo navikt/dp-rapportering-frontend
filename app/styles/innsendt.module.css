@@ -6,6 +6,15 @@
   background-color: var(--a-bg-subtle);
 }
 
+.innsendtAccordionHeader :global(.navds-accordion__icon-wrapper) {
+  align-self: start;
+}
+
+.innsendtAccordionHeader span:global(.navds-accordion__header-content) {
+  display: block;
+  width: 100%;
+}
+
 .innsendtPeriodeHeader {
   display: flex;
   justify-content: space-between;

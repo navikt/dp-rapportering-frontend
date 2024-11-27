@@ -26,8 +26,6 @@ import { NavigasjonContainer } from "~/components/navigasjon-container/Navigasjo
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import styles from "../styles/innsendt.module.css";
 
-console.log(styles);
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const rapporteringsperioder = await hentRapporteringsperioder(request);
   const innsendtPerioder = await hentInnsendtePerioder(request);
@@ -105,16 +103,10 @@ export default function InnsendteRapporteringsPerioderSide() {
             [styles.feilet]: nyestePeriode.status.toLocaleLowerCase() === "feilet",
           };
 
-          console.log(nyestePeriode.periode.fraOgMed, labelStyle);
           return (
             <Accordion key={nyestePeriode.periode.fraOgMed} headingSize="medium">
               <Accordion.Item>
-                <Accordion.Header
-                  className={classNames(
-                    "innsendt-accordion-header",
-                    styles.innsendtAccordionHeader
-                  )}
-                >
+                <Accordion.Header className={classNames(styles.innsendtAccordionHeader)}>
                   <div className={styles.innsendtPeriodeHeader}>
                     <div>
                       <div>{hentUkeTekst(nyestePeriode, getAppText)}</div>
