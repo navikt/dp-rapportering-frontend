@@ -43,18 +43,16 @@ export default function RapporteringsPeriodeSide() {
   return (
     <>
       <Outlet />
-      <div className="debug-container">
-        <DevelopmentContainer>
-          <Accordion>
-            <Accordion.Item>
-              <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
-              <Accordion.Content>
-                <pre>${JSON.stringify(periode, null, 2)}</pre>
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion>
-        </DevelopmentContainer>
-      </div>
+      <DevelopmentContainer>
+        <Accordion>
+          <Accordion.Item>
+            <Accordion.Header>(DEBUG) Rapporteringsperiode som json:</Accordion.Header>
+            <Accordion.Content>
+              <pre>${JSON.stringify(periode, null, 2)}</pre>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
+      </DevelopmentContainer>
     </>
   );
 }

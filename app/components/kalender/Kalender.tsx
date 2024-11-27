@@ -46,7 +46,7 @@ export function Kalender(props: IProps) {
           {visDato && (
             <p className={styles.header}>
               {periodeUkenummerTekst}
-              <span className="tekst-subtil">{periodeFomTomDatoTekst}</span>
+              <span className={styles.tekstSubtil}>{periodeFomTomDatoTekst}</span>
             </p>
           )}
         </div>

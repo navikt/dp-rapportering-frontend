@@ -4,6 +4,8 @@ import { ErrorResponse, isRouteErrorResponse } from "@remix-run/react";
 import { useEffect } from "react";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { foundAppText, foundRichText, useSanity } from "~/hooks/useSanity";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { NavigasjonContainer } from "../navigasjon-container/NavigasjonContainer";
 
 export interface IError {
   statusText: string;
@@ -86,15 +88,15 @@ export function GeneralErrorBoundary({ error }: IProps) {
 
       <PortableText value={description} />
 
-      <div className="navigasjon-container">
+      <NavigasjonContainer>
         <Button
           as="a"
-          className="navigasjonsknapp"
+          className={navigasjonStyles.knapp}
           href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
         >
           {getLink("rapportering-ga-til-mine-dagpenger").linkText}
         </Button>
-      </div>
+      </NavigasjonContainer>
     </>
   );
 }
