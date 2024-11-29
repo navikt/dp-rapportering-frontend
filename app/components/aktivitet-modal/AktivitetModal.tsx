@@ -1,10 +1,11 @@
 import styles from "./AktivitetModal.module.css";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { useActionData, useFetcher } from "@remix-run/react";
+import { useActionData, useFetcher, useNavigation } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { AktivitetType, aktivitetType } from "~/utils/aktivitettype.utils";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { validator } from "~/utils/validering.util";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -37,6 +38,8 @@ export function AktivitetModal({
   const dag = periode.dager.find((dag) => dag.dato === valgtDato);
 
   const fetcher = useFetcher();
+  const navigation = useNavigation();
+  const isSubmitting = useIsSubmitting(navigation);
 
   const slettHandler = () => {
     fetcher.submit(
@@ -97,7 +100,7 @@ export function AktivitetModal({
               <Button variant="secondary" type="button" name="submit" onClick={slettHandler}>
                 {getAppText("rapportering-slett")}
               </Button>
-              <Button type="submit" name="submit" value="lagre">
+              <Button type="submit" name="submit" value="lagre" disabled={isSubmitting}>
                 {getAppText("rapportering-lagre")}
               </Button>
             </div>
