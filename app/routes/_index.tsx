@@ -2,7 +2,13 @@ import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  useFetcher,
+  useLoaderData,
+  useNavigation,
+  useRouteError,
+} from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { getSession } from "~/models/getSession.server";
 import { getInfoAlertStatus } from "~/models/info.server";
@@ -10,6 +16,7 @@ import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server"
 import type { action as StartAction } from "./api.start";
 import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -46,6 +53,9 @@ export default function Landingsside() {
   const { trackSkjemaStartet } = useAmplitude();
 
   const forstePeriode = rapporteringsperioder[0];
+
+  const navigation = useNavigation();
+  const isSubmitting = useIsSubmitting(navigation);
 
   useEffect(() => {
     setBreadcrumbs([], getAppText);
@@ -126,7 +136,7 @@ export default function Landingsside() {
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               onClick={startUtfylling}
-              disabled={!samtykker}
+              disabled={!samtykker || isSubmitting}
             >
               {getAppText("rapportering-knapp-neste")}
             </Button>
