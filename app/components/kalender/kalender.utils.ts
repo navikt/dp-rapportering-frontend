@@ -1,5 +1,5 @@
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-import { IAktivitet } from "~/utils/aktivitettype.utils";
+import { IAktivitet, aktivitetTypeMap } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
 import type { GetAppText } from "~/hooks/useSanity";
@@ -70,7 +70,8 @@ export function hentSkjermleserDatoTekst(
   const formattertDato = new Date(dag.dato).toLocaleDateString(locale, options);
 
   const aktiviteter = dag.aktiviteter.map(
-    (aktivitet) => `${aktivitet.type} ${hentAktivitetSumTekst(aktivitet, getAppText, true)}`
+    (aktivitet) =>
+      `${aktivitetTypeMap(aktivitet.type, getAppText)} ${hentAktivitetSumTekst(aktivitet, getAppText, true)}`
   );
 
   if (aktiviteter.length === 0) {

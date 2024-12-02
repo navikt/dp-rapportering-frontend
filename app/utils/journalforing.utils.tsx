@@ -555,5 +555,6 @@ export function samleHtmlForPeriode(
   }
 
   const html = `<div class="melding-om-vedtak">${getHeader({ text: getAppText("rapportering-tittel"), level: "1" })}${pages.join('</div><div class="melding-om-vedtak">')}</div>`;
+  console.log(html);
   return html;
 }

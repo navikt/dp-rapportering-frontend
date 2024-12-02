@@ -2,8 +2,10 @@ import {
   AvregistertArbeidssokerAlert,
   RegistertArbeidssokerAlert,
 } from "./arbeidssokerregister/ArbeidssokerRegister";
+import { hentSkjermleserDatoTekst } from "./kalender/kalender.utils";
 import { NavigasjonContainer } from "./navigasjon-container/NavigasjonContainer";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
+import classNames from "classnames";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -28,17 +30,19 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
     window.hj("trigger", "nyttmeldekortDP");
   }
 
+  console.log(periode);
+
   useUXSignals(true);
 
   return (
     <>
-      <Alert variant="success" className="my-4">
+      <Alert variant="success" className={classNames("my-4", styles.screenOnly)}>
         <Heading spacing size="small" level="3">
           {tittel}
         </Heading>
       </Alert>
 
-      <Accordion headingSize="medium">
+      <Accordion headingSize="medium" className={styles.screenOnly}>
         <Accordion.Item>
           <Accordion.Header>
             {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
@@ -57,8 +61,36 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
-      <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--a-spacing-8) auto" }} />
-      <NavigasjonContainer>
+
+      <div
+        className={styles.screenOnly}
+        data-uxsignals-embed="panel-ppugndwzu6"
+        style={{ margin: "var(--a-spacing-8) auto" }}
+      />
+
+      {/* TODO
+       * Lista over dager må ha en tittel med uker og dato
+       * Arbeidssøkerstatus må vises {periode.registrertArbeidssoker (true | false)}
+       * {periode.registrertArbeidssoker ? (
+              <RegistertArbeidssokerAlert />
+            ) : (
+              <AvregistertArbeidssokerAlert />
+            )}
+       * De første 7 dagene i lista har ukenummer og fra- og til-dato som tittel periode.dager[0-6].dato
+         import { getISOWeek } from "date-fns";
+         getISOWeek(new Date(dato))
+       * De siste 7 dagene i lista har ukenummer og fra- og til-dato som tittel periode.dager[7-13].dato
+       */}
+
+      <div className={styles.printOnly}>
+        <ul>
+          {periode.dager.map((dag) => {
+            return <li key={dag.dato}>{hentSkjermleserDatoTekst(dag, getAppText, locale)}</li>;
+          })}
+        </ul>
+      </div>
+
+      <NavigasjonContainer className={styles.screenOnly}>
         {harNestePeriode ? (
           <RemixLink
             as="Button"
@@ -78,7 +110,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         )}
       </NavigasjonContainer>
 
-      <NavigasjonContainer>
+      <NavigasjonContainer className={styles.screenOnly}>
         <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
