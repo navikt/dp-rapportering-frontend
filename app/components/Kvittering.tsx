@@ -6,6 +6,7 @@ import { hentSkjermleserDatoTekst } from "./kalender/kalender.utils";
 import { NavigasjonContainer } from "./navigasjon-container/NavigasjonContainer";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import classNames from "classnames";
+import { getISOWeek } from "date-fns";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -68,26 +69,34 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         style={{ margin: "var(--a-spacing-8) auto" }}
       />
 
-      {/* TODO
-       * Lista over dager må ha en tittel med uker og dato
-       * Arbeidssøkerstatus må vises {periode.registrertArbeidssoker (true | false)}
-       * {periode.registrertArbeidssoker ? (
-              <RegistertArbeidssokerAlert />
-            ) : (
-              <AvregistertArbeidssokerAlert />
-            )}
-       * De første 7 dagene i lista har ukenummer og fra- og til-dato som tittel periode.dager[0-6].dato
-         import { getISOWeek } from "date-fns";
-         getISOWeek(new Date(dato))
-       * De siste 7 dagene i lista har ukenummer og fra- og til-dato som tittel periode.dager[7-13].dato
-       */}
-
       <div className={styles.printOnly}>
+        <h3>
+          Uke {getISOWeek(new Date(periode.dager[0].dato))} ({periode.dager[0].dato} -{" "}
+          {periode.dager[6].dato})
+        </h3>
         <ul>
-          {periode.dager.map((dag) => {
-            return <li key={dag.dato}>{hentSkjermleserDatoTekst(dag, getAppText, locale)}</li>;
-          })}
+          {periode.dager.slice(0, 7).map((dag) => (
+            <li key={dag.dato} className={styles.dag}>
+              {hentSkjermleserDatoTekst(dag, getAppText, locale)}
+            </li>
+          ))}
         </ul>
+        <h3>
+          Uke {getISOWeek(new Date(periode.dager[7].dato))} ({periode.dager[7].dato} -{" "}
+          {periode.dager[13].dato})
+        </h3>
+        <ul>
+          {periode.dager.slice(7, 14).map((dag) => (
+            <li key={dag.dato} className={styles.dag}>
+              {hentSkjermleserDatoTekst(dag, getAppText, locale)}
+            </li>
+          ))}
+        </ul>
+        {periode.registrertArbeidssoker ? (
+          <RegistertArbeidssokerAlert />
+        ) : (
+          <AvregistertArbeidssokerAlert />
+        )}
       </div>
 
       <NavigasjonContainer className={styles.screenOnly}>
