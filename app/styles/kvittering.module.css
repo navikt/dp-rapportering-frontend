@@ -2,3 +2,22 @@
   padding-left: var(--a-spacing-2);
   padding-right: var(--a-spacing-2);
 }
+
+@media print {
+  .kvitteringInnhold {
+    display: block;
+    animation: none;
+  }
+
+  :global(.navds-accordion__header) {
+    display: none;
+  }
+
+  :global(#decorator-header) {
+    display: none;
+  }
+
+  :global(#decorator-footer) {
+    display: none;
+  }
+}
