@@ -13,6 +13,17 @@ import {
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
+
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { Kalender } from "~/components/kalender/Kalender";
+import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { RemixLink } from "~/components/RemixLink";
+import { useAmplitude } from "~/hooks/useAmplitude";
+import { useLocale } from "~/hooks/useLocale";
+import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { logErrorResponse, logg } from "~/models/logger.server";
 import {
   hentPeriode,
@@ -24,16 +35,7 @@ import { useAddHtml } from "~/utils/journalforing.utils";
 import { kanSendes } from "~/utils/periode.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
-import { useAmplitude } from "~/hooks/useAmplitude";
-import { useLocale } from "~/hooks/useLocale";
-import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { RemixLink } from "~/components/RemixLink";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { Kalender } from "~/components/kalender/Kalender";
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+
 import styles from "../styles/send-inn.module.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -97,7 +99,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
@@ -134,7 +136,7 @@ export default function RapporteringsPeriodeSendInnSide() {
   if (periode) {
     const ukenummer = formaterPeriodeTilUkenummer(
       periode.periode.fraOgMed,
-      periode.periode.tilOgMed
+      periode.periode.tilOgMed,
     );
     const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed);
 

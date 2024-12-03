@@ -3,19 +3,20 @@ import { Button, Select } from "@navikt/ds-react";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { ChangeEvent } from "react";
+
+import { Error } from "~/components/error/Error";
+import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { LagretAutomatisk } from "~/components/LagretAutomatisk";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { RemixLink } from "~/components/RemixLink";
+import { useAmplitude } from "~/hooks/useAmplitude";
+import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreBegrunnelse } from "~/models/begrunnelse.server";
 import { kanSendes } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
-import { useAmplitude } from "~/hooks/useAmplitude";
-import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { LagretAutomatisk } from "~/components/LagretAutomatisk";
-import { RemixLink } from "~/components/RemixLink";
-import { Error } from "~/components/error/Error";
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -42,7 +43,7 @@ export default function BegrunnelseSide() {
         rapporteringsperiodeId: periode.id,
         begrunnelseEndring: value,
       },
-      { method: "post" }
+      { method: "post" },
     );
   };
 

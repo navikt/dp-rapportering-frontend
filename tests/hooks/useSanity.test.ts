@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
+
 import {
-  ReplaceTexts,
   createLinkObject,
   createSanityMessageObject,
   createSanityRichTextObject,
@@ -13,6 +13,7 @@ import {
   getMessage,
   getRichText,
   replaceKeys,
+  ReplaceTexts,
 } from "~/hooks/useSanity";
 
 const sanityTexts = {
@@ -53,25 +54,25 @@ describe("useSanity", () => {
 
   test("foundRichText finner ikke tekst og returnerer false", () => {
     expect(
-      foundRichText(createSanityRichTextObject("rapportering-tekst"), "rapportering-tekst")
+      foundRichText(createSanityRichTextObject("rapportering-tekst"), "rapportering-tekst"),
     ).toBe(false);
   });
 
   test("foundRichText finner tekst og returnerer true", () => {
     expect(
-      foundRichText(createSanityRichTextObject("Tekst fra Sanity"), "rapportering-tekst")
+      foundRichText(createSanityRichTextObject("Tekst fra Sanity"), "rapportering-tekst"),
     ).toBe(true);
   });
 
   test("foundMessage finner ikke link og returnerer false", () => {
     expect(
-      foundMessage(createSanityMessageObject("rapportering-message"), "rapportering-message")
+      foundMessage(createSanityMessageObject("rapportering-message"), "rapportering-message"),
     ).toBe(false);
   });
 
   test("foundMessage finner melding og returnerer true", () => {
     expect(foundMessage(createSanityMessageObject("Link fra Sanity"), "rapportering-message")).toBe(
-      true
+      true,
     );
   });
 

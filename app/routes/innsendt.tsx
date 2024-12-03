@@ -4,18 +4,7 @@ import { type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { useEffect } from "react";
-import {
-  IRapporteringsperiode,
-  hentInnsendtePerioder,
-  hentRapporteringsperioder,
-} from "~/models/rapporteringsperiode.server";
-import { formaterPeriodeDato } from "~/utils/dato.utils";
-import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { sorterGrupper } from "~/utils/innsendt.utils";
-import { hentUkeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
-import { useLocale } from "~/hooks/useLocale";
-import { useSanity } from "~/hooks/useSanity";
-import { RemixLink } from "~/components/RemixLink";
+
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import {
   AvregistertArbeidssokerAlert,
@@ -24,6 +13,19 @@ import {
 import { Kalender } from "~/components/kalender/Kalender";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { RemixLink } from "~/components/RemixLink";
+import { useLocale } from "~/hooks/useLocale";
+import { useSanity } from "~/hooks/useSanity";
+import {
+  hentInnsendtePerioder,
+  hentRapporteringsperioder,
+  IRapporteringsperiode,
+} from "~/models/rapporteringsperiode.server";
+import { formaterPeriodeDato } from "~/utils/dato.utils";
+import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
+import { sorterGrupper } from "~/utils/innsendt.utils";
+import { hentUkeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
+
 import styles from "../styles/innsendt.module.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -35,7 +37,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 function grupperPerioder(
   perioder: { [key: string]: IRapporteringsperiode[] },
-  periode: IRapporteringsperiode
+  periode: IRapporteringsperiode,
 ): { [key: string]: IRapporteringsperiode[] } {
   const { fraOgMed } = periode.periode;
 
@@ -72,7 +74,7 @@ export default function InnsendteRapporteringsPerioderSide() {
           handleInApp: true,
         },
       ],
-      getAppText
+      getAppText,
     );
   }, [getAppText]);
 
@@ -113,13 +115,13 @@ export default function InnsendteRapporteringsPerioderSide() {
                       <div className={styles.innsendtPeriodeHeaderDato}>
                         {formaterPeriodeDato(
                           nyestePeriode.periode.fraOgMed,
-                          nyestePeriode.periode.tilOgMed
+                          nyestePeriode.periode.tilOgMed,
                         )}
                       </div>
                     </div>
                     <div className={classNames(styles.innsendtPeriodeHeaderStatus, labelStyle)}>
                       {getAppText(
-                        `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`
+                        `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`,
                       )}
                     </div>
                   </div>
@@ -142,7 +144,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                                   :{" "}
                                 </strong>
                                 {new Intl.DateTimeFormat(locale).format(
-                                  new Date(periode.mottattDato)
+                                  new Date(periode.mottattDato),
                                 )}
                               </div>
                             )}

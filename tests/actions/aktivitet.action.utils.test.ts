@@ -1,5 +1,6 @@
 import { uuidv7 } from "uuidv7";
 import { describe, expect, it, vi } from "vitest";
+
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { oppdaterAktiviteter } from "~/utils/aktivitet.action.utils";
 import { AktivitetType } from "~/utils/aktivitettype.utils";

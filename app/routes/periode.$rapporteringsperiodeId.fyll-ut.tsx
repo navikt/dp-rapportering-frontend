@@ -5,23 +5,25 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
-import { AktivitetType } from "~/utils/aktivitettype.utils";
-import { kanSendes } from "~/utils/periode.utils";
-import { useIsSubmitting } from "~/utils/useIsSubmitting";
-import { useAmplitude } from "~/hooks/useAmplitude";
-import { useLocale } from "~/hooks/useLocale";
-import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { LagretAutomatisk } from "~/components/LagretAutomatisk";
-import { LesMer } from "~/components/LesMer";
-import { RemixLink } from "~/components/RemixLink";
+
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { LagretAutomatisk } from "~/components/LagretAutomatisk";
+import { LesMer } from "~/components/LesMer";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { RemixLink } from "~/components/RemixLink";
+import { useAmplitude } from "~/hooks/useAmplitude";
+import { useLocale } from "~/hooks/useLocale";
+import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
+import { kanSendes } from "~/utils/periode.utils";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
+
 import styles from "../styles/fyll-ut.module.css";
 
 export async function action({ request, params }: ActionFunctionArgs) {

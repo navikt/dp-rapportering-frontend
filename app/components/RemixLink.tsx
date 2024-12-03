@@ -29,7 +29,7 @@ export const RemixLink = forwardRef(RemixLinkComponent);
 
 function RemixLinkComponent(
   props: PropsWithChildren<IProps>,
-  ref: Ref<HTMLAnchorElement> | undefined
+  ref: Ref<HTMLAnchorElement> | undefined,
 ) {
   const {
     onClick,

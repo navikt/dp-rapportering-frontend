@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { aktivitetType } from "~/utils/aktivitettype.utils";
+
 import { hentSkjermleserDatoTekst } from "~/components/kalender/kalender.utils";
+import { aktivitetType } from "~/utils/aktivitettype.utils";
 
 const ingenAktiviteter = {
   dagIndex: 0,
@@ -73,14 +74,14 @@ describe("hentSkjermleserDatoTekst", () => {
   it("skal vise tekst for to aktiviteter", () => {
     const tekst = hentSkjermleserDatoTekst(sykOgUtdanning, mockGetAppText);
     expect(tekst).toBe(
-      "søndag 22. september, Syk 1 rapportering-dag og Utdanning 1 rapportering-dag"
+      "søndag 22. september, Syk 1 rapportering-dag og Utdanning 1 rapportering-dag",
     );
   });
 
   it("skal vise tekst for én aktivitet heldag og én aktivitet med timer", () => {
     const tekst = hentSkjermleserDatoTekst(arbeidOgUtdanning, mockGetAppText);
     expect(tekst).toBe(
-      "søndag 22. september, Utdanning 1 rapportering-dag og Arbeid 5 rapportering-timer"
+      "søndag 22. september, Utdanning 1 rapportering-dag og Arbeid 5 rapportering-timer",
     );
   });
 });

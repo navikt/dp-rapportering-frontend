@@ -1,6 +1,8 @@
 import { FileCheckmarkIcon } from "@navikt/aksel-icons";
 import { Detail } from "@navikt/ds-react";
+
 import { useSanity } from "~/hooks/useSanity";
+
 import styles from "../styles/lagretAutomatisk.module.css";
 
 export function LagretAutomatisk() {

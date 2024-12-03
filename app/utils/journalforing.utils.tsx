@@ -1,3 +1,19 @@
+import { PortableText } from "@portabletext/react";
+import type { SubmitFunction } from "@remix-run/react";
+import { addDays, format } from "date-fns";
+import { renderToString } from "react-dom/server";
+
+import { hentAktivitetBeskrivelse } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
+import { type GetAppText, type GetRichText } from "~/hooks/useSanity";
+import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import {
+  AktivitetType,
+  aktivitetType,
+  aktivitetTypeMap,
+  IAktivitet,
+} from "~/utils/aktivitettype.utils";
+
 import {
   formaterDato,
   formaterPeriodeDato,
@@ -10,24 +26,10 @@ import {
   hentTotaltArbeidstimerTekst,
   hentTotaltFravaerTekstMedType,
   hentUkeTekst,
-  periodeSomTimer,
   perioderSomKanSendes,
+  periodeSomTimer,
 } from "./periode.utils";
 import { Rapporteringstype } from "./types";
-import { PortableText } from "@portabletext/react";
-import type { SubmitFunction } from "@remix-run/react";
-import { addDays, format } from "date-fns";
-import { renderToString } from "react-dom/server";
-import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
-import {
-  AktivitetType,
-  IAktivitet,
-  aktivitetType,
-  aktivitetTypeMap,
-} from "~/utils/aktivitettype.utils";
-import { type GetAppText, type GetRichText } from "~/hooks/useSanity";
-import { hentAktivitetBeskrivelse } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
 
 interface IProps {
   locale: DecoratorLocale;
@@ -60,7 +62,7 @@ export function useAddHtml({
       periode,
       getAppText,
       getRichText,
-      locale
+      locale,
     );
     formData.set("_html", html);
     formData.set("_action", "send-inn");
@@ -72,7 +74,7 @@ export function useAddHtml({
 export function getArbeidssokerAlert(
   periode: IRapporteringsperiode,
   getAppText: GetAppText,
-  getRichText: GetRichText
+  getRichText: GetRichText,
 ): string {
   if (periode.registrertArbeidssoker) {
     return `<p>${getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert")}</p>`;
@@ -87,7 +89,7 @@ export function getArbeidssokerAlert(
     renderToString(
       <PortableText
         value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert")}
-      />
+      />,
     ),
   ].join("");
 }
@@ -158,7 +160,7 @@ export function getAktivitet(aktivitet: IAktivitet, getAppText: GetAppText): str
 export function getDag(
   dag: IRapporteringsperiodeDag,
   ukedag: { kort: string; lang: string },
-  getAppText: GetAppText
+  getAppText: GetAppText,
 ): string {
   return `<li>${ukedag.lang} ${format(new Date(dag.dato), "d")}. ${dag.aktiviteter.length ? dag.aktiviteter.map((aktivitet) => getAktivitet(aktivitet, getAppText)).join(", ") : ""}</li>`;
 }
@@ -279,8 +281,8 @@ export function htmlForLandingsside(props: IProps): string {
           value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
             dato: formaterDato(new Date(periode.kanSendesFra)),
           })}
-        />
-      )
+        />,
+      ),
     );
   }
 
@@ -289,10 +291,10 @@ export function htmlForLandingsside(props: IProps): string {
   if (periode?.kanSendes) {
     seksjoner.push(getHeader({ text: getAppText("rapportering-samtykke-tittel"), level: "2" }));
     seksjoner.push(
-      renderToString(<PortableText value={getRichText("rapportering-samtykke-beskrivelse")} />)
+      renderToString(<PortableText value={getRichText("rapportering-samtykke-beskrivelse")} />),
     );
     seksjoner.push(
-      `<form><input type="checkbox" name="rapportering-samtykke-checkbox" checked/><label>${getAppText("rapportering-samtykke-checkbox")}</label></form>`
+      `<form><input type="checkbox" name="rapportering-samtykke-checkbox" checked/><label>${getAppText("rapportering-samtykke-checkbox")}</label></form>`,
     );
   }
 
@@ -319,7 +321,7 @@ export function htmlForRapporteringstype(props: IProps): string {
       getHeader({
         text: getAppText("rapportering-flere-perioder-tittel", { antall: antallPerioder }),
         level: "2",
-      })
+      }),
     );
     seksjoner.push(`<p>${getAppText("rapportering-flere-perioder-innledning")}</p>`);
   }
@@ -331,7 +333,7 @@ export function htmlForRapporteringstype(props: IProps): string {
           ? getAppText("rapportering-foerste-periode")
           : getAppText("rapportering-naavaerende-periode"),
       level: "2",
-    })
+    }),
   );
   seksjoner.push(`<p>${hentPeriodeTekst(periode, getAppText)}</p>`);
   seksjoner.push(
@@ -341,15 +343,15 @@ export function htmlForRapporteringstype(props: IProps): string {
           "fra-dato": tidligstInnsendingDato,
           "til-dato": senestInnsendingDato,
         })}
-      />
-    )
+      />,
+    ),
   );
   seksjoner.push(
     getLesMer({
       ...props,
       tittel: "rapportering-les-mer-hva-skal-rapporteres-tittel",
       innhold: "rapportering-les-mer-hva-skal-rapporteres-innhold",
-    })
+    }),
   );
 
   const legend =
@@ -363,7 +365,7 @@ export function htmlForRapporteringstype(props: IProps): string {
     {
       value: Rapporteringstype.harIngenAktivitet,
       label: renderToString(
-        <PortableText value={getRichText("rapportering-ingen-å-rapportere")} />
+        <PortableText value={getRichText("rapportering-ingen-å-rapportere")} />,
       ).replaceAll(/<\/?p>/g, ""),
     },
   ]
@@ -373,7 +375,7 @@ export function htmlForRapporteringstype(props: IProps): string {
         checked: periode.rapporteringstype === option.value,
         label: option.label,
         name: "rapportering-ingen-å-rapportere-" + option.value,
-      })
+      }),
     )
     .join("</div><div>");
 
@@ -490,7 +492,7 @@ export function htmlForOppsummering(props: IProps): string {
 
   if (periode.originalId) {
     seksjoner.push(
-      getHeader({ text: getAppText("rapportering-endring-begrunnelse-tittel"), level: "3" })
+      getHeader({ text: getAppText("rapportering-endring-begrunnelse-tittel"), level: "3" }),
     );
     seksjoner.push(`<p>${periode.begrunnelseEndring}</p>`);
   } else {
@@ -502,14 +504,14 @@ export function htmlForOppsummering(props: IProps): string {
       `<form>
         <input type="checkbox" name="rapportering-send-inn-bekreft-opplysning" checked/>
         <label>${getAppText("rapportering-endring-send-inn-bekreft-opplysning")}</label>
-      </form>`
+      </form>`,
     );
   } else {
     seksjoner.push(
       `<form>
         <input type="checkbox" name="rapportering-send-inn-bekreft-opplysning" checked/>
         <label>${getAppText("rapportering-send-inn-bekreft-opplysning")}</label>
-      </form>`
+      </form>`,
     );
   }
 
@@ -521,7 +523,7 @@ export function samleHtmlForPeriode(
   periode: IRapporteringsperiode,
   getAppText: GetAppText,
   getRichText: GetRichText,
-  locale: DecoratorLocale
+  locale: DecoratorLocale,
 ): string {
   const pages: string[] = [];
 
@@ -529,7 +531,7 @@ export function samleHtmlForPeriode(
     const fns = [htmlForFyllUt, htmlForEndringBegrunnelse, htmlForOppsummering];
 
     fns.forEach((fn) =>
-      pages.push(fn({ periode, getAppText, getRichText, locale, rapporteringsperioder }))
+      pages.push(fn({ periode, getAppText, getRichText, locale, rapporteringsperioder })),
     );
   } else {
     const fns = [
@@ -550,7 +552,7 @@ export function samleHtmlForPeriode(
     }
 
     fns.forEach((fn) =>
-      pages.push(fn({ periode, getAppText, getRichText, locale, rapporteringsperioder }))
+      pages.push(fn({ periode, getAppText, getRichText, locale, rapporteringsperioder })),
     );
   }
 

@@ -2,10 +2,11 @@ import { render, screen } from "@testing-library/react";
 import { formatDate } from "date-fns";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, test, vi } from "vitest";
+
+import { Kalender } from "~/components/kalender/Kalender";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
-import { Kalender } from "~/components/kalender/Kalender";
 
 const formaterDato = (dato: string) => `${formatDate(new Date(dato), "d")}.`;
 
@@ -13,7 +14,7 @@ export const renderKalender = (periode: IRapporteringsperiode, props = {}) => {
   return render(
     <MemoryRouter>
       <Kalender periode={periode} aapneModal={vi.fn()} locale={DecoratorLocale.NB} {...props} />
-    </MemoryRouter>
+    </MemoryRouter>,
   );
 };
 

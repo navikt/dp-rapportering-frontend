@@ -1,13 +1,13 @@
+import type { GetAppText } from "~/hooks/useSanity";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
-import type { GetAppText } from "~/hooks/useSanity";
 
 export function hentAktivitetSummenTekst(
   dag: IRapporteringsperiodeDag,
   getAppText: GetAppText,
-  lang?: boolean
+  lang?: boolean,
 ) {
   const arbeid = dag.aktiviteter.some((aktivitet) => aktivitet.type === "Arbeid");
 
@@ -44,7 +44,7 @@ export function hentAktivitetSummenTekstUtenLabel(dag: IRapporteringsperiodeDag)
 export function hentAktivitetSumTekst(
   aktivitet: IAktivitet,
   getAppText: GetAppText,
-  lang?: boolean
+  lang?: boolean,
 ) {
   if (aktivitet.timer) {
     const timer = periodeSomTimer(aktivitet.timer) ?? 0;
@@ -59,7 +59,7 @@ export function hentAktivitetSumTekst(
 export function hentSkjermleserDatoTekst(
   dag: IRapporteringsperiodeDag,
   getAppText: GetAppText,
-  locale: string = DecoratorLocale.NB
+  locale: string = DecoratorLocale.NB,
 ) {
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
@@ -70,7 +70,7 @@ export function hentSkjermleserDatoTekst(
   const formattertDato = new Date(dag.dato).toLocaleDateString(locale, options);
 
   const aktiviteter = dag.aktiviteter.map(
-    (aktivitet) => `${aktivitet.type} ${hentAktivitetSumTekst(aktivitet, getAppText, true)}`
+    (aktivitet) => `${aktivitet.type} ${hentAktivitetSumTekst(aktivitet, getAppText, true)}`,
   );
 
   if (aktiviteter.length === 0) {

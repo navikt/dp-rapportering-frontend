@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
+
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { lagEndringsperiode } from "~/models/rapporteringsperiode.server";
 

@@ -1,12 +1,14 @@
 import { describe, expect, test } from "vitest";
+
+import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
+
 import {
-  erAktivitetenLik,
   erAktiviteteneLike,
+  erAktivitetenLik,
   erPeriodeneLike,
   periodeSomTimer,
   sorterAktiviteter,
 } from "../../app/utils/periode.utils";
-import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 
 describe("periodeSomTimer", () => {
@@ -75,7 +77,7 @@ describe("erAktivitetenLik", () => {
   test("aktiviteter med ulik type returnerer false", () => {
     const aktiviteteneErLike = erAktivitetenLik(
       { type: AktivitetType.Syk },
-      { type: AktivitetType.Utdanning }
+      { type: AktivitetType.Utdanning },
     );
     expect(aktiviteteneErLike).toBe(false);
   });
@@ -83,7 +85,7 @@ describe("erAktivitetenLik", () => {
   test("aktiviteter med lik type, men ulike timer, returnerer false", () => {
     const aktiviteteneErLike = erAktivitetenLik(
       { type: AktivitetType.Arbeid, timer: "PT5H" },
-      { type: AktivitetType.Arbeid, timer: "PT6H" }
+      { type: AktivitetType.Arbeid, timer: "PT6H" },
     );
     expect(aktiviteteneErLike).toBe(false);
   });
@@ -91,7 +93,7 @@ describe("erAktivitetenLik", () => {
   test("aktiviteter med samme type og timer returnerer true", () => {
     const aktiviteteneErLike = erAktivitetenLik(
       { type: AktivitetType.Arbeid, timer: "PT5H" },
-      { type: AktivitetType.Arbeid, timer: "PT5H" }
+      { type: AktivitetType.Arbeid, timer: "PT5H" },
     );
     expect(aktiviteteneErLike).toBe(true);
   });
@@ -101,7 +103,7 @@ describe("erAktiviteneLike", () => {
   test("aktivitene er like returnerer true", () => {
     const aktiviteteneErLike = erAktiviteteneLike(
       [{ type: AktivitetType.Syk }],
-      [{ type: AktivitetType.Syk }]
+      [{ type: AktivitetType.Syk }],
     );
     expect(aktiviteteneErLike).toBe(true);
   });
@@ -121,7 +123,7 @@ describe("erAktiviteneLike", () => {
           type: AktivitetType.Arbeid,
           timer: "PT5H",
         },
-      ]
+      ],
     );
 
     expect(aktiviteteneErLike).toBe(true);
@@ -130,7 +132,7 @@ describe("erAktiviteneLike", () => {
   test("aktivitene er ulike returnerer false", () => {
     const aktiviteteneErLike = erAktiviteteneLike(
       [{ type: AktivitetType.Syk }],
-      [{ type: AktivitetType.Arbeid }]
+      [{ type: AktivitetType.Arbeid }],
     );
     expect(aktiviteteneErLike).toBe(false);
   });
@@ -138,7 +140,7 @@ describe("erAktiviteneLike", () => {
   test("det er ulikt antall aktiviteter returnerer false", () => {
     const aktiviteteneErLike = erAktiviteteneLike(
       [{ type: AktivitetType.Syk }, { type: AktivitetType.Arbeid }],
-      [{ type: AktivitetType.Arbeid }]
+      [{ type: AktivitetType.Arbeid }],
     );
     expect(aktiviteteneErLike).toBe(false);
   });

@@ -24,7 +24,8 @@
   background-color: var(--a-orange-200);
 }
 
-.ferie, .fravaer {
+.ferie,
+.fravaer {
   background-color: var(--a-green-200);
 }
 

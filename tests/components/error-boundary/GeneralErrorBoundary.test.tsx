@@ -1,9 +1,10 @@
 import { ErrorResponse } from "@remix-run/react";
 import { describe, expect, test, vi } from "vitest";
+
 import {
-  IError,
   getErrorDescriptionTextId,
   getErrorTitleTextId,
+  IError,
 } from "~/components/error-boundary/GeneralErrorBoundary";
 
 vi.mock(import("~/hooks/useSanity"), async (importOriginal) => {

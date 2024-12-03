@@ -1,7 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { AktivitetType } from "~/utils/aktivitettype.utils";
+
 import { AktivitetCheckboxes } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
 
 vi.mock("remix-validated-form", () => {
   return {
@@ -26,7 +27,7 @@ describe("AktivitetCheckboxes", () => {
       const checkbox = screen.getByLabelText(aktivitet);
       expect(checkbox).toBeInTheDocument();
       expect(
-        screen.getByText(`rapportering-aktivitet-radio-${aktivitet.toLowerCase()}-beskrivelse`)
+        screen.getByText(`rapportering-aktivitet-radio-${aktivitet.toLowerCase()}-beskrivelse`),
       ).toBeInTheDocument();
     });
   });
@@ -40,7 +41,7 @@ describe("AktivitetCheckboxes", () => {
 
     expect(checkbox).toBeInTheDocument();
     expect(
-      screen.getByText(`rapportering-aktivitet-radio-${aktivitet.toLowerCase()}-beskrivelse`)
+      screen.getByText(`rapportering-aktivitet-radio-${aktivitet.toLowerCase()}-beskrivelse`),
     ).toBeInTheDocument();
   });
 

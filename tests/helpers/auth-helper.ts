@@ -1,4 +1,5 @@
 import { type MockInstance, vi } from "vitest";
+
 import * as mockAuth from "~/utils/auth.utils.server";
 
 const mockToken =

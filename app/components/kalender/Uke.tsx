@@ -1,11 +1,13 @@
-import styles from "./Kalender.module.css";
-import { hentAktivitetSummenTekst, hentSkjermleserDatoTekst } from "./kalender.utils";
 import classNames from "classnames";
 import { format } from "date-fns";
+
+import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
-import { useSanity } from "~/hooks/useSanity";
+
+import styles from "./Kalender.module.css";
+import { hentAktivitetSummenTekst, hentSkjermleserDatoTekst } from "./kalender.utils";
 
 interface IProps {
   aapneModal: (dato: string) => void;
@@ -24,7 +26,7 @@ export function Uke(props: IProps) {
     if (!dagenHarAktivitet) return false;
 
     const alleTyperErTilstede = typer.map((type) =>
-      dag.aktiviteter.some((aktivitet) => aktivitet.type === type)
+      dag.aktiviteter.some((aktivitet) => aktivitet.type === type),
     );
 
     return alleTyperErTilstede.every((type) => type === true);

@@ -10,10 +10,10 @@ export interface IArbeidssokerSvar {
 export async function lagreArbeidssokerSvar(
   request: Request,
   rapporteringsperiodeId: string,
-  svar: IArbeidssokerSvar
+  svar: IArbeidssokerSvar,
 ): Promise<INetworkResponse> {
   const url = `${getEnv(
-    "DP_RAPPORTERING_URL"
+    "DP_RAPPORTERING_URL",
   )}/rapporteringsperiode/${rapporteringsperiodeId}/arbeidssoker`;
 
   const response = await fetch(url, {

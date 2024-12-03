@@ -1,6 +1,5 @@
-import { withDb } from "./responses/db";
-import { getDatabase } from "./responses/db.utils";
-import { HttpResponse, http, passthrough } from "msw";
+import { http, HttpResponse, passthrough } from "msw";
+
 import { formatereDato } from "~/devTools/periodedato";
 import { hentEndringsId, startEndring } from "~/devTools/rapporteringsperiode";
 import { IArbeidssokerSvar } from "~/models/arbeidssoker.server";
@@ -12,6 +11,9 @@ import {
 import { IRapporteringstypeSvar } from "~/models/rapporteringstype.server";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
+
+import { withDb } from "./responses/db";
+import { getDatabase } from "./responses/db.utils";
 
 export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder`, ({ cookies }) => {
@@ -71,7 +73,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       }
 
       return HttpResponse.json(periode);
-    }
+    },
   ),
 
   http.post(`${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/start`, () => {
@@ -92,7 +94,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       db.addRapporteringsperioder(endretPeriode);
 
       return HttpResponse.json({ id: endretPeriode.id });
-    }
+    },
   ),
 
   http.post(
@@ -106,7 +108,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       db.lagreAktivitet(rapporteringsperiodeId, dag);
 
       return HttpResponse.json(undefined, { status: 204 });
-    }
+    },
   ),
 
   http.post(
@@ -119,7 +121,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       db.updateRapporteringsperiode(rapporteringsperiodeId, { registrertArbeidssoker });
 
       return HttpResponse.json(undefined, { status: 204 });
-    }
+    },
   ),
 
   http.post(
@@ -133,7 +135,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       db.updateRapporteringsperiode(rapporteringsperiodeId, { begrunnelseEndring });
 
       return HttpResponse.json(undefined, { status: 204 });
-    }
+    },
   ),
 
   http.post(
@@ -146,7 +148,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       db.updateRapporteringsperiode(rapporteringsperiodeId, { rapporteringstype });
 
       return HttpResponse.json(undefined, { status: 204 });
-    }
+    },
   ),
 
   http.get("https://rt6o382n.apicdn.sanity.io/*", async () => {

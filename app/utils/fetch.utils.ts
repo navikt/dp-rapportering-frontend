@@ -1,8 +1,10 @@
-import { getRapporteringOboToken } from "./auth.utils.server";
-import { isLocalOrDemo } from "./env.utils";
 import { uuidv7 } from "uuidv7";
+
 import { getSessionId } from "~/../mocks/session";
 import { IHttpProblem } from "~/utils/types";
+
+import { getRapporteringOboToken } from "./auth.utils.server";
+import { isLocalOrDemo } from "./env.utils";
 
 export function getCorralationId(headers: Headers) {
   return headers.get("X-Request-ID") ?? "";

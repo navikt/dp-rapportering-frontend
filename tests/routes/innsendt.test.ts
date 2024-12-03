@@ -1,7 +1,9 @@
 // @vitest-environment node
-import { HttpResponse, http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
+
 import { loader } from "~/routes/innsendt";
+
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
@@ -25,7 +27,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
-        })
+        }),
       );
 
       expect(response.status).toBe(500);
@@ -40,8 +42,8 @@ describe("Liste ut alle rapporteringsperioder", () => {
           },
           {
             once: true,
-          }
-        )
+          },
+        ),
       );
 
       mockSession();
@@ -51,7 +53,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
-        })
+        }),
       );
 
       expect(response.status).toBe(500);
@@ -66,15 +68,15 @@ describe("Liste ut alle rapporteringsperioder", () => {
           () => {
             return HttpResponse.json(innsendtRapporteringsperioderResponse, { status: 200 });
           },
-          { once: true }
+          { once: true },
         ),
         http.get(
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`,
           () => {
             return HttpResponse.json(rapporteringsperioderResponse, { status: 200 });
           },
-          { once: true }
-        )
+          { once: true },
+        ),
       );
 
       const response = await loader({

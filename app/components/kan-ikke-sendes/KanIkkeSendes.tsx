@@ -1,7 +1,8 @@
 import { Alert } from "@navikt/ds-react";
+
+import { useSanity } from "~/hooks/useSanity";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { kanSendes } from "~/utils/periode.utils";
-import { useSanity } from "~/hooks/useSanity";
 
 interface IProps {
   periode: IRapporteringsperiode;

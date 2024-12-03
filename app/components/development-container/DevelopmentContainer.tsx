@@ -1,6 +1,8 @@
-import styles from "./DevelopmentContainer.module.css";
 import { Tag } from "@navikt/ds-react";
+
 import { isLocalhost } from "~/utils/env.utils";
+
+import styles from "./DevelopmentContainer.module.css";
 
 interface IProps {
   children: JSX.Element;

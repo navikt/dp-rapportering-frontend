@@ -1,5 +1,6 @@
-import styles from "./Scenario.module.css";
 import { ChevronRightIcon } from "@navikt/aksel-icons";
+
+import styles from "./Scenario.module.css";
 
 interface IScenario {
   tittel: string;

@@ -1,8 +1,10 @@
-import { useLocale } from "./useLocale";
 import { getAmplitudeInstance } from "@navikt/nav-dekoratoren-moduler";
 import { useCallback } from "react";
+
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { Rapporteringstype } from "~/utils/types";
+
+import { useLocale } from "./useLocale";
 
 interface ISkjemaSteg {
   periode: IRapporteringsperiode;
@@ -25,25 +27,25 @@ export function useAmplitude() {
         ...props,
       });
     },
-    [track, språk]
+    [track, språk],
   );
   const trackSkjemaStartet = useCallback(
     (skjemaId: string, endring = false) => {
       trackEvent("skjema startet", { skjemaId, endring });
     },
-    [trackEvent]
+    [trackEvent],
   );
 
   const trackSkjemaFullført = useCallback(
     (skjemaId: string, rapporteringstype: Rapporteringstype | null, endring = false) =>
       trackEvent("skjema fullført", { skjemaId, rapporteringstype, endring }),
-    [trackEvent]
+    [trackEvent],
   );
 
   const trackSkjemaInnsendingFeilet = useCallback(
     (skjemaId: string, rapporteringstype: Rapporteringstype | null, endring = false) =>
       trackEvent("skjema innsending feilet", { skjemaId, rapporteringstype, endring }),
-    [trackEvent]
+    [trackEvent],
   );
 
   const trackSkjemaSteg = useCallback(
@@ -55,7 +57,7 @@ export function useAmplitude() {
         rapporteringstype,
         endring,
       }),
-    [trackEvent]
+    [trackEvent],
   );
 
   return {

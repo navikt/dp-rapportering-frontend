@@ -13,7 +13,7 @@ export async function getLanguage(request: Request): Promise<DecoratorLocale> {
 
 export async function setLanguage(
   cookieHeader: string,
-  language: DecoratorLocale
+  language: DecoratorLocale,
 ): Promise<string> {
   const cookie = (await languageCookie.parse(cookieHeader)) || {};
 

@@ -1,13 +1,15 @@
 import { screen } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
+
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import TomRapporteringsPeriodeSide from "~/routes/periode.$rapporteringsperiodeId.tom";
+
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
-import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
+import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 
 const testDb = withDb(sessionRecord.getDatabase("123"));
 const mockResponse = () => server.use(...createHandlers(testDb));
@@ -46,7 +48,7 @@ describe("TomRapporteringsPeriodeSide", () => {
     render();
 
     expect(
-      await screen.findByRole("heading", { name: /rapportering-tom-periode-tittel/ })
+      await screen.findByRole("heading", { name: /rapportering-tom-periode-tittel/ }),
     ).toBeInTheDocument();
     expect(await screen.findByText(/rapportering-tom-periode-innhold/)).toBeInTheDocument();
   });
@@ -71,10 +73,10 @@ describe("TomRapporteringsPeriodeSide", () => {
     render();
 
     expect(
-      await screen.findByRole("button", { name: /rapportering-knapp-tilbake/ })
+      await screen.findByRole("button", { name: /rapportering-knapp-tilbake/ }),
     ).toBeInTheDocument();
     expect(
-      await screen.findByRole("button", { name: /rapportering-knapp-neste/ })
+      await screen.findByRole("button", { name: /rapportering-knapp-neste/ }),
     ).toBeInTheDocument();
   });
 });

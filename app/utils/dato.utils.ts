@@ -1,6 +1,7 @@
-import { DecoratorLocale } from "./dekoratoren.utils";
 import { format, getISOWeek } from "date-fns";
 import { enGB, nb } from "date-fns/locale";
+
+import { DecoratorLocale } from "./dekoratoren.utils";
 
 export function formaterDato(date: Date, language: DecoratorLocale = DecoratorLocale.NB) {
   const locale = [DecoratorLocale.NB, DecoratorLocale.NN].includes(language) ? nb : enGB;
@@ -23,7 +24,6 @@ export function formaterPeriodeTilUkenummer(fraOgMed: string, tilOgMed: string) 
 }
 
 export function getWeekDays(locale: string): { kort: string; lang: string }[] {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const weekDays = new Array(7).fill(null).map((_, index) => {
     const date = new Date(Date.UTC(2017, 0, 2 + index)); // 2017-01-02 is just a random Monday
     return {

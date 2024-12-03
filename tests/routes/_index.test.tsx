@@ -1,8 +1,10 @@
 import { createRemixStub } from "@remix-run/testing";
 import { render, screen } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
+
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import Landingsside, { loader } from "~/routes/_index";
+
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
@@ -66,7 +68,7 @@ describe("Hovedside rapportering", () => {
       renderLandingsside();
 
       expect(
-        await screen.findByText("rapportering-for-tidlig-a-sende-meldekort")
+        await screen.findByText("rapportering-for-tidlig-a-sende-meldekort"),
       ).toBeInTheDocument();
     });
 
@@ -82,11 +84,11 @@ describe("Hovedside rapportering", () => {
       expect(await screen.findByText(/rapportering-samtykke-tittel/)).toBeInTheDocument();
       expect(await screen.findByText(/rapportering-samtykke-beskrivelse/)).toBeInTheDocument();
       expect(
-        await screen.findByRole("checkbox", { name: /rapportering-samtykke-checkbox/ })
+        await screen.findByRole("checkbox", { name: /rapportering-samtykke-checkbox/ }),
       ).toBeInTheDocument();
 
       expect(
-        await screen.findByRole("button", { name: /rapportering-knapp-neste/ })
+        await screen.findByRole("button", { name: /rapportering-knapp-neste/ }),
       ).toBeDisabled();
     });
 
@@ -106,12 +108,12 @@ describe("Hovedside rapportering", () => {
       });
       expect(samtykkeCheckbox).toBeInTheDocument();
       expect(
-        await screen.findByRole("button", { name: /rapportering-knapp-neste/ })
+        await screen.findByRole("button", { name: /rapportering-knapp-neste/ }),
       ).toBeDisabled();
 
       samtykkeCheckbox.click();
       expect(
-        await screen.findByRole("button", { name: /rapportering-knapp-neste/ })
+        await screen.findByRole("button", { name: /rapportering-knapp-neste/ }),
       ).not.toBeDisabled();
     });
   });

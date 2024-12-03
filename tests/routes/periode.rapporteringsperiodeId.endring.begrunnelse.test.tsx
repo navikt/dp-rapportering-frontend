@@ -1,16 +1,18 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
+
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import BegrunnelseSide, {
   action as begrunnelseAction,
 } from "~/routes/periode.$rapporteringsperiodeId.endring.begrunnelse";
+
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
-import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
+import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 
 const testDb = withDb(sessionRecord.getDatabase("123"));
 const rapporteringsperiode: IRapporteringsperiode = {
@@ -46,10 +48,10 @@ describe("BegrunnelseSide", () => {
   test("Skal vise alle alternativer i begrunnelsesvalg", async () => {
     render();
     expect(
-      await screen.findByText(/rapportering-endring-begrunnelse-nedtrekksmeny-label/)
+      await screen.findByText(/rapportering-endring-begrunnelse-nedtrekksmeny-label/),
     ).toBeInTheDocument();
     expect(
-      await screen.findByText(/rapportering-endring-begrunnelse-nedtrekksmeny-description/)
+      await screen.findByText(/rapportering-endring-begrunnelse-nedtrekksmeny-description/),
     ).toBeInTheDocument();
 
     const options = [
@@ -64,7 +66,7 @@ describe("BegrunnelseSide", () => {
     ];
 
     options.forEach((option) =>
-      expect(screen.getByText(new RegExp(option, "i"))).toBeInTheDocument()
+      expect(screen.getByText(new RegExp(option, "i"))).toBeInTheDocument(),
     );
   });
 
@@ -72,7 +74,7 @@ describe("BegrunnelseSide", () => {
     render();
 
     const select = await screen.findByLabelText(
-      /rapportering-endring-begrunnelse-nedtrekksmeny-label/
+      /rapportering-endring-begrunnelse-nedtrekksmeny-label/,
     );
 
     const selectOption = async (value: string) => {
@@ -89,7 +91,7 @@ describe("BegrunnelseSide", () => {
 
     const nesteKnapp = await screen.findByRole("button", { name: /rapportering-knapp-neste/i });
     const select = await screen.findByLabelText(
-      /rapportering-endring-begrunnelse-nedtrekksmeny-label/
+      /rapportering-endring-begrunnelse-nedtrekksmeny-label/,
     );
 
     expect(nesteKnapp).toHaveAttribute("disabled");

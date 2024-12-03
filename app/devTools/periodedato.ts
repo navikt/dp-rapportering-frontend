@@ -1,4 +1,5 @@
 import { addDays, addWeeks, format, getWeek, getYear, startOfWeek, subDays } from "date-fns";
+
 import { IPeriode } from "~/models/rapporteringsperiode.server";
 
 export function formatereDato(dato: Date): string {
@@ -8,7 +9,7 @@ export function formatereDato(dato: Date): string {
 export function lagPeriodeDatoFor(uke: number, år: number): IPeriode {
   const startdato = addWeeks(
     startOfWeek(new Date(Date.UTC(år, 0, 1)), { weekStartsOn: 1 }),
-    uke - 1
+    uke - 1,
   );
 
   return {

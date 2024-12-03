@@ -1,7 +1,9 @@
+import { uuidv7 } from "uuidv7";
+
+import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+
 import { AktivitetType } from "./aktivitettype.utils";
 import { hentISO8601DurationString } from "./duration.utils";
-import { uuidv7 } from "uuidv7";
-import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 interface IAktivtetData {
   id?: string;
@@ -17,10 +19,10 @@ export function oppdaterAktiviteter(
   dag: IRapporteringsperiodeDag,
   aktivitetsTyper: AktivitetType[],
   dato: string,
-  varighet: string
+  varighet: string,
 ): IRapporteringsperiodeDag {
   const filtrerteAktiviteter = dag.aktiviteter.filter((aktivitet) =>
-    aktivitetsTyper.includes(aktivitet.type)
+    aktivitetsTyper.includes(aktivitet.type),
   );
 
   const oppdaterteAktiviteter = filtrerteAktiviteter.map((aktivitet) => {
@@ -46,7 +48,7 @@ export function oppdaterAktiviteter(
 function hentAktivitetData(
   type: AktivitetType,
   dato: string,
-  varighet: string
+  varighet: string,
 ): IAktivitetArbeidData | IAktivtetData {
   if (type === "Arbeid") {
     return {

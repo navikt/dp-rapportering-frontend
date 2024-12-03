@@ -1,9 +1,11 @@
 // @vitest-environment node
 import { redirect } from "@remix-run/node";
-import { HttpResponse, http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
+
 import { action } from "~/routes/periode.$rapporteringsperiodeId.endring.send-inn";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
+
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
@@ -42,10 +44,10 @@ describe("Send inn rapporteringsperiode", () => {
             () => {
               return HttpResponse.json(
                 { id: "1", kanSendes: false, status: IRapporteringsperiodeStatus.Innsendt },
-                { status: 200 }
+                { status: 200 },
               );
-            }
-          )
+            },
+          ),
         );
 
         server.use(
@@ -54,15 +56,15 @@ describe("Send inn rapporteringsperiode", () => {
             async ({ request }) => {
               const sentRequest = await request.text();
               expect(sentRequest).toBe(
-                `{"id":"1","kanSendes":true,"status":${IRapporteringsperiodeStatus.TilUtfylling},"html":"<div />"}`
+                `{"id":"1","kanSendes":true,"status":${IRapporteringsperiodeStatus.TilUtfylling},"html":"<div />"}`,
               );
 
               return HttpResponse.json(null, {
                 status: 400,
               });
             },
-            { once: true }
-          )
+            { once: true },
+          ),
         );
 
         mockSession();
@@ -74,7 +76,7 @@ describe("Send inn rapporteringsperiode", () => {
         });
 
         expect(response).toEqual(
-          redirect(`/periode/${rapporteringsperiodeResponse.id}/endring/bekreftelse`)
+          redirect(`/periode/${rapporteringsperiodeResponse.id}/endring/bekreftelse`),
         );
       });
 
@@ -91,8 +93,8 @@ describe("Send inn rapporteringsperiode", () => {
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
             () => {
               return HttpResponse.json({ id: "1", kanSendes: false }, { status: 200 });
-            }
-          )
+            },
+          ),
         );
 
         server.use(
@@ -101,15 +103,15 @@ describe("Send inn rapporteringsperiode", () => {
             async ({ request }) => {
               const sentRequest = await request.text();
               expect(sentRequest).toBe(
-                `{"id":"1","kanSendes":true,"status":${IRapporteringsperiodeStatus.TilUtfylling},"html":"<div />"}`
+                `{"id":"1","kanSendes":true,"status":${IRapporteringsperiodeStatus.TilUtfylling},"html":"<div />"}`,
               );
 
               return HttpResponse.json(null, {
                 status: 400,
               });
             },
-            { once: true }
-          )
+            { once: true },
+          ),
         );
 
         mockSession();

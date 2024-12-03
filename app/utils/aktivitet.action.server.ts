@@ -1,15 +1,17 @@
+import { validationError } from "remix-validated-form";
+
+import { lagreAktivitet } from "~/models/aktivitet.server";
+import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+
 import { oppdaterAktiviteter } from "./aktivitet.action.utils";
 import { AktivitetType } from "./aktivitettype.utils";
 import type { INetworkResponse } from "./types";
 import { validator } from "./validering.util";
-import { validationError } from "remix-validated-form";
-import { lagreAktivitet } from "~/models/aktivitet.server";
-import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 
 export async function slettAlleAktiviteter(
   request: Request,
   periodeId: string,
-  formdata: FormData
+  formdata: FormData,
 ): Promise<INetworkResponse> {
   const dag: IRapporteringsperiodeDag = JSON.parse(String(formdata.get("dag")));
 
@@ -21,7 +23,7 @@ export async function slettAlleAktiviteter(
 export async function validerOgLagreAktivitet(
   request: Request,
   periodeId: string,
-  formdata: FormData
+  formdata: FormData,
 ): Promise<INetworkResponse> {
   const inputVerdier = await validator().validate(formdata);
 

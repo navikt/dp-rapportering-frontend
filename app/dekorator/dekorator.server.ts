@@ -5,6 +5,7 @@ import {
   type DecoratorParams,
   fetchDecoratorHtml,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
+
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { getEnv } from "~/utils/env.utils";
 

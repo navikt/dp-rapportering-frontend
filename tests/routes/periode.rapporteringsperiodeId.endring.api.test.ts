@@ -1,10 +1,12 @@
 // @vitest-environment node
 import { redirect } from "@remix-run/node";
-import { HttpResponse, http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
+
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { loader } from "~/routes/periode.$rapporteringsperiodeId.endre";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
+
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
@@ -37,8 +39,8 @@ describe("Start endring", () => {
           },
           {
             once: true,
-          }
-        )
+          },
+        ),
       );
 
       mockSession();
@@ -59,8 +61,8 @@ describe("Start endring", () => {
           () => {
             return HttpResponse.json(null, { status: 500 });
           },
-          { once: true }
-        )
+          { once: true },
+        ),
       );
 
       mockSession();
@@ -70,7 +72,7 @@ describe("Start endring", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
-        })
+        }),
       );
 
       expect(response.status).toBe(500);
