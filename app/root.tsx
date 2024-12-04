@@ -2,7 +2,7 @@ import navStyles from "@navikt/ds-css/dist/index.css?url";
 import { Alert, Heading } from "@navikt/ds-react";
 import { onLanguageSelect, setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -125,7 +125,7 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const locale = formData.get("locale") as DecoratorLocale;
 
-  return Response.json(
+  return json(
     { status: "success" },
     {
       headers: {
