@@ -1,8 +1,11 @@
-import { HttpResponse, http } from "msw";
 import { beforeEach } from "node:test";
+
+import { http, HttpResponse } from "msw";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+
 import { server } from "../../mocks/server";
 
 const url = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`;
@@ -27,7 +30,7 @@ describe("rapporteringsperiode.server", () => {
     server.use(
       http.get(url, () => {
         return HttpResponse.json(rapporteringsperioder, { status: 200 });
-      })
+      }),
     );
 
     expect(await hentRapporteringsperioder(request)).toEqual(rapporteringsperioder);
@@ -37,7 +40,7 @@ describe("rapporteringsperiode.server", () => {
     server.use(
       http.get(url, () => {
         return new HttpResponse(null, { status: 204 });
-      })
+      }),
     );
 
     try {
@@ -52,7 +55,7 @@ describe("rapporteringsperiode.server", () => {
     server.use(
       http.get(url, () => {
         return new HttpResponse(null, { status: 500 });
-      })
+      }),
     );
 
     try {

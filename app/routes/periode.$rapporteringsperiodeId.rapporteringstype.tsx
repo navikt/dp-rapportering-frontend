@@ -5,27 +5,28 @@ import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { addDays } from "date-fns";
 import { useCallback } from "react";
+
+import { Error } from "~/components/error/Error";
+import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { LesMer } from "~/components/LesMer";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { RemixLink } from "~/components/RemixLink";
+import { useAmplitude } from "~/hooks/useAmplitude";
+import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst, kanSendes, perioderSomKanSendes } from "~/utils/periode.utils";
 import { Rapporteringstype } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
-import { useAmplitude } from "~/hooks/useAmplitude";
-import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { LesMer } from "~/components/LesMer";
-import { RemixLink } from "~/components/RemixLink";
-import { Error } from "~/components/error/Error";
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const rapporteringsperiodeId = formData.get("rapporteringsperiodeId") as string;
   const rapporteringstype: Rapporteringstype = formData.get(
-    "rapporteringstype"
+    "rapporteringstype",
   ) as Rapporteringstype;
 
   return lagreRapporteringstype(request, rapporteringsperiodeId, rapporteringstype);
@@ -77,10 +78,10 @@ export default function RapporteringstypeSide() {
     (valgtType: Rapporteringstype) => {
       rapporteringstypeFetcher.submit(
         { rapporteringstype: valgtType, rapporteringsperiodeId: periode.id },
-        { method: "post" }
+        { method: "post" },
       );
     },
-    [periode.id, rapporteringstypeFetcher]
+    [periode.id, rapporteringstypeFetcher],
   );
 
   const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));

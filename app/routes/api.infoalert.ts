@@ -1,4 +1,5 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+
 import { setInfoAlertStatus } from "~/models/info.server";
 
 export async function action({ request }: LoaderFunctionArgs) {
@@ -13,6 +14,6 @@ export async function action({ request }: LoaderFunctionArgs) {
       headers: {
         "Set-Cookie": await setInfoAlertStatus(cookieHeader, showInfoAlert),
       },
-    }
+    },
   );
 }

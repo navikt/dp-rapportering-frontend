@@ -68,7 +68,7 @@ export async function startUtfylling(request: Request, periodeId: string): Promi
 }
 
 export async function hentRapporteringsperioder(
-  request: Request
+  request: Request,
 ): Promise<IRapporteringsperiode[]> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperioder`;
 
@@ -98,7 +98,7 @@ export async function hentPeriode(
   request: Request,
   periodeId: string,
   hentOriginal: boolean = true,
-  operasjon: string = ""
+  operasjon: string = "",
 ): Promise<{ periode: IRapporteringsperiode; response: Response }> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}`;
   const response = await fetch(url, {
@@ -149,7 +149,7 @@ export async function hentInnsendtePerioder(request: Request): Promise<IRapporte
 
 export async function sendInnPeriode(
   request: Request,
-  rapporteringsperiode: IRapporteringsperiode
+  rapporteringsperiode: IRapporteringsperiode,
 ): Promise<IInnsendtRapporteringsperiodeResponse> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
@@ -192,7 +192,7 @@ export async function sendInnPeriode(
 
 export async function lagEndringsperiode(
   request: Request,
-  periodeId: string
+  periodeId: string,
 ): Promise<IRapporteringsperiode> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/endre`;
 

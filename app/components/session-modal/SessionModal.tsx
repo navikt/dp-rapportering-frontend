@@ -1,8 +1,10 @@
-import styles from "./SessionModal.module.css";
 import { Button, Modal } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
+
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+
+import styles from "./SessionModal.module.css";
 
 export function SessionModal() {
   const { getAppText } = useSanity();

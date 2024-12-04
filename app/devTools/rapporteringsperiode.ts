@@ -1,9 +1,11 @@
-import { beregnForrigePeriodeDato, beregnNåværendePeriodeDato } from "./periodedato";
 import { addDays, format, subDays } from "date-fns";
 import { times } from "remeda";
 import { uuidv7 as uuid } from "uuidv7";
+
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
+
+import { beregnForrigePeriodeDato, beregnNåværendePeriodeDato } from "./periodedato";
 
 export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
   const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
@@ -49,7 +51,7 @@ export function lagForstRapporteringsperiode() {
 }
 
 export function leggTilForrigeRapporteringsperiode(
-  navaerendePeriode: IRapporteringsperiode["periode"]
+  navaerendePeriode: IRapporteringsperiode["periode"],
 ) {
   const { fraOgMed, tilOgMed } = beregnForrigePeriodeDato(navaerendePeriode.fraOgMed);
   return lagRapporteringsperiode({ id: uuid(), periode: { fraOgMed, tilOgMed } });

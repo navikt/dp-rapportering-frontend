@@ -1,6 +1,8 @@
 import "@testing-library/jest-dom/vitest";
+
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
+
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 
 // runs a cleanup after each test case (e.g. clearing jsdom)

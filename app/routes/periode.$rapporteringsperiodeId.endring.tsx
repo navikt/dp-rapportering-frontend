@@ -1,7 +1,8 @@
 import { Outlet } from "@remix-run/react";
-import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
+
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 
 export default function RapporteringsPeriodeSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
@@ -16,7 +17,7 @@ export default function RapporteringsPeriodeSide() {
         handleInApp: true,
       },
     ],
-    getAppText
+    getAppText,
   );
 
   return <Outlet />;

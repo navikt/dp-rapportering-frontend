@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
+
+import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import {
   type IPeriode,
   type IRapporteringsperiode,
@@ -8,7 +10,6 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
 import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
-import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 
 vi.mock("remix-validated-form", () => ({
   ValidatedForm: ({ children }: { children: React.ReactNode }) => <form>{children}</form>,

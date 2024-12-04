@@ -17,7 +17,7 @@ export const aktivitetsvalidering = z.object({
         .positive({ message: "rapportering-feilmelding-ma-skrive-positivt-tall" })
         .min(0.5, { message: "rapportering-feilmelding-ma-skrive-positivt-tall" })
         .max(24, { message: "rapportering-feilmelding-ma-skrive-positivt-tall" })
-        .step(0.5, { message: "rapportering-feilmelding-hel-halv-time" })
+        .step(0.5, { message: "rapportering-feilmelding-hel-halv-time" }),
     )
     .optional(),
 });
@@ -30,6 +30,6 @@ export function begrunnelseEndringValidator() {
   return withZod(
     z.object({
       begrunnelseEndring: z.string().min(1, "rapportering-feilmelding-ma-ha-begrunnelse"),
-    })
+    }),
   );
 }

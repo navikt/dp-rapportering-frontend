@@ -1,11 +1,12 @@
 import { render, screen, within } from "@testing-library/react";
 import { format } from "date-fns";
 import { beforeEach, describe, expect, test, vi } from "vitest";
+
+import { Uke } from "~/components/kalender/Uke";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
-import { Uke } from "~/components/kalender/Uke";
 
 const formaterDato = (dato: string) => `${format(new Date(dato), "d")}.`;
 
@@ -24,7 +25,7 @@ const renderUke = (rapporteringUke: IRapporteringsperiodeDag[], props?: { readon
       readonly={readonly}
       rapporteringUke={rapporteringUke}
       locale={locale}
-    />
+    />,
   );
 };
 

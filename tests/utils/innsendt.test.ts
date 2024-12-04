@@ -1,5 +1,7 @@
 import { describe, expect, test } from "vitest";
+
 import { sorterGrupper } from "~/utils/innsendt.utils";
+
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 
 describe("sorterAktiviteter", () => {

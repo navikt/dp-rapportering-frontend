@@ -1,17 +1,19 @@
-import styles from "./AktivitetModal.module.css";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { useActionData, useFetcher, useNavigation } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
+
+import { useLocale } from "~/hooks/useLocale";
+import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { action as rapporteringAction } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 import { AktivitetType, aktivitetType } from "~/utils/aktivitettype.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { validator } from "~/utils/validering.util";
-import { useLocale } from "~/hooks/useLocale";
-import { useSanity } from "~/hooks/useSanity";
+
+import { AktivitetCheckboxes } from "../aktivitet-checkbox/AktivitetCheckboxes";
 import { FormattertDato } from "../FormattertDato";
 import { LesMer } from "../LesMer";
-import { AktivitetCheckboxes } from "../aktivitet-checkbox/AktivitetCheckboxes";
+import styles from "./AktivitetModal.module.css";
 
 interface IProps {
   periode: IRapporteringsperiode;
@@ -47,7 +49,7 @@ export function AktivitetModal({
         rapporteringsperiodeId: periode.id,
         dag: JSON.stringify(dag),
       },
-      { method: "post", action: "/api/slett" }
+      { method: "post", action: "/api/slett" },
     );
 
     lukkModal();

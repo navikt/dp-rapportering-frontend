@@ -2,9 +2,11 @@ import { Button, Heading } from "@navikt/ds-react";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 import { ErrorResponse, isRouteErrorResponse } from "@remix-run/react";
 import { useEffect } from "react";
-import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { foundAppText, foundRichText, useSanity } from "~/hooks/useSanity";
+
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { foundAppText, foundRichText, useSanity } from "~/hooks/useSanity";
+import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
+
 import { NavigasjonContainer } from "../navigasjon-container/NavigasjonContainer";
 
 export interface IError {

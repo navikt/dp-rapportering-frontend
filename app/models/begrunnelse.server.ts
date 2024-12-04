@@ -10,10 +10,10 @@ export interface IBegrunnelseSvar {
 export async function lagreBegrunnelse(
   request: Request,
   rapporteringsperiodeId: string,
-  begrunnelseEndring: string
+  begrunnelseEndring: string,
 ): Promise<INetworkResponse> {
   const url = `${getEnv(
-    "DP_RAPPORTERING_URL"
+    "DP_RAPPORTERING_URL",
   )}/rapporteringsperiode/${rapporteringsperiodeId}/begrunnelse`;
 
   const response = await fetch(url, {

@@ -1,6 +1,7 @@
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { createRemixStub } from "@remix-run/testing";
 import { render as TLRender } from "@testing-library/react";
+
 import RapporteringsPeriodeSide, {
   loader as rapporteringsperiodeLoader,
 } from "~/routes/periode.$rapporteringsperiodeId";

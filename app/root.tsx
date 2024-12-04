@@ -1,13 +1,8 @@
-import { getDecoratorHTML } from "./dekorator/dekorator.server";
-import { DevTools } from "./devTools";
-import { getLanguage, setLanguage } from "./models/language.server";
-import { allTextsQuery } from "./sanity/sanity.query";
-import type { ISanity } from "./sanity/sanity.types";
-import styles from "./styles/root.module.css";
+import navStyles from "@navikt/ds-css/dist/index.css?url";
 import { Alert, Heading } from "@navikt/ds-react";
 import { onLanguageSelect, setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
-import { redirect } from "@remix-run/node";
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -20,18 +15,25 @@ import {
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
 import { uuidv7 } from "uuidv7";
-import { sanityConfig } from "./sanity/sanity.config";
-import { DecoratorLocale, availableLanguages, getLocale } from "./utils/dekoratoren.utils";
-import { getEnv, isLocalOrDemo } from "./utils/env.utils";
-import { initInstrumentation } from "./utils/faro";
+
+import indexStyle from "~/index.css?url";
+
+import { hasSession } from "../mocks/session";
+import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBoundary";
+import { ServiceMessage } from "./components/service-message/ServiceMessage";
+import { getDecoratorHTML } from "./dekorator/dekorator.server";
+import { DevTools } from "./devTools";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
-import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBoundary";
-import { ServiceMessage } from "./components/service-message/ServiceMessage";
-import navStyles from "@navikt/ds-css/dist/index.css?url";
-import indexStyle from "~/index.css?url";
-import { hasSession } from "../mocks/session";
+import { getLanguage, setLanguage } from "./models/language.server";
+import { sanityConfig } from "./sanity/sanity.config";
+import { allTextsQuery } from "./sanity/sanity.query";
+import type { ISanity } from "./sanity/sanity.types";
+import styles from "./styles/root.module.css";
+import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekoratoren.utils";
+import { getEnv, isLocalOrDemo } from "./utils/env.utils";
+import { initInstrumentation } from "./utils/faro";
 
 export const sanityClient = createClient(sanityConfig);
 
@@ -129,7 +131,7 @@ export async function action({ request }: LoaderFunctionArgs) {
       headers: {
         "Set-Cookie": await setLanguage(cookieHeader, locale),
       },
-    }
+    },
   );
 }
 

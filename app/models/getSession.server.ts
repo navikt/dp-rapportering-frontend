@@ -1,5 +1,6 @@
 import { expiresIn, getToken, validateToken } from "@navikt/oasis";
-import { getEnv, isLocalOrDemo, isLocalhost } from "~/utils/env.utils";
+
+import { getEnv, isLocalhost, isLocalOrDemo } from "~/utils/env.utils";
 import { INetworkResponse } from "~/utils/types";
 
 export interface ISessionData {

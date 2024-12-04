@@ -1,6 +1,7 @@
-import { createHandlers } from "./handlers";
 import type { SetupServerApi } from "msw/node";
 import { setupServer } from "msw/node";
+
+import { createHandlers } from "./handlers";
 
 export const server = setupServer(...createHandlers());
 

@@ -1,12 +1,14 @@
-import { EndringsLenke } from "./Endringslenke";
-import styles from "./Kalender.module.css";
-import { Uke } from "./Uke";
 import classNames from "classnames";
+
+import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, getWeekDays } from "~/utils/dato.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { hentUkeTekst, kanSendes } from "~/utils/periode.utils";
-import { useSanity } from "~/hooks/useSanity";
+
+import { EndringsLenke } from "./Endringslenke";
+import styles from "./Kalender.module.css";
+import { Uke } from "./Uke";
 
 interface IProps {
   aapneModal: (dato: string) => void;

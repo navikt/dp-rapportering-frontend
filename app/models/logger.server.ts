@@ -1,5 +1,6 @@
 import fs from "fs";
 import winston from "winston";
+
 import { IHttpProblem } from "~/utils/types";
 
 const sikkerLogPath = () =>
@@ -27,11 +28,11 @@ export async function logErrorResponse(errorResponse: Response, message?: string
   const body = await getHttpProblem(errorResponse);
   sikkerLogger.error(
     `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${JSON.stringify(body)}`,
-    { x_correlationId: body?.correlationId }
+    { x_correlationId: body?.correlationId },
   );
   logger.error(
     `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`,
-    { x_correlationId: body?.correlationId }
+    { x_correlationId: body?.correlationId },
   );
 }
 

@@ -1,5 +1,6 @@
 import { screen, within } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
+
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import RapporteringstypeSide, {
@@ -8,13 +9,14 @@ import RapporteringstypeSide, {
 } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
-import { testKalender } from "../components/Kalender.test";
+
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
-import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
+import { testKalender } from "../components/Kalender.test";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
+import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 
 vi.mock("~/hooks/useLocale", () => ({
   useLocale: vi.fn(() => ({ locale: DecoratorLocale.NB })),
@@ -72,7 +74,7 @@ describe("RapporteringstypeSide", () => {
 
       // Arbeidssøkerregister
       expect(
-        screen.getByText(/rapportering-arbeidssokerregister-alert-tittel-avregistrert/)
+        screen.getByText(/rapportering-arbeidssokerregister-alert-tittel-avregistrert/),
       ).toBeInTheDocument();
     });
 
@@ -112,7 +114,7 @@ describe("RapporteringstypeSide", () => {
       bekreftAktivitet("rapportering-utdanning", /1 rapportering-dag/);
 
       expect(
-        screen.getByText(/rapportering-arbeidssokerregister-alert-tittel-registrert/)
+        screen.getByText(/rapportering-arbeidssokerregister-alert-tittel-registrert/),
       ).toBeInTheDocument();
     });
   });

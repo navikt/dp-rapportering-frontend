@@ -3,11 +3,12 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet, useLoaderData, useLocation, useRouteError } from "@remix-run/react";
 import { useEffect } from "react";
 import invariant from "tiny-invariant";
-import { hentPeriode } from "~/models/rapporteringsperiode.server";
-import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { useSanity } from "~/hooks/useSanity";
+
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
+import { useSanity } from "~/hooks/useSanity";
+import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -36,7 +37,7 @@ export default function RapporteringsPeriodeSide() {
           url: `${baseUrl}${pathname}`,
         },
       ],
-      getAppText
+      getAppText,
     );
   }, [getAppText, pathname]);
 

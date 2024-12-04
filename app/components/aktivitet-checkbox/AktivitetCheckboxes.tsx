@@ -1,12 +1,14 @@
-import styles from "./AktivitetCheckboxes.module.css";
 import { Checkbox, CheckboxGroup, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import classNames from "classnames";
 import { useField } from "remix-validated-form";
-import { AktivitetType, IAktivitet, aktivitetTypeMap } from "~/utils/aktivitettype.utils";
-import { periodeSomTimer } from "~/utils/periode.utils";
+
 import { type GetAppText, useSanity } from "~/hooks/useSanity";
+import { AktivitetType, aktivitetTypeMap, IAktivitet } from "~/utils/aktivitettype.utils";
+import { periodeSomTimer } from "~/utils/periode.utils";
+
 import { TallInput } from "../tall-input/TallInput";
+import styles from "./AktivitetCheckboxes.module.css";
 
 export interface IProps {
   name: string;
@@ -91,7 +93,7 @@ export function AktivitetCheckboxes({
                   name="timer"
                   label={`${getAppText("rapportering-antall-timer")}`}
                   verdi={periodeSomTimer(
-                    aktiviteter?.find((aktivitet) => aktivitet.type === "Arbeid")?.timer ?? ""
+                    aktiviteter?.find((aktivitet) => aktivitet.type === "Arbeid")?.timer ?? "",
                   )}
                 />
                 <PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />

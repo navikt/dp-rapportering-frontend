@@ -1,6 +1,8 @@
 import { ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
+
 import { useSanity } from "~/hooks/useSanity";
+
 import styles from "../styles/lesMer.module.css";
 
 export function LesMer() {

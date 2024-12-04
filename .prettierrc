@@ -1,21 +1,3 @@
 {
-  "endOfLine": "auto",
-  "printWidth": 100,
-  "trailingComma": "es5",
-  "importOrder": [
-    "<THIRD_PARTY_MODULES>",
-    "interface",
-    "(?=content|api)",
-    "context/",
-    "mock/",
-    "config",
-    "utils/",
-    "hooks/",
-    "(components/|./index)",
-    ".svg",
-    "^../(.*)$",
-    "(?=./styles.module.scss)"
-  ],
-  "importOrderSortSpecifiers": true,
-  "plugins": ["@trivago/prettier-plugin-sort-imports"]
+  "printWidth": 100
 }

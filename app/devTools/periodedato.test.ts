@@ -1,5 +1,6 @@
-import { beregnForrigePeriodeDato, lagPeriodeDatoFor } from "./periodedato";
 import { describe, expect, test } from "vitest";
+
+import { beregnForrigePeriodeDato, lagPeriodeDatoFor } from "./periodedato";
 
 describe("lagPeriodeDato", () => {
   test("oppretter riktig datoer for gitt uke og år", () => {
