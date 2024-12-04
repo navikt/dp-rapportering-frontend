@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { factory, nullable, primaryKey } from "@mswjs/data";
+
 import { lagForstRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 
 export type Database = ReturnType<SessionRecord["createDatabase"]>;

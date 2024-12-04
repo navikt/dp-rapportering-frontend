@@ -1,9 +1,11 @@
-import { Scenario } from "./Scenario";
 import { ArrowsCirclepathIcon, SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Modal, Tooltip } from "@navikt/ds-react";
 import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
+
 import { INetworkResponse } from "~/utils/types";
+
+import { Scenario } from "./Scenario";
 
 export enum ScenarioType {
   ingen = "ingen",

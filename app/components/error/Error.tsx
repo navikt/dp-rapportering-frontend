@@ -1,5 +1,6 @@
-import styles from "./Error.module.css";
 import { Alert } from "@navikt/ds-react";
+
+import styles from "./Error.module.css";
 
 interface ErrorProps {
   title: string;

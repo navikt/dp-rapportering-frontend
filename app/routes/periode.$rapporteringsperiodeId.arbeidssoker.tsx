@@ -3,23 +3,25 @@ import { Button, Radio, RadioGroup } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
-import { kanSendes } from "~/utils/periode.utils";
-import { INetworkResponse } from "~/utils/types";
-import { useIsSubmitting } from "~/utils/useIsSubmitting";
-import { useAmplitude } from "~/hooks/useAmplitude";
-import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { Error } from "../components/error/Error";
-import { LagretAutomatisk } from "~/components/LagretAutomatisk";
-import { RemixLink } from "~/components/RemixLink";
+
 import {
   AvregistertArbeidssokerAlert,
   RegistertArbeidssokerAlert,
 } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { RemixLink } from "~/components/RemixLink";
+import { useAmplitude } from "~/hooks/useAmplitude";
+import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
+import { kanSendes } from "~/utils/periode.utils";
+import { INetworkResponse } from "~/utils/types";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
+
+import { Error } from "../components/error/Error";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -61,7 +63,7 @@ export default function ArbeidssøkerRegisterSide() {
           registrertArbeidssoker: registrertArbeidssokerSvar,
           rapporteringsperiodeId: periode.id,
         },
-        { method: "post" }
+        { method: "post" },
       );
     }
   }

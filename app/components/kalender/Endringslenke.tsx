@@ -1,5 +1,6 @@
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
+
 import { RemixLink } from "../RemixLink";
 
 interface IProps {

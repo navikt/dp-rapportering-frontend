@@ -1,9 +1,10 @@
 import { render, screen, within } from "@testing-library/react";
 import { times } from "remeda";
 import { beforeEach, describe, expect, test } from "vitest";
+
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 
 const bekreftAktivitet = async (label: RegExp, antall: RegExp) => {
   const element = screen.getByText(label);

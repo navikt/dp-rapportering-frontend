@@ -1,7 +1,9 @@
 // @vitest-environment node
-import { HttpResponse, http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
+
 import { loader } from "~/routes/periode.$rapporteringsperiodeId";
+
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
@@ -28,7 +30,7 @@ describe("Hent en rapporteringsperiode", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
-        })
+        }),
       );
 
       expect(response.status).toBe(500);
@@ -40,8 +42,8 @@ describe("Hent en rapporteringsperiode", () => {
           `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
           () => {
             return HttpResponse.json(rapporteringsperiodeResponse, { status: 200 });
-          }
-        )
+          },
+        ),
       );
 
       mockSession();
@@ -62,8 +64,8 @@ describe("Hent en rapporteringsperiode", () => {
           () => {
             return HttpResponse.json(null, { status: 500 });
           },
-          { once: true }
-        )
+          { once: true },
+        ),
       );
 
       mockSession();
@@ -73,7 +75,7 @@ describe("Hent en rapporteringsperiode", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
-        })
+        }),
       );
 
       expect(response.status).toBe(500);

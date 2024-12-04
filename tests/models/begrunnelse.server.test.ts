@@ -1,6 +1,8 @@
-import { HttpResponse, http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+
 import { lagreBegrunnelse } from "~/models/begrunnelse.server";
+
 import { server } from "../../mocks/server";
 
 const url = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:id/begrunnelse`;
@@ -26,7 +28,7 @@ describe("lagreBegrunnelse", () => {
     server.use(
       http.post(url, () => {
         return HttpResponse.json({}, { status: 200 });
-      })
+      }),
     );
 
     const response = await lagreBegrunnelse(request, rapporteringsperiodeId, begrunnelseEndring);
@@ -38,7 +40,7 @@ describe("lagreBegrunnelse", () => {
     server.use(
       http.post(url, () => {
         return HttpResponse.json({}, { status: 500 });
-      })
+      }),
     );
 
     const response = await lagreBegrunnelse(request, rapporteringsperiodeId, begrunnelseEndring);

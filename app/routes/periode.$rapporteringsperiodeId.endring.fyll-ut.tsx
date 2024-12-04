@@ -5,22 +5,23 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
+
+import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { Kalender } from "~/components/kalender/Kalender";
+import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { LagretAutomatisk } from "~/components/LagretAutomatisk";
+import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { RemixLink } from "~/components/RemixLink";
+import { useAmplitude } from "~/hooks/useAmplitude";
+import { useLocale } from "~/hooks/useLocale";
+import { useSanity } from "~/hooks/useSanity";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
-import { useAmplitude } from "~/hooks/useAmplitude";
-import { useLocale } from "~/hooks/useLocale";
-import { useSanity } from "~/hooks/useSanity";
-import { LagretAutomatisk } from "~/components/LagretAutomatisk";
-import { RemixLink } from "~/components/RemixLink";
-import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { Kalender } from "~/components/kalender/Kalender";
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -59,7 +60,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     request,
     periode.originalId as string,
     true,
-    "loader-endring-fyll-ut-original"
+    "loader-endring-fyll-ut-original",
   );
 
   return { periode, originalPeriode };

@@ -1,4 +1,5 @@
 import { addDays, format, getWeek, getYear, subDays } from "date-fns";
+
 import { ScenarioType } from "~/devTools";
 import {
   beregnNåværendePeriodeDato,
@@ -15,6 +16,7 @@ import {
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
 import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
+
 import { Database } from "../../mocks/session";
 
 function seedRapporteringsperioder(db: Database) {
@@ -71,7 +73,7 @@ function findRapporteringsperiodeById(db: Database, id: string) {
 function updateRapporteringsperiode(
   db: Database,
   id: string,
-  data: Partial<IRapporteringsperiode>
+  data: Partial<IRapporteringsperiode>,
 ) {
   return db.rapporteringsperioder.update({
     where: {
@@ -86,7 +88,7 @@ function updateRapporteringsperiode(
 function lagreAktivitet(
   db: Database,
   rapporteringsperiodeId: string,
-  dag: IRapporteringsperiodeDag
+  dag: IRapporteringsperiodeDag,
 ) {
   const periode = findRapporteringsperiodeById(db, rapporteringsperiodeId);
 
@@ -159,7 +161,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
           kanSendes: false,
           periode,
           kanSendesFra: format(subDays(new Date(periode.tilOgMed), 1), "yyyy-MM-dd"),
-        })
+        }),
       );
       break;
     }
@@ -175,7 +177,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       deleteAllRapporteringsperioder(db);
       db.rapporteringsperioder.create(lagForstRapporteringsperiode());
       db.rapporteringsperioder.create(
-        leggTilForrigeRapporteringsperiode(findAllRapporteringsperioder(db)[0].periode)
+        leggTilForrigeRapporteringsperiode(findAllRapporteringsperioder(db)[0].periode),
       );
       break;
     }
@@ -230,7 +232,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
           originalId: endretPeriode.id,
           mottattDato: format(addDays(new Date(periode1.fraOgMed), 7), "yyyy-MM-dd"),
           begrunnelseEndring: "Glemt å registrere aktivitet",
-        })
+        }),
       );
 
       // Ferdig
@@ -243,7 +245,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
           periode: periode2,
           kanSendesFra: periode2KanSendesFra,
           mottattDato: periode2KanSendesFra,
-        })
+        }),
       );
 
       // Feilet
@@ -255,7 +257,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
           periode: periode3,
           kanSendesFra: periode3KanSendesFra,
           mottattDato: periode3KanSendesFra,
-        })
+        }),
       );
 
       db.rapporteringsperioder.create(
@@ -264,7 +266,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
             fraOgMed,
             tilOgMed,
           },
-        })
+        }),
       );
     }
   }

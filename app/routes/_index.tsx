@@ -10,21 +10,23 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { getSession } from "~/models/getSession.server";
-import { getInfoAlertStatus } from "~/models/info.server";
-import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
-import type { action as StartAction } from "./api.start";
-import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { useIsSubmitting } from "~/utils/useIsSubmitting";
-import { useAmplitude } from "~/hooks/useAmplitude";
-import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { RemixLink } from "~/components/RemixLink";
+
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { RemixLink } from "~/components/RemixLink";
+import { useAmplitude } from "~/hooks/useAmplitude";
+import { useSanity } from "~/hooks/useSanity";
+import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { getSession } from "~/models/getSession.server";
+import { getInfoAlertStatus } from "~/models/info.server";
+import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
+import { useIsSubmitting } from "~/utils/useIsSubmitting";
+
+import type { action as StartAction } from "./api.start";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
@@ -65,7 +67,7 @@ export default function Landingsside() {
     trackSkjemaStartet(forstePeriode.id);
     startFetcher.submit(
       { rapporteringsperiodeId: forstePeriode.id },
-      { method: "post", action: "/api/start" }
+      { method: "post", action: "/api/start" },
     );
   }
 
@@ -77,7 +79,7 @@ export default function Landingsside() {
           onClose={() => {
             showInfoAlertFetcher.submit(
               { infoAlertStatus: false },
-              { method: "post", action: "/api/infoalert" }
+              { method: "post", action: "/api/infoalert" },
             );
           }}
           variant="info"
@@ -103,7 +105,7 @@ export default function Landingsside() {
               dato: formaterDato(new Date(forstePeriode.kanSendesFra)),
               "fra-og-til-uke": formaterPeriodeTilUkenummer(
                 forstePeriode.periode.fraOgMed,
-                forstePeriode.periode.tilOgMed
+                forstePeriode.periode.tilOgMed,
               ),
             })}
           />

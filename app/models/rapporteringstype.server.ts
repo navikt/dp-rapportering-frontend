@@ -10,10 +10,10 @@ export interface IRapporteringstypeSvar {
 export async function lagreRapporteringstype(
   request: Request,
   rapporteringsperiodeId: string,
-  rapporteringstype: Rapporteringstype
+  rapporteringstype: Rapporteringstype,
 ): Promise<INetworkResponse> {
   const url = `${getEnv(
-    "DP_RAPPORTERING_URL"
+    "DP_RAPPORTERING_URL",
   )}/rapporteringsperiode/${rapporteringsperiodeId}/rapporteringstype`;
 
   const response = await fetch(url, {

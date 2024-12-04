@@ -1,6 +1,7 @@
 import { screen } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
+
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import RapporteringstypeSide, {
@@ -8,9 +9,10 @@ import RapporteringstypeSide, {
   loader as rapporteringstypeLoader,
 } from "~/routes/periode.$rapporteringsperiodeId.rapporteringstype";
 import { Rapporteringstype } from "~/utils/types";
+
 import { server } from "../../mocks/server";
-import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
+import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 
 describe("RapporteringstypeSide", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
@@ -43,8 +45,8 @@ describe("RapporteringstypeSide", () => {
       }),
       http.get(
         `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
-        () => HttpResponse.json(rapporteringsperioder[0], { status: 200 })
-      )
+        () => HttpResponse.json(rapporteringsperioder[0], { status: 200 }),
+      ),
     );
   };
 
@@ -63,7 +65,7 @@ describe("RapporteringstypeSide", () => {
 
       expect(await screen.findByText(/rapportering-naavaerende-periode/)).toBeInTheDocument();
       expect(
-        (await screen.findAllByText(/rapportering-uke 1 - 2 \(01.01.2024 - 14.01.2024\)/i)).length
+        (await screen.findAllByText(/rapportering-uke 1 - 2 \(01.01.2024 - 14.01.2024\)/i)).length,
       ).toBe(2);
     });
   });
@@ -87,7 +89,7 @@ describe("RapporteringstypeSide", () => {
 
       expect(await screen.findByText(/rapportering-foerste-periode/)).toBeInTheDocument();
       expect(
-        (await screen.findAllByText(/rapportering-uke 1 - 2 \(01.01.2024 - 14.01.2024\)/i)).length
+        (await screen.findAllByText(/rapportering-uke 1 - 2 \(01.01.2024 - 14.01.2024\)/i)).length,
       ).toBe(2);
     });
 
@@ -104,7 +106,7 @@ describe("RapporteringstypeSide", () => {
       render();
 
       expect(
-        await screen.findByText(/rapportering-rapporter-navarende-tittel/)
+        await screen.findByText(/rapportering-rapporter-navarende-tittel/),
       ).toBeInTheDocument();
 
       const [harAktiviteterRadio, harIngenAktiviteterRadio] = await Promise.all([

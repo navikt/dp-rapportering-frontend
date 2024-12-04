@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
+
+import { Kvittering } from "~/components/Kvittering";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { Kvittering } from "~/components/Kvittering";
 
 export default function RapporteringsPeriodesBekreftelsesSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");

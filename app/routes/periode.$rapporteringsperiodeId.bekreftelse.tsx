@@ -1,12 +1,13 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
-import { perioderSomKanSendes } from "~/utils/periode.utils";
+
+import { Kvittering } from "~/components/Kvittering";
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { Kvittering } from "~/components/Kvittering";
+import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import { perioderSomKanSendes } from "~/utils/periode.utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // TODO: Er listen med rapporteringsperioder med eller uten den innsendte perioden?

@@ -1,5 +1,7 @@
 import { TypedObject } from "@portabletext/types";
 import { describe, expect, it, vi } from "vitest";
+
+import { createSanityRichTextObject } from "~/hooks/useSanity";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 // import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
@@ -24,7 +26,7 @@ import {
   samleHtmlForPeriode,
 } from "~/utils/journalforing.utils";
 import { Rapporteringstype } from "~/utils/types";
-import { createSanityRichTextObject } from "~/hooks/useSanity";
+
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 
 vi.unmock("~/hooks/useSanity");
@@ -52,7 +54,7 @@ describe("getArbeidssokerAlert", () => {
     const alert = getArbeidssokerAlert(
       { ...periode, registrertArbeidssoker: false },
       mockGetAppText,
-      mockGetRichText
+      mockGetRichText,
     );
     expect(alert).toContain("rapportering-arbeidssokerregister-alert-tittel-avregistrert");
     expect(alert).toContain("rapportering-arbeidssokerregister-alert-innhold-avregistrert");
@@ -154,7 +156,7 @@ describe("getDag", () => {
         ],
       },
       { kort: "man", lang: "mandag" },
-      mockGetAppText
+      mockGetAppText,
     );
     expect(dag).toBe("<li>mandag 13. rapportering-arbeid (8.25), rapportering-utdanning</li>");
   });
@@ -167,7 +169,7 @@ describe("getDag", () => {
         aktiviteter: [],
       },
       { kort: "man", lang: "mandag" },
-      mockGetAppText
+      mockGetAppText,
     );
     expect(dag).toBe("<li>mandag 13. </li>");
   });
@@ -183,7 +185,7 @@ describe("getKalender", () => {
         getRichText: mockGetRichText,
         locale,
       },
-      false
+      false,
     );
 
     expect(kalender).toContain("<ul>");
@@ -198,7 +200,7 @@ describe("getKalender", () => {
         getRichText: mockGetRichText,
         locale,
       },
-      false
+      false,
     );
 
     expect(kalender).not.toContain("rapportering-hva-vil-du-lagre");
@@ -213,7 +215,7 @@ describe("getKalender", () => {
         getRichText: mockGetRichText,
         locale,
       },
-      true
+      true,
     );
 
     expect(kalender).toContain("rapportering-hva-vil-du-lagre");
@@ -268,7 +270,7 @@ describe("htmlForLandingsside", () => {
     });
 
     expect(html).toContain(
-      '<form><input type="checkbox" name="rapportering-samtykke-checkbox" checked/><label>rapportering-samtykke-checkbox</label></form>'
+      '<form><input type="checkbox" name="rapportering-samtykke-checkbox" checked/><label>rapportering-samtykke-checkbox</label></form>',
     );
   });
 
@@ -429,7 +431,7 @@ describe("htmlForOppsummering", () => {
     const alert = getArbeidssokerAlert(
       innsendtRapporteringsperioderResponse[0],
       mockGetAppText,
-      mockGetRichText
+      mockGetRichText,
     );
 
     expect(nyttMeldekort).toContain(alert);
@@ -502,7 +504,7 @@ describe("htmlForEndringBegrunnelse", () => {
 
   it("viser valgt begurnnelse som strong", () => {
     expect(html).toContain(
-      "<li><strong>rapportering-endring-begrunnelse-nedtrekksmeny-option-3</strong></li>"
+      "<li><strong>rapportering-endring-begrunnelse-nedtrekksmeny-option-3</strong></li>",
     );
   });
 });
@@ -527,7 +529,7 @@ describe("samleHtmlForPeriode", () => {
       props.periode,
       mockGetAppText,
       mockGetRichText,
-      locale
+      locale,
     );
 
     expect(html).toContain(endringBegurnnelse);
@@ -554,7 +556,7 @@ describe("samleHtmlForPeriode", () => {
     props.periode,
     mockGetAppText,
     mockGetRichText,
-    locale
+    locale,
   );
 
   it("viser html for nytt meldekort", () => {

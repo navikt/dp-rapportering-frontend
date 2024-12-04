@@ -1,4 +1,5 @@
 import { type Faro, getWebInstrumentations, initializeFaro } from "@grafana/faro-web-sdk";
+
 import { getEnv } from "~/utils/env.utils";
 
 let faro: Faro | null = null;

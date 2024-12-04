@@ -1,9 +1,10 @@
 import { getAmplitudeInstance } from "@navikt/nav-dekoratoren-moduler";
 import { renderHook } from "@testing-library/react";
-import { Mock, afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, Mock, test, vi } from "vitest";
+
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
-import { Rapporteringstype } from "~/utils/types";
 import { useAmplitude } from "~/hooks/useAmplitude";
+import { Rapporteringstype } from "~/utils/types";
 
 vi.unmock("~/hooks/useAmplitude");
 

@@ -1,12 +1,14 @@
-import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
-import { IRapporteringsperiodeStatus } from "./types";
 import { parse } from "tinyduration";
+
+import { type GetAppText } from "~/hooks/useSanity";
 import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
-import { type GetAppText } from "~/hooks/useSanity";
+
+import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
+import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
+import { IRapporteringsperiodeStatus } from "./types";
 
 export function periodeSomTimer(periode?: string): number | undefined {
   if (!periode) return undefined;
@@ -21,14 +23,14 @@ export function periodeSomTimer(periode?: string): number | undefined {
 
 export function hentUkeTekst(
   { periode: { fraOgMed, tilOgMed } }: IRapporteringsperiode,
-  getAppText: GetAppText
+  getAppText: GetAppText,
 ): string {
   return `${getAppText("rapportering-uke")} ${formaterPeriodeTilUkenummer(fraOgMed, tilOgMed)}`;
 }
 
 export function hentPeriodeTekst(
   rapporteringsperiode: IRapporteringsperiode,
-  getAppText: GetAppText
+  getAppText: GetAppText,
 ): string {
   const { fraOgMed, tilOgMed } = rapporteringsperiode.periode;
   const ukenummer = formaterPeriodeTilUkenummer(fraOgMed, tilOgMed);
@@ -53,7 +55,7 @@ export function hentTotaltArbeidstimer(rapporteringsperiode: IRapporteringsperio
 
 export function hentTotaltArbeidstimerTekst(
   rapporteringsperiode: IRapporteringsperiode,
-  getAppText: GetAppText
+  getAppText: GetAppText,
 ): string {
   const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
   const filtertAktiviteter = flatMapAktiviteter.filter((aktivitet) => aktivitet.type === "Arbeid");
@@ -73,11 +75,11 @@ export function hentTotaltArbeidstimerTekst(
 
 export function hentTotaltDagerMedAktivitetstype(
   rapporteringsperiode: IRapporteringsperiode,
-  aktivitetType: AktivitetType
+  aktivitetType: AktivitetType,
 ): number {
   const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
   const filtertAktiviteter = flatMapAktiviteter.filter(
-    (aktivitet) => aktivitet.type === aktivitetType
+    (aktivitet) => aktivitet.type === aktivitetType,
   );
 
   return filtertAktiviteter.length;
@@ -86,11 +88,11 @@ export function hentTotaltDagerMedAktivitetstype(
 export function hentTotaltFravaerTekstMedType(
   rapporteringsperiode: IRapporteringsperiode,
   aktivitetType: AktivitetType,
-  getAppText: GetAppText
+  getAppText: GetAppText,
 ): string {
   const flatMapAktiviteter = rapporteringsperiode.dager.flatMap((d) => d.aktiviteter);
   const filtertAktiviteter = flatMapAktiviteter.filter(
-    (aktivitet) => aktivitet.type === aktivitetType
+    (aktivitet) => aktivitet.type === aktivitetType,
   );
 
   return `${filtertAktiviteter.length} ${filtertAktiviteter.length === 1 ? getAppText("rapportering-dag") : getAppText("rapportering-dager")}`;
@@ -130,7 +132,7 @@ export function erAktivitetenLik(aktivitet: IAktivitet, originalAktivitet: IAkti
 
 export function erAktiviteteneLike(
   aktiviteter: IAktivitet[],
-  originaleAktiviteter: IAktivitet[]
+  originaleAktiviteter: IAktivitet[],
 ): boolean {
   if (aktiviteter.length !== originaleAktiviteter.length) {
     return false;
@@ -148,7 +150,7 @@ export function erAktiviteteneLike(
 
 export function erDageneLike(
   dag: IRapporteringsperiodeDag,
-  originalDag: IRapporteringsperiodeDag
+  originalDag: IRapporteringsperiodeDag,
 ): boolean {
   if (dag.dato !== originalDag.dato) {
     return false;
@@ -167,7 +169,7 @@ export function erDageneLike(
 
 export function erPeriodeneLike(
   periode: IRapporteringsperiode,
-  originalPeriode: IRapporteringsperiode
+  originalPeriode: IRapporteringsperiode,
 ): boolean {
   if (
     periode.periode.fraOgMed !== originalPeriode.periode.fraOgMed ||

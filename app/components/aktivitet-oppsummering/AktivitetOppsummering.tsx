@@ -1,9 +1,11 @@
-import styles from "./AktivitetOppsummering.module.css";
 import classNames from "classnames";
+
+import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { hentTotaltArbeidstimerTekst, hentTotaltFravaerTekstMedType } from "~/utils/periode.utils";
-import { useSanity } from "~/hooks/useSanity";
+
+import styles from "./AktivitetOppsummering.module.css";
 
 interface IProps {
   periode: IRapporteringsperiode;

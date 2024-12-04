@@ -1,5 +1,6 @@
-import { lagRapporteringsperiode } from "./rapporteringsperiode";
 import { describe, expect, test } from "vitest";
+
+import { lagRapporteringsperiode } from "./rapporteringsperiode";
 
 describe("lagRapporteringsperiode", () => {
   test("skal generere en periode med 14 dager", () => {
@@ -28,7 +29,7 @@ describe("lagRapporteringsperiode", () => {
     expectedKanSendesFra.setDate(expectedKanSendesFra.getDate() - 1);
 
     expect(rapporteringsperiode.kanSendesFra).toBe(
-      expectedKanSendesFra.toISOString().split("T")[0]
+      expectedKanSendesFra.toISOString().split("T")[0],
     );
   });
 

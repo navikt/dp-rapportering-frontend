@@ -1,17 +1,19 @@
 import { screen, waitFor } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
+
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { loader as rapporteringsperiodeLoader } from "~/routes/periode.$rapporteringsperiodeId";
 import ArbeidssøkerRegisterSide, {
   action as arbeidssokerregisterAction,
 } from "~/routes/periode.$rapporteringsperiodeId.arbeidssoker";
+
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
 import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
-import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
+import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 
 const testDb = withDb(sessionRecord.getDatabase("123"));
 const rapporteringsperiode: IRapporteringsperiode = {
@@ -51,12 +53,12 @@ describe("ArbeidssøkerRegisterSide", () => {
 
     expect(await screen.findByText(/rapportering-arbeidssokerregister-tittel/)).toBeInTheDocument();
     expect(
-      await screen.findByText(/rapportering-arbeidssokerregister-subtittel/)
+      await screen.findByText(/rapportering-arbeidssokerregister-subtittel/),
     ).toBeInTheDocument();
     expect(await screen.findByRole("radio", { name: /svar-ja/ })).toBeInTheDocument();
     expect(await screen.findByRole("radio", { name: /svar-nei/ })).toBeInTheDocument();
     expect(await screen.findByRole("button", { name: /rapportering-knapp-neste/ })).toHaveAttribute(
-      "disabled"
+      "disabled",
     );
   });
 
@@ -70,7 +72,7 @@ describe("ArbeidssøkerRegisterSide", () => {
 
     await waitFor(() => expect(radioJa).toBeChecked());
     expect(
-      await screen.findByRole("heading", { name: /alert-tittel-registrert/ })
+      await screen.findByRole("heading", { name: /alert-tittel-registrert/ }),
     ).toBeInTheDocument();
   });
 
@@ -84,7 +86,7 @@ describe("ArbeidssøkerRegisterSide", () => {
 
     await waitFor(() => expect(radioNei).toBeChecked());
     expect(
-      await screen.findByRole("heading", { name: /alert-tittel-avregistrert/ })
+      await screen.findByRole("heading", { name: /alert-tittel-avregistrert/ }),
     ).toBeInTheDocument();
     expect(await screen.findByText(/alert-innhold-avregistrert/)).toBeInTheDocument();
   });
@@ -97,7 +99,7 @@ describe("ArbeidssøkerRegisterSide", () => {
     expect(radioJa).toBeChecked();
 
     expect(
-      await screen.findByRole("heading", { name: /alert-tittel-registrert/ })
+      await screen.findByRole("heading", { name: /alert-tittel-registrert/ }),
     ).toBeInTheDocument();
   });
 
@@ -109,7 +111,7 @@ describe("ArbeidssøkerRegisterSide", () => {
     expect(radioNei).toBeChecked();
 
     expect(
-      await screen.findByRole("heading", { name: /alert-tittel-avregistrert/ })
+      await screen.findByRole("heading", { name: /alert-tittel-avregistrert/ }),
     ).toBeInTheDocument();
     expect(await screen.findByText(/alert-innhold-avregistrert/)).toBeInTheDocument();
   });

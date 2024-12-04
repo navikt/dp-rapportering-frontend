@@ -1,5 +1,6 @@
 import { Alert, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
+
 import { useSanity } from "~/hooks/useSanity";
 
 export function RegistertArbeidssokerAlert() {

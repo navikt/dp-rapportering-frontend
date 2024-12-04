@@ -1,8 +1,10 @@
 // @vitest-environment node
-import { HttpResponse, http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { action } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
+
 import { action as slettAction } from "~/routes/api.slett";
+import { action } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
+
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
@@ -57,8 +59,8 @@ describe("Fyll ut rapporteringsperiode", () => {
             () => HttpResponse.json(null, { status: 200 }),
             {
               once: true,
-            }
-          )
+            },
+          ),
         );
 
         const response = await action({
@@ -86,8 +88,8 @@ describe("Fyll ut rapporteringsperiode", () => {
             },
             {
               once: true,
-            }
-          )
+            },
+          ),
         );
 
         mockSession();
@@ -130,8 +132,8 @@ describe("Fyll ut rapporteringsperiode", () => {
             () => HttpResponse.json(null, { status: 200 }),
             {
               once: true,
-            }
-          )
+            },
+          ),
         );
 
         const response = await slettAction({

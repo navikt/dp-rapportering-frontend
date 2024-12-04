@@ -1,18 +1,20 @@
+import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
+
+import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { Kalender } from "~/components/kalender/Kalender";
+import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { RemixLink } from "~/components/RemixLink";
+import { useLocale } from "~/hooks/useLocale";
+import { useSanity } from "~/hooks/useSanity";
+import { useUXSignals } from "~/hooks/useUXSignals";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+
+import styles from "../styles/kvittering.module.css";
 import {
   AvregistertArbeidssokerAlert,
   RegistertArbeidssokerAlert,
 } from "./arbeidssokerregister/ArbeidssokerRegister";
 import { NavigasjonContainer } from "./navigasjon-container/NavigasjonContainer";
-import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
-import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { useLocale } from "~/hooks/useLocale";
-import { useSanity } from "~/hooks/useSanity";
-import { useUXSignals } from "~/hooks/useUXSignals";
-import { RemixLink } from "~/components/RemixLink";
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { Kalender } from "~/components/kalender/Kalender";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import styles from "../styles/kvittering.module.css";
 
 interface Ikvittering {
   tittel: string;

@@ -1,16 +1,17 @@
-import { IRapporteringsperiodeDag } from "./rapporteringsperiode.server";
 import { logErrorResponse } from "~/models/logger.server";
 import { getEnv } from "~/utils/env.utils";
 import { getCorrelationId, getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
 
+import { IRapporteringsperiodeDag } from "./rapporteringsperiode.server";
+
 export async function lagreAktivitet(
   request: Request,
   rapporteringsperiodeId: string,
-  dag: IRapporteringsperiodeDag
+  dag: IRapporteringsperiodeDag,
 ): Promise<INetworkResponse> {
   const url = `${getEnv(
-    "DP_RAPPORTERING_URL"
+    "DP_RAPPORTERING_URL",
   )}/rapporteringsperiode/${rapporteringsperiodeId}/aktivitet`;
 
   const response = await fetch(url, {

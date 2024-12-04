@@ -1,6 +1,6 @@
-import { useTypedRouteLoaderData } from "./useTypedRouteLoaderData";
 import type { PortableTextBlock, TypedObject } from "@portabletext/types";
 import { useCallback } from "react";
+
 import type {
   ISanity,
   ISanityAppText,
@@ -8,6 +8,8 @@ import type {
   ISanityMessage,
   ISanityRichText,
 } from "~/sanity/sanity.types";
+
+import { useTypedRouteLoaderData } from "./useTypedRouteLoaderData";
 
 export type ReplaceTexts = { [key: string]: string | number };
 
@@ -60,7 +62,7 @@ export function foundAppText(text: string, textId: string) {
 export function getAppText(
   sanityTexts: ISanity,
   textId: string,
-  replaceTexts?: ReplaceTexts
+  replaceTexts?: ReplaceTexts,
 ): string {
   const text =
     sanityTexts?.appTexts.find((appText: ISanityAppText) => appText.textId === textId)?.valueText ||
@@ -79,7 +81,7 @@ export function getAppText(
 
 export type GetRichText = (
   textId: string,
-  replaceTexts?: ReplaceTexts
+  replaceTexts?: ReplaceTexts,
 ) => TypedObject | TypedObject[];
 
 export function foundRichText(text: PortableTextBlock[] | undefined, textId: string) {
@@ -103,7 +105,7 @@ export function replaceKeys(text: string, replaceTexts: ReplaceTexts) {
 export function getRichText(
   sanityTexts: ISanity,
   textId: string,
-  replaceTexts?: ReplaceTexts
+  replaceTexts?: ReplaceTexts,
 ): PortableTextBlock[] {
   const richText = sanityTexts?.richTexts?.find((richText: ISanityRichText) => {
     return richText.textId === textId;
