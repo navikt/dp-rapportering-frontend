@@ -1,5 +1,5 @@
 :root {
-  --dato-strl: 35px;
+  --dato-strl: 33px;
 }
 
 .kalender {
@@ -84,6 +84,7 @@
   cursor: pointer;
   border: 0;
   z-index: 10;
+  border: 1px solid transparent;
 }
 
 .readonly {
@@ -138,30 +139,36 @@
 
 .datoMedAktivitetSykdom {
   background-color: var(--a-orange-50);
+  border-color: var(--a-orange-50);
 }
 
 .datoMedAktivitetFerie {
   background-color: var(--a-green-50);
+  border-color: var(--a-green-50);
 }
 
 .datoMedAktivitetUtdanning {
   background-color: var(--a-purple-50);
+  border-color: var(--a-purple-50);
 }
 
 .datoMedAktivitetArbeidOgUtdanning {
   background-color: var(--a-blue-50);
+  border-color: var(--a-blue-50);
 }
 
 .arbeid,
 .arbeidOgUtdanning,
 .arbeid.arbeidOgUtdanning {
   background-color: var(--a-blue-200);
+  border-color: var(--a-blue-200);
 }
 
 .arbeid:hover,
 .arbeidOgUtdanning:hover,
 .arbeid.arbeid.arbeidOgUtdanning:hover {
   background-color: var(--a-blue-300);
+  border-color: var(--a-blue-300);
 }
 
 .sykOgUtdanning::after,
@@ -172,6 +179,7 @@
   right: -12.5%;
   top: -12.5%;
   background-color: var(--a-purple-200);
+  border: 1px solid var(--a-purple-200);
   border-radius: 50%;
   height: 50%;
   width: 50%;
@@ -181,6 +189,7 @@
 .fravaerOgUtdanning:hover::after,
 .sykOgUtdanning:hover::after {
   background-color: var(--a-purple-300);
+  border-color: var(--a-purple-300);
 }
 
 .sykFravaerOgUtdanning::before {
@@ -189,6 +198,7 @@
   left: -12.5%;
   top: -12.5%;
   background-color: var(--a-purple-200);
+  border: 1px solid var(--a-purple-200);
   border-radius: 50%;
   height: 50%;
   width: 50%;
@@ -196,47 +206,57 @@
 
 .sykFravaerOgUtdanning:hover::before {
   background-color: var(--a-purple-300);
+  border-color: var(--a-purple-300);
 }
 
 .utdanning {
   background-color: var(--a-purple-200);
+  border-color: var(--a-purple-200);
 }
 
 .utdanning:hover {
   background-color: var(--a-purple-300);
+  border-color: var(--a-purple-300);
 }
 
 .timerUtdanning {
   background-color: var(--a-purple-50);
+  border-color: var(--a-purple-50);
 }
 
 .timerSykdom {
   background-color: var(--a-orange-50);
+  border-color: var(--a-orange-50);
 }
 
 .ferie,
 .fravaer {
   background-color: var(--a-green-200);
+  border-color: var(--a-green-200);
 }
 
 .ferie:hover,
 .fravaer:hover {
   background-color: var(--a-green-300);
+  border-color: var(--a-green-300);
 }
 
 .timerFerie,
 .timerFravaer {
   background-color: var(--a-green-50);
+  border-color: var(--a-green-50);
 }
 
 .sykdom,
 .sykOgFravaer {
   background-color: var(--a-orange-200);
+  border-color: var(--a-orange-200);
 }
 
 .sykdom:hover,
 .sykOgFravaer:hover {
   background-color: var(--a-orange-300);
+  border-color: var(--a-orange-300);
 }
 
 .sykOgFravaer::after {
@@ -245,6 +265,7 @@
   right: -12.5%;
   top: -12.5%;
   background-color: var(--a-green-200);
+  border-color: var(--a-green-200);
   border-radius: 50%;
   height: 50%;
   width: 50%;
@@ -252,6 +273,7 @@
 
 .sykOgFravaer:hover::after {
   background-color: var(--a-green-300);
+  border-color: var(--a-green-300);
 }
 
 .knappKontainer {
@@ -296,7 +318,7 @@
   }
 
   .readonly {
-    padding-left: 4px;
+    padding-left: 6px;
   }
 
   .datoMedAktivitet {
