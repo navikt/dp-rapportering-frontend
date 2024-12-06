@@ -29,6 +29,7 @@ export function useAmplitude() {
     },
     [track, språk],
   );
+
   const trackSkjemaStartet = useCallback(
     (skjemaId: string, endring = false) => {
       trackEvent("skjema startet", { skjemaId, endring });
@@ -50,7 +51,7 @@ export function useAmplitude() {
 
   const trackSkjemaSteg = useCallback(
     ({ periode: { id, rapporteringstype }, stegnavn, steg, endring = false }: ISkjemaSteg) =>
-      trackEvent("skjemasteg fullført", {
+      trackEvent("skjema steg fullført", {
         skjemaId: id,
         stegnavn,
         steg,
@@ -60,10 +61,50 @@ export function useAmplitude() {
     [trackEvent],
   );
 
+  const trackAccordionApnet = useCallback(
+    (skjemaId: string) => {
+      trackEvent("accordion åpnet", { skjemaId });
+    },
+    [trackEvent],
+  );
+
+  const trackAccordionLukket = useCallback(
+    (skjemaId: string) => {
+      trackEvent("accordion lukket", { skjemaId });
+    },
+    [trackEvent],
+  );
+
+  const trackAlertVist = useCallback(
+    (skjemaId: string) => {
+      trackEvent("alert vist", { skjemaId });
+    },
+    [trackEvent],
+  );
+
+  const trackModalApnet = useCallback(
+    (skjemaId: string) => {
+      trackEvent("modal åpnet", { skjemaId });
+    },
+    [trackEvent],
+  );
+
+  const trackModalLukket = useCallback(
+    (skjemaId: string) => {
+      trackEvent("modal lukket", { skjemaId });
+    },
+    [trackEvent],
+  );
+
   return {
     trackSkjemaStartet,
     trackSkjemaFullført,
     trackSkjemaInnsendingFeilet,
     trackSkjemaSteg,
+    trackAccordionApnet,
+    trackAccordionLukket,
+    trackAlertVist,
+    trackModalApnet,
+    trackModalLukket,
   };
 }
