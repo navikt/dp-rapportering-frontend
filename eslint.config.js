@@ -10,7 +10,7 @@ import typescript from "typescript-eslint";
 export default [
   {
     name: "ignore",
-    ignores: ["graphql/", "build/", "playwright-report/"],
+    ignores: ["graphql/", "build/", "coverage/", "server/build/", "playwright-report/"],
   },
   {
     name: "eslint/recommended:",
