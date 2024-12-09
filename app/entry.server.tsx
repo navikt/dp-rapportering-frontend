@@ -14,7 +14,7 @@ import { renderToPipeableStream } from "react-dom/server";
 import { setup, start } from "../mocks/server";
 import { isLocalOrDemo } from "./utils/env.utils";
 
-const ABORT_DELAY = 5_000;
+const ABORT_DELAY = 6_000;
 
 if (isLocalOrDemo) {
   const server = setup();
@@ -45,7 +45,7 @@ function handleBotRequest(
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />,
+      <RemixServer context={remixContext} url={request.url} />,
       {
         onAllReady() {
           shellRendered = true;
@@ -91,7 +91,7 @@ function handleBrowserRequest(
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />,
+      <RemixServer context={remixContext} url={request.url} />,
       {
         onShellReady() {
           shellRendered = true;
