@@ -10,7 +10,7 @@ export default defineConfig({
   base:
     process.env.NODE_ENV === "production"
       ? "https://cdn.nav.no/teamdagpenger/dp-rapportering-frontend/client/"
-      : "/arbeid/dagpenger/meldekort/",
+      : "/arbeid/dagpenger/meldekort",
   plugins: [remix({ basename: "/arbeid/dagpenger/meldekort" }), tsconfigPaths()],
   server: {
     port: 3000,
