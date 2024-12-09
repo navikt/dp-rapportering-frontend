@@ -29,8 +29,11 @@ COPY ./package-lock.json  ./
 
 RUN npm ci --ignore-scripts --omit dev
 
+
+# export build to filesystem (GitHub)
 FROM scratch AS export
 COPY --from=app-build /app/build /
+
 
 # runtime
 FROM gcr.io/distroless/nodejs22-debian12 AS runtime
@@ -41,7 +44,6 @@ ENV NODE_ENV=${NODE_ENV}
 ENV TZ="Europe/Oslo"
 EXPOSE 3000
 
-COPY ./public ./public/
 COPY ./package.json ./package.json
 COPY --from=app-build /app/build/ ./build/
 COPY --from=app-dependencies /app/node_modules ./node_modules
