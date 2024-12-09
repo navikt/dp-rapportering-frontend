@@ -2,6 +2,7 @@ import { getAmplitudeInstance } from "@navikt/nav-dekoratoren-moduler";
 import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { Rapporteringstype } from "~/utils/types";
 
 import { useLocale } from "./useLocale";
@@ -96,6 +97,13 @@ export function useAmplitude() {
     [trackEvent],
   );
 
+  const trackSprakEndret = useCallback(
+    (språk: DecoratorLocale) => {
+      trackEvent("språk endret", { språk });
+    },
+    [trackEvent],
+  );
+
   return {
     trackSkjemaStartet,
     trackSkjemaFullført,
@@ -106,5 +114,6 @@ export function useAmplitude() {
     trackAlertVist,
     trackModalApnet,
     trackModalLukket,
+    trackSprakEndret,
   };
 }

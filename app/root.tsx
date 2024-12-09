@@ -23,6 +23,7 @@ import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBo
 import { ServiceMessage } from "./components/service-message/ServiceMessage";
 import { getDecoratorHTML } from "./dekorator/dekorator.server";
 import { DevTools } from "./devTools";
+import { useAmplitude } from "./hooks/useAmplitude";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
@@ -187,6 +188,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { getAppText } = useSanity();
+  const { trackSprakEndret } = useAmplitude();
 
   initInstrumentation();
 
@@ -195,7 +197,7 @@ export default function App() {
     setAvailableLanguages(availableLanguages);
 
     onLanguageSelect((language) => {
-      // TODO: Logg endring av språk til amplitude
+      trackSprakEndret(language.locale as DecoratorLocale);
       document.documentElement.setAttribute("lang", language.locale);
       fetcher.submit({ locale: language.locale }, { method: "post" });
     });
