@@ -3,10 +3,21 @@
   padding-right: var(--a-spacing-2);
 }
 
+.skrivUtKnappen {
+  display: flex;
+  gap: var(--a-spacing-4);
+  margin: var(--a-spacing-8) 0;
+  justify-content: center;
+}
+
 @media print {
   .kvitteringInnhold {
     display: block;
     animation: none;
+  }
+
+  .skrivUtKnappen {
+    display: none;
   }
 
   :global(.navds-accordion__header) {

@@ -15,6 +15,7 @@ import {
   RegistertArbeidssokerAlert,
 } from "./arbeidssokerregister/ArbeidssokerRegister";
 import { NavigasjonContainer } from "./navigasjon-container/NavigasjonContainer";
+import { PrinterSmallFillIcon } from "@navikt/aksel-icons";
 
 interface Ikvittering {
   tittel: string;
@@ -56,10 +57,21 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
             ) : (
               <AvregistertArbeidssokerAlert />
             )}
+
+            <div className={styles.skrivUtKnappen}>
+              <Button
+                variant="tertiary"
+                icon={<PrinterSmallFillIcon aria-hidden />}
+                onClick={() => window.print()}
+              >
+                Skriv ut
+              </Button>
+            </div>
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
       <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--a-spacing-8) auto" }} />
+
       <NavigasjonContainer>
         {harNestePeriode ? (
           <RemixLink
