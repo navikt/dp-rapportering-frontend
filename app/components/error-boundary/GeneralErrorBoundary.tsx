@@ -80,7 +80,9 @@ export function GeneralErrorBoundary({ error }: IProps) {
     setBreadcrumbs([], getAppText);
   }, [getAppText]);
 
-  console.error(`${titleId}: ${descriptionId}`, error);
+  useEffect(() => {
+    console.error(`${titleId}: ${descriptionId}`, error);
+  }, []);
 
   return (
     <>
