@@ -38,7 +38,7 @@
     "cross-env": "7.0.3",
     "date-fns": "4.1.0",
     "express": "4.21.2",
-    "groq": "3.66.1",
+    "groq": "3.67.0",
     "html-react-parser": "5.2.0",
     "isbot": "5.1.17",
     "morgan": "1.10.0",
@@ -51,7 +51,7 @@
     "tinyduration": "3.3.1",
     "uuidv7": "1.0.2",
     "winston": "3.17.0",
-    "zod": "3.23.8",
+    "zod": "3.24.1",
     "zod-form-data": "2.0.2"
   },
   "devDependencies": {
@@ -80,7 +80,7 @@
     "globals": "15.13.0",
     "husky": "9.1.7",
     "jsdom": "25.0.1",
-    "lint-staged": "15.2.10",
+    "lint-staged": "15.2.11",
     "npm-run-all": "4.1.5",
     "prettier": "3.4.2",
     "typescript": "5.7.2",
@@ -91,7 +91,10 @@
   },
   "overrides": {
     "@remix-run/server-runtime": {
-      "cookie": "^0.7.2"
+      "cookie": "0.7.2"
+    },
+    "remix-validated-form": {
+      "nanoid": "3.3.8"
     }
   },
   "engines": {
