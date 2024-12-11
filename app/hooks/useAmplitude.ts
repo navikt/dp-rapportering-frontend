@@ -14,6 +14,24 @@ interface ISkjemaSteg {
   endring?: boolean;
 }
 
+interface INavigere {
+  destinasjon: string;
+  lenketekst: string;
+  linkId: string;
+}
+
+interface IAccordion {
+  skjemaId: string;
+  tekst: string;
+  tekstId: string;
+}
+
+interface IFeilmelding {
+  tekst: string;
+  titleId: string;
+  descriptionId: string;
+}
+
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAmplitude() {
@@ -63,15 +81,15 @@ export function useAmplitude() {
   );
 
   const trackAccordionApnet = useCallback(
-    (skjemaId: string) => {
-      trackEvent("accordion åpnet", { skjemaId });
+    ({ skjemaId, tekst, tekstId }: IAccordion) => {
+      trackEvent("accordion åpnet", { skjemaId, tekst, tekstId });
     },
     [trackEvent],
   );
 
   const trackAccordionLukket = useCallback(
-    (skjemaId: string) => {
-      trackEvent("accordion lukket", { skjemaId });
+    ({ skjemaId, tekst, tekstId }: IAccordion) => {
+      trackEvent("accordion lukket", { skjemaId, tekst, tekstId });
     },
     [trackEvent],
   );
@@ -104,6 +122,20 @@ export function useAmplitude() {
     [trackEvent],
   );
 
+  const trackNavigere = useCallback(
+    ({ lenketekst, destinasjon, linkId }: INavigere) => {
+      trackEvent("navigere", { lenketekst, destinasjon, linkId });
+    },
+    [trackEvent],
+  );
+
+  const trackFeilmelding = useCallback(
+    ({ tekst, titleId, descriptionId }: IFeilmelding) => {
+      trackEvent("feilmelding", { tekst, titleId, descriptionId });
+    },
+    [trackEvent],
+  );
+
   return {
     trackSkjemaStartet,
     trackSkjemaFullført,
@@ -115,5 +147,7 @@ export function useAmplitude() {
     trackModalApnet,
     trackModalLukket,
     trackSprakEndret,
+    trackNavigere,
+    trackFeilmelding,
   };
 }
