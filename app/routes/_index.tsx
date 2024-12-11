@@ -52,7 +52,7 @@ export default function Landingsside() {
   const startFetcher = useFetcher<typeof StartAction>();
   const showInfoAlertFetcher = useFetcher();
   const [samtykker, setSamtykker] = useState(showInfoAlert);
-  const { trackSkjemaStartet } = useAmplitude();
+  const { trackSkjemaStartet, trackNavigere } = useAmplitude();
 
   const forstePeriode = rapporteringsperioder[0];
 
@@ -147,7 +147,18 @@ export default function Landingsside() {
       )}
 
       <NavigasjonContainer>
-        <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
+        <RemixLink
+          as="Link"
+          to={getLink("rapportering-se-og-endre").linkUrl}
+          onClick={() => {
+            const linkId = "rapportering-se-og-endre";
+            trackNavigere({
+              lenketekst: getLink(linkId).linkText,
+              destinasjon: getLink(linkId).linkUrl,
+              linkId,
+            });
+          }}
+        >
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
       </NavigasjonContainer>

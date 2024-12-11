@@ -36,6 +36,14 @@ vi.mock("~/hooks/useAmplitude", () => ({
     trackSkjemaFullført: vi.fn(),
     trackSkjemaInnsendingFeilet: vi.fn(),
     trackSkjemaSteg: vi.fn(),
+    trackAccordionApnet: vi.fn(),
+    trackAccordionLukket: vi.fn(),
+    trackAlertVist: vi.fn(),
+    trackModalApnet: vi.fn(),
+    trackModalLukket: vi.fn(),
+    trackSprakEndret: vi.fn(),
+    trackNavigere: vi.fn(),
+    trackFeilmelding: vi.fn(),
   }),
 }));
 

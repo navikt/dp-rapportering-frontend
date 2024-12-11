@@ -18,6 +18,7 @@ describe("AktivitetCheckboxes", () => {
     aktiviteter: [],
     muligeAktiviteter: ["Arbeid", "Syk"] as AktivitetType[],
     onChange: vi.fn(),
+    periodeId: "1",
   };
 
   it.skip("rendrer chekboxes med riktige label og beskrivelser", () => {

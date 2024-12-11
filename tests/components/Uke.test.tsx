@@ -25,6 +25,7 @@ const renderUke = (rapporteringUke: IRapporteringsperiodeDag[], props?: { readon
       readonly={readonly}
       rapporteringUke={rapporteringUke}
       locale={locale}
+      periodeId="1"
     />,
   );
 };

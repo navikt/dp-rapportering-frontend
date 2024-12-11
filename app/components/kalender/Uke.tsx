@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { format } from "date-fns";
 
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
@@ -14,11 +15,13 @@ interface IProps {
   readonly?: boolean;
   rapporteringUke: IRapporteringsperiodeDag[];
   locale: DecoratorLocale;
+  periodeId: string;
 }
 
 export function Uke(props: IProps) {
-  const { rapporteringUke, readonly, aapneModal, locale = DecoratorLocale.NB } = props;
+  const { rapporteringUke, readonly, aapneModal, locale = DecoratorLocale.NB, periodeId } = props;
   const { getAppText } = useSanity();
+  const { trackModalApnet } = useAmplitude();
 
   function erAktivStil(dag: IRapporteringsperiodeDag, typer: AktivitetType[]): boolean {
     const dagenHarAktivitet = dag.aktiviteter.length > 0;
@@ -74,7 +77,10 @@ export function Uke(props: IProps) {
               <button
                 className={classNames(styles.dato, dagKnappStyle)}
                 aria-label={hentSkjermleserDatoTekst(dag, getAppText, locale)}
-                onClick={() => aapneModal(dag.dato)}
+                onClick={() => {
+                  trackModalApnet(periodeId);
+                  aapneModal(dag.dato);
+                }}
               >
                 {`${format(new Date(dag.dato), "d")}.`}
               </button>

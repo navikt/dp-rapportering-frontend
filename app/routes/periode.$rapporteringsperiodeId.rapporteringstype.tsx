@@ -131,7 +131,7 @@ export default function RapporteringstypeSide() {
         })}
       />
 
-      <LesMer />
+      <LesMer periodeId={periode.id} />
 
       <RadioGroup
         disabled={!kanSendes(periode)}

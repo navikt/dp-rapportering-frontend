@@ -87,10 +87,11 @@ export function AktivitetModal({
                 onChange={setValgteAktiviteter}
                 label={getAppText("rapportering-hva-vil-du-lagre")}
                 aktiviteter={dag.aktiviteter}
+                periodeId={periode.id}
               />
             </div>
 
-            <LesMer />
+            <LesMer periodeId={periode.id} />
 
             {actionData?.status === "error" && actionData?.error && (
               <Alert variant="error" className={styles.feilmelding}>
