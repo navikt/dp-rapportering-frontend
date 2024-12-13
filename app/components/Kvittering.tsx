@@ -64,7 +64,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
                 icon={<PrinterSmallFillIcon aria-hidden />}
                 onClick={() => window.print()}
               >
-                Skriv ut
+                {getAppText("rapportering-skriv-ut")}
               </Button>
             </div>
           </Accordion.Content>
