@@ -11,20 +11,20 @@ interface IProps {
 export function EndringsLenke(props: IProps) {
   const { getAppText } = useSanity();
 
-  const { trackSkjemaStartet } = useAmplitude();
+  const { trackSkjemaStartet, trackNavigere } = useAmplitude();
+
+  const sti = "endre";
+  const linkId = "rapportering-redigeringslenke-endre";
+  const tekst = getAppText(linkId);
 
   const endringHandler = () => {
+    trackNavigere({ lenketekst: tekst, destinasjon: `/periode/[periodeId]/${sti}`, linkId }); // Potensielt overflødig
     trackSkjemaStartet(props.id, true);
   };
 
-  const endringsType = {
-    sti: "endre",
-    tekst: getAppText("rapportering-redigeringslenke-endre"),
-  };
-
   return (
-    <RemixLink onClick={endringHandler} as="Link" to={`/periode/${props.id}/${endringsType.sti}`}>
-      {endringsType.tekst}
+    <RemixLink onClick={endringHandler} as="Link" to={`/periode/${props.id}/${sti}`}>
+      {tekst}
     </RemixLink>
   );
 }

@@ -59,7 +59,7 @@ describe("useAmplitude", () => {
       });
     });
 
-    test("tracker 'skjemasteg fullført' hendelsen riktig", () => {
+    test("tracker 'skjema steg fullført' hendelsen riktig", () => {
       const skjemaId = "123456";
       const rapporteringstype = Rapporteringstype.harAktivitet;
 
@@ -73,7 +73,7 @@ describe("useAmplitude", () => {
         endring: false,
       });
 
-      expect(trackMock).toHaveBeenCalledWith("skjemasteg fullført", {
+      expect(trackMock).toHaveBeenCalledWith("skjema steg fullført", {
         skjemanavn,
         skjemaId,
         språk,

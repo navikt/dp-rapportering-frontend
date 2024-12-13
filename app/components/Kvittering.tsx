@@ -4,6 +4,7 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useUXSignals } from "~/hooks/useUXSignals";
@@ -26,6 +27,7 @@ interface Ikvittering {
 export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink } = useSanity();
   const { locale } = useLocale();
+  const { trackNavigere } = useAmplitude();
 
   if (typeof window !== "undefined" && window["hj"]) {
     window.hj("trigger", "nyttmeldekortDP");
@@ -93,7 +95,18 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
       </NavigasjonContainer>
 
       <NavigasjonContainer>
-        <RemixLink as="Link" to={getLink("rapportering-se-og-endre").linkUrl}>
+        <RemixLink
+          as="Link"
+          to={getLink("rapportering-se-og-endre").linkUrl}
+          onClick={() => {
+            const linkId = "rapportering-se-og-endre";
+            trackNavigere({
+              lenketekst: getLink(linkId).linkText,
+              destinasjon: getLink(linkId).linkUrl,
+              linkId,
+            });
+          }}
+        >
           {getLink("rapportering-se-og-endre").linkText}
         </RemixLink>
       </NavigasjonContainer>
