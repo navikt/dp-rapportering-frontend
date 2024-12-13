@@ -73,12 +73,14 @@ export function Kalender(props: IProps) {
         </thead>
         <tbody className={classNames(styles.ukerKontainer)}>
           <Uke
+            periodeId={periode.id}
             rapporteringUke={forsteUke}
             readonly={readonly}
             aapneModal={aapneModal}
             locale={locale}
           />
           <Uke
+            periodeId={periode.id}
             rapporteringUke={andreUke}
             readonly={readonly}
             aapneModal={aapneModal}

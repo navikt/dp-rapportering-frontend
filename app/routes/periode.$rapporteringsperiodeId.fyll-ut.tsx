@@ -124,7 +124,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
       <PortableText value={getRichText("rapportering-periode-fyll-ut-beskrivelse")} />
 
-      <LesMer />
+      <LesMer periodeId={periode.id} />
 
       <Kalender periode={periode} aapneModal={aapneModal} locale={locale} />
       <AktivitetModal

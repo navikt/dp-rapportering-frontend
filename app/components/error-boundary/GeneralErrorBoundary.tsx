@@ -4,6 +4,7 @@ import { ErrorResponse, isRouteErrorResponse } from "@remix-run/react";
 import { useEffect } from "react";
 
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { foundAppText, foundRichText, useSanity } from "~/hooks/useSanity";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 
@@ -75,12 +76,15 @@ export function useGetErrorText(error: unknown | IError): {
 export function GeneralErrorBoundary({ error }: IProps) {
   const { getAppText, getLink } = useSanity();
   const { titleId, descriptionId, title, description } = useGetErrorText(error);
+  const { trackFeilmelding } = useAmplitude();
 
   useEffect(() => {
     setBreadcrumbs([], getAppText);
   }, [getAppText]);
 
   useEffect(() => {
+    // Logg besøk, titleId og descriptionId
+    trackFeilmelding({ tekst: title, titleId, descriptionId });
     console.error(`${titleId}: ${descriptionId}`, error);
   }, []);
 

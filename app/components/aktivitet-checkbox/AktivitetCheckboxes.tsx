@@ -3,6 +3,7 @@ import { PortableText } from "@portabletext/react";
 import classNames from "classnames";
 import { useField } from "remix-validated-form";
 
+import { useAmplitude } from "~/hooks/useAmplitude";
 import { type GetAppText, useSanity } from "~/hooks/useSanity";
 import { AktivitetType, aktivitetTypeMap, IAktivitet } from "~/utils/aktivitettype.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
@@ -17,6 +18,7 @@ export interface IProps {
   muligeAktiviteter: readonly AktivitetType[];
   onChange: (aktivitet: AktivitetType[]) => void;
   aktiviteter: IAktivitet[];
+  periodeId: string;
 }
 
 export function erIkkeAktiv(aktiviteter: AktivitetType[], aktivitet: AktivitetType) {
@@ -60,9 +62,22 @@ export function AktivitetCheckboxes({
   muligeAktiviteter,
   aktiviteter,
   onChange,
+  periodeId,
 }: IProps) {
   const { error } = useField(name);
   const { getAppText, getRichText } = useSanity();
+  const { trackAccordionApnet, trackAccordionLukket } = useAmplitude();
+
+  const tekstId = "rapportering-aktivitet-jobb-prosentstilling-tittel";
+  const header = getAppText(tekstId);
+
+  function trackOpenChange(open: boolean) {
+    if (open) {
+      trackAccordionApnet({ skjemaId: periodeId, tekst: header, tekstId });
+    } else {
+      trackAccordionLukket({ skjemaId: periodeId, tekst: header, tekstId });
+    }
+  }
 
   return (
     <CheckboxGroup legend={label} error={error || undefined} value={verdi} onChange={onChange}>
@@ -99,8 +114,9 @@ export function AktivitetCheckboxes({
                 <PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />
 
                 <ReadMore
-                  header={getAppText("rapportering-aktivitet-jobb-prosentstilling-tittel")}
+                  header={header}
                   className={styles.prosentstilling}
+                  onOpenChange={trackOpenChange}
                 >
                   <PortableText
                     value={getRichText("rapportering-aktivitet-jobb-prosentstilling-innhold")}
