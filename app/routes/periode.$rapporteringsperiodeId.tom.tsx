@@ -7,7 +7,7 @@ import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
@@ -16,7 +16,7 @@ export default function TomRapporteringsPeriodeSide() {
   const { getAppText, getRichText } = useSanity();
 
   const navigate = useNavigate();
-  const { trackSkjemaSteg } = useAmplitude();
+  const { trackSkjemaSteg } = useAnalytics();
 
   const neste = () => {
     trackSkjemaSteg({

@@ -3,7 +3,7 @@ import { PortableText } from "@portabletext/react";
 import classNames from "classnames";
 import { useField } from "remix-validated-form";
 
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { type GetAppText, useSanity } from "~/hooks/useSanity";
 import { AktivitetType, aktivitetTypeMap, IAktivitet } from "~/utils/aktivitettype.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
@@ -66,7 +66,7 @@ export function AktivitetCheckboxes({
 }: IProps) {
   const { error } = useField(name);
   const { getAppText, getRichText } = useSanity();
-  const { trackAccordionApnet, trackAccordionLukket } = useAmplitude();
+  const { trackAccordionApnet, trackAccordionLukket } = useAnalytics();
 
   const tekstId = "rapportering-aktivitet-jobb-prosentstilling-tittel";
   const header = getAppText(tekstId);

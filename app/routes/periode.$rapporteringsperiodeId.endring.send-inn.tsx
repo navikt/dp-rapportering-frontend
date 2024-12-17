@@ -20,7 +20,7 @@ import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -120,7 +120,7 @@ export default function RapporteringsPeriodeSendInnSide() {
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
 
-  const { trackSkjemaSteg, trackSkjemaInnsendingFeilet } = useAmplitude();
+  const { trackSkjemaSteg, trackSkjemaInnsendingFeilet } = useAnalytics();
 
   const addHtml = useAddHtml({
     rapporteringsperioder,

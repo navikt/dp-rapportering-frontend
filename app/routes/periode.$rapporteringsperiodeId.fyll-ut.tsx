@@ -15,7 +15,7 @@ import { LesMer } from "~/components/LesMer";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -57,7 +57,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const { locale } = useLocale();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
-  const { trackSkjemaSteg } = useAmplitude();
+  const { trackSkjemaSteg } = useAnalytics();
 
   const { getAppText, getRichText } = useSanity();
   const actionData = useActionData<typeof action>();

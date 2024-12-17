@@ -16,7 +16,7 @@ import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBo
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { getSession } from "~/models/getSession.server";
@@ -52,7 +52,7 @@ export default function Landingsside() {
   const startFetcher = useFetcher<typeof StartAction>();
   const showInfoAlertFetcher = useFetcher();
   const [samtykker, setSamtykker] = useState(showInfoAlert);
-  const { trackSkjemaStartet, trackNavigere } = useAmplitude();
+  const { trackSkjemaStartet, trackNavigere } = useAnalytics();
 
   const forstePeriode = rapporteringsperioder[0];
 

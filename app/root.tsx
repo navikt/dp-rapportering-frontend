@@ -23,7 +23,7 @@ import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBo
 import { ServiceMessage } from "./components/service-message/ServiceMessage";
 import { getDecoratorHTML } from "./dekorator/dekorator.server";
 import { DevTools } from "./devTools";
-import { useAmplitude } from "./hooks/useAmplitude";
+import { useAnalytics } from "./hooks/useAnalytics";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
@@ -115,6 +115,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
       SANITY_DATASETT: process.env.SANITY_DATASETT,
       GITHUB_SHA: process.env.GITHUB_SHA,
+      UMAMI_ID: process.env.UMAMI_ID,
     },
     fragments,
   };
@@ -152,6 +153,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {parse(fragments.DECORATOR_HEAD_ASSETS, { trim: true })}
         <Meta />
         <Links />
+        {env.UMAMI_ID && (
+          <script
+            defer
+            src="https://cdn.nav.no/team-researchops/sporing/sporing.js"
+            data-host-url="https://umami.nav.no"
+            data-website-id={env.UMAMI_ID}
+            data-tag="dp-rapportering-frontend"
+          ></script>
+        )}
       </head>
       <body>
         <script
@@ -188,13 +198,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { getAppText } = useSanity();
-  const { trackSprakEndret } = useAmplitude();
+  const { trackSprakEndret } = useAnalytics();
 
   initInstrumentation();
 
   const fetcher = useFetcher();
+
   if (typeof document !== "undefined") {
     setAvailableLanguages(availableLanguages);
+
+    document.querySelectorAll("a").forEach((a) => {
+      if (!a.getAttribute("data-umami-event")) {
+        const dataUmamiEvent = a.pathname.includes(getEnv("BASE_PATH"))
+          ? "intern-lenke"
+          : "ekstern-lenke";
+
+        a.setAttribute("data-umami-event", dataUmamiEvent);
+        a.setAttribute("data-umami-event-url", a.href);
+      }
+    });
 
     onLanguageSelect((language) => {
       trackSprakEndret(language.locale as DecoratorLocale);

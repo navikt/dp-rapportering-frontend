@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { format } from "date-fns";
 
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
@@ -21,7 +21,7 @@ interface IProps {
 export function Uke(props: IProps) {
   const { rapporteringUke, readonly, aapneModal, locale = DecoratorLocale.NB, periodeId } = props;
   const { getAppText } = useSanity();
-  const { trackModalApnet } = useAmplitude();
+  const { trackModalApnet } = useAnalytics();
 
   function erAktivStil(dag: IRapporteringsperiodeDag, typer: AktivitetType[]): boolean {
     const dagenHarAktivitet = dag.aktiviteter.length > 0;

@@ -12,7 +12,7 @@ import { LesMer } from "~/components/LesMer";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
@@ -49,7 +49,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function RapporteringstypeSide() {
   const navigate = useNavigate();
-  const { trackSkjemaSteg } = useAmplitude();
+  const { trackSkjemaSteg } = useAnalytics();
 
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder } = useLoaderData<typeof loader>();

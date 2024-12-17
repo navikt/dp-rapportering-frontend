@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import { Kvittering } from "~/components/Kvittering";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 
@@ -9,7 +9,7 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText } = useSanity();
 
-  const { trackSkjemaFullført } = useAmplitude();
+  const { trackSkjemaFullført } = useAnalytics();
   const tracked = useRef(false);
 
   useEffect(() => {

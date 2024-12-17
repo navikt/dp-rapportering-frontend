@@ -3,6 +3,7 @@ import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
+import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
 
 import { useLocale } from "./useLocale";
@@ -34,8 +35,15 @@ interface IFeilmelding {
 
 const skjemanavn = "dagpenger-rapportering";
 
-export function useAmplitude() {
-  const track = getAmplitudeInstance("dekoratoren");
+export function useAnalytics() {
+  let track = undefined;
+
+  if (typeof window !== "undefined" && getEnv("UMAMI_ID")) {
+    track = window.umami.track;
+  } else {
+    track = getAmplitudeInstance("dekoratoren");
+  }
+
   const { locale: språk } = useLocale();
 
   const trackEvent = useCallback(
