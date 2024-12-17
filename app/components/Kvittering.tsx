@@ -1,3 +1,4 @@
+import { PrinterSmallFillIcon } from "@navikt/aksel-icons";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -16,7 +17,6 @@ import {
   RegistertArbeidssokerAlert,
 } from "./arbeidssokerregister/ArbeidssokerRegister";
 import { NavigasjonContainer } from "./navigasjon-container/NavigasjonContainer";
-import { PrinterSmallFillIcon } from "@navikt/aksel-icons";
 
 interface Ikvittering {
   tittel: string;

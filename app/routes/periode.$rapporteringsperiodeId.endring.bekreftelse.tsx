@@ -14,7 +14,7 @@ export default function RapporteringsPeriodesBekreftelsesSide() {
 
   useEffect(() => {
     if (!tracked.current) {
-      trackSkjemaFullført(periode.id, periode.rapporteringstype);
+      trackSkjemaFullført(periode.id, periode.rapporteringstype, true);
       tracked.current = true;
     }
   }, [periode.id, trackSkjemaFullført, periode.rapporteringstype]);
