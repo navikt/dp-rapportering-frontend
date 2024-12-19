@@ -10,7 +10,7 @@ import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreBegrunnelse } from "~/models/begrunnelse.server";
@@ -33,7 +33,7 @@ export default function BegrunnelseSide() {
   const isSubmitting = useIsSubmitting(fetcher);
 
   const navigate = useNavigate();
-  const { trackSkjemaSteg } = useAmplitude();
+  const { trackSkjemaSteg } = useAnalytics();
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;

@@ -14,7 +14,7 @@ import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
@@ -79,7 +79,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
 
-  const { trackSkjemaSteg } = useAmplitude();
+  const { trackSkjemaSteg } = useAnalytics();
   const navigate = useNavigate();
 
   useEffect(() => {

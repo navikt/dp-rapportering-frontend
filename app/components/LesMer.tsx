@@ -1,7 +1,7 @@
 import { ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 
 import styles from "../styles/lesMer.module.css";
@@ -12,7 +12,7 @@ interface IProps {
 
 export function LesMer({ periodeId }: IProps) {
   const { getRichText, getAppText } = useSanity();
-  const { trackAccordionApnet, trackAccordionLukket } = useAmplitude();
+  const { trackAccordionApnet, trackAccordionLukket } = useAnalytics();
 
   const tekstId = "rapportering-les-mer-hva-skal-rapporteres-tittel";
   const header = getAppText(tekstId);

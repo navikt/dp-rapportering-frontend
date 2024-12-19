@@ -4,7 +4,7 @@ import { ErrorResponse, isRouteErrorResponse } from "@remix-run/react";
 import { useEffect } from "react";
 
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { foundAppText, foundRichText, useSanity } from "~/hooks/useSanity";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 
@@ -76,7 +76,7 @@ export function useGetErrorText(error: unknown | IError): {
 export function GeneralErrorBoundary({ error }: IProps) {
   const { getAppText, getLink } = useSanity();
   const { titleId, descriptionId, title, description } = useGetErrorText(error);
-  const { trackFeilmelding } = useAmplitude();
+  const { trackFeilmelding } = useAnalytics();
 
   useEffect(() => {
     setBreadcrumbs([], getAppText);

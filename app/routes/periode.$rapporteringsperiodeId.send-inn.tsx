@@ -22,7 +22,7 @@ import {
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -95,7 +95,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function RapporteringsPeriodeSendInnSide() {
   const { locale } = useLocale();
   const [hasTrackedError, setHasTrackedError] = useState(false);
-  const { trackSkjemaSteg, trackSkjemaInnsendingFeilet } = useAmplitude();
+  const { trackSkjemaSteg, trackSkjemaInnsendingFeilet } = useAnalytics();
 
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();

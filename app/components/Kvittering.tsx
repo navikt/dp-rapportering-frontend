@@ -5,7 +5,7 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useUXSignals } from "~/hooks/useUXSignals";
@@ -27,7 +27,7 @@ interface Ikvittering {
 export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink } = useSanity();
   const { locale } = useLocale();
-  const { trackNavigere } = useAmplitude();
+  const { trackNavigere } = useAnalytics();
 
   if (typeof window !== "undefined" && window["hj"]) {
     window.hj("trigger", "nyttmeldekortDP");

@@ -1,4 +1,4 @@
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 
 import { RemixLink } from "../RemixLink";
@@ -11,7 +11,7 @@ interface IProps {
 export function EndringsLenke(props: IProps) {
   const { getAppText } = useSanity();
 
-  const { trackSkjemaStartet, trackNavigere } = useAmplitude();
+  const { trackSkjemaStartet, trackNavigere } = useAnalytics();
 
   const sti = "endre";
   const linkId = "rapportering-redigeringslenke-endre";
