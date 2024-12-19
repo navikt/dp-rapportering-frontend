@@ -156,10 +156,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {env.UMAMI_ID && (
           <script
             defer
-            src="https://cdn.nav.no/team-researchops/sporing/sporing.js"
+            src="https://cdn.nav.no/team-researchops/sporing/sporing-uten-uuid.js"
             data-host-url="https://umami.nav.no"
             data-website-id={env.UMAMI_ID}
-            data-tag="dp-rapportering-frontend"
           ></script>
         )}
       </head>
