@@ -36,25 +36,26 @@ interface IFeilmelding {
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
-  let track = undefined;
-
-  if (typeof window !== "undefined" && getEnv("UMAMI_ID")) {
-    track = window.umami.track;
-  } else {
-    track = getAmplitudeInstance("dekoratoren");
-  }
+  const umami = typeof window !== "undefined" && getEnv("UMAMI_ID") ? window.umami.track : () => {};
+  const amplitude = getAmplitudeInstance("dekoratoren");
 
   const { locale: språk } = useLocale();
 
   const trackEvent = useCallback(
     <T extends object>(event: string, props: T = {} as T) => {
-      track(event, {
+      umami(event, {
+        skjemanavn,
+        språk,
+        ...props,
+      });
+
+      amplitude(event, {
         skjemanavn,
         språk,
         ...props,
       });
     },
-    [track, språk],
+    [umami, amplitude, språk],
   );
 
   const trackSkjemaStartet = useCallback(
