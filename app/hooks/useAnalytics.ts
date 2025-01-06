@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
-import { getEnv } from "~/utils/env.utils";
+import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
 
 import { useLocale } from "./useLocale";
@@ -43,11 +43,13 @@ export function useAnalytics() {
 
   const trackEvent = useCallback(
     <T extends object>(event: string, props: T = {} as T) => {
-      umami(event, {
-        skjemanavn,
-        språk,
-        ...props,
-      });
+      if (isLocalOrDemo) {
+        umami(event, {
+          skjemanavn,
+          språk,
+          ...props,
+        });
+      }
 
       amplitude(event, {
         skjemanavn,
