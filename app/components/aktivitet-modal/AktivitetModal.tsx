@@ -1,5 +1,6 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { useActionData, useFetcher, useNavigation } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { ValidatedForm } from "remix-validated-form";
 
 import { useLocale } from "~/hooks/useLocale";
@@ -42,6 +43,7 @@ export function AktivitetModal({
   const fetcher = useFetcher();
   const navigation = useNavigation();
   const isSubmitting = useIsSubmitting(navigation);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const slettHandler = () => {
     fetcher.submit(
@@ -54,6 +56,12 @@ export function AktivitetModal({
 
     lukkModal();
   };
+
+  useEffect(() => {
+    if (modalAapen) {
+      modalRef?.current?.scrollTo({ top: 0 });
+    }
+  }, [modalAapen]);
 
   return (
     <Modal
@@ -73,7 +81,7 @@ export function AktivitetModal({
           {valgtDato && <FormattertDato locale={locale} dato={valgtDato} ukedag />}
         </Heading>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body ref={modalRef}>
         {dag && (
           <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator()}>
             <input type="hidden" name="dato" defaultValue={valgtDato} />
