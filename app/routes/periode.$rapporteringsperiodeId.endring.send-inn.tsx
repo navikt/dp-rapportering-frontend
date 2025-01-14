@@ -15,6 +15,10 @@ import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import {
+  AvregistertArbeidssokerAlert,
+  RegistertArbeidssokerAlert,
+} from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
@@ -208,6 +212,12 @@ export default function RapporteringsPeriodeSendInnSide() {
 
           <p>{periode.begrunnelseEndring}</p>
         </div>
+      )}
+
+      {periode.registrertArbeidssoker ? (
+        <RegistertArbeidssokerAlert />
+      ) : (
+        <AvregistertArbeidssokerAlert />
       )}
 
       <Checkbox onChange={() => setConfirmed((prev) => !prev)}>
