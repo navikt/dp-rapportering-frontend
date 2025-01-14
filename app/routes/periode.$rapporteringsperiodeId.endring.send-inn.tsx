@@ -204,6 +204,12 @@ export default function RapporteringsPeriodeSendInnSide() {
         <AktivitetOppsummering periode={periode} />
       </div>
 
+      {periode.registrertArbeidssoker ? (
+        <RegistertArbeidssokerAlert />
+      ) : (
+        <AvregistertArbeidssokerAlert />
+      )}
+
       {periode.begrunnelseEndring && (
         <div>
           <Heading size="small" className="my-4" level="3">
@@ -212,12 +218,6 @@ export default function RapporteringsPeriodeSendInnSide() {
 
           <p>{periode.begrunnelseEndring}</p>
         </div>
-      )}
-
-      {periode.registrertArbeidssoker ? (
-        <RegistertArbeidssokerAlert />
-      ) : (
-        <AvregistertArbeidssokerAlert />
       )}
 
       <Checkbox onChange={() => setConfirmed((prev) => !prev)}>
