@@ -494,6 +494,7 @@ export function htmlForOppsummering(props: IProps): string {
     seksjoner.push(
       getHeader({ text: getAppText("rapportering-endring-begrunnelse-tittel"), level: "3" }),
     );
+    seksjoner.push(getArbeidssokerAlert(periode, getAppText, getRichText));
     seksjoner.push(`<p>${periode.begrunnelseEndring}</p>`);
   } else {
     seksjoner.push(getArbeidssokerAlert(periode, getAppText, getRichText));
