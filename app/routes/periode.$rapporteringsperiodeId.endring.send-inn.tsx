@@ -15,6 +15,10 @@ import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import {
+  AvregistertArbeidssokerAlert,
+  RegistertArbeidssokerAlert,
+} from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
@@ -199,6 +203,12 @@ export default function RapporteringsPeriodeSendInnSide() {
         <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
         <AktivitetOppsummering periode={periode} />
       </div>
+
+      {periode.registrertArbeidssoker ? (
+        <RegistertArbeidssokerAlert />
+      ) : (
+        <AvregistertArbeidssokerAlert />
+      )}
 
       {periode.begrunnelseEndring && (
         <div>
