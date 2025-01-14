@@ -11,8 +11,9 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import invariant from "tiny-invariant";
+import { uuidv7 } from "uuidv7";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import {
@@ -124,7 +125,11 @@ export default function RapporteringsPeriodeSendInnSide() {
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
 
-  const { trackSkjemaSteg, trackSkjemaInnsendingFeilet } = useAnalytics();
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført, trackSkjemaInnsendingFeilet } =
+    useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "endring-oppsummering";
+  const steg = 3;
 
   const addHtml = useAddHtml({
     rapporteringsperioder,
@@ -148,14 +153,24 @@ export default function RapporteringsPeriodeSendInnSide() {
   }
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "endring-oppsummering",
-      steg: 3,
+      stegnavn,
+      steg,
+      sesjonId,
     });
 
     addHtml(event);
   };
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
 
   useEffect(() => {
     if (actionData?.error && !hasTrackedError) {

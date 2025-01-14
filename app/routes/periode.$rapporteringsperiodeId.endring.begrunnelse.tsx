@@ -2,7 +2,8 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Select } from "@navikt/ds-react";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher, useNavigate } from "@remix-run/react";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useMemo } from "react";
+import { uuidv7 } from "uuidv7";
 
 import { Error } from "~/components/error/Error";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
@@ -33,7 +34,10 @@ export default function BegrunnelseSide() {
   const isSubmitting = useIsSubmitting(fetcher);
 
   const navigate = useNavigate();
-  const { trackSkjemaSteg } = useAnalytics();
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "endring-begrunnelse";
+  const steg = 2;
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
@@ -59,15 +63,25 @@ export default function BegrunnelseSide() {
   ];
 
   const neste = () => {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "endring-begrunnelse",
-      steg: 2,
+      stegnavn,
+      steg,
       endring: true,
+      sesjonId,
     });
 
     navigate(`/periode/${periode.id}/endring/send-inn`);
   };
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
 
   return (
     <>

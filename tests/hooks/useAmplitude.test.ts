@@ -66,7 +66,7 @@ describe("useAnalytics", () => {
       const { result } = renderHook(() => useAnalytics());
       const periode = lagRapporteringsperiode({ id: "123456", rapporteringstype });
 
-      result.current.trackSkjemaSteg({
+      result.current.trackSkjemaStegFullført({
         periode,
         stegnavn: "Steg 1",
         steg: 1,

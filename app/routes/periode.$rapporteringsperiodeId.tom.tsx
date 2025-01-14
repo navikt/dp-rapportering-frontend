@@ -2,6 +2,8 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useNavigate } from "@remix-run/react";
+import { useEffect, useMemo } from "react";
+import { uuidv7 } from "uuidv7";
 
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
@@ -16,17 +18,31 @@ export default function TomRapporteringsPeriodeSide() {
   const { getAppText, getRichText } = useSanity();
 
   const navigate = useNavigate();
-  const { trackSkjemaSteg } = useAnalytics();
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "tom";
+  const steg = 3;
 
   const neste = () => {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "tom",
-      steg: 3,
+      stegnavn,
+      steg,
+      sesjonId,
     });
 
     navigate(`/periode/${periode.id}/arbeidssoker`);
   };
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
+
   return (
     <>
       <KanIkkeSendes periode={periode} />

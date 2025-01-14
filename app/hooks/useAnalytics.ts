@@ -13,6 +13,7 @@ interface ISkjemaSteg {
   stegnavn: string;
   steg: number;
   endring?: boolean;
+  sesjonId?: string;
 }
 
 interface INavigere {
@@ -79,15 +80,43 @@ export function useAnalytics() {
     [trackEvent],
   );
 
-  const trackSkjemaSteg = useCallback(
-    ({ periode: { id, rapporteringstype }, stegnavn, steg, endring = false }: ISkjemaSteg) =>
-      trackEvent("skjema steg fullført", {
+  const trackSkjemaStegStartet = useCallback(
+    ({
+      periode: { id, rapporteringstype },
+      stegnavn,
+      steg,
+      endring = false,
+      sesjonId,
+    }: ISkjemaSteg) => {
+      return trackEvent("skjema steg startet", {
         skjemaId: id,
         stegnavn,
         steg,
         rapporteringstype,
         endring,
-      }),
+        sesjonId,
+      });
+    },
+    [trackEvent],
+  );
+
+  const trackSkjemaStegFullført = useCallback(
+    ({
+      periode: { id, rapporteringstype },
+      stegnavn,
+      steg,
+      endring = false,
+      sesjonId,
+    }: ISkjemaSteg) => {
+      return trackEvent("skjema steg fullført", {
+        skjemaId: id,
+        stegnavn,
+        steg,
+        rapporteringstype,
+        endring,
+        sesjonId,
+      });
+    },
     [trackEvent],
   );
 
@@ -151,7 +180,8 @@ export function useAnalytics() {
     trackSkjemaStartet,
     trackSkjemaFullført,
     trackSkjemaInnsendingFeilet,
-    trackSkjemaSteg,
+    trackSkjemaStegStartet,
+    trackSkjemaStegFullført,
     trackAccordionApnet,
     trackAccordionLukket,
     trackAlertVist,

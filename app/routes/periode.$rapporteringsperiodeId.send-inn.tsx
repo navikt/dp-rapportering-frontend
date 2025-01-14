@@ -11,8 +11,9 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import invariant from "tiny-invariant";
+import { uuidv7 } from "uuidv7";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import {
@@ -95,10 +96,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function RapporteringsPeriodeSendInnSide() {
   const { locale } = useLocale();
   const [hasTrackedError, setHasTrackedError] = useState(false);
-  const { trackSkjemaSteg, trackSkjemaInnsendingFeilet } = useAnalytics();
 
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
+
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført, trackSkjemaInnsendingFeilet } =
+    useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "oppsummering";
+  const steg = 5;
 
   const submit = useSubmit();
   const navigate = useNavigate();
@@ -131,10 +137,11 @@ export default function RapporteringsPeriodeSendInnSide() {
   }
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "oppsummering",
-      steg: 5,
+      stegnavn,
+      steg,
+      sesjonId,
     });
 
     addHtml(event);
@@ -158,6 +165,15 @@ export default function RapporteringsPeriodeSendInnSide() {
       setHasTrackedError(false);
     }
   }, [actionData]);
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
 
   return (
     <>

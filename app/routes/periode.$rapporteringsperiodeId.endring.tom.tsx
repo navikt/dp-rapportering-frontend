@@ -15,6 +15,7 @@ export default function TomRapporteringsPeriodeSide() {
   const { getAppText, getRichText, getLink } = useSanity();
 
   const navigate = useNavigate();
+
   return (
     <>
       <KanIkkeSendes periode={periode} />

@@ -4,7 +4,8 @@ import { PortableText } from "@portabletext/react";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { addDays } from "date-fns";
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
+import { uuidv7 } from "uuidv7";
 
 import { Error } from "~/components/error/Error";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
@@ -49,12 +50,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function RapporteringstypeSide() {
   const navigate = useNavigate();
-  const { trackSkjemaSteg } = useAnalytics();
 
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText, getRichText } = useSanity();
+
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "rapporteringstype";
+  const steg = 1;
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
   const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
@@ -88,10 +93,11 @@ export default function RapporteringstypeSide() {
   const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
 
   const neste = () => {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "rapporteringstype",
-      steg: 1,
+      stegnavn,
+      steg,
+      sesjonId,
     });
 
     const nesteKnappLink =
@@ -100,6 +106,15 @@ export default function RapporteringstypeSide() {
         : `/periode/${periode.id}/fyll-ut`;
     navigate(nesteKnappLink);
   };
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
 
   return (
     <>

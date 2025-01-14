@@ -3,8 +3,9 @@ import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import invariant from "tiny-invariant";
+import { uuidv7 } from "uuidv7";
 
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -79,7 +80,11 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
 
-  const { trackSkjemaSteg } = useAnalytics();
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "endring-fyll-ut";
+  const steg = 1;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -114,11 +119,12 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const periodeneErLike = erPeriodeneLike(periode, originalPeriode);
 
   const neste = () => {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "endring-fyll-ut",
-      steg: 1,
+      stegnavn,
+      steg,
       endring: true,
+      sesjonId,
     });
 
     const nextLink = periodeneErLike
@@ -126,6 +132,15 @@ export default function RapporteringsPeriodeFyllUtSide() {
       : `/periode/${periode.id}/endring/begrunnelse`;
     navigate(nextLink);
   };
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
 
   return (
     <>
