@@ -44,7 +44,9 @@ export function useAnalytics() {
 
   const trackEvent = useCallback(
     <T extends object>(event: string, props: T = {} as T) => {
-      if (isLocalOrDemo) {
+      if (getEnv("SKAL_LOGGE") !== "true") return;
+
+      if (umami && isLocalOrDemo) {
         umami(event, {
           skjemanavn,
           språk,
@@ -52,11 +54,13 @@ export function useAnalytics() {
         });
       }
 
-      amplitude(event, {
-        skjemanavn,
-        språk,
-        ...props,
-      });
+      if (amplitude) {
+        amplitude(event, {
+          skjemanavn,
+          språk,
+          ...props,
+        });
+      }
     },
     [umami, amplitude, språk],
   );

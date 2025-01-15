@@ -6,6 +6,7 @@ dekorator:
   url: https://dekoratoren.dev.nav.no/
   env: dev
 faro_url: "https://telemetry.ekstern.dev.nav.no/collect"
-RUNTIME_ENVIRONMENT: "demo"
+runtime_environment: "demo"
 sanity_datasett: "production"
 umami_id: "24bd3b5d-f1e6-446c-a551-0bf556592157"
+skal_logge: "true"

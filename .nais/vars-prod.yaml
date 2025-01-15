@@ -13,3 +13,4 @@ umami_id: ""
 replicas:
   min: 2
   max: 2
+skal_logge: "true"

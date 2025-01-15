@@ -22,6 +22,7 @@ interface IEnv {
   RUNTIME_ENVIRONMENT: string;
   SANITY_DATASETT: string;
   UMAMI_ID: string;
+  SKAL_LOGGE: string;
 }
 
 export function getEnv(value: keyof IEnv) {

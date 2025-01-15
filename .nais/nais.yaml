@@ -53,6 +53,8 @@ spec:
       value: {{sanity_datasett}}
     - name: UMAMI_ID
       value: {{umami_id}}
+    - name: SKAL_LOGGE
+      value: skal_logge
   accessPolicy:
     outbound:
       external:

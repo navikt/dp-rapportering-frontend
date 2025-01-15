@@ -116,6 +116,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       SANITY_DATASETT: process.env.SANITY_DATASETT,
       GITHUB_SHA: process.env.GITHUB_SHA,
       UMAMI_ID: process.env.UMAMI_ID,
+      SKAL_LOGGE: process.env.SKAL_LOGGE,
     },
     fragments,
   };

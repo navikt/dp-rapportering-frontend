@@ -16,6 +16,16 @@ vi.mock("~/hooks/useLocale", () => ({
   useLocale: () => ({ locale: "no" }),
 }));
 
+const env: { [key: string]: string } = {
+  UMAMI_ID: "",
+  SKAL_LOGGE: "true",
+};
+
+vi.mock("~/utils/env.utils", () => ({
+  getEnv: (name: string) => env[name],
+  isLocalOrDemo: false,
+}));
+
 describe("useAnalytics", () => {
   const skjemanavn = "dagpenger-rapportering";
   const språk = "no";
