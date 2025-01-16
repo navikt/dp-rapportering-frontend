@@ -1,7 +1,7 @@
 import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler";
 import { createCookie } from "@remix-run/node";
 
-const cookieName = "dp-rapportering-frontend-decorator-language";
+const cookieName = "decorator-language";
 const languageCookie = createCookie(cookieName);
 
 export async function getLanguage(request: Request): Promise<DecoratorLocale> {
