@@ -20,7 +20,6 @@ import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { getSession } from "~/models/getSession.server";
-import { getInfoAlertStatus } from "~/models/info.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
@@ -32,9 +31,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
     const session = await getSession(request);
-    const showInfoAlert = (await getInfoAlertStatus(request)) as boolean;
 
-    return { rapporteringsperioder, session, showInfoAlert };
+    return { rapporteringsperioder, session };
   } catch (error: unknown) {
     if (error instanceof Response) {
       throw error;
@@ -46,12 +44,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Landingsside() {
   // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
-  const { rapporteringsperioder, showInfoAlert } = useLoaderData<typeof loader>();
+  const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const { getAppText, getLink, getRichText } = useSanity();
   const startFetcher = useFetcher<typeof StartAction>();
-  const showInfoAlertFetcher = useFetcher();
-  const [samtykker, setSamtykker] = useState(showInfoAlert);
+  const [samtykker, setSamtykker] = useState(false);
   const { trackSkjemaStartet, trackNavigere } = useAmplitude();
 
   const forstePeriode = rapporteringsperioder[0];
@@ -73,25 +70,6 @@ export default function Landingsside() {
 
   return (
     <>
-      {showInfoAlert ?? (
-        <Alert
-          closeButton
-          onClose={() => {
-            showInfoAlertFetcher.submit(
-              { infoAlertStatus: false },
-              { method: "post", action: "/api/infoalert" },
-            );
-          }}
-          variant="info"
-          className="my-4 alert-with-rich-text"
-        >
-          <Heading spacing size="small" level="2">
-            {getAppText("rapportering-informasjon-nytt-meldekort-tittel")}
-          </Heading>
-          <PortableText value={getRichText("rapportering-informasjon-nytt-meldekort")} />
-        </Alert>
-      )}
-
       {rapporteringsperioder.length === 0 && (
         <Alert variant="info" className="my-4 alert-with-rich-text">
           <PortableText value={getRichText("rapportering-ingen-meldekort")} />
