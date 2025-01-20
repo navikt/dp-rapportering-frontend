@@ -12,6 +12,25 @@ interface IProps {
   periodeId: string;
 }
 
+export const lesMerInnhold = [
+  {
+    value: AktivitetType.Arbeid,
+    content: "rapportering-les-mer-hva-skal-rapporteres-innhold-jobb",
+  },
+  {
+    value: AktivitetType.Syk,
+    content: "rapportering-les-mer-hva-skal-rapporteres-innhold-syk",
+  },
+  {
+    value: AktivitetType.Fravaer,
+    content: "rapportering-les-mer-hva-skal-rapporteres-innhold-ferie",
+  },
+  {
+    value: AktivitetType.Utdanning,
+    content: "rapportering-les-mer-hva-skal-rapporteres-innhold-utdanning",
+  },
+];
+
 export function LesMer({ periodeId }: IProps) {
   const { getRichText, getAppText } = useSanity();
   const { trackAccordionApnet, trackAccordionLukket } = useAmplitude();
@@ -33,25 +52,6 @@ export function LesMer({ periodeId }: IProps) {
     setSelectedValues(values);
   }
 
-  const lesMerInnhold = [
-    {
-      value: AktivitetType.Arbeid,
-      content: getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold-jobb"),
-    },
-    {
-      value: AktivitetType.Syk,
-      content: getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold-syk"),
-    },
-    {
-      value: AktivitetType.Fravaer,
-      content: getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold-ferie"),
-    },
-    {
-      value: AktivitetType.Utdanning,
-      content: getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold-utdanning"),
-    },
-  ];
-
   const filtrertInnhold = lesMerInnhold.filter(
     (element) => selectedValues.length === 0 || selectedValues.includes(element.value),
   );
@@ -70,7 +70,7 @@ export function LesMer({ periodeId }: IProps) {
           ))}
         </CheckboxGroup>
         {filtrertInnhold.map((element) => (
-          <PortableText key={element.value} value={element.content} />
+          <PortableText key={element.value} value={getRichText(element.content)} />
         ))}
       </ReadMore>
     </div>
