@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { useAmplitude } from "~/hooks/useAmplitude";
 import { useSanity } from "~/hooks/useSanity";
+import { AktivitetType, aktivitetTypeMap } from "~/utils/aktivitettype.utils";
 
 import styles from "../styles/lesMer.module.css";
 
@@ -63,10 +64,12 @@ export function LesMer({ periodeId }: IProps) {
     <div className={styles.container}>
       <ReadMore header={header} onOpenChange={trackOpenChange}>
         <CheckboxGroup legend="Hvilket tema vil du lese mer om?" onChange={handleCheckboxChange}>
-          <Checkbox value="jobb">Jobb</Checkbox>
-          <Checkbox value="syk">Syk</Checkbox>
-          <Checkbox value="ferie">Ferie, fravær eller utenlandsopphold</Checkbox>
-          <Checkbox value="utdanning">Tiltak, kurs eller utdanning</Checkbox>
+          <Checkbox value="jobb">{aktivitetTypeMap(AktivitetType.Arbeid, getAppText)}</Checkbox>
+          <Checkbox value="syk">{aktivitetTypeMap(AktivitetType.Syk, getAppText)}</Checkbox>
+          <Checkbox value="ferie">{aktivitetTypeMap(AktivitetType.Fravaer, getAppText)}</Checkbox>
+          <Checkbox value="utdanning">
+            {aktivitetTypeMap(AktivitetType.Utdanning, getAppText)}
+          </Checkbox>
         </CheckboxGroup>
         {filtrertInnhold.map((element) => (
           <PortableText key={element.value} value={element.content} />
