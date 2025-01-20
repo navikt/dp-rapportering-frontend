@@ -35,41 +35,37 @@ export function LesMer({ periodeId }: IProps) {
 
   const lesMerInnhold = [
     {
-      value: "jobb",
+      value: AktivitetType.Arbeid,
       content: getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold-jobb"),
     },
     {
-      value: "syk",
+      value: AktivitetType.Syk,
       content: getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold-syk"),
     },
     {
-      value: "ferie",
+      value: AktivitetType.Fravaer,
       content: getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold-ferie"),
     },
     {
-      value: "utdanning",
+      value: AktivitetType.Utdanning,
       content: getRichText("rapportering-les-mer-hva-skal-rapporteres-innhold-utdanning"),
     },
   ];
 
-  let filtrertInnhold;
-
-  if (selectedValues.length === 0) {
-    filtrertInnhold = lesMerInnhold;
-  } else {
-    filtrertInnhold = lesMerInnhold.filter((element) => selectedValues.includes(element.value));
-  }
+  const filtrertInnhold =
+    selectedValues.length === 0
+      ? lesMerInnhold
+      : lesMerInnhold.filter((element) => selectedValues.includes(element.value));
 
   return (
     <div className={styles.container}>
       <ReadMore header={header} onOpenChange={trackOpenChange}>
         <CheckboxGroup legend="Hvilket tema vil du lese mer om?" onChange={handleCheckboxChange}>
-          <Checkbox value="jobb">{aktivitetTypeMap(AktivitetType.Arbeid, getAppText)}</Checkbox>
-          <Checkbox value="syk">{aktivitetTypeMap(AktivitetType.Syk, getAppText)}</Checkbox>
-          <Checkbox value="ferie">{aktivitetTypeMap(AktivitetType.Fravaer, getAppText)}</Checkbox>
-          <Checkbox value="utdanning">
-            {aktivitetTypeMap(AktivitetType.Utdanning, getAppText)}
-          </Checkbox>
+          {Object.values(AktivitetType).map((type) => (
+            <Checkbox key={type} value={type}>
+              {aktivitetTypeMap(type, getAppText)}
+            </Checkbox>
+          ))}
         </CheckboxGroup>
         {filtrertInnhold.map((element) => (
           <PortableText key={element.value} value={element.content} />
