@@ -52,18 +52,20 @@ export function LesMer({ periodeId }: IProps) {
     },
   ];
 
-  const filtrertInnhold =
-    selectedValues.length === 0
-      ? lesMerInnhold
-      : lesMerInnhold.filter((element) => selectedValues.includes(element.value));
+  const filtrertInnhold = lesMerInnhold.filter(
+    (element) => selectedValues.length === 0 || selectedValues.includes(element.value),
+  );
 
   return (
     <div className={styles.container}>
       <ReadMore header={header} onOpenChange={trackOpenChange}>
-        <CheckboxGroup legend="Hvilket tema vil du lese mer om?" onChange={handleCheckboxChange}>
-          {Object.values(AktivitetType).map((type) => (
-            <Checkbox key={type} value={type}>
-              {aktivitetTypeMap(type, getAppText)}
+        <CheckboxGroup
+          legend={getAppText("rapportering-les-mer-hva-skal-rapporteres-legend")}
+          onChange={handleCheckboxChange}
+        >
+          {lesMerInnhold.map((element) => (
+            <Checkbox key={element.value} value={element.value}>
+              {aktivitetTypeMap(element.value, getAppText)}
             </Checkbox>
           ))}
         </CheckboxGroup>
