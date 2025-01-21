@@ -198,7 +198,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { getAppText } = useSanity();
-  const { trackSprakEndret } = useAnalytics();
+  const { trackSprakEndret, trackForetrukketSprak } = useAnalytics();
 
   initInstrumentation();
 
@@ -206,6 +206,7 @@ export default function App() {
 
   if (typeof document !== "undefined") {
     setAvailableLanguages(availableLanguages);
+    trackForetrukketSprak(navigator.language);
 
     document.querySelectorAll("a").forEach((a) => {
       if (!a.getAttribute("data-umami-event")) {

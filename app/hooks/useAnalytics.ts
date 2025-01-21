@@ -166,6 +166,13 @@ export function useAnalytics() {
     [trackEvent],
   );
 
+  const trackForetrukketSprak = useCallback(
+    (språk: string) => {
+      trackEvent("foretrukket språk", { språk });
+    },
+    [trackEvent],
+  );
+
   const trackNavigere = useCallback(
     ({ lenketekst, destinasjon, linkId }: INavigere) => {
       trackEvent("navigere", { lenketekst, destinasjon, linkId });
@@ -192,6 +199,7 @@ export function useAnalytics() {
     trackModalApnet,
     trackModalLukket,
     trackSprakEndret,
+    trackForetrukketSprak,
     trackNavigere,
     trackFeilmelding,
   };

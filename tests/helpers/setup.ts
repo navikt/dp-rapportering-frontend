@@ -43,6 +43,7 @@ vi.mock("~/hooks/useAnalytics", () => ({
     trackModalApnet: vi.fn(),
     trackModalLukket: vi.fn(),
     trackSprakEndret: vi.fn(),
+    trackForetrukketSprak: vi.fn(),
     trackNavigere: vi.fn(),
     trackFeilmelding: vi.fn(),
   }),
