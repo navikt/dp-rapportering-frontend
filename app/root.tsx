@@ -154,7 +154,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {parse(fragments.DECORATOR_HEAD_ASSETS, { trim: true })}
         <Meta />
         <Links />
-        {env.UMAMI_ID && env.SKAL_LOGGE && (
+        {env.UMAMI_ID && env.SKAL_LOGGE === "true" && (
           <script
             defer
             src="https://cdn.nav.no/team-researchops/sporing/sporing-uten-uuid.js"

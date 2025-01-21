@@ -45,7 +45,10 @@ const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
   const umami =
-    typeof window !== "undefined" && getEnv("SKAL_LOGGE") && getEnv("UMAMI_ID") && window.umami
+    typeof window !== "undefined" &&
+    getEnv("SKAL_LOGGE") === "true" &&
+    getEnv("UMAMI_ID") &&
+    window.umami
       ? window.umami.track
       : undefined;
   const amplitude = getAmplitudeInstance("dekoratoren");
@@ -54,7 +57,7 @@ export function useAnalytics() {
 
   const trackEvent = useCallback(
     <T extends object>(event: string, props: T = {} as T) => {
-      if (!getEnv("SKAL_LOGGE")) return;
+      if (getEnv("SKAL_LOGGE") !== "true") return;
 
       if (umami && isLocalOrDemo) {
         umami(event, {
