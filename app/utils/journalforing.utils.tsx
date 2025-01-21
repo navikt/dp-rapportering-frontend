@@ -4,6 +4,7 @@ import { addDays, format } from "date-fns";
 import { renderToString } from "react-dom/server";
 
 import { hentAktivitetBeskrivelse } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
+import { lesMerInnhold } from "~/components/LesMer";
 import { type GetAppText, type GetRichText } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
@@ -105,14 +106,38 @@ export function getHeader({
 }
 
 export function getLesMer(props: IProps & { tittel: string; innhold: string }): string {
-  const { getAppText, getRichText, tittel, innhold } = props;
+  const { getAppText, tittel, innhold } = props;
   return [
     "// Les mer",
     "<div style='border: 1px solid black; padding: 10px;'>",
     getHeader({ text: getAppText(tittel), level: "2" }),
-    renderToString(<PortableText value={getRichText(innhold)} />),
+    innhold,
     "</div>",
   ].join("");
+}
+
+export function getLesMerFyllUt(props: IProps): string {
+  const { getAppText, getRichText } = props;
+
+  const legend = getAppText("rapportering-les-mer-hva-skal-rapporteres-legend");
+  const options = lesMerInnhold
+    .map(
+      ({ value }) =>
+        `<input type="checkbox" name="${value}" /><label>${aktivitetTypeMap(value, getAppText)}</label>`,
+    )
+    .join("</div><div>");
+
+  const checkboxes = `<fieldset><legend>${getHeader({ text: legend, level: "3" })}</legend><form><div>${options}</div></form></fieldset>`;
+
+  const innhold = lesMerInnhold
+    .map(({ content }) => renderToString(<PortableText value={getRichText(content)} />))
+    .join("");
+
+  return getLesMer({
+    ...props,
+    tittel: "rapportering-les-mer-hva-skal-rapporteres-tittel",
+    innhold: [checkboxes, innhold].join(""),
+  });
 }
 
 export function getAktivitetCheckbox(props: IProps & { aktivitet: AktivitetType }): string {
@@ -123,7 +148,9 @@ export function getAktivitetCheckbox(props: IProps & { aktivitet: AktivitetType 
     const lesMer = getLesMer({
       ...props,
       tittel: "rapportering-aktivitet-jobb-prosentstilling-tittel",
-      innhold: "rapportering-aktivitet-jobb-prosentstilling-innhold",
+      innhold: renderToString(
+        <PortableText value={getRichText("rapportering-aktivitet-jobb-prosentstilling-innhold")} />,
+      ),
     });
     arbeid = `${getHeader({ text: getAppText("rapportering-antall-timer"), level: "5" })}<p>${renderToString(<PortableText value={getRichText("rapportering-input-tall-beskrivelse")} />)}</p>${lesMer}`;
   }
@@ -346,13 +373,7 @@ export function htmlForRapporteringstype(props: IProps): string {
       />,
     ),
   );
-  seksjoner.push(
-    getLesMer({
-      ...props,
-      tittel: "rapportering-les-mer-hva-skal-rapporteres-tittel",
-      innhold: "rapportering-les-mer-hva-skal-rapporteres-innhold",
-    }),
-  );
+  seksjoner.push(getLesMerFyllUt(props));
 
   const legend =
     rapporteringsperioder.length === 1
@@ -406,6 +427,10 @@ export function htmlForFyllUt(props: IProps): string {
     getKalender(props),
     getOppsummering({ getAppText, periode }),
   ];
+
+  if (periode.originalId) {
+    seksjoner.splice(2, 0, getLesMerFyllUt(props));
+  }
 
   return seksjoner.join("");
 }
