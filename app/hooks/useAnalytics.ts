@@ -37,7 +37,13 @@ interface IFeilmelding {
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
-  const umami = typeof window !== "undefined" && getEnv("UMAMI_ID") ? window.umami.track : () => {};
+  const umami =
+    typeof window !== "undefined" &&
+    getEnv("SKAL_LOGGE") === "true" &&
+    getEnv("UMAMI_ID") &&
+    window.umami
+      ? window.umami.track
+      : undefined;
   const amplitude = getAmplitudeInstance("dekoratoren");
 
   const { locale: språk } = useLocale();
