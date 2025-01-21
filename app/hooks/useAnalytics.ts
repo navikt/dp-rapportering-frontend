@@ -28,6 +28,13 @@ interface IAccordion {
   tekstId: string;
 }
 
+interface ILesMerFilter {
+  arbeid: boolean;
+  syk: boolean;
+  fravaer: boolean;
+  utdanning: boolean;
+}
+
 interface IFeilmelding {
   tekst: string;
   titleId: string;
@@ -144,6 +151,13 @@ export function useAnalytics() {
     [trackEvent],
   );
 
+  const trackLesMerFilter = useCallback(
+    ({ arbeid, syk, fravaer, utdanning }: ILesMerFilter) => {
+      trackEvent("les mer filter", { arbeid, syk, fravaer, utdanning });
+    },
+    [trackEvent],
+  );
+
   const trackAlertVist = useCallback(
     (skjemaId: string) => {
       trackEvent("alert vist", { skjemaId });
@@ -201,6 +215,7 @@ export function useAnalytics() {
     trackSkjemaStegFullført,
     trackAccordionApnet,
     trackAccordionLukket,
+    trackLesMerFilter,
     trackAlertVist,
     trackModalApnet,
     trackModalLukket,

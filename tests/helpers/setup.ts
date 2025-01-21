@@ -39,6 +39,7 @@ vi.mock("~/hooks/useAnalytics", () => ({
     trackSkjemaStegFullført: vi.fn(),
     trackAccordionApnet: vi.fn(),
     trackAccordionLukket: vi.fn(),
+    trackLesMerFilter: vi.fn(),
     trackAlertVist: vi.fn(),
     trackModalApnet: vi.fn(),
     trackModalLukket: vi.fn(),

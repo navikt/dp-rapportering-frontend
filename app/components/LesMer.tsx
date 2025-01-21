@@ -33,7 +33,7 @@ export const lesMerInnhold = [
 
 export function LesMer({ periodeId }: IProps) {
   const { getRichText, getAppText } = useSanity();
-  const { trackAccordionApnet, trackAccordionLukket } = useAnalytics();
+  const { trackAccordionApnet, trackAccordionLukket, trackLesMerFilter } = useAnalytics();
 
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
@@ -49,6 +49,12 @@ export function LesMer({ periodeId }: IProps) {
   }
 
   function handleCheckboxChange(values: string[]) {
+    trackLesMerFilter({
+      arbeid: values.includes(AktivitetType.Arbeid),
+      syk: values.includes(AktivitetType.Syk),
+      fravaer: values.includes(AktivitetType.Fravaer),
+      utdanning: values.includes(AktivitetType.Utdanning),
+    });
     setSelectedValues(values);
   }
 
