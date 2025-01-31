@@ -19,7 +19,7 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
-import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
@@ -32,10 +32,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
-    case "slette": {
-      return slettAlleAktiviteter(request, periodeId, formdata);
-    }
-
     case "lagre": {
       return validerOgLagreAktivitet(request, periodeId, formdata);
     }

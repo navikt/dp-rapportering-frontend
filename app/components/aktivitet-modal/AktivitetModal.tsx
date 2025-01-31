@@ -45,7 +45,8 @@ export function AktivitetModal({
   const isSubmitting = useIsSubmitting(navigation);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const slettHandler = () => {
+  function slettHandler() {
+    // TODO: Logg aktiviteter slettes
     fetcher.submit(
       {
         rapporteringsperiodeId: periode.id,
@@ -55,7 +56,17 @@ export function AktivitetModal({
     );
 
     lukkModal();
-  };
+  }
+
+  function onSubmit() {
+    // TODO: Logg aktiviteter lagres
+    //
+  }
+
+  function onClose() {
+    // TODO: Logg modal lukkes
+    lukkModal();
+  }
 
   useEffect(() => {
     if (modalAapen) {
@@ -68,7 +79,7 @@ export function AktivitetModal({
       className={styles.modal}
       aria-labelledby="aktivitet-modal-heading"
       open={modalAapen}
-      onClose={lukkModal}
+      onClose={onClose}
     >
       <Modal.Header>
         <Heading
@@ -83,7 +94,12 @@ export function AktivitetModal({
       </Modal.Header>
       <Modal.Body ref={modalRef}>
         {dag && (
-          <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator()}>
+          <ValidatedForm
+            method="post"
+            key="lagre-ny-aktivitet"
+            validator={validator()}
+            onSubmit={onSubmit}
+          >
             <input type="hidden" name="dato" defaultValue={valgtDato} />
             <input type="hidden" name="dag" defaultValue={JSON.stringify(dag)} />
 
@@ -108,7 +124,7 @@ export function AktivitetModal({
             )}
 
             <div className={styles.knappKontainer}>
-              <Button variant="secondary" type="button" name="submit" onClick={slettHandler}>
+              <Button variant="secondary" type="button" onClick={slettHandler}>
                 {getAppText("rapportering-slett")}
               </Button>
               <Button type="submit" name="submit" value="lagre" disabled={isSubmitting}>
