@@ -1,8 +1,10 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { useActionData, useFetcher, useNavigation } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
+import { uuidv7 } from "uuidv7";
 
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -37,6 +39,8 @@ export function AktivitetModal({
 
   const { getAppText } = useSanity();
   const actionData = useActionData<typeof rapporteringAction>();
+  const [sesjonId, setSesjonId] = useState<string>("");
+  const modalId = "aktivitet-modal";
 
   const dag = periode.dager.find((dag) => dag.dato === valgtDato);
 
@@ -44,6 +48,7 @@ export function AktivitetModal({
   const navigation = useNavigation();
   const isSubmitting = useIsSubmitting(navigation);
   const modalRef = useRef<HTMLDivElement>(null);
+  const { trackModalApnet, trackModalLukket } = useAnalytics();
 
   function slettHandler() {
     // TODO: Logg aktiviteter slettes
@@ -58,19 +63,17 @@ export function AktivitetModal({
     lukkModal();
   }
 
-  function onSubmit() {
-    // TODO: Logg aktiviteter lagres
-    //
-  }
-
   function onClose() {
-    // TODO: Logg modal lukkes
+    trackModalLukket({ skjemaId: periode.id, modalId, sesjonId });
     lukkModal();
   }
 
   useEffect(() => {
     if (modalAapen) {
       modalRef?.current?.scrollTo({ top: 0 });
+      const id = uuidv7();
+      setSesjonId(id);
+      trackModalApnet({ skjemaId: periode.id, modalId, sesjonId: id });
     }
   }, [modalAapen]);
 
@@ -94,12 +97,7 @@ export function AktivitetModal({
       </Modal.Header>
       <Modal.Body ref={modalRef}>
         {dag && (
-          <ValidatedForm
-            method="post"
-            key="lagre-ny-aktivitet"
-            validator={validator()}
-            onSubmit={onSubmit}
-          >
+          <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator()}>
             <input type="hidden" name="dato" defaultValue={valgtDato} />
             <input type="hidden" name="dag" defaultValue={JSON.stringify(dag)} />
 

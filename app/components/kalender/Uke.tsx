@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import { format } from "date-fns";
 
-import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
@@ -19,9 +18,8 @@ interface IProps {
 }
 
 export function Uke(props: IProps) {
-  const { rapporteringUke, readonly, aapneModal, locale = DecoratorLocale.NB, periodeId } = props;
+  const { rapporteringUke, readonly, aapneModal, locale = DecoratorLocale.NB } = props;
   const { getAppText } = useSanity();
-  const { trackModalApnet } = useAnalytics();
 
   function erAktivStil(dag: IRapporteringsperiodeDag, typer: AktivitetType[]): boolean {
     const dagenHarAktivitet = dag.aktiviteter.length > 0;
@@ -78,7 +76,6 @@ export function Uke(props: IProps) {
                 className={classNames(styles.dato, dagKnappStyle)}
                 aria-label={hentSkjermleserDatoTekst(dag, getAppText, locale)}
                 onClick={() => {
-                  trackModalApnet(periodeId);
                   aapneModal(dag.dato);
                 }}
               >

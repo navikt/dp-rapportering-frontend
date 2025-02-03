@@ -45,6 +45,12 @@ interface IFeilmelding {
   descriptionId: string;
 }
 
+interface IModal {
+  skjemaId: string;
+  modalId: string;
+  sesjonId: string;
+}
+
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
@@ -172,15 +178,15 @@ export function useAnalytics() {
   );
 
   const trackModalApnet = useCallback(
-    (skjemaId: string) => {
-      trackEvent("modal åpnet", { skjemaId });
+    ({ skjemaId, modalId, sesjonId }: IModal) => {
+      trackEvent("modal åpnet", { skjemaId, modalId, sesjonId });
     },
     [trackEvent],
   );
 
   const trackModalLukket = useCallback(
-    (skjemaId: string) => {
-      trackEvent("modal lukket", { skjemaId });
+    ({ skjemaId, modalId, sesjonId }: IModal) => {
+      trackEvent("modal lukket", { skjemaId, modalId, sesjonId });
     },
     [trackEvent],
   );
