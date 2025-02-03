@@ -14,11 +14,13 @@ import {
 } from "@remix-run/react";
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
+import { useEffect, useRef } from "react";
 import { uuidv7 } from "uuidv7";
 
 import indexStyle from "~/index.css?url";
 
 import { hasSession } from "../mocks/session";
+import { Umami } from "./components/analytics/Umami";
 import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBoundary";
 import { ServiceMessage } from "./components/service-message/ServiceMessage";
 import { getDecoratorHTML } from "./dekorator/dekorator.server";
@@ -116,7 +118,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
       SANITY_DATASETT: process.env.SANITY_DATASETT,
       GITHUB_SHA: process.env.GITHUB_SHA,
       UMAMI_ID: process.env.UMAMI_ID,
-      SKAL_LOGGE: process.env.SKAL_LOGGE,
     },
     fragments,
   };
@@ -154,14 +155,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {parse(fragments.DECORATOR_HEAD_ASSETS, { trim: true })}
         <Meta />
         <Links />
-        {env.UMAMI_ID && env.SKAL_LOGGE === "true" && (
-          <script
-            defer
-            src="https://cdn.nav.no/team-researchops/sporing/sporing-uten-uuid.js"
-            data-host-url="https://umami.nav.no"
-            data-website-id={env.UMAMI_ID}
-          ></script>
-        )}
+        <Umami />
       </head>
       <body>
         <script
@@ -199,35 +193,42 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   const { getAppText } = useSanity();
   const { trackSprakEndret, trackForetrukketSprak } = useAnalytics();
+  const mainContent = useRef<HTMLDivElement>(null);
 
   initInstrumentation();
 
   const fetcher = useFetcher();
 
-  if (typeof document !== "undefined") {
+  useEffect(() => {
     setAvailableLanguages(availableLanguages);
     trackForetrukketSprak(navigator.language);
 
-    document.querySelectorAll("a").forEach((a) => {
-      if (!a.getAttribute("data-umami-event")) {
-        const dataUmamiEvent = a.pathname.includes(getEnv("BASE_PATH"))
-          ? "intern-lenke"
-          : "ekstern-lenke";
+    if (typeof document !== "undefined") {
+      onLanguageSelect((language) => {
+        trackSprakEndret(language.locale as DecoratorLocale);
+        document.documentElement.setAttribute("lang", language.locale);
+        fetcher.submit({ locale: language.locale }, { method: "post" });
+      });
+    }
+  }, []);
 
-        a.setAttribute("data-umami-event", dataUmamiEvent);
-        a.setAttribute("data-umami-event-url", a.href);
-      }
-    });
+  useEffect(() => {
+    if (typeof document !== "undefined" && mainContent.current) {
+      mainContent.current.querySelectorAll("a").forEach((a) => {
+        if (!a.getAttribute("data-umami-event")) {
+          const dataUmamiEvent = a.pathname.includes(getEnv("BASE_PATH"))
+            ? "intern-lenke"
+            : "ekstern-lenke";
 
-    onLanguageSelect((language) => {
-      trackSprakEndret(language.locale as DecoratorLocale);
-      document.documentElement.setAttribute("lang", language.locale);
-      fetcher.submit({ locale: language.locale }, { method: "post" });
-    });
-  }
+          a.setAttribute("data-umami-event", dataUmamiEvent);
+          a.setAttribute("data-umami-event-url", a.href);
+        }
+      });
+    }
+  }, [mainContent]);
 
   return (
-    <main id="maincontent" role="main" tabIndex={-1}>
+    <main ref={mainContent} id="maincontent" role="main" tabIndex={-1}>
       <div className={styles.rapporteringHeader}>
         <div className={styles.rapporteringHeaderInnhold}>
           <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">

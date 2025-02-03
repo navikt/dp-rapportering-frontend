@@ -1,9 +1,13 @@
-import { getAmplitudeInstance } from "@navikt/nav-dekoratoren-moduler";
+import {
+  awaitDecoratorData,
+  getAmplitudeInstance,
+  getCurrentConsent,
+} from "@navikt/nav-dekoratoren-moduler";
 import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
-import { getEnv, isLocalOrDemo } from "~/utils/env.utils";
+import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
 
 import { useLocale } from "./useLocale";
@@ -45,10 +49,7 @@ const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
   const umami =
-    typeof window !== "undefined" &&
-    getEnv("SKAL_LOGGE") === "true" &&
-    getEnv("UMAMI_ID") &&
-    window.umami
+    typeof window !== "undefined" && getEnv("UMAMI_ID") && window.umami
       ? window.umami.track
       : undefined;
   const amplitude = getAmplitudeInstance("dekoratoren");
@@ -56,10 +57,15 @@ export function useAnalytics() {
   const { locale: språk } = useLocale();
 
   const trackEvent = useCallback(
-    <T extends object>(event: string, props: T = {} as T) => {
-      if (getEnv("SKAL_LOGGE") !== "true") return;
+    async <T extends object>(event: string, props: T = {} as T) => {
+      if (typeof window === "undefined") return;
 
-      if (umami && isLocalOrDemo) {
+      await awaitDecoratorData();
+      const { consent } = getCurrentConsent();
+
+      if (!consent.analytics) return;
+
+      if (umami) {
         umami(event, {
           skjemanavn,
           språk,
