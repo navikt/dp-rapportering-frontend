@@ -23,6 +23,14 @@ vi.mock("~/hooks/useLocale", () => ({
   useLocale: () => ({ locale: "no" }),
 }));
 
+vi.mock("~/utils/analytics", () => ({
+  hentData: async (props: object, språk: string, skjemanavn: string) => ({
+    språk,
+    skjemanavn,
+    ...props,
+  }),
+}));
+
 const env: { [key: string]: string } = {
   UMAMI_ID: "",
 };
@@ -52,6 +60,7 @@ describe("useAnalytics", () => {
       result.current.trackSkjemaStartet(skjemaId, false);
 
       await Promise.resolve();
+      await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema startet", {
         skjemanavn,
@@ -68,6 +77,7 @@ describe("useAnalytics", () => {
       const { result } = renderHook(() => useAnalytics());
       result.current.trackSkjemaFullført(skjemaId, rapporteringstype, false);
 
+      await Promise.resolve();
       await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema fullført", {
@@ -94,6 +104,7 @@ describe("useAnalytics", () => {
       });
 
       await Promise.resolve();
+      await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema steg fullført", {
         skjemanavn,
@@ -115,6 +126,7 @@ describe("useAnalytics", () => {
       result.current.trackSkjemaStartet(skjemaId, true);
 
       await Promise.resolve();
+      await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema startet", {
         skjemanavn,
@@ -131,6 +143,7 @@ describe("useAnalytics", () => {
       const { result } = renderHook(() => useAnalytics());
       result.current.trackSkjemaInnsendingFeilet(skjemaId, rapporteringstype, true);
 
+      await Promise.resolve();
       await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema innsending feilet", {

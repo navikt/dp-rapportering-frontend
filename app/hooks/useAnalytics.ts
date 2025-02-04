@@ -6,6 +6,7 @@ import {
 import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { hentData } from "~/utils/analytics";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
@@ -76,20 +77,14 @@ export function useAnalytics() {
 
       if (!consent.analytics) return;
 
+      const data = await hentData(props, språk, skjemanavn);
+
       if (umami) {
-        umami(event, {
-          skjemanavn,
-          språk,
-          ...props,
-        });
+        umami(event, data);
       }
 
       if (amplitude) {
-        amplitude(event, {
-          skjemanavn,
-          språk,
-          ...props,
-        });
+        amplitude(event, data);
       }
     },
     [umami, amplitude, språk],
