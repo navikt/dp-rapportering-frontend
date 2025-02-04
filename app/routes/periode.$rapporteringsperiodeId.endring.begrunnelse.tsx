@@ -2,7 +2,8 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Select } from "@navikt/ds-react";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher, useNavigate } from "@remix-run/react";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useMemo } from "react";
+import { uuidv7 } from "uuidv7";
 
 import { Error } from "~/components/error/Error";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
@@ -10,7 +11,7 @@ import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreBegrunnelse } from "~/models/begrunnelse.server";
@@ -33,7 +34,10 @@ export default function BegrunnelseSide() {
   const isSubmitting = useIsSubmitting(fetcher);
 
   const navigate = useNavigate();
-  const { trackSkjemaSteg } = useAmplitude();
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "endring-begrunnelse";
+  const steg = 2;
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
@@ -59,15 +63,25 @@ export default function BegrunnelseSide() {
   ];
 
   const neste = () => {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "endring-begrunnelse",
-      steg: 2,
+      stegnavn,
+      steg,
       endring: true,
+      sesjonId,
     });
 
     navigate(`/periode/${periode.id}/endring/send-inn`);
   };
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
 
   return (
     <>

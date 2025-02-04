@@ -30,18 +30,21 @@ vi.mock("~/hooks/useLocale", () => ({
   locale: DecoratorLocale.NB,
 }));
 
-vi.mock("~/hooks/useAmplitude", () => ({
-  useAmplitude: () => ({
+vi.mock("~/hooks/useAnalytics", () => ({
+  useAnalytics: () => ({
     trackSkjemaStartet: vi.fn(),
     trackSkjemaFullført: vi.fn(),
     trackSkjemaInnsendingFeilet: vi.fn(),
-    trackSkjemaSteg: vi.fn(),
+    trackSkjemaStegStartet: vi.fn(),
+    trackSkjemaStegFullført: vi.fn(),
     trackAccordionApnet: vi.fn(),
     trackAccordionLukket: vi.fn(),
+    trackLesMerFilter: vi.fn(),
     trackAlertVist: vi.fn(),
     trackModalApnet: vi.fn(),
     trackModalLukket: vi.fn(),
     trackSprakEndret: vi.fn(),
+    trackForetrukketSprak: vi.fn(),
     trackNavigere: vi.fn(),
     trackFeilmelding: vi.fn(),
   }),

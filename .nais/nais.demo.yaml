@@ -51,9 +51,11 @@ spec:
     - name: FARO_URL
       value: {{faro_url}}
     - name: RUNTIME_ENVIRONMENT
-      value: {{RUNTIME_ENVIRONMENT}}
+      value: {{runtime_environment}}
     - name: SANITY_DATASETT
       value: {{sanity_datasett}}
+    - name: UMAMI_ID
+      value: {{umami_id}}
   accessPolicy:
     outbound:
       external:

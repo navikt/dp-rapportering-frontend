@@ -2,7 +2,9 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Radio, RadioGroup } from "@navikt/ds-react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher, useNavigate } from "@remix-run/react";
+import { useEffect, useMemo } from "react";
 import invariant from "tiny-invariant";
+import { uuidv7 } from "uuidv7";
 
 import {
   AvregistertArbeidssokerAlert,
@@ -13,7 +15,7 @@ import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
@@ -44,17 +46,30 @@ export default function ArbeidssøkerRegisterSide() {
   const fetcher = useFetcher<INetworkResponse>();
   const isSubmitting = useIsSubmitting(fetcher);
 
-  const { trackSkjemaSteg } = useAmplitude();
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "arbeidssoker";
+  const steg = 4;
 
   function neste() {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "arbeidssoker",
-      steg: 4,
+      stegnavn,
+      steg,
+      sesjonId,
     });
 
     navigate(`/periode/${periode.id}/send-inn`);
   }
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
 
   function handleChange(registrertArbeidssokerSvar: boolean) {
     if (kanSendes(periode)) {

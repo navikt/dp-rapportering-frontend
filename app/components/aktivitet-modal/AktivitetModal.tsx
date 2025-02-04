@@ -1,8 +1,10 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { useActionData, useFetcher, useNavigation } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
+import { uuidv7 } from "uuidv7";
 
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -37,6 +39,8 @@ export function AktivitetModal({
 
   const { getAppText } = useSanity();
   const actionData = useActionData<typeof rapporteringAction>();
+  const [sesjonId, setSesjonId] = useState<string>("");
+  const modalId = "aktivitet-modal";
 
   const dag = periode.dager.find((dag) => dag.dato === valgtDato);
 
@@ -44,8 +48,33 @@ export function AktivitetModal({
   const navigation = useNavigation();
   const isSubmitting = useIsSubmitting(navigation);
   const modalRef = useRef<HTMLDivElement>(null);
+  const { trackModalApnet, trackModalLukket } = useAnalytics();
+  const [harLoggetLukket, setHarLoggetLukket] = useState<boolean>(false);
 
-  const slettHandler = () => {
+  function loggModalLukket(knapp: string, antallAktiviteter: number) {
+    if (harLoggetLukket) return;
+
+    /**
+     * onClose kalles ved alle handlinger som lukker modalen, men er også den
+     * eneste metoden vi har for å lytte på avbryt-knappen. onClose er den siste
+     * metoden som blir kalt, så her sørger vi for at bare én logg blir sendt per
+     * 100ms
+     */
+    setHarLoggetLukket(true);
+    setTimeout(() => {
+      setHarLoggetLukket(false);
+    }, 100);
+
+    trackModalLukket({
+      skjemaId: periode.id,
+      modalId,
+      sesjonId,
+      knapp,
+      antallAktiviteter,
+    });
+  }
+
+  function slettHandler() {
     fetcher.submit(
       {
         rapporteringsperiodeId: periode.id,
@@ -54,12 +83,25 @@ export function AktivitetModal({
       { method: "post", action: "/api/slett" },
     );
 
+    loggModalLukket("slett", 0);
     lukkModal();
-  };
+  }
+
+  function onClose() {
+    loggModalLukket("lukk", 0);
+    lukkModal();
+  }
+
+  function onSubmit(data: { type: string[]; timer?: number }) {
+    loggModalLukket("lagre", data.type?.length ?? 0);
+  }
 
   useEffect(() => {
     if (modalAapen) {
       modalRef?.current?.scrollTo({ top: 0 });
+      const id = uuidv7();
+      setSesjonId(id);
+      trackModalApnet({ skjemaId: periode.id, modalId, sesjonId: id });
     }
   }, [modalAapen]);
 
@@ -68,7 +110,7 @@ export function AktivitetModal({
       className={styles.modal}
       aria-labelledby="aktivitet-modal-heading"
       open={modalAapen}
-      onClose={lukkModal}
+      onClose={onClose}
     >
       <Modal.Header>
         <Heading
@@ -83,7 +125,12 @@ export function AktivitetModal({
       </Modal.Header>
       <Modal.Body ref={modalRef}>
         {dag && (
-          <ValidatedForm method="post" key="lagre-ny-aktivitet" validator={validator()}>
+          <ValidatedForm
+            method="post"
+            key="lagre-ny-aktivitet"
+            validator={validator()}
+            onSubmit={onSubmit}
+          >
             <input type="hidden" name="dato" defaultValue={valgtDato} />
             <input type="hidden" name="dag" defaultValue={JSON.stringify(dag)} />
 
@@ -108,7 +155,7 @@ export function AktivitetModal({
             )}
 
             <div className={styles.knappKontainer}>
-              <Button variant="secondary" type="button" name="submit" onClick={slettHandler}>
+              <Button variant="secondary" type="button" onClick={slettHandler}>
                 {getAppText("rapportering-slett")}
               </Button>
               <Button type="submit" name="submit" value="lagre" disabled={isSubmitting}>

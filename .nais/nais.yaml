@@ -51,6 +51,8 @@ spec:
       value: {{faro_url}}
     - name: SANITY_DATASETT
       value: {{sanity_datasett}}
+    - name: UMAMI_ID
+      value: {{umami_id}}
   accessPolicy:
     outbound:
       external:

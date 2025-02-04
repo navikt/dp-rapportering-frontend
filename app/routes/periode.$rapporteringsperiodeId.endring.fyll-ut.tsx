@@ -3,8 +3,9 @@ import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import invariant from "tiny-invariant";
+import { uuidv7 } from "uuidv7";
 
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -14,11 +15,11 @@ import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
-import { slettAlleAktiviteter, validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
+import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
@@ -31,10 +32,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const submitKnapp = formdata.get("submit");
 
   switch (submitKnapp) {
-    case "slette": {
-      return slettAlleAktiviteter(request, periodeId, formdata);
-    }
-
     case "lagre": {
       return validerOgLagreAktivitet(request, periodeId, formdata);
     }
@@ -79,7 +76,11 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
 
-  const { trackSkjemaSteg } = useAmplitude();
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "endring-fyll-ut";
+  const steg = 1;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -114,11 +115,12 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const periodeneErLike = erPeriodeneLike(periode, originalPeriode);
 
   const neste = () => {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "endring-fyll-ut",
-      steg: 1,
+      stegnavn,
+      steg,
       endring: true,
+      sesjonId,
     });
 
     const nextLink = periodeneErLike
@@ -126,6 +128,15 @@ export default function RapporteringsPeriodeFyllUtSide() {
       : `/periode/${periode.id}/endring/begrunnelse`;
     navigate(nextLink);
   };
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
 
   return (
     <>

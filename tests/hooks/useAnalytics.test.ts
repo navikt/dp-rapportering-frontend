@@ -3,20 +3,44 @@ import { renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, Mock, test, vi } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { Rapporteringstype } from "~/utils/types";
 
-vi.unmock("~/hooks/useAmplitude");
+vi.unmock("~/hooks/useAnalytics");
 
-vi.mock("@navikt/nav-dekoratoren-moduler", () => ({
-  getAmplitudeInstance: vi.fn().mockReturnValue(vi.fn()),
-}));
+vi.mock(import("@navikt/nav-dekoratoren-moduler"), async (importOriginal) => {
+  const actual = await importOriginal();
+
+  return {
+    ...actual,
+    getAmplitudeInstance: vi.fn().mockReturnValue(vi.fn()),
+    awaitDecoratorData: vi.fn().mockResolvedValue({}),
+    getCurrentConsent: vi.fn().mockReturnValue({ consent: { analytics: true, surveys: true } }),
+  };
+});
 
 vi.mock("~/hooks/useLocale", () => ({
   useLocale: () => ({ locale: "no" }),
 }));
 
-describe("useAmplitude", () => {
+vi.mock("~/utils/analytics", () => ({
+  hentData: async (props: object, språk: string, skjemanavn: string) => ({
+    språk,
+    skjemanavn,
+    ...props,
+  }),
+}));
+
+const env: { [key: string]: string } = {
+  UMAMI_ID: "",
+};
+
+vi.mock("~/utils/env.utils", () => ({
+  getEnv: (name: string) => env[name],
+  isLocalOrDemo: false,
+}));
+
+describe("useAnalytics", () => {
   const skjemanavn = "dagpenger-rapportering";
   const språk = "no";
   const trackMock = vi.fn();
@@ -29,11 +53,14 @@ describe("useAmplitude", () => {
   });
 
   describe("Vanlig rapporteringsskjema", () => {
-    test("tracker 'skjema startet' hendelsen riktig", () => {
+    test("tracker 'skjema startet' hendelsen riktig", async () => {
       const skjemaId = "123456";
 
-      const { result } = renderHook(() => useAmplitude());
+      const { result } = renderHook(() => useAnalytics());
       result.current.trackSkjemaStartet(skjemaId, false);
+
+      await Promise.resolve();
+      await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema startet", {
         skjemanavn,
@@ -43,12 +70,15 @@ describe("useAmplitude", () => {
       });
     });
 
-    test("tracker 'skjema fullført' hendelsen riktig", () => {
+    test("tracker 'skjema fullført' hendelsen riktig", async () => {
       const skjemaId = "123456";
       const rapporteringstype = Rapporteringstype.harAktivitet;
 
-      const { result } = renderHook(() => useAmplitude());
+      const { result } = renderHook(() => useAnalytics());
       result.current.trackSkjemaFullført(skjemaId, rapporteringstype, false);
+
+      await Promise.resolve();
+      await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema fullført", {
         skjemanavn,
@@ -59,19 +89,22 @@ describe("useAmplitude", () => {
       });
     });
 
-    test("tracker 'skjema steg fullført' hendelsen riktig", () => {
+    test("tracker 'skjema steg fullført' hendelsen riktig", async () => {
       const skjemaId = "123456";
       const rapporteringstype = Rapporteringstype.harAktivitet;
 
-      const { result } = renderHook(() => useAmplitude());
+      const { result } = renderHook(() => useAnalytics());
       const periode = lagRapporteringsperiode({ id: "123456", rapporteringstype });
 
-      result.current.trackSkjemaSteg({
+      result.current.trackSkjemaStegFullført({
         periode,
         stegnavn: "Steg 1",
         steg: 1,
         endring: false,
       });
+
+      await Promise.resolve();
+      await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema steg fullført", {
         skjemanavn,
@@ -86,11 +119,14 @@ describe("useAmplitude", () => {
   });
 
   describe("Rapporteringsskjema med endring", () => {
-    test("tracker 'skjema startet' hendelsen riktig", () => {
+    test("tracker 'skjema startet' hendelsen riktig", async () => {
       const skjemaId = "123456";
 
-      const { result } = renderHook(() => useAmplitude());
+      const { result } = renderHook(() => useAnalytics());
       result.current.trackSkjemaStartet(skjemaId, true);
+
+      await Promise.resolve();
+      await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema startet", {
         skjemanavn,
@@ -100,12 +136,15 @@ describe("useAmplitude", () => {
       });
     });
 
-    test("tracker 'skjema innsending feilet' hendelsen riktig", () => {
+    test("tracker 'skjema innsending feilet' hendelsen riktig", async () => {
       const skjemaId = "123456";
       const rapporteringstype = Rapporteringstype.harAktivitet;
 
-      const { result } = renderHook(() => useAmplitude());
+      const { result } = renderHook(() => useAnalytics());
       result.current.trackSkjemaInnsendingFeilet(skjemaId, rapporteringstype, true);
+
+      await Promise.resolve();
+      await Promise.resolve();
 
       expect(trackMock).toHaveBeenCalledWith("skjema innsending feilet", {
         skjemanavn,

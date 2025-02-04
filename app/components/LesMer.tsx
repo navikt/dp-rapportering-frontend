@@ -2,7 +2,7 @@ import { Checkbox, CheckboxGroup, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useState } from "react";
 
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { AktivitetType, aktivitetTypeMap } from "~/utils/aktivitettype.utils";
 
@@ -33,9 +33,10 @@ export const lesMerInnhold = [
 
 export function LesMer({ periodeId }: IProps) {
   const { getRichText, getAppText } = useSanity();
-  const { trackAccordionApnet, trackAccordionLukket } = useAmplitude();
+  const { trackAccordionApnet, trackAccordionLukket, trackLesMerFilter } = useAnalytics();
 
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
+  const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const tekstId = "rapportering-les-mer-hva-skal-rapporteres-tittel";
   const header = getAppText(tekstId);
@@ -48,8 +49,30 @@ export function LesMer({ periodeId }: IProps) {
     }
   }
 
+  function debounce(fn: () => void, timeout = 3000) {
+    if (timer) {
+      clearTimeout(timer);
+      setTimer(undefined);
+    }
+
+    setTimer(
+      setTimeout(() => {
+        fn();
+      }, timeout),
+    );
+  }
+
   function handleCheckboxChange(values: string[]) {
     setSelectedValues(values);
+
+    debounce(() => {
+      trackLesMerFilter({
+        arbeid: values.includes(AktivitetType.Arbeid),
+        syk: values.includes(AktivitetType.Syk),
+        fravaer: values.includes(AktivitetType.Fravaer),
+        utdanning: values.includes(AktivitetType.Utdanning),
+      });
+    });
   }
 
   const filtrertInnhold = lesMerInnhold.filter(

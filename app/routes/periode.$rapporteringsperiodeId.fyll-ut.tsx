@@ -3,8 +3,9 @@ import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useActionData, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import invariant from "tiny-invariant";
+import { uuidv7 } from "uuidv7";
 
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
@@ -15,7 +16,7 @@ import { LesMer } from "~/components/LesMer";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { RemixLink } from "~/components/RemixLink";
-import { useAmplitude } from "~/hooks/useAmplitude";
+import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -57,7 +58,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const { locale } = useLocale();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
 
-  const { trackSkjemaSteg } = useAmplitude();
+  const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
+  const sesjonId = useMemo(uuidv7, [periode.id]);
+  const stegnavn = "fyll-ut";
+  const steg = 2;
 
   const { getAppText, getRichText } = useSanity();
   const actionData = useActionData<typeof action>();
@@ -101,10 +105,11 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const harIngenAktiviteter = periode.dager.every((dag) => dag.aktiviteter.length === 0);
 
   const neste = () => {
-    trackSkjemaSteg({
+    trackSkjemaStegFullført({
       periode,
-      stegnavn: "fyll-ut",
-      steg: 2,
+      stegnavn,
+      steg,
+      sesjonId,
     });
 
     const nextLink = harIngenAktiviteter
@@ -113,6 +118,15 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
     navigate(nextLink);
   };
+
+  useEffect(() => {
+    trackSkjemaStegStartet({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
+    });
+  }, []);
 
   return (
     <>

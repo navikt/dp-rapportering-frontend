@@ -1,8 +1,14 @@
-import { getAmplitudeInstance } from "@navikt/nav-dekoratoren-moduler";
+import {
+  awaitDecoratorData,
+  getAmplitudeInstance,
+  getCurrentConsent,
+} from "@navikt/nav-dekoratoren-moduler";
 import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { hentData } from "~/utils/analytics";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
+import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
 
 import { useLocale } from "./useLocale";
@@ -12,6 +18,7 @@ interface ISkjemaSteg {
   stegnavn: string;
   steg: number;
   endring?: boolean;
+  sesjonId?: string;
 }
 
 interface INavigere {
@@ -26,27 +33,61 @@ interface IAccordion {
   tekstId: string;
 }
 
+interface ILesMerFilter {
+  arbeid: boolean;
+  syk: boolean;
+  fravaer: boolean;
+  utdanning: boolean;
+}
+
 interface IFeilmelding {
   tekst: string;
   titleId: string;
   descriptionId: string;
 }
 
+interface IModal {
+  skjemaId: string;
+  modalId: string;
+  sesjonId: string;
+}
+
+interface ILukkModal extends IModal {
+  knapp: string;
+  antallAktiviteter?: number;
+}
+
 const skjemanavn = "dagpenger-rapportering";
 
-export function useAmplitude() {
-  const track = getAmplitudeInstance("dekoratoren");
+export function useAnalytics() {
+  const amplitude = getAmplitudeInstance("dekoratoren");
+  const umami =
+    typeof window !== "undefined" && getEnv("UMAMI_ID") && window.umami
+      ? window.umami.track
+      : undefined;
+
   const { locale: språk } = useLocale();
 
   const trackEvent = useCallback(
-    <T extends object>(event: string, props: T = {} as T) => {
-      track(event, {
-        skjemanavn,
-        språk,
-        ...props,
-      });
+    async <T extends object>(event: string, props: T = {} as T) => {
+      if (typeof window === "undefined") return;
+
+      await awaitDecoratorData();
+      const { consent } = getCurrentConsent();
+
+      if (!consent.analytics) return;
+
+      const data = await hentData(props, språk, skjemanavn);
+
+      if (umami) {
+        umami(event, data);
+      }
+
+      if (amplitude) {
+        amplitude(event, data);
+      }
     },
-    [track, språk],
+    [umami, amplitude, språk],
   );
 
   const trackSkjemaStartet = useCallback(
@@ -68,15 +109,43 @@ export function useAmplitude() {
     [trackEvent],
   );
 
-  const trackSkjemaSteg = useCallback(
-    ({ periode: { id, rapporteringstype }, stegnavn, steg, endring = false }: ISkjemaSteg) =>
-      trackEvent("skjema steg fullført", {
+  const trackSkjemaStegStartet = useCallback(
+    ({
+      periode: { id, rapporteringstype },
+      stegnavn,
+      steg,
+      endring = false,
+      sesjonId,
+    }: ISkjemaSteg) => {
+      return trackEvent("skjema steg startet", {
         skjemaId: id,
         stegnavn,
         steg,
         rapporteringstype,
         endring,
-      }),
+        sesjonId,
+      });
+    },
+    [trackEvent],
+  );
+
+  const trackSkjemaStegFullført = useCallback(
+    ({
+      periode: { id, rapporteringstype },
+      stegnavn,
+      steg,
+      endring = false,
+      sesjonId,
+    }: ISkjemaSteg) => {
+      return trackEvent("skjema steg fullført", {
+        skjemaId: id,
+        stegnavn,
+        steg,
+        rapporteringstype,
+        endring,
+        sesjonId,
+      });
+    },
     [trackEvent],
   );
 
@@ -94,6 +163,13 @@ export function useAmplitude() {
     [trackEvent],
   );
 
+  const trackLesMerFilter = useCallback(
+    ({ arbeid, syk, fravaer, utdanning }: ILesMerFilter) => {
+      trackEvent("les mer filter", { arbeid, syk, fravaer, utdanning });
+    },
+    [trackEvent],
+  );
+
   const trackAlertVist = useCallback(
     (skjemaId: string) => {
       trackEvent("alert vist", { skjemaId });
@@ -102,15 +178,15 @@ export function useAmplitude() {
   );
 
   const trackModalApnet = useCallback(
-    (skjemaId: string) => {
-      trackEvent("modal åpnet", { skjemaId });
+    ({ skjemaId, modalId, sesjonId }: IModal) => {
+      trackEvent("modal åpnet", { skjemaId, modalId, sesjonId });
     },
     [trackEvent],
   );
 
   const trackModalLukket = useCallback(
-    (skjemaId: string) => {
-      trackEvent("modal lukket", { skjemaId });
+    ({ skjemaId, modalId, sesjonId, knapp, antallAktiviteter }: ILukkModal) => {
+      trackEvent("modal lukket", { skjemaId, modalId, sesjonId, knapp, antallAktiviteter });
     },
     [trackEvent],
   );
@@ -118,6 +194,13 @@ export function useAmplitude() {
   const trackSprakEndret = useCallback(
     (språk: DecoratorLocale) => {
       trackEvent("språk endret", { språk });
+    },
+    [trackEvent],
+  );
+
+  const trackForetrukketSprak = useCallback(
+    (språk: string) => {
+      trackEvent("foretrukket språk", { språk });
     },
     [trackEvent],
   );
@@ -140,13 +223,16 @@ export function useAmplitude() {
     trackSkjemaStartet,
     trackSkjemaFullført,
     trackSkjemaInnsendingFeilet,
-    trackSkjemaSteg,
+    trackSkjemaStegStartet,
+    trackSkjemaStegFullført,
     trackAccordionApnet,
     trackAccordionLukket,
+    trackLesMerFilter,
     trackAlertVist,
     trackModalApnet,
     trackModalLukket,
     trackSprakEndret,
+    trackForetrukketSprak,
     trackNavigere,
     trackFeilmelding,
   };
