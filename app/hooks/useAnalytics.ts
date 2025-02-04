@@ -51,6 +51,11 @@ interface IModal {
   sesjonId: string;
 }
 
+interface ILukkModal extends IModal {
+  knapp: string;
+  antallAktiviteter?: number;
+}
+
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
@@ -185,8 +190,8 @@ export function useAnalytics() {
   );
 
   const trackModalLukket = useCallback(
-    ({ skjemaId, modalId, sesjonId }: IModal) => {
-      trackEvent("modal lukket", { skjemaId, modalId, sesjonId });
+    ({ skjemaId, modalId, sesjonId, knapp, antallAktiviteter }: ILukkModal) => {
+      trackEvent("modal lukket", { skjemaId, modalId, sesjonId, knapp, antallAktiviteter });
     },
     [trackEvent],
   );
