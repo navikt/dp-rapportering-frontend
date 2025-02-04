@@ -59,11 +59,11 @@ interface ILukkModal extends IModal {
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
+  const amplitude = getAmplitudeInstance("dekoratoren");
   const umami =
     typeof window !== "undefined" && getEnv("UMAMI_ID") && window.umami
       ? window.umami.track
       : undefined;
-  const amplitude = getAmplitudeInstance("dekoratoren");
 
   const { locale: språk } = useLocale();
 
