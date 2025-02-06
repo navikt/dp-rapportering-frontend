@@ -81,13 +81,15 @@ export function useAnalytics() {
 
       if (umami) {
         // @ts-expect-error - Umami is not typed correctly
-        umami((umamiProps) => ({
-          name: event,
-          ...umamiProps,
-          referrer: redactId(umamiProps.referrer),
-          url: redactId(umamiProps.url),
-          data,
-        }));
+        umami((umamiProps) => {
+          return {
+            name: event,
+            ...umamiProps,
+            referrer: redactId(umamiProps.referrer),
+            url: redactId(window.location.pathname),
+            data,
+          };
+        });
       }
 
       if (amplitude) {
