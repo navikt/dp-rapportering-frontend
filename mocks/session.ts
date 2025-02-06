@@ -28,7 +28,7 @@ class SessionRecord {
   private createDatabase() {
     return factory({
       rapporteringsperioder: {
-        id: primaryKey(faker.string.uuid),
+        id: primaryKey(faker.string.numeric),
         periode: {
           fraOgMed: () => faker.date.recent().toISOString(),
           tilOgMed: () => faker.date.future().toISOString(),
@@ -43,7 +43,7 @@ class SessionRecord {
         status: faker.string.alpha,
         mottattDato: nullable(() => faker.date.recent().toISOString()),
         registrertArbeidssoker: nullable(faker.datatype.boolean),
-        originalId: nullable(faker.string.uuid),
+        originalId: nullable(faker.string.numeric),
         html: nullable(faker.string.alpha),
         rapporteringstype: nullable(faker.string.alpha),
       },
