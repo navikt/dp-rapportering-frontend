@@ -24,7 +24,15 @@ vi.mock("~/hooks/useLocale", () => ({
 }));
 
 vi.mock("~/utils/analytics", () => ({
-  hentData: async (props: object, språk: string, skjemanavn: string) => ({
+  hentData: async ({
+    props,
+    språk,
+    skjemanavn,
+  }: {
+    props: object;
+    språk: string;
+    skjemanavn: string;
+  }) => ({
     språk,
     skjemanavn,
     ...props,
