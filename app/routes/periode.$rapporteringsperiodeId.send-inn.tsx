@@ -179,7 +179,7 @@ export default function RapporteringsPeriodeSendInnSide() {
   }, []);
 
   useEffect(() => {
-    revalidator.revalidate()
+    revalidator.revalidate();
   }, []);
 
   return (

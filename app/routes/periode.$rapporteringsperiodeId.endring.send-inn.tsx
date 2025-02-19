@@ -195,7 +195,7 @@ export default function RapporteringsPeriodeSendInnSide() {
   }, [actionData]);
 
   useEffect(() => {
-    revalidator.revalidate()
+    revalidator.revalidate();
   }, []);
 
   return (

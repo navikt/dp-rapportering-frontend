@@ -25,7 +25,7 @@
 
 @media print {
   .rapporteringHeaderInnhold h1::before {
-    content: url('/arbeid/dagpenger/meldekort/favicon-32x32.png');
+    content: url("/arbeid/dagpenger/meldekort/favicon-32x32.png");
     margin-right: 10px;
     position: relative;
     top: 4px;
