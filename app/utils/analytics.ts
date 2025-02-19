@@ -6,11 +6,15 @@ export async function hash(string: string): Promise<string> {
   return hashHex;
 }
 
-export async function hentData<T extends object>(
-  props: T = {} as T,
-  språk: string,
+export async function hentData<T extends object>({
+  props = {} as T,
+  språk,
   skjemanavn = "dagpenger-rapportering",
-) {
+}: {
+  props: T;
+  språk: string;
+  skjemanavn: string;
+}) {
   let skjemaId = "";
 
   if (Object.hasOwn(props, "skjemaId")) {
@@ -28,4 +32,13 @@ export async function hentData<T extends object>(
   }
 
   return data;
+}
+
+export const periodeIdRegex = "periode/.+/";
+export const periodeIdRedacted = "periode/[rapporteringsId]/";
+
+export function redactId(url: string): string {
+  if (!url || typeof url !== "string") return url;
+
+  return url.replace(new RegExp(periodeIdRegex, "g"), periodeIdRedacted);
 }
