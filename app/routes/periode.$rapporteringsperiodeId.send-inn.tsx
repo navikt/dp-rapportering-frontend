@@ -9,6 +9,7 @@ import {
   useLoaderData,
   useNavigate,
   useNavigation,
+  useRevalidator,
   useSubmit,
 } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
@@ -100,6 +101,8 @@ export default function RapporteringsPeriodeSendInnSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
+  const revalidator = useRevalidator();
+
   const { trackSkjemaStegStartet, trackSkjemaStegFullført, trackSkjemaInnsendingFeilet } =
     useAnalytics();
   const sesjonId = useMemo(uuidv7, [periode.id]);
@@ -173,6 +176,10 @@ export default function RapporteringsPeriodeSendInnSide() {
       steg,
       sesjonId,
     });
+  }, []);
+
+  useEffect(() => {
+    revalidator.revalidate()
   }, []);
 
   return (

@@ -6,7 +6,7 @@ import {
 import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { hentData } from "~/utils/analytics";
+import { hentData, redactId } from "~/utils/analytics";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
@@ -77,10 +77,19 @@ export function useAnalytics() {
 
       if (!consent.analytics) return;
 
-      const data = await hentData(props, språk, skjemanavn);
+      const data = await hentData({ props, språk, skjemanavn });
 
       if (umami) {
-        umami(event, data);
+        // @ts-expect-error - Umami is not typed correctly
+        umami((umamiProps) => {
+          return {
+            name: event,
+            ...umamiProps,
+            referrer: redactId(umamiProps.referrer),
+            url: redactId(window.location.pathname),
+            data,
+          };
+        });
       }
 
       if (amplitude) {
@@ -219,6 +228,13 @@ export function useAnalytics() {
     [trackEvent],
   );
 
+  const trackBesok = useCallback(
+    ({ tekst, titleId, descriptionId }: IFeilmelding) => {
+      trackEvent("besøk", { tekst, titleId, descriptionId });
+    },
+    [trackEvent],
+  );
+
   return {
     trackSkjemaStartet,
     trackSkjemaFullført,
@@ -235,5 +251,6 @@ export function useAnalytics() {
     trackForetrukketSprak,
     trackNavigere,
     trackFeilmelding,
+    trackBesok,
   };
 }
