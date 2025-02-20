@@ -3,12 +3,17 @@ import { PortableText } from "@portabletext/react";
 
 import { useSanity } from "~/hooks/useSanity";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { KortType } from "~/utils/types";
 
 interface IProps {
   periode: IRapporteringsperiode;
 }
 
 export function ArbeidssokerAlert({ periode }: IProps) {
+  if (periode.type === KortType.MANUELL_ARENA) {
+    return null;
+  }
+
   if (periode.registrertArbeidssoker === true) {
     return <RegistertArbeidssokerAlert />;
   }

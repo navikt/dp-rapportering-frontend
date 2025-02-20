@@ -56,6 +56,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       status: IRapporteringsperiodeStatus.Innsendt,
       kanSendes: false,
       mottattDato,
+      registrertArbeidssoker: periode.registrertArbeidssoker ?? true,
     });
 
     return HttpResponse.json({ id: periode.id });
