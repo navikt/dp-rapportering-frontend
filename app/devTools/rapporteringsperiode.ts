@@ -2,7 +2,7 @@ import { addDays, format, subDays } from "date-fns";
 import { times } from "remeda";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { IRapporteringsperiodeStatus } from "~/utils/types";
+import { IRapporteringsperiodeStatus, KortType } from "~/utils/types";
 
 import { beregnForrigePeriodeDato, beregnNåværendePeriodeDato } from "./periodedato";
 
@@ -15,7 +15,7 @@ export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
 
   const meldekort: IRapporteringsperiode = {
     id: createId(),
-    type: "05",
+    type: KortType.ELEKTRONISK,
     periode: {
       fraOgMed,
       tilOgMed,

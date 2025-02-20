@@ -30,7 +30,7 @@ import {
   perioderSomKanSendes,
   periodeSomTimer,
 } from "./periode.utils";
-import { Rapporteringstype } from "./types";
+import { KortType, Rapporteringstype } from "./types";
 
 interface IProps {
   locale: DecoratorLocale;
@@ -77,22 +77,26 @@ export function getArbeidssokerAlert(
   getAppText: GetAppText,
   getRichText: GetRichText,
 ): string {
-  if (periode.registrertArbeidssoker) {
+  if (periode.registrertArbeidssoker === true) {
     return `<p>${getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert")}</p>`;
   }
 
-  return [
-    getHeader({
-      text: getAppText("rapportering-arbeidssokerregister-alert-tittel-avregistrert"),
-      level: "3",
-    }),
+  if (periode.registrertArbeidssoker === false) {
+    return [
+      getHeader({
+        text: getAppText("rapportering-arbeidssokerregister-alert-tittel-avregistrert"),
+        level: "3",
+      }),
 
-    renderToString(
-      <PortableText
-        value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert")}
-      />,
-    ),
-  ].join("");
+      renderToString(
+        <PortableText
+          value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert")}
+        />,
+      ),
+    ].join("");
+  }
+
+  return "";
 }
 
 export function getHeader({
@@ -560,22 +564,23 @@ export function samleHtmlForPeriode(
       pages.push(fn({ periode, getAppText, getRichText, locale, rapporteringsperioder })),
     );
   } else {
-    const fns = [
-      htmlForLandingsside,
-      htmlForRapporteringstype,
-      htmlForArbeidssoker,
-      htmlForOppsummering,
-    ];
+    const fns = [htmlForLandingsside, htmlForRapporteringstype];
 
     if (periode.rapporteringstype === Rapporteringstype.harAktivitet) {
-      fns.splice(2, 0, htmlForFyllUt);
+      fns.push(htmlForFyllUt);
     }
 
     const harIngenAktiviteter = periode.dager.every((dag) => dag.aktiviteter.length === 0);
 
     if (periode.rapporteringstype === Rapporteringstype.harAktivitet && harIngenAktiviteter) {
-      fns.splice(3, 0, htmlForTom);
+      fns.push(htmlForTom);
     }
+
+    if (periode.type !== KortType.MANUELL_ARENA) {
+      fns.push(htmlForArbeidssoker);
+    }
+
+    fns.push(htmlForOppsummering);
 
     fns.forEach((fn) =>
       pages.push(fn({ periode, getAppText, getRichText, locale, rapporteringsperioder })),

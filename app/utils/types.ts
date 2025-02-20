@@ -37,3 +37,15 @@ export interface IHttpProblem {
   errorType?: string;
   correlationId: string;
 }
+
+export const KortType = {
+  ORDINAER: "01",
+  ERSTATNING: "03",
+  RETUR: "04",
+  ELEKTRONISK: "05",
+  AAP: "06",
+  ORDINAER_MANUELL: "07",
+  MASKINELT_OPPDATERT: "08",
+  MANUELL_ARENA: "09",
+  KORRIGERT_ELEKTRONISK: "10",
+} as const;

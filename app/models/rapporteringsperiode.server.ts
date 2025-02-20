@@ -2,7 +2,7 @@ import { logErrorResponse } from "~/models/logger.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
-import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
+import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
 
 export interface IPeriode {
   fraOgMed: string;
@@ -15,9 +15,11 @@ export interface IRapporteringsperiodeDag {
   aktiviteter: IAktivitet[];
 }
 
+type Type = (typeof KortType)[keyof typeof KortType];
+
 export interface IRapporteringsperiode {
   id: string;
-  type: string;
+  type: Type;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
   sisteFristForTrekk: string | null;
