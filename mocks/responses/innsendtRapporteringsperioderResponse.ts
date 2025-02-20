@@ -5,6 +5,7 @@ import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
 export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
   {
     id: "3fa85f64-5717-4562-b3fc-2c963f66afa3",
+    type: "05",
     periode: {
       fraOgMed: "2023-05-01",
       tilOgMed: "2023-05-14",
@@ -134,6 +135,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
   },
   {
     id: "3fa85f64-5717-4562-b3fc-2c963f66afa3",
+    type: "05",
     periode: {
       fraOgMed: "2023-05-01",
       tilOgMed: "2023-05-14",

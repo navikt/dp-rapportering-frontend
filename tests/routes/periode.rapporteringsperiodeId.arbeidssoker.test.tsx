@@ -62,6 +62,24 @@ describe("ArbeidssøkerRegisterSide", () => {
     );
   });
 
+  test("Spørsmål om arbeidssøker skal være true og disabled når etterregistrering", async () => {
+    const rapporteringsperiode09: IRapporteringsperiode = {
+      ...rapporteringsperiode,
+      type: "09",
+      registrertArbeidssoker: true,
+    };
+    testDb.addRapporteringsperioder(rapporteringsperiode09);
+    render();
+
+    const radioJa = await screen.findByRole("radio", { name: /svar-ja/i });
+    await waitFor(() => expect(radioJa).toBeChecked());
+    expect(radioJa).toHaveAttribute("disabled");
+
+    const radioNei = await screen.findByRole("radio", { name: /svar-nei/i });
+    await waitFor(() => expect(radioNei).not.toBeChecked());
+    expect(radioNei).toHaveAttribute("disabled");
+  });
+
   test("Skal svare med 'Ja'", async () => {
     testDb.addRapporteringsperioder(rapporteringsperiode);
     render();

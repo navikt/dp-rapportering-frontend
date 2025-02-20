@@ -89,7 +89,7 @@ export default function ArbeidssøkerRegisterSide() {
 
       <fetcher.Form method="post">
         <RadioGroup
-          disabled={!kanSendes(periode)}
+          disabled={!kanSendes(periode) || periode.type === "09"}
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}

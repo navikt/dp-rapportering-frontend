@@ -17,6 +17,7 @@ export interface IRapporteringsperiodeDag {
 
 export interface IRapporteringsperiode {
   id: string;
+  type: string;
   periode: IPeriode;
   dager: IRapporteringsperiodeDag[];
   sisteFristForTrekk: string | null;

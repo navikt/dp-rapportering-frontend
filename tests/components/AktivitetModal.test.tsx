@@ -35,6 +35,7 @@ const mockRapporteringsperiodeDag: IRapporteringsperiodeDag = {
 
 const mockRapporteringsperiode: IRapporteringsperiode = {
   id: "1",
+  type: "05",
   periode: mockPeriode,
   dager: [mockRapporteringsperiodeDag],
   sisteFristForTrekk: null,
