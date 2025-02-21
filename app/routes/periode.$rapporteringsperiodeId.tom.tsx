@@ -12,6 +12,16 @@ import { RemixLink } from "~/components/RemixLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { KortType } from "~/utils/types";
+
+function nesteSide(periode: IRapporteringsperiode) {
+  if (periode.type === KortType.MANUELL_ARENA) {
+    return `/periode/${periode.id}/send-inn`;
+  }
+
+  return `/periode/${periode.id}/arbeidssoker`;
+}
 
 export default function TomRapporteringsPeriodeSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
@@ -31,7 +41,7 @@ export default function TomRapporteringsPeriodeSide() {
       sesjonId,
     });
 
-    navigate(`/periode/${periode.id}/arbeidssoker`);
+    navigate(nesteSide(periode));
   };
 
   useEffect(() => {

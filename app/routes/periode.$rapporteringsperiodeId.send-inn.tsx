@@ -17,10 +17,7 @@ import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import {
-  AvregistertArbeidssokerAlert,
-  RegistertArbeidssokerAlert,
-} from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
@@ -187,7 +184,6 @@ export default function RapporteringsPeriodeSendInnSide() {
       <Heading tabIndex={-1} level="2" size="medium" spacing className="vo-fokus">
         {getAppText("rapportering-send-inn-tittel")}
       </Heading>
-
       {kanSendes(periode) ? (
         <Alert variant="warning" className="my-4 alert-with-rich-text">
           <PortableText value={getRichText("rapportering-meldekort-ikke-sendt-enda")} />
@@ -195,24 +191,17 @@ export default function RapporteringsPeriodeSendInnSide() {
       ) : (
         <KanIkkeSendes periode={periode} />
       )}
-
       <PortableText value={getRichText("rapportering-send-inn-innhold")} />
-
       <div className="my-4">
         <Heading size="xsmall">{getAppText("rapportering-send-inn-periode-tittel")}</Heading>
         <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
       </div>
-
       <div className="oppsummering">
         <Kalender periode={periode} readonly={true} locale={locale} aapneModal={() => {}} />
         <AktivitetOppsummering periode={periode} />
       </div>
 
-      {periode.registrertArbeidssoker ? (
-        <RegistertArbeidssokerAlert />
-      ) : (
-        <AvregistertArbeidssokerAlert />
-      )}
+      <ArbeidssokerAlert periode={periode} />
 
       <Checkbox
         disabled={!kanSendes(periode)}
@@ -221,13 +210,11 @@ export default function RapporteringsPeriodeSendInnSide() {
       >
         {getAppText("rapportering-send-inn-bekreft-opplysning")}
       </Checkbox>
-
       {actionData?.error && (
         <Alert variant="error" className={styles.feilmelding}>
           {actionData.error}
         </Alert>
       )}
-
       <Form method="post" onSubmit={onSubmit} className={navigasjonStyles.container}>
         <Button
           onClick={() => navigate(-1)}

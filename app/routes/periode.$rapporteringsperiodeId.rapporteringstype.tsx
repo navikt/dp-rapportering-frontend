@@ -16,11 +16,14 @@ import { RemixLink } from "~/components/RemixLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import {
+  hentRapporteringsperioder,
+  IRapporteringsperiode,
+} from "~/models/rapporteringsperiode.server";
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { formaterDato } from "~/utils/dato.utils";
 import { hentPeriodeTekst, kanSendes, perioderSomKanSendes } from "~/utils/periode.utils";
-import { Rapporteringstype } from "~/utils/types";
+import { KortType, Rapporteringstype } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -46,6 +49,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // TODO: Sanityfy
     throw new Response("Feil i uthenting av rapporteringsperioder", { status: 500 });
   }
+}
+
+function nesteSide(periode: IRapporteringsperiode) {
+  const skalIkkeFylleUt = periode.rapporteringstype === Rapporteringstype.harIngenAktivitet;
+
+  if (skalIkkeFylleUt && periode.type === KortType.MANUELL_ARENA) {
+    return `/periode/${periode.id}/send-inn`;
+  } else if (skalIkkeFylleUt) {
+    return `/periode/${periode.id}/arbeidssoker`;
+  }
+  return `/periode/${periode.id}/fyll-ut`;
 }
 
 export default function RapporteringstypeSide() {
@@ -100,11 +114,7 @@ export default function RapporteringstypeSide() {
       sesjonId,
     });
 
-    const nesteKnappLink =
-      type === Rapporteringstype.harIngenAktivitet
-        ? `/periode/${periode.id}/arbeidssoker`
-        : `/periode/${periode.id}/fyll-ut`;
-    navigate(nesteKnappLink);
+    navigate(nesteSide(periode));
   };
 
   useEffect(() => {

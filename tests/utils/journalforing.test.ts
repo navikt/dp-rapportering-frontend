@@ -25,7 +25,7 @@ import {
   htmlForTom,
   samleHtmlForPeriode,
 } from "~/utils/journalforing.utils";
-import { Rapporteringstype } from "~/utils/types";
+import { KortType, Rapporteringstype } from "~/utils/types";
 
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 
@@ -574,5 +574,32 @@ describe("samleHtmlForPeriode", () => {
     const tom = htmlForTom(props);
 
     expect(html).toContain(tom);
+  });
+});
+
+describe("Etterregistrert meldekort", () => {
+  it("viser ikke arbeidssokerstatus", () => {
+    const props = {
+      rapporteringsperioder: [],
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        type: KortType.MANUELL_ARENA,
+        registrertArbeidssoker: null,
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    };
+
+    const html = samleHtmlForPeriode(
+      props.rapporteringsperioder,
+      props.periode,
+      mockGetAppText,
+      mockGetRichText,
+      locale,
+    );
+
+    expect(html).not.toContain("rapportering-arbeidssokerregister-svar-ja");
+    expect(html).not.toContain("rapportering-arbeidssokerregister-alert-tittel");
   });
 });

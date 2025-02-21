@@ -20,9 +20,11 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { kanSendes } from "~/utils/periode.utils";
+import { KortType } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import styles from "../styles/fyll-ut.module.css";
@@ -49,6 +51,20 @@ export async function action({ request, params }: ActionFunctionArgs) {
       };
     }
   }
+}
+
+function nesteSide(periode: IRapporteringsperiode) {
+  const harIngenAktiviteter = periode.dager.every((dag) => dag.aktiviteter.length === 0);
+
+  if (harIngenAktiviteter) {
+    return `/periode/${periode.id}/tom`;
+  }
+
+  if (periode.type === KortType.MANUELL_ARENA) {
+    return `/periode/${periode.id}/send-inn`;
+  }
+
+  return `/periode/${periode.id}/arbeidssoker`;
 }
 
 export default function RapporteringsPeriodeFyllUtSide() {
@@ -102,8 +118,6 @@ export default function RapporteringsPeriodeFyllUtSide() {
     setModalAapen(false);
   }
 
-  const harIngenAktiviteter = periode.dager.every((dag) => dag.aktiviteter.length === 0);
-
   const neste = () => {
     trackSkjemaStegFullført({
       periode,
@@ -112,9 +126,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       sesjonId,
     });
 
-    const nextLink = harIngenAktiviteter
-      ? `/periode/${periode.id}/tom`
-      : `/periode/${periode.id}/arbeidssoker`;
+    const nextLink = nesteSide(periode);
 
     navigate(nextLink);
   };
