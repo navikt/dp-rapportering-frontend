@@ -15,7 +15,7 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
-import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
+import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
 
 import { Database } from "../../mocks/session";
 
@@ -268,6 +268,29 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
           },
         }),
       );
+      break;
+    }
+
+    case ScenarioType.manuelt: {
+      deleteAllRapporteringsperioder(db);
+
+      const { fraOgMed } = beregnNåværendePeriodeDato();
+
+      const periode = {
+        fraOgMed: formatereDato(subDays(new Date(fraOgMed), 28)),
+        tilOgMed: formatereDato(subDays(new Date(fraOgMed), 15)),
+      };
+
+      const periodeKanSendesFra = format(subDays(new Date(periode.fraOgMed), 1), "yyyy-MM-dd");
+
+      const endretPeriode = lagRapporteringsperiode({
+        type: KortType.MANUELL_ARENA,
+        periode,
+        kanSendesFra: periodeKanSendesFra,
+        mottattDato: periodeKanSendesFra,
+      });
+      db.rapporteringsperioder.create(endretPeriode);
+      break;
     }
   }
 }

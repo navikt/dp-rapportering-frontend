@@ -17,10 +17,7 @@ import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import {
-  AvregistertArbeidssokerAlert,
-  RegistertArbeidssokerAlert,
-} from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
@@ -226,11 +223,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         <AktivitetOppsummering periode={periode} />
       </div>
 
-      {periode.registrertArbeidssoker ? (
-        <RegistertArbeidssokerAlert />
-      ) : (
-        <AvregistertArbeidssokerAlert />
-      )}
+      <ArbeidssokerAlert periode={periode} />
 
       {periode.begrunnelseEndring && (
         <div>

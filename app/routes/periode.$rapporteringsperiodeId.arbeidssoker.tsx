@@ -6,10 +6,7 @@ import { useEffect, useMemo } from "react";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
-import {
-  AvregistertArbeidssokerAlert,
-  RegistertArbeidssokerAlert,
-} from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
@@ -20,7 +17,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { kanSendes } from "~/utils/periode.utils";
-import { INetworkResponse } from "~/utils/types";
+import { INetworkResponse, KortType } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import { Error } from "../components/error/Error";
@@ -89,7 +86,7 @@ export default function ArbeidssøkerRegisterSide() {
 
       <fetcher.Form method="post">
         <RadioGroup
-          disabled={!kanSendes(periode)}
+          disabled={!kanSendes(periode) || periode.type === KortType.MANUELL_ARENA}
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
@@ -117,12 +114,7 @@ export default function ArbeidssøkerRegisterSide() {
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
 
-      {periode.registrertArbeidssoker !== null &&
-        (periode.registrertArbeidssoker ? (
-          <RegistertArbeidssokerAlert />
-        ) : (
-          <AvregistertArbeidssokerAlert />
-        ))}
+      <ArbeidssokerAlert periode={periode} />
 
       <NavigasjonContainer>
         <RemixLink

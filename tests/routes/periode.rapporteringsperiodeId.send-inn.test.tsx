@@ -25,6 +25,7 @@ vi.mock("~/hooks/useLocale", () => ({
 const testDb = withDb(sessionRecord.getDatabase("123"));
 const rapporteringsperiode = lagRapporteringsperiode({
   periode: { fraOgMed: "2024-01-01", tilOgMed: "2024-01-14" },
+  registrertArbeidssoker: false,
 });
 
 const mockResponse = () => server.use(...createHandlers(testDb));

@@ -2,6 +2,28 @@ import { Alert, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 
 import { useSanity } from "~/hooks/useSanity";
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { KortType } from "~/utils/types";
+
+interface IProps {
+  periode: IRapporteringsperiode;
+}
+
+export function ArbeidssokerAlert({ periode }: IProps) {
+  if (periode.type === KortType.MANUELL_ARENA) {
+    return null;
+  }
+
+  if (periode.registrertArbeidssoker === true) {
+    return <RegistertArbeidssokerAlert />;
+  }
+
+  if (periode.registrertArbeidssoker === false) {
+    return <AvregistertArbeidssokerAlert />;
+  }
+
+  return null;
+}
 
 export function RegistertArbeidssokerAlert() {
   const { getAppText } = useSanity();

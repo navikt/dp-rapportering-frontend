@@ -6,10 +6,7 @@ import classNames from "classnames";
 import { useEffect } from "react";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import {
-  AvregistertArbeidssokerAlert,
-  RegistertArbeidssokerAlert,
-} from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
@@ -169,11 +166,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                           visDato={false}
                         />
                         <AktivitetOppsummering periode={periode} />
-                        {periode.registrertArbeidssoker ? (
-                          <RegistertArbeidssokerAlert />
-                        ) : (
-                          <AvregistertArbeidssokerAlert />
-                        )}
+                        <ArbeidssokerAlert periode={periode} />
                       </div>
                     );
                   })}

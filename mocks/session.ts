@@ -29,6 +29,7 @@ class SessionRecord {
     return factory({
       rapporteringsperioder: {
         id: primaryKey(faker.string.numeric),
+        type: faker.string.numeric,
         periode: {
           fraOgMed: () => faker.date.recent().toISOString(),
           tilOgMed: () => faker.date.future().toISOString(),

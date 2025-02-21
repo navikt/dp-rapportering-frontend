@@ -1,9 +1,10 @@
 import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { IRapporteringsperiodeStatus } from "~/utils/types";
+import { IRapporteringsperiodeStatus, KortType } from "~/utils/types";
 
 export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
   {
     id: "3fa85f64-5717-4562-b3fc-2c963f66afa9",
+    type: KortType.ELEKTRONISK,
     periode: {
       fraOgMed: "2023-05-01",
       tilOgMed: "2023-05-14",
@@ -95,6 +96,7 @@ export const rapporteringsperioderResponse: IRapporteringsperiode[] = [
   },
   {
     id: "3fa85f64-5717-4562-b3fc-2c963f66afa4",
+    type: KortType.ELEKTRONISK,
     periode: {
       fraOgMed: "2023-05-15",
       tilOgMed: "2023-05-28",
