@@ -9,7 +9,6 @@ export async function slettAlleAktiviteter(
   request: Request,
   rapporteringsperiode: IRapporteringsperiode,
 ): Promise<INetworkResponse> {
-  console.log("helloo");
   const url = `${getEnv(
     "DP_RAPPORTERING_URL",
   )}/rapporteringsperiode/${rapporteringsperiode.id}/aktiviter`;
