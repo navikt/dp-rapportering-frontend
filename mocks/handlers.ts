@@ -112,6 +112,19 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     },
   ),
 
+  http.delete(
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/aktiviter`,
+    async ({ cookies, params }) => {
+      const db = database || getDatabase(cookies);
+
+      const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
+
+      db.deleteAllAktiviteter(rapporteringsperiodeId);
+
+      return HttpResponse.json(undefined, { status: 204 });
+    },
+  ),
+
   http.post(
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/arbeidssoker`,
     async ({ cookies, params, request }) => {

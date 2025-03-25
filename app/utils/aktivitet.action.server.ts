@@ -8,7 +8,7 @@ import { AktivitetType } from "./aktivitettype.utils";
 import type { INetworkResponse } from "./types";
 import { validator } from "./validering.util";
 
-export async function slettAlleAktiviteter(
+export async function slettAlleAktiviteterForBestemtDag(
   request: Request,
   periodeId: string,
   formdata: FormData,
