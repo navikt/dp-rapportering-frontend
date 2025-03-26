@@ -43,7 +43,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Landingsside() {
-  // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
   const { getAppText, getLink, getRichText } = useSanity();

@@ -65,7 +65,6 @@ function nesteSide(periode: IRapporteringsperiode) {
 export default function RapporteringstypeSide() {
   const navigate = useNavigate();
 
-  // TODO: Sjekk om bruker har rapporteringsperioder eller ikke
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText, getRichText } = useSanity();
