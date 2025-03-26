@@ -113,7 +113,8 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   ),
 
   http.delete(
-    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/aktiviter`,
+    `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/aktiviteter`,
+
     async ({ cookies, params }) => {
       const db = database || getDatabase(cookies);
 

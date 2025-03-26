@@ -22,6 +22,7 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { formaterDato } from "~/utils/dato.utils";
+import { isLocalhost } from "~/utils/env.utils";
 import {
   harAktiviteter,
   hentPeriodeTekst,
@@ -114,14 +115,15 @@ export default function RapporteringstypeSide() {
 
   const neste = async () => {
     if (
+      isLocalhost &&
       periode.rapporteringstype === Rapporteringstype.harIngenAktivitet &&
       harAktiviteter(periode)
     ) {
       slettAlleAktiviteterFetcher.submit(
         {
-          periode: JSON.stringify(periode),
+          rapporteringsperiodeId: periode.id,
         },
-        { method: "post", action: "/api/slettAlleAktiviteter" },
+        { method: "delete", action: "/api/slett-alle-aktiviteter" },
       );
     }
     trackSkjemaStegFullført({
