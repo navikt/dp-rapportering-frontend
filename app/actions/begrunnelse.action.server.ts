@@ -1,9 +1,8 @@
 import { validationError } from "remix-validated-form";
 
 import { lagreAktivitet } from "~/models/aktivitet.server";
-
-import type { INetworkResponse } from "./types";
-import { begrunnelseEndringValidator } from "./validering.util";
+import { INetworkResponse } from "~/utils/types";
+import { begrunnelseEndringValidator } from "~/utils/validering.util";
 
 export async function validerOgLagreBegrunnelse(
   request: Request,

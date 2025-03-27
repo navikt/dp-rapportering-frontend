@@ -2,7 +2,7 @@
 import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 
-import { action as slettAction } from "~/routes/api.slett";
+import { action as slettAction } from "~/routes/api/slett-aktivitet";
 import { action } from "~/routes/periode.$rapporteringsperiodeId.fyll-ut";
 
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
