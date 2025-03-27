@@ -1,6 +1,6 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 
-import { slettAlleAktiviteterForRapporteringsperioden } from "~/utils/aktivitet.action.server";
+import { slettAlleAktiviteterForRapporteringsperioden } from "~/services/aktivitet.service";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
