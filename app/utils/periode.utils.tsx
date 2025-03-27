@@ -69,7 +69,6 @@ export function hentTotaltArbeidstimerTekst(
 
   const formattertTimer = timer.toString().replace(/\./g, ",");
 
-  // TODO: Alltid vis "timer"?
   return `${formattertTimer} ${timer === 1 ? getAppText("rapportering-time") : getAppText("rapportering-timer")}`;
 }
 
