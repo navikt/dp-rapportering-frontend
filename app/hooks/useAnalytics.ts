@@ -60,7 +60,7 @@ interface ILukkModal extends IModal {
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
-  const amplitude = getAmplitudeInstance("dekoratoren");
+  const amplitude = getAmplitudeInstance(skjemanavn);
   const umami =
     typeof window !== "undefined" && getEnv("UMAMI_ID") && window.umami
       ? window.umami.track
