@@ -80,7 +80,7 @@ export function AktivitetModal({
         rapporteringsperiodeId: periode.id,
         dag: JSON.stringify(dag),
       },
-      { method: "post", action: "/api/slett" },
+      { method: "post", action: "/api/slett-aktivitet" },
     );
 
     loggModalLukket("slett", 0);

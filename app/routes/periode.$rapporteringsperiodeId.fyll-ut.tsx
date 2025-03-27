@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
+import { validerOgLagreAktivitet } from "~/actions/aktivitet.action.server";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
@@ -21,7 +22,6 @@ import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { kanSendes } from "~/utils/periode.utils";
 import { KortType } from "~/utils/types";

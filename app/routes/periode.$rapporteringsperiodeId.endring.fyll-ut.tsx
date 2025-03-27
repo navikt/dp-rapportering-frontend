@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
+import { validerOgLagreAktivitet } from "~/actions/aktivitet.action.server";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
@@ -19,7 +20,6 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
-import { validerOgLagreAktivitet } from "~/utils/aktivitet.action.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";

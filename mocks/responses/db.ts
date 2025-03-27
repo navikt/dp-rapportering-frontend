@@ -113,6 +113,27 @@ function lagreAktivitet(
   }
 }
 
+function deleteAllAktiviteter(db: Database, rapporteringsperiodeId: string) {
+  const periode = findRapporteringsperiodeById(db, rapporteringsperiodeId);
+
+  if (periode) {
+    const oppdatertDager = periode.dager.map((d) => {
+      return { ...d, aktiviteter: [] };
+    });
+
+    db.rapporteringsperioder.update({
+      where: {
+        id: {
+          equals: rapporteringsperiodeId,
+        },
+      },
+      data: {
+        dager: oppdatertDager,
+      },
+    });
+  }
+}
+
 function deleteAllRapporteringsperioder(db: Database) {
   const perioder = db.rapporteringsperioder.findMany({}) as IRapporteringsperiode[];
 
@@ -318,6 +339,8 @@ export const withDb = (db: Database) => {
     deleteRapporteringsperiode: (id: string) => deleteRapporteringsperiode(db, id),
     lagreAktivitet: (rapporteringsperiodeId: string, dag: IRapporteringsperiodeDag) =>
       lagreAktivitet(db, rapporteringsperiodeId, dag),
+    deleteAllAktiviteter: (rapporteringsperiodeId: string) =>
+      deleteAllAktiviteter(db, rapporteringsperiodeId),
     deleteAllInnsendteperioder: () => deleteAllInnsendteperioder(db),
     deleteAllRapporteringsperioder: () => deleteAllRapporteringsperioder(db),
     updateRapporteringsperioder: (scenario: ScenarioType) =>
