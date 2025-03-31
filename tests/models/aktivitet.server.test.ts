@@ -17,7 +17,6 @@ vi.mock("~/utils/fetch.utils", () => ({
     Accept: "application",
     Authorization: "Bearer token",
   })),
-  getCorrelationId: vi.fn(() => "123"),
 }));
 
 vi.mock("~/models/logger.server", () => ({
