@@ -56,7 +56,7 @@ export async function slettAlleAktiviteterForRapporteringsperioden(
       status: "error",
       error: {
         statusCode: response.status,
-        statusText: `rapportering-feilmelding-lagre-aktivitet`, // TODO: sjekk om bruker skal få feilmelding og i så tilfelle hvilket innhold
+        statusText: `rapportering-feilmelding-lagre-aktivitet`,
       },
       id,
     };
