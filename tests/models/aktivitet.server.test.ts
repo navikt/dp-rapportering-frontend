@@ -9,13 +9,15 @@ import {
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 import { server } from "../../mocks/server";
 
+const baseUrl = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/`;
+
 vi.mock("~/utils/fetch.utils", () => ({
-  getCorrelationId: vi.fn(() => "mock-correlation-id"),
   getHeaders: vi.fn(() => ({
     "Content-Type": "application/json",
-    Accept: "application/json",
+    Accept: "application",
     Authorization: "Bearer token",
   })),
+  getCorrelationId: vi.fn(() => "123"),
 }));
 
 vi.mock("~/models/logger.server", () => ({
@@ -33,8 +35,8 @@ describe("aktivitet", () => {
     aktiviteter: [],
     dagIndex: 0,
   };
-  const urlLagreAktivitet = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/${rapporteringsperiodeId}/aktivitet`;
-  const urlSlettAktiviteter = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/${rapporteringsperiodeId}/aktiviteter`;
+  const urlLagreAktivitet = `${baseUrl}/${rapporteringsperiodeId}/aktivitet`;
+  const urlSlettAktiviteter = `${baseUrl}/${rapporteringsperiodeId}/aktiviteter`;
 
   describe("lagreAktivitet", () => {
     test("lager aktivitet vellykket", async () => {
