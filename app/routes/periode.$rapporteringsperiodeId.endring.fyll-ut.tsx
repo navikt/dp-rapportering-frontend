@@ -168,6 +168,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           className={navigasjonStyles.knapp}
           icon={<ArrowLeftIcon aria-hidden />}
           iconPosition="left"
+          onClick={() => navigate(-1)}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </RemixLink>
