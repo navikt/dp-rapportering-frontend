@@ -22,7 +22,12 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
 import { formaterDato } from "~/utils/dato.utils";
-import { hentPeriodeTekst, kanSendes, perioderSomKanSendes } from "~/utils/periode.utils";
+import {
+  harAktiviteter,
+  hentPeriodeTekst,
+  kanSendes,
+  perioderSomKanSendes,
+} from "~/utils/periode.utils";
 import { KortType, Rapporteringstype } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
@@ -76,6 +81,7 @@ export default function RapporteringstypeSide() {
   const steg = 1;
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
+  const slettAlleAktiviteterFetcher = useFetcher();
   const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
 
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
@@ -106,7 +112,18 @@ export default function RapporteringstypeSide() {
   const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
   const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
 
-  const neste = () => {
+  const neste = async () => {
+    if (
+      periode.rapporteringstype === Rapporteringstype.harIngenAktivitet &&
+      harAktiviteter(periode)
+    ) {
+      slettAlleAktiviteterFetcher.submit(
+        {
+          rapporteringsperiodeId: periode.id,
+        },
+        { method: "delete", action: "/api/slett-alle-aktiviteter" },
+      );
+    }
     trackSkjemaStegFullført({
       periode,
       stegnavn,

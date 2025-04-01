@@ -55,7 +55,7 @@
     "zod-form-data": "2.0.5"
   },
   "devDependencies": {
-    "@eslint/js": "9.20.0",
+    "@eslint/js": "9.23.0",
     "@remix-run/dev": "2.15.3",
     "@remix-run/testing": "2.15.3",
     "@testing-library/dom": "10.4.0",
@@ -65,7 +65,7 @@
     "@types/compression": "1.7.5",
     "@types/express": "5.0.0",
     "@types/morgan": "1.9.9",
-    "@types/node": "22.13.4",
+    "@types/node": "22.13.15",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "@vitejs/plugin-react": "4.3.4",
@@ -85,7 +85,7 @@
     "prettier": "3.5.1",
     "typescript": "5.7.3",
     "typescript-eslint": "8.24.1",
-    "vite": "5.4.14",
+    "vite": "5.4.16",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "2.1.8"
   },
