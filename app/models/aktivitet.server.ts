@@ -35,3 +35,32 @@ export async function lagreAktivitet(
 
   return { status: "success" };
 }
+
+export async function slettAlleAktiviteterForRapporteringsperioden(
+  request: Request,
+  rapporteringsPeriodeId: string,
+): Promise<INetworkResponse> {
+  const url = `${getEnv(
+    "DP_RAPPORTERING_URL",
+  )}/rapporteringsperiode/${rapporteringsPeriodeId}/aktiviteter`;
+
+  const response = await fetch(url, {
+    method: "delete",
+    headers: await getHeaders(request),
+  });
+
+  if (!response.ok) {
+    const id = await getCorrelationId(response);
+    await logErrorResponse(response, `Feil ved sletting av aktiviter`);
+    return {
+      status: "error",
+      error: {
+        statusCode: response.status,
+        statusText: `rapportering-feilmelding-lagre-aktivitet`,
+      },
+      id,
+    };
+  }
+
+  return { status: "success" };
+}
