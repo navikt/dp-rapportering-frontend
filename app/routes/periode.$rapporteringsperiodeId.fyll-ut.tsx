@@ -16,7 +16,6 @@ import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { LesMer } from "~/components/LesMer";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -166,17 +165,15 @@ export default function RapporteringsPeriodeFyllUtSide() {
       </div>
 
       <NavigasjonContainer>
-        <RemixLink
-          as="Button"
-          to={`/periode/${periode.id}/rapporteringstype`}
+        <Button
+          onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
           className={navigasjonStyles.knapp}
-          disabled={searchParams.has("endring")}
         >
           {getAppText("rapportering-knapp-tilbake")}
-        </RemixLink>
+        </Button>
 
         <Button
           size="medium"

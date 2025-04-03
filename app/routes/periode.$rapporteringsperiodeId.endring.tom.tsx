@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Heading } from "@navikt/ds-react";
+import { Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useNavigate } from "@remix-run/react";
 
@@ -32,9 +32,7 @@ export default function TomRapporteringsPeriodeSide() {
       </div>
 
       <NavigasjonContainer>
-        <RemixLink
-          as="Button"
-          to=""
+        <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
@@ -42,7 +40,7 @@ export default function TomRapporteringsPeriodeSide() {
           className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
-        </RemixLink>
+        </Button>
 
         <RemixLink
           as="Button"

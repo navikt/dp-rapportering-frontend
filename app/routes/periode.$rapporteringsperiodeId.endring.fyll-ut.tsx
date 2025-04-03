@@ -161,17 +161,15 @@ export default function RapporteringsPeriodeFyllUtSide() {
       </div>
 
       <NavigasjonContainer>
-        <RemixLink
-          as="Button"
-          to={`/innsendt`}
-          variant="secondary"
-          className={navigasjonStyles.knapp}
-          icon={<ArrowLeftIcon aria-hidden />}
-          iconPosition="left"
+        <Button
           onClick={() => navigate(-1)}
+          variant="secondary"
+          iconPosition="left"
+          icon={<ArrowLeftIcon aria-hidden />}
+          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
-        </RemixLink>
+        </Button>
 
         <Button
           size="medium"

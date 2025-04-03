@@ -11,7 +11,6 @@ import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -117,9 +116,7 @@ export default function ArbeidssøkerRegisterSide() {
       <ArbeidssokerAlert periode={periode} />
 
       <NavigasjonContainer>
-        <RemixLink
-          as="Button"
-          to={""}
+        <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
@@ -127,7 +124,7 @@ export default function ArbeidssøkerRegisterSide() {
           className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
-        </RemixLink>
+        </Button>
 
         <Button
           size="medium"
