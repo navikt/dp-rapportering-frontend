@@ -107,16 +107,15 @@ export default function BegrunnelseSide() {
       )}
 
       <NavigasjonContainer>
-        <RemixLink
-          as="Button"
-          to={`/periode/${periode.id}/endring/fyll-ut`}
+        <Button
+          onClick={() => navigate(-1)}
           variant="secondary"
-          className={navigasjonStyles.knapp}
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
+          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
-        </RemixLink>
+        </Button>
 
         <Button
           size="medium"

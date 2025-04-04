@@ -12,7 +12,6 @@ import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LesMer } from "~/components/LesMer";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -198,17 +197,15 @@ export default function RapporteringstypeSide() {
       )}
 
       <NavigasjonContainer>
-        <RemixLink
-          as="Button"
-          to={`/`}
+        <Button
+          onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
           className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
-        </RemixLink>
-
+        </Button>
         <Button
           size="medium"
           onClick={neste}
