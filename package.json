@@ -38,7 +38,7 @@
     "cross-env": "7.0.3",
     "date-fns": "4.1.0",
     "express": "4.21.2",
-    "groq": "3.82.0",
+    "groq": "3.83.0",
     "html-react-parser": "5.2.3",
     "isbot": "5.1.25",
     "morgan": "1.10.0",
