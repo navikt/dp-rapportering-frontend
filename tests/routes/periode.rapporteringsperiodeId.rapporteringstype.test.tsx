@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
-import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, test, vi } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -8,11 +8,16 @@ import RapporteringstypeSide, {
   action as rapporteringstypeAction,
   loader as rapporteringstypeLoader,
 } from "~/routes/periode.$rapporteringsperiodeId.rapporteringstype";
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { Rapporteringstype } from "~/utils/types";
 
 import { server } from "../../mocks/server";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
+
+vi.mock("~/hooks/useLocale", () => ({
+  useLocale: vi.fn(() => ({ locale: DecoratorLocale.NB })),
+}));
 
 describe("RapporteringstypeSide", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));

@@ -8,6 +8,7 @@ import {
 
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
+import { DecoratorLocale } from "./dekoratoren.utils";
 import { IRapporteringsperiodeStatus } from "./types";
 
 export function periodeSomTimer(periode?: string): number | undefined {
@@ -31,10 +32,11 @@ export function hentUkeTekst(
 export function hentPeriodeTekst(
   rapporteringsperiode: IRapporteringsperiode,
   getAppText: GetAppText,
+  locale: DecoratorLocale,
 ): string {
   const { fraOgMed, tilOgMed } = rapporteringsperiode.periode;
   const ukenummer = formaterPeriodeTilUkenummer(fraOgMed, tilOgMed);
-  const dato = formaterPeriodeDato(fraOgMed, tilOgMed);
+  const dato = formaterPeriodeDato(fraOgMed, tilOgMed, locale);
 
   return `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
 }

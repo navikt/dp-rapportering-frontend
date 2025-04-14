@@ -131,7 +131,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       periode.periode.fraOgMed,
       periode.periode.tilOgMed,
     );
-    const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed);
+    const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed, locale);
 
     invaerendePeriodeTekst = `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
   }
