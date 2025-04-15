@@ -70,7 +70,11 @@ describe("RapporteringstypeSide", () => {
 
       expect(await screen.findByText(/rapportering-naavaerende-periode/)).toBeInTheDocument();
       expect(
-        (await screen.findAllByText(/rapportering-uke 1 - 2 \(01.01.2024 - 14.01.2024\)/i)).length,
+        (
+          await screen.findAllByText(
+            /rapportering-uke 1 - 2 \(01. januar 2024 - 14. januar 2024\)/i,
+          )
+        ).length,
       ).toBe(2);
     });
   });
@@ -94,7 +98,11 @@ describe("RapporteringstypeSide", () => {
 
       expect(await screen.findByText(/rapportering-foerste-periode/)).toBeInTheDocument();
       expect(
-        (await screen.findAllByText(/rapportering-uke 1 - 2 \(01.01.2024 - 14.01.2024\)/i)).length,
+        (
+          await screen.findAllByText(
+            /rapportering-uke 1 - 2 \(01. januar 2024 - 14. januar 2024\)/i,
+          )
+        ).length,
       ).toBe(2);
     });
 

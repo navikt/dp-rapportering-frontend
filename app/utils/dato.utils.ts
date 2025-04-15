@@ -12,8 +12,8 @@ export function formaterDato(date: Date, language: DecoratorLocale = DecoratorLo
 export function formaterPeriodeDato(fraOgMed: string, tilOgMed: string, language: DecoratorLocale) {
   const locale = [DecoratorLocale.NB, DecoratorLocale.NN].includes(language) ? nb : enGB;
 
-  const fom = format(new Date(fraOgMed), "dd.MM.yyyy", { locale });
-  const tom = format(new Date(tilOgMed), "dd.MM.yyyy", { locale });
+  const fom = format(new Date(fraOgMed), "dd. MMMM yyyy", { locale });
+  const tom = format(new Date(tilOgMed), "dd. MMMM yyyy", { locale });
 
   return `${fom} - ${tom}`;
 }

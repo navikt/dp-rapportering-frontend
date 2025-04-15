@@ -12,7 +12,7 @@ describe("formaterPeriodeDato", () => {
 
     const periodeString = formaterPeriodeDato(fraOgMed, tilOgMed, locale);
 
-    expect(periodeString).toBe("22.05.2023 - 04.06.2023");
+    expect(periodeString).toBe("22. mai 2023 - 04. juni 2023");
   });
 });
 
