@@ -68,7 +68,7 @@
     "@types/node": "22.14.1",
     "@types/react": "18.3.20",
     "@types/react-dom": "18.3.6",
-    "@vitejs/plugin-react": "4.3.4",
+    "@vitejs/plugin-react": "4.4.0",
     "@vitest/coverage-istanbul": "2.1.9",
     "dotenv": "16.5.0",
     "eslint": "9.24.0",
