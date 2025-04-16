@@ -211,7 +211,7 @@ export function getKalender(props: IProps, showModal: boolean = true): string {
 
   const seksjoner = [
     `<h3>${hentUkeTekst(periode, getAppText)}</h3>`,
-    `<p>${formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed)}</p>`,
+    `<p>${formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed, locale)}</p>`,
   ];
 
   if (showModal) {
@@ -366,7 +366,7 @@ export function htmlForRapporteringstype(props: IProps): string {
       level: "2",
     }),
   );
-  seksjoner.push(`<p>${hentPeriodeTekst(periode, getAppText)}</p>`);
+  seksjoner.push(`<p>${hentPeriodeTekst(periode, getAppText, props.locale)}</p>`);
   seksjoner.push(
     renderToString(
       <PortableText
@@ -383,7 +383,7 @@ export function htmlForRapporteringstype(props: IProps): string {
     rapporteringsperioder.length === 1
       ? getAppText("rapportering-rapporter-navarende-tittel")
       : getAppText("rapportering-ikke-utfylte-rapporter-tittel");
-  const description = hentPeriodeTekst(periode, getAppText);
+  const description = hentPeriodeTekst(periode, getAppText, props.locale);
 
   const options = [
     { value: Rapporteringstype.harAktivitet, label: getAppText("rapportering-noe-å-rapportere") },
@@ -495,7 +495,11 @@ export function htmlForOppsummering(props: IProps): string {
   }
 
   const ukenummer = formaterPeriodeTilUkenummer(periode.periode.fraOgMed, periode.periode.tilOgMed);
-  const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed);
+  const dato = formaterPeriodeDato(
+    periode.periode.fraOgMed,
+    periode.periode.tilOgMed,
+    props.locale,
+  );
 
   const invaerendePeriodeTekst = `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
 

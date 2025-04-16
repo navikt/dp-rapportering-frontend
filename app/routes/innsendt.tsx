@@ -113,6 +113,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                         {formaterPeriodeDato(
                           nyestePeriode.periode.fraOgMed,
                           nyestePeriode.periode.tilOgMed,
+                          locale,
                         )}
                       </div>
                     </div>

@@ -39,7 +39,7 @@ export function Kalender(props: IProps) {
 
   const periodeUkenummerTekst = hentUkeTekst(periode, getAppText);
 
-  const periodeFomTomDatoTekst = formaterPeriodeDato(fraOgMed, tilOgMed);
+  const periodeFomTomDatoTekst = formaterPeriodeDato(fraOgMed, tilOgMed, locale);
 
   return (
     <>

@@ -1,15 +1,18 @@
 import { describe, expect, test } from "vitest";
 
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
+import { DecoratorLocale } from "./dekoratoren.utils";
 
 describe("formaterPeriodeDato", () => {
   test("returnerer riktig periodeformat", () => {
     const fraOgMed = "2023-05-22";
     const tilOgMed = "2023-06-04";
 
-    const periodeString = formaterPeriodeDato(fraOgMed, tilOgMed);
+    const locale = DecoratorLocale.NB;
 
-    expect(periodeString).toBe("22.05.2023 - 04.06.2023");
+    const periodeString = formaterPeriodeDato(fraOgMed, tilOgMed, locale);
+
+    expect(periodeString).toBe("22. mai 2023 - 04. juni 2023");
   });
 });
 

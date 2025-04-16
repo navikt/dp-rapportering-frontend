@@ -9,9 +9,11 @@ export function formaterDato(date: Date, language: DecoratorLocale = DecoratorLo
   return format(date, "d. MMMM", { locale });
 }
 
-export function formaterPeriodeDato(fraOgMed: string, tilOgMed: string) {
-  const fom = format(new Date(fraOgMed), "dd.MM.yyyy");
-  const tom = format(new Date(tilOgMed), "dd.MM.yyyy");
+export function formaterPeriodeDato(fraOgMed: string, tilOgMed: string, language: DecoratorLocale) {
+  const locale = [DecoratorLocale.NB, DecoratorLocale.NN].includes(language) ? nb : enGB;
+
+  const fom = format(new Date(fraOgMed), "dd. MMMM yyyy", { locale });
+  const tom = format(new Date(tilOgMed), "dd. MMMM yyyy", { locale });
 
   return `${fom} - ${tom}`;
 }
