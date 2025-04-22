@@ -13,6 +13,7 @@ import { LesMer } from "~/components/LesMer";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { useAnalytics } from "~/hooks/useAnalytics";
+import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import {
@@ -67,8 +68,8 @@ function nesteSide(periode: IRapporteringsperiode) {
 }
 
 export default function RapporteringstypeSide() {
+  const { locale } = useLocale();
   const navigate = useNavigate();
-
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText, getRichText } = useSanity();
@@ -162,7 +163,7 @@ export default function RapporteringstypeSide() {
           : getAppText("rapportering-naavaerende-periode")}
       </Heading>
 
-      <p>{hentPeriodeTekst(periode, getAppText)}</p>
+      <p>{hentPeriodeTekst(periode, getAppText, locale)}</p>
 
       <PortableText
         value={getRichText("rapportering-fyll-ut-frister", {
@@ -176,7 +177,7 @@ export default function RapporteringstypeSide() {
       <RadioGroup
         disabled={!kanSendes(periode)}
         legend={rapporteringstypeFormLabel}
-        description={hentPeriodeTekst(periode, getAppText)}
+        description={hentPeriodeTekst(periode, getAppText, locale)}
         onChange={endreRapporteringstype}
         value={type}
       >
