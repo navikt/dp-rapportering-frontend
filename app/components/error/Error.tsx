@@ -8,7 +8,7 @@ interface ErrorProps {
 
 export const Error = ({ title }: ErrorProps) => {
   return (
-    <Alert variant="error" className={styles.container}>
+    <Alert role="alert" variant="error" className={styles.container}>
       {title}
     </Alert>
   );

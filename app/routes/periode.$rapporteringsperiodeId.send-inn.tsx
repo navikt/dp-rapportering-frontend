@@ -185,7 +185,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         {getAppText("rapportering-send-inn-tittel")}
       </Heading>
       {kanSendes(periode) ? (
-        <Alert variant="warning" className="my-4 alert-with-rich-text">
+        <Alert role="status" variant="warning" className="my-4 alert-with-rich-text">
           <PortableText value={getRichText("rapportering-meldekort-ikke-sendt-enda")} />
         </Alert>
       ) : (
@@ -211,7 +211,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         {getAppText("rapportering-send-inn-bekreft-opplysning")}
       </Checkbox>
       {actionData?.error && (
-        <Alert variant="error" className={styles.feilmelding}>
+        <Alert role="alert" variant="error" className={styles.feilmelding}>
           {actionData.error}
         </Alert>
       )}

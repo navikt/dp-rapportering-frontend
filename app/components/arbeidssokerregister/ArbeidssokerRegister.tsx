@@ -41,7 +41,7 @@ export function AvregistertArbeidssokerAlert() {
   const { getAppText, getRichText } = useSanity();
 
   return (
-    <Alert variant="warning" className="my-6">
+    <Alert role="status" variant="warning" className="my-6">
       <Heading spacing size="xsmall">
         {getAppText("rapportering-arbeidssokerregister-alert-tittel-avregistrert")}
       </Heading>
