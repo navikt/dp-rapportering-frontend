@@ -80,7 +80,7 @@ jobs:
           key: modules-${{ hashFiles('package-lock.json') }}
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '22.14.0'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
 
