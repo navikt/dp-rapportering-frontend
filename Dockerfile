@@ -1,4 +1,4 @@
-FROM node:22-alpine AS node
+FROM node:24-alpine AS node
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
 RUN npm config set @navikt:registry=https://npm.pkg.github.com
@@ -7,7 +7,7 @@ RUN npm config set @navikt:registry=https://npm.pkg.github.com
 # build app
 FROM node AS app-build
 WORKDIR /app
-ENV RUNTIME_ENVIRONMENT ${RUNTIME_ENVIRONMENT}
+ENV RUNTIME_ENVIRONMENT=${RUNTIME_ENVIRONMENT}
 
 COPY ./app ./app
 COPY ./mocks ./mocks
