@@ -202,7 +202,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Heading>
 
       {kanSendes(periode) ? (
-        <Alert variant="warning" className="my-4 alert-with-rich-text">
+        <Alert role="status" variant="warning" className="my-4 alert-with-rich-text">
           <PortableText value={getRichText("rapportering-endring-ikke-sendt-enda")} />
         </Alert>
       ) : (
@@ -240,7 +240,7 @@ export default function RapporteringsPeriodeSendInnSide() {
       </Checkbox>
 
       {actionData?.error && (
-        <Alert variant="error" className={styles.feilmelding}>
+        <Alert role="alert" variant="error" className={styles.feilmelding}>
           {getAppText(actionData.error)}
         </Alert>
       )}
