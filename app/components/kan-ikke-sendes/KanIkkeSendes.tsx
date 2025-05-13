@@ -13,7 +13,7 @@ export function KanIkkeSendes(props: IProps): JSX.Element | undefined {
 
   if (!kanSendes(props.periode)) {
     return (
-      <Alert variant="error" className="my-4">
+      <Alert role="alert" variant="error" className="my-4">
         {getAppText("rapportering-periode-kan-ikke-sendes")}
       </Alert>
     );

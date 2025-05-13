@@ -149,7 +149,7 @@ export function AktivitetModal({
             <LesMer periodeId={periode.id} />
 
             {actionData?.status === "error" && actionData?.error && (
-              <Alert variant="error" className={styles.feilmelding}>
+              <Alert role="alert" variant="error" className={styles.feilmelding}>
                 {getAppText(actionData.error.statusText)}
               </Alert>
             )}
