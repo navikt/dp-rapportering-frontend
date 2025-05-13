@@ -18,6 +18,7 @@ import { NavigasjonContainer } from "~/components/navigasjon-container/Navigasjo
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
+import { usePreventDoubleClick } from "~/hooks/usePreventDoubleClick";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -85,7 +86,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
 
-  const [harTrykketNeste, setHarTrykketNeste] = useState(false);
+  const [harTrykketNeste, trySetHarTrykketNeste] = usePreventDoubleClick();
 
   useEffect(() => {
     if (actionData?.status === "success") {
@@ -117,9 +118,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   }
 
   const neste = () => {
-    if (harTrykketNeste) return;
-
-    setHarTrykketNeste(true);
+    if (!trySetHarTrykketNeste()) return;
 
     trackSkjemaStegFullført({
       periode,
@@ -140,12 +139,6 @@ export default function RapporteringsPeriodeFyllUtSide() {
       sesjonId,
     });
   }, []);
-
-  useEffect(() => {
-    if (navigation.state === "idle") {
-      setHarTrykketNeste(false);
-    }
-  }, [navigation.state]);
 
   return (
     <>
