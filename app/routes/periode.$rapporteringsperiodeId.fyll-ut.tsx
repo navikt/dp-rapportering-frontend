@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { useActionData, useNavigate, useNavigation, useSearchParams } from "@remix-run/react";
+import { useActionData, useNavigate, useNavigation } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
@@ -85,8 +85,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [harTrykketNeste, setHarTrykketNeste] = useState(false);
 
   useEffect(() => {
     if (actionData?.status === "success") {
@@ -118,6 +117,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
   }
 
   const neste = () => {
+    if (harTrykketNeste) return;
+
+    setHarTrykketNeste(true);
+
     trackSkjemaStegFullført({
       periode,
       stegnavn,
@@ -126,7 +129,6 @@ export default function RapporteringsPeriodeFyllUtSide() {
     });
 
     const nextLink = nesteSide(periode);
-
     navigate(nextLink);
   };
 
@@ -138,6 +140,12 @@ export default function RapporteringsPeriodeFyllUtSide() {
       sesjonId,
     });
   }, []);
+
+  useEffect(() => {
+    if (navigation.state === "idle") {
+      setHarTrykketNeste(false);
+    }
+  }, [navigation.state]);
 
   return (
     <>
@@ -182,7 +190,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           icon={<ArrowRightIcon aria-hidden />}
           className={navigasjonStyles.knapp}
           onClick={neste}
-          disabled={isSubmitting}
+          disabled={isSubmitting || harTrykketNeste}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
