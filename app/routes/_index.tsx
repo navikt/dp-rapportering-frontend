@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Button, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-react";
+import { Alert, Button, Checkbox, CheckboxGroup, Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import {
@@ -90,6 +90,10 @@ export default function Landingsside() {
       )}
 
       <PortableText value={getRichText("rapportering-innledning")} />
+
+      <ReadMore header={getAppText("rapportering-arbeidstid-ikke-redusert-tittel")}>
+        <PortableText value={getRichText("rapportering-arbeidstid-ikke-redusert")} />
+      </ReadMore>
 
       {forstePeriode?.kanSendes === true && (
         <>
