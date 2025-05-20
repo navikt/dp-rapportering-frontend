@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Button, Checkbox, CheckboxGroup, Heading } from "@navikt/ds-react";
+import { Alert, Button, Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import {
@@ -9,7 +9,7 @@ import {
   useNavigation,
   useRouteError,
 } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
@@ -47,7 +47,6 @@ export default function Landingsside() {
 
   const { getAppText, getLink, getRichText } = useSanity();
   const startFetcher = useFetcher<typeof StartAction>();
-  const [samtykker, setSamtykker] = useState(false);
   const { trackSkjemaStartet, trackNavigere } = useAnalytics();
 
   const forstePeriode = rapporteringsperioder[0];
@@ -91,6 +90,10 @@ export default function Landingsside() {
 
       <PortableText value={getRichText("rapportering-innledning")} />
 
+      <ReadMore header={getAppText("rapportering-arbeidstid-ikke-redusert-tittel")}>
+        <PortableText value={getRichText("rapportering-arbeidstid-ikke-redusert")} />
+      </ReadMore>
+
       {forstePeriode?.kanSendes === true && (
         <>
           <Heading size="small" level="2" className="mt-8">
@@ -99,15 +102,6 @@ export default function Landingsside() {
 
           <PortableText value={getRichText("rapportering-samtykke-beskrivelse")} />
 
-          <CheckboxGroup
-            value={[samtykker]}
-            legend=""
-            hideLegend
-            onChange={(value) => setSamtykker(value.includes(true))}
-          >
-            <Checkbox value={true}>{getAppText("rapportering-samtykke-checkbox")}</Checkbox>
-          </CheckboxGroup>
-
           <NavigasjonContainer>
             <Button
               size="medium"
@@ -115,7 +109,7 @@ export default function Landingsside() {
               icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               onClick={startUtfylling}
-              disabled={!samtykker || isSubmitting}
+              disabled={isSubmitting}
             >
               {getAppText("rapportering-knapp-neste")}
             </Button>

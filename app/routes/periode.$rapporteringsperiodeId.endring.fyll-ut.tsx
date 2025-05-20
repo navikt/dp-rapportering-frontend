@@ -18,6 +18,7 @@ import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContai
 import { RemixLink } from "~/components/RemixLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
+import { usePreventDoubleClick } from "~/hooks/usePreventDoubleClick";
 import { useSanity } from "~/hooks/useSanity";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
@@ -75,6 +76,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
+  const [harTrykketNeste, trySetHarTrykketNeste] = usePreventDoubleClick();
 
   const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
   const sesjonId = useMemo(uuidv7, [periode.id]);
@@ -115,6 +117,8 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const periodeneErLike = erPeriodeneLike(periode, originalPeriode);
 
   const neste = () => {
+    if (!trySetHarTrykketNeste()) return;
+
     trackSkjemaStegFullført({
       periode,
       stegnavn,
@@ -178,7 +182,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
           iconPosition="right"
           className={navigasjonStyles.knapp}
           onClick={neste}
-          disabled={isSubmitting}
+          disabled={isSubmitting || harTrykketNeste}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
