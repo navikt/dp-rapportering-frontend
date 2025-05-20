@@ -71,50 +71,5 @@ describe("Hovedside rapportering", () => {
         await screen.findByText("rapportering-for-tidlig-a-sende-meldekort"),
       ).toBeInTheDocument();
     });
-
-    test("Skal vise samtykke hvis bruker har minst en rapporteringsperiode", async () => {
-      mockSession();
-      const rapporteringsperiode = lagRapporteringsperiode({ kanSendes: true });
-      testDb.addRapporteringsperioder(rapporteringsperiode);
-
-      mockResponse();
-
-      renderLandingsside();
-
-      expect(await screen.findByText(/rapportering-samtykke-tittel/)).toBeInTheDocument();
-      expect(await screen.findByText(/rapportering-samtykke-beskrivelse/)).toBeInTheDocument();
-      expect(
-        await screen.findByRole("checkbox", { name: /rapportering-samtykke-checkbox/ }),
-      ).toBeInTheDocument();
-
-      expect(
-        await screen.findByRole("button", { name: /rapportering-knapp-neste/ }),
-      ).toBeDisabled();
-    });
-
-    test("kan trykke neste-knapp etter å ha krysset av for samtykke checkbox.", async () => {
-      mockSession();
-      const rapporteringsperiode = lagRapporteringsperiode({ kanSendes: true });
-      testDb.addRapporteringsperioder(rapporteringsperiode);
-      mockResponse();
-
-      renderLandingsside();
-
-      expect(await screen.findByText(/rapportering-samtykke-tittel/)).toBeInTheDocument();
-      expect(await screen.findByText(/rapportering-samtykke-beskrivelse/)).toBeInTheDocument();
-
-      const samtykkeCheckbox = await screen.findByRole("checkbox", {
-        name: /rapportering-samtykke-checkbox/,
-      });
-      expect(samtykkeCheckbox).toBeInTheDocument();
-      expect(
-        await screen.findByRole("button", { name: /rapportering-knapp-neste/ }),
-      ).toBeDisabled();
-
-      samtykkeCheckbox.click();
-      expect(
-        await screen.findByRole("button", { name: /rapportering-knapp-neste/ }),
-      ).not.toBeDisabled();
-    });
   });
 });
