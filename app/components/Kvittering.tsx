@@ -34,7 +34,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
 
   return (
     <>
-      <Alert variant="success" className="my-4">
+      <Alert variant="success" role="status" className="my-4">
         <Heading spacing size="small" level="3">
           {tittel}
         </Heading>
