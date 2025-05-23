@@ -20,7 +20,6 @@ import { uuidv7 } from "uuidv7";
 import indexStyle from "~/index.css?url";
 
 import { hasSession } from "../mocks/session";
-import { AlertWithCloseButton } from "./components/AlertWithCloseButton";
 import { Umami } from "./components/analytics/Umami";
 import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBoundary";
 import { ServiceMessage } from "./components/service-message/ServiceMessage";
@@ -43,11 +42,22 @@ export const sanityClient = createClient(sanityConfig);
 
 export const meta: MetaFunction = () => {
   return [
-    { charset: "utf-8" },
-    { name: "viewport", content: "width=device-width,initial-scale=1" },
+    {
+      charset: "utf-8",
+    },
+    {
+      name: "viewport",
+      content: "width=device-width,initial-scale=1",
+    },
     { title: "Meldekort - dagpenger" },
-    { property: "og:title", content: "Meldekort - dagpenger" },
-    { name: "description", content: "meldekortløsning for dagpenger" },
+    {
+      property: "og:title",
+      content: "Meldekort - dagpenger",
+    },
+    {
+      name: "description",
+      content: "meldekortløsning for dagpenger",
+    },
   ];
 };
 
@@ -67,7 +77,11 @@ export const links: LinksFunction = () => {
       sizes: "16x16",
       href: `${getEnv("BASE_PATH")}/favicon-16x16.png`,
     },
-    { rel: "icon", type: "image/x-icon", href: `${getEnv("BASE_PATH")}/favicon.ico` },
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      href: `${getEnv("BASE_PATH")}/favicon.ico`,
+    },
   ];
 };
 
@@ -85,7 +99,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 
   if (isLocalOrDemo && !hasSession(request)) {
-    return redirect("/", { headers: { "Set-Cookie": `sessionId=${uuidv7()}` } });
+    return redirect("/", {
+      headers: {
+        "Set-Cookie": `sessionId=${uuidv7()}`,
+      },
+    });
   }
 
   return {
@@ -113,13 +131,17 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   return json(
     { status: "success" },
-    { headers: { "Set-Cookie": await setLanguage(cookieHeader, locale) } },
+    {
+      headers: {
+        "Set-Cookie": await setLanguage(cookieHeader, locale),
+      },
+    },
   );
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { fragments, env } = useTypedRouteLoaderData("root");
-  const { getMessages, getAppText } = useSanity();
+  const { getMessages } = useSanity();
 
   const serviceMessages = getMessages();
 
@@ -136,7 +158,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Umami />
       </head>
       <body>
-        <script dangerouslySetInnerHTML={{ __html: `window.env = ${JSON.stringify(env)}` }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.env = ${JSON.stringify(env)}`,
+          }}
+        />
         {parse(fragments.DECORATOR_HEADER, { trim: true })}
 
         {isLocalOrDemo && (
@@ -144,14 +170,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Alert variant="warning">
               Dette er en demoside og inneholder ikke dine personlige data.
             </Alert>
-          </div>
-        )}
-
-        {!isLocalOrDemo && (
-          <div className={styles.serviceMessages}>
-            <AlertWithCloseButton variant="info">
-              {getAppText("rapportering-informasjon-feilmelding")}
-            </AlertWithCloseButton>
           </div>
         )}
 
