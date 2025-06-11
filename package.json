@@ -51,7 +51,7 @@
     "tinyduration": "3.4.1",
     "uuidv7": "1.0.2",
     "winston": "3.17.0",
-    "zod": "3.25.47",
+    "zod": "3.25.58",
     "zod-form-data": "2.0.7"
   },
   "devDependencies": {
