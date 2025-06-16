@@ -87,7 +87,7 @@
     "typescript-eslint": "8.34.0",
     "vite": "6.3.5",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "3.1.4"
+    "vitest": "3.2.3"
   },
   "overrides": {
     "@remix-run/server-runtime": {
