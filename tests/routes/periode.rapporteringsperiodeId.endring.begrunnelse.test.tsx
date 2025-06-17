@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
@@ -46,7 +46,10 @@ describe("BegrunnelseSide", () => {
   });
 
   test("Skal vise alle alternativer i begrunnelsesvalg", async () => {
-    render();
+    await act(async () => {
+      render();
+    });
+
     expect(
       await screen.findByText(/rapportering-endring-begrunnelse-nedtrekksmeny-label/),
     ).toBeInTheDocument();
@@ -71,7 +74,9 @@ describe("BegrunnelseSide", () => {
   });
 
   test("Skal kunne velge en begrunnelse", async () => {
-    render();
+    await act(async () => {
+      render();
+    });
 
     const select = await screen.findByLabelText(
       /rapportering-endring-begrunnelse-nedtrekksmeny-label/,
@@ -87,7 +92,9 @@ describe("BegrunnelseSide", () => {
   });
 
   test("Må velge en begrunnelse for å gå videre", async () => {
-    render();
+    await act(async () => {
+      render();
+    });
 
     const nesteKnapp = await screen.findByRole("button", { name: /rapportering-knapp-neste/i });
     const select = await screen.findByLabelText(

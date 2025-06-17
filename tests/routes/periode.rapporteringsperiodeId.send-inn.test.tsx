@@ -1,4 +1,4 @@
-import { screen, within } from "@testing-library/react";
+import { act, screen, within } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
@@ -59,7 +59,9 @@ describe("RapporteringstypeSide", () => {
     test("Uten aktiviteter", async () => {
       testDb.addRapporteringsperioder(rapporteringsperiode);
 
-      render();
+      await act(async () => {
+        render();
+      });
 
       expect(await screen.findByText(/rapportering-meldekort-ikke-sendt-enda/)).toBeInTheDocument();
 
@@ -105,7 +107,9 @@ describe("RapporteringstypeSide", () => {
         registrertArbeidssoker: true,
       });
 
-      render();
+      await act(async () => {
+        render();
+      });
 
       expect(await screen.findByText(/rapportering-meldekort-ikke-sendt-enda/)).toBeInTheDocument();
 

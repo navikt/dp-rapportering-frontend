@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { act, screen, waitFor } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
@@ -49,7 +49,9 @@ describe("ArbeidssøkerRegisterSide", () => {
 
   test("Skal vise spørsmål om arbeidssøker", async () => {
     testDb.addRapporteringsperioder(rapporteringsperiode);
-    render();
+    await act(async () => {
+      render();
+    });
 
     expect(await screen.findByText(/rapportering-arbeidssokerregister-tittel/)).toBeInTheDocument();
     expect(
@@ -69,7 +71,9 @@ describe("ArbeidssøkerRegisterSide", () => {
       registrertArbeidssoker: true,
     };
     testDb.addRapporteringsperioder(rapporteringsperiode09);
-    render();
+    await act(async () => {
+      render();
+    });
 
     const radioJa = await screen.findByRole("radio", { name: /svar-ja/i });
     await waitFor(() => expect(radioJa).toBeChecked());
@@ -82,11 +86,15 @@ describe("ArbeidssøkerRegisterSide", () => {
 
   test("Skal svare med 'Ja'", async () => {
     testDb.addRapporteringsperioder(rapporteringsperiode);
-    render();
+    await act(async () => {
+      render();
+    });
 
     const radioJa = await screen.findByRole("radio", { name: /svar-ja/i });
 
-    radioJa.click();
+    await act(async () => {
+      radioJa.click();
+    });
 
     await waitFor(() => expect(radioJa).toBeChecked());
     expect(
@@ -96,11 +104,15 @@ describe("ArbeidssøkerRegisterSide", () => {
 
   test("Skal svare med 'Nei'", async () => {
     testDb.addRapporteringsperioder(rapporteringsperiode);
-    render();
+    await act(async () => {
+      render();
+    });
 
     const radioNei = await screen.findByRole("radio", { name: /svar-nei/i });
 
-    radioNei.click();
+    await act(async () => {
+      radioNei.click();
+    });
 
     await waitFor(() => expect(radioNei).toBeChecked());
     expect(
@@ -111,7 +123,9 @@ describe("ArbeidssøkerRegisterSide", () => {
 
   test("Skal være allerede besvart med 'Ja'", async () => {
     testDb.addRapporteringsperioder({ ...rapporteringsperiode, registrertArbeidssoker: true });
-    render();
+    await act(async () => {
+      render();
+    });
 
     const radioJa = await screen.findByRole("radio", { name: /svar-ja/ });
     expect(radioJa).toBeChecked();
@@ -123,7 +137,9 @@ describe("ArbeidssøkerRegisterSide", () => {
 
   test("Skal være allerede besvart med 'Nei'", async () => {
     testDb.addRapporteringsperioder({ ...rapporteringsperiode, registrertArbeidssoker: false });
-    render();
+    await act(async () => {
+      render();
+    });
 
     const radioNei = await screen.findByRole("radio", { name: /svar-nei/ });
     expect(radioNei).toBeChecked();

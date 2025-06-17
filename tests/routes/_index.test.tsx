@@ -1,5 +1,5 @@
 import { createRemixStub } from "@remix-run/testing";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
@@ -53,7 +53,9 @@ describe("Hovedside rapportering", () => {
       mockSession();
       mockResponse();
 
-      renderLandingsside();
+      await act(async () => {
+        renderLandingsside();
+      });
 
       expect(await screen.findByText(/rapportering-ingen-meldekort/)).toBeInTheDocument();
     });
@@ -65,7 +67,9 @@ describe("Hovedside rapportering", () => {
 
       mockResponse();
 
-      renderLandingsside();
+      await act(async () => {
+        renderLandingsside();
+      });
 
       expect(
         await screen.findByText("rapportering-for-tidlig-a-sende-meldekort"),
