@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { act, screen } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, test, vi } from "vitest";
 
@@ -66,7 +66,9 @@ describe("RapporteringstypeSide", () => {
   describe("Når brukeren har én periode", () => {
     test("Viser oversikt for nåværende periode", async () => {
       mockApiResponses([rapporteringsperiode]);
-      render();
+      await act(async () => {
+        render();
+      });
 
       expect(await screen.findByText(/rapportering-naavaerende-periode/)).toBeInTheDocument();
       expect(
@@ -94,7 +96,9 @@ describe("RapporteringstypeSide", () => {
 
     test("Viser oversikt for første periode", async () => {
       mockApiResponses(rapporteringsperioder);
-      render();
+      await act(async () => {
+        render();
+      });
 
       expect(await screen.findByText(/rapportering-foerste-periode/)).toBeInTheDocument();
       expect(
@@ -108,7 +112,9 @@ describe("RapporteringstypeSide", () => {
 
     test("Viser info boks for flere perioder", async () => {
       mockApiResponses(rapporteringsperioder);
-      render();
+      await act(async () => {
+        render();
+      });
 
       expect(await screen.findByText(/rapportering-flere-perioder-tittel/)).toBeInTheDocument();
       expect(await screen.findByText(/rapportering-flere-perioder-innledning/)).toBeInTheDocument();
@@ -116,7 +122,9 @@ describe("RapporteringstypeSide", () => {
 
     test("Viser alternativer for rapporteringstype", async () => {
       mockApiResponses([rapporteringsperiode]);
-      render();
+      await act(async () => {
+        render();
+      });
 
       expect(
         await screen.findByText(/rapportering-rapporter-navarende-tittel/),

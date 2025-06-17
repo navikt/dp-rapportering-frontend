@@ -23,6 +23,7 @@ vi.mock("@navikt/nav-dekoratoren-moduler", async () => {
   return {
     ...actualModule,
     getAmplitudeInstance: vi.fn(),
+    setBreadcrumbs: vi.fn(),
   };
 });
 
