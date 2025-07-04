@@ -1,4 +1,4 @@
-import { getAmplitudeInstance } from "@navikt/nav-dekoratoren-moduler";
+import { getAnalyticsInstance } from "@navikt/nav-dekoratoren-moduler";
 import { renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, Mock, test, vi } from "vitest";
 
@@ -13,7 +13,7 @@ vi.mock(import("@navikt/nav-dekoratoren-moduler"), async (importOriginal) => {
 
   return {
     ...actual,
-    getAmplitudeInstance: vi.fn().mockReturnValue(vi.fn()),
+    getAnalyticsInstance: vi.fn().mockReturnValue(vi.fn()),
     awaitDecoratorData: vi.fn().mockResolvedValue({}),
     getCurrentConsent: vi.fn().mockReturnValue({ consent: { analytics: true, surveys: true } }),
   };
@@ -53,7 +53,7 @@ describe("useAnalytics", () => {
   const språk = "no";
   const trackMock = vi.fn();
   beforeEach(() => {
-    (getAmplitudeInstance as Mock).mockReturnValue(trackMock);
+    (getAnalyticsInstance as Mock).mockReturnValue(trackMock);
   });
 
   afterEach(() => {
