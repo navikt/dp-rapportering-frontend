@@ -58,7 +58,6 @@ export default function BegrunnelseSide() {
     { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-3" },
     { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-4" },
     { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-5" },
-    { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-6" },
     { value: "rapportering-endring-begrunnelse-nedtrekksmeny-option-other" },
   ];
 

@@ -64,7 +64,6 @@ describe("BegrunnelseSide", () => {
       "rapportering-endring-begrunnelse-nedtrekksmeny-option-3",
       "rapportering-endring-begrunnelse-nedtrekksmeny-option-4",
       "rapportering-endring-begrunnelse-nedtrekksmeny-option-5",
-      "rapportering-endring-begrunnelse-nedtrekksmeny-option-6",
       "rapportering-endring-begrunnelse-nedtrekksmeny-option-other",
     ];
 
