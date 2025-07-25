@@ -1,21 +1,21 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { useEffect } from "react";
+import { LoaderFunctionArgs } from "react-router";
 import {
   isRouteErrorResponse,
   useFetcher,
   useLoaderData,
   useNavigation,
   useRouteError,
-} from "@remix-run/react";
-import { useEffect } from "react";
+} from "react-router";
 
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
+import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -118,7 +118,7 @@ export default function Landingsside() {
       )}
 
       <NavigasjonContainer>
-        <RemixLink
+        <ReactLink
           as="Link"
           to={getLink("rapportering-se-og-endre").linkUrl}
           onClick={() => {
@@ -131,7 +131,7 @@ export default function Landingsside() {
           }}
         >
           {getLink("rapportering-se-og-endre").linkText}
-        </RemixLink>
+        </ReactLink>
       </NavigasjonContainer>
     </>
   );

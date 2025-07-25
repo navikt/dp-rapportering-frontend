@@ -1,9 +1,9 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { useActionData, useLoaderData, useNavigate, useNavigation } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
@@ -15,7 +15,7 @@ import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
+import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { usePreventDoubleClick } from "~/hooks/usePreventDoubleClick";
@@ -188,14 +188,14 @@ export default function RapporteringsPeriodeFyllUtSide() {
         </Button>
       </NavigasjonContainer>
       <NavigasjonContainer>
-        <RemixLink
+        <ReactLink
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
           variant="tertiary"
           className="px-8"
         >
           {getLink("rapportering-endre-avbryt").linkText}
-        </RemixLink>
+        </ReactLink>
       </NavigasjonContainer>
 
       <LagretAutomatisk />

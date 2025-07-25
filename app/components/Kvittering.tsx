@@ -4,7 +4,7 @@ import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
+import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -69,13 +69,13 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
 
       <NavigasjonContainer>
         {harNestePeriode ? (
-          <RemixLink
+          <ReactLink
             as="Button"
             to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
             className={navigasjonStyles.knapp}
           >
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
-          </RemixLink>
+          </ReactLink>
         ) : (
           <Button
             as="a"
@@ -88,7 +88,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
       </NavigasjonContainer>
 
       <NavigasjonContainer>
-        <RemixLink
+        <ReactLink
           as="Link"
           to={getLink("rapportering-se-og-endre").linkUrl}
           onClick={() => {
@@ -101,7 +101,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           }}
         >
           {getLink("rapportering-se-og-endre").linkText}
-        </RemixLink>
+        </ReactLink>
       </NavigasjonContainer>
     </>
   );

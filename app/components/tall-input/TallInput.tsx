@@ -1,5 +1,5 @@
 import { TextField } from "@navikt/ds-react";
-import { useField } from "remix-validated-form";
+import { useField } from "@rvf/react-router";
 
 import { useSanity } from "~/hooks/useSanity";
 
@@ -20,6 +20,7 @@ export function TallInput(props: IProps) {
       inputMode="decimal"
       name={props.name}
       defaultValue={props.verdi}
+      // @ts-expect-error useField type says that error is a function, but it is string
       error={error ? getAppText(error) : undefined}
       {...getInputProps({
         id: props.name,

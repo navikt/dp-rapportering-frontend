@@ -1,4 +1,5 @@
 import { Tag } from "@navikt/ds-react";
+import { JSX } from "react";
 
 import { isLocalhost } from "~/utils/env.utils";
 

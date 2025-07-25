@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 import styles from "./NavigasjonContainer.module.css";
 
 interface IProps {

@@ -1,5 +1,5 @@
-import { useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { useNavigation } from "react-router";
 
 /**
  * En hook som beskytter mot dobbeltklikk på knapper,

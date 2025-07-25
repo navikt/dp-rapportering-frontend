@@ -1,7 +1,7 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
-import { useActionData, useFetcher, useNavigation } from "@remix-run/react";
+import { ValidatedForm } from "@rvf/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ValidatedForm } from "remix-validated-form";
+import { useActionData, useFetcher, useNavigation } from "react-router";
 import { uuidv7 } from "uuidv7";
 
 import { useAnalytics } from "~/hooks/useAnalytics";
@@ -92,7 +92,7 @@ export function AktivitetModal({
     lukkModal();
   }
 
-  function onSubmit(data: { type: string[]; timer?: number }) {
+  function onSubmit(data: { type: string; timer?: number }) {
     loggModalLukket("lagre", data.type?.length ?? 0);
   }
 

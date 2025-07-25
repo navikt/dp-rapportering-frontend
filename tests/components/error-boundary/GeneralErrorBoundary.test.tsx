@@ -1,4 +1,4 @@
-import { ErrorResponse } from "@remix-run/react";
+import { ErrorResponse } from "react-router";
 import { describe, expect, test, vi } from "vitest";
 
 import {
@@ -14,7 +14,7 @@ vi.mock(import("~/hooks/useSanity"), async (importOriginal) => {
   };
 });
 
-vi.mock(import("@remix-run/react"), () => ({
+vi.mock(import("react-router"), () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isRouteErrorResponse: (error: any): error is ErrorResponse => "data" in (error as IError),
 }));

@@ -20,3 +20,5 @@ node_modules
 secure.log
 /test-results/
 /blob-report/
+
+.react-router/

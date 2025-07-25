@@ -1,7 +1,7 @@
 import { ArrowsCirclepathIcon, SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Modal, Tooltip } from "@navikt/ds-react";
-import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
+import { useFetcher } from "react-router";
 
 import { INetworkResponse } from "~/utils/types";
 

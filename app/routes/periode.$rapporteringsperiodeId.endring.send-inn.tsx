@@ -1,8 +1,9 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { useEffect, useMemo, useState } from "react";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { data, redirect } from "react-router";
 import {
   Form,
   useActionData,
@@ -11,8 +12,7 @@ import {
   useNavigation,
   useRevalidator,
   useSubmit,
-} from "@remix-run/react";
-import { useEffect, useMemo, useState } from "react";
+} from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
@@ -22,7 +22,7 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
+import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -72,7 +72,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         body: periode,
       });
 
-      return json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
+      return data({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
     }
     const response = await sendInnPeriode(request, periode);
     const { id } = response;
@@ -96,7 +96,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       });
     }
 
-    return json(
+    return data(
       {
         error: "rapportering-feilmelding-feil-ved-innsending",
       },
@@ -271,14 +271,14 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Button>
       </Form>
       <NavigasjonContainer>
-        <RemixLink
+        <ReactLink
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
           variant="tertiary"
           className="px-8"
         >
           {getLink("rapportering-endre-avbryt").linkText}
-        </RemixLink>
+        </ReactLink>
       </NavigasjonContainer>
     </>
   );
