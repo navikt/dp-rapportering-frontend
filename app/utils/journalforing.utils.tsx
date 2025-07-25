@@ -1,7 +1,7 @@
 import { PortableText } from "@portabletext/react";
-import type { SubmitFunction } from "@remix-run/react";
 import { addDays, format } from "date-fns";
 import { renderToString } from "react-dom/server";
+import type { SubmitFunction } from "react-router";
 
 import { hentAktivitetBeskrivelse } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
 import { lesMerInnhold } from "~/components/LesMer";

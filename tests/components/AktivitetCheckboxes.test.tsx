@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { AktivitetCheckboxes } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 
-vi.mock("remix-validated-form", () => {
+vi.mock("@rvf/react-router", () => {
   return {
     useField: () => ({ error: null, getInputProps: () => {} }),
   };
@@ -67,7 +67,7 @@ describe("AktivitetCheckboxes", () => {
   });
 
   it("viser feilmelding", () => {
-    vi.mock("remix-validated-form", () => {
+    vi.mock("@rvf/react-router", () => {
       return {
         useField: () => ({ error: "Feilmelding", getInputProps: () => {} }),
       };

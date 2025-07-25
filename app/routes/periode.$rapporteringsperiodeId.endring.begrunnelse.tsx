@@ -1,8 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Select } from "@navikt/ds-react";
-import { ActionFunctionArgs } from "@remix-run/node";
-import { useFetcher, useNavigate } from "@remix-run/react";
 import { ChangeEvent, useEffect, useMemo } from "react";
+import { ActionFunctionArgs } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import { uuidv7 } from "uuidv7";
 
 import { Error } from "~/components/error/Error";
@@ -10,7 +10,7 @@ import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
+import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -129,14 +129,14 @@ export default function BegrunnelseSide() {
         </Button>
       </NavigasjonContainer>
       <NavigasjonContainer>
-        <RemixLink
+        <ReactLink
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
           variant="tertiary"
           className={navigasjonStyles.knapp}
         >
           {getLink("rapportering-endre-avbryt").linkText}
-        </RemixLink>
+        </ReactLink>
       </NavigasjonContainer>
 
       <LagretAutomatisk />

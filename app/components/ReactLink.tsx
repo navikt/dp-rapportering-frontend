@@ -1,12 +1,12 @@
 import { Button, Link } from "@navikt/ds-react";
-import type { LinkProps } from "@remix-run/react";
-import { useHref } from "@remix-run/react";
 import type { PropsWithChildren, Ref } from "react";
 import { forwardRef } from "react";
-import { useLinkClickHandler } from "react-router-dom";
+import type { LinkProps } from "react-router";
+import { useHref } from "react-router";
+import { useLinkClickHandler } from "react-router";
 
-type TRemixLinkSize = "small" | "medium" | "xsmall";
-type TRemixLinkVariant =
+type TReactLinkSize = "small" | "medium" | "xsmall";
+type TReactLinkVariant =
   | "secondary"
   | "primary"
   | "primary-neutral"
@@ -17,17 +17,17 @@ type TRemixLinkVariant =
 
 interface IProps extends LinkProps {
   as: "Link" | "Button";
-  size?: TRemixLinkSize;
-  variant?: TRemixLinkVariant;
+  size?: TReactLinkSize;
+  variant?: TReactLinkVariant;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
   disabled?: boolean;
   className?: string;
 }
 
-export const RemixLink = forwardRef(RemixLinkComponent);
+export const ReactLink = forwardRef(ReactLinkComponent);
 
-function RemixLinkComponent(
+function ReactLinkComponent(
   props: PropsWithChildren<IProps>,
   ref: Ref<HTMLAnchorElement> | undefined,
 ) {

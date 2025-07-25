@@ -2,7 +2,7 @@
 
 ## Komme i gang
 
-Appen er basert på [Remix](https://remix.run/docs)
+Appen er basert på [React Router v7](https://reactrouter.com/)
 
 ```
 npm install

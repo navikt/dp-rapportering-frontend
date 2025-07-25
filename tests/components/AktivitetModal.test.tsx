@@ -11,7 +11,7 @@ import {
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
 import { IRapporteringsperiodeStatus, Rapporteringstype } from "~/utils/types";
 
-vi.mock("remix-validated-form", () => ({
+vi.mock("@rvf/react-router", () => ({
   ValidatedForm: ({ children }: { children: React.ReactNode }) => <form>{children}</form>,
   useField: () => ({ error: null, getInputProps: () => {} }),
 }));
@@ -92,7 +92,7 @@ describe.skip("AktivitetModal", () => {
 
   it("viser feilmelding når actionData returnerer feilmelding", () => {
     // Mock actionData to return an error status
-    vi.mock("@remix-run/react", () => ({
+    vi.mock("react-router", () => ({
       useActionData: () => ({
         status: "error",
         error: { statusText: "Feilmelding" },
