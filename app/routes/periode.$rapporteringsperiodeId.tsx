@@ -1,7 +1,7 @@
 import { Accordion } from "@navikt/ds-react";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Outlet, useLoaderData, useLocation, useRouteError } from "@remix-run/react";
 import { useEffect } from "react";
+import type { LoaderFunctionArgs } from "react-router";
+import { Outlet, useLoaderData, useLocation, useRouteError } from "react-router";
 import invariant from "tiny-invariant";
 
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";

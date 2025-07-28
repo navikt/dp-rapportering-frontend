@@ -1,5 +1,5 @@
-import { useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";

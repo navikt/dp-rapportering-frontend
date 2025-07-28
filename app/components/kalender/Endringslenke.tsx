@@ -1,7 +1,7 @@
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 
-import { RemixLink } from "../RemixLink";
+import { ReactLink } from "../ReactLink";
 
 interface IProps {
   id: string;
@@ -23,8 +23,8 @@ export function EndringsLenke(props: IProps) {
   };
 
   return (
-    <RemixLink onClick={endringHandler} as="Link" to={`/periode/${props.id}/${sti}`}>
+    <ReactLink onClick={endringHandler} as="Link" to={`/periode/${props.id}/${sti}`}>
       {tekst}
-    </RemixLink>
+    </ReactLink>
   );
 }

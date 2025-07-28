@@ -1,6 +1,6 @@
 // @vitest-environment node
-import { redirect } from "@remix-run/node";
 import { http, HttpResponse } from "msw";
+import { redirect, UNSAFE_DataWithResponseInit } from "react-router";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
@@ -39,15 +39,15 @@ describe("Send inn rapporteringsperiode", () => {
           body,
         });
 
-        const response = await catchErrorResponse(() =>
+        const response = (await catchErrorResponse(() =>
           action({
             request,
             params: testParams,
             context: {},
           }),
-        );
+        )) as UNSAFE_DataWithResponseInit<{ error: string }>;
 
-        expect(response.status).toBe(500);
+        expect(response.init?.status).toBe(500);
       });
 
       test("burde feile hvis _html er null", async () => {
@@ -58,15 +58,15 @@ describe("Send inn rapporteringsperiode", () => {
           body,
         });
 
-        const response = await catchErrorResponse(() =>
+        const response = (await catchErrorResponse(() =>
           action({
             request,
             params: testParams,
             context: {},
           }),
-        );
+        )) as UNSAFE_DataWithResponseInit<{ error: string }>;
 
-        expect(response.status).toBe(500);
+        expect(response.init?.status).toBe(500);
       });
 
       test("burde feile hvis _html er tom", async () => {
@@ -77,15 +77,15 @@ describe("Send inn rapporteringsperiode", () => {
           body,
         });
 
-        const response = await catchErrorResponse(() =>
+        const response = (await catchErrorResponse(() =>
           action({
             request,
             params: testParams,
             context: {},
           }),
-        );
+        )) as UNSAFE_DataWithResponseInit<{ error: string }>;
 
-        expect(response.status).toBe(500);
+        expect(response.init?.status).toBe(500);
       });
 
       test("burde kunne sende inn og redirecte til riktig side", async () => {
@@ -165,14 +165,14 @@ describe("Send inn rapporteringsperiode", () => {
 
         mockSession();
 
-        const response = await action({
+        const response = (await action({
           request,
           params: testParams,
           context: {},
-        });
+        })) as UNSAFE_DataWithResponseInit<{ error: string }>;
 
-        const data = await response.json();
-        expect(response.status).toBe(500);
+        const data = response.data;
+        expect(response.init?.status).toBe(500);
 
         expect(data.error).toBe("rapportering-feilmelding-feil-ved-innsending");
       });
@@ -263,14 +263,14 @@ describe("Send inn rapporteringsperiode", () => {
 
         mockSession();
 
-        const response = await action({
+        const response = (await action({
           request,
           params: testParams,
           context: {},
-        });
+        })) as UNSAFE_DataWithResponseInit<{ error: string }>;
 
-        const data = await response.json();
-        expect(response.status).toBe(400);
+        const data = response.data;
+        expect(response.init?.status).toBe(400);
 
         expect(data.error).toBe("rapportering-feilmelding-kan-ikke-sendes");
       });

@@ -25,13 +25,13 @@ describe("Hent en rapporteringsperiode", () => {
     };
 
     test("skal feile hvis bruker ikke er logget på", async () => {
-      const response = await catchErrorResponse(() =>
+      const response = (await catchErrorResponse(() =>
         loader({
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
         }),
-      );
+      )) as Response;
 
       expect(response.status).toBe(500);
     });
@@ -70,13 +70,13 @@ describe("Hent en rapporteringsperiode", () => {
 
       mockSession();
 
-      const response = await catchErrorResponse(() =>
+      const response = (await catchErrorResponse(() =>
         loader({
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
         }),
-      );
+      )) as Response;
 
       expect(response.status).toBe(500);
     });

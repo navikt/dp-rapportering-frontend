@@ -13,6 +13,7 @@ COPY ./app ./app
 COPY ./mocks ./mocks
 COPY ./public ./public
 COPY ./vite.config.ts ./
+COPY ./react-router.config.ts ./
 COPY ./package.json ./
 COPY ./package-lock.json  ./
 
@@ -48,4 +49,4 @@ COPY ./package.json ./package.json
 COPY --from=app-build /app/build/ ./build/
 COPY --from=app-dependencies /app/node_modules ./node_modules
 
-CMD ["./node_modules/@remix-run/serve/dist/cli.js", "./build/server/index.js"]
+CMD ["./node_modules/.bin/react-router-serve", "./build/server/index.js"]
