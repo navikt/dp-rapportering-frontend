@@ -1,7 +1,7 @@
 import { Checkbox, CheckboxGroup, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
+import { useField } from "@rvf/react-router";
 import classNames from "classnames";
-import { useField } from "remix-validated-form";
 
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { type GetAppText, useSanity } from "~/hooks/useSanity";
@@ -80,7 +80,7 @@ export function AktivitetCheckboxes({
   }
 
   return (
-    <CheckboxGroup legend={label} error={error || undefined} value={verdi} onChange={onChange}>
+    <CheckboxGroup legend={label} error={error() || undefined} value={verdi} onChange={onChange}>
       {muligeAktiviteter.map((aktivitet) => {
         return (
           <div

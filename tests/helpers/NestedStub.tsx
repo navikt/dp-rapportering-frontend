@@ -1,12 +1,12 @@
-import { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { createRemixStub } from "@remix-run/testing";
 import { render as TLRender } from "@testing-library/react";
+import { ActionFunction, LoaderFunction } from "react-router";
+import { createRoutesStub } from "react-router";
 
 import RapporteringsPeriodeSide, {
   loader as rapporteringsperiodeLoader,
 } from "~/routes/periode.$rapporteringsperiodeId";
 
-interface IRemixStub {
+interface IRoutesStub {
   path: string;
   Component: React.ComponentType;
   action?: ActionFunction;
@@ -20,8 +20,8 @@ export const withNestedRapporteringsperiode = ({
   action,
   loader,
   initialEntry,
-}: IRemixStub) => {
-  const RemixStub = createRemixStub([
+}: IRoutesStub) => {
+  const RoutesStub = createRoutesStub([
     {
       path: "/periode/:rapporteringsperiodeId",
       Component: RapporteringsPeriodeSide,
@@ -31,6 +31,7 @@ export const withNestedRapporteringsperiode = ({
       children: [
         {
           path,
+          // @ts-expect-error Don't know why these types are incompatible now
           Component,
           loader,
           action,
@@ -39,5 +40,5 @@ export const withNestedRapporteringsperiode = ({
     },
   ]);
 
-  TLRender(<RemixStub initialEntries={[initialEntry]} />);
+  TLRender(<RoutesStub initialEntries={[initialEntry]} />);
 };

@@ -1,7 +1,7 @@
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
-import { ErrorResponse, isRouteErrorResponse } from "@remix-run/react";
 import { useEffect } from "react";
+import { ErrorResponse, isRouteErrorResponse } from "react-router";
 
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { useAnalytics } from "~/hooks/useAnalytics";

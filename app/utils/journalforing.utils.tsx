@@ -1,7 +1,7 @@
 import { PortableText } from "@portabletext/react";
-import type { SubmitFunction } from "@remix-run/react";
 import { addDays, format } from "date-fns";
 import { renderToString } from "react-dom/server";
+import type { SubmitFunction } from "react-router";
 
 import { hentAktivitetBeskrivelse } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
 import { lesMerInnhold } from "~/components/LesMer";
@@ -280,7 +280,6 @@ export function htmlForEndringBegrunnelse(props: IProps): string {
     "rapportering-endring-begrunnelse-nedtrekksmeny-option-3",
     "rapportering-endring-begrunnelse-nedtrekksmeny-option-4",
     "rapportering-endring-begrunnelse-nedtrekksmeny-option-5",
-    "rapportering-endring-begrunnelse-nedtrekksmeny-option-6",
     "rapportering-endring-begrunnelse-nedtrekksmeny-option-other",
   ];
 

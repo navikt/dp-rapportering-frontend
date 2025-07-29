@@ -1,8 +1,9 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { useEffect, useMemo, useState } from "react";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { data, redirect } from "react-router";
 import {
   Form,
   useActionData,
@@ -11,8 +12,7 @@ import {
   useNavigation,
   useRevalidator,
   useSubmit,
-} from "@remix-run/react";
-import { useEffect, useMemo, useState } from "react";
+} from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
@@ -71,7 +71,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         body: periode,
       });
 
-      return json({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
+      return data({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
     }
 
     const innsendtPeriode = await sendInnPeriode(request, periode);
@@ -80,7 +80,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return redirect(`/periode/${id}/bekreftelse`);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error: unknown) {
-    return json(
+    return data(
       {
         error: "rapportering-feilmelding-feil-ved-innsending",
       },

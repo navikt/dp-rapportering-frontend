@@ -1,5 +1,5 @@
 import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler";
-import { createCookie } from "@remix-run/node";
+import { createCookie } from "react-router";
 
 const cookieName = "decorator-language";
 const languageCookie = createCookie(cookieName);

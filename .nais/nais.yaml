@@ -32,6 +32,10 @@ spec:
     {{#each ingresses as |url|}}
     - {{url}}
     {{/each}}
+  observability:
+    logging:
+      destinations:
+        - id: elastic
   secureLogs:
     enabled: true
   env:

@@ -1,4 +1,8 @@
-export async function catchErrorResponse(fn: () => Promise<unknown>): Promise<Response> {
+import { UNSAFE_DataWithResponseInit } from "react-router";
+
+export async function catchErrorResponse(
+  fn: () => Promise<unknown>,
+): Promise<Response | UNSAFE_DataWithResponseInit<{ error: string }>> {
   try {
     const res = await fn();
     return res as Response;

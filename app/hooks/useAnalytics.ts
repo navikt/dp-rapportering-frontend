@@ -1,6 +1,6 @@
 import {
   awaitDecoratorData,
-  getAmplitudeInstance,
+  getAnalyticsInstance,
   getCurrentConsent,
 } from "@navikt/nav-dekoratoren-moduler";
 import { useCallback } from "react";
@@ -60,7 +60,7 @@ interface ILukkModal extends IModal {
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
-  const amplitude = getAmplitudeInstance(skjemanavn);
+  const amplitude = getAnalyticsInstance(skjemanavn);
   const umami =
     typeof window !== "undefined" && getEnv("UMAMI_ID") && window.umami
       ? window.umami.track

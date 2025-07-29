@@ -22,7 +22,7 @@ vi.mock("@navikt/nav-dekoratoren-moduler", async () => {
   const actualModule = await import("@navikt/nav-dekoratoren-moduler");
   return {
     ...actualModule,
-    getAmplitudeInstance: vi.fn(),
+    getAnalyticsInstance: vi.fn(),
     setBreadcrumbs: vi.fn(),
   };
 });
