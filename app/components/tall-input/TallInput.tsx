@@ -1,5 +1,5 @@
 import { TextField } from "@navikt/ds-react";
-import { useField } from "remix-validated-form";
+import { useField } from "@rvf/react-router";
 
 import { useSanity } from "~/hooks/useSanity";
 
@@ -13,6 +13,7 @@ export interface IProps {
 export function TallInput(props: IProps) {
   const { error, getInputProps } = useField(props.name);
   const { getAppText } = useSanity();
+  const errorText = error();
 
   return (
     <TextField
@@ -20,7 +21,7 @@ export function TallInput(props: IProps) {
       inputMode="decimal"
       name={props.name}
       defaultValue={props.verdi}
-      error={error ? getAppText(error) : undefined}
+      error={errorText ? getAppText(errorText) : undefined}
       {...getInputProps({
         id: props.name,
         label: props.label,

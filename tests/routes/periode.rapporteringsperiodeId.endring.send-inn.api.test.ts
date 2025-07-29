@@ -1,6 +1,6 @@
 // @vitest-environment node
-import { redirect } from "@remix-run/node";
 import { http, HttpResponse } from "msw";
+import { redirect, UNSAFE_DataWithResponseInit } from "react-router";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 
 import { action } from "~/routes/periode.$rapporteringsperiodeId.endring.send-inn";
@@ -116,14 +116,14 @@ describe("Send inn rapporteringsperiode", () => {
 
         mockSession();
 
-        const response = await action({
+        const response = (await action({
           request,
           params: testParams,
           context: {},
-        });
+        })) as UNSAFE_DataWithResponseInit<{ error: string }>;
 
-        const data = await response.json();
-        expect(response.status).toBe(400);
+        const data = response.data;
+        expect(response.init?.status).toBe(400);
 
         expect(data.error).toBe("rapportering-feilmelding-kan-ikke-sendes");
       });

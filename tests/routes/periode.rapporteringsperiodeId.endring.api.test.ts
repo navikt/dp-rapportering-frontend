@@ -1,6 +1,6 @@
 // @vitest-environment node
-import { redirect } from "@remix-run/node";
 import { http, HttpResponse } from "msw";
+import { redirect } from "react-router";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -67,13 +67,13 @@ describe("Start endring", () => {
 
       mockSession();
 
-      const response = await catchErrorResponse(() =>
+      const response = (await catchErrorResponse(() =>
         loader({
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
         }),
-      );
+      )) as Response;
 
       expect(response.status).toBe(500);
     });

@@ -1,14 +1,14 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { useNavigate } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router";
 import { uuidv7 } from "uuidv7";
 
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
+import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -69,7 +69,7 @@ export default function TomRapporteringsPeriodeSide() {
       </div>
 
       <NavigasjonContainer>
-        <RemixLink
+        <ReactLink
           as="Button"
           to=""
           onClick={() => navigate(-1)}
@@ -79,7 +79,7 @@ export default function TomRapporteringsPeriodeSide() {
           className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
-        </RemixLink>
+        </ReactLink>
 
         <Button
           size="medium"

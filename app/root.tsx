@@ -1,8 +1,11 @@
 import navStyles from "@navikt/ds-css/dist/index.css?url";
 import { Alert, Heading } from "@navikt/ds-react";
 import { onLanguageSelect, setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { createClient } from "@sanity/client";
+import parse from "html-react-parser";
+import { useEffect, useRef } from "react";
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "react-router";
+import { data, redirect } from "react-router";
 import {
   Links,
   Meta,
@@ -11,10 +14,7 @@ import {
   ScrollRestoration,
   useFetcher,
   useRouteError,
-} from "@remix-run/react";
-import { createClient } from "@sanity/client";
-import parse from "html-react-parser";
-import { useEffect, useRef } from "react";
+} from "react-router";
 import { uuidv7 } from "uuidv7";
 
 import indexStyle from "~/index.css?url";
@@ -129,7 +129,7 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const locale = formData.get("locale") as DecoratorLocale;
 
-  return json(
+  return data(
     { status: "success" },
     {
       headers: {

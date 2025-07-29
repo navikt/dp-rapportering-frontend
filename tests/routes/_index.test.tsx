@@ -1,5 +1,5 @@
-import { createRemixStub } from "@remix-run/testing";
 import { act, render, screen } from "@testing-library/react";
+import { createRoutesStub } from "react-router";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
@@ -20,7 +20,7 @@ describe("Hovedside rapportering", () => {
   });
 
   const renderLandingsside = () => {
-    const RemixStub = createRemixStub([
+    const RoutesStub = createRoutesStub([
       {
         path: "/",
         Component: Landingsside,
@@ -38,7 +38,7 @@ describe("Hovedside rapportering", () => {
         },
       },
     ]);
-    render(<RemixStub />);
+    render(<RoutesStub />);
   };
 
   const testDb = withDb(sessionRecord.getDatabase("123"));

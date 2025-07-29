@@ -1,6 +1,6 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { LoaderFunctionArgs } from "react-router";
+import { useLoaderData } from "react-router";
 
 import { Kvittering } from "~/components/Kvittering";
 import { useAnalytics } from "~/hooks/useAnalytics";

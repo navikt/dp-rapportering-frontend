@@ -1,4 +1,4 @@
-import { validationError } from "remix-validated-form";
+import { validationError } from "@rvf/react-router";
 
 import { lagreAktivitet } from "~/models/aktivitet.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { formatDate } from "date-fns";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 import { describe, expect, test, vi } from "vitest";
 
 import { Kalender } from "~/components/kalender/Kalender";

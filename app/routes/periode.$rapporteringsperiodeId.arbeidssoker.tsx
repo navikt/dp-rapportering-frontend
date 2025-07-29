@@ -1,8 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Radio, RadioGroup } from "@navikt/ds-react";
-import type { ActionFunctionArgs } from "@remix-run/node";
-import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
+import type { ActionFunctionArgs } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
