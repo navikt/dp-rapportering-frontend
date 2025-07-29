@@ -1,16 +1,16 @@
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { type LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { useEffect } from "react";
+import { type LoaderFunctionArgs } from "react-router";
+import { useLoaderData } from "react-router";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
-import { RemixLink } from "~/components/RemixLink";
+import { ReactLink } from "~/components/ReactLink";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import {
@@ -180,13 +180,13 @@ export default function InnsendteRapporteringsPerioderSide() {
 
       <NavigasjonContainer>
         {harFlerePerioder ? (
-          <RemixLink
+          <ReactLink
             as="Button"
             to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
             className={navigasjonStyles.knapp}
           >
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
-          </RemixLink>
+          </ReactLink>
         ) : (
           <Button
             as="a"

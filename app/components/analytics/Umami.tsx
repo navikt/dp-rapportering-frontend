@@ -1,5 +1,5 @@
 import { awaitDecoratorData, getCurrentConsent } from "@navikt/nav-dekoratoren-moduler";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 
 import { getEnv } from "~/utils/env.utils";
 

@@ -1,4 +1,5 @@
 import { Alert } from "@navikt/ds-react";
+import { JSX } from "react";
 
 import { useSanity } from "~/hooks/useSanity";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";

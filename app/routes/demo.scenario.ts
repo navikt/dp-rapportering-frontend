@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "react-router";
 
 import { ScenarioType } from "~/devTools";
 import { isLocalOrDemo } from "~/utils/env.utils";

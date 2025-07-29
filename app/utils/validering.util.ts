@@ -1,4 +1,4 @@
-import { withZod } from "@remix-validated-form/with-zod";
+import { withZod } from "@rvf/zod";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
@@ -11,13 +11,15 @@ export const aktivitetsvalidering = z.object({
       (timer) => String(timer).replace(/,/g, "."),
       z.coerce
         .number({
-          required_error: "rapportering-feilmelding-ma-skrive-tall",
-          invalid_type_error: "rapportering-feilmelding-ugyldig-tall",
+          error: (issue) =>
+            issue.input === undefined
+              ? "rapportering-feilmelding-ma-skrive-tall"
+              : "rapportering-feilmelding-ugyldig-tall",
         })
         .positive({ message: "rapportering-feilmelding-ma-skrive-positivt-tall" })
         .min(0.5, { message: "rapportering-feilmelding-ma-skrive-positivt-tall" })
         .max(24, { message: "rapportering-feilmelding-ma-skrive-positivt-tall" })
-        .step(0.5, { message: "rapportering-feilmelding-hel-halv-time" }),
+        .multipleOf(0.5, { message: "rapportering-feilmelding-hel-halv-time" }),
     )
     .optional(),
 });

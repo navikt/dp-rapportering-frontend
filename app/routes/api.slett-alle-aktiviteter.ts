@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs } from "react-router";
 
 import { slettAlleAktiviteterForRapporteringsperioden } from "~/models/aktivitet.server";
 

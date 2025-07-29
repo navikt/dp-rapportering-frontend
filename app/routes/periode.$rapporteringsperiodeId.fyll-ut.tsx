@@ -1,9 +1,9 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import type { ActionFunctionArgs } from "@remix-run/node";
-import { useActionData, useNavigate, useNavigation } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
+import type { ActionFunctionArgs } from "react-router";
+import { useActionData, useNavigate, useNavigation } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
