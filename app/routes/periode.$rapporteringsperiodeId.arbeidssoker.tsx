@@ -28,7 +28,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const svar = formData.get("registrertArbeidssoker");
 
-  const registrertArbeidssoker = svar === "true" ? true : false;
+  const registrertArbeidssoker = svar === "true";
 
   return lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
     registrertArbeidssoker,
@@ -85,7 +85,7 @@ export default function ArbeidssøkerRegisterSide() {
 
       <fetcher.Form method="post">
         <RadioGroup
-          disabled={!kanSendes(periode) || periode.type === KortType.MANUELL_ARENA}
+          disabled={!kanSendes(periode) || periode.type === KortType.MANUELL_ARENA || isSubmitting}
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
