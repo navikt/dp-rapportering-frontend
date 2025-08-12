@@ -65,7 +65,7 @@
     "@types/express": "5.0.3",
     "@types/morgan": "1.9.10",
     "@types/node": "22.17.1",
-    "@types/react": "19.1.9",
+    "@types/react": "19.1.10",
     "@types/react-dom": "19.1.7",
     "@vitejs/plugin-react": "4.7.0",
     "@vitest/coverage-istanbul": "3.2.4",
