@@ -38,7 +38,7 @@ describe("AktivitetCheckboxes", () => {
     const props = { ...defaultProps, muligeAktiviteter: [aktivitet] as AktivitetType[] };
     render(<AktivitetCheckboxes {...props} />);
 
-    const checkbox = screen.getByLabelText("rapportering-fraevaer");
+    const checkbox = screen.getByText("rapportering-fraevaer");
 
     expect(checkbox).toBeInTheDocument();
     expect(
@@ -50,17 +50,15 @@ describe("AktivitetCheckboxes", () => {
     const selectedAktiviteter: AktivitetType[] = [AktivitetType.Arbeid];
     render(<AktivitetCheckboxes {...defaultProps} verdi={selectedAktiviteter} />);
 
-    expect(screen.getByLabelText("rapportering-arbeid")).not.toBeDisabled();
-    // expect(screen.getByLabelText("Utdanning")).not.toBeDisabled();
-    expect(screen.getByLabelText("rapportering-syk")).toBeDisabled();
-    // expect(screen.getByLabelText("Fravaer")).toBeDisabled();
+    expect(screen.getByTestId("aktivitet-radio-Arbeid")).not.toBeDisabled();
+    expect(screen.getByTestId("aktivitet-radio-Syk")).toBeDisabled();
   });
 
   it("kaller onChange med de riktige verdiene når checkbox klikkes", () => {
     const handleChange = vi.fn();
     render(<AktivitetCheckboxes {...defaultProps} onChange={handleChange} />);
 
-    const arbeidCheckbox = screen.getByLabelText("rapportering-arbeid");
+    const arbeidCheckbox = screen.getByText("rapportering-arbeid");
     fireEvent.click(arbeidCheckbox);
 
     expect(handleChange).toHaveBeenCalledWith(["Arbeid"]);
