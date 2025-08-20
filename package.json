@@ -39,7 +39,7 @@
     "express": "5.1.0",
     "groq": "4.5.0",
     "html-react-parser": "5.2.6",
-    "isbot": "5.1.29",
+    "isbot": "5.1.30",
     "morgan": "1.10.1",
     "msw": "2.10.5",
     "react": "19.1.1",
