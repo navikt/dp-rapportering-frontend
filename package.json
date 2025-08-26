@@ -24,7 +24,7 @@
     "@navikt/ds-react": "7.28.1",
     "@navikt/nav-dekoratoren-moduler": "3.4.0",
     "@navikt/oasis": "3.8.0",
-    "@portabletext/react": "3.2.4",
+    "@portabletext/react": "4.0.1",
     "@portabletext/types": "2.0.15",
     "@react-router/express": "7.8.2",
     "@react-router/node": "7.8.2",
