@@ -31,7 +31,7 @@
     "@react-router/serve": "7.8.2",
     "@rvf/react-router": "8.0.0",
     "@rvf/zod": "7.0.4",
-    "@sanity/client": "7.11.0",
+    "@sanity/client": "7.11.1",
     "classnames": "2.5.1",
     "compression": "1.8.1",
     "cross-env": "10.0.0",
