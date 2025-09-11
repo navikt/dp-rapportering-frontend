@@ -1,3 +1,4 @@
+import { TZDate } from "@date-fns/tz";
 import { render, screen } from "@testing-library/react";
 import { formatDate } from "date-fns";
 import { MemoryRouter } from "react-router";
@@ -7,8 +8,9 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
+import { TIDSSONER } from "~/utils/types";
 
-const formaterDato = (dato: string) => `${formatDate(new Date(dato), "d")}.`;
+const formaterDato = (dato: string) => `${formatDate(new TZDate(dato, TIDSSONER.OSLO), "d")}.`;
 
 export const renderKalender = (periode: IRapporteringsperiode, props = {}) => {
   return render(

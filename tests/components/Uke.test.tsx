@@ -1,3 +1,4 @@
+import { TZDate } from "@date-fns/tz";
 import { render, screen, within } from "@testing-library/react";
 import { format } from "date-fns";
 import { beforeEach, describe, expect, test, vi } from "vitest";
@@ -7,8 +8,9 @@ import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
+import { TIDSSONER } from "~/utils/types";
 
-const formaterDato = (dato: string) => `${format(new Date(dato), "d")}.`;
+const formaterDato = (dato: string) => `${format(new TZDate(dato, TIDSSONER.OSLO), "d")}.`;
 
 const lagPeriode = (fraOgMed = "2024-01-01", tilOgMed = "2024-01-01") =>
   lagRapporteringsperiode({ periode: { fraOgMed, tilOgMed } });

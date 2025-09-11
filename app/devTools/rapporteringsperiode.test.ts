@@ -1,4 +1,7 @@
+import { TZDate } from "@date-fns/tz";
 import { describe, expect, test } from "vitest";
+
+import { TIDSSONER } from "~/utils/types";
 
 import { lagRapporteringsperiode } from "./rapporteringsperiode";
 
@@ -12,7 +15,7 @@ describe("lagRapporteringsperiode", () => {
 
     expect(rapporteringsperiode.dager).toHaveLength(14);
     rapporteringsperiode.dager.forEach((dag, index) => {
-      const forventetDato = new Date(fraOgMed);
+      const forventetDato = new TZDate(fraOgMed, TIDSSONER.OSLO);
       forventetDato.setDate(forventetDato.getDate() + index);
       expect(dag.dato).toBe(forventetDato.toISOString().split("T")[0]);
     });
@@ -25,7 +28,7 @@ describe("lagRapporteringsperiode", () => {
 
     const rapporteringsperiode = lagRapporteringsperiode({ id, periode: { fraOgMed, tilOgMed } });
 
-    const expectedKanSendesFra = new Date(tilOgMed);
+    const expectedKanSendesFra = new TZDate(tilOgMed, TIDSSONER.OSLO);
     expectedKanSendesFra.setDate(expectedKanSendesFra.getDate() - 1);
 
     expect(rapporteringsperiode.kanSendesFra).toBe(

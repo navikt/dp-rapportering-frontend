@@ -1,3 +1,4 @@
+import { TZDate } from "@date-fns/tz";
 import { PortableText } from "@portabletext/react";
 import { addDays, format } from "date-fns";
 import { renderToString } from "react-dom/server";
@@ -30,7 +31,7 @@ import {
   perioderSomKanSendes,
   periodeSomTimer,
 } from "./periode.utils";
-import { KortType, Rapporteringstype } from "./types";
+import { KortType, Rapporteringstype, TIDSSONER } from "./types";
 
 interface IProps {
   locale: DecoratorLocale;
@@ -193,7 +194,7 @@ export function getDag(
   ukedag: { kort: string; lang: string },
   getAppText: GetAppText,
 ): string {
-  return `<li>${ukedag.lang} ${format(new Date(dag.dato), "d")}. ${dag.aktiviteter.length ? dag.aktiviteter.map((aktivitet) => getAktivitet(aktivitet, getAppText)).join(", ") : ""}</li>`;
+  return `<li>${ukedag.lang} ${format(new TZDate(dag.dato, TIDSSONER.OSLO), "d")}. ${dag.aktiviteter.length ? dag.aktiviteter.map((aktivitet) => getAktivitet(aktivitet, getAppText)).join(", ") : ""}</li>`;
 }
 
 export function getKalender(props: IProps, showModal: boolean = true): string {
@@ -309,7 +310,7 @@ export function htmlForLandingsside(props: IProps): string {
       renderToString(
         <PortableText
           value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
-            dato: formaterDato(new Date(periode.kanSendesFra)),
+            dato: formaterDato({ dato: new TZDate(periode.kanSendesFra, TIDSSONER.OSLO) }),
           })}
         />,
       ),
@@ -341,8 +342,12 @@ export function htmlForRapporteringstype(props: IProps): string {
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
 
-  const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
-  const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
+  const tidligstInnsendingDato = formaterDato({
+    dato: new TZDate(periode.kanSendesFra, TIDSSONER.OSLO),
+  });
+  const senestInnsendingDato = formaterDato({
+    dato: addDays(new TZDate(periode.periode.fraOgMed, TIDSSONER.OSLO), 21),
+  });
 
   const seksjoner: string[] = [];
 
