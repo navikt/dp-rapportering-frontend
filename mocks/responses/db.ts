@@ -1,11 +1,7 @@
 import { addDays, format, getWeek, getYear, subDays } from "date-fns";
 
 import { ScenarioType } from "~/devTools";
-import {
-  beregnNåværendePeriodeDato,
-  formatereDato,
-  lagPeriodeDatoFor,
-} from "~/devTools/periodedato";
+import { beregnNåværendePeriodeDato, lagPeriodeDatoFor } from "~/devTools/periodedato";
 import {
   lagForstRapporteringsperiode,
   lagRapporteringsperiode,
@@ -15,6 +11,7 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
+import { formaterDato } from "~/utils/dato.utils";
 import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
 
 import { Database } from "../../mocks/session";
@@ -209,25 +206,34 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
 
       const periode1 = {
-        fraOgMed: formatereDato(subDays(new Date(fraOgMed), 14)),
-        tilOgMed: formatereDato(subDays(new Date(fraOgMed), 1)),
+        fraOgMed: formaterDato({ dato: subDays(new Date(fraOgMed), 14), dateFormat: "yyyy-MM-dd" }),
+        tilOgMed: formaterDato({ dato: subDays(new Date(fraOgMed), 1), dateFormat: "yyyy-MM-dd" }),
       };
 
-      const periode1KanSendesFra = format(subDays(new Date(periode1.fraOgMed), 1), "yyyy-MM-dd");
+      const periode1KanSendesFra = formaterDato({
+        dato: subDays(new Date(periode1.fraOgMed), 1),
+        dateFormat: "yyyy-MM-dd",
+      });
 
       const periode2 = {
-        fraOgMed: formatereDato(subDays(new Date(fraOgMed), 28)),
-        tilOgMed: formatereDato(subDays(new Date(fraOgMed), 15)),
+        fraOgMed: formaterDato({ dato: subDays(new Date(fraOgMed), 28), dateFormat: "yyyy-MM-dd" }),
+        tilOgMed: formaterDato({ dato: subDays(new Date(fraOgMed), 15), dateFormat: "yyyy-MM-dd" }),
       };
 
-      const periode2KanSendesFra = format(subDays(new Date(periode2.fraOgMed), 1), "yyyy-MM-dd");
+      const periode2KanSendesFra = formaterDato({
+        dato: subDays(new Date(periode2.fraOgMed), 1),
+        dateFormat: "yyyy-MM-dd",
+      });
 
       const periode3 = {
-        fraOgMed: formatereDato(subDays(new Date(fraOgMed), 42)),
-        tilOgMed: formatereDato(subDays(new Date(fraOgMed), 29)),
+        fraOgMed: formaterDato({ dato: subDays(new Date(fraOgMed), 42), dateFormat: "yyyy-MM-dd" }),
+        tilOgMed: formaterDato({ dato: subDays(new Date(fraOgMed), 29), dateFormat: "yyyy-MM-dd" }),
       };
 
-      const periode3KanSendesFra = format(subDays(new Date(periode3.fraOgMed), 1), "yyyy-MM-dd");
+      const periode3KanSendesFra = formaterDato({
+        dato: subDays(new Date(periode3.fraOgMed), 1),
+        dateFormat: "yyyy-MM-dd",
+      });
 
       // Endret
       const endretPeriode = lagRapporteringsperiode({
@@ -298,11 +304,14 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       const { fraOgMed } = beregnNåværendePeriodeDato();
 
       const periode = {
-        fraOgMed: formatereDato(subDays(new Date(fraOgMed), 28)),
-        tilOgMed: formatereDato(subDays(new Date(fraOgMed), 15)),
+        fraOgMed: formaterDato({ dato: subDays(new Date(fraOgMed), 28), dateFormat: "yyyy-MM-dd" }),
+        tilOgMed: formaterDato({ dato: subDays(new Date(fraOgMed), 15), dateFormat: "yyyy-MM-dd" }),
       };
 
-      const periodeKanSendesFra = format(subDays(new Date(periode.fraOgMed), 1), "yyyy-MM-dd");
+      const periodeKanSendesFra = formaterDato({
+        dato: subDays(new Date(periode.fraOgMed), 1),
+        dateFormat: "yyyy-MM-dd",
+      });
 
       const endretPeriode = lagRapporteringsperiode({
         type: KortType.MANUELL_ARENA,

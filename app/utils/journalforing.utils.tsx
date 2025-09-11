@@ -1,6 +1,6 @@
 import { TZDate } from "@date-fns/tz";
 import { PortableText } from "@portabletext/react";
-import { addDays, format } from "date-fns";
+import { addDays } from "date-fns";
 import { renderToString } from "react-dom/server";
 import type { SubmitFunction } from "react-router";
 
@@ -194,7 +194,7 @@ export function getDag(
   ukedag: { kort: string; lang: string },
   getAppText: GetAppText,
 ): string {
-  return `<li>${ukedag.lang} ${format(new TZDate(dag.dato, TIDSSONER.OSLO), "d")}. ${dag.aktiviteter.length ? dag.aktiviteter.map((aktivitet) => getAktivitet(aktivitet, getAppText)).join(", ") : ""}</li>`;
+  return `<li>${ukedag.lang} ${formaterDato({ dato: dag.dato, dateFormat: "d" })}. ${dag.aktiviteter.length ? dag.aktiviteter.map((aktivitet) => getAktivitet(aktivitet, getAppText)).join(", ") : ""}</li>`;
 }
 
 export function getKalender(props: IProps, showModal: boolean = true): string {

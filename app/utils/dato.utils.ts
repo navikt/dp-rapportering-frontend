@@ -6,7 +6,7 @@ import { DecoratorLocale } from "./dekoratoren.utils";
 import { TIDSSONER } from "./types";
 
 interface IFormaterDatoProps {
-  dato: Date;
+  dato: Date | string;
   locale?: DecoratorLocale;
   dateFormat?: string;
 }
@@ -18,16 +18,15 @@ export function formaterDato({
 }: IFormaterDatoProps) {
   const dateFnsLocale = [DecoratorLocale.NB, DecoratorLocale.NN].includes(locale) ? nb : enGB;
 
+  // @ts-expect-error TZDate godtar både string og Date, så vi kan sende dato direkte
   return format(new TZDate(dato, TIDSSONER.OSLO), dateFormat, {
     locale: dateFnsLocale,
   });
 }
 
 export function formaterPeriodeDato(fraOgMed: string, tilOgMed: string, language: DecoratorLocale) {
-  const locale = [DecoratorLocale.NB, DecoratorLocale.NN].includes(language) ? nb : enGB;
-
-  const fom = format(new TZDate(fraOgMed, TIDSSONER.OSLO), "dd. MMMM yyyy", { locale });
-  const tom = format(new TZDate(tilOgMed, TIDSSONER.OSLO), "dd. MMMM yyyy", { locale });
+  const fom = formaterDato({ dato: fraOgMed, dateFormat: "dd. MMMM yyyy", locale: language });
+  const tom = formaterDato({ dato: tilOgMed, dateFormat: "dd. MMMM yyyy", locale: language });
 
   return `${fom} - ${tom}`;
 }

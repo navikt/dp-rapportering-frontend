@@ -1,8 +1,9 @@
 import { TZDate } from "@date-fns/tz";
-import { addDays, format, subDays } from "date-fns";
+import { addDays, subDays } from "date-fns";
 import { times } from "remeda";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { formaterDato } from "~/utils/dato.utils";
 import { IRapporteringsperiodeStatus, KortType, TIDSSONER } from "~/utils/types";
 
 import { beregnForrigePeriodeDato, beregnNåværendePeriodeDato } from "./periodedato";
@@ -41,16 +42,16 @@ export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
     ...props,
   };
 
-  meldekort.kanSendesFra = format(
-    subDays(new TZDate(meldekort.periode.tilOgMed, TIDSSONER.OSLO), 1),
-    "yyyy-MM-dd",
-  );
+  meldekort.kanSendesFra = formaterDato({
+    dato: subDays(new TZDate(meldekort.periode.tilOgMed, TIDSSONER.OSLO), 1),
+    dateFormat: "yyyy-MM-dd",
+  });
   meldekort.dager = meldekort.dager.map((dag, index) => ({
     ...dag,
-    dato: format(
-      addDays(new TZDate(meldekort.periode.fraOgMed, TIDSSONER.OSLO), index),
-      "yyyy-MM-dd",
-    ),
+    dato: formaterDato({
+      dato: addDays(new TZDate(meldekort.periode.fraOgMed, TIDSSONER.OSLO), index),
+      dateFormat: "yyyy-MM-dd",
+    }),
   }));
 
   return meldekort;

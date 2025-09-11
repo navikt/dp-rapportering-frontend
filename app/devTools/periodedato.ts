@@ -1,12 +1,11 @@
 import { TZDate } from "@date-fns/tz";
-import { addDays, addWeeks, format, getWeek, getYear, startOfWeek, subDays } from "date-fns";
+import { addDays, addWeeks, getWeek, getYear, startOfWeek, subDays } from "date-fns";
 
 import { IPeriode } from "~/models/rapporteringsperiode.server";
+import { formaterDato } from "~/utils/dato.utils";
 import { TIDSSONER } from "~/utils/types";
 
-export function formatereDato(dato: Date): string {
-  return format(dato, "yyyy-MM-dd");
-}
+const dateFormat = "yyyy-MM-dd";
 
 export function lagPeriodeDatoFor(uke: number, år: number): IPeriode {
   const startdato = addWeeks(
@@ -15,8 +14,8 @@ export function lagPeriodeDatoFor(uke: number, år: number): IPeriode {
   );
 
   return {
-    fraOgMed: formatereDato(startdato),
-    tilOgMed: formatereDato(addDays(startdato, 13)),
+    fraOgMed: formaterDato({ dato: startdato, dateFormat }),
+    tilOgMed: formaterDato({ dato: addDays(startdato, 13), dateFormat }),
   };
 }
 
@@ -31,7 +30,7 @@ export function beregnForrigePeriodeDato(fraOgMed: string): IPeriode {
   const startdato = subDays(new TZDate(fraOgMed, TIDSSONER.OSLO), 14);
 
   return {
-    fraOgMed: formatereDato(startdato),
-    tilOgMed: formatereDato(addDays(startdato, 13)),
+    fraOgMed: formaterDato({ dato: startdato, dateFormat }),
+    tilOgMed: formaterDato({ dato: addDays(startdato, 13), dateFormat }),
   };
 }

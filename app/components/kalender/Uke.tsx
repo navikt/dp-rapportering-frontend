@@ -1,12 +1,10 @@
-import { TZDate } from "@date-fns/tz";
 import classNames from "classnames";
-import { format } from "date-fns";
 
 import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
+import { formaterDato } from "~/utils/dato.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
-import { TIDSSONER } from "~/utils/types";
 
 import styles from "./Kalender.module.css";
 import { hentAktivitetSummenTekst, hentSkjermleserDatoTekst } from "./kalender.utils";
@@ -69,7 +67,7 @@ export function Uke(props: IProps) {
                 className={classNames(styles.dato, dagKnappStyle, styles.readonly)}
                 aria-label={hentSkjermleserDatoTekst(dag, getAppText, locale)}
               >
-                {`${format(new TZDate(dag.dato, TIDSSONER.OSLO), "d")}. `}
+                {`${formaterDato({ dato: dag.dato, dateFormat: "d" })}. `}
               </span>
             )}
 
@@ -81,7 +79,7 @@ export function Uke(props: IProps) {
                   aapneModal(dag.dato);
                 }}
               >
-                {`${format(new TZDate(dag.dato, TIDSSONER.OSLO), "d")}.`}
+                {`${formaterDato({ dato: dag.dato, dateFormat: "d" })}.`}
               </button>
             )}
 
