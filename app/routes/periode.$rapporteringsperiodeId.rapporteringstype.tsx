@@ -1,3 +1,4 @@
+import { TZDate } from "@date-fns/tz";
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
@@ -28,7 +29,7 @@ import {
   kanSendes,
   perioderSomKanSendes,
 } from "~/utils/periode.utils";
-import { KortType, Rapporteringstype } from "~/utils/types";
+import { KortType, Rapporteringstype, TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -108,8 +109,12 @@ export default function RapporteringstypeSide() {
     [periode.id, rapporteringstypeFetcher],
   );
 
-  const tidligstInnsendingDato = formaterDato(new Date(periode.kanSendesFra));
-  const senestInnsendingDato = formaterDato(addDays(new Date(periode.periode.fraOgMed), 21));
+  const tidligstInnsendingDato = formaterDato({
+    dato: new TZDate(periode.kanSendesFra, TIDSSONER.OSLO),
+  });
+  const senestInnsendingDato = formaterDato({
+    dato: addDays(new TZDate(periode.periode.fraOgMed, TIDSSONER.OSLO), 21),
+  });
 
   const neste = async () => {
     if (

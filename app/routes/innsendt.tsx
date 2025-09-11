@@ -1,3 +1,4 @@
+import { TZDate } from "@date-fns/tz";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import classNames from "classnames";
@@ -22,6 +23,7 @@ import { formaterPeriodeDato } from "~/utils/dato.utils";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { sorterGrupper } from "~/utils/innsendt.utils";
 import { hentUkeTekst, perioderSomKanSendes } from "~/utils/periode.utils";
+import { TIDSSONER } from "~/utils/types";
 
 import styles from "../styles/innsendt.module.css";
 
@@ -142,7 +144,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                                   :{" "}
                                 </strong>
                                 {new Intl.DateTimeFormat(locale).format(
-                                  new Date(periode.mottattDato),
+                                  new TZDate(periode.mottattDato, TIDSSONER.OSLO),
                                 )}
                               </div>
                             )}

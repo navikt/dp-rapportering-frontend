@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import { format } from "date-fns";
 
 import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
+import { formaterDato } from "~/utils/dato.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 
 import styles from "./Kalender.module.css";
@@ -67,7 +67,7 @@ export function Uke(props: IProps) {
                 className={classNames(styles.dato, dagKnappStyle, styles.readonly)}
                 aria-label={hentSkjermleserDatoTekst(dag, getAppText, locale)}
               >
-                {`${format(new Date(dag.dato), "d")}. `}
+                {`${formaterDato({ dato: dag.dato, dateFormat: "d" })}. `}
               </span>
             )}
 
@@ -79,7 +79,7 @@ export function Uke(props: IProps) {
                   aapneModal(dag.dato);
                 }}
               >
-                {`${format(new Date(dag.dato), "d")}.`}
+                {`${formaterDato({ dato: dag.dato, dateFormat: "d" })}.`}
               </button>
             )}
 

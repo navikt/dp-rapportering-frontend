@@ -1,3 +1,4 @@
+import { TZDate } from "@date-fns/tz";
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
@@ -23,6 +24,7 @@ import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
+import { TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import type { action as StartAction } from "./api.start";
@@ -78,7 +80,7 @@ export default function Landingsside() {
         <Alert variant="info" className="my-4 alert-with-rich-text">
           <PortableText
             value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
-              dato: formaterDato(new Date(forstePeriode.kanSendesFra)),
+              dato: formaterDato({ dato: new TZDate(forstePeriode.kanSendesFra, TIDSSONER.OSLO) }),
               "fra-og-til-uke": formaterPeriodeTilUkenummer(
                 forstePeriode.periode.fraOgMed,
                 forstePeriode.periode.tilOgMed,

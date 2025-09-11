@@ -49,3 +49,7 @@ export const KortType = {
   MANUELL_ARENA: "09",
   KORRIGERT_ELEKTRONISK: "10",
 } as const;
+
+export const TIDSSONER = {
+  OSLO: "Europe/Oslo",
+};

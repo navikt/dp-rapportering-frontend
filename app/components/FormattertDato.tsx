@@ -1,4 +1,7 @@
+import { TZDate } from "@date-fns/tz";
+
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
+import { TIDSSONER } from "~/utils/types";
 
 interface IProps {
   dato: string;
@@ -24,7 +27,7 @@ export function FormattertDato(props: IProps) {
     options.year = "numeric";
   }
 
-  const formattertDato = new Date(props.dato).toLocaleDateString(locale, options);
+  const formattertDato = new TZDate(props.dato, TIDSSONER.OSLO).toLocaleDateString(locale, options);
 
   return <>{formattertDato}</>;
 }

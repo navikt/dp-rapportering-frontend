@@ -1,8 +1,11 @@
+import { TZDate } from "@date-fns/tz";
+
 import type { GetAppText } from "~/hooks/useSanity";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { periodeSomTimer } from "~/utils/periode.utils";
+import { TIDSSONER } from "~/utils/types";
 
 export function hentAktivitetSummenTekst(
   dag: IRapporteringsperiodeDag,
@@ -67,7 +70,7 @@ export function hentSkjermleserDatoTekst(
     month: "long",
   };
 
-  const formattertDato = new Date(dag.dato).toLocaleDateString(locale, options);
+  const formattertDato = new TZDate(dag.dato, TIDSSONER.OSLO).toLocaleDateString(locale, options);
 
   const aktiviteter = dag.aktiviteter.map(
     (aktivitet) => `${aktivitet.type} ${hentAktivitetSumTekst(aktivitet, getAppText, true)}`,

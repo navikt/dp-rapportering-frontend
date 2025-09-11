@@ -1,6 +1,5 @@
 import { http, HttpResponse, passthrough } from "msw";
 
-import { formatereDato } from "~/devTools/periodedato";
 import { hentEndringsId, startEndring } from "~/devTools/rapporteringsperiode";
 import { IArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { IBegrunnelseSvar } from "~/models/begrunnelse.server";
@@ -9,6 +8,7 @@ import {
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
 import { IRapporteringstypeSvar } from "~/models/rapporteringstype.server";
+import { formaterDato } from "~/utils/dato.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
 
@@ -30,7 +30,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     const db = database || getDatabase(cookies);
     const periode = (await request.json()) as IRapporteringsperiode;
 
-    const mottattDato = formatereDato(new Date());
+    const mottattDato = formaterDato({ dato: new Date(), dateFormat: "yyyy-MM-dd" });
 
     if (periode.originalId) {
       db.updateRapporteringsperiode(periode.originalId, {
