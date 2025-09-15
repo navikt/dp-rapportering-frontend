@@ -93,12 +93,12 @@ export async function hentRapporteringsperioder(
   }
 
   const rapporteringsperioder: IRapporteringsperiode[] = await response.json();
-  // if (getEnv("RUNTIME_ENVIRONMENT") === "development") {
-  //   return rapporteringsperioder.map((periode) => ({
-  //     ...periode,
-  //     kanSendes: true,
-  //   }));
-  // }
+  if (getEnv("RUNTIME_ENVIRONMENT") === "development") {
+    return rapporteringsperioder.map((periode) => ({
+      ...periode,
+      kanSendes: true,
+    }));
+  }
 
   return rapporteringsperioder;
 }
