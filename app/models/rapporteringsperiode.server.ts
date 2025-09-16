@@ -1,6 +1,6 @@
 import { logErrorResponse } from "~/models/logger.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
-import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
+import { DP_RAPPORTERING_URL, getEnv } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
 
@@ -93,6 +93,12 @@ export async function hentRapporteringsperioder(
   }
 
   const rapporteringsperioder: IRapporteringsperiode[] = await response.json();
+  if (getEnv("RUNTIME_ENVIRONMENT") === "development") {
+    return rapporteringsperioder.map((periode) => ({
+      ...periode,
+      kanSendes: true,
+    }));
+  }
 
   return rapporteringsperioder;
 }
@@ -125,6 +131,16 @@ export async function hentPeriode(
   const periode: IRapporteringsperiode = await response.json();
 
   // Forberedelse til å sende ved response, slik at kallende funksjon kan hente ut headers og x_corralationId
+  if (getEnv("RUNTIME_ENVIRONMENT") === "development") {
+    return {
+      periode: {
+        ...periode,
+        kanSendes: true,
+      },
+      response,
+    };
+  }
+
   return { periode, response };
 }
 

@@ -7,6 +7,7 @@ idporten:
 dekorator:
   url: https://www.nav.no/dekoratoren
   env: prod
+runtime_environment: "production"
 faro_url: "https://telemetry.nav.no/collect"
 sanity_datasett: "production"
 umami_id: "feb08edd-87bf-4617-a22f-363ce00d48f6"

@@ -51,6 +51,8 @@ spec:
       value: "{{dekorator.env}}"
     - name: GITHUB_SHA
       value: "{{githubSha}}"
+    - name: RUNTIME_ENVIRONMENT
+      value: {{runtime_environment}}
     - name: FARO_URL
       value: "{{faro_url}}"
     - name: SANITY_DATASETT
