@@ -1,8 +1,4 @@
-import {
-  awaitDecoratorData,
-  getAnalyticsInstance,
-  getCurrentConsent,
-} from "@navikt/nav-dekoratoren-moduler";
+import { awaitDecoratorData, getCurrentConsent } from "@navikt/nav-dekoratoren-moduler";
 import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -60,7 +56,6 @@ interface ILukkModal extends IModal {
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
-  const amplitude = getAnalyticsInstance(skjemanavn);
   const umami =
     typeof window !== "undefined" && getEnv("UMAMI_ID") && window.umami
       ? window.umami.track
@@ -91,12 +86,8 @@ export function useAnalytics() {
           };
         });
       }
-
-      if (amplitude) {
-        amplitude(event, data);
-      }
     },
-    [umami, amplitude, språk],
+    [umami, språk],
   );
 
   const trackSkjemaStartet = useCallback(
