@@ -1,6 +1,5 @@
-import { getAnalyticsInstance } from "@navikt/nav-dekoratoren-moduler";
-import { renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, Mock, test, vi } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { useAnalytics } from "~/hooks/useAnalytics";
@@ -13,7 +12,6 @@ vi.mock(import("@navikt/nav-dekoratoren-moduler"), async (importOriginal) => {
 
   return {
     ...actual,
-    getAnalyticsInstance: vi.fn().mockReturnValue(vi.fn()),
     awaitDecoratorData: vi.fn().mockResolvedValue({}),
     getCurrentConsent: vi.fn().mockReturnValue({ consent: { analytics: true, surveys: true } }),
   };
@@ -23,24 +21,29 @@ vi.mock("~/hooks/useLocale", () => ({
   useLocale: () => ({ locale: "no" }),
 }));
 
-vi.mock("~/utils/analytics", () => ({
-  hentData: async ({
-    props,
-    språk,
-    skjemanavn,
-  }: {
-    props: object;
-    språk: string;
-    skjemanavn: string;
-  }) => ({
-    språk,
-    skjemanavn,
-    ...props,
-  }),
-}));
+vi.mock("~/utils/analytics", () => {
+  return {
+    redactId(url: string): string {
+      return url;
+    },
+    hentData: async ({
+      props,
+      språk,
+      skjemanavn,
+    }: {
+      props: object;
+      språk: string;
+      skjemanavn: string;
+    }) => ({
+      språk,
+      skjemanavn,
+      ...props,
+    }),
+  };
+});
 
 const env: { [key: string]: string } = {
-  UMAMI_ID: "",
+  UMAMI_ID: "123",
 };
 
 vi.mock("~/utils/env.utils", () => ({
@@ -53,7 +56,17 @@ describe("useAnalytics", () => {
   const språk = "no";
   const trackMock = vi.fn();
   beforeEach(() => {
-    (getAnalyticsInstance as Mock).mockReturnValue(trackMock);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).umami = {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      track: vi.fn((arg: any) => {
+        if (typeof arg === "function") {
+          const payload = arg({ referrer: "", url: location.pathname });
+          // Forward bare name + data slik testene forventer
+          trackMock(payload.name, payload.data);
+        }
+      }),
+    };
   });
 
   afterEach(() => {
@@ -65,17 +78,16 @@ describe("useAnalytics", () => {
       const skjemaId = "123456";
 
       const { result } = renderHook(() => useAnalytics());
-      result.current.trackSkjemaStartet(skjemaId, false);
+      await result.current.trackSkjemaStartet(skjemaId, false);
 
-      await Promise.resolve();
-      await Promise.resolve();
-
-      expect(trackMock).toHaveBeenCalledWith("skjema startet", {
-        skjemanavn,
-        skjemaId,
-        språk,
-        endring: false,
-      });
+      await waitFor(() =>
+        expect(trackMock).toHaveBeenCalledWith("skjema startet", {
+          skjemanavn,
+          skjemaId,
+          språk,
+          endring: false,
+        }),
+      );
     });
 
     test("tracker 'skjema fullført' hendelsen riktig", async () => {
