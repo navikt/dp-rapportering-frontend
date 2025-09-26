@@ -4,8 +4,6 @@ declare global {
     umami: {
       track(event: string, props: { [key: string]: unknown }): void;
     };
-
-    hj(event: string, eventName: string): void;
   }
 }
 
