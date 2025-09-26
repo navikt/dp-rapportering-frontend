@@ -26,10 +26,6 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   const { locale } = useLocale();
   const { trackNavigere } = useAnalytics();
 
-  if (typeof window !== "undefined" && window["hj"]) {
-    window.hj("trigger", "nyttmeldekortDP");
-  }
-
   useUXSignals(true);
 
   return (
