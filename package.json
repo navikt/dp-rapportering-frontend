@@ -34,7 +34,7 @@
     "@sanity/client": "7.11.2",
     "classnames": "2.5.1",
     "compression": "1.8.1",
-    "cross-env": "10.0.0",
+    "cross-env": "10.1.0",
     "date-fns": "4.1.0",
     "express": "5.1.0",
     "groq": "4.10.1",
