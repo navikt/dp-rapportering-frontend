@@ -69,7 +69,13 @@ export async function harDpMeldeplikt(request: Request): Promise<boolean> {
 
   const harMeldeplikt = await response.text();
 
-  return harMeldeplikt !== "false"; // Vi ønsker at det skal defaultes til true
+  if (harMeldeplikt === "true") {
+    return true;
+  } else if (harMeldeplikt === "false") {
+    return false;
+  }
+
+  return true; // Vi ønsker at resultatet skal default til true
 }
 
 export async function startUtfylling(request: Request, periodeId: string): Promise<Response> {
