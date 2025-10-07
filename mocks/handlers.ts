@@ -18,6 +18,12 @@ import { getDatabase } from "./responses/db.utils";
 export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder`, ({ cookies }) => {
     const db = database || getDatabase(cookies);
+    const perioder = db.findAllRapporteringsperioder();
+
+    if (perioder.length === 0) {
+      return HttpResponse.json([], { status: 204 });
+    }
+
     return HttpResponse.json(db.findAllRapporteringsperioder());
   }),
 

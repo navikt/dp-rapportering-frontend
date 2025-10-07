@@ -88,8 +88,7 @@ export async function hentRapporteringsperioder(
   }
 
   if (response.status === 204) {
-    await logErrorResponse(response, `Hentet rapporteringsperioder men bruker har ingen perioder`);
-    throw new Response("rapportering-feilmelding-hent-perioder-404", { status: 404 });
+    return [];
   }
 
   const rapporteringsperioder: IRapporteringsperiode[] = await response.json();
