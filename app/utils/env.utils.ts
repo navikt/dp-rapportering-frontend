@@ -20,6 +20,7 @@ interface IEnv {
   RUNTIME_ENVIRONMENT: string;
   SANITY_DATASETT: string;
   UMAMI_ID: string;
+  FELLES_MELDEKORT_URL: string;
 }
 
 export function getEnv(value: keyof IEnv) {

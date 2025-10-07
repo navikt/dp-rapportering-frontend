@@ -52,6 +52,26 @@ export enum InnsendtRapporteringsperiodeStatus {
   FEIL = "FEIL",
 }
 
+export async function harDpMeldeplikt(request: Request): Promise<boolean> {
+  const url = `${DP_RAPPORTERING_URL}/hardpmeldeplikt`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: await getHeaders(request),
+  });
+
+  if (!response.ok) {
+    await logErrorResponse(response, `Klarte ikke å hente meldeplikt`);
+    throw new Response(`rapportering-feilmelding-hent-meldeplikt`, {
+      status: response.status,
+    });
+  }
+
+  const harMeldeplikt = await response.text();
+
+  return harMeldeplikt !== "false"; // Vi ønsker at det skal defaultes til true
+}
+
 export async function startUtfylling(request: Request, periodeId: string): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/start`;
 
