@@ -14,3 +14,4 @@ umami_id: "feb08edd-87bf-4617-a22f-363ce00d48f6"
 replicas:
   min: 2
   max: 2
+felles_meldekort_url: "https://www.nav.no"

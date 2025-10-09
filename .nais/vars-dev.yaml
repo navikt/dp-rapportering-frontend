@@ -14,4 +14,4 @@ umami_id: "ccee3ffe-f3c3-4ef6-8e01-742756847782"
 replicas:
   min: 2
   max: 2
-  
+felles_meldekort_url: "https://meldekort-frontend-q2.ansatt.dev.nav.no"
