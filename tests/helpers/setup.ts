@@ -1,7 +1,5 @@
 import "@testing-library/jest-dom/vitest";
 
-import { URLSearchParams } from "node:url";
-
 import { cleanup } from "@testing-library/react";
 import { afterEach, beforeAll, vi } from "vitest";
 
@@ -9,7 +7,6 @@ import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 
 beforeAll(() => {
   // Sikre at alle Web APIs kommer fra samme realm
-  globalThis.URLSearchParams = URLSearchParams as typeof globalThis.URLSearchParams;
   globalThis.Request = Request as typeof globalThis.Request;
   globalThis.FormData = FormData as typeof globalThis.FormData;
 });
