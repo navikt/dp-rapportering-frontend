@@ -1,7 +1,5 @@
-import { beforeEach } from "node:test";
-
 import { http, HttpResponse } from "msw";
-import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";

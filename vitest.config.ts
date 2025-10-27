@@ -9,7 +9,6 @@ export default defineConfig({
     watch: false,
     coverage: {
       provider: "istanbul",
-      all: true,
       include: ["app/*"],
     },
   },
