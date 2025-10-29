@@ -27,7 +27,7 @@
     "@portabletext/react": "4.0.3",
     "@portabletext/types": "2.0.15",
     "@react-router/express": "7.9.4",
-    "@react-router/node": "7.9.4",
+    "@react-router/node": "7.9.5",
     "@react-router/serve": "7.9.4",
     "@rvf/react-router": "8.1.0",
     "@rvf/zod": "7.0.4",
