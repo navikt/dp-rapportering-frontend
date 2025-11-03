@@ -35,6 +35,7 @@ describe("Root", () => {
         request: new Request("http://localhost:3000"),
         params: {},
         context: {},
+        unstable_pattern: "",
       }),
     )) as Response;
 
@@ -58,6 +59,7 @@ describe("Root", () => {
       request: new Request("http://localhost:3000"),
       params: {},
       context: {},
+      unstable_pattern: "",
     })) as { fragments: DecoratorElements };
 
     expect(response.fragments).not.toBeNull();

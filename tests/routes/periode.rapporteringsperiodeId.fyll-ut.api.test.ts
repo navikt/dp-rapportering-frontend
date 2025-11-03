@@ -67,6 +67,7 @@ describe("Fyll ut rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
+          unstable_pattern: "",
         });
 
         expect(response.status).toBe("success");
@@ -98,6 +99,7 @@ describe("Fyll ut rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
+          unstable_pattern: "",
         });
 
         expect(response.status).toBe("error");
@@ -140,6 +142,7 @@ describe("Fyll ut rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
+          unstable_pattern: "",
         });
 
         expect(response.status).toBe("success");

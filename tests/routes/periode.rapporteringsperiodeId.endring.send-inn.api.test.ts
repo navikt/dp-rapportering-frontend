@@ -73,6 +73,7 @@ describe("Send inn rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
+          unstable_pattern: "",
         });
 
         expect(response).toEqual(
@@ -120,6 +121,7 @@ describe("Send inn rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
+          unstable_pattern: "",
         })) as UNSAFE_DataWithResponseInit<{ error: string }>;
 
         const data = response.data;

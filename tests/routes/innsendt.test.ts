@@ -27,6 +27,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
+          unstable_pattern: "",
         }),
       )) as Response;
 
@@ -53,6 +54,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
+          unstable_pattern: "",
         }),
       )) as Response;
 
@@ -83,6 +85,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
         request: new Request("http://localhost:3000"),
         params: {},
         context: {},
+        unstable_pattern: "",
       });
 
       expect(response).toEqual({
