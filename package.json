@@ -38,7 +38,7 @@
     "date-fns": "4.1.0",
     "express": "5.1.0",
     "groq": "4.13.0",
-    "html-react-parser": "5.2.7",
+    "html-react-parser": "5.2.8",
     "isbot": "5.1.32",
     "morgan": "1.10.1",
     "msw": "2.11.6",
