@@ -10,7 +10,10 @@ interface IProps {
 }
 
 export function ArbeidssokerAlert({ periode }: IProps) {
-  if (periode.type === KortType.MANUELL_ARENA) {
+  if (
+    periode.type === KortType.MANUELL_ARENA ||
+    periode.type === KortType.ETTERREGISTRERT
+  ) {
     return null;
   }
 

@@ -322,6 +322,23 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       db.rapporteringsperioder.create(endretPeriode);
       break;
     }
+
+    case ScenarioType.etterregistrert: {
+      deleteAllRapporteringsperioder(db);
+
+      const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
+
+      const etterregistrertPeriode = lagRapporteringsperiode({
+        type: KortType.ETTERREGISTRERT,
+        periode: {
+          fraOgMed,
+          tilOgMed,
+        },
+      });
+
+      db.rapporteringsperioder.create(etterregistrertPeriode);
+      break;
+    }
   }
 }
 

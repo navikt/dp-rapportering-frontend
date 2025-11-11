@@ -60,7 +60,10 @@ function nesteSide(periode: IRapporteringsperiode) {
     return `/periode/${periode.id}/tom`;
   }
 
-  if (periode.type === KortType.MANUELL_ARENA) {
+  if (
+    periode.type === KortType.MANUELL_ARENA ||
+    periode.type === KortType.ETTERREGISTRERT
+  ) {
     return `/periode/${periode.id}/send-inn`;
   }
 

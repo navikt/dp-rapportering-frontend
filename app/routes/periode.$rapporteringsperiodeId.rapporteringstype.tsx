@@ -60,7 +60,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 function nesteSide(periode: IRapporteringsperiode) {
   const skalIkkeFylleUt = periode.rapporteringstype === Rapporteringstype.harIngenAktivitet;
 
-  if (skalIkkeFylleUt && periode.type === KortType.MANUELL_ARENA) {
+  if (
+    skalIkkeFylleUt &&
+    (periode.type === KortType.MANUELL_ARENA || periode.type === KortType.ETTERREGISTRERT)
+  ) {
     return `/periode/${periode.id}/send-inn`;
   } else if (skalIkkeFylleUt) {
     return `/periode/${periode.id}/arbeidssoker`;

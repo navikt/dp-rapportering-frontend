@@ -16,7 +16,10 @@ import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { KortType } from "~/utils/types";
 
 function nesteSide(periode: IRapporteringsperiode) {
-  if (periode.type === KortType.MANUELL_ARENA) {
+  if (
+    periode.type === KortType.MANUELL_ARENA ||
+    periode.type === KortType.ETTERREGISTRERT
+  ) {
     return `/periode/${periode.id}/send-inn`;
   }
 
