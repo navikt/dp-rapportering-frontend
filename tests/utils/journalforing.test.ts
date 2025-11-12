@@ -578,12 +578,37 @@ describe("samleHtmlForPeriode", () => {
 });
 
 describe("Etterregistrert meldekort", () => {
-  it("viser ikke arbeidssokerstatus", () => {
+  it("viser ikke arbeidssokerstatus  for etterregistrert meldekort fra Arena", () => {
     const props = {
       rapporteringsperioder: [],
       periode: {
         ...innsendtRapporteringsperioderResponse[0],
         type: KortType.MANUELL_ARENA,
+        registrertArbeidssoker: null,
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    };
+
+    const html = samleHtmlForPeriode(
+      props.rapporteringsperioder,
+      props.periode,
+      mockGetAppText,
+      mockGetRichText,
+      locale,
+    );
+
+    expect(html).not.toContain("rapportering-arbeidssokerregister-svar-ja");
+    expect(html).not.toContain("rapportering-arbeidssokerregister-alert-tittel");
+  });
+
+  it("viser ikke arbeidssokerstatus for etterregistrert meldekort fra Meldekortregister", () => {
+    const props = {
+      rapporteringsperioder: [],
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        type: KortType.ETTERREGISTRERT,
         registrertArbeidssoker: null,
       },
       getAppText: mockGetAppText,
