@@ -23,8 +23,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
-import { kanSendes } from "~/utils/periode.utils";
-import { KortType } from "~/utils/types";
+import { kanSendes, skalIkkeHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import styles from "../styles/fyll-ut.module.css";
@@ -60,10 +59,7 @@ function nesteSide(periode: IRapporteringsperiode) {
     return `/periode/${periode.id}/tom`;
   }
 
-  if (
-    periode.type === KortType.MANUELL_ARENA ||
-    periode.type === KortType.ETTERREGISTRERT
-  ) {
+  if (skalIkkeHaArbeidssokerSporsmal(periode)) {
     return `/periode/${periode.id}/send-inn`;
   }
 

@@ -13,13 +13,10 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { KortType } from "~/utils/types";
+import { skalIkkeHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 
 function nesteSide(periode: IRapporteringsperiode) {
-  if (
-    periode.type === KortType.MANUELL_ARENA ||
-    periode.type === KortType.ETTERREGISTRERT
-  ) {
+  if (skalIkkeHaArbeidssokerSporsmal(periode)) {
     return `/periode/${periode.id}/send-inn`;
   }
 
