@@ -67,5 +67,6 @@ export function getSessionId(request: Request) {
 }
 
 export function hasSession(request: Request) {
-  return request.headers.get("Cookie")?.includes("sessionId");
+  const sessionId = getSessionId(request);
+  return sessionId !== null;
 }

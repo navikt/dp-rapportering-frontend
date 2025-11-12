@@ -28,8 +28,9 @@ import {
   hentPeriodeTekst,
   kanSendes,
   perioderSomKanSendes,
+  skalHaArbeidssokerSporsmal,
 } from "~/utils/periode.utils";
-import { KortType, Rapporteringstype, TIDSSONER } from "~/utils/types";
+import { Rapporteringstype, TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -60,7 +61,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 function nesteSide(periode: IRapporteringsperiode) {
   const skalIkkeFylleUt = periode.rapporteringstype === Rapporteringstype.harIngenAktivitet;
 
-  if (skalIkkeFylleUt && periode.type === KortType.MANUELL_ARENA) {
+  if (skalIkkeFylleUt && !skalHaArbeidssokerSporsmal(periode)) {
     return `/periode/${periode.id}/send-inn`;
   } else if (skalIkkeFylleUt) {
     return `/periode/${periode.id}/arbeidssoker`;

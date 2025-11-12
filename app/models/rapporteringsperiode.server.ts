@@ -189,6 +189,10 @@ export async function sendInnPeriode(
   const rapporteringsperiodeWithHtml = {
     ...rapporteringsperiode,
     html: html.toString().trim(),
+    registrertArbeidssoker:
+      rapporteringsperiode.type === KortType.ETTERREGISTRERT
+        ? true
+        : rapporteringsperiode.registrertArbeidssoker,
   };
 
   const standardHeaders = await getHeaders(request);

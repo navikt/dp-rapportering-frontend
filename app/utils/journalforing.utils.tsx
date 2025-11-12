@@ -30,8 +30,9 @@ import {
   hentUkeTekst,
   perioderSomKanSendes,
   periodeSomTimer,
+  skalHaArbeidssokerSporsmal,
 } from "./periode.utils";
-import { KortType, Rapporteringstype, TIDSSONER } from "./types";
+import { Rapporteringstype, TIDSSONER } from "./types";
 
 interface IProps {
   locale: DecoratorLocale;
@@ -584,7 +585,7 @@ export function samleHtmlForPeriode(
       fns.push(htmlForTom);
     }
 
-    if (periode.type !== KortType.MANUELL_ARENA) {
+    if (skalHaArbeidssokerSporsmal(periode)) {
       fns.push(htmlForArbeidssoker);
     }
 

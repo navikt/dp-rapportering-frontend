@@ -9,7 +9,7 @@ import {
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 import { DecoratorLocale } from "./dekoratoren.utils";
-import { IRapporteringsperiodeStatus } from "./types";
+import { IRapporteringsperiodeStatus, KortType } from "./types";
 
 export function periodeSomTimer(periode?: string): number | undefined {
   if (!periode) return undefined;
@@ -184,4 +184,8 @@ export function erPeriodeneLike(
   }
 
   return true;
+}
+
+export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
+  return periode.type !== KortType.MANUELL_ARENA && periode.type !== KortType.ETTERREGISTRERT;
 }

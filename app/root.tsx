@@ -102,7 +102,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (isLocalOrDemo && !hasSession(request)) {
     return redirect("/", {
       headers: {
-        "Set-Cookie": `sessionId=${uuidv7()}`,
+        "Set-Cookie": `sessionId=${uuidv7()}; Path=/; SameSite=Lax`,
       },
     });
   }
