@@ -23,7 +23,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
-import { kanSendes, skalIkkeHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import { kanSendes, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import styles from "../styles/fyll-ut.module.css";
@@ -59,7 +59,7 @@ function nesteSide(periode: IRapporteringsperiode) {
     return `/periode/${periode.id}/tom`;
   }
 
-  if (skalIkkeHaArbeidssokerSporsmal(periode)) {
+  if (!skalHaArbeidssokerSporsmal(periode)) {
     return `/periode/${periode.id}/send-inn`;
   }
 

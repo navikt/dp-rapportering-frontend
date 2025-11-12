@@ -186,6 +186,6 @@ export function erPeriodeneLike(
   return true;
 }
 
-export function skalIkkeHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
-  return periode.type === KortType.MANUELL_ARENA || periode.type === KortType.ETTERREGISTRERT;
+export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
+  return periode.type !== KortType.MANUELL_ARENA && periode.type !== KortType.ETTERREGISTRERT;
 }

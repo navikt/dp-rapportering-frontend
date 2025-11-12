@@ -30,7 +30,7 @@ import {
   hentUkeTekst,
   perioderSomKanSendes,
   periodeSomTimer,
-  skalIkkeHaArbeidssokerSporsmal,
+  skalHaArbeidssokerSporsmal,
 } from "./periode.utils";
 import { Rapporteringstype, TIDSSONER } from "./types";
 
@@ -585,7 +585,7 @@ export function samleHtmlForPeriode(
       fns.push(htmlForTom);
     }
 
-    if (!skalIkkeHaArbeidssokerSporsmal(periode)) {
+    if (skalHaArbeidssokerSporsmal(periode)) {
       fns.push(htmlForArbeidssoker);
     }
 

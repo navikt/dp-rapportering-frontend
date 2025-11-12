@@ -13,10 +13,10 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { skalIkkeHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import { skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 
 function nesteSide(periode: IRapporteringsperiode) {
-  if (skalIkkeHaArbeidssokerSporsmal(periode)) {
+  if (!skalHaArbeidssokerSporsmal(periode)) {
     return `/periode/${periode.id}/send-inn`;
   }
 

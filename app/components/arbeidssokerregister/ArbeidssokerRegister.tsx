@@ -3,14 +3,14 @@ import { PortableText } from "@portabletext/react";
 
 import { useSanity } from "~/hooks/useSanity";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { skalIkkeHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import { skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 
 interface IProps {
   periode: IRapporteringsperiode;
 }
 
 export function ArbeidssokerAlert({ periode }: IProps) {
-  if (skalIkkeHaArbeidssokerSporsmal(periode)) {
+  if (!skalHaArbeidssokerSporsmal(periode)) {
     return null;
   }
 

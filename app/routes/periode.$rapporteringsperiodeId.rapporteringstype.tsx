@@ -28,7 +28,7 @@ import {
   hentPeriodeTekst,
   kanSendes,
   perioderSomKanSendes,
-  skalIkkeHaArbeidssokerSporsmal,
+  skalHaArbeidssokerSporsmal,
 } from "~/utils/periode.utils";
 import { Rapporteringstype, TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
@@ -61,7 +61,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 function nesteSide(periode: IRapporteringsperiode) {
   const skalIkkeFylleUt = periode.rapporteringstype === Rapporteringstype.harIngenAktivitet;
 
-  if (skalIkkeFylleUt && skalIkkeHaArbeidssokerSporsmal(periode)) {
+  if (skalIkkeFylleUt && !skalHaArbeidssokerSporsmal(periode)) {
     return `/periode/${periode.id}/send-inn`;
   } else if (skalIkkeFylleUt) {
     return `/periode/${periode.id}/arbeidssoker`;

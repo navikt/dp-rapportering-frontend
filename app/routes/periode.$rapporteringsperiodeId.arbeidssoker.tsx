@@ -15,7 +15,7 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
-import { kanSendes, skalIkkeHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import { kanSendes, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
@@ -85,7 +85,7 @@ export default function ArbeidssøkerRegisterSide() {
 
       <fetcher.Form method="post">
         <RadioGroup
-          disabled={!kanSendes(periode) || skalIkkeHaArbeidssokerSporsmal(periode) || isSubmitting}
+          disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
           legend={getAppText("rapportering-arbeidssokerregister-tittel")}
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
