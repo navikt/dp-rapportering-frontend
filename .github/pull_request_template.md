@@ -5,4 +5,4 @@ For bugfixer, beskriv gjerne:
 - Hva var problemet?
 - Hvordan har det blitt løst?
 
-Lenke til oppgave/issue: [FAVRO-KORT]
+Lenke til oppgave/issue: [TRELLO-KORT]
