@@ -5,7 +5,7 @@ import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/util
 export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
   {
     id: "3fa85f64-5717-4562-b3fc-2c963f66afa3",
-    type: KortType.ELEKTRONISK,
+    type: KortType.ORDINAERT,
     periode: {
       fraOgMed: "2023-05-01",
       tilOgMed: "2023-05-14",
@@ -135,7 +135,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
   },
   {
     id: "3fa85f64-5717-4562-b3fc-2c963f66afa3",
-    type: KortType.ELEKTRONISK,
+    type: KortType.ORDINAERT,
     periode: {
       fraOgMed: "2023-05-01",
       tilOgMed: "2023-05-14",

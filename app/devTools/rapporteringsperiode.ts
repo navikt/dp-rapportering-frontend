@@ -17,7 +17,7 @@ export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
 
   const meldekort: IRapporteringsperiode = {
     id: createId(),
-    type: KortType.ELEKTRONISK,
+    type: KortType.ORDINAERT,
     periode: {
       fraOgMed,
       tilOgMed,
