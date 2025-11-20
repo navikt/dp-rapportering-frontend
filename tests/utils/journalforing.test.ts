@@ -583,7 +583,7 @@ describe("Etterregistrert meldekort", () => {
       rapporteringsperioder: [],
       periode: {
         ...innsendtRapporteringsperioderResponse[0],
-        type: KortType.MANUELL_ARENA,
+        type: KortType.ETTERREGISTRERT,
         registrertArbeidssoker: null,
       },
       getAppText: mockGetAppText,

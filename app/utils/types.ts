@@ -38,26 +38,10 @@ export interface IHttpProblem {
   correlationId: string;
 }
 
-export const ArenaMeldekortType = {
-  ORDINAER: "01",
-  ERSTATNING: "03",
-  RETUR: "04",
-  ELEKTRONISK: "05",
-  AAP: "06",
-  ORDINAER_MANUELL: "07",
-  MASKINELT_OPPDATERT: "08",
-  MANUELL_ARENA: "09",
-  KORRIGERT_ELEKTRONISK: "10",
-} as const;
-
-export const MeldekortregisterType = {
+export const KortType = {
   ORDINAERT: "Ordinaert",
   ETTERREGISTRERT: "Etterregistrert",
-} as const;
-
-export const KortType = {
-  ...ArenaMeldekortType,
-  ...MeldekortregisterType,
+  KORRIGERT: "Korrigert",
 } as const;
 
 export const TIDSSONER = {
