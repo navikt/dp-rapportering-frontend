@@ -20,7 +20,6 @@ import { uuidv7 } from "uuidv7";
 import indexStyle from "~/index.css?url";
 
 import { hasSession } from "../mocks/session";
-import { Umami } from "./components/analytics/Umami";
 import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBoundary";
 import { ServiceMessage } from "./components/service-message/ServiceMessage";
 import { getDecoratorHTML } from "./dekorator/dekorator.server";
@@ -124,7 +123,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
       RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
       SANITY_DATASETT: process.env.SANITY_DATASETT,
       GITHUB_SHA: process.env.GITHUB_SHA,
-      UMAMI_ID: process.env.UMAMI_ID,
     },
     fragments,
   };
@@ -162,7 +160,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {parse(fragments.DECORATOR_HEAD_ASSETS, { trim: true })}
         <Meta />
         <Links />
-        <Umami />
       </head>
       <body>
         <script
