@@ -36,7 +36,7 @@
     "compression": "1.8.1",
     "cross-env": "10.1.0",
     "date-fns": "4.1.0",
-    "express": "5.1.0",
+    "express": "5.2.1",
     "groq": "4.19.0",
     "html-react-parser": "5.2.10",
     "isbot": "5.1.32",
