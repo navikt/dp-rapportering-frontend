@@ -1,10 +1,13 @@
-import { awaitDecoratorData, getCurrentConsent } from "@navikt/nav-dekoratoren-moduler";
+import {
+  awaitDecoratorData,
+  getAnalyticsInstance,
+  getCurrentConsent,
+} from "@navikt/nav-dekoratoren-moduler";
 import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { hentData, redactId } from "~/utils/analytics";
+import { hentData } from "~/utils/analytics";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
-import { getEnv } from "~/utils/env.utils";
 import { Rapporteringstype } from "~/utils/types";
 
 import { useLocale } from "./useLocale";
@@ -56,10 +59,7 @@ interface ILukkModal extends IModal {
 const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
-  const umami =
-    typeof window !== "undefined" && getEnv("UMAMI_ID") && window.umami
-      ? window.umami.track
-      : undefined;
+  const logger = getAnalyticsInstance(skjemanavn);
 
   const { locale: språk } = useLocale();
 
@@ -74,20 +74,11 @@ export function useAnalytics() {
 
       const data = await hentData({ props, språk, skjemanavn });
 
-      if (umami) {
-        // @ts-expect-error - Umami is not typed correctly
-        umami((umamiProps) => {
-          return {
-            name: event,
-            ...umamiProps,
-            referrer: redactId(umamiProps.referrer),
-            url: redactId(window.location.pathname),
-            data,
-          };
-        });
+      if (logger) {
+        logger(event, data);
       }
     },
-    [umami, språk],
+    [logger, språk],
   );
 
   const trackSkjemaStartet = useCallback(
@@ -243,5 +234,6 @@ export function useAnalytics() {
     trackNavigere,
     trackFeilmelding,
     trackBesok,
+    logger,
   };
 }
