@@ -314,7 +314,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       });
 
       const endretPeriode = lagRapporteringsperiode({
-        type: KortType.MANUELL_ARENA,
+        type: KortType.ETTERREGISTRERT,
         periode,
         kanSendesFra: periodeKanSendesFra,
         mottattDato: periodeKanSendesFra,

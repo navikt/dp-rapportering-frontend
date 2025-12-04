@@ -7,6 +7,7 @@ import { loader as rapporteringsperiodeLoader } from "~/routes/periode.$rapporte
 import ArbeidssøkerRegisterSide, {
   action as arbeidssokerregisterAction,
 } from "~/routes/periode.$rapporteringsperiodeId.arbeidssoker";
+import { KortType } from "~/utils/types";
 
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
@@ -67,7 +68,7 @@ describe("ArbeidssøkerRegisterSide", () => {
   test("Spørsmål om arbeidssøker skal være true og disabled når etterregistrering", async () => {
     const rapporteringsperiode09: IRapporteringsperiode = {
       ...rapporteringsperiode,
-      type: "09",
+      type: KortType.ETTERREGISTRERT,
       registrertArbeidssoker: true,
     };
     testDb.addRapporteringsperioder(rapporteringsperiode09);
