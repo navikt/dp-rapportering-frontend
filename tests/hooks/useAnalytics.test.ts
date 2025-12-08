@@ -7,6 +7,8 @@ import { Rapporteringstype } from "~/utils/types";
 
 vi.unmock("~/hooks/useAnalytics");
 
+const loggerMock = vi.fn();
+
 vi.mock(import("@navikt/nav-dekoratoren-moduler"), async (importOriginal) => {
   const actual = await importOriginal();
 
@@ -14,6 +16,7 @@ vi.mock(import("@navikt/nav-dekoratoren-moduler"), async (importOriginal) => {
     ...actual,
     awaitDecoratorData: vi.fn().mockResolvedValue({}),
     getCurrentConsent: vi.fn().mockReturnValue({ consent: { analytics: true, surveys: true } }),
+    getAnalyticsInstance: vi.fn(() => loggerMock),
   };
 });
 
@@ -42,31 +45,15 @@ vi.mock("~/utils/analytics", () => {
   };
 });
 
-const env: { [key: string]: string } = {
-  UMAMI_ID: "123",
-};
-
 vi.mock("~/utils/env.utils", () => ({
-  getEnv: (name: string) => env[name],
   isLocalOrDemo: false,
 }));
 
 describe("useAnalytics", () => {
   const skjemanavn = "dagpenger-rapportering";
   const språk = "no";
-  const trackMock = vi.fn();
   beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).umami = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      track: vi.fn((arg: any) => {
-        if (typeof arg === "function") {
-          const payload = arg({ referrer: "", url: location.pathname });
-          // Forward bare name + data slik testene forventer
-          trackMock(payload.name, payload.data);
-        }
-      }),
-    };
+    loggerMock.mockClear();
   });
 
   afterEach(() => {
@@ -81,7 +68,7 @@ describe("useAnalytics", () => {
       await result.current.trackSkjemaStartet(skjemaId, false);
 
       await waitFor(() =>
-        expect(trackMock).toHaveBeenCalledWith("skjema startet", {
+        expect(loggerMock).toHaveBeenCalledWith("skjema startet", {
           skjemanavn,
           skjemaId,
           språk,
@@ -100,7 +87,7 @@ describe("useAnalytics", () => {
       await Promise.resolve();
       await Promise.resolve();
 
-      expect(trackMock).toHaveBeenCalledWith("skjema fullført", {
+      expect(loggerMock).toHaveBeenCalledWith("skjema fullført", {
         skjemanavn,
         skjemaId,
         språk,
@@ -126,7 +113,7 @@ describe("useAnalytics", () => {
       await Promise.resolve();
       await Promise.resolve();
 
-      expect(trackMock).toHaveBeenCalledWith("skjema steg fullført", {
+      expect(loggerMock).toHaveBeenCalledWith("skjema steg fullført", {
         skjemanavn,
         skjemaId,
         språk,
@@ -148,7 +135,7 @@ describe("useAnalytics", () => {
       await Promise.resolve();
       await Promise.resolve();
 
-      expect(trackMock).toHaveBeenCalledWith("skjema startet", {
+      expect(loggerMock).toHaveBeenCalledWith("skjema startet", {
         skjemanavn,
         skjemaId,
         språk,
@@ -166,7 +153,7 @@ describe("useAnalytics", () => {
       await Promise.resolve();
       await Promise.resolve();
 
-      expect(trackMock).toHaveBeenCalledWith("skjema innsending feilet", {
+      expect(loggerMock).toHaveBeenCalledWith("skjema innsending feilet", {
         skjemanavn,
         skjemaId,
         språk,

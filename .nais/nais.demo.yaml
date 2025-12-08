@@ -54,8 +54,6 @@ spec:
       value: {{runtime_environment}}
     - name: SANITY_DATASETT
       value: {{sanity_datasett}}
-    - name: UMAMI_ID
-      value: {{umami_id}}
   accessPolicy:
     outbound:
       external:
