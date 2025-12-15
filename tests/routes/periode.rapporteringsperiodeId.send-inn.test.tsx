@@ -22,7 +22,7 @@ vi.mock("~/hooks/useLocale", () => ({
   useLocale: vi.fn(() => ({ locale: DecoratorLocale.NB })),
 }));
 
-const testDb = withDb(sessionRecord.getDatabase("123"));
+const testDb = withDb(await sessionRecord.getDatabase("123"));
 const rapporteringsperiode = lagRapporteringsperiode({
   periode: { fraOgMed: "2024-01-01", tilOgMed: "2024-01-14" },
   registrertArbeidssoker: false,
@@ -57,7 +57,7 @@ describe("RapporteringstypeSide", () => {
     });
 
     test("Uten aktiviteter", async () => {
-      testDb.addRapporteringsperioder(rapporteringsperiode);
+      await testDb.addRapporteringsperioder(rapporteringsperiode);
 
       await act(async () => {
         render();
@@ -101,7 +101,7 @@ describe("RapporteringstypeSide", () => {
         ...rapporteringsperiode.dager.slice(4),
       ];
 
-      testDb.addRapporteringsperioder({
+      await testDb.addRapporteringsperioder({
         ...rapporteringsperiode,
         dager,
         registrertArbeidssoker: true,

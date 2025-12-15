@@ -16,7 +16,7 @@ import { sessionRecord } from "../../mocks/session";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 
-const testDb = withDb(sessionRecord.getDatabase("123"));
+const testDb = withDb(await sessionRecord.getDatabase("123"));
 const rapporteringsperiode: IRapporteringsperiode = {
   ...lagRapporteringsperiode({ kanSendes: true }),
   registrertArbeidssoker: null,
@@ -49,7 +49,7 @@ describe("ArbeidssøkerRegisterSide", () => {
   });
 
   test("Skal vise spørsmål om arbeidssøker", async () => {
-    testDb.addRapporteringsperioder(rapporteringsperiode);
+    await testDb.addRapporteringsperioder(rapporteringsperiode);
     await act(async () => {
       render();
     });
@@ -71,7 +71,7 @@ describe("ArbeidssøkerRegisterSide", () => {
       type: KortType.ETTERREGISTRERT,
       registrertArbeidssoker: true,
     };
-    testDb.addRapporteringsperioder(rapporteringsperiode09);
+    await testDb.addRapporteringsperioder(rapporteringsperiode09);
     await act(async () => {
       render();
     });
@@ -86,7 +86,7 @@ describe("ArbeidssøkerRegisterSide", () => {
   });
 
   test("Skal svare med 'Ja'", async () => {
-    testDb.addRapporteringsperioder(rapporteringsperiode);
+    await testDb.addRapporteringsperioder(rapporteringsperiode);
     await act(async () => {
       render();
     });
@@ -104,7 +104,7 @@ describe("ArbeidssøkerRegisterSide", () => {
   });
 
   test("Skal svare med 'Nei'", async () => {
-    testDb.addRapporteringsperioder(rapporteringsperiode);
+    await testDb.addRapporteringsperioder(rapporteringsperiode);
     await act(async () => {
       render();
     });
@@ -123,7 +123,10 @@ describe("ArbeidssøkerRegisterSide", () => {
   });
 
   test("Skal være allerede besvart med 'Ja'", async () => {
-    testDb.addRapporteringsperioder({ ...rapporteringsperiode, registrertArbeidssoker: true });
+    await testDb.addRapporteringsperioder({
+      ...rapporteringsperiode,
+      registrertArbeidssoker: true,
+    });
     await act(async () => {
       render();
     });
@@ -137,7 +140,10 @@ describe("ArbeidssøkerRegisterSide", () => {
   });
 
   test("Skal være allerede besvart med 'Nei'", async () => {
-    testDb.addRapporteringsperioder({ ...rapporteringsperiode, registrertArbeidssoker: false });
+    await testDb.addRapporteringsperioder({
+      ...rapporteringsperiode,
+      registrertArbeidssoker: false,
+    });
     await act(async () => {
       render();
     });

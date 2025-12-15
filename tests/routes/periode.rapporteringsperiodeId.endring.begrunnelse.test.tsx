@@ -14,7 +14,7 @@ import { sessionRecord } from "../../mocks/session";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 
-const testDb = withDb(sessionRecord.getDatabase("123"));
+const testDb = withDb(await sessionRecord.getDatabase("123"));
 const rapporteringsperiode: IRapporteringsperiode = {
   ...lagRapporteringsperiode({ kanSendes: true }),
 };

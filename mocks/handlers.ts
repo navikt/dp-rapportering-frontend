@@ -20,8 +20,8 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     return HttpResponse.text("true");
   }),
 
-  http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder`, ({ cookies }) => {
-    const db = database || getDatabase(cookies);
+  http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder`, async ({ cookies }) => {
+    const db = database || (await getDatabase(cookies));
     const perioder = db.findAllRapporteringsperioder();
 
     if (perioder.length === 0) {
@@ -31,26 +31,26 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     return HttpResponse.json(db.findAllRapporteringsperioder());
   }),
 
-  http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`, ({ cookies }) => {
-    const db = database || getDatabase(cookies);
+  http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder/innsendte`, async ({ cookies }) => {
+    const db = database || (await getDatabase(cookies));
     return HttpResponse.json(db.findAllInnsendtePerioder());
   }),
 
   http.post(`${DP_RAPPORTERING_URL}/rapporteringsperiode`, async ({ cookies, request }) => {
-    const db = database || getDatabase(cookies);
+    const db = database || (await getDatabase(cookies));
     const periode = (await request.json()) as IRapporteringsperiode;
 
     const mottattDato = formaterDato({ dato: new Date(), dateFormat: "yyyy-MM-dd" });
 
     if (periode.originalId) {
-      db.updateRapporteringsperiode(periode.originalId, {
+      await db.updateRapporteringsperiode(periode.originalId, {
         kanEndres: false,
         status: IRapporteringsperiodeStatus.Endret,
       });
 
       const endretPeriode = hentEndringsId(periode);
 
-      db.addRapporteringsperioder({
+      await db.addRapporteringsperioder({
         ...endretPeriode,
         status: IRapporteringsperiodeStatus.Innsendt,
         kanEndres: false,
@@ -62,7 +62,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       return HttpResponse.json({ id: endretPeriode.id });
     }
 
-    db.updateRapporteringsperiode(periode.id, {
+    await db.updateRapporteringsperiode(periode.id, {
       status: IRapporteringsperiodeStatus.Innsendt,
       kanSendes: false,
       mottattDato,
@@ -74,8 +74,8 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
   http.get(
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
-    ({ cookies, params }) => {
-      const db = database || getDatabase(cookies);
+    async ({ cookies, params }) => {
+      const db = database || (await getDatabase(cookies));
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
       const periode = db.findRapporteringsperiodeById(rapporteringsperiodeId);
 
@@ -93,8 +93,8 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
   http.post(
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/endre`,
-    ({ cookies, params }) => {
-      const db = database || getDatabase(cookies);
+    async ({ cookies, params }) => {
+      const db = database || (await getDatabase(cookies));
 
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
 
@@ -102,7 +102,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
 
       const endretPeriode = startEndring(rapporteringsperiode);
 
-      db.addRapporteringsperioder(endretPeriode);
+      await db.addRapporteringsperioder(endretPeriode);
 
       return HttpResponse.json({ id: endretPeriode.id });
     },
@@ -111,12 +111,12 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.post(
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/aktivitet`,
     async ({ cookies, request, params }) => {
-      const db = database || getDatabase(cookies);
+      const db = database || (await getDatabase(cookies));
 
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
       const dag = (await request.json()) as IRapporteringsperiodeDag;
 
-      db.lagreAktivitet(rapporteringsperiodeId, dag);
+      await db.lagreAktivitet(rapporteringsperiodeId, dag);
 
       return HttpResponse.json(undefined, { status: 204 });
     },
@@ -126,11 +126,11 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/aktiviteter`,
 
     async ({ cookies, params }) => {
-      const db = database || getDatabase(cookies);
+      const db = database || (await getDatabase(cookies));
 
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
 
-      db.deleteAllAktiviteter(rapporteringsperiodeId);
+      await db.deleteAllAktiviteter(rapporteringsperiodeId);
 
       return HttpResponse.json(undefined, { status: 204 });
     },
@@ -139,11 +139,11 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.post(
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/arbeidssoker`,
     async ({ cookies, params, request }) => {
-      const db = database || getDatabase(cookies);
+      const db = database || (await getDatabase(cookies));
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
       const { registrertArbeidssoker } = (await request.json()) as IArbeidssokerSvar;
 
-      db.updateRapporteringsperiode(rapporteringsperiodeId, { registrertArbeidssoker });
+      await db.updateRapporteringsperiode(rapporteringsperiodeId, { registrertArbeidssoker });
 
       return HttpResponse.json(undefined, { status: 204 });
     },
@@ -152,12 +152,12 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.post(
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/begrunnelse`,
     async ({ cookies, params, request }) => {
-      const db = database || getDatabase(cookies);
+      const db = database || (await getDatabase(cookies));
 
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
       const { begrunnelseEndring } = (await request.json()) as IBegrunnelseSvar;
 
-      db.updateRapporteringsperiode(rapporteringsperiodeId, { begrunnelseEndring });
+      await db.updateRapporteringsperiode(rapporteringsperiodeId, { begrunnelseEndring });
 
       return HttpResponse.json(undefined, { status: 204 });
     },
@@ -166,11 +166,11 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.post(
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/rapporteringstype`,
     async ({ cookies, params, request }) => {
-      const db = database || getDatabase(cookies);
+      const db = database || (await getDatabase(cookies));
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
       const { rapporteringstype } = (await request.json()) as IRapporteringstypeSvar;
 
-      db.updateRapporteringsperiode(rapporteringsperiodeId, { rapporteringstype });
+      await db.updateRapporteringsperiode(rapporteringsperiodeId, { rapporteringstype });
 
       return HttpResponse.json(undefined, { status: 204 });
     },

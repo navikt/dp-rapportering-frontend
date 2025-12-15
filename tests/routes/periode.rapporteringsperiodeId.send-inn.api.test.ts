@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { http, HttpResponse } from "msw";
 import { redirect, UNSAFE_DataWithResponseInit } from "react-router";
+import { uuidv7 } from "uuidv7";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 
 import { action } from "~/routes/periode.$rapporteringsperiodeId.send-inn";
@@ -190,12 +191,14 @@ describe("Send inn rapporteringsperiode", () => {
           body,
         });
 
+        const id = uuidv7();
+
         server.use(
           http.get(
             `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId`,
             () => {
               return HttpResponse.json(
-                { id: "1", kanSendes: false, status: IRapporteringsperiodeStatus.Innsendt },
+                { id: id, kanSendes: false, status: IRapporteringsperiodeStatus.Innsendt },
                 { status: 200 },
               );
             },
@@ -208,7 +211,7 @@ describe("Send inn rapporteringsperiode", () => {
             async ({ request }) => {
               const sentRequest = await request.text();
               expect(sentRequest).toBe(
-                `{"id":"1","kanSendes":true,"status":${IRapporteringsperiodeStatus.TilUtfylling},"html":"<div />"}`,
+                `{"id":"$id","kanSendes":true,"status":${IRapporteringsperiodeStatus.TilUtfylling},"html":"<div />"}`,
               );
 
               return HttpResponse.json(null, {

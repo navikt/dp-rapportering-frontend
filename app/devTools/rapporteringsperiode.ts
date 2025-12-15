@@ -1,6 +1,7 @@
 import { TZDate } from "@date-fns/tz";
 import { addDays, subDays } from "date-fns";
 import { times } from "remeda";
+import { uuidv7 } from "uuidv7";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterDato } from "~/utils/dato.utils";
@@ -8,15 +9,11 @@ import { IRapporteringsperiodeStatus, KortType, TIDSSONER } from "~/utils/types"
 
 import { beregnForrigePeriodeDato, beregnNåværendePeriodeDato } from "./periodedato";
 
-function createId(): string {
-  return String(Math.floor(Math.random() * 10_000_000_000));
-}
-
 export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
   const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
 
   const meldekort: IRapporteringsperiode = {
-    id: createId(),
+    id: uuidv7(),
     type: KortType.ORDINAERT,
     periode: {
       fraOgMed,
@@ -66,13 +63,13 @@ export function leggTilForrigeRapporteringsperiode(
   navaerendePeriode: IRapporteringsperiode["periode"],
 ) {
   const { fraOgMed, tilOgMed } = beregnForrigePeriodeDato(navaerendePeriode.fraOgMed);
-  return lagRapporteringsperiode({ id: createId(), periode: { fraOgMed, tilOgMed } });
+  return lagRapporteringsperiode({ id: uuidv7(), periode: { fraOgMed, tilOgMed } });
 }
 
 export function startEndring(navaerendePeriode: IRapporteringsperiode): IRapporteringsperiode {
   return {
     ...navaerendePeriode,
-    id: createId(),
+    id: uuidv7(),
     originalId: navaerendePeriode.id,
     status: IRapporteringsperiodeStatus.TilUtfylling,
     kanEndres: false,
@@ -83,6 +80,6 @@ export function startEndring(navaerendePeriode: IRapporteringsperiode): IRapport
 export function hentEndringsId(navaerendePeriode: IRapporteringsperiode): IRapporteringsperiode {
   return {
     ...navaerendePeriode,
-    id: createId(),
+    id: uuidv7(),
   };
 }

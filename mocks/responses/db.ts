@@ -14,23 +14,18 @@ import {
 import { formaterDato } from "~/utils/dato.utils";
 import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
 
-import { Database } from "../../mocks/session";
+import { Database } from "../session";
 
-function seedRapporteringsperioder(db: Database) {
-  db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+async function seedRapporteringsperioder(db: Database) {
+  await db.rapporteringsperioder.create(lagForstRapporteringsperiode());
 }
 
-function addRapporteringsperioder(db: Database, rapporteringsperiode: IRapporteringsperiode) {
-  db.rapporteringsperioder.create(rapporteringsperiode);
+async function addRapporteringsperioder(db: Database, rapporteringsperiode: IRapporteringsperiode) {
+  await db.rapporteringsperioder.create(rapporteringsperiode);
 }
 
 function findAllRapporteringsperioder(db: Database) {
-  return db.rapporteringsperioder.findMany({
-    where: {
-      status: {
-        in: ["TilUtfylling"],
-      },
-    },
+  return db.rapporteringsperioder.findMany((q) => q.where({ status: "TilUtfylling" }), {
     orderBy: {
       periode: {
         fraOgMed: "asc",
@@ -40,49 +35,61 @@ function findAllRapporteringsperioder(db: Database) {
 }
 
 function findAllInnsendtePerioder(db: Database) {
-  return db.rapporteringsperioder.findMany({
-    where: {
-      status: {
-        in: ["Innsendt", "Endret", "Ferdig", "Feilet"],
-      },
-    },
-    orderBy: [
-      {
+  return db.rapporteringsperioder.findMany(
+    (q) =>
+      q
+        .where({ status: "Innsendt" })
+        .or({ status: "Endret" })
+        .or({ status: "Ferdig" })
+        .or({ status: "Feilet" }),
+    {
+      orderBy: {
         mottattDato: "desc",
-      },
-      {
         originalId: "asc",
       },
-    ],
-  }) as IRapporteringsperiode[];
+    },
+  ) as IRapporteringsperiode[];
 }
 
 function findRapporteringsperiodeById(db: Database, id: string) {
-  return db.rapporteringsperioder.findFirst({
-    where: {
-      id: {
-        equals: id,
-      },
-    },
-  }) as IRapporteringsperiode;
+  return db.rapporteringsperioder.findFirst((q) => q.where({ id: id })) as IRapporteringsperiode;
 }
 
-function updateRapporteringsperiode(
+async function updateRapporteringsperiode(
   db: Database,
   id: string,
-  data: Partial<IRapporteringsperiode>,
+  oppdatertPeriode: Partial<IRapporteringsperiode>,
 ) {
-  return db.rapporteringsperioder.update({
-    where: {
-      id: {
-        equals: id,
-      },
+  return await db.rapporteringsperioder.update((q) => q.where({ id: id }), {
+    data(periode) {
+      if (oppdatertPeriode.type != undefined) periode.type = oppdatertPeriode.type;
+      if (oppdatertPeriode.periode != undefined) periode.periode = oppdatertPeriode.periode;
+      if (oppdatertPeriode.dager != undefined) periode.dager = oppdatertPeriode.dager;
+      if (oppdatertPeriode.sisteFristForTrekk != undefined)
+        periode.sisteFristForTrekk = oppdatertPeriode.sisteFristForTrekk;
+      if (oppdatertPeriode.kanSendesFra != undefined)
+        periode.kanSendesFra = oppdatertPeriode.kanSendesFra;
+      if (oppdatertPeriode.kanSendes != undefined) periode.kanSendes = oppdatertPeriode.kanSendes;
+      if (oppdatertPeriode.kanEndres != undefined) periode.kanEndres = oppdatertPeriode.kanEndres;
+      if (oppdatertPeriode.bruttoBelop != undefined)
+        periode.bruttoBelop = oppdatertPeriode.bruttoBelop;
+      if (oppdatertPeriode.begrunnelseEndring != undefined)
+        periode.begrunnelseEndring = oppdatertPeriode.begrunnelseEndring;
+      if (oppdatertPeriode.status != undefined) periode.status = oppdatertPeriode.status;
+      if (oppdatertPeriode.mottattDato != undefined)
+        periode.mottattDato = oppdatertPeriode.mottattDato;
+      if (oppdatertPeriode.registrertArbeidssoker != undefined)
+        periode.registrertArbeidssoker = oppdatertPeriode.registrertArbeidssoker;
+      if (oppdatertPeriode.originalId != undefined)
+        periode.originalId = oppdatertPeriode.originalId;
+      if (oppdatertPeriode.html != undefined) periode.html = oppdatertPeriode.html;
+      if (oppdatertPeriode.rapporteringstype != undefined)
+        periode.rapporteringstype = oppdatertPeriode.rapporteringstype;
     },
-    data,
   });
 }
 
-function lagreAktivitet(
+async function lagreAktivitet(
   db: Database,
   rapporteringsperiodeId: string,
   dag: IRapporteringsperiodeDag,
@@ -97,20 +104,15 @@ function lagreAktivitet(
       return d;
     });
 
-    db.rapporteringsperioder.update({
-      where: {
-        id: {
-          equals: rapporteringsperiodeId,
-        },
-      },
-      data: {
-        dager: oppdatertDager,
+    await db.rapporteringsperioder.update((q) => q.where({ id: rapporteringsperiodeId }), {
+      data(periode) {
+        periode.dager = oppdatertDager;
       },
     });
   }
 }
 
-function deleteAllAktiviteter(db: Database, rapporteringsperiodeId: string) {
+async function deleteAllAktiviteter(db: Database, rapporteringsperiodeId: string) {
   const periode = findRapporteringsperiodeById(db, rapporteringsperiodeId);
 
   if (periode) {
@@ -118,30 +120,19 @@ function deleteAllAktiviteter(db: Database, rapporteringsperiodeId: string) {
       return { ...d, aktiviteter: [] };
     });
 
-    db.rapporteringsperioder.update({
-      where: {
-        id: {
-          equals: rapporteringsperiodeId,
-        },
-      },
-      data: {
-        dager: oppdatertDager,
+    await db.rapporteringsperioder.update((q) => q.where({ id: rapporteringsperiodeId }), {
+      data(periode) {
+        periode.dager = oppdatertDager;
       },
     });
   }
 }
 
 function deleteAllRapporteringsperioder(db: Database) {
-  const perioder = db.rapporteringsperioder.findMany({}) as IRapporteringsperiode[];
+  const perioder = db.rapporteringsperioder.findMany() as IRapporteringsperiode[];
 
   perioder.forEach((periode) => {
-    db.rapporteringsperioder.delete({
-      where: {
-        id: {
-          equals: periode.id,
-        },
-      },
-    });
+    db.rapporteringsperioder.delete((q) => q.where({ id: periode.id }));
   });
 }
 
@@ -149,13 +140,7 @@ const deleteAllInnsendteperioder = (db: Database) => {
   const innsendteperioder = findAllInnsendtePerioder(db);
 
   innsendteperioder.forEach((periode) => {
-    db.rapporteringsperioder.delete({
-      where: {
-        id: {
-          equals: periode.id,
-        },
-      },
-    });
+    db.rapporteringsperioder.delete((q) => q.where({ id: periode.id }));
   });
 };
 
@@ -343,13 +328,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
 }
 
 function deleteRapporteringsperiode(db: Database, id: string) {
-  db.rapporteringsperioder.delete({
-    where: {
-      id: {
-        equals: id,
-      },
-    },
-  });
+  db.rapporteringsperioder.delete((q) => q.where({ id: id }));
 }
 
 export const withDb = (db: Database) => {

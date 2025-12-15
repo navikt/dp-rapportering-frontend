@@ -11,7 +11,7 @@ import { server } from "../../mocks/server";
 import { sessionRecord } from "../../mocks/session";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 
-describe("Hovedside rapportering", () => {
+describe("Hovedside rapportering", async () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
   afterAll(() => server.close());
   afterEach(() => {
@@ -41,7 +41,7 @@ describe("Hovedside rapportering", () => {
     render(<RoutesStub />);
   };
 
-  const testDb = withDb(sessionRecord.getDatabase("123"));
+  const testDb = withDb(await sessionRecord.getDatabase("123"));
   const mockResponse = () => server.use(...createHandlers(testDb));
 
   beforeEach(() => {
@@ -63,7 +63,7 @@ describe("Hovedside rapportering", () => {
     test("Skal vise at bruker har en fremtidig rapporteringsperiode", async () => {
       mockSession();
       const rapporteringsperiode = lagRapporteringsperiode({ kanSendes: false });
-      testDb.addRapporteringsperioder(rapporteringsperiode);
+      await testDb.addRapporteringsperioder(rapporteringsperiode);
 
       mockResponse();
 

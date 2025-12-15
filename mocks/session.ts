@@ -1,5 +1,5 @@
-import { faker } from "@faker-js/faker";
-import { factory, nullable, primaryKey } from "@mswjs/data";
+import { Collection } from "@msw/data";
+import { z } from "zod";
 
 import { lagForstRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 
@@ -14,41 +14,57 @@ class SessionRecord {
     this.sessions = new Map();
   }
 
-  public getDatabase(sessionId: string): ReturnType<SessionRecord["createDatabase"]> {
+  public async getDatabase(
+    sessionId: string,
+  ): Promise<ReturnType<SessionRecord["createDatabase"]>> {
     if (!this.sessions.has(sessionId)) {
       const db = this.createDatabase();
 
       this.sessions.set(sessionId, db);
-      db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+      await db.rapporteringsperioder.create(lagForstRapporteringsperiode());
     }
 
     return this.sessions.get(sessionId)!;
   }
 
   private createDatabase() {
-    return factory({
-      rapporteringsperioder: {
-        id: primaryKey(faker.string.numeric),
-        type: faker.string.numeric,
-        periode: {
-          fraOgMed: () => faker.date.recent().toISOString(),
-          tilOgMed: () => faker.date.future().toISOString(),
-        },
-        dager: Array,
-        sisteFristForTrekk: nullable(() => faker.date.recent().toISOString()),
-        kanSendesFra: () => faker.date.recent().toISOString(),
-        kanSendes: faker.datatype.boolean,
-        kanEndres: faker.datatype.boolean,
-        bruttoBelop: nullable(faker.number.float),
-        begrunnelseEndring: nullable(faker.string.sample),
-        status: faker.string.alpha,
-        mottattDato: nullable(() => faker.date.recent().toISOString()),
-        registrertArbeidssoker: nullable(faker.datatype.boolean),
-        originalId: nullable(faker.string.numeric),
-        html: nullable(faker.string.alpha),
-        rapporteringstype: nullable(faker.string.alpha),
-      },
-    });
+    return {
+      rapporteringsperioder: new Collection({
+        schema: z.object({
+          id: z.uuid(),
+          type: z.string(),
+          periode: z.object({
+            fraOgMed: z.string(),
+            tilOgMed: z.string(),
+          }),
+          dager: z.array(
+            z.object({
+              dagIndex: z.number(),
+              dato: z.string(),
+              aktiviteter: z.array(
+                z.object({
+                  id: z.string().optional(),
+                  type: z.string(),
+                  timer: z.string().nullable().optional(),
+                }),
+              ),
+            }),
+          ),
+          sisteFristForTrekk: z.string().nullable(),
+          kanSendesFra: z.string(),
+          kanSendes: z.boolean(),
+          kanEndres: z.boolean(),
+          bruttoBelop: z.number().nullable(),
+          begrunnelseEndring: z.string().nullable(),
+          status: z.enum(["TilUtfylling", "Innsendt", "Endret", "Ferdig", "Feilet"]),
+          mottattDato: z.string().nullable(),
+          registrertArbeidssoker: z.boolean().nullable(),
+          originalId: z.string().nullable(),
+          html: z.string().nullable(),
+          rapporteringstype: z.enum(["harAktivitet", "harIngenAktivitet"]).nullable(),
+        }),
+      }),
+    };
   }
 }
 

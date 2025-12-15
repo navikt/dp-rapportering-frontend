@@ -1,4 +1,5 @@
 import { http, HttpResponse } from "msw";
+import { uuidv7 } from "uuidv7";
 import { afterAll, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
 import {
@@ -17,6 +18,7 @@ vi.mock("~/utils/fetch.utils", () => ({
     Accept: "application",
     Authorization: "Bearer token",
   })),
+  getCorrelationId: vi.fn(() => uuidv7()),
 }));
 
 vi.mock("~/models/logger.server", () => ({

@@ -11,7 +11,7 @@ import { sessionRecord } from "../../mocks/session";
 import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 
-const testDb = withDb(sessionRecord.getDatabase("123"));
+const testDb = withDb(await sessionRecord.getDatabase("123"));
 const mockResponse = () => server.use(...createHandlers(testDb));
 
 beforeEach(() => {
@@ -40,7 +40,7 @@ describe("TomRapporteringsPeriodeSide", () => {
   };
 
   test("Skal vise alert om at brukeren ikke har meldt noe ", async () => {
-    testDb.addRapporteringsperioder(rapporteringsperiode);
+    await testDb.addRapporteringsperioder(rapporteringsperiode);
 
     mockSession();
     mockResponse();
@@ -54,7 +54,7 @@ describe("TomRapporteringsPeriodeSide", () => {
   });
 
   test("Skal vise veiledning for neste steg", async () => {
-    testDb.addRapporteringsperioder(rapporteringsperiode);
+    await testDb.addRapporteringsperioder(rapporteringsperiode);
 
     mockSession();
     mockResponse();
@@ -65,7 +65,7 @@ describe("TomRapporteringsPeriodeSide", () => {
   });
 
   test("Skal vise tilbake- og nesteknapp", async () => {
-    testDb.addRapporteringsperioder(rapporteringsperiode);
+    await testDb.addRapporteringsperioder(rapporteringsperiode);
 
     mockSession();
     mockResponse();
