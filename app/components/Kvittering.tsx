@@ -1,5 +1,6 @@
 import { PrinterSmallFillIcon } from "@navikt/aksel-icons";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
@@ -22,7 +23,7 @@ interface Ikvittering {
 }
 
 export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
-  const { getAppText, getLink } = useSanity();
+  const { getAppText, getLink, getRichText } = useSanity();
   const { locale } = useLocale();
   const { trackNavigere } = useAnalytics();
 
@@ -34,6 +35,10 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         <Heading spacing size="small" level="3">
           {tittel}
         </Heading>
+      </Alert>
+
+      <Alert variant="info" className="my-4 alert-with-rich-text">
+        <PortableText value={getRichText("rapportering-periode-kvittering-info")} />
       </Alert>
 
       <Accordion headingSize="medium">
