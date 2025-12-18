@@ -1,9 +1,6 @@
 declare global {
   interface Window {
     env: IEnv;
-    umami: {
-      track(event: string, props: { [key: string]: unknown }): void;
-    };
   }
 }
 
@@ -19,7 +16,6 @@ interface IEnv {
   DEKORATOR_ENV: string;
   RUNTIME_ENVIRONMENT: string;
   SANITY_DATASETT: string;
-  UMAMI_ID: string;
   FELLES_MELDEKORT_URL: string;
 }
 

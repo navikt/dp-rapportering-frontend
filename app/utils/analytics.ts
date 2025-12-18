@@ -16,12 +16,16 @@ export async function hentData<T extends object>({
   skjemanavn: string;
 }) {
   let skjemaId = "";
-
   if (Object.hasOwn(props, "skjemaId")) {
     skjemaId = await hash((props as { skjemaId: string }).skjemaId);
   }
 
-  const data: { skjemanavn: string; språk: string; skjemaId?: string } & T = {
+  let sesjonId = "";
+  if (Object.hasOwn(props, "sesjonId")) {
+    sesjonId = await hash((props as { sesjonId: string }).sesjonId);
+  }
+
+  const data: { skjemanavn: string; språk: string; skjemaId?: string; sesjonId?: string } & T = {
     skjemanavn,
     språk,
     ...props,
@@ -29,6 +33,10 @@ export async function hentData<T extends object>({
 
   if (skjemaId) {
     data.skjemaId = skjemaId;
+  }
+
+  if (sesjonId) {
+    data.sesjonId = sesjonId;
   }
 
   return data;

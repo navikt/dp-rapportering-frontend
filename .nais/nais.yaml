@@ -57,8 +57,6 @@ spec:
       value: "{{faro_url}}"
     - name: SANITY_DATASETT
       value: "{{sanity_datasett}}"
-    - name: UMAMI_ID
-      value: "{{umami_id}}"
     - name: FELLES_MELDEKORT_URL
       value: "{{felles_meldekort_url}}"
   accessPolicy:
