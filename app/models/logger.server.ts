@@ -22,6 +22,8 @@ export const sikkerLogger = winston.createLogger({
           new winston.transports.Http({
             host: "team-logs.nais-system",
             ssl: false,
+            handleExceptions: true,
+            handleRejections: true,
           }),
         ],
 });
