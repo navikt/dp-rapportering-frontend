@@ -33,8 +33,6 @@ spec:
     {{#each ingresses as |url|}}
     - {{url}}
     {{/each}}
-  secureLogs:
-    enabled: true
   env:
     - name: SELF_URL
       value: {{ingress}}
@@ -61,5 +59,7 @@ spec:
         - host: www.nav.no
         - host: dekoratoren.dev.nav.no
       rules:
+        - application: logging
+          namespace: nais-system
         - application: nav-dekoratoren
           namespace: personbruker
