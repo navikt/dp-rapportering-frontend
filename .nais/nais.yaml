@@ -36,8 +36,6 @@ spec:
     logging:
       destinations:
         - id: elastic
-  secureLogs:
-    enabled: true
   env:
     - name: SELF_URL
       value: "{{ingress}}"
@@ -66,6 +64,8 @@ spec:
         - host: www.nav.no
         - host: dekoratoren.dev.nav.no
       rules:
+        - application: logging
+          namespace: nais-system
         - application: dp-rapportering
         - application: nav-dekoratoren
           namespace: personbruker

@@ -1,10 +1,7 @@
-import fs from "fs";
 import winston from "winston";
 
 import { IHttpProblem } from "~/utils/types";
 
-const sikkerLogPath = () =>
-  fs.existsSync("/secure-logs/") ? "/secure-logs/secure.log" : "./secure.log";
 export const logger = winston.createLogger({
   format: process.env.NODE_ENV === "development" ? winston.format.simple() : winston.format.json(),
   transports: new winston.transports.Console(),
@@ -12,14 +9,19 @@ export const logger = winston.createLogger({
 
 export const sikkerLogger = winston.createLogger({
   format: process.env.NODE_ENV === "development" ? winston.format.simple() : winston.format.json(),
+  defaultMeta: {
+    google_cloud_project: process.env.GOOGLE_CLOUD_PROJECT,
+    nais_namespace_name: process.env.NAIS_NAMESPACE,
+    nais_pod_name: process.env.NAIS_POD_NAME,
+    nais_container_name: process.env.NAIS_APP_NAME,
+  },
   transports:
     process.env.NODE_ENV === "development"
       ? new winston.transports.Console()
       : [
-          new winston.transports.File({
-            filename: sikkerLogPath(),
-            maxsize: 5242880,
-            maxFiles: 10,
+          new winston.transports.Http({
+            host: "team-logs.nais-system",
+            ssl: false,
           }),
         ],
 });
