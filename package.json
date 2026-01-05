@@ -16,7 +16,7 @@
     "pre-commit": "lint-staged && npm run typecheck"
   },
   "dependencies": {
-    "@grafana/faro-web-sdk": "2.0.2",
+    "@grafana/faro-web-sdk": "2.1.0",
     "@msw/data": "1.1.2",
     "@navikt/aksel-icons": "7.36.0",
     "@navikt/ds-css": "7.36.0",
