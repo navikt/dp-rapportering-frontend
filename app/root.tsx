@@ -1,6 +1,7 @@
 import navStyles from "@navikt/ds-css/dist/index.css?url";
 import { Alert, Heading } from "@navikt/ds-react";
 import { onLanguageSelect, setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
+import { PortableText } from "@portabletext/react";
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
 import { useEffect, useRef } from "react";
@@ -29,7 +30,7 @@ import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import { getLanguage, setLanguage } from "./models/language.server";
-import { harDpMeldeplikt } from "./models/rapporteringsperiode.server";
+import { harMeldeplikt } from "./models/rapporteringsperiode.server";
 import { sanityConfig } from "./sanity/sanity.config";
 import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanity } from "./sanity/sanity.types";
@@ -106,11 +107,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
-  const brukerHarDpMeldeplikt = await harDpMeldeplikt(request);
-
-  if (!brukerHarDpMeldeplikt) {
-    return redirect(`${getEnv("FELLES_MELDEKORT_URL")}/meldekort`);
-  }
+  const brukerHarMeldeplikt = await harMeldeplikt(request);
 
   return {
     sanityTexts,
@@ -125,6 +122,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       GITHUB_SHA: process.env.GITHUB_SHA,
     },
     fragments,
+    brukerHarMeldeplikt,
   };
 }
 
@@ -145,8 +143,8 @@ export async function action({ request }: LoaderFunctionArgs) {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { fragments, env } = useTypedRouteLoaderData("root");
-  const { getMessages } = useSanity();
+  const { fragments, env, brukerHarMeldeplikt } = useTypedRouteLoaderData("root");
+  const { getMessages, getAppText, getRichText } = useSanity();
 
   const serviceMessages = getMessages();
 
@@ -182,6 +180,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {serviceMessages.map((message) => (
               <ServiceMessage key={message.textId} message={message} />
             ))}
+          </div>
+        )}
+
+        {brukerHarMeldeplikt && (
+          <div className={styles.serviceMessages}>
+            <Alert variant="info">
+              <Heading spacing size="small" level="2">
+                {getAppText("andre-meldekort-tittel")}
+              </Heading>
+              <PortableText value={getRichText("andre-meldekort")} />
+            </Alert>
           </div>
         )}
 

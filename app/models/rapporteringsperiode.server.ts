@@ -52,8 +52,8 @@ export enum InnsendtRapporteringsperiodeStatus {
   FEIL = "FEIL",
 }
 
-export async function harDpMeldeplikt(request: Request): Promise<boolean> {
-  const url = `${DP_RAPPORTERING_URL}/hardpmeldeplikt`;
+export async function harMeldeplikt(request: Request): Promise<boolean> {
+  const url = `${DP_RAPPORTERING_URL}/harmeldeplikt`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -61,7 +61,7 @@ export async function harDpMeldeplikt(request: Request): Promise<boolean> {
   });
 
   if (!response.ok) {
-    await logErrorResponse(response, `Klarte ikke å hente meldeplikt`);
+    await logErrorResponse(response, `Klarte ikke å hente data om meldeplikt`);
     throw new Response(`rapportering-feilmelding-hent-meldeplikt`, {
       status: response.status,
     });
