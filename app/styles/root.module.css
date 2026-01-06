@@ -1,7 +1,7 @@
 .serviceMessages {
   max-width: var(--app-max-width);
   padding: 0 var(--app-padding);
-  margin: 0 auto;
+  margin: 10px auto;
 }
 
 .rapporteringContainer {

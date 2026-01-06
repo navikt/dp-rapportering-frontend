@@ -15,8 +15,20 @@ import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { withDb } from "./responses/db";
 import { getDatabase } from "./responses/db.utils";
 
+export const TEST_DECORATOR_VERSION = {
+  localVersion: "678600c725d69f25c0da1f6f05f4c1eb4d3c56f9",
+  latestVersion: "678600c725d69f25c0da1f6f05f4c1eb4d3c56f9",
+};
+export const TEST_DECORATOR_RESPONSE = {
+  header: '<header id="decorator-header">DECORATOR HEADER</header>',
+  footer: '<div id="decorator-footer">DECORATOR FOOTER</div>',
+  scripts: '<script type="application/json" id="__DECORATOR_DATA__"></script>',
+  headAssets: '<link type="text/css" rel="stylesheet">',
+  versionId: "678600c725d69f25c0da1f6f05f4c1eb4d3c56f9",
+};
+
 export const createHandlers = (database?: ReturnType<typeof withDb>) => [
-  http.get(`${DP_RAPPORTERING_URL}/hardpmeldeplikt`, () => {
+  http.get(`${DP_RAPPORTERING_URL}/harmeldeplikt`, () => {
     return HttpResponse.text("true");
   }),
 
@@ -179,4 +191,11 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
   http.get("https://rt6o382n.apicdn.sanity.io/*", async () => {
     return passthrough();
   }),
+
+  http.get("https://dekoratoren.ekstern.dev.nav.no/api/version", () =>
+    HttpResponse.json(TEST_DECORATOR_VERSION, { status: 200 }),
+  ),
+  http.get("https://dekoratoren.ekstern.dev.nav.no/ssr", () =>
+    HttpResponse.json(TEST_DECORATOR_RESPONSE, { status: 200 }),
+  ),
 ];

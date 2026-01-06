@@ -1,67 +1,66 @@
-import { DecoratorElements } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { render, screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
-import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
+import { createRoutesStub } from "react-router";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { loader } from "~/root";
+import { Layout, loader } from "~/root";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 
 import { server } from "../mocks/server";
-import { endSessionMock, mockSession } from "./helpers/auth-helper";
-import { catchErrorResponse } from "./helpers/response-helper";
+import { endSessionMock } from "./helpers/auth-helper";
 
 describe("Root", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+  beforeEach(() => {
+    vi.stubEnv("IS_LOCALHOST", "true");
+    vi.stubEnv("USE_MSW", "true");
+  });
   afterAll(() => server.close());
   afterEach(() => {
     server.resetHandlers();
     endSessionMock();
   });
 
-  test("Skal sende bruker til meldekort-frontend hvis ikke har DP", async () => {
-    server.use(
-      http.get(
-        `${DP_RAPPORTERING_URL}/hardpmeldeplikt`,
-        () => {
-          return HttpResponse.text("false");
-        },
-        { once: true },
-      ),
-    );
+  test("Viser innhold", async () => {
+    const Stub = createRoutesStub([
+      {
+        id: "root",
+        path: "/",
+        Component: () => <Layout>!</Layout>,
+        loader: loader,
+      },
+    ]);
 
-    mockSession();
+    render(<Stub />);
 
-    const response = (await catchErrorResponse(() =>
-      loader({
-        request: new Request("http://localhost:3000"),
-        params: {},
-        context: {},
-        unstable_pattern: "",
-      }),
-    )) as Response;
+    await waitFor(() => screen.findByText("DECORATOR HEADER"));
+    await waitFor(() => screen.findByText("DECORATOR FOOTER"));
 
-    expect(response.status).toBe(302);
+    await waitFor(() => screen.findByText("andre-meldekort-tittel"));
   });
 
-  test("Skal ikke sende bruker til meldekort-frontend hvis har DP", async () => {
+  test("Viser ikke andre-meldekort-meldingen hvis ikke har andre meldekort", async () => {
     server.use(
-      http.get(
-        `${DP_RAPPORTERING_URL}/hardpmeldeplikt`,
-        () => {
-          return HttpResponse.text("true");
-        },
-        { once: true },
-      ),
+      http.get(`${DP_RAPPORTERING_URL}/harmeldeplikt`, () => {
+        return HttpResponse.text("false");
+      }),
     );
 
-    mockSession();
+    const Stub = createRoutesStub([
+      {
+        id: "root",
+        path: "/",
+        Component: () => <Layout>!</Layout>,
+        loader: loader,
+      },
+    ]);
 
-    const response = (await loader({
-      request: new Request("http://localhost:3000"),
-      params: {},
-      context: {},
-      unstable_pattern: "",
-    })) as { fragments: DecoratorElements };
+    render(<Stub />);
 
-    expect(response.fragments).not.toBeNull();
+    await waitFor(() => screen.findByText("DECORATOR HEADER"));
+    await waitFor(() => screen.findByText("DECORATOR FOOTER"));
+
+    const melding = screen.queryByText("andre-meldekort-tittel");
+    expect(melding).toBeNull();
   });
 });

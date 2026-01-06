@@ -62,6 +62,7 @@ vi.mock("~/hooks/useSanity", () => ({
     getAppText: (key: string) => key,
     getLink: (key: string) => ({ linkText: key, href: key }),
     getRichText: (key: string) => key,
+    getMessages: () => [],
   }),
 }));
 
