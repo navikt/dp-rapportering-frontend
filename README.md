@@ -9,21 +9,23 @@ npm install
 npm run dev
 ```
 
-Kopier `.env.example` og rename til `.env`.
-
-Sett `IS_LOCALHOST="true"`.
-
-Sett `USE_MSW="true"` dersom du ønsker å kjøre applikasjonen med `msw mock data`.
-
-Sett `USE_MSW="false"` dersom du ønsker å kjøre applikasjonen med `DEV API`.
+1. Kopier `.env.example` og rename til `.env`. 
+2. Sett `IS_LOCALHOST="true"`. 
+3. Sett `USE_MSW="true"` dersom du ønsker å kjøre applikasjonen med `msw mock data`. 
+4. Sett `USE_MSW="false"` dersom du ønsker å kjøre applikasjonen med `DEV API`.
 
 ---
 
 ## Kjøre mot dev-APIer i localhost
 
-For å kjøre requester mot dp-rapportering må vi ha et token, generert med [tokenx-token-generator](https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering). Logg på med testid. Hent ut verdien fra `access_token`, rediger `.env` og endre `DP_RAPPORTERING_TOKEN` til det nylig genererte tokenet. Env-variabelen `IS_LOCALHOST="true"` må også være satt.
+For å kjøre requester mot dp-rapportering må vi ha et token, dette kan genereres med `npm run token`. Det genererte 
+tokenet legges automagisk inn i `.env`-filen.
 
-Dette tokenet vil vare i en time før du må generere et nytt token.
+Tokenet kan også genereres med [tokenx-token-generator](https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering).
+Logg på med testid. Hent ut verdien fra `access_token`, rediger `.env` og endre `DP_RAPPORTERING_TOKEN` til det 
+nylig genererte tokenet.
+
+Det genererte tokenet vil vare i en time (uavhengig av hvordan det ble generert) før du må generere et nytt token.
 
 Eksempel på riktig config:
 
