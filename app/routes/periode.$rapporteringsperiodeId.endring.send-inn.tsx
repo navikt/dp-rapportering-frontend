@@ -27,7 +27,7 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { logErrorResponse, logg } from "~/models/logger.server";
+import { logErrorResponseAsError, logg } from "~/models/logger.server";
 import {
   hentPeriode,
   hentRapporteringsperioder,
@@ -86,7 +86,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         body: null,
       });
     } else if (error instanceof Response) {
-      logErrorResponse(error, `Klarte ikke å sende inn endring, ID: ${periodeId}`);
+      logErrorResponseAsError(error, `Klarte ikke å sende inn endring, ID: ${periodeId}`);
     } else {
       logg({
         type: "error",
