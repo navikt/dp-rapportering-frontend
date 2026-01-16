@@ -28,16 +28,24 @@ export const sikkerLogger = winston.createLogger({
         ],
 });
 
-export async function logErrorResponse(errorResponse: Response, message?: string) {
+export async function logErrorResponseAsError(errorResponse: Response, message?: string) {
   const body = await getHttpProblem(errorResponse);
-  sikkerLogger.error(
-    `Feil i response fra backend. ${message}. URL: ${errorResponse.url}, Status: ${errorResponse.status}, body: ${JSON.stringify(body)}`,
-    { x_correlationId: body?.correlationId },
-  );
-  logger.error(
-    `Feil i response fra backend. ${message}. Status: ${errorResponse.status}. Se sikker logg for response body.`,
-    { x_correlationId: body?.correlationId },
-  );
+  logg({
+    type: "error",
+    message: `Feil i response fra backend. ${message}. Status: ${errorResponse.status}.`,
+    correlationId: body?.correlationId || null,
+    body: body,
+  });
+}
+
+export async function logErrorResponseAsWarn(errorResponse: Response, message?: string) {
+  const body = await getHttpProblem(errorResponse);
+  logg({
+    type: "warn",
+    message: `Feil i response fra backend. ${message}. Status: ${errorResponse.status}.`,
+    correlationId: body?.correlationId || null,
+    body: body,
+  });
 }
 
 async function getHttpProblem(response: Response): Promise<IHttpProblem | null> {

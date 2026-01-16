@@ -1,4 +1,4 @@
-import { logErrorResponse } from "~/models/logger.server";
+import { logErrorResponseAsError } from "~/models/logger.server";
 import { getEnv } from "~/utils/env.utils";
 import { getCorrelationId, getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
@@ -22,7 +22,7 @@ export async function lagreAktivitet(
 
   if (!response.ok) {
     const id = await getCorrelationId(response);
-    await logErrorResponse(response, `Feil ved lagring av aktivitet`);
+    await logErrorResponseAsError(response, `Feil ved lagring av aktivitet`);
     return {
       status: "error",
       error: {
@@ -51,7 +51,7 @@ export async function slettAlleAktiviteterForRapporteringsperioden(
 
   if (!response.ok) {
     const id = await getCorrelationId(response);
-    await logErrorResponse(response, `Feil ved sletting av aktiviter`);
+    await logErrorResponseAsError(response, `Feil ved sletting av aktiviter`);
     return {
       status: "error",
       error: {

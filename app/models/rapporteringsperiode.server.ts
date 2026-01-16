@@ -1,4 +1,4 @@
-import { logErrorResponse } from "~/models/logger.server";
+import { logErrorResponseAsError, logErrorResponseAsWarn } from "~/models/logger.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
@@ -61,7 +61,7 @@ export async function harDpMeldeplikt(request: Request): Promise<boolean> {
   });
 
   if (!response.ok) {
-    await logErrorResponse(response, `Klarte ikke å hente meldeplikt`);
+    await logErrorResponseAsError(response, `Klarte ikke å hente meldeplikt`);
     throw new Response(`rapportering-feilmelding-hent-meldeplikt`, {
       status: response.status,
     });
@@ -87,7 +87,7 @@ export async function startUtfylling(request: Request, periodeId: string): Promi
   });
 
   if (!response.ok) {
-    await logErrorResponse(response, `Klarte ikke å starte utfylling`);
+    await logErrorResponseAsError(response, `Klarte ikke å starte utfylling`);
     throw new Response(`rapportering-feilmelding-start-utfylling`, {
       status: response.status,
     });
@@ -107,7 +107,7 @@ export async function hentRapporteringsperioder(
   });
 
   if (!response.ok) {
-    await logErrorResponse(response, `Klarte ikke å hente rapporteringsperioder`);
+    await logErrorResponseAsError(response, `Klarte ikke å hente rapporteringsperioder`);
     throw new Response(`rapportering-feilmelding-hent-perioder`, {
       status: response.status,
     });
@@ -138,12 +138,12 @@ export async function hentPeriode(
   });
 
   if (response.status === 404) {
-    await logErrorResponse(response, `Klarte ikke å hente periode`);
+    await logErrorResponseAsWarn(response, `Klarte ikke å hente periode`);
     throw new Response("rapportering-feilmelding-hent-meldekort-404", { status: response.status });
   }
 
   if (!response.ok) {
-    await logErrorResponse(response, `Feil ved henting av periode`);
+    await logErrorResponseAsError(response, `Feil ved henting av periode`);
     throw new Response("rapportering-feilmelding-hent-meldekort-500", { status: 500 });
   }
 
@@ -161,7 +161,7 @@ export async function hentInnsendtePerioder(request: Request): Promise<IRapporte
   });
 
   if (!response.ok) {
-    await logErrorResponse(response, `Klarte ikke å hente innsendte perioder`);
+    await logErrorResponseAsError(response, `Klarte ikke å hente innsendte perioder`);
     throw new Response("rapportering-feilmelding-hent-innsendte-meldekort-500", {
       status: 500,
     });
@@ -212,7 +212,7 @@ export async function sendInnPeriode(
   });
 
   if (!response.ok) {
-    await logErrorResponse(response, `Klarte ikke å sende inn periode`);
+    await logErrorResponseAsError(response, `Klarte ikke å sende inn periode`);
     throw new Response(`rapportering-feilmelding-send-inn-periode`, {
       status: response.status,
     });
@@ -233,7 +233,7 @@ export async function lagEndringsperiode(
   });
 
   if (!response.ok) {
-    await logErrorResponse(response, `Klarte ikke å hente innsendte perioder`);
+    await logErrorResponseAsError(response, `Klarte ikke å hente innsendte perioder`);
     throw new Response(`rapportering-feilmelding-lag-endringsperiode`, {
       status: response.status,
     });
