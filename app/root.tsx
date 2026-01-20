@@ -30,7 +30,7 @@ import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import { getLanguage, setLanguage } from "./models/language.server";
-import { harMeldeplikt } from "./models/rapporteringsperiode.server";
+import { harDpMeldeplikt, harMeldeplikt } from "./models/rapporteringsperiode.server";
 import { sanityConfig } from "./sanity/sanity.config";
 import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanity } from "./sanity/sanity.types";
@@ -107,7 +107,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
+  const brukerHarDpMeldeplikt = await harDpMeldeplikt(request);
   const brukerHarMeldeplikt = await harMeldeplikt(request);
+
+  if (!brukerHarDpMeldeplikt && brukerHarMeldeplikt) {
+    return redirect(`${getEnv("FELLES_MELDEKORT_URL")}/meldekort`);
+  }
 
   return {
     sanityTexts,

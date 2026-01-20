@@ -7,7 +7,8 @@ import { Layout, loader } from "~/root";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 
 import { server } from "../mocks/server";
-import { endSessionMock } from "./helpers/auth-helper";
+import { endSessionMock, mockSession } from "./helpers/auth-helper";
+import { catchErrorResponse } from "./helpers/response-helper";
 
 describe("Root", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
@@ -21,7 +22,7 @@ describe("Root", () => {
     endSessionMock();
   });
 
-  test("Viser innhold", async () => {
+  test("Viser andre-meldekort-meldingen hvis er DP-bruker og har Arena-meldekort", async () => {
     const Stub = createRoutesStub([
       {
         id: "root",
@@ -39,7 +40,7 @@ describe("Root", () => {
     await waitFor(() => screen.findByText("andre-meldekort-tittel"));
   });
 
-  test("Viser ikke andre-meldekort-meldingen hvis ikke har andre meldekort", async () => {
+  test("Viser ikke andre-meldekort-meldingen hvis er DP-bruker og ikke har Arena-meldekort", async () => {
     server.use(
       http.get(`${DP_RAPPORTERING_URL}/harmeldeplikt`, () => {
         return HttpResponse.text("false");
@@ -62,5 +63,30 @@ describe("Root", () => {
 
     const melding = screen.queryByText("andre-meldekort-tittel");
     expect(melding).toBeNull();
+  });
+
+  test("Sender bruker til meldekort-frontend hvis ikke er DP-bruker og har Arena-meldekort", async () => {
+    server.use(
+      http.get(
+        `${DP_RAPPORTERING_URL}/hardpmeldeplikt`,
+        () => {
+          return HttpResponse.text("false");
+        },
+        { once: true },
+      ),
+    );
+
+    mockSession();
+
+    const response = (await catchErrorResponse(() =>
+      loader({
+        request: new Request("http://localhost:3000"),
+        params: {},
+        context: {},
+        unstable_pattern: "",
+      }),
+    )) as Response;
+
+    expect(response.status).toBe(302);
   });
 });

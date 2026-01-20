@@ -28,6 +28,10 @@ export const TEST_DECORATOR_RESPONSE = {
 };
 
 export const createHandlers = (database?: ReturnType<typeof withDb>) => [
+  http.get(`${DP_RAPPORTERING_URL}/hardpmeldeplikt`, () => {
+    return HttpResponse.text("true");
+  }),
+
   http.get(`${DP_RAPPORTERING_URL}/harmeldeplikt`, () => {
     return HttpResponse.text("true");
   }),

@@ -52,6 +52,32 @@ export enum InnsendtRapporteringsperiodeStatus {
   FEIL = "FEIL",
 }
 
+export async function harDpMeldeplikt(request: Request): Promise<boolean> {
+  const url = `${DP_RAPPORTERING_URL}/hardpmeldeplikt`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: await getHeaders(request),
+  });
+
+  if (!response.ok) {
+    await logErrorResponse(response, `Klarte ikke å hente data om DP-meldeplikt`);
+    throw new Response(`rapportering-feilmelding-hent-meldeplikt`, {
+      status: response.status,
+    });
+  }
+
+  const harDpMeldeplikt = await response.text();
+
+  if (harDpMeldeplikt === "true") {
+    return true;
+  } else if (harDpMeldeplikt === "false") {
+    return false;
+  }
+
+  return true; // Vi ønsker at resultatet skal default til true
+}
+
 export async function harMeldeplikt(request: Request): Promise<boolean> {
   const url = `${DP_RAPPORTERING_URL}/harmeldeplikt`;
 
