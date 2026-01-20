@@ -28,7 +28,7 @@
     "@portabletext/types": "4.0.1",
     "@react-router/express": "7.11.0",
     "@react-router/node": "7.11.0",
-    "@react-router/serve": "7.11.0",
+    "@react-router/serve": "7.12.0",
     "@rvf/react-router": "8.1.0",
     "@rvf/zod": "7.0.4",
     "@sanity/client": "7.13.2",
