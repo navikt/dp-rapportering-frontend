@@ -1,6 +1,9 @@
+// @vitest-environment node
 import { describe, expect, test } from "vitest";
 
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
+import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.server.utils";
+import { IRapporteringsperiodeStatus } from "~/utils/types";
 
 import {
   erAktiviteteneLike,
@@ -10,6 +13,7 @@ import {
   sorterAktiviteter,
 } from "../../app/utils/periode.utils";
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
+import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 
 describe("periodeSomTimer", () => {
   test("skal returnere riktig antall timer for en gyldig periode-streng", () => {
@@ -213,5 +217,142 @@ describe("erPeriodeneLike", () => {
     // Rydd opp
     expect(erPeriodeneLike(periode, originalPeriode)).toBe(false);
     originalPeriode.dager[0].aktiviteter[1] = [...tirsdagsAktiviteter];
+  });
+});
+
+describe("redirectTilForsideHvisMeldekortIkkeKanFyllesUt", () => {
+  const periodeId = rapporteringsperioderResponse[0].id;
+  const basePeriode = rapporteringsperioderResponse[0];
+
+  describe("Skal redirecte fra utfyllingssider når status ikke er TilUtfylling", () => {
+    test("Skal redirecte fra /fyll-ut når status er Innsendt", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/fyll-ut`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).toThrow();
+    });
+
+    test("Skal redirecte fra /arbeidssoker når status er Ferdig", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/arbeidssoker`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Ferdig };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).toThrow();
+    });
+
+    test("Skal redirecte fra /rapporteringstype når status er Feilet", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/rapporteringstype`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Feilet };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).toThrow();
+    });
+
+    test("Skal redirecte fra /send-inn når status er Endret", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/send-inn`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Endret };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).toThrow();
+    });
+
+    test("Skal redirecte fra /tom når status er Innsendt", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/tom`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).toThrow();
+    });
+  });
+
+  describe("Skal IKKE redirecte fra unntatte sider", () => {
+    test("Skal IKKE redirecte fra /bekreftelse selv med Innsendt status", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/bekreftelse`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal IKKE redirecte fra /endring/fyll-ut selv med Innsendt status", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/fyll-ut`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal IKKE redirecte fra /endre selv med Innsendt status", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endre`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal IKKE redirecte fra /endring (uten trailing slash) selv med Innsendt status", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal IKKE redirecte fra /endring/send-inn selv med Innsendt status", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/send-inn`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal IKKE redirecte fra /endring/bekreftelse selv med Innsendt status", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/bekreftelse`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+  });
+
+  describe("Skal IKKE redirecte når status er TilUtfylling", () => {
+    test("Skal IKKE redirecte fra /fyll-ut når status er TilUtfylling", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/fyll-ut`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.TilUtfylling };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal IKKE redirecte fra /arbeidssoker når status er TilUtfylling", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/arbeidssoker`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.TilUtfylling };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal IKKE redirecte fra /send-inn når status er TilUtfylling", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/send-inn`,
+      );
+      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.TilUtfylling };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
   });
 });

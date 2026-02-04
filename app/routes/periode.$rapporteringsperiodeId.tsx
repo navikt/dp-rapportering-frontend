@@ -9,6 +9,7 @@ import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBo
 import { useSanity } from "~/hooks/useSanity";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
+import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.server.utils";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -16,9 +17,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const periodeId = params.rapporteringsperiodeId;
 
   const skalHenteOriginal = ["endre"];
-  const hentOriginal = skalHenteOriginal.some((url) => request.url.includes(url));
+  const hentOriginal = skalHenteOriginal.some((pathSegment) => request.url.includes(pathSegment));
 
   const { periode } = await hentPeriode(request, periodeId, hentOriginal, "loader-periode");
+
+  redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode);
 
   return { periode };
 }
