@@ -9,7 +9,7 @@ import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBo
 import { useSanity } from "~/hooks/useSanity";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.utils";
+import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.server.utils";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");

@@ -2,6 +2,7 @@
 import { describe, expect, test } from "vitest";
 
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
+import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.server.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
 
 import {
@@ -9,7 +10,6 @@ import {
   erAktivitetenLik,
   erPeriodeneLike,
   periodeSomTimer,
-  redirectTilForsideHvisMeldekortIkkeKanFyllesUt,
   sorterAktiviteter,
 } from "../../app/utils/periode.utils";
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";

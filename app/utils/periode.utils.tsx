@@ -1,8 +1,6 @@
-import { redirect } from "react-router";
 import { parse } from "tinyduration";
 
 import { type GetAppText } from "~/hooks/useSanity";
-import { logg } from "~/models/logger.server";
 import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
@@ -12,34 +10,6 @@ import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 import { DecoratorLocale } from "./dekoratoren.utils";
 import { IRapporteringsperiodeStatus, KortType } from "./types";
-
-function kanIkkeFyllesUt(status: IRapporteringsperiodeStatus): boolean {
-  return status !== IRapporteringsperiodeStatus.TilUtfylling;
-}
-
-export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
-  request: Request,
-  periode: IRapporteringsperiode,
-): void {
-  const url = new URL(request.url);
-  const pathSegments = url.pathname.split("/");
-
-  const erBekreftelseSide = pathSegments.includes("bekreftelse");
-  const erEndringsflyt = pathSegments.includes("endring");
-  const erStartEndring = pathSegments.includes("endre");
-  const erUtfyllingsSide = !erBekreftelseSide && !erEndringsflyt && !erStartEndring;
-
-  if (erUtfyllingsSide && kanIkkeFyllesUt(periode.status)) {
-    logg({
-      type: "warn",
-      message: `Bruker prøvde å fylle ut periode som ikke er TilUtfylling, ID: ${periode.id}`,
-      correlationId: null,
-      body: { periodeId: periode.id, status: periode.status, url: url.pathname },
-    });
-
-    throw redirect("../");
-  }
-}
 
 export function periodeSomTimer(periode?: string): number | undefined {
   if (!periode) return undefined;
