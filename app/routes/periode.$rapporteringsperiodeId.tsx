@@ -1,46 +1,27 @@
 import { Accordion } from "@navikt/ds-react";
 import { useEffect } from "react";
 import type { LoaderFunctionArgs } from "react-router";
-import { Outlet, redirect, useLoaderData, useLocation, useRouteError } from "react-router";
+import { Outlet, useLoaderData, useLocation, useRouteError } from "react-router";
 import invariant from "tiny-invariant";
 
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
 import { useSanity } from "~/hooks/useSanity";
-import { logg } from "~/models/logger.server";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
 import { baseUrl, setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { IRapporteringsperiodeStatus } from "~/utils/types";
+import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.utils";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
 
   const periodeId = params.rapporteringsperiodeId;
-  const url = new URL(request.url);
 
   const skalHenteOriginal = ["endre"];
-  const hentOriginal = skalHenteOriginal.some((url) => request.url.includes(url));
+  const hentOriginal = skalHenteOriginal.some((pathSegment) => request.url.includes(pathSegment));
 
   const { periode } = await hentPeriode(request, periodeId, hentOriginal, "loader-periode");
 
-  // Guard: Hindre tilgang til utfyllingssider for allerede innsendte/ferdige/feilede perioder
-  // Unntatt: bekreftelses-sider, endring-flyt, og start-endring
-  const erBekreftelseSide = url.pathname.includes("/bekreftelse");
-  const erEndringsflyt = url.pathname.includes("/endring/");
-  const erStartEndring = url.pathname.endsWith("/endre");
-  const skalIkkeGuarde = erBekreftelseSide || erEndringsflyt || erStartEndring;
-
-  if (!skalIkkeGuarde && periode.status !== IRapporteringsperiodeStatus.TilUtfylling) {
-    logg({
-      type: "warn",
-      message: `Bruker prøvde å fylle ut periode som ikke er TilUtfylling, ID: ${periodeId}`,
-      correlationId: null,
-      body: { periodeId, status: periode.status, url: url.pathname },
-    });
-
-    // Redirect til forsiden
-    throw redirect("../");
-  }
+  redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode);
 
   return { periode };
 }
