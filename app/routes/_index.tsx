@@ -74,16 +74,14 @@ export default function Landingsside() {
   return (
     <>
       {feilType === FEILTYPE.ALLEREDE_INNSENDT && (
-        <Alert variant="warning" className="my-4">
-          Du prøvde å åpne et meldekort som allerede er sendt inn. Du kan ikke fylle ut dette
-          meldekortet på nytt.
+        <Alert variant="warning" className="my-4 alert-with-rich-text">
+          <PortableText value={getRichText("rapportering-feil-allerede-innsendt")} />
         </Alert>
       )}
 
       {feilType === FEILTYPE.KAN_IKKE_ENDRES && (
-        <Alert variant="warning" className="my-4">
-          Du prøvde å endre et meldekort som ikke lenger kan endres. Fristen for å endre dette
-          meldekortet har gått ut.
+        <Alert variant="warning" className="my-4 alert-with-rich-text">
+          <PortableText value={getRichText("rapportering-feil-kan-ikke-endres")} />
         </Alert>
       )}
 
