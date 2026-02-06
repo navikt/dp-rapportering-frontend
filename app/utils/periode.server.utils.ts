@@ -3,16 +3,15 @@ import { redirect } from "react-router";
 import { logg } from "~/models/logger.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
-import { IRapporteringsperiodeStatus } from "./types";
+import { FEILTYPE, IRapporteringsperiodeStatus } from "./types";
 
 function kanIkkeFyllesUt(status: IRapporteringsperiodeStatus): boolean {
-  // Feilet-perioder skal kunne fylles ut hvis kanEndres er true
-  // Kun Innsendt, Ferdig og Endret skal blokkeres
-  return (
-    status === IRapporteringsperiodeStatus.Innsendt ||
-    status === IRapporteringsperiodeStatus.Ferdig ||
-    status === IRapporteringsperiodeStatus.Endret
-  );
+  // Kun Innsendt, Ferdig og Endret skal blokkeres (Feilet-perioder skal kunne fylles ut)
+  return [
+    IRapporteringsperiodeStatus.Innsendt,
+    IRapporteringsperiodeStatus.Ferdig,
+    IRapporteringsperiodeStatus.Endret,
+  ].includes(status);
 }
 
 export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
@@ -28,7 +27,6 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
   const erUtfyllingsSide = !erBekreftelseSide && !erEndringsflyt && !erStartEndring;
 
   // Blokkér vanlige utfyllingssider hvis status er Innsendt/Ferdig/Endret
-  // (Feilet-perioder skal kunne fylles ut hvis kanEndres er true)
   if (erUtfyllingsSide && kanIkkeFyllesUt(periode.status)) {
     logg({
       type: "warn",
@@ -38,7 +36,7 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
     });
 
     // Vanlige utfyllingssider er på nivå /periode/{id}/fyll-ut, så ../.. går til forsiden
-    throw redirect(`../..?feil=allerede-behandlet&status=${periode.status}`);
+    throw redirect(`../..?feil=${FEILTYPE.ALLEREDE_INNSENDT}&status=${periode.status}`);
   }
 
   // Blokkér endringsflyt-sider hvis perioden ikke kan endres
@@ -64,6 +62,6 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
     });
 
     // Endringsflyt-sider er på nivå /periode/{id}/endring/send-inn, så ../../.. går til forsiden
-    throw redirect(`../../..?feil=kan-ikke-endres&status=${periode.status}`);
+    throw redirect(`../../..?feil=${FEILTYPE.KAN_IKKE_ENDRES}&status=${periode.status}`);
   }
 }

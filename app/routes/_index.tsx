@@ -25,7 +25,7 @@ import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { TIDSSONER } from "~/utils/types";
+import { FEILTYPE, TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import type { action as StartAction } from "./api.start";
@@ -73,14 +73,14 @@ export default function Landingsside() {
 
   return (
     <>
-      {feilType === "allerede-behandlet" && (
+      {feilType === FEILTYPE.ALLEREDE_INNSENDT && (
         <Alert variant="warning" className="my-4">
-          Du prøvde å åpne et meldekort som allerede er behandlet. Du kan ikke fylle ut dette
+          Du prøvde å åpne et meldekort som allerede er sendt inn. Du kan ikke fylle ut dette
           meldekortet på nytt.
         </Alert>
       )}
 
-      {feilType === "kan-ikke-endres" && (
+      {feilType === FEILTYPE.KAN_IKKE_ENDRES && (
         <Alert variant="warning" className="my-4">
           Du prøvde å endre et meldekort som ikke lenger kan endres. Fristen for å endre dette
           meldekortet har gått ut.
