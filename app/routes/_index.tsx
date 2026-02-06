@@ -111,7 +111,7 @@ export default function Landingsside() {
         <PortableText value={getRichText("rapportering-arbeidstid-ikke-redusert")} />
       </ReadMore>
 
-      {forstePeriode?.kanSendes === true && !feilType && (
+      {forstePeriode?.kanSendes === true && (
         <>
           <Heading size="small" level="2" className="mt-8">
             {getAppText("rapportering-samtykke-tittel")}
