@@ -324,6 +324,90 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       db.rapporteringsperioder.create(etterregistrertPeriode);
       break;
     }
+
+    case ScenarioType.bokmerket: {
+      deleteAllRapporteringsperioder(db);
+
+      const { fraOgMed } = beregnNåværendePeriodeDato();
+
+      // Opprett et innsendt meldekort fra forrige periode (simulerer et gammelt, allerede innsendt meldekort)
+      const forrigePeriodeFra = formaterDato({
+        dato: subDays(new Date(fraOgMed), 14),
+        dateFormat: "yyyy-MM-dd",
+      });
+      const forrigePeriodeTil = formaterDato({
+        dato: subDays(new Date(fraOgMed), 1),
+        dateFormat: "yyyy-MM-dd",
+      });
+
+      const innsendt = lagRapporteringsperiode({
+        kanSendes: false,
+        status: IRapporteringsperiodeStatus.Innsendt,
+        rapporteringstype: Rapporteringstype.harAktivitet,
+        periode: {
+          fraOgMed: forrigePeriodeFra,
+          tilOgMed: forrigePeriodeTil,
+        },
+        kanEndres: true,
+        kanSendesFra: formaterDato({
+          dato: subDays(new Date(forrigePeriodeFra), 1),
+          dateFormat: "yyyy-MM-dd",
+        }),
+        mottattDato: formaterDato({
+          dato: addDays(new Date(forrigePeriodeFra), 7),
+          dateFormat: "yyyy-MM-dd",
+        }),
+      });
+      db.rapporteringsperioder.create(innsendt);
+
+      // Opprett et innsendt meldekort som ikke kan endres (simulerer prod-casen med kanEndres=false)
+      const forrigeforrigePeriodeFra = formaterDato({
+        dato: subDays(new Date(fraOgMed), 28),
+        dateFormat: "yyyy-MM-dd",
+      });
+      const forrigeforrigePeriodeTil = formaterDato({
+        dato: subDays(new Date(fraOgMed), 15),
+        dateFormat: "yyyy-MM-dd",
+      });
+
+      const ikkeKanEndres = lagRapporteringsperiode({
+        kanSendes: false,
+        status: IRapporteringsperiodeStatus.Innsendt,
+        rapporteringstype: Rapporteringstype.harAktivitet,
+        periode: {
+          fraOgMed: forrigeforrigePeriodeFra,
+          tilOgMed: forrigeforrigePeriodeTil,
+        },
+        kanEndres: false,
+        kanSendesFra: formaterDato({
+          dato: subDays(new Date(forrigeforrigePeriodeFra), 1),
+          dateFormat: "yyyy-MM-dd",
+        }),
+        mottattDato: formaterDato({
+          dato: addDays(new Date(forrigeforrigePeriodeFra), 7),
+          dateFormat: "yyyy-MM-dd",
+        }),
+        begrunnelseEndring: "Annet",
+        originalId: "123456789",
+      });
+      db.rapporteringsperioder.create(ikkeKanEndres);
+
+      // Opprett også ett meldekort som kan fylles ut (slik at forsiden viser noe)
+      db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+
+      // Logg ID-ene slik at det er enkelt å teste
+      console.log(
+        `\n🔖 Bokmerket meldekort scenario:\n` +
+          `   1. Innsendt periode (kanEndres=true) ID: ${innsendt.id}\n` +
+          `      Test: /periode/${innsendt.id}/fyll-ut\n` +
+          `      Forventet: Redirectes til forsiden (status er Innsendt)\n` +
+          `   2. Innsendt periode (kanEndres=false) ID: ${ikkeKanEndres.id}\n` +
+          `      Test: /periode/${ikkeKanEndres.id}/endring/send-inn\n` +
+          `      Forventet: Redirectes til forsiden (kanEndres er false)\n`,
+      );
+
+      break;
+    }
   }
 }
 

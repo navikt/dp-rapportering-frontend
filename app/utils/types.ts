@@ -44,6 +44,11 @@ export const KortType = {
   KORRIGERT: "Korrigert",
 } as const;
 
+export const FEILTYPE = {
+  ALLEREDE_INNSENDT: "allerede-innsendt",
+  KAN_IKKE_ENDRES: "kan-ikke-endres",
+} as const;
+
 export const TIDSSONER = {
   OSLO: "Europe/Oslo",
 };

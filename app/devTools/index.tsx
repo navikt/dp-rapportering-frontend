@@ -16,6 +16,7 @@ export enum ScenarioType {
   innsendte = "innsendte",
   manuelt = "manuelt",
   etterregistrert = "etterregistrert",
+  bokmerket = "bokmerket",
 }
 interface IScenario {
   type: ScenarioType;
@@ -50,6 +51,10 @@ const scenarios: IScenario[] = [
   {
     type: ScenarioType.etterregistrert,
     tittel: "Etterregistrert meldekort",
+  },
+  {
+    type: ScenarioType.bokmerket,
+    tittel: "Bokmerket meldekort (Innsendt)",
   },
 ];
 
