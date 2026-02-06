@@ -10,6 +10,7 @@ import {
   useLoaderData,
   useNavigation,
   useRouteError,
+  useSearchParams,
 } from "react-router";
 
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
@@ -46,12 +47,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Landingsside() {
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
+  const [searchParams] = useSearchParams();
 
   const { getAppText, getLink, getRichText } = useSanity();
   const startFetcher = useFetcher<typeof StartAction>();
   const { trackSkjemaStartet, trackNavigere } = useAnalytics();
 
   const forstePeriode = rapporteringsperioder[0];
+  const feilType = searchParams.get("feil");
 
   const navigation = useNavigation();
   const isSubmitting = useIsSubmitting(navigation);
@@ -70,6 +73,20 @@ export default function Landingsside() {
 
   return (
     <>
+      {feilType === "allerede-behandlet" && (
+        <Alert variant="warning" className="my-4">
+          Du prøvde å åpne et meldekort som allerede er behandlet. Du kan ikke fylle ut dette
+          meldekortet på nytt.
+        </Alert>
+      )}
+
+      {feilType === "kan-ikke-endres" && (
+        <Alert variant="warning" className="my-4">
+          Du prøvde å endre et meldekort som ikke lenger kan endres. Fristen for å endre dette
+          meldekortet har gått ut.
+        </Alert>
+      )}
+
       {rapporteringsperioder.length === 0 && (
         <Alert variant="info" className="my-4 alert-with-rich-text">
           <PortableText value={getRichText("rapportering-ingen-meldekort")} />
@@ -96,7 +113,7 @@ export default function Landingsside() {
         <PortableText value={getRichText("rapportering-arbeidstid-ikke-redusert")} />
       </ReadMore>
 
-      {forstePeriode?.kanSendes === true && (
+      {forstePeriode?.kanSendes === true && !feilType && (
         <>
           <Heading size="small" level="2" className="mt-8">
             {getAppText("rapportering-samtykke-tittel")}
