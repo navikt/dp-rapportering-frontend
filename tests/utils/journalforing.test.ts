@@ -47,7 +47,7 @@ describe("getArbeidssokerAlert", () => {
 
   it("viser alert for arbeidssøker", () => {
     const alert = getArbeidssokerAlert(periode, mockGetAppText, mockGetRichText);
-    expect(alert).toContain("rapportering-arbeidssokerregister-alert-tittel-registrert");
+    expect(alert).toContain("rapportering-arbeidssokerregister-alert-tittel-registrert-v2");
   });
 
   it("viser alert for avregistrering av arbeidssøker", () => {
@@ -57,7 +57,7 @@ describe("getArbeidssokerAlert", () => {
       mockGetRichText,
     );
     expect(alert).toContain("rapportering-arbeidssokerregister-alert-tittel-avregistrert");
-    expect(alert).toContain("rapportering-arbeidssokerregister-alert-innhold-avregistrert");
+    expect(alert).toContain("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2");
   });
 });
 

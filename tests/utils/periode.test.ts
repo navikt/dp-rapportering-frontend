@@ -9,6 +9,7 @@ import {
   erAktiviteteneLike,
   erAktivitetenLik,
   erPeriodeneLike,
+  nestePeriode,
   periodeSomTimer,
   sorterAktiviteter,
 } from "../../app/utils/periode.utils";
@@ -354,5 +355,35 @@ describe("redirectTilForsideHvisMeldekortIkkeKanFyllesUt", () => {
 
       expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
     });
+  });
+});
+
+describe("gir neste meldeperiode", () => {
+  test("skal gi neste periode med riktig datoformat", () => {
+    const periode = {
+      fraOgMed: "2026-02-09",
+      tilOgMed: "2026-02-22",
+    };
+
+    const nesteMeldekortperiode = {
+      fraOgMed: "23/02",
+      tilOgMed: "08/03",
+    };
+
+    expect(nestePeriode(periode)).toEqual(nesteMeldekortperiode);
+  });
+
+  test("skal gi neste periode med datoformat dd.MM.yyyy", () => {
+    const periode = {
+      fraOgMed: "2026-02-09",
+      tilOgMed: "2026-02-22",
+    };
+
+    const nesteMeldekortperiode = {
+      fraOgMed: "23.02.2026",
+      tilOgMed: "08.03.2026",
+    };
+
+    expect(nestePeriode(periode, "dd.MM.yyyy")).toEqual(nesteMeldekortperiode);
   });
 });

@@ -55,9 +55,6 @@ describe("ArbeidssøkerRegisterSide", () => {
     });
 
     expect(await screen.findByText(/rapportering-arbeidssokerregister-tittel/)).toBeInTheDocument();
-    expect(
-      await screen.findByText(/rapportering-arbeidssokerregister-subtittel/),
-    ).toBeInTheDocument();
     expect(await screen.findByRole("radio", { name: /svar-ja/ })).toBeInTheDocument();
     expect(await screen.findByRole("radio", { name: /svar-nei/ })).toBeInTheDocument();
     expect(await screen.findByRole("button", { name: /rapportering-knapp-neste/ })).toHaveAttribute(

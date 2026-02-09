@@ -15,7 +15,7 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
-import { kanSendes, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import { kanSendes, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
@@ -46,6 +46,7 @@ export default function ArbeidssøkerRegisterSide() {
   const sesjonId = useMemo(uuidv7, [periode.id]);
   const stegnavn = "arbeidssoker";
   const steg = 4;
+  const nesteMeldeperiode = nestePeriode(periode.periode);
 
   function neste() {
     trackSkjemaStegFullført({
@@ -86,8 +87,10 @@ export default function ArbeidssøkerRegisterSide() {
       <fetcher.Form method="post">
         <RadioGroup
           disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
-          legend={getAppText("rapportering-arbeidssokerregister-tittel")}
-          description={getAppText("rapportering-arbeidssokerregister-subtittel")}
+          legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
+            fom: nesteMeldeperiode.fraOgMed,
+            tom: nesteMeldeperiode.tilOgMed,
+          })}
           onChange={handleChange}
           name="_action"
           value={periode.registrertArbeidssoker}

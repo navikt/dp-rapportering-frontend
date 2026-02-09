@@ -1,15 +1,18 @@
+import { TZDate } from "@date-fns/tz";
+import { addDays } from "date-fns";
 import { parse } from "tinyduration";
 
 import { type GetAppText } from "~/hooks/useSanity";
 import {
+  IPeriode,
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
 
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
+import { formaterDato, formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 import { DecoratorLocale } from "./dekoratoren.utils";
-import { IRapporteringsperiodeStatus, KortType } from "./types";
+import { IRapporteringsperiodeStatus, KortType, TIDSSONER } from "./types";
 
 export function periodeSomTimer(periode?: string): number | undefined {
   if (!periode) return undefined;
@@ -188,4 +191,20 @@ export function erPeriodeneLike(
 
 export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
   return periode.type !== KortType.ETTERREGISTRERT;
+}
+
+export function nestePeriode(periode: IPeriode, dateFormat: string = "dd/MM"): IPeriode {
+  const fraOgMed = addDays(periode.tilOgMed, 1);
+  const tilOgMed = addDays(fraOgMed, 13);
+
+  return {
+    fraOgMed: formaterDato({
+      dato: new TZDate(fraOgMed, TIDSSONER.OSLO),
+      dateFormat,
+    }),
+    tilOgMed: formaterDato({
+      dato: new TZDate(tilOgMed, TIDSSONER.OSLO),
+      dateFormat,
+    }),
+  };
 }
