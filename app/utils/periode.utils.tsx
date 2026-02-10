@@ -193,7 +193,12 @@ export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): bool
   return periode.type !== KortType.ETTERREGISTRERT;
 }
 
-export function nestePeriode(periode: IPeriode, dateFormat: string = "dd/MM"): IPeriode {
+interface IFormattertDato {
+  fraOgMed: string;
+  tilOgMed: string;
+}
+
+export function nestePeriode(periode: IPeriode, dateFormat: string = "dd/MM"): IFormattertDato {
   const fraOgMed = addDays(periode.tilOgMed, 1);
   const tilOgMed = addDays(fraOgMed, 13);
 
