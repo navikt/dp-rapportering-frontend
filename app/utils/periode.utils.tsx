@@ -1,4 +1,3 @@
-import { TZDate } from "@date-fns/tz";
 import { addDays } from "date-fns";
 import { parse } from "tinyduration";
 
@@ -12,7 +11,7 @@ import {
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterDato, formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 import { DecoratorLocale } from "./dekoratoren.utils";
-import { IRapporteringsperiodeStatus, KortType, TIDSSONER } from "./types";
+import { IRapporteringsperiodeStatus, KortType } from "./types";
 
 export function periodeSomTimer(periode?: string): number | undefined {
   if (!periode) return undefined;
@@ -194,7 +193,9 @@ export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): bool
 }
 
 interface IFormattertDato {
+  /** Formatert fraOgMed-dato */
   fraOgMed: string;
+  /** Formatert tilOgMed-dato */
   tilOgMed: string;
 }
 
@@ -204,11 +205,11 @@ export function nestePeriode(periode: IPeriode, dateFormat: string = "dd/MM"): I
 
   return {
     fraOgMed: formaterDato({
-      dato: new TZDate(fraOgMed, TIDSSONER.OSLO),
+      dato: fraOgMed,
       dateFormat,
     }),
     tilOgMed: formaterDato({
-      dato: new TZDate(tilOgMed, TIDSSONER.OSLO),
+      dato: tilOgMed,
       dateFormat,
     }),
   };
