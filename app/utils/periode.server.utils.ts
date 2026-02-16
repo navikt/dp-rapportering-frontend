@@ -5,63 +5,62 @@ import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 import { FEILTYPE, IRapporteringsperiodeStatus } from "./types";
 
-function kanIkkeFyllesUt(status: IRapporteringsperiodeStatus): boolean {
-  // Kun Innsendt, Ferdig og Endret skal blokkeres (Feilet-perioder skal kunne fylles ut)
-  return [
-    IRapporteringsperiodeStatus.Innsendt,
-    IRapporteringsperiodeStatus.Ferdig,
-    IRapporteringsperiodeStatus.Endret,
-  ].includes(status);
-}
-
 export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
   request: Request,
   periode: IRapporteringsperiode,
 ): void {
   const url = new URL(request.url);
-  const pathSegments = url.pathname.split("/");
+  const path = url.pathname;
 
-  const erBekreftelseSide = pathSegments.includes("bekreftelse");
-  const erEndringsflyt = pathSegments.includes("endring");
-  const erStartEndring = pathSegments.includes("endre");
-  const erUtfyllingsSide = !erBekreftelseSide && !erEndringsflyt && !erStartEndring;
+  // Identifiser route-type basert på URL-struktur
+  const isBekreftelseSide = path.includes("/bekreftelse");
+  const isEndrePath = path.endsWith("/endre");
+  const isEndringFlow = path.includes("/endring/") && !isBekreftelseSide;
+  const isNormalFlow = !path.includes("/endring") && !path.includes("/endre") && !isBekreftelseSide;
 
-  // Blokkér vanlige utfyllingssider hvis status er Innsendt/Ferdig/Endret
-  if (erUtfyllingsSide && kanIkkeFyllesUt(periode.status)) {
-    logg({
-      type: "warn",
-      message: `Bruker prøvde å fylle ut periode som allerede er sendt inn, ID: ${periode.id}`,
-      correlationId: null,
-      body: { periodeId: periode.id, status: periode.status, url: url.pathname },
-    });
-
-    // Vanlige utfyllingssider er på nivå /periode/{id}/fyll-ut, så ../.. går til forsiden
-    throw redirect(`../..?feil=${FEILTYPE.ALLEREDE_INNSENDT}&status=${periode.status}`);
+  // 1. Tillat alltid bekreftelsessider
+  if (isBekreftelseSide) {
+    return;
   }
 
-  // Blokkér endringsflyt-sider hvis perioden ikke kan endres
-  // Tillat hvis:
-  // - Status er TilUtfylling (endring pågår - typisk når startEndring() har blitt kalt)
-  // - Bekreftelsessider (bruker må kunne se bekreftelse)
-  if (
-    erEndringsflyt &&
-    !erBekreftelseSide &&
-    !periode.kanEndres &&
-    periode.status !== IRapporteringsperiodeStatus.TilUtfylling
-  ) {
-    logg({
-      type: "warn",
-      message: `Bruker prøvde å endre periode som ikke kan endres, ID: ${periode.id}`,
-      correlationId: null,
-      body: {
-        periodeId: periode.id,
-        status: periode.status,
-        kanEndres: periode.kanEndres,
-        url: url.pathname,
-      },
-    });
+  // 2. Sjekk /endre rute - krever kanEndres
+  if (isEndrePath) {
+    if (!periode.kanEndres) {
+      logg({
+        type: "warn",
+        message: `Bruker prøvde å starte endring på periode som ikke kan endres, ID: ${periode.id}`,
+        correlationId: null,
+        body: { periodeId: periode.id, kanEndres: periode.kanEndres, url: path },
+      });
+      throw redirect(`/?feil=${FEILTYPE.KAN_IKKE_ENDRES}`);
+    }
+    return;
+  }
 
-    // Endringsflyt-sider er på nivå /periode/{id}/endring/send-inn, så ../../.. går til forsiden
-    throw redirect(`../../..?feil=${FEILTYPE.KAN_IKKE_ENDRES}&status=${periode.status}`);
+  // 3. Sjekk endringsflyt - krever TilUtfylling (working copy)
+  if (isEndringFlow) {
+    if (periode.status !== IRapporteringsperiodeStatus.TilUtfylling) {
+      logg({
+        type: "warn",
+        message: `Bruker prøvde å endre periode som ikke er i redigeringsmodus, ID: ${periode.id}`,
+        correlationId: null,
+        body: { periodeId: periode.id, status: periode.status, url: path },
+      });
+      throw redirect(`/?feil=${FEILTYPE.KAN_IKKE_ENDRES}`);
+    }
+    return;
+  }
+
+  // 4. Sjekk normal flyt - krever TilUtfylling
+  if (isNormalFlow) {
+    if (periode.status !== IRapporteringsperiodeStatus.TilUtfylling) {
+      logg({
+        type: "warn",
+        message: `Bruker prøvde å fylle ut periode som ikke er TilUtfylling, ID: ${periode.id}`,
+        correlationId: null,
+        body: { periodeId: periode.id, status: periode.status, url: path },
+      });
+      throw redirect(`/?feil=${FEILTYPE.ALLEREDE_INNSENDT}`);
+    }
   }
 }
