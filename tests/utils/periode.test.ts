@@ -281,36 +281,9 @@ describe("redirectTilForsideHvisMeldekortIkkeKanFyllesUt", () => {
       expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
     });
 
-    test("Skal IKKE redirecte fra /endring/fyll-ut selv med Innsendt status", () => {
-      const request = new Request(
-        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/fyll-ut`,
-      );
-      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
-
-      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
-    });
-
-    test("Skal IKKE redirecte fra /endre selv med Innsendt status", () => {
-      const request = new Request(
-        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endre`,
-      );
-      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
-
-      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
-    });
-
     test("Skal IKKE redirecte fra /endring (uten trailing slash) selv med Innsendt status", () => {
       const request = new Request(
         `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring`,
-      );
-      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
-
-      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
-    });
-
-    test("Skal IKKE redirecte fra /endring/send-inn selv med Innsendt status", () => {
-      const request = new Request(
-        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/send-inn`,
       );
       const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
 
@@ -369,8 +342,49 @@ describe("redirectTilForsideHvisMeldekortIkkeKanFyllesUt", () => {
     });
   });
 
-  describe("Skal redirecte fra endringsflyt når kanEndres er false OG status ikke er TilUtfylling", () => {
-    test("Skal redirecte fra /endring/fyll-ut når kanEndres er false og status er Innsendt", () => {
+  describe("Skal validere /endre ruten basert på kanEndres", () => {
+    test("Skal IKKE redirecte fra /endre når kanEndres er true", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endre`,
+      );
+      const periode = {
+        ...basePeriode,
+        status: IRapporteringsperiodeStatus.Innsendt,
+        kanEndres: true,
+      };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal redirecte fra /endre når kanEndres er false", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endre`,
+      );
+      const periode = {
+        ...basePeriode,
+        status: IRapporteringsperiodeStatus.Innsendt,
+        kanEndres: false,
+      };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).toThrow();
+    });
+  });
+
+  describe("Skal validere endringsflyt basert på status", () => {
+    test("Skal IKKE redirecte fra /endring/fyll-ut når status er TilUtfylling", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/fyll-ut`,
+      );
+      const periode = {
+        ...basePeriode,
+        status: IRapporteringsperiodeStatus.TilUtfylling,
+        kanEndres: false,
+      };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal redirecte fra /endring/fyll-ut når status er Innsendt", () => {
       const request = new Request(
         `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/fyll-ut`,
       );
@@ -383,7 +397,7 @@ describe("redirectTilForsideHvisMeldekortIkkeKanFyllesUt", () => {
       expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).toThrow();
     });
 
-    test("Skal redirecte fra /endring/send-inn når kanEndres er false og status er Ferdig", () => {
+    test("Skal redirecte fra /endring/send-inn når status er Ferdig", () => {
       const request = new Request(
         `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/send-inn`,
       );
@@ -396,56 +410,15 @@ describe("redirectTilForsideHvisMeldekortIkkeKanFyllesUt", () => {
       expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).toThrow();
     });
 
-    test("Skal IKKE redirecte fra /endring/fyll-ut når kanEndres er false MEN status er TilUtfylling", () => {
-      const request = new Request(
-        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/fyll-ut`,
-      );
-      const periode = {
-        ...basePeriode,
-        status: IRapporteringsperiodeStatus.TilUtfylling,
-        kanEndres: false,
-      };
-
-      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
-    });
-
-    test("Skal IKKE redirecte fra /endring/send-inn når status er TilUtfylling og kanEndres er false (typisk endringsflyt)", () => {
+    test("Skal IKKE redirecte fra /endring/send-inn når status er TilUtfylling (pågående endring)", () => {
       const request = new Request(
         `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/send-inn`,
       );
-      // Dette simulerer en pågående endring: startEndring() setter status=TilUtfylling, kanEndres=false
       const periode = {
         ...basePeriode,
         status: IRapporteringsperiodeStatus.TilUtfylling,
         kanEndres: false,
-        kanSendes: true,
         originalId: "123456789",
-      };
-
-      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
-    });
-
-    test("Skal IKKE redirecte fra /endre selv når kanEndres er false", () => {
-      const request = new Request(
-        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endre`,
-      );
-      const periode = {
-        ...basePeriode,
-        status: IRapporteringsperiodeStatus.Innsendt,
-        kanEndres: false,
-      };
-
-      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
-    });
-
-    test("Skal IKKE redirecte fra /endring/bekreftelse selv når kanEndres er false", () => {
-      const request = new Request(
-        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/bekreftelse`,
-      );
-      const periode = {
-        ...basePeriode,
-        status: IRapporteringsperiodeStatus.Innsendt,
-        kanEndres: false,
       };
 
       expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
