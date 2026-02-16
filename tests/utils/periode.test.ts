@@ -281,15 +281,6 @@ describe("redirectTilForsideHvisMeldekortIkkeKanFyllesUt", () => {
       expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
     });
 
-    test("Skal IKKE redirecte fra /endring (uten trailing slash) selv med Innsendt status", () => {
-      const request = new Request(
-        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring`,
-      );
-      const periode = { ...basePeriode, status: IRapporteringsperiodeStatus.Innsendt };
-
-      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
-    });
-
     test("Skal IKKE redirecte fra /endring/bekreftelse selv med Innsendt status", () => {
       const request = new Request(
         `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/bekreftelse`,
@@ -400,6 +391,33 @@ describe("redirectTilForsideHvisMeldekortIkkeKanFyllesUt", () => {
     test("Skal IKKE redirecte fra /endring/send-inn når status er TilUtfylling (pågående endring)", () => {
       const request = new Request(
         `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring/send-inn`,
+      );
+      const periode = {
+        ...basePeriode,
+        status: IRapporteringsperiodeStatus.TilUtfylling,
+        kanEndres: false,
+        originalId: "123456789",
+      };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).not.toThrow();
+    });
+
+    test("Skal redirecte fra /endring (uten trailing slash) når status er Innsendt", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring`,
+      );
+      const periode = {
+        ...basePeriode,
+        status: IRapporteringsperiodeStatus.Innsendt,
+        kanEndres: false,
+      };
+
+      expect(() => redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode)).toThrow();
+    });
+
+    test("Skal IKKE redirecte fra /endring (uten trailing slash) når status er TilUtfylling", () => {
+      const request = new Request(
+        `http://localhost:3000/arbeid/dagpenger/meldekort/periode/${periodeId}/endring`,
       );
       const periode = {
         ...basePeriode,

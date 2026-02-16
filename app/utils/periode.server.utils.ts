@@ -12,18 +12,23 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
   const url = new URL(request.url);
   const path = url.pathname;
 
-  // Identifiser route-type basert på URL-struktur
+  // Klassifiser URL-sti for å identifisere hvilken type side brukeren prøver å nå
   const isBekreftelseSide = path.includes("/bekreftelse");
   const isEndrePath = path.endsWith("/endre");
-  const isEndringFlow = path.includes("/endring/") && !isBekreftelseSide;
+  const isEndringFlow =
+    (path.includes("/endring/") || path.endsWith("/endring")) && !isBekreftelseSide;
   const isNormalFlow = !path.includes("/endring") && !path.includes("/endre") && !isBekreftelseSide;
 
-  // 1. Tillat alltid bekreftelsessider
+  // 1. Bekreftelsessider skal alltid være tilgjengelige
+  // Brukere må kunne se bekreftelse etter innsending/endring uavhengig av periodestatus
   if (isBekreftelseSide) {
     return;
   }
 
-  // 2. Sjekk /endre rute - krever kanEndres
+  // 2. /endre-ruten starter endringsflyt for innsendte meldekort
+  // Denne ruten mottar original periode-ID (eks: ID=123) og validerer kanEndres
+  // Ved godkjent endring opprettes det en ny working copy med TilUtfylling-status (eks: ID=456)
+  // Bruker redirectes deretter til /endring/* med det nye working copy-ID-et
   if (isEndrePath) {
     if (!periode.kanEndres) {
       logg({
@@ -37,7 +42,10 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
     return;
   }
 
-  // 3. Sjekk endringsflyt - krever TilUtfylling (working copy)
+  // 3. Endringsflyt-sider (/endring/* og /endring) krever at perioden er i redigeringsmodus
+  // Disse sidene mottar working copy-ID (eks: ID=456) opprettet av /endre-ruten
+  // Working copy har alltid status=TilUtfylling og kan redigeres
+  // Hvis status ikke er TilUtfylling, er dette en ugyldig working copy eller utdatert URL
   if (isEndringFlow) {
     if (periode.status !== IRapporteringsperiodeStatus.TilUtfylling) {
       logg({
@@ -51,7 +59,8 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
     return;
   }
 
-  // 4. Sjekk normal flyt - krever TilUtfylling
+  // 4. Vanlig utfylling krever status TilUtfylling
+  // Blokkerer tilgang til utfyllingssider for perioder som er Innsendt, Ferdig, Endret, eller Feilet
   if (isNormalFlow) {
     if (periode.status !== IRapporteringsperiodeStatus.TilUtfylling) {
       logg({
