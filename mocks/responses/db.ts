@@ -12,6 +12,7 @@ import {
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
 import { formaterDato } from "~/utils/dato.utils";
+import { isLocalOrDemo } from "~/utils/env.utils";
 import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
 
 import { Database } from "../session";
@@ -395,16 +396,18 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       // Opprett også ett meldekort som kan fylles ut (slik at forsiden viser noe)
       db.rapporteringsperioder.create(lagForstRapporteringsperiode());
 
-      // Logg ID-ene slik at det er enkelt å teste
-      console.log(
-        `\n🔖 Bokmerket meldekort scenario:\n` +
-          `   1. Innsendt periode (kanEndres=true) ID: ${innsendt.id}\n` +
-          `      Test: /periode/${innsendt.id}/fyll-ut\n` +
-          `      Forventet: Redirectes til forsiden (status er Innsendt)\n` +
-          `   2. Innsendt periode (kanEndres=false) ID: ${ikkeKanEndres.id}\n` +
-          `      Test: /periode/${ikkeKanEndres.id}/endring/send-inn\n` +
-          `      Forventet: Redirectes til forsiden (kanEndres er false)\n`,
-      );
+      // Logg ID-ene slik at det er enkelt å teste (kun i local/demo)
+      if (isLocalOrDemo) {
+        console.log(
+          `\n🔖 Bokmerket meldekort scenario:\n` +
+            `   1. Innsendt periode (kanEndres=true) ID: ${innsendt.id}\n` +
+            `      Test: /periode/${innsendt.id}/fyll-ut\n` +
+            `      Forventet: Redirectes til forsiden (status er Innsendt)\n` +
+            `   2. Innsendt periode (kanEndres=false) ID: ${ikkeKanEndres.id}\n` +
+            `      Test: /periode/${ikkeKanEndres.id}/endring/send-inn\n` +
+            `      Forventet: Redirectes til forsiden (kanEndres er false)\n`,
+        );
+      }
 
       break;
     }
