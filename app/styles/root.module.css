@@ -7,12 +7,12 @@
 .rapporteringContainer {
   max-width: var(--app-max-width);
   padding: var(--app-padding);
-  margin: var(--a-spacing-4) auto var(--a-spacing-18);
+  margin: var(--ax-space-16) auto var(--ax-space-72);
 }
 
 .rapporteringHeader {
-  margin-top: var(--a-spacing-4);
-  border-bottom: 5px solid var(--a-green-400);
+  margin-top: var(--ax-space-16);
+  border-bottom: 5px solid var(--ax-success-500);
 }
 
 .rapporteringHeaderInnhold {

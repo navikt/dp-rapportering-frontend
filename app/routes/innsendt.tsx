@@ -87,9 +87,7 @@ export default function InnsendteRapporteringsPerioderSide() {
       <Heading size="medium" level="2">
         {getAppText("rapportering-innsendt-beskrivelse-tittel")}
       </Heading>
-
       <PortableText value={getRichText("rapportering-innsendt-beskrivelse-innhold")} />
-
       {innsendtPerioder.length === 0 && (
         <Alert variant="info">{getAppText("rapportering-innsendt-ingen-innsendte")}</Alert>
       )}
@@ -105,10 +103,13 @@ export default function InnsendteRapporteringsPerioderSide() {
           };
 
           return (
-            <Accordion key={nyestePeriode.periode.fraOgMed} headingSize="medium">
+            <Accordion key={nyestePeriode.periode.fraOgMed}>
               <Accordion.Item>
-                <Accordion.Header className={classNames(styles.innsendtAccordionHeader)}>
-                  <div className={styles.innsendtPeriodeHeader}>
+                <Accordion.Header
+                  data-color="neutral"
+                  className={classNames(styles.innsendtAccordionHeader)}
+                >
+                  <Heading level="3" size="medium" className={styles.innsendtPeriodeHeader}>
                     <div>
                       <div>{hentUkeTekst(nyestePeriode, getAppText)}</div>
                       <div className={styles.innsendtPeriodeHeaderDato}>
@@ -124,7 +125,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                         `rapportering-status-${nyestePeriode.status.toLocaleLowerCase()}`,
                       )}
                     </div>
-                  </div>
+                  </Heading>
                 </Accordion.Header>
                 <Accordion.Content className={styles.innsendtAccordionContent}>
                   {perioder.map((periode) => {

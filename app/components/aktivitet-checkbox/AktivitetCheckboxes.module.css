@@ -1,11 +1,16 @@
 .checkbox {
   width: 100%;
   position: relative;
-  margin-bottom: var(--a-spacing-4);
+  margin-bottom: var(--ax-space-16);
 }
 
 .checkbox label span span:first-of-type {
-  margin-bottom: var(--a-spacing-4);
+  margin-bottom: var(--ax-space-16);
+}
+
+.checkbox .description {
+  margin-top: var(--ax-space-16);
+  color: var(--ax-text-neutral-subtle);
 }
 
 .checkbox::before {
@@ -21,26 +26,26 @@
 
 .arbeid::before,
 .checkbox::before {
-  background-color: var(--a-blue-200);
+  background-color: var(--aktivitetFargeArbeid);
 }
 
 .syk::before {
-  background-color: var(--a-orange-200);
+  background-color: var(--aktivitetFargeSykdom);
 }
 
 .ferie::before,
 .fravaer::before {
-  background-color: var(--a-green-200);
+  background-color: var(--aktivitetFargeFravaer);
 }
 
 .utdanning::before {
-  background-color: var(--a-purple-200);
+  background-color: var(--aktivitetFargeUtdanning);
 }
 
 .timer {
-  padding: 0 var(--a-spacing-8) var(--a-spacing-4) var(--a-spacing-8);
+  padding: 0 var(--ax-space-32) var(--ax-space-16) var(--ax-space-32);
 }
 
 .prosentstilling button span {
-  color: var(--a-blue-700);
+  color: var(--ax-accent-800);
 }

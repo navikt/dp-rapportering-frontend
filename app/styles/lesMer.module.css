@@ -1,4 +1,4 @@
 .container {
-  margin-top: var(--a-spacing-4);
-  margin-bottom: var(--a-spacing-8);
+  margin-top: var(--ax-space-16);
+  margin-bottom: var(--ax-space-32);
 }

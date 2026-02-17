@@ -3,9 +3,9 @@
 }
 
 .kalender {
-  margin-left: calc(var(--a-spacing-2) * -1);
-  padding-bottom: var(--a-spacing-8);
-  width: calc(var(--a-spacing-4) + 100%);
+  margin-left: calc(var(--ax-space-8) * -1);
+  padding-bottom: var(--ax-space-32);
+  width: calc(var(--ax-space-16) + 100%);
 }
 
 .kalender[aria-disabled="true"] {
@@ -27,19 +27,19 @@
 .header {
   display: flex;
   flex-direction: column;
-  font-weight: var(--a-font-weight-bold);
+  font-weight: var(--ax-font-weight-bold);
   margin: 0;
 }
 
 .header span {
-  color: var(--a-text-subtle);
-  font-size: var(--a-font-size-medium);
-  font-weight: var(--a-font-weight-regular);
+  color: var(--ax-text-neutral-subtle);
+  font-size: var(--ax-font-size-medium);
+  font-weight: var(--ax-font-weight-regular);
 }
 
 .ukerKontainer {
   display: grid;
-  gap: var(--a-spacing-10);
+  gap: var(--ax-space-40);
   grid-auto-flow: row;
   transition: all ease-in-out 200ms;
 }
@@ -47,21 +47,21 @@
 .ukeRadKontainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--a-spacing-2);
+  gap: var(--ax-space-8);
   justify-items: center;
 }
 
 .ukedagKontainer {
   display: grid;
-  margin-top: var(--a-spacing-4);
-  gap: var(--a-spacing-2);
+  margin-top: var(--ax-space-16);
+  gap: var(--ax-space-8);
   grid-template-columns: repeat(7, 1fr);
   justify-items: center;
-  margin-bottom: var(--a-spacing-2);
+  margin-bottom: var(--ax-space-8);
 }
 
 .ukedag {
-  font-size: var(--a-font-size-small);
+  font-size: var(--ax-font-size-small);
 }
 
 .datoKontainer {
@@ -75,14 +75,13 @@
   padding-left: 6px;
   justify-content: center;
   align-items: center;
-  background-color: var(--a-bg-subtle);
+  background-color: var(--ax-bg-neutral-moderate);
   width: var(--dato-strl);
   height: var(--dato-strl);
   border-radius: 50%;
-  font-size: var(--a-font-size-medium);
-  line-height: var(--a-font-size-medium);
+  font-size: var(--ax-font-size-medium);
+  line-height: var(--ax-font-size-medium);
   cursor: pointer;
-  border: 0;
   z-index: 10;
   border: 1px solid transparent;
 }
@@ -93,7 +92,7 @@
 }
 
 .dato:hover {
-  background-color: var(--a-gray-200);
+  background-color: var(--ax-neutral-300);
 }
 
 .datoMedAktivitet {
@@ -105,26 +104,26 @@
   padding-top: calc(var(--dato-strl) * 0.6);
   justify-content: center;
   align-items: center;
-  background-color: var(--a-surface-selected);
+  background-color: var(--ax-bg-accent-soft);
   width: calc(var(--dato-strl) - 1px);
   height: calc(calc(var(--dato-strl) * 1.15));
-  font-size: var(--a-font-size-small);
-  color: var(--a-text-subtle);
+  font-size: var(--ax-font-size-small);
+  color: var(--ax-text-neutral-subtle);
   z-index: 0;
 }
 
 .datoMedAktivitetAktivitetSykdom {
-  background-color: var(--a-surface-warning-subtle);
+  background-color: var(--ax-bg-warning-soft);
 }
 
 .datoMedAktivitetAktivitetFerie {
-  background-color: var(--a-surface-success-subtle);
+  background-color: var(--ax-bg-success-soft);
 }
 
 .timeTypeKontainer {
   display: flex;
   flex-direction: column;
-  margin-top: var(--a-spacing-6);
+  margin-top: var(--ax-space-24);
   min-width: 450px;
 }
 
@@ -138,37 +137,37 @@
 }
 
 .datoMedAktivitetSykdom {
-  background-color: var(--a-orange-50);
-  border-color: var(--a-orange-50);
+  background-color: var(--ax-warning-100);
+  border-color: var(--ax-warning-100);
 }
 
 .datoMedAktivitetFerie {
-  background-color: var(--a-green-50);
-  border-color: var(--a-green-50);
+  background-color: var(--ax-success-100);
+  border-color: var(--ax-success-100);
 }
 
 .datoMedAktivitetUtdanning {
-  background-color: var(--a-purple-50);
-  border-color: var(--a-purple-50);
+  background-color: var(--ax-meta-purple-100);
+  border-color: var(--ax-meta-purple-100);
 }
 
 .datoMedAktivitetArbeidOgUtdanning {
-  background-color: var(--a-blue-50);
-  border-color: var(--a-blue-50);
+  background-color: var(--ax-accent-100);
+  border-color: var(--ax-accent-100);
 }
 
 .arbeid,
 .arbeidOgUtdanning,
 .arbeid.arbeidOgUtdanning {
-  background-color: var(--a-blue-200);
-  border-color: var(--a-blue-200);
+  background-color: var(--aktivitetFargeArbeid);
+  border-color: var(--aktivitetFargeArbeid);
 }
 
 .arbeid:hover,
 .arbeidOgUtdanning:hover,
 .arbeid.arbeid.arbeidOgUtdanning:hover {
-  background-color: var(--a-blue-300);
-  border-color: var(--a-blue-300);
+  background-color: var(--ax-accent-400);
+  border-color: var(--ax-accent-400);
 }
 
 .sykOgUtdanning::after,
@@ -178,8 +177,8 @@
   position: absolute;
   right: -12.5%;
   top: -12.5%;
-  background-color: var(--a-purple-200);
-  border: 1px solid var(--a-purple-200);
+  background-color: var(--aktivitetFargeUtdanning);
+  border: 1px solid var(--aktivitetFargeUtdanning);
   border-radius: 50%;
   height: 50%;
   width: 50%;
@@ -188,8 +187,8 @@
 .arbeidOgUtdanning:hover::after,
 .fravaerOgUtdanning:hover::after,
 .sykOgUtdanning:hover::after {
-  background-color: var(--a-purple-300);
-  border-color: var(--a-purple-300);
+  background-color: var(--ax-meta-purple-400);
+  border-color: var(--ax-meta-purple-400);
 }
 
 .sykFravaerOgUtdanning::before {
@@ -197,66 +196,66 @@
   position: absolute;
   left: -12.5%;
   top: -12.5%;
-  background-color: var(--a-purple-200);
-  border: 1px solid var(--a-purple-200);
+  background-color: var(--aktivitetFargeUtdanning);
+  border: 1px solid var(--aktivitetFargeUtdanning);
   border-radius: 50%;
   height: 50%;
   width: 50%;
 }
 
 .sykFravaerOgUtdanning:hover::before {
-  background-color: var(--a-purple-300);
-  border-color: var(--a-purple-300);
+  background-color: var(--ax-meta-purple-400);
+  border-color: var(--ax-meta-purple-400);
 }
 
 .utdanning {
-  background-color: var(--a-purple-200);
-  border-color: var(--a-purple-200);
+  background-color: var(--aktivitetFargeUtdanning);
+  border-color: var(--aktivitetFargeUtdanning);
 }
 
 .utdanning:hover {
-  background-color: var(--a-purple-300);
-  border-color: var(--a-purple-300);
+  background-color: var(--ax-meta-purple-400);
+  border-color: var(--ax-meta-purple-400);
 }
 
 .timerUtdanning {
-  background-color: var(--a-purple-50);
-  border-color: var(--a-purple-50);
+  background-color: var(--ax-meta-purple-100);
+  border-color: var(--ax-meta-purple-100);
 }
 
 .timerSykdom {
-  background-color: var(--a-orange-50);
-  border-color: var(--a-orange-50);
+  background-color: var(--ax-warning-100);
+  border-color: var(--ax-warning-100);
 }
 
 .ferie,
 .fravaer {
-  background-color: var(--a-green-200);
-  border-color: var(--a-green-200);
+  background-color: var(--aktivitetFargeFravaer);
+  border-color: var(--aktivitetFargeFravaer);
 }
 
 .ferie:hover,
 .fravaer:hover {
-  background-color: var(--a-green-300);
-  border-color: var(--a-green-300);
+  background-color: var(--ax-success-400);
+  border-color: var(--ax-success-400);
 }
 
 .timerFerie,
 .timerFravaer {
-  background-color: var(--a-green-50);
-  border-color: var(--a-green-50);
+  background-color: var(--ax-success-100);
+  border-color: var(--ax-success-100);
 }
 
 .sykdom,
 .sykOgFravaer {
-  background-color: var(--a-orange-200);
-  border-color: var(--a-orange-200);
+  background-color: var(--aktivitetFargeSykdom);
+  border-color: var(--aktivitetFargeSykdom);
 }
 
 .sykdom:hover,
 .sykOgFravaer:hover {
-  background-color: var(--a-orange-300);
-  border-color: var(--a-orange-300);
+  background-color: var(--ax-warning-400);
+  border-color: var(--ax-warning-400);
 }
 
 .sykOgFravaer::after {
@@ -264,32 +263,32 @@
   position: absolute;
   right: -12.5%;
   top: -12.5%;
-  background-color: var(--a-green-200);
-  border-color: var(--a-green-200);
+  background-color: var(--aktivitetFargeFravaer);
+  border-color: var(--aktivitetFargeFravaer);
   border-radius: 50%;
   height: 50%;
   width: 50%;
 }
 
 .sykOgFravaer:hover::after {
-  background-color: var(--a-green-300);
-  border-color: var(--a-green-300);
+  background-color: var(--ax-success-400);
+  border-color: var(--ax-success-400);
 }
 
 .knappKontainer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--a-spacing-2);
-  margin-top: var(--a-spacing-8);
+  gap: var(--ax-space-8);
+  margin-top: var(--ax-space-32);
 }
 
 .tekstSubtil {
-  color: var(--a-text-subtle);
+  color: var(--ax-text-neutral-subtle);
 }
 
 @media screen and (min-width: 768px) {
   .ukedag {
-    font-size: var(--a-font-size-medium);
+    font-size: var(--ax-font-size-medium);
   }
 
   .datoKontainer {
@@ -298,7 +297,7 @@
   }
 
   .header {
-    font-size: var(--a-font-size-heading-medium);
+    font-size: var(--ax-font-size-heading-medium);
   }
 
   .redigeringsAlternativer {
@@ -307,14 +306,14 @@
   }
 
   .redigeringsAlternativer a {
-    margin-bottom: var(--a-spacing-4);
+    margin-bottom: var(--ax-space-16);
   }
 
   .dato {
     width: calc(var(--dato-strl) * 2);
     height: calc(var(--dato-strl) * 2);
-    font-size: var(--a-font-size-large);
-    line-height: var(--a-font-size-large);
+    font-size: var(--ax-font-size-large);
+    line-height: var(--ax-font-size-large);
   }
 
   .readonly {
@@ -326,7 +325,7 @@
     left: calc((calc(var(--dato-strl) * 2) - calc(var(--dato-strl) * 1.5)) / 2);
     border-radius: 0 0 10px 10px;
     padding-top: calc(var(--dato-strl) * 0.3);
-    font-size: var(--a-font-size-medium);
+    font-size: var(--ax-font-size-medium);
     width: calc(var(--dato-strl) * 1.5);
     height: calc(var(--dato-strl) * 1.4);
   }
