@@ -5,8 +5,8 @@
 Appen er basert på [React Router v7](https://reactrouter.com/)
 
 ```
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 1. Kopier `.env.example` og rename til `.env`. 
@@ -18,7 +18,7 @@ npm run dev
 
 ## Kjøre mot dev-APIer i localhost
 
-For å kjøre requester mot dp-rapportering må vi ha et token, dette kan genereres med `npm run token`. Det genererte 
+For å kjøre requester mot dp-rapportering må vi ha et token, dette kan genereres med `pnpm run token`. Det genererte 
 tokenet legges automagisk inn i `.env`-filen.
 
 Tokenet kan også genereres med [tokenx-token-generator](https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering).
@@ -39,26 +39,9 @@ DP_RAPPORTERING_TOKEN="langStrengHerFraAccess_token"
 
 ### Feil node versjon
 
-```npm ERR! code EBADENGINE
-npm ERR! engine Unsupported engine
-npm ERR! engine Not compatible with your version of node/npm: execa@7.1.1
-npm ERR! notsup Not compatible with your version of node/npm: execa@7.1.1
-npm ERR! notsup Required: {"node":"^14.18.0 || ^16.14.0 || >=18.0.0"}
-npm ERR! notsup Actual: {"npm":"9.6.3","node":"v16.13.0"}
-
-npm ERR! A complete log of this run can be found in: /Use
-```
-
 Kjør `$ nvm use` og det burde løse problemet.
 
 ### Manglende autentisering ved installasjon av @navikt npm pakker
-
-```
-npm ERR! code E401
-npm ERR! 401 Unauthorized - GET https://npm.pkg.github.com/download/@navikt/oasis/0.3.7/5c5965d82448aa24ef9c53430a745429555e153f - unauthenticated: User cannot be authenticated with the token provided.
-
-npm ERR! A complete log of this run can be found in: /Users/<user>/.npm/\_logs/2023-09-05T08_44_38_897Z-debug-0.log
-```
 
 Github token er utdatert.
 

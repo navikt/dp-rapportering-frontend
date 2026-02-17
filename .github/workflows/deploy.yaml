@@ -81,19 +81,20 @@ jobs:
         id: node_modules
         with:
           path: ./node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
+          key: modules-${{ hashFiles('pnpm-lock.yaml') }}
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v6
         with:
           node-version: '24.x'
-          cache: 'npm'
+          cache: 'pnpm'
           registry-url: 'https://npm.pkg.github.com'
 
-      - run: npm ci --ignore-scripts
+      - run: pnpm install --ignore-scripts --frozen-lockfile
         if: steps.node_modules.outputs.cache-hit != 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
-      - run: npm run test
+      - run: pnpm run test
 
   deploy-demo:
     needs: [build-demo, test]
