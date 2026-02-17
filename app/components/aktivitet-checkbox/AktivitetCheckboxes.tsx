@@ -96,11 +96,13 @@ export function AktivitetCheckboxes({
               key={aktivitet}
               disabled={erIkkeAktiv(verdi, aktivitet)}
               value={aktivitet}
-              description={hentAktivitetBeskrivelse(aktivitet, getAppText)}
               data-testid={`aktivitet-radio-${aktivitet}`}
               name={name}
             >
-              {aktivitetTypeMap(aktivitet, getAppText)}
+              <div>{aktivitetTypeMap(aktivitet, getAppText)}</div>
+              <div className={styles.description}>
+                {hentAktivitetBeskrivelse(aktivitet, getAppText)}
+              </div>
             </Checkbox>
             {verdi.includes(AktivitetType.Arbeid) && aktivitet === "Arbeid" && (
               <div className={styles.timer}>

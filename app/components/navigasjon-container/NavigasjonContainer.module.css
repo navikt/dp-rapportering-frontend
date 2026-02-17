@@ -1,13 +1,13 @@
 .container {
   display: flex;
-  gap: var(--a-spacing-4);
-  margin: var(--a-spacing-8) 0;
+  gap: var(--ax-space-16);
+  margin: var(--ax-space-32) 0;
   justify-content: center;
 }
 
-.knapp:global(.navds-button) {
+.knapp:global(.aksel-button) {
   text-wrap: nowrap;
-  padding: var(--a-spacing-3) var(--a-spacing-8);
+  padding: var(--ax-space-12) var(--ax-space-32);
   flex: 1;
 }
 
@@ -16,12 +16,12 @@
     justify-content: center;
   }
 
-  .knapp:global(.navds-button) {
-    padding: var(--a-spacing-4) var(--a-spacing-12);
+  .knapp:global(.aksel-button) {
+    padding: var(--ax-space-16) var(--ax-space-48);
     flex: none;
   }
 
-  .knapp:global(.navds-button) span {
-    font-size: var(--a-font-size-large);
+  .knapp:global(.aksel-button) span {
+    font-size: var(--ax-font-size-large);
   }
 }
