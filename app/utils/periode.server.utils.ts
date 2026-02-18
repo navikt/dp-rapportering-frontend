@@ -27,8 +27,8 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
 
   // 2. /endre-ruten starter endringsflyt for innsendte meldekort
   // Denne ruten mottar original periode-ID (eks: ID=123) og validerer kanEndres
-  // Ved godkjent endring opprettes det en ny working copy med TilUtfylling-status (eks: ID=456)
-  // Bruker redirectes deretter til /endring/* med det nye working copy-ID-et
+  // Ved godkjent endring opprettes det en ny redigerbar kopi med TilUtfylling-status (eks: ID=456)
+  // Bruker redirectes deretter til /endring/* med ID-et til den redigerbare kopien
   if (isEndrePath) {
     if (!periode.kanEndres) {
       logg({
@@ -43,9 +43,9 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
   }
 
   // 3. Endringsflyt-sider (/endring/* og /endring) krever at perioden er i redigeringsmodus
-  // Disse sidene mottar working copy-ID (eks: ID=456) opprettet av /endre-ruten
-  // Working copy har alltid status=TilUtfylling og kan redigeres
-  // Hvis status ikke er TilUtfylling, er dette en ugyldig working copy eller utdatert URL
+  // Disse sidene mottar ID til redigerbar kopi (eks: ID=456) opprettet av /endre-ruten
+  // Redigerbar kopi har alltid status=TilUtfylling og kan redigeres
+  // Hvis status ikke er TilUtfylling, er dette en ugyldig kopi eller utdatert URL
   if (isEndringFlow) {
     if (periode.status !== IRapporteringsperiodeStatus.TilUtfylling) {
       logg({
