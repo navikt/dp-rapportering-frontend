@@ -41,10 +41,12 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         <PortableText value={getRichText("rapportering-periode-kvittering-info")} />
       </Alert>
 
-      <Accordion headingSize="medium">
+      <Accordion data-color="neutral">
         <Accordion.Item>
-          <Accordion.Header>
-            {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
+          <Accordion.Header className={styles.kvitteringTittel}>
+            <Heading level="3" size="medium">
+              {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
+            </Heading>
           </Accordion.Header>
           <Accordion.Content className={styles.kvitteringInnhold}>
             <div className="oppsummering">
@@ -66,7 +68,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
-      <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--a-spacing-8) auto" }} />
+      <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--ax-space-32) auto" }} />
 
       <NavigasjonContainer>
         {harNestePeriode ? (

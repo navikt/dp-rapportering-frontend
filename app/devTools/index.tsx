@@ -72,9 +72,10 @@ export function DevTools() {
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <Tooltip content="Scenario-velger">
           <Button
+            data-color="neutral"
             onClick={() => ref.current?.showModal()}
             icon={<SandboxIcon title="Åpne scenarioer-velgeren" />}
-            variant="tertiary-neutral"
+            variant="tertiary"
           />
         </Tooltip>
       </div>

@@ -1,16 +1,17 @@
 .innsendtPerioder {
-  margin-top: var(--a-spacing-8);
+  margin-top: var(--ax-space-32);
 }
 
 .innsendtAccordionHeader {
-  background-color: var(--a-bg-subtle);
+  background-color: var(--ax-bg-neutral-soft);
+  border-radius: 0;
 }
 
-.innsendtAccordionHeader :global(.navds-accordion__icon-wrapper) {
+.innsendtAccordionHeader :global(.aksel-accordion__icon-wrapper) {
   align-self: start;
 }
 
-.innsendtAccordionHeader span:global(.navds-accordion__header-content) {
+.innsendtAccordionHeader span:global(.aksel-heading) {
   display: block;
   width: 100%;
 }
@@ -21,52 +22,57 @@
 }
 
 .innsendtAccordionContent {
-  background-color: var(--a-bg-subtle);
+  background-color: var(--ax-bg-neutral-soft);
   padding-left: 0;
   padding-right: 0;
-  border-bottom: 2px solid var(--a-border-divider);
+  box-shadow: none;
+  margin: 0;
+}
+
+.innsendtAccordionContent :global(.aksel-accordion__content-inner) {
+  padding: 0;
 }
 
 .innsendtPeriodeHeaderDato {
-  font-size: var(--a-font-size-medium);
-  font-weight: var(--a-font-weight-regular);
-  line-height: var(--a-spacing-6);
+  font-size: var(--ax-font-size-medium);
+  font-weight: var(--ax-font-weight-regular);
+  line-height: var(--ax-space-24);
 }
 
 .innsendtOppsummering {
-  margin: 0 var(--a-spacing-4);
+  margin: 0 var(--ax-space-16);
   padding-top: 0;
-  padding-bottom: var(--a-spacing-5);
+  padding-bottom: var(--ax-space-20);
 }
 
 .innsendtOppsummering:nth-child(n + 2) {
-  border-top: 2px solid var(--a-border-divider);
+  border-top: 2px solid var(--ax-border-neutral-subtle);
   border-radius: 0;
-  margin-top: var(--a-spacing-5);
+  margin-top: var(--ax-space-20);
 }
 
 .innsendtPeriodeHeaderStatus {
   font-weight: normal;
-  border: 1px solid var(--a-gray-900);
-  border-radius: var(--a-border-radius-medium);
-  padding: 0 var(--a-spacing-2);
+  border: 1px solid var(--ax-neutral-1000);
+  border-radius: var(--ax-radius-4);
+  padding: 0 var(--ax-space-8);
   height: fit-content;
-  font-size: var(--a-font-size-medium);
+  font-size: var(--ax-font-size-medium);
 }
 
 .tilutfylling,
 .innsendt,
 .endret {
-  background-color: var(--a-lightblue-100);
-  border-color: var(--a-lightblue-700);
+  background-color: var(--ax-bg-brand-blue-moderateA);
+  border-color: var(--ax-border-info-strong);
 }
 
 .feilet {
-  background-color: var(--a-red-100);
-  border-color: var(--a-red-59);
+  background-color: var(--ax-danger-200);
+  border-color: var(--ax-border-danger-strong);
 }
 
 .ferdig {
-  background-color: var(--a-green-100);
-  border-color: var(--a-green-500);
+  background-color: var(--ax-success-200);
+  border-color: var(--ax-success-600);
 }

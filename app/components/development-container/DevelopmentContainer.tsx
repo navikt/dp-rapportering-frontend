@@ -14,7 +14,7 @@ export function DevelopmentContainer({ children }: IProps) {
     <>
       {isLocalhost && (
         <div className={styles.container}>
-          <Tag variant="neutral" className={styles.tag}>
+          <Tag data-color="neutral" variant="outline" className={styles.tag}>
             Development
           </Tag>
           {children}
