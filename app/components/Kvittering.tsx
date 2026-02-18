@@ -37,10 +37,6 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         </Heading>
       </Alert>
 
-      <Alert variant="info" className="my-4 alert-with-rich-text">
-        <PortableText value={getRichText("rapportering-periode-kvittering-info")} />
-      </Alert>
-
       <Accordion data-color="neutral">
         <Accordion.Item>
           <Accordion.Header className={styles.kvitteringTittel}>
@@ -65,6 +61,16 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
                 {getAppText("rapportering-skriv-ut")}
               </Button>
             </div>
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item>
+          <Accordion.Header>
+            <Heading level="3" size="medium">
+              {getAppText("rapportering-periode-kvittering-info-tittel")}
+            </Heading>
+          </Accordion.Header>
+          <Accordion.Content className="alert-with-rich-text">
+            <PortableText value={getRichText("rapportering-periode-kvittering-info")} />
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>

@@ -12,7 +12,7 @@ export async function catchErrorResponse(
     } else if (e instanceof Error) {
       throw e;
     } else {
-      throw new Error("Noe skjedde feil");
+      throw new Error("Noe skjedde feil", { cause: e });
     }
   }
 }
