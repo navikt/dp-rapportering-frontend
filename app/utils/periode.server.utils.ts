@@ -3,7 +3,7 @@ import { redirect } from "react-router";
 import { logg } from "~/models/logger.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
-import { FEILTYPE, IRapporteringsperiodeStatus } from "./types";
+import { IRapporteringsperiodeStatus } from "./types";
 
 export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
   request: Request,
@@ -37,7 +37,7 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
         correlationId: null,
         body: { periodeId: periode.id, kanEndres: periode.kanEndres, url: path },
       });
-      throw redirect(`/?feil=${FEILTYPE.KAN_IKKE_ENDRES}`);
+      throw redirect("/");
     }
     return;
   }
@@ -54,7 +54,7 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
         correlationId: null,
         body: { periodeId: periode.id, status: periode.status, url: path },
       });
-      throw redirect(`/?feil=${FEILTYPE.KAN_IKKE_ENDRES}`);
+      throw redirect("/");
     }
     return;
   }
@@ -69,7 +69,7 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
         correlationId: null,
         body: { periodeId: periode.id, status: periode.status, url: path },
       });
-      throw redirect(`/?feil=${FEILTYPE.ALLEREDE_INNSENDT}`);
+      throw redirect("/");
     }
   }
 }

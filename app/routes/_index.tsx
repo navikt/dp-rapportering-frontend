@@ -10,7 +10,6 @@ import {
   useLoaderData,
   useNavigation,
   useRouteError,
-  useSearchParams,
 } from "react-router";
 
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
@@ -25,7 +24,7 @@ import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
-import { FEILTYPE, TIDSSONER } from "~/utils/types";
+import { TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import type { action as StartAction } from "./api.start";
@@ -47,14 +46,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Landingsside() {
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
-  const [searchParams] = useSearchParams();
 
   const { getAppText, getLink, getRichText } = useSanity();
   const startFetcher = useFetcher<typeof StartAction>();
   const { trackSkjemaStartet, trackNavigere } = useAnalytics();
 
   const forstePeriode = rapporteringsperioder[0];
-  const feilType = searchParams.get("feil");
 
   const navigation = useNavigation();
   const isSubmitting = useIsSubmitting(navigation);
@@ -73,18 +70,6 @@ export default function Landingsside() {
 
   return (
     <>
-      {feilType === FEILTYPE.ALLEREDE_INNSENDT && (
-        <Alert variant="warning" className="my-4 alert-with-rich-text">
-          <PortableText value={getRichText("rapportering-feil-allerede-innsendt")} />
-        </Alert>
-      )}
-
-      {feilType === FEILTYPE.KAN_IKKE_ENDRES && (
-        <Alert variant="warning" className="my-4 alert-with-rich-text">
-          <PortableText value={getRichText("rapportering-feil-kan-ikke-endres")} />
-        </Alert>
-      )}
-
       {rapporteringsperioder.length === 0 && (
         <Alert variant="info" className="my-4 alert-with-rich-text">
           <PortableText value={getRichText("rapportering-ingen-meldekort")} />
