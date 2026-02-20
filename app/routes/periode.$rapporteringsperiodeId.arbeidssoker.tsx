@@ -49,10 +49,13 @@ export default function ArbeidssøkerRegisterSide() {
   const steg = 4;
   const nesteMeldeperiode = nestePeriode(periode.periode);
 
+  // Fra-dato skal vise årstall hvis det er ulikt til-datoens årstall, eller hvis det er ulikt dagens årstall.
+  // Til-datoen viser alltid årstall
   const dateFormat =
-    nesteMeldeperiode.fraOgMed.getFullYear() === nesteMeldeperiode.tilOgMed.getFullYear()
-      ? "dd. MMMM"
-      : "dd. MMMM yyyy";
+    nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
+    nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
+      ? "d. MMMM yyyy"
+      : "d. MMMM";
 
   function neste() {
     trackSkjemaStegFullført({
@@ -95,7 +98,7 @@ export default function ArbeidssøkerRegisterSide() {
           disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
           legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
             fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
-            tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat }),
+            tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
           })}
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}

@@ -81,7 +81,11 @@ export function getArbeidssokerAlert(
   getRichText: GetRichText,
 ): string {
   if (periode.registrertArbeidssoker === true) {
-    return `<p>${getAppText("rapportering-arbeidssokerregister-alert-innhold-registrert-v2")}</p>`;
+    return renderToString(
+      <PortableText
+        value={getRichText("rapportering-arbeidssokerregister-alert-innhold-registrert-v2")}
+      />,
+    );
   }
 
   if (periode.registrertArbeidssoker === false) {
@@ -90,7 +94,7 @@ export function getArbeidssokerAlert(
     return renderToString(
       <PortableText
         value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2", {
-          dato: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "dd. MMMM yyyy" }),
+          dato: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "d. MMMM yyyy" }),
         })}
       />,
     );
@@ -463,9 +467,10 @@ export function htmlForArbeidssoker(props: IProps): string {
 
   const nesteMeldeperiode = nestePeriode(periode.periode);
   const dateFormat =
-    nesteMeldeperiode.fraOgMed.getFullYear() === nesteMeldeperiode.tilOgMed.getFullYear()
-      ? "dd. MMMM"
-      : "dd. MMMM yyyy";
+    nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
+    nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
+      ? "d. MMMM yyyy"
+      : "d. MMMM";
 
   const seksjoner: string[] = [];
 

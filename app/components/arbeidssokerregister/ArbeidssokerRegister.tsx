@@ -27,11 +27,13 @@ export function ArbeidssokerAlert({ periode }: IProps) {
 }
 
 export function RegistertArbeidssokerAlert() {
-  const { getAppText } = useSanity();
+  const { getRichText } = useSanity();
 
   return (
-    <Alert variant="info" className="my-6">
-      {getAppText("rapportering-arbeidssokerregister-alert-innhold-registrert-v2")}
+    <Alert variant="info" className="my-6 alert-with-rich-text">
+      <PortableText
+        value={getRichText("rapportering-arbeidssokerregister-alert-innhold-registrert-v2")}
+      />
     </Alert>
   );
 }
@@ -45,7 +47,7 @@ export function AvregistertArbeidssokerAlert({ periode }: IProps) {
     <Alert role="status" variant="warning" className="my-6 alert-with-rich-text">
       <PortableText
         value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2", {
-          dato: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "dd. MMMM yyyy" }),
+          dato: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "d. MMMM yyyy" }),
         })}
       />
     </Alert>
