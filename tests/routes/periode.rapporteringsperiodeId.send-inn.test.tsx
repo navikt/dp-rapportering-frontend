@@ -77,7 +77,7 @@ describe("RapporteringstypeSide", () => {
 
       // Arbeidssøkerregister
       expect(
-        screen.getByText(/rapportering-arbeidssokerregister-alert-tittel-avregistrert/),
+        screen.getByText(/rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2/),
       ).toBeInTheDocument();
     });
 
@@ -119,7 +119,7 @@ describe("RapporteringstypeSide", () => {
       bekreftAktivitet("rapportering-utdanning", /1 rapportering-dag/);
 
       expect(
-        screen.getByText(/rapportering-arbeidssokerregister-alert-tittel-registrert/),
+        screen.getByText(/rapportering-arbeidssokerregister-alert-innhold-registrert-v2/),
       ).toBeInTheDocument();
     });
   });

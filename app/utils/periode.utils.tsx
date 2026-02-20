@@ -9,7 +9,7 @@ import {
 } from "~/models/rapporteringsperiode.server";
 
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
-import { formaterDato, formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
+import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 import { DecoratorLocale } from "./dekoratoren.utils";
 import { IRapporteringsperiodeStatus, KortType } from "./types";
 
@@ -192,25 +192,16 @@ export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): bool
   return periode.type !== KortType.ETTERREGISTRERT;
 }
 
-interface IFormattertDato {
+interface IPeriodeDate {
   /** Formatert fraOgMed-dato */
-  fraOgMed: string;
+  fraOgMed: Date;
   /** Formatert tilOgMed-dato */
-  tilOgMed: string;
+  tilOgMed: Date;
 }
 
-export function nestePeriode(periode: IPeriode, dateFormat: string = "dd/MM"): IFormattertDato {
+export function nestePeriode(periode: IPeriode): IPeriodeDate {
   const fraOgMed = addDays(periode.tilOgMed, 1);
   const tilOgMed = addDays(fraOgMed, 13);
 
-  return {
-    fraOgMed: formaterDato({
-      dato: fraOgMed,
-      dateFormat,
-    }),
-    tilOgMed: formaterDato({
-      dato: tilOgMed,
-      dateFormat,
-    }),
-  };
+  return { fraOgMed, tilOgMed };
 }

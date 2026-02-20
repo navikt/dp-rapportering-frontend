@@ -1,8 +1,9 @@
-import { Alert, Heading } from "@navikt/ds-react";
+import { Alert } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 
 import { useSanity } from "~/hooks/useSanity";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { formaterDato } from "~/utils/dato.utils";
 import { nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 
 interface IProps {
@@ -30,26 +31,21 @@ export function RegistertArbeidssokerAlert() {
 
   return (
     <Alert variant="info" className="my-6">
-      <Heading spacing size="xsmall">
-        {getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert-v2")}
-      </Heading>
+      {getAppText("rapportering-arbeidssokerregister-alert-innhold-registrert-v2")}
     </Alert>
   );
 }
 
 export function AvregistertArbeidssokerAlert({ periode }: IProps) {
-  const { getAppText, getRichText } = useSanity();
+  const { getRichText } = useSanity();
 
-  const nesteMeldeperiode = nestePeriode(periode.periode, "dd.MM.yyyy");
+  const nesteMeldeperiode = nestePeriode(periode.periode);
 
   return (
-    <Alert role="status" variant="warning" className="my-6">
-      <Heading spacing size="xsmall">
-        {getAppText("rapportering-arbeidssokerregister-alert-tittel-avregistrert")}
-      </Heading>
+    <Alert role="status" variant="warning" className="my-6 alert-with-rich-text">
       <PortableText
         value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2", {
-          dato: nesteMeldeperiode.fraOgMed,
+          dato: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "dd. MMMM yyyy" }),
         })}
       />
     </Alert>

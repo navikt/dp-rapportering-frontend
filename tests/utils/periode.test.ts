@@ -433,31 +433,17 @@ describe("redirectTilForsideHvisMeldekortIkkeKanFyllesUt", () => {
 });
 
 describe("gir neste meldeperiode", () => {
-  test("skal gi neste periode med riktig datoformat", () => {
+  test("skal gi neste periode", () => {
     const periode = {
       fraOgMed: "2026-02-09",
       tilOgMed: "2026-02-22",
     };
 
     const nesteMeldekortperiode = {
-      fraOgMed: "23/02",
-      tilOgMed: "08/03",
+      fraOgMed: new Date("2026-02-23"),
+      tilOgMed: new Date("2026-03-08"),
     };
 
     expect(nestePeriode(periode)).toEqual(nesteMeldekortperiode);
-  });
-
-  test("skal gi neste periode med datoformat dd.MM.yyyy", () => {
-    const periode = {
-      fraOgMed: "2026-02-09",
-      tilOgMed: "2026-02-22",
-    };
-
-    const nesteMeldekortperiode = {
-      fraOgMed: "23.02.2026",
-      tilOgMed: "08.03.2026",
-    };
-
-    expect(nestePeriode(periode, "dd.MM.yyyy")).toEqual(nesteMeldekortperiode);
   });
 });

@@ -56,7 +56,6 @@ describe("getArbeidssokerAlert", () => {
       mockGetAppText,
       mockGetRichText,
     );
-    expect(alert).toContain("rapportering-arbeidssokerregister-alert-tittel-avregistrert");
     expect(alert).toContain("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2");
   });
 });

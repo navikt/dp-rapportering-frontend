@@ -15,6 +15,7 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
+import { formaterDato } from "~/utils/dato.utils";
 import { kanSendes, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
@@ -47,6 +48,11 @@ export default function ArbeidssøkerRegisterSide() {
   const stegnavn = "arbeidssoker";
   const steg = 4;
   const nesteMeldeperiode = nestePeriode(periode.periode);
+
+  const dateFormat =
+    nesteMeldeperiode.fraOgMed.getFullYear() === nesteMeldeperiode.tilOgMed.getFullYear()
+      ? "dd. MMMM"
+      : "dd. MMMM yyyy";
 
   function neste() {
     trackSkjemaStegFullført({
@@ -88,9 +94,10 @@ export default function ArbeidssøkerRegisterSide() {
         <RadioGroup
           disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
           legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
-            fom: nesteMeldeperiode.fraOgMed,
-            tom: nesteMeldeperiode.tilOgMed,
+            fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
+            tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat }),
           })}
+          description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
           name="_action"
           value={periode.registrertArbeidssoker}

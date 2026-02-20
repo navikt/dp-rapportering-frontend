@@ -85,22 +85,15 @@ export function getArbeidssokerAlert(
   }
 
   if (periode.registrertArbeidssoker === false) {
-    const nesteMeldeperiode = nestePeriode(periode.periode, "dd.MM.yyyy");
+    const nesteMeldeperiode = nestePeriode(periode.periode);
 
-    return [
-      getHeader({
-        text: getAppText("rapportering-arbeidssokerregister-alert-tittel-avregistrert"),
-        level: "3",
-      }),
-
-      renderToString(
-        <PortableText
-          value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2", {
-            dato: nesteMeldeperiode.fraOgMed,
-          })}
-        />,
-      ),
-    ].join("");
+    return renderToString(
+      <PortableText
+        value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2", {
+          dato: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "dd. MMMM yyyy" }),
+        })}
+      />,
+    );
   }
 
   return "";
@@ -469,13 +462,18 @@ export function htmlForArbeidssoker(props: IProps): string {
   }
 
   const nesteMeldeperiode = nestePeriode(periode.periode);
+  const dateFormat =
+    nesteMeldeperiode.fraOgMed.getFullYear() === nesteMeldeperiode.tilOgMed.getFullYear()
+      ? "dd. MMMM"
+      : "dd. MMMM yyyy";
 
   const seksjoner: string[] = [];
 
   const legend = getAppText("rapportering-arbeidssokerregister-tittel-v2", {
-    fom: nesteMeldeperiode.fraOgMed,
-    tom: nesteMeldeperiode.tilOgMed,
+    fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
+    tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat }),
   });
+  const description = getAppText("rapportering-arbeidssokerregister-subtittel");
   const options = [
     { value: true, label: "rapportering-arbeidssokerregister-svar-ja" },
     { value: false, label: "rapportering-arbeidssokerregister-svar-nei" },
@@ -492,7 +490,7 @@ export function htmlForArbeidssoker(props: IProps): string {
 
   const radioGroup = `
     <form>
-      <fieldset><legend>${legend}</legend><div>${options}</div></fieldset>
+      <fieldset><legend>${legend}</legend><p>${description}</p><div>${options}</div></fieldset>
     </form>
   `;
   seksjoner.push(radioGroup);
