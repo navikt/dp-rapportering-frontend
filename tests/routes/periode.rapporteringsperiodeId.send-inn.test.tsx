@@ -66,7 +66,7 @@ describe("RapporteringstypeSide", () => {
       expect(await screen.findByText(/rapportering-meldekort-ikke-sendt-enda/)).toBeInTheDocument();
 
       expect(screen.getAllByText(/rapportering-uke 1 - 2/i)).toHaveLength(2);
-      expect(screen.getAllByText(/01. januar 2024 - 14. januar 2024/i)).toHaveLength(2);
+      expect(screen.getAllByText(/1. januar 2024 - 14. januar 2024/i)).toHaveLength(2);
       testKalender(rapporteringsperiode);
 
       // AktivitetOppsummering
@@ -77,7 +77,7 @@ describe("RapporteringstypeSide", () => {
 
       // Arbeidssøkerregister
       expect(
-        screen.getByText(/rapportering-arbeidssokerregister-alert-tittel-avregistrert/),
+        screen.getByText(/rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2/),
       ).toBeInTheDocument();
     });
 
@@ -119,7 +119,7 @@ describe("RapporteringstypeSide", () => {
       bekreftAktivitet("rapportering-utdanning", /1 rapportering-dag/);
 
       expect(
-        screen.getByText(/rapportering-arbeidssokerregister-alert-tittel-registrert/),
+        screen.getByText(/rapportering-arbeidssokerregister-alert-innhold-registrert-v2/),
       ).toBeInTheDocument();
     });
   });
