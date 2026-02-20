@@ -81,7 +81,7 @@ export function getArbeidssokerAlert(
   getRichText: GetRichText,
 ): string {
   if (periode.registrertArbeidssoker === true) {
-    return `<p>${getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert-v2")}</p>`;
+    return `<p>${getAppText("rapportering-arbeidssokerregister-alert-innhold-registrert-v2")}</p>`;
   }
 
   if (periode.registrertArbeidssoker === false) {

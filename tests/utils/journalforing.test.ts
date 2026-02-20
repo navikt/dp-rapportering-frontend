@@ -47,7 +47,7 @@ describe("getArbeidssokerAlert", () => {
 
   it("viser alert for arbeidssøker", () => {
     const alert = getArbeidssokerAlert(periode, mockGetAppText, mockGetRichText);
-    expect(alert).toContain("rapportering-arbeidssokerregister-alert-tittel-registrert-v2");
+    expect(alert).toContain("rapportering-arbeidssokerregister-alert-innhold-registrert-v2");
   });
 
   it("viser alert for avregistrering av arbeidssøker", () => {
