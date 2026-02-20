@@ -65,7 +65,7 @@ export function Kalender(props: IProps) {
               return (
                 <th scope="col" key={`${periode.id}-${index}`} className={styles.ukedag}>
                   <span>{ukedag.kort}</span>
-                  <span className="navds-sr-only">{ukedag.lang}</span>
+                  <span className="aksel-sr-only">{ukedag.lang}</span>
                 </th>
               );
             })}

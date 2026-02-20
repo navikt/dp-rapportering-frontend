@@ -15,8 +15,8 @@
 .knappKontainer {
   display: flex;
   justify-content: center;
-  gap: var(--a-spacing-4);
-  margin-top: var(--a-spacing-8);
+  gap: var(--ax-space-16);
+  margin-top: var(--ax-space-32);
 }
 
 .registrertAktivitet {
@@ -27,42 +27,42 @@
   border: 0;
   max-width: 300px;
   width: 100%;
-  padding: var(--a-spacing-2) var(--a-spacing-4);
-  margin: 0 calc(var(--a-spacing-1) * -1) var(--a-spacing-2);
-  background-color: var(--a-blue-200);
-  border-radius: var(--a-spacing-6);
+  padding: var(--ax-space-8) var(--ax-space-16);
+  margin: 0 calc(var(--ax-space-4) * -1) var(--ax-space-8);
+  background-color: var(--aktivitetFargeArbeid);
+  border-radius: var(--ax-space-24);
 }
 
 .feilmelding {
-  margin-top: var(--a-spacing-4);
+  margin-top: var(--ax-space-16);
 }
 
 .Arbeid {
-  background-color: var(--a-blue-200);
+  background-color: var(--aktivitetFargeArbeid);
 }
 
 .Syk {
-  background-color: var(--a-orange-200);
+  background-color: var(--aktivitetFargeSykdom);
 }
 
 .Ferie {
-  background-color: var(--a-green-200);
+  background-color: var(--aktivitetFargeFravaer);
 }
 
 @media screen and (min-width: 768px) {
   .kalender {
-    margin-left: calc(var(--a-spacing-6) * -1);
-    width: calc(var(--a-spacing-12) + 100%);
+    margin-left: calc(var(--ax-space-24) * -1);
+    width: calc(var(--ax-space-48) + 100%);
   }
 
   .kalenderUkedag {
-    font-size: var(--a-font-size-medium);
+    font-size: var(--ax-font-size-medium);
   }
 
   .kalenderDato {
     width: 60px;
     height: 60px;
-    font-size: var(--a-font-size-large);
+    font-size: var(--ax-font-size-large);
   }
 
   .aktivitetKontainer {

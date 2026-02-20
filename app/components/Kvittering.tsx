@@ -37,14 +37,12 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         </Heading>
       </Alert>
 
-      <Alert variant="info" className="my-4 alert-with-rich-text">
-        <PortableText value={getRichText("rapportering-periode-kvittering-info")} />
-      </Alert>
-
-      <Accordion headingSize="medium">
+      <Accordion data-color="neutral">
         <Accordion.Item>
-          <Accordion.Header>
-            {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
+          <Accordion.Header className={styles.kvitteringTittel}>
+            <Heading level="3" size="medium">
+              {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
+            </Heading>
           </Accordion.Header>
           <Accordion.Content className={styles.kvitteringInnhold}>
             <div className="oppsummering">
@@ -65,8 +63,18 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
             </div>
           </Accordion.Content>
         </Accordion.Item>
+        <Accordion.Item>
+          <Accordion.Header>
+            <Heading level="3" size="medium">
+              {getAppText("rapportering-periode-kvittering-info-tittel")}
+            </Heading>
+          </Accordion.Header>
+          <Accordion.Content className="alert-with-rich-text">
+            <PortableText value={getRichText("rapportering-periode-kvittering-info")} />
+          </Accordion.Content>
+        </Accordion.Item>
       </Accordion>
-      <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--a-spacing-8) auto" }} />
+      <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--ax-space-32) auto" }} />
 
       <NavigasjonContainer>
         {harNestePeriode ? (

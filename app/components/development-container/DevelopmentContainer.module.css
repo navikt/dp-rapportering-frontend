@@ -1,11 +1,11 @@
 .container {
   position: relative;
-  border: 1px solid var(--a-purple-500);
+  border: 1px solid var(--ax-meta-purple-600);
   border-radius: 4px;
-  background-color: var(--a-purple-100);
+  background-color: var(--ax-meta-purple-200);
   max-width: var(--app-max-width);
   padding: var(--app-padding);
-  margin: var(--a-spacing-10) auto var(--a-spacing-8);
+  margin: var(--ax-space-40) auto var(--ax-space-32);
 }
 
 .tag {

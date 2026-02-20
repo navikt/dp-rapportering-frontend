@@ -1,7 +1,7 @@
 .container {
-  margin-top: var(--a-spacing-4);
+  margin-top: var(--ax-space-16);
 }
 
 .container > p {
-  color: var(--a-text-subtle);
+  color: var(--ax-text-neutral-subtle);
 }

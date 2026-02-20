@@ -1,7 +1,9 @@
 FROM node:24-alpine AS node
+RUN corepack enable
+RUN corepack prepare pnpm@10.29.3 --activate
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
-RUN npm config set @navikt:registry=https://npm.pkg.github.com
+    pnpm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
+RUN pnpm config set @navikt:registry=https://npm.pkg.github.com
 
 
 # build app
@@ -15,10 +17,10 @@ COPY ./public ./public
 COPY ./vite.config.ts ./
 COPY ./react-router.config.ts ./
 COPY ./package.json ./
-COPY ./package-lock.json  ./
+COPY ./pnpm-lock.yaml  ./
 
-RUN npm ci --ignore-scripts
-RUN npm run build
+RUN pnpm install --ignore-scripts --frozen-lockfile
+RUN pnpm run build
 
 
 # install dependencies
@@ -26,9 +28,9 @@ FROM node AS app-dependencies
 WORKDIR /app
 
 COPY ./package.json ./
-COPY ./package-lock.json  ./
+COPY ./pnpm-lock.yaml  ./
 
-RUN npm ci --ignore-scripts --omit dev
+RUN pnpm install --ignore-scripts --frozen-lockfile --prod
 
 
 # export build to filesystem (GitHub)
@@ -37,7 +39,7 @@ COPY --from=app-build /app/build /
 
 
 # runtime
-FROM gcr.io/distroless/nodejs22-debian12 AS runtime
+FROM gcr.io/distroless/nodejs24-debian12 AS runtime
 WORKDIR /app
 
 ARG NODE_ENV=production
@@ -49,4 +51,4 @@ COPY ./package.json ./package.json
 COPY --from=app-build /app/build/ ./build/
 COPY --from=app-dependencies /app/node_modules ./node_modules
 
-CMD ["./node_modules/.bin/react-router-serve", "./build/server/index.js"]
+CMD ["./node_modules/@react-router/serve/dist/cli.js", "./build/server/index.js"]

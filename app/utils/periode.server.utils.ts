@@ -5,30 +5,71 @@ import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 import { IRapporteringsperiodeStatus } from "./types";
 
-function kanIkkeFyllesUt(status: IRapporteringsperiodeStatus): boolean {
-  return status !== IRapporteringsperiodeStatus.TilUtfylling;
-}
-
 export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
   request: Request,
   periode: IRapporteringsperiode,
 ): void {
   const url = new URL(request.url);
-  const pathSegments = url.pathname.split("/");
+  const path = url.pathname;
 
-  const erBekreftelseSide = pathSegments.includes("bekreftelse");
-  const erEndringsflyt = pathSegments.includes("endring");
-  const erStartEndring = pathSegments.includes("endre");
-  const erUtfyllingsSide = !erBekreftelseSide && !erEndringsflyt && !erStartEndring;
+  // Klassifiser URL-sti for å identifisere hvilken type side brukeren prøver å nå
+  const isBekreftelseSide = path.includes("/bekreftelse");
+  const isEndrePath = path.endsWith("/endre");
+  const isEndringFlow =
+    (path.includes("/endring/") || path.endsWith("/endring")) && !isBekreftelseSide;
+  const isNormalFlow = !path.includes("/endring") && !path.includes("/endre") && !isBekreftelseSide;
 
-  if (erUtfyllingsSide && kanIkkeFyllesUt(periode.status)) {
-    logg({
-      type: "warn",
-      message: `Bruker prøvde å fylle ut periode som ikke er TilUtfylling, ID: ${periode.id}`,
-      correlationId: null,
-      body: { periodeId: periode.id, status: periode.status, url: url.pathname },
-    });
+  // 1. Bekreftelsessider skal alltid være tilgjengelige
+  // Brukere må kunne se bekreftelse etter innsending/endring uavhengig av periodestatus
+  if (isBekreftelseSide) {
+    return;
+  }
 
-    throw redirect("../");
+  // 2. /endre-ruten starter endringsflyt for innsendte meldekort
+  // Denne ruten mottar original periode-ID (eks: ID=123) og validerer kanEndres
+  // Ved godkjent endring opprettes det en ny redigerbar kopi med TilUtfylling-status (eks: ID=456)
+  // Bruker redirectes deretter til /endring/* med ID-et til den redigerbare kopien
+  if (isEndrePath) {
+    if (!periode.kanEndres) {
+      logg({
+        type: "warn",
+        message: `Bruker prøvde å starte endring på periode som ikke kan endres, ID: ${periode.id}`,
+        correlationId: null,
+        body: { periodeId: periode.id, kanEndres: periode.kanEndres, url: path },
+      });
+      throw redirect("/");
+    }
+    return;
+  }
+
+  // 3. Endringsflyt-sider (/endring/* og /endring) krever at perioden er i redigeringsmodus
+  // Disse sidene mottar ID til redigerbar kopi (eks: ID=456) opprettet av /endre-ruten
+  // Redigerbar kopi har alltid status=TilUtfylling og kan redigeres
+  // Hvis status ikke er TilUtfylling, er dette en ugyldig kopi eller utdatert URL
+  if (isEndringFlow) {
+    if (periode.status !== IRapporteringsperiodeStatus.TilUtfylling) {
+      logg({
+        type: "warn",
+        message: `Bruker prøvde å endre periode som ikke er i redigeringsmodus, ID: ${periode.id}`,
+        correlationId: null,
+        body: { periodeId: periode.id, status: periode.status, url: path },
+      });
+      throw redirect("/");
+    }
+    return;
+  }
+
+  // 4. Vanlig utfylling krever status TilUtfylling
+  // Blokkerer tilgang til utfyllingssider for perioder som er Innsendt, Ferdig, Endret, eller Feilet
+  if (isNormalFlow) {
+    if (periode.status !== IRapporteringsperiodeStatus.TilUtfylling) {
+      logg({
+        type: "warn",
+        message: `Bruker prøvde å fylle ut periode som ikke er TilUtfylling, ID: ${periode.id}`,
+        correlationId: null,
+        body: { periodeId: periode.id, status: periode.status, url: path },
+      });
+      throw redirect("/");
+    }
   }
 }

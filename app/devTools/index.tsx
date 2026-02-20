@@ -16,6 +16,7 @@ export enum ScenarioType {
   innsendte = "innsendte",
   manuelt = "manuelt",
   etterregistrert = "etterregistrert",
+  bokmerket = "bokmerket",
 }
 interface IScenario {
   type: ScenarioType;
@@ -51,6 +52,10 @@ const scenarios: IScenario[] = [
     type: ScenarioType.etterregistrert,
     tittel: "Etterregistrert meldekort",
   },
+  {
+    type: ScenarioType.bokmerket,
+    tittel: "Bokmerket meldekort (Innsendt)",
+  },
 ];
 
 export function DevTools() {
@@ -67,9 +72,10 @@ export function DevTools() {
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <Tooltip content="Scenario-velger">
           <Button
+            data-color="neutral"
             onClick={() => ref.current?.showModal()}
             icon={<SandboxIcon title="Åpne scenarioer-velgeren" />}
-            variant="tertiary-neutral"
+            variant="tertiary"
           />
         </Tooltip>
       </div>
