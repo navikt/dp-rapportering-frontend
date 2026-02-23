@@ -55,9 +55,6 @@ describe("ArbeidssøkerRegisterSide", () => {
     });
 
     expect(await screen.findByText(/rapportering-arbeidssokerregister-tittel/)).toBeInTheDocument();
-    expect(
-      await screen.findByText(/rapportering-arbeidssokerregister-subtittel/),
-    ).toBeInTheDocument();
     expect(await screen.findByRole("radio", { name: /svar-ja/ })).toBeInTheDocument();
     expect(await screen.findByRole("radio", { name: /svar-nei/ })).toBeInTheDocument();
     expect(await screen.findByRole("button", { name: /rapportering-knapp-neste/ })).toHaveAttribute(
@@ -98,9 +95,7 @@ describe("ArbeidssøkerRegisterSide", () => {
     });
 
     await waitFor(() => expect(radioJa).toBeChecked());
-    expect(
-      await screen.findByRole("heading", { name: /alert-tittel-registrert/ }),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/alert-innhold-registrert-v2/)).toBeInTheDocument();
   });
 
   test("Skal svare med 'Nei'", async () => {
@@ -116,10 +111,7 @@ describe("ArbeidssøkerRegisterSide", () => {
     });
 
     await waitFor(() => expect(radioNei).toBeChecked());
-    expect(
-      await screen.findByRole("heading", { name: /alert-tittel-avregistrert/ }),
-    ).toBeInTheDocument();
-    expect(await screen.findByText(/alert-innhold-avregistrert/)).toBeInTheDocument();
+    expect(await screen.findByText(/alert-innhold-avregistrert-v2/)).toBeInTheDocument();
   });
 
   test("Skal være allerede besvart med 'Ja'", async () => {
@@ -134,9 +126,7 @@ describe("ArbeidssøkerRegisterSide", () => {
     const radioJa = await screen.findByRole("radio", { name: /svar-ja/ });
     expect(radioJa).toBeChecked();
 
-    expect(
-      await screen.findByRole("heading", { name: /alert-tittel-registrert/ }),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/alert-innhold-registrert-v2/)).toBeInTheDocument();
   });
 
   test("Skal være allerede besvart med 'Nei'", async () => {
@@ -150,10 +140,6 @@ describe("ArbeidssøkerRegisterSide", () => {
 
     const radioNei = await screen.findByRole("radio", { name: /svar-nei/ });
     expect(radioNei).toBeChecked();
-
-    expect(
-      await screen.findByRole("heading", { name: /alert-tittel-avregistrert/ }),
-    ).toBeInTheDocument();
-    expect(await screen.findByText(/alert-innhold-avregistrert/)).toBeInTheDocument();
+    expect(await screen.findByText(/alert-innhold-avregistrert-v2/)).toBeInTheDocument();
   });
 });

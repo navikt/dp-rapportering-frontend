@@ -1,7 +1,9 @@
+import { addDays } from "date-fns";
 import { parse } from "tinyduration";
 
 import { type GetAppText } from "~/hooks/useSanity";
 import {
+  IPeriode,
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
@@ -188,4 +190,18 @@ export function erPeriodeneLike(
 
 export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
   return periode.type !== KortType.ETTERREGISTRERT;
+}
+
+interface IPeriodeDate {
+  /** Formatert fraOgMed-dato */
+  fraOgMed: Date;
+  /** Formatert tilOgMed-dato */
+  tilOgMed: Date;
+}
+
+export function nestePeriode(periode: IPeriode): IPeriodeDate {
+  const fraOgMed = addDays(periode.tilOgMed, 1);
+  const tilOgMed = addDays(fraOgMed, 13);
+
+  return { fraOgMed, tilOgMed };
 }

@@ -28,6 +28,7 @@ import {
   hentTotaltArbeidstimerTekst,
   hentTotaltFravaerTekstMedType,
   hentUkeTekst,
+  nestePeriode,
   perioderSomKanSendes,
   periodeSomTimer,
   skalHaArbeidssokerSporsmal,
@@ -80,22 +81,23 @@ export function getArbeidssokerAlert(
   getRichText: GetRichText,
 ): string {
   if (periode.registrertArbeidssoker === true) {
-    return `<p>${getAppText("rapportering-arbeidssokerregister-alert-tittel-registrert")}</p>`;
+    return renderToString(
+      <PortableText
+        value={getRichText("rapportering-arbeidssokerregister-alert-innhold-registrert-v2")}
+      />,
+    );
   }
 
   if (periode.registrertArbeidssoker === false) {
-    return [
-      getHeader({
-        text: getAppText("rapportering-arbeidssokerregister-alert-tittel-avregistrert"),
-        level: "3",
-      }),
+    const nesteMeldeperiode = nestePeriode(periode.periode);
 
-      renderToString(
-        <PortableText
-          value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert")}
-        />,
-      ),
-    ].join("");
+    return renderToString(
+      <PortableText
+        value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2", {
+          dato: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "d. MMMM yyyy" }),
+        })}
+      />,
+    );
   }
 
   return "";
@@ -463,9 +465,19 @@ export function htmlForArbeidssoker(props: IProps): string {
     return "";
   }
 
+  const nesteMeldeperiode = nestePeriode(periode.periode);
+  const dateFormat =
+    nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
+    nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
+      ? "d. MMMM yyyy"
+      : "d. MMMM";
+
   const seksjoner: string[] = [];
 
-  const legend = getAppText("rapportering-arbeidssokerregister-tittel");
+  const legend = getAppText("rapportering-arbeidssokerregister-tittel-v2", {
+    fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
+    tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat }),
+  });
   const description = getAppText("rapportering-arbeidssokerregister-subtittel");
   const options = [
     { value: true, label: "rapportering-arbeidssokerregister-svar-ja" },
