@@ -24,7 +24,7 @@ on:
     outputs:
       image:
         description: "The docker image"
-        value: ${{ jobs.test.outputs.image }}
+        value: ${{ inputs.push_image && jobs.test.outputs.image || '' }}
 
 jobs:
   test:
