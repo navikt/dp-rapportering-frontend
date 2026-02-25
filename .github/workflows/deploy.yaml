@@ -1,60 +1,47 @@
 name: Build and deploy
 
-on: 
+on:
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/build-test.yaml
     permissions:
       contents: read
       id-token: write
       packages: write
-    outputs:
-      image: ${{ steps.docker-build-push.outputs.image }}
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '24.x'
-      - name: docker-build-push
-        uses: nais/docker-build-push@v0
-        id: docker-build-push
-        with:
-          team: teamdagpenger
-          push_image: true
-          dockerfile: Dockerfile
-          docker_context: .
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
+    with:
+      project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+      push_image: true
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
   build-demo:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/build-test.yaml
     permissions:
       contents: read
       id-token: write
       packages: write
-    outputs:
-      image: ${{ steps.docker-build-push.outputs.image }}
+    with:
+      project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+      push_image: true
+      build_args: RUNTIME_ENVIRONMENT=demo
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+
+  cdn-upload-demo:
+    name: Upload static files (demo)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-       - uses: actions/checkout@v6
-       - uses: actions/setup-node@v6
-         with:
-          node-version: '24.x'
-       - name: docker-build-push
-         uses: nais/docker-build-push@v0
-         id: docker-build-push
-         with:
-          team: teamdagpenger
-          push_image: true
-          dockerfile: Dockerfile
-          docker_context: .
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-          build_args: RUNTIME_ENVIRONMENT=demo
-          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
+       - uses: actions/checkout@v4
        - name: Build static files
          uses: docker/build-push-action@v5
          with:
@@ -70,30 +57,8 @@ jobs:
            identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
            project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
-  test:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
-        with:
-          version: '10.30.1'
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '24.x'
-          cache: 'pnpm'
-          registry-url: 'https://npm.pkg.github.com'
-
-      - run: pnpm install --ignore-scripts --frozen-lockfile
-        if: steps.node_modules.outputs.cache-hit != 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
-      - run: pnpm run test
-
   deploy-demo:
-    needs: [build-demo, test]
+    needs: [build-demo, cdn-upload-demo]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -109,7 +74,7 @@ jobs:
           PRINT_PAYLOAD: true
 
   deploy-dev:
-    needs: [build, test]
+    needs: [build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -125,7 +90,7 @@ jobs:
           PRINT_PAYLOAD: true
 
   deploy-prod:
-    needs: [build, test]
+    needs: [build]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
