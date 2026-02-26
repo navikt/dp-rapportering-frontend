@@ -1,4 +1,4 @@
-import { parseCookie, stringifyCookie } from "cookie";
+import { parseCookie, serialize } from "cookie";
 
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 
@@ -18,5 +18,5 @@ export async function setLanguage(
   const cookie = (await parseCookie(cookieHeader)) || {};
   cookie[cookieName] = language;
 
-  return stringifyCookie(cookie);
+  return serialize(cookieName, language);
 }

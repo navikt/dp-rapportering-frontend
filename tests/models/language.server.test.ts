@@ -62,14 +62,14 @@ describe("setLanguage", () => {
     expect(result).toContain("decorator-language=nb");
   });
 
-  it("beholder eksisterende cookies og legger til ny språk-cookie", async () => {
+  it("returnerer kun decorator-language cookie, ikke eksisterende cookies", async () => {
     const result = await setLanguage("some-other-cookie=value", DecoratorLocale.EN);
 
     expect(result).toContain("decorator-language=en");
-    expect(result).toContain("some-other-cookie=value");
+    expect(result).not.toContain("some-other-cookie=value");
   });
 
-  it("oppdaterer eksisterende decorator-language cookie", async () => {
+  it("returnerer ny decorator-language-verdi uavhengig av eksisterende verdi", async () => {
     const result = await setLanguage("decorator-language=nb", DecoratorLocale.NN);
 
     expect(result).toContain("decorator-language=nn");
