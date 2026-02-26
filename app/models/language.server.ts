@@ -1,22 +1,22 @@
-import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler";
-import { createCookie } from "react-router";
+import { parseCookie, stringifyCookie } from "cookie";
+
+import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 
 const cookieName = "decorator-language";
-const languageCookie = createCookie(cookieName);
 
 export async function getLanguage(request: Request): Promise<DecoratorLocale> {
-  const cookieHeader = request.headers.get("Cookie");
+  const cookieHeader = request.headers.get("Cookie") || "";
 
-  const cookie = (await languageCookie.parse(cookieHeader)) || {};
-  return cookie[cookieName];
+  const cookie = await parseCookie(cookieHeader);
+  return cookie[cookieName] as DecoratorLocale;
 }
 
 export async function setLanguage(
   cookieHeader: string,
   language: DecoratorLocale,
 ): Promise<string> {
-  const cookie = (await languageCookie.parse(cookieHeader)) || {};
-
+  const cookie = (await parseCookie(cookieHeader)) || {};
   cookie[cookieName] = language;
-  return languageCookie.serialize(cookie);
+
+  return stringifyCookie(cookie);
 }
