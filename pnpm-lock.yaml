@@ -62,6 +62,9 @@ importers:
       compression:
         specifier: 1.8.1
         version: 1.8.1
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
       cross-env:
         specifier: 10.1.0
         version: 10.1.0

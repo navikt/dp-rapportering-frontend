@@ -4,7 +4,12 @@ import { onLanguageSelect, setAvailableLanguages } from "@navikt/nav-dekoratoren
 import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
 import { useEffect, useRef } from "react";
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "react-router";
+import type {
+  ActionFunctionArgs,
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "react-router";
 import { data, redirect } from "react-router";
 import {
   Links,
@@ -128,7 +133,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
 }
 
-export async function action({ request }: LoaderFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie") || "";
   const formData = await request.formData();
 
