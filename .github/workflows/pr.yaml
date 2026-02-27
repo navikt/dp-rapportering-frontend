@@ -9,6 +9,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: write
     with:
       project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
     secrets:
