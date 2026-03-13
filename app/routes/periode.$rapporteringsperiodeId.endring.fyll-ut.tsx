@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Button, Heading } from "@navikt/ds-react";
+import { Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useEffect, useMemo, useState } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
@@ -21,9 +21,11 @@ import { useLocale } from "~/hooks/useLocale";
 import { usePreventDoubleClick } from "~/hooks/usePreventDoubleClick";
 import { useSanity } from "~/hooks/useSanity";
 import { hentPeriode } from "~/models/rapporteringsperiode.server";
+import styles from "~/styles/fyll-ut.module.css";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
+import { valider } from "~/utils/validering.util";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -76,6 +78,8 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgtDato, setValgtDato] = useState<string | undefined>(undefined);
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
+
+  const [valideringMeldinger, setValideringMeldinger] = useState<string[]>([]);
   const [harTrykketNeste, trySetHarTrykketNeste] = usePreventDoubleClick();
 
   const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
@@ -118,6 +122,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   const neste = () => {
     if (!trySetHarTrykketNeste()) return;
+
+    const valideringMeldinger = valider(periode);
+    setValideringMeldinger(valideringMeldinger);
+    if (valideringMeldinger.length > 0) return;
 
     trackSkjemaStegFullført({
       periode,
@@ -163,6 +171,16 @@ export default function RapporteringsPeriodeFyllUtSide() {
       <div className="registert-meldeperiode-container">
         <AktivitetOppsummering periode={periode} />
       </div>
+
+      {valideringMeldinger.length !== 0 && (
+        <Alert role="alert" variant="error" className={styles.feilmelding}>
+          <ul>
+            {valideringMeldinger.map((melding, index) => (
+              <li key={index}>{melding}</li>
+            ))}
+          </ul>
+        </Alert>
+      )}
 
       <NavigasjonContainer>
         <Button

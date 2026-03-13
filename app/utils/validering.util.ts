@@ -1,6 +1,10 @@
 import { withZod } from "@rvf/zod";
+import { parse } from "iso8601-duration";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
+
+import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { AktivitetType } from "~/utils/aktivitettype.utils";
 
 const AktivitetstypeEnum = z.enum(["Arbeid", "Syk", "Utdanning", "Fravaer"]);
 
@@ -34,4 +38,62 @@ export function begrunnelseEndringValidator() {
       begrunnelseEndring: z.string().min(1, "rapportering-feilmelding-ma-ha-begrunnelse"),
     }),
   );
+}
+
+export function valider(periode: IRapporteringsperiode): string[] {
+  const valideringMeldinger: string[] = [];
+
+  periode.dager.forEach((dag) => {
+    // validerIngenDuplikateAktivitetsTyper
+    const aktivitetSet = new Set();
+    dag.aktiviteter.forEach((aktivitet) => {
+      aktivitetSet.add(aktivitet.type);
+    });
+
+    if (aktivitetSet.size !== dag.aktiviteter.length) {
+      valideringMeldinger.push(dag.dato + " inneholder duplikate aktivitets typer");
+    }
+
+    // validerAktivitetsTypeKombinasjoner
+    if (
+      dag.aktiviteter.find((aktivitet) => aktivitet.type === AktivitetType.Arbeid) != null &&
+      (dag.aktiviteter.find((aktivitet) => aktivitet.type === AktivitetType.Syk) != null ||
+        dag.aktiviteter.find((aktivitet) => aktivitet.type === AktivitetType.Fravaer) != null)
+    ) {
+      valideringMeldinger.push(dag.dato + " inneholder ugyldige kombinasjoner av aktivitets typer");
+    }
+
+    // validerArbeidedeTimer
+    dag.aktiviteter.forEach((aktivitet) => {
+      if (aktivitet.type === AktivitetType.Arbeid && aktivitet.timer) {
+        const duration = parse(aktivitet.timer);
+        const timer = duration.hours ?? 0;
+        const minutter = duration.minutes ?? 0;
+
+        if (
+          timer < 0 ||
+          minutter < 0 ||
+          timer > 24 ||
+          minutter > 59 ||
+          (timer === 0 && minutter === 0) ||
+          (timer === 24 && minutter > 0) ||
+          minutter % 30 !== 0
+        ) {
+          valideringMeldinger.push(dag.dato + " inneholder ugyldige timer");
+        }
+      }
+    });
+
+    // validerIngenArbeidedeTimerUtenArbeid
+    dag.aktiviteter.forEach((aktivitet) => {
+      if (
+        (aktivitet.type === AktivitetType.Arbeid && !aktivitet.timer) ||
+        (aktivitet.type !== AktivitetType.Arbeid && aktivitet.timer)
+      ) {
+        valideringMeldinger.push(dag.dato + " inneholder ugyldige timer");
+      }
+    });
+  });
+
+  return valideringMeldinger;
 }
