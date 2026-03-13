@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Button, Heading } from "@navikt/ds-react";
+import { Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useEffect, useMemo, useState } from "react";
 import type { ActionFunctionArgs } from "react-router";
@@ -25,6 +25,7 @@ import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { kanSendes, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
+import { valider } from "~/utils/validering.util";
 
 import styles from "../styles/fyll-ut.module.css";
 
@@ -85,6 +86,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const [valgteAktiviteter, setValgteAktiviteter] = useState<AktivitetType[]>([]);
   const [modalAapen, setModalAapen] = useState(false);
 
+  const [valideringMeldinger, setValideringMeldinger] = useState<string[]>([]);
   const [harTrykketNeste, trySetHarTrykketNeste] = usePreventDoubleClick();
 
   useEffect(() => {
@@ -118,6 +120,10 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   const neste = () => {
     if (!trySetHarTrykketNeste()) return;
+
+    const valideringMeldinger = valider(periode, getAppText);
+    setValideringMeldinger(valideringMeldinger);
+    if (valideringMeldinger.length > 0) return;
 
     trackSkjemaStegFullført({
       periode,
@@ -163,6 +169,16 @@ export default function RapporteringsPeriodeFyllUtSide() {
       <div className={styles.container}>
         <AktivitetOppsummering periode={periode} />
       </div>
+
+      {valideringMeldinger.length !== 0 && (
+        <Alert role="alert" variant="error">
+          <ul>
+            {valideringMeldinger.map((melding, index) => (
+              <li key={index}>{melding}</li>
+            ))}
+          </ul>
+        </Alert>
+      )}
 
       <NavigasjonContainer>
         <Button
