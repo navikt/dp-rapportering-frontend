@@ -1,8 +1,6 @@
 FROM node:24-alpine AS node
 RUN corepack enable
 RUN corepack prepare pnpm@10.30.1 --activate
-RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    pnpm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
 RUN pnpm config set @navikt:registry=https://npm.pkg.github.com
 
 
@@ -19,7 +17,10 @@ COPY ./react-router.config.ts ./
 COPY ./package.json ./
 COPY ./pnpm-lock.yaml  ./
 
-RUN pnpm install --ignore-scripts --frozen-lockfile
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
+    pnpm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN) && \
+    pnpm install --ignore-scripts --frozen-lockfile && \
+    pnpm config delete //npm.pkg.github.com/:_authToken
 RUN pnpm run build
 
 
@@ -30,7 +31,10 @@ WORKDIR /app
 COPY ./package.json ./
 COPY ./pnpm-lock.yaml  ./
 
-RUN pnpm install --ignore-scripts --frozen-lockfile --prod
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
+    pnpm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN) && \
+    pnpm install --ignore-scripts --frozen-lockfile --prod && \
+    pnpm config delete //npm.pkg.github.com/:_authToken
 
 
 # export build to filesystem (GitHub)
