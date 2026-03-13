@@ -1,8 +1,9 @@
 import { withZod } from "@rvf/zod";
-import { parse } from "iso8601-duration";
+import { parse } from "tinyduration";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
+import type { GetAppText } from "~/hooks/useSanity";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 
@@ -40,7 +41,7 @@ export function begrunnelseEndringValidator() {
   );
 }
 
-export function valider(periode: IRapporteringsperiode): string[] {
+export function valider(periode: IRapporteringsperiode, getAppText: GetAppText): string[] {
   const valideringMeldinger: string[] = [];
 
   periode.dager.forEach((dag) => {
@@ -51,7 +52,9 @@ export function valider(periode: IRapporteringsperiode): string[] {
     });
 
     if (aktivitetSet.size !== dag.aktiviteter.length) {
-      valideringMeldinger.push(dag.dato + " inneholder duplikate aktivitets typer");
+      valideringMeldinger.push(
+        dag.dato + " " + getAppText("rapportering-feilmelding-duplikate-aktivitets-typer"),
+      );
     }
 
     // validerAktivitetsTypeKombinasjoner
@@ -60,7 +63,9 @@ export function valider(periode: IRapporteringsperiode): string[] {
       (dag.aktiviteter.find((aktivitet) => aktivitet.type === AktivitetType.Syk) != null ||
         dag.aktiviteter.find((aktivitet) => aktivitet.type === AktivitetType.Fravaer) != null)
     ) {
-      valideringMeldinger.push(dag.dato + " inneholder ugyldige kombinasjoner av aktivitets typer");
+      valideringMeldinger.push(
+        dag.dato + " " + getAppText("rapportering-feilmelding-ugyldig-aktivitetskombinasjon"),
+      );
     }
 
     // validerArbeidedeTimer
@@ -79,7 +84,9 @@ export function valider(periode: IRapporteringsperiode): string[] {
           (timer === 24 && minutter > 0) ||
           minutter % 30 !== 0
         ) {
-          valideringMeldinger.push(dag.dato + " inneholder ugyldige timer");
+          valideringMeldinger.push(
+            dag.dato + " " + getAppText("rapportering-feilmelding-ugyldige-timer"),
+          );
         }
       }
     });
@@ -90,7 +97,9 @@ export function valider(periode: IRapporteringsperiode): string[] {
         (aktivitet.type === AktivitetType.Arbeid && !aktivitet.timer) ||
         (aktivitet.type !== AktivitetType.Arbeid && aktivitet.timer)
       ) {
-        valideringMeldinger.push(dag.dato + " inneholder ugyldige timer");
+        valideringMeldinger.push(
+          dag.dato + " " + getAppText("rapportering-feilmelding-ugyldige-timer"),
+        );
       }
     });
   });

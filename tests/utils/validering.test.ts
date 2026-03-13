@@ -9,13 +9,17 @@ import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
 import { IRapporteringsperiodeStatus, KortType } from "~/utils/types";
 import { valider } from "~/utils/validering.util";
 
+function mockGetAppText(textId: string): string {
+  return textId;
+}
+
 describe("validererAktiviteter", () => {
   test("skal validere OK tomme aktiviteter", () => {
     const aktiviteter: IAktivitet[] = [];
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(0);
   });
@@ -30,7 +34,7 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(0);
   });
@@ -45,7 +49,7 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(0);
   });
@@ -60,7 +64,7 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(0);
   });
@@ -76,12 +80,12 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(0);
   });
 
-  test("skal ikke validere OK Arbeid og Syk", () => {
+  test("skal gi valideringsfeil når Arbeid og Syk er på samme dag", () => {
     const aktiviteter: IAktivitet[] = [
       {
         id: uuidv7(),
@@ -96,12 +100,12 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(14);
   });
 
-  test("skal ikke validere OK Arbeid og Fravaer", () => {
+  test("skal gi valideringsfeil når Arbeid og Fravaer er på samme dag", () => {
     const aktiviteter: IAktivitet[] = [
       {
         id: uuidv7(),
@@ -116,7 +120,7 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(14);
   });
@@ -136,12 +140,12 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(0);
   });
 
-  test("skal ikke validere OK duplikater", () => {
+  test("skal gi valideringsfeil når det finnes duplikater", () => {
     const aktiviteter: IAktivitet[] = [
       {
         id: uuidv7(),
@@ -155,12 +159,12 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(14);
   });
 
-  test("skal ikke validere OK Arbeid uten timer", () => {
+  test("skal gi valideringsfeil når Arbeid ikke har timer", () => {
     const aktiviteter: IAktivitet[] = [
       {
         id: uuidv7(),
@@ -171,12 +175,12 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(14);
   });
 
-  test("skal ikke validere OK Arbeid med 0 timer og 0 minutter", () => {
+  test("skal gi valideringsfeil når Arbeid har 0 timer og 0 minutter", () => {
     const aktiviteter: IAktivitet[] = [
       {
         id: uuidv7(),
@@ -187,12 +191,12 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(14);
   });
 
-  test("skal ikke validere OK Syk med timer", () => {
+  test("skal gi valideringsfeil når Syk har timer", () => {
     const aktiviteter: IAktivitet[] = [
       {
         id: uuidv7(),
@@ -203,12 +207,12 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(14);
   });
 
-  test("skal ikke validere OK Arbeid med minutter som ikke er 0 eller 30", () => {
+  test("skal gi valideringsfeil når Arbeid har minutter som ikke er 0 eller 30", () => {
     const aktiviteter: IAktivitet[] = [
       {
         id: uuidv7(),
@@ -219,12 +223,12 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(14);
   });
 
-  test("skal ikke validere OK Arbeid med 24 timer og minutter > 0", () => {
+  test("skal gi valideringsfeil når Arbeid har 24 timer og minutter > 0", () => {
     const aktiviteter: IAktivitet[] = [
       {
         id: uuidv7(),
@@ -235,7 +239,7 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(14);
   });
@@ -251,7 +255,39 @@ describe("validererAktiviteter", () => {
 
     const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
 
-    const valideringMeldinger = valider(rapporteringsperiode);
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
+
+    expect(valideringMeldinger.length).toEqual(0);
+  });
+
+  test("skal validere OK Arbeid med med timer og uten minutter", () => {
+    const aktiviteter: IAktivitet[] = [
+      {
+        id: uuidv7(),
+        type: AktivitetType.Arbeid,
+        timer: "PT5H",
+      },
+    ];
+
+    const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
+
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
+
+    expect(valideringMeldinger.length).toEqual(0);
+  });
+
+  test("skal validere OK Arbeid med minutter og uten timer", () => {
+    const aktiviteter: IAktivitet[] = [
+      {
+        id: uuidv7(),
+        type: AktivitetType.Arbeid,
+        timer: "PT30M",
+      },
+    ];
+
+    const rapporteringsperiode = opprettRapporteringsperiode(aktiviteter);
+
+    const valideringMeldinger = valider(rapporteringsperiode, mockGetAppText);
 
     expect(valideringMeldinger.length).toEqual(0);
   });

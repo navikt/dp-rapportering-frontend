@@ -121,7 +121,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const neste = () => {
     if (!trySetHarTrykketNeste()) return;
 
-    const valideringMeldinger = valider(periode);
+    const valideringMeldinger = valider(periode, getAppText);
     setValideringMeldinger(valideringMeldinger);
     if (valideringMeldinger.length > 0) return;
 
@@ -171,7 +171,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       </div>
 
       {valideringMeldinger.length !== 0 && (
-        <Alert role="alert" variant="error" className={styles.feilmelding}>
+        <Alert role="alert" variant="error">
           <ul>
             {valideringMeldinger.map((melding, index) => (
               <li key={index}>{melding}</li>
