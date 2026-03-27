@@ -13,4 +13,3 @@ sanity_datasett: "production"
 replicas:
   min: 2
   max: 2
-felles_meldekort_url: "https://www.nav.no"

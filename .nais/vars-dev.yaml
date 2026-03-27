@@ -13,4 +13,3 @@ sanity_datasett: "development"
 replicas:
   min: 2
   max: 2
-felles_meldekort_url: "https://meldekort-frontend-q2.ansatt.dev.nav.no"

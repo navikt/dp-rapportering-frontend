@@ -16,7 +16,6 @@ interface IEnv {
   DEKORATOR_ENV: string;
   RUNTIME_ENVIRONMENT: string;
   SANITY_DATASETT: string;
-  FELLES_MELDEKORT_URL: string;
 }
 
 export function getEnv(value: keyof IEnv) {

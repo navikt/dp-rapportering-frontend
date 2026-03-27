@@ -16,10 +16,6 @@ import { withDb } from "./responses/db";
 import { getDatabase } from "./responses/db.utils";
 
 export const createHandlers = (database?: ReturnType<typeof withDb>) => [
-  http.get(`${DP_RAPPORTERING_URL}/hardpmeldeplikt`, () => {
-    return HttpResponse.text("true");
-  }),
-
   http.get(`${DP_RAPPORTERING_URL}/rapporteringsperioder`, async ({ cookies }) => {
     const db = database || (await getDatabase(cookies));
     const perioder = db.findAllRapporteringsperioder();
