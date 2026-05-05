@@ -6,7 +6,7 @@ import { describe, expect, test } from "vitest";
 import { beregnNåværendePeriodeDato } from "~/devTools/periodedato";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
-import { IRapporteringsperiodeStatus, KortType } from "~/utils/types";
+import { IRapporteringsperiodeStatus, KortType, OPPRETTET_AV } from "~/utils/types";
 import { valider } from "~/utils/validering.util";
 
 function mockGetAppText(textId: string): string {
@@ -320,5 +320,6 @@ function opprettRapporteringsperiode(aktiviteter: IAktivitet[]): IRapporteringsp
     originalId: null,
     html: null,
     rapporteringstype: null,
+    opprettetAv: OPPRETTET_AV.Dagpenger,
   };
 }
