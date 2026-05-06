@@ -5,6 +5,7 @@ import { getHeaders } from "~/utils/fetch.utils";
 import {
   IRapporteringsperiodeStatus,
   KortType,
+  OPPRETTET_AV,
   Rapporteringstype,
   TOpprettetAv,
 } from "~/utils/types";
@@ -170,7 +171,8 @@ export async function sendInnPeriode(
     ...rapporteringsperiode,
     html: html.toString().trim(),
     registrertArbeidssoker:
-      rapporteringsperiode.type === KortType.ETTERREGISTRERT
+      rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
+      rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
         ? true
         : rapporteringsperiode.registrertArbeidssoker,
   };
