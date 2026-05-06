@@ -1,6 +1,11 @@
 import { type IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
-import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
+import {
+  IRapporteringsperiodeStatus,
+  KortType,
+  OPPRETTET_AV,
+  Rapporteringstype,
+} from "~/utils/types";
 
 export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
   {
@@ -132,6 +137,7 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
     originalId: null,
     html: null,
     rapporteringstype: Rapporteringstype.harAktivitet,
+    opprettetAv: OPPRETTET_AV.Dagpenger,
   },
   {
     id: "3fa85f64-5717-4562-b3fc-2c963f66afa3",
@@ -262,5 +268,6 @@ export const innsendtRapporteringsperioderResponse: IRapporteringsperiode[] = [
     originalId: null,
     html: null,
     rapporteringstype: Rapporteringstype.harAktivitet,
+    opprettetAv: OPPRETTET_AV.Dagpenger,
   },
 ];

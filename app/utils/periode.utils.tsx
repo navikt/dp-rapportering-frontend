@@ -11,7 +11,7 @@ import {
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 import { DecoratorLocale } from "./dekoratoren.utils";
-import { IRapporteringsperiodeStatus, KortType } from "./types";
+import { IRapporteringsperiodeStatus, KortType, OPPRETTET_AV } from "./types";
 
 export function periodeSomTimer(periode?: string): number | undefined {
   if (!periode) return undefined;
@@ -189,7 +189,10 @@ export function erPeriodeneLike(
 }
 
 export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
-  return periode.type !== KortType.ETTERREGISTRERT;
+  const erDagpenger = periode.opprettetAv === OPPRETTET_AV.Dagpenger;
+  const erIkkeEtterregistrert = periode.type !== KortType.ETTERREGISTRERT;
+
+  return erDagpenger && erIkkeEtterregistrert;
 }
 
 interface IPeriodeDate {

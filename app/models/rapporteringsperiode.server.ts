@@ -2,7 +2,12 @@ import { logErrorResponseAsError, logErrorResponseAsWarn } from "~/models/logger
 import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
-import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
+import {
+  IRapporteringsperiodeStatus,
+  KortType,
+  Rapporteringstype,
+  TOpprettetAv,
+} from "~/utils/types";
 
 export interface IPeriode {
   fraOgMed: string;
@@ -34,6 +39,7 @@ export interface IRapporteringsperiode {
   originalId: string | null;
   html: string | null;
   rapporteringstype: Rapporteringstype | null;
+  opprettetAv: TOpprettetAv | null;
 }
 
 export interface IInnsendtRapporteringsperiodeResponse {

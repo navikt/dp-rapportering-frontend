@@ -62,6 +62,7 @@ class SessionRecord {
           originalId: z.string().nullable(),
           html: z.string().nullable(),
           rapporteringstype: z.enum(["harAktivitet", "harIngenAktivitet"]).nullable(),
+          opprettetAv: z.enum(["Arena", "Dagpenger"]).nullable(),
         }),
       }),
     };

@@ -9,7 +9,12 @@ import {
   type IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
-import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
+import {
+  IRapporteringsperiodeStatus,
+  KortType,
+  OPPRETTET_AV,
+  Rapporteringstype,
+} from "~/utils/types";
 
 vi.mock("@rvf/react-router", () => ({
   ValidatedForm: ({ children }: { children: React.ReactNode }) => <form>{children}</form>,
@@ -50,6 +55,7 @@ const mockRapporteringsperiode: IRapporteringsperiode = {
   originalId: null,
   html: null,
   rapporteringstype: Rapporteringstype.harAktivitet,
+  opprettetAv: OPPRETTET_AV.Dagpenger,
 };
 
 const defaultProps = {

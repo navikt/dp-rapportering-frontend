@@ -5,7 +5,7 @@ import { uuidv7 } from "uuidv7";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterDato } from "~/utils/dato.utils";
-import { IRapporteringsperiodeStatus, KortType, TIDSSONER } from "~/utils/types";
+import { IRapporteringsperiodeStatus, KortType, OPPRETTET_AV, TIDSSONER } from "~/utils/types";
 
 import { beregnForrigePeriodeDato, beregnNåværendePeriodeDato } from "./periodedato";
 
@@ -36,6 +36,7 @@ export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
     originalId: null,
     html: null,
     rapporteringstype: null,
+    opprettetAv: OPPRETTET_AV.Dagpenger,
     ...props,
   };
 

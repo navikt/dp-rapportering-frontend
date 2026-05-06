@@ -47,3 +47,10 @@ export const KortType = {
 export const TIDSSONER = {
   OSLO: "Europe/Oslo",
 };
+
+export const OPPRETTET_AV = {
+  Arena: "Arena",
+  Dagpenger: "Dagpenger",
+} as const;
+
+export type TOpprettetAv = (typeof OPPRETTET_AV)[keyof typeof OPPRETTET_AV];

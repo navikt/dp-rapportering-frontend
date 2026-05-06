@@ -13,7 +13,12 @@ import {
 } from "~/models/rapporteringsperiode.server";
 import { formaterDato } from "~/utils/dato.utils";
 import { isLocalOrDemo } from "~/utils/env.utils";
-import { IRapporteringsperiodeStatus, KortType, Rapporteringstype } from "~/utils/types";
+import {
+  IRapporteringsperiodeStatus,
+  KortType,
+  OPPRETTET_AV,
+  Rapporteringstype,
+} from "~/utils/types";
 
 import { Database } from "../session";
 
@@ -409,6 +414,57 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
         );
       }
 
+      break;
+    }
+
+    case ScenarioType.arena: {
+      deleteAllRapporteringsperioder(db);
+
+      const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
+
+      // Innsendt Arena-meldekort fra forrige periode
+      const forrigePeriodeFra = formaterDato({
+        dato: subDays(new Date(fraOgMed), 14),
+        dateFormat: "yyyy-MM-dd",
+      });
+      const forrigePeriodeTil = formaterDato({
+        dato: subDays(new Date(fraOgMed), 1),
+        dateFormat: "yyyy-MM-dd",
+      });
+
+      db.rapporteringsperioder.create(
+        lagRapporteringsperiode({
+          opprettetAv: OPPRETTET_AV.Arena,
+          kanSendes: false,
+          status: IRapporteringsperiodeStatus.Innsendt,
+          rapporteringstype: Rapporteringstype.harAktivitet,
+          periode: {
+            fraOgMed: forrigePeriodeFra,
+            tilOgMed: forrigePeriodeTil,
+          },
+          kanEndres: false,
+          kanSendesFra: formaterDato({
+            dato: subDays(new Date(forrigePeriodeFra), 1),
+            dateFormat: "yyyy-MM-dd",
+          }),
+          mottattDato: formaterDato({
+            dato: addDays(new Date(forrigePeriodeFra), 7),
+            dateFormat: "yyyy-MM-dd",
+          }),
+        }),
+      );
+
+      // Aktivt Arena-meldekort for nåværende periode
+      db.rapporteringsperioder.create(
+        lagRapporteringsperiode({
+          opprettetAv: OPPRETTET_AV.Arena,
+          periode: {
+            fraOgMed,
+            tilOgMed,
+          },
+          registrertArbeidssoker: null,
+        }),
+      );
       break;
     }
   }
