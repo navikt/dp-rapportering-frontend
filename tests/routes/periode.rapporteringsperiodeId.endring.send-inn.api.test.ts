@@ -76,7 +76,8 @@ describe("Send inn rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
-          unstable_pattern: "",
+          pattern: "",
+          url: new URL("https://test.nav.no"),
         });
 
         expect(response).toEqual(
@@ -124,7 +125,8 @@ describe("Send inn rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
-          unstable_pattern: "",
+          pattern: "",
+          url: new URL("https://test.nav.no"),
         })) as UNSAFE_DataWithResponseInit<{ error: string }>;
 
         const data = response.data;
