@@ -1,4 +1,5 @@
-import { addDays } from "date-fns";
+import { TZDate } from "@date-fns/tz";
+import { addDays, isAfter } from "date-fns";
 import { parse } from "tinyduration";
 
 import { type GetAppText } from "~/hooks/useSanity";
@@ -11,7 +12,7 @@ import {
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
 import { DecoratorLocale } from "./dekoratoren.utils";
-import { IRapporteringsperiodeStatus, KortType } from "./types";
+import { IRapporteringsperiodeStatus, KortType, TIDSSONER } from "./types";
 
 export function periodeSomTimer(periode?: string): number | undefined {
   if (!periode) return undefined;
@@ -188,10 +189,22 @@ export function erPeriodeneLike(
   return true;
 }
 
+export function erSendtForSent(periode: IRapporteringsperiode): boolean {
+  if (!periode.sisteFristForTrekk) {
+    return false;
+  }
+
+  const now = new TZDate(new Date(), TIDSSONER.OSLO);
+  const frist = new TZDate(periode.sisteFristForTrekk, TIDSSONER.OSLO);
+
+  return isAfter(now, frist);
+}
+
 export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
   const erIkkeEtterregistrert = periode.type !== KortType.ETTERREGISTRERT;
+  const ikkeForSent = !erSendtForSent(periode);
 
-  return erIkkeEtterregistrert;
+  return erIkkeEtterregistrert && ikkeForSent;
 }
 
 interface IPeriodeDate {
