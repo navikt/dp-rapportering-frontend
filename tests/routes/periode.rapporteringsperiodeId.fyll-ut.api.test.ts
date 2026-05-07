@@ -67,7 +67,8 @@ describe("Fyll ut rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
-          unstable_pattern: "",
+          pattern: "",
+          url: new URL("https://test.nav.no"),
         });
 
         expect(response.status).toBe("success");
@@ -99,7 +100,8 @@ describe("Fyll ut rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
-          unstable_pattern: "",
+          pattern: "",
+          url: new URL("https://test.nav.no"),
         });
 
         expect(response.status).toBe("error");
@@ -142,7 +144,8 @@ describe("Fyll ut rapporteringsperiode", () => {
           request,
           params: testParams,
           context: {},
-          unstable_pattern: "",
+          pattern: "",
+          url: new URL("https://test.nav.no"),
         });
 
         expect(response.status).toBe("success");

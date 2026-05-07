@@ -49,7 +49,8 @@ describe("Start endring", () => {
         request: new Request("http://localhost:3000"),
         params: testParams,
         context: {},
-        unstable_pattern: "",
+        pattern: "",
+        url: new URL("https://test.nav.no"),
       });
 
       expect(response).toEqual(redirect(`/periode/${endringsPeriode.id}/endring/fyll-ut`));
@@ -73,7 +74,8 @@ describe("Start endring", () => {
           request: new Request("http://localhost:3000"),
           params: testParams,
           context: {},
-          unstable_pattern: "",
+          pattern: "",
+          url: new URL("https://test.nav.no"),
         }),
       )) as Response;
 

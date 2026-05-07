@@ -31,7 +31,6 @@ export const withNestedRapporteringsperiode = ({
       children: [
         {
           path,
-          // @ts-expect-error Don't know why these types are incompatible now
           Component,
           loader,
           action,
