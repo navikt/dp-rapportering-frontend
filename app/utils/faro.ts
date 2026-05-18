@@ -23,6 +23,19 @@ export function getFaro(): Faro | null {
         captureConsole: true,
       }),
     ],
+    paused: window.location.hostname === "localhost",
+    beforeSend: (item) => {
+      if (item.meta?.page?.url) {
+        try {
+          const url = new URL(item.meta.page.url);
+          url.search = "";
+          item.meta.page.url = url.toString();
+        } catch {
+          /* ignore */
+        }
+      }
+      return item;
+    },
   });
   return faro;
 }
