@@ -1,4 +1,4 @@
-import navStyles from "@navikt/ds-css/dist/index.css?url";
+import navStyles from "@navikt/ds-css?url";
 import { Alert, Heading } from "@navikt/ds-react";
 import { onLanguageSelect, setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
 import { createClient } from "@sanity/client";
