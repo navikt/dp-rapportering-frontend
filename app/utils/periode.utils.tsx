@@ -1,5 +1,5 @@
 import { TZDate } from "@date-fns/tz";
-import { addDays, isAfter } from "date-fns";
+import { addDays, endOfDay, isAfter } from "date-fns";
 import { parse } from "tinyduration";
 
 import { type GetAppText } from "~/hooks/useSanity";
@@ -196,8 +196,9 @@ export function erSendtForSent(periode: IRapporteringsperiode): boolean {
 
   const now = new TZDate(new Date(), TIDSSONER.OSLO);
   const frist = new TZDate(periode.sisteFristForTrekk, TIDSSONER.OSLO);
+  const fristSluttAvDag = endOfDay(frist);
 
-  return isAfter(now, frist);
+  return isAfter(now, fristSluttAvDag);
 }
 
 export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {

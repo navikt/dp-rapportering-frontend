@@ -53,6 +53,7 @@ export default function ArbeidssøkerRegisterSide() {
   const stegnavn = "arbeidssoker";
   const steg = 4;
   const nesteMeldeperiode = nestePeriode(periode.periode);
+  const sendtForSent = erSendtForSent(periode);
 
   // Fra-dato skal vise årstall hvis det er ulikt til-datoens årstall, eller hvis det er ulikt dagens årstall.
   // Til-datoen viser alltid årstall
@@ -103,7 +104,7 @@ export default function ArbeidssøkerRegisterSide() {
           disabled={
             !kanSendes(periode) ||
             !skalHaArbeidssokerSporsmal(periode) ||
-            erSendtForSent(periode) ||
+            sendtForSent ||
             isSubmitting
           }
           legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
@@ -113,19 +114,19 @@ export default function ArbeidssøkerRegisterSide() {
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
           name="_action"
-          value={erSendtForSent(periode) ? undefined : periode.registrertArbeidssoker}
+          value={sendtForSent ? undefined : periode.registrertArbeidssoker}
         >
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={true}
-            checked={!erSendtForSent(periode) && periode.registrertArbeidssoker === true}
+            checked={!sendtForSent && periode.registrertArbeidssoker === true}
           >
             {getAppText("rapportering-arbeidssokerregister-svar-ja")}
           </Radio>
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={false}
-            checked={!erSendtForSent(periode) && periode.registrertArbeidssoker === false}
+            checked={!sendtForSent && periode.registrertArbeidssoker === false}
           >
             {getAppText("rapportering-arbeidssokerregister-svar-nei")}
           </Radio>
@@ -155,9 +156,7 @@ export default function ArbeidssøkerRegisterSide() {
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
           className={navigasjonStyles.knapp}
-          disabled={
-            isSubmitting || (!erSendtForSent(periode) && periode.registrertArbeidssoker === null)
-          }
+          disabled={isSubmitting || (!sendtForSent && periode.registrertArbeidssoker === null)}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
