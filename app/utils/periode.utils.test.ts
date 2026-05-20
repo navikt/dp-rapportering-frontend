@@ -82,7 +82,7 @@ describe("skalHaArbeidssokerSporsmal", () => {
     expect(skalHaArbeidssokerSporsmal(periode)).toBe(true);
   });
 
-  test("skal returnere false når meldekortet sendes for sent", () => {
+  test("skal returnere true når meldekortet sendes for sent (spørsmålet skal vises, men være disabled)", () => {
     const pastertDato = format(subDays(new Date(), 7), "yyyy-MM-dd");
     const periode = lagRapporteringsperiode({
       opprettetAv: OPPRETTET_AV.Dagpenger,
@@ -90,7 +90,7 @@ describe("skalHaArbeidssokerSporsmal", () => {
       sisteFristForTrekk: pastertDato,
     });
 
-    expect(skalHaArbeidssokerSporsmal(periode)).toBe(false);
+    expect(skalHaArbeidssokerSporsmal(periode)).toBe(true);
   });
 
   test("skal returnere true når meldekortet sendes før sisteFristForTrekk", () => {

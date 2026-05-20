@@ -4,7 +4,7 @@ import { PortableText } from "@portabletext/react";
 import { useSanity } from "~/hooks/useSanity";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { formaterDato } from "~/utils/dato.utils";
-import { nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import { erSendtForSent, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { KortType, OPPRETTET_AV } from "~/utils/types";
 
 interface IProps {
@@ -22,6 +22,10 @@ export function ArbeidssokerAlert({ periode }: IProps) {
 
   if (!skalHaArbeidssokerSporsmal(periode)) {
     return null;
+  }
+
+  if (erSendtForSent(periode)) {
+    return <ForSentAlert />;
   }
 
   if (periode.registrertArbeidssoker === true) {
@@ -72,6 +76,19 @@ export function ArenaMeldekortAlert() {
         {getAppText("rapportering-arena-meldekort-info-tittel")}
       </Heading>
       <PortableText value={getRichText("rapportering-arena-meldekort-info-innhold")} />
+    </Alert>
+  );
+}
+
+export function ForSentAlert() {
+  const { getAppText, getRichText } = useSanity();
+
+  return (
+    <Alert variant="warning" className="my-6 alert-with-rich-text">
+      <Heading spacing size="xsmall">
+        {getAppText("rapportering-for-sent-alert-tittel")}
+      </Heading>
+      <PortableText value={getRichText("rapportering-for-sent-alert-innhold")} />
     </Alert>
   );
 }

@@ -16,7 +16,12 @@ import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { formaterDato } from "~/utils/dato.utils";
-import { kanSendes, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import {
+  erSendtForSent,
+  kanSendes,
+  nestePeriode,
+  skalHaArbeidssokerSporsmal,
+} from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
@@ -95,7 +100,12 @@ export default function ArbeidssøkerRegisterSide() {
 
       <fetcher.Form method="post">
         <RadioGroup
-          disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
+          disabled={
+            !kanSendes(periode) ||
+            !skalHaArbeidssokerSporsmal(periode) ||
+            erSendtForSent(periode) ||
+            isSubmitting
+          }
           legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
             fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
             tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
@@ -103,19 +113,19 @@ export default function ArbeidssøkerRegisterSide() {
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
           name="_action"
-          value={periode.registrertArbeidssoker}
+          value={erSendtForSent(periode) ? undefined : periode.registrertArbeidssoker}
         >
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={true}
-            checked={periode.registrertArbeidssoker === true}
+            checked={!erSendtForSent(periode) && periode.registrertArbeidssoker === true}
           >
             {getAppText("rapportering-arbeidssokerregister-svar-ja")}
           </Radio>
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={false}
-            checked={periode.registrertArbeidssoker === false}
+            checked={!erSendtForSent(periode) && periode.registrertArbeidssoker === false}
           >
             {getAppText("rapportering-arbeidssokerregister-svar-nei")}
           </Radio>
@@ -145,7 +155,9 @@ export default function ArbeidssøkerRegisterSide() {
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
           className={navigasjonStyles.knapp}
-          disabled={periode.registrertArbeidssoker === null || isSubmitting}
+          disabled={
+            isSubmitting || (!erSendtForSent(periode) && periode.registrertArbeidssoker === null)
+          }
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}

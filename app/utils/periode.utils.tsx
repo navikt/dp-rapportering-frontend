@@ -202,9 +202,8 @@ export function erSendtForSent(periode: IRapporteringsperiode): boolean {
 
 export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
   const erIkkeEtterregistrert = periode.type !== KortType.ETTERREGISTRERT;
-  const ikkeForSent = !erSendtForSent(periode);
 
-  return erIkkeEtterregistrert && ikkeForSent;
+  return erIkkeEtterregistrert;
 }
 
 interface IPeriodeDate {
