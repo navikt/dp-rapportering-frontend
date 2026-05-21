@@ -467,30 +467,6 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       );
       break;
     }
-
-    case ScenarioType.forSent: {
-      deleteAllRapporteringsperioder(db);
-
-      const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
-
-      // Meldekort hvor sisteFristForTrekk er passert
-      const fristForTrekk = formaterDato({
-        dato: subDays(new Date(), 7), // 7 dager siden
-        dateFormat: "yyyy-MM-dd",
-      });
-
-      db.rapporteringsperioder.create(
-        lagRapporteringsperiode({
-          periode: {
-            fraOgMed,
-            tilOgMed,
-          },
-          sisteFristForTrekk: fristForTrekk,
-          registrertArbeidssoker: null,
-        }),
-      );
-      break;
-    }
   }
 }
 

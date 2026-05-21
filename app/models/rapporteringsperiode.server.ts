@@ -2,7 +2,6 @@ import { logErrorResponseAsError, logErrorResponseAsWarn } from "~/models/logger
 import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
-import { erSendtForSent } from "~/utils/periode.utils";
 import {
   IRapporteringsperiodeStatus,
   KortType,
@@ -168,23 +167,14 @@ export async function sendInnPeriode(
     throw new Error("Kunne ikke finne HTML med tekstene");
   }
 
-  // Hvis sendt for sent, skal registrertArbeidssoker være null
-  // Ellers sett til true for etterregistrert og Arena, eller bruk eksisterende verdi
-  let registrertArbeidssoker = rapporteringsperiode.registrertArbeidssoker;
-
-  if (erSendtForSent(rapporteringsperiode)) {
-    registrertArbeidssoker = null;
-  } else if (
-    rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
-    rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
-  ) {
-    registrertArbeidssoker = true;
-  }
-
   const rapporteringsperiodeWithHtml = {
     ...rapporteringsperiode,
     html: html.toString().trim(),
-    registrertArbeidssoker,
+    registrertArbeidssoker:
+      rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
+      rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
+        ? true
+        : rapporteringsperiode.registrertArbeidssoker,
   };
 
   const standardHeaders = await getHeaders(request);
