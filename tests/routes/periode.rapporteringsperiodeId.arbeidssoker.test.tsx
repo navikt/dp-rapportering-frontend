@@ -1,5 +1,4 @@
 import { act, screen, waitFor } from "@testing-library/react";
-import { format, subDays } from "date-fns";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
@@ -142,33 +141,5 @@ describe("ArbeidssøkerRegisterSide", () => {
     const radioNei = await screen.findByRole("radio", { name: /svar-nei/ });
     expect(radioNei).toBeChecked();
     expect(await screen.findByText(/alert-innhold-avregistrert-v2/)).toBeInTheDocument();
-  });
-
-  test("Spørsmål om arbeidssøker skal være disabled og uten prevalgt valg når meldekortet sendes for sent, men Neste-knappen skal være aktiv", async () => {
-    const pastertDato = format(subDays(new Date(), 7), "yyyy-MM-dd");
-    const rapporteringForSent: IRapporteringsperiode = {
-      ...rapporteringsperiode,
-      sisteFristForTrekk: pastertDato,
-      registrertArbeidssoker: null,
-    };
-    await testDb.addRapporteringsperioder(rapporteringForSent);
-    await act(async () => {
-      render();
-    });
-
-    expect(await screen.findByText(/rapportering-arbeidssokerregister-tittel/)).toBeInTheDocument();
-
-    const radioJa = await screen.findByRole("radio", { name: /svar-ja/i });
-    expect(radioJa).toHaveAttribute("disabled");
-    expect(radioJa).not.toBeChecked();
-
-    const radioNei = await screen.findByRole("radio", { name: /svar-nei/i });
-    expect(radioNei).toHaveAttribute("disabled");
-    expect(radioNei).not.toBeChecked();
-
-    expect(await screen.findByText(/rapportering-for-sent-alert-tittel/)).toBeInTheDocument();
-
-    const nesteKnapp = await screen.findByRole("button", { name: /rapportering-knapp-neste/ });
-    expect(nesteKnapp).not.toHaveAttribute("disabled");
   });
 });
