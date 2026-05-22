@@ -1,6 +1,6 @@
 import { type Faro, getWebInstrumentations, initializeFaro } from "@grafana/faro-web-sdk";
 
-import { getEnv } from "~/utils/env.utils";
+import { getEnv, isLocalhost } from "~/utils/env.utils";
 
 let faro: Faro | null = null;
 
@@ -23,6 +23,19 @@ export function getFaro(): Faro | null {
         captureConsole: true,
       }),
     ],
+    paused: isLocalhost,
+    beforeSend: (item) => {
+      if (item.meta?.page?.url) {
+        try {
+          const url = new URL(item.meta.page.url);
+          url.search = "";
+          item.meta.page.url = url.toString();
+        } catch {
+          /* ignore */
+        }
+      }
+      return item;
+    },
   });
   return faro;
 }
