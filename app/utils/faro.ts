@@ -1,4 +1,5 @@
 import { type Faro, getWebInstrumentations, initializeFaro } from "@grafana/faro-web-sdk";
+import { TracingInstrumentation } from "@grafana/faro-web-tracing";
 
 import { getEnv, isLocalhost } from "~/utils/env.utils";
 
@@ -21,6 +22,11 @@ export function getFaro(): Faro | null {
     instrumentations: [
       ...getWebInstrumentations({
         captureConsole: true,
+      }),
+      new TracingInstrumentation({
+        instrumentationOptions: {
+          propagateTraceHeaderCorsUrls: [/https:\/\/[^/]+\.nav\.no\/.*/],
+        },
       }),
     ],
     paused: isLocalhost,
