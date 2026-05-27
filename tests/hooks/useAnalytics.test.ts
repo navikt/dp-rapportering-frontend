@@ -8,7 +8,9 @@ import { Rapporteringstype } from "~/utils/types";
 vi.unmock("~/hooks/useAnalytics");
 
 const loggerCustomMock = vi.fn();
-const loggerMock = Object.assign(vi.fn(), { custom: loggerCustomMock });
+const loggerMock = vi.fn() as ReturnType<typeof vi.fn> & { custom: typeof loggerCustomMock };
+
+loggerMock.custom = loggerCustomMock;
 
 vi.mock("@navikt/nav-dekoratoren-moduler", async () => {
   return {
