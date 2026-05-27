@@ -1,9 +1,9 @@
 import {
   awaitDecoratorData,
-  EventName,
   getAnalyticsInstance,
   getCurrentConsent,
 } from "@navikt/nav-dekoratoren-moduler";
+import type { EventName } from "@navikt/nav-dekoratoren-moduler";
 import { useCallback } from "react";
 
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
