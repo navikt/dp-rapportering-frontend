@@ -9,11 +9,8 @@ vi.unmock("~/hooks/useAnalytics");
 
 const loggerMock = vi.fn();
 
-vi.mock(import("@navikt/nav-dekoratoren-moduler"), async (importOriginal) => {
-  const actual = await importOriginal();
-
+vi.mock("@navikt/nav-dekoratoren-moduler", async () => {
   return {
-    ...actual,
     awaitDecoratorData: vi.fn().mockResolvedValue({}),
     getCurrentConsent: vi.fn().mockReturnValue({ consent: { analytics: true, surveys: true } }),
     getAnalyticsInstance: vi.fn(() => loggerMock),
