@@ -1,3 +1,4 @@
+import type { EventName } from "@navikt/nav-dekoratoren-moduler";
 import {
   awaitDecoratorData,
   getAnalyticsInstance,
@@ -64,7 +65,11 @@ export function useAnalytics() {
   const { locale: språk } = useLocale();
 
   const trackEvent = useCallback(
-    async <T extends object>(event: string, props: T = {} as T) => {
+    async <T extends object>(
+      event: EventName | string,
+      props: T = {} as T,
+      custom: boolean = false,
+    ) => {
       if (typeof window === "undefined") return;
 
       await awaitDecoratorData();
@@ -74,9 +79,14 @@ export function useAnalytics() {
 
       const data = await hentData({ props, språk, skjemanavn });
 
-      if (logger) {
-        logger(event, data);
+      if (!logger) return;
+
+      if (custom) {
+        logger.custom(event, data);
+        return;
       }
+
+      logger(event as EventName, data);
     },
     [logger, språk],
   );
@@ -108,14 +118,18 @@ export function useAnalytics() {
       endring = false,
       sesjonId,
     }: ISkjemaSteg) => {
-      return trackEvent("skjema steg startet", {
-        skjemaId: id,
-        stegnavn,
-        steg,
-        rapporteringstype,
-        endring,
-        sesjonId,
-      });
+      return trackEvent(
+        "skjema steg startet",
+        {
+          skjemaId: id,
+          stegnavn,
+          steg,
+          rapporteringstype,
+          endring,
+          sesjonId,
+        },
+        true,
+      );
     },
     [trackEvent],
   );
@@ -156,7 +170,7 @@ export function useAnalytics() {
 
   const trackLesMerFilter = useCallback(
     ({ arbeid, syk, fravaer, utdanning }: ILesMerFilter) => {
-      trackEvent("les mer filter", { arbeid, syk, fravaer, utdanning });
+      trackEvent("les mer filter", { arbeid, syk, fravaer, utdanning }, true);
     },
     [trackEvent],
   );
@@ -184,14 +198,14 @@ export function useAnalytics() {
 
   const trackSprakEndret = useCallback(
     (språk: DecoratorLocale) => {
-      trackEvent("språk endret", { språk });
+      trackEvent("språk endret", { språk }, true);
     },
     [trackEvent],
   );
 
   const trackForetrukketSprak = useCallback(
     (språk: string) => {
-      trackEvent("foretrukket språk", { språk });
+      trackEvent("foretrukket språk", { språk }, true);
     },
     [trackEvent],
   );
@@ -205,7 +219,7 @@ export function useAnalytics() {
 
   const trackFeilmelding = useCallback(
     ({ tekst, titleId, descriptionId }: IFeilmelding) => {
-      trackEvent("feilmelding", { tekst, titleId, descriptionId });
+      trackEvent("feilmelding", { tekst, titleId, descriptionId }, true);
     },
     [trackEvent],
   );

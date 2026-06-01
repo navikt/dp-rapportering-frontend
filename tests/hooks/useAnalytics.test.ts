@@ -7,13 +7,13 @@ import { Rapporteringstype } from "~/utils/types";
 
 vi.unmock("~/hooks/useAnalytics");
 
-const loggerMock = vi.fn();
+const loggerCustomMock = vi.fn();
+const loggerMock = vi.fn() as ReturnType<typeof vi.fn> & { custom: typeof loggerCustomMock };
 
-vi.mock(import("@navikt/nav-dekoratoren-moduler"), async (importOriginal) => {
-  const actual = await importOriginal();
+loggerMock.custom = loggerCustomMock;
 
+vi.mock("@navikt/nav-dekoratoren-moduler", async () => {
   return {
-    ...actual,
     awaitDecoratorData: vi.fn().mockResolvedValue({}),
     getCurrentConsent: vi.fn().mockReturnValue({ consent: { analytics: true, surveys: true } }),
     getAnalyticsInstance: vi.fn(() => loggerMock),
@@ -54,6 +54,7 @@ describe("useAnalytics", () => {
   const språk = "no";
   beforeEach(() => {
     loggerMock.mockClear();
+    loggerCustomMock.mockClear();
   });
 
   afterEach(() => {
@@ -159,6 +160,28 @@ describe("useAnalytics", () => {
         språk,
         rapporteringstype,
         endring: true,
+      });
+    });
+
+    test("tracker 'les mer filter' via custom logger", async () => {
+      const { result } = renderHook(() => useAnalytics());
+      result.current.trackLesMerFilter({
+        arbeid: true,
+        syk: false,
+        fravaer: true,
+        utdanning: false,
+      });
+
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(loggerCustomMock).toHaveBeenCalledWith("les mer filter", {
+        skjemanavn,
+        språk,
+        arbeid: true,
+        syk: false,
+        fravaer: true,
+        utdanning: false,
       });
     });
   });

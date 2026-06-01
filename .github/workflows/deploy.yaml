@@ -43,7 +43,7 @@ jobs:
     steps:
        - uses: actions/checkout@v6
        - name: Build static files
-         uses: docker/build-push-action@v7.1.0
+         uses: docker/build-push-action@v7.2.0
          with:
            target: export
            outputs: type=local,dest=build
@@ -90,7 +90,7 @@ jobs:
           PRINT_PAYLOAD: true
 
   deploy-prod:
-    needs: [build]
+    needs: [build, deploy-dev]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:

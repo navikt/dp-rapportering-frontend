@@ -9,15 +9,6 @@ updates:
       timezone: "Europe/Oslo"
     cooldown:
       default-days: 7
-  # Maintain dependencies for gradle
-  - package-ecosystem: "gradle"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "10:05"
-      timezone: "Europe/Oslo"
-    cooldown:
-      default-days: 7
   # Maintain dependencies for docker
   - package-ecosystem: "docker"
     directory: "/"
@@ -34,5 +25,10 @@ updates:
       interval: "daily"
       time: "10:05"
       timezone: "Europe/Oslo"
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
     cooldown:
       default-days: 7
