@@ -18,7 +18,7 @@ export enum ScenarioType {
   etterregistrert = "etterregistrert",
   bokmerket = "bokmerket",
   arena = "arena",
-  forSent = "forSent",
+  ikkeRegistrertArbeidssoker = "ikkeRegistrertArbeidssoker",
 }
 interface IScenario {
   type: ScenarioType;
@@ -63,8 +63,8 @@ const scenarios: IScenario[] = [
     tittel: "Arena meldekort",
   },
   {
-    type: ScenarioType.forSent,
-    tittel: "Meldekort sendt for sent",
+    type: ScenarioType.ikkeRegistrertArbeidssoker,
+    tittel: "Ikke registrert arbeidssøker",
   },
 ];
 

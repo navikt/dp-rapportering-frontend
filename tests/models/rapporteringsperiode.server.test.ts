@@ -1,4 +1,3 @@
-import { format, subDays } from "date-fns";
 import { http, HttpResponse } from "msw";
 import { afterAll, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
@@ -68,35 +67,6 @@ describe("rapporteringsperiode.server", () => {
 
   describe("sendInnPeriode", () => {
     const sendInnUrl = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`;
-
-    test("skal sende registrertArbeidssoker som null når meldekortet sendes for sent", async () => {
-      const pastertDato = format(subDays(new Date(), 7), "yyyy-MM-dd");
-      const periode = lagRapporteringsperiode({
-        sisteFristForTrekk: pastertDato,
-        registrertArbeidssoker: true,
-      });
-
-      let capturedBody: { registrertArbeidssoker: boolean | null } | null = null;
-
-      server.use(
-        http.post(sendInnUrl, async ({ request }) => {
-          capturedBody = (await request.json()) as { registrertArbeidssoker: boolean | null };
-          return HttpResponse.json({ id: "123", status: "OK" }, { status: 200 });
-        }),
-      );
-
-      const formData = new FormData();
-      formData.append("_html", "<html>Test</html>");
-      const request = new Request(sendInnUrl, {
-        method: "POST",
-        body: formData,
-      });
-
-      await sendInnPeriode(request, periode);
-
-      expect(capturedBody).toBeDefined();
-      expect(capturedBody!.registrertArbeidssoker).toBe(null);
-    });
 
     test("skal sende registrertArbeidssoker som true når perioden er etterregistrert", async () => {
       const periode = lagRapporteringsperiode({

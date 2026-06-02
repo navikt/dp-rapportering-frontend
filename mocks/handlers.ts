@@ -132,6 +132,13 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     },
   ),
 
+  http.get(`${DP_RAPPORTERING_URL}/erregistrertarbeidssoker`, async ({ cookies }) => {
+    const db = database || (await getDatabase(cookies));
+    const erRegistrertArbeidssoker = db.getErRegistrertArbeidssoker();
+
+    return HttpResponse.json(erRegistrertArbeidssoker);
+  }),
+
   http.post(
     `${DP_RAPPORTERING_URL}/rapporteringsperiode/:rapporteringsperiodeId/arbeidssoker`,
     async ({ cookies, params, request }) => {

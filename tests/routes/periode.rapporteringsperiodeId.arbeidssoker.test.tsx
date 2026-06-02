@@ -1,12 +1,11 @@
 import { act, screen, waitFor } from "@testing-library/react";
-import { format, subDays } from "date-fns";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { loader as rapporteringsperiodeLoader } from "~/routes/periode.$rapporteringsperiodeId";
 import ArbeidssøkerRegisterSide, {
   action as arbeidssokerregisterAction,
+  loader as arbeidssokerLoader,
 } from "~/routes/periode.$rapporteringsperiodeId.arbeidssoker";
 import { KortType } from "~/utils/types";
 
@@ -30,7 +29,7 @@ const render = () => {
     path: "/periode/:rapporteringsperiodeId/arbeidssoker",
     Component: ArbeidssøkerRegisterSide,
     action: arbeidssokerregisterAction,
-    loader: rapporteringsperiodeLoader,
+    loader: arbeidssokerLoader,
     initialEntry: `/periode/${rapporteringsperiode.id}/arbeidssoker`,
   });
 };
@@ -144,14 +143,11 @@ describe("ArbeidssøkerRegisterSide", () => {
     expect(await screen.findByText(/alert-innhold-avregistrert-v2/)).toBeInTheDocument();
   });
 
-  test("Spørsmål om arbeidssøker skal være disabled og uten prevalgt valg når meldekortet sendes for sent, men Neste-knappen skal være aktiv", async () => {
-    const pastertDato = format(subDays(new Date(), 7), "yyyy-MM-dd");
-    const rapporteringForSent: IRapporteringsperiode = {
-      ...rapporteringsperiode,
-      sisteFristForTrekk: pastertDato,
-      registrertArbeidssoker: null,
-    };
-    await testDb.addRapporteringsperioder(rapporteringForSent);
+  test("Spørsmål skal være disabled når bruker ikke er registrert arbeidssøker", async () => {
+    // Sett erRegistrertArbeidssoker til false i testDb
+    testDb.setErRegistrertArbeidssoker(false);
+
+    await testDb.addRapporteringsperioder(rapporteringsperiode);
     await act(async () => {
       render();
     });
@@ -166,8 +162,12 @@ describe("ArbeidssøkerRegisterSide", () => {
     expect(radioNei).toHaveAttribute("disabled");
     expect(radioNei).not.toBeChecked();
 
-    expect(await screen.findByText(/rapportering-for-sent-alert-tittel/)).toBeInTheDocument();
+    // Skal vise alert for ikke registrert arbeidssøker
+    expect(
+      await screen.findByText(/rapportering-ikke-registrert-arbeidssoker-alert-tittel/),
+    ).toBeInTheDocument();
 
+    // Neste-knappen skal være aktiv (bruker kan gå videre uten å svare)
     const nesteKnapp = await screen.findByRole("button", { name: /rapportering-knapp-neste/ });
     expect(nesteKnapp).not.toHaveAttribute("disabled");
   });
