@@ -17,7 +17,6 @@ import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
@@ -222,8 +221,6 @@ export default function RapporteringsPeriodeSendInnSide() {
         <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
         <AktivitetOppsummering periode={periode} />
       </div>
-
-      <ArbeidssokerAlert periode={periode} />
 
       {periode.begrunnelseEndring && (
         <div>
