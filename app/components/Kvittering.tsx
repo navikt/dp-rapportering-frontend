@@ -20,9 +20,15 @@ interface Ikvittering {
   tittel: string;
   periode: IRapporteringsperiode;
   harNestePeriode: boolean;
+  erRegistrertArbeidssoker?: boolean;
 }
 
-export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
+export function Kvittering({
+  tittel,
+  periode,
+  harNestePeriode,
+  erRegistrertArbeidssoker,
+}: Ikvittering) {
   const { getAppText, getLink, getRichText } = useSanity();
   const { locale } = useLocale();
   const { trackNavigere } = useAnalytics();
@@ -50,7 +56,10 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
               <AktivitetOppsummering periode={periode} />
             </div>
 
-            <ArbeidssokerAlert periode={periode} />
+            <ArbeidssokerAlert
+              periode={periode}
+              erRegistrertArbeidssoker={erRegistrertArbeidssoker}
+            />
 
             <div className={styles.skrivUtKnappen}>
               <Button
