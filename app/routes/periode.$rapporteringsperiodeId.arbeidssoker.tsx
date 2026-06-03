@@ -115,22 +115,10 @@ export default function ArbeidssøkerRegisterSide() {
           description={getAppText("rapportering-arbeidssokerregister-subtittel")}
           onChange={handleChange}
           name="_action"
-          value={!erRegistrertArbeidssoker ? undefined : periode.registrertArbeidssoker}
+          value={!erRegistrertArbeidssoker ? null : periode.registrertArbeidssoker}
         >
-          <Radio
-            name="erRegistrertSomArbeidssoker"
-            value={true}
-            checked={erRegistrertArbeidssoker && periode.registrertArbeidssoker === true}
-          >
-            {getAppText("rapportering-arbeidssokerregister-svar-ja")}
-          </Radio>
-          <Radio
-            name="erRegistrertSomArbeidssoker"
-            value={false}
-            checked={erRegistrertArbeidssoker && periode.registrertArbeidssoker === false}
-          >
-            {getAppText("rapportering-arbeidssokerregister-svar-nei")}
-          </Radio>
+          <Radio value={true}>{getAppText("rapportering-arbeidssokerregister-svar-ja")}</Radio>
+          <Radio value={false}>{getAppText("rapportering-arbeidssokerregister-svar-nei")}</Radio>
         </RadioGroup>
       </fetcher.Form>
 

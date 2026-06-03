@@ -90,7 +90,7 @@ describe("rapporteringsperiode.server", () => {
         body: formData,
       });
 
-      await sendInnPeriode(request, periode);
+      await sendInnPeriode(request, periode, true);
 
       expect(capturedBody).toBeDefined();
       expect(capturedBody!.registrertArbeidssoker).toBe(true);
@@ -118,7 +118,7 @@ describe("rapporteringsperiode.server", () => {
         body: formData,
       });
 
-      await sendInnPeriode(request, periode);
+      await sendInnPeriode(request, periode, true);
 
       expect(capturedBody).toBeDefined();
       expect(capturedBody!.registrertArbeidssoker).toBe(true);
@@ -145,10 +145,37 @@ describe("rapporteringsperiode.server", () => {
         body: formData,
       });
 
-      await sendInnPeriode(request, periode);
+      await sendInnPeriode(request, periode, true);
 
       expect(capturedBody).toBeDefined();
       expect(capturedBody!.registrertArbeidssoker).toBe(false);
+    });
+
+    test("skal sende registrertArbeidssoker som null når bruker ikke er registrert arbeidssøker", async () => {
+      const periode = lagRapporteringsperiode({
+        registrertArbeidssoker: true, // Bruker hadde svart "Ja", men er nå avregistrert
+      });
+
+      let capturedBody: { registrertArbeidssoker: boolean | null } | null = null;
+
+      server.use(
+        http.post(sendInnUrl, async ({ request }) => {
+          capturedBody = (await request.json()) as { registrertArbeidssoker: boolean | null };
+          return HttpResponse.json({ id: "123", status: "OK" }, { status: 200 });
+        }),
+      );
+
+      const formData = new FormData();
+      formData.append("_html", "<html>Test</html>");
+      const request = new Request(sendInnUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      await sendInnPeriode(request, periode, false);
+
+      expect(capturedBody).toBeDefined();
+      expect(capturedBody!.registrertArbeidssoker).toBe(null);
     });
   });
 });

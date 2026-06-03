@@ -158,6 +158,7 @@ export async function hentInnsendtePerioder(request: Request): Promise<IRapporte
 export async function sendInnPeriode(
   request: Request,
   rapporteringsperiode: IRapporteringsperiode,
+  erRegistrertArbeidssoker: boolean,
 ): Promise<IInnsendtRapporteringsperiodeResponse> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
@@ -174,7 +175,9 @@ export async function sendInnPeriode(
       rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
       rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
         ? true
-        : rapporteringsperiode.registrertArbeidssoker,
+        : !erRegistrertArbeidssoker
+          ? null
+          : rapporteringsperiode.registrertArbeidssoker,
   };
 
   const standardHeaders = await getHeaders(request);

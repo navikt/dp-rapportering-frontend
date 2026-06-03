@@ -35,6 +35,7 @@ const render = () => {
 };
 
 beforeEach(() => {
+  server.resetHandlers();
   testDb.clear();
   mockSession();
   mockResponse();
@@ -44,6 +45,7 @@ describe("ArbeidssøkerRegisterSide", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
   afterAll(() => server.close());
   afterEach(() => {
+    testDb.setErRegistrertArbeidssoker(true);
     server.resetHandlers();
     endSessionMock();
   });
