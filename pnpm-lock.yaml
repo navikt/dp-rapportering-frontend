@@ -33,8 +33,8 @@ importers:
         specifier: 8.11.0
         version: 8.11.0(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@navikt/nav-dekoratoren-moduler':
-        specifier: 4.1.1
-        version: 4.1.1(html-react-parser@6.1.2(@types/react@19.2.15)(react@19.2.6))(react@19.2.6)
+        specifier: 4.2.0
+        version: 4.2.0(html-react-parser@6.1.2(@types/react@19.2.15)(react@19.2.6))(react@19.2.6)
       '@navikt/oasis':
         specifier: 4.1.4
         version: 4.1.4
@@ -60,8 +60,8 @@ importers:
         specifier: 7.0.5
         version: 7.0.5(@types/react@19.2.15)(react@19.2.6)(scheduler@0.27.0)(zod@4.4.3)
       '@sanity/client':
-        specifier: 7.22.0
-        version: 7.22.0
+        specifier: 7.22.1
+        version: 7.22.1
       classnames:
         specifier: 2.5.1
         version: 2.5.1
@@ -950,8 +950,8 @@ packages:
   '@navikt/ds-tokens@8.11.0':
     resolution: {integrity: sha512-4vte9eN1/6h/Gnbh1Ls9kOt+jRYjNYs/uNk3CzYW/5cSDrmjKnCMhdFKQdpkfolu4ff+GCDoHc1WaJJpeYn/dQ==, tarball: https://npm.pkg.github.com/download/@navikt/ds-tokens/8.11.0/247cb6dd6c04352aceea2df5f3ce9588f6cd5883}
 
-  '@navikt/nav-dekoratoren-moduler@4.1.1':
-    resolution: {integrity: sha512-OyCVWavseiyGQwk8xHb6vShJtL+kOO/HIJe65QIsWrk85JV/ZeirB1/B4seA9klor1Zi9IvqyJkzl+nsJVZq9g==, tarball: https://npm.pkg.github.com/download/@navikt/nav-dekoratoren-moduler/4.1.1/14a1ab3742f4564e5fd921553b5cce65f534edf1}
+  '@navikt/nav-dekoratoren-moduler@4.2.0':
+    resolution: {integrity: sha512-kmn7Uj4RselUKdYfmpLUxPaMMfgBoqlyuimvOO/sjgUxyWq+qZn1rcZ9JNt58gMCfPI1L6mfnMp+XRvWv4lA1A==, tarball: https://npm.pkg.github.com/download/@navikt/nav-dekoratoren-moduler/4.2.0/f86499ff4bcc9299fa38641ba0906118f7fb1661}
     engines: {node: 24.x}
     peerDependencies:
       html-react-parser: '>=5.x'
@@ -1407,8 +1407,8 @@ packages:
     peerDependencies:
       zod: '>= 3.11.0'
 
-  '@sanity/client@7.22.0':
-    resolution: {integrity: sha512-KqN9cowZwfZNCwCchRaz1B9WrZTThQxX/gfJhJO1uKJBuk/JcbYGBiSK9CSqocWoYDQ/QqANVXy1r7a8zognww==}
+  '@sanity/client@7.22.1':
+    resolution: {integrity: sha512-DrQqLAes7W9Ek2iKgTZ+ffY1v3DURJ6//iXJZMEQSUeRbxls2ifRTdV1gRS26v8nMkL0OCH+WCoUUseD4vhuQQ==}
     engines: {node: '>=20'}
 
   '@sanity/eventsource@5.0.2':
@@ -2409,8 +2409,8 @@ packages:
     resolution: {integrity: sha512-9fSjSaos/fRIVIp+xSJlE6lfwhES7LNtKaCBIamHsjr2na1BiABJPo0mOjjz8GJDURarmCPGqaiVg5mfjb98CQ==}
     engines: {node: '>= 0.4'}
 
-  get-it@8.7.2:
-    resolution: {integrity: sha512-slSwC/BBAnoz9OnHopU+V5pJKAieddoF6dmx2CvbWMRePgup8ftiB+D7d+pr2PZzcqNtZOVDMoLOsXGsERhTEg==}
+  get-it@8.7.3:
+    resolution: {integrity: sha512-Fcv6n05iKMY/obxWb7wL0T8xOiUN/5ptBlg/Vf2WAvfs175wAV7Qf+UtWKp7Jdneu+KbUe6MIL0js2WBzoAoyg==}
     engines: {node: '>=14.0.0'}
 
   get-port@5.1.1:
@@ -2731,9 +2731,9 @@ packages:
   jose@6.1.3:
     resolution: {integrity: sha512-0TpaTfihd4QMNwrz/ob2Bp7X04yuxJkjRGi4aKmOqwhov54i6u79oCv7T+C7lo70MKH6BesI3vscD1yb/yzKXQ==}
 
-  js-cookie@3.0.5:
-    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
-    engines: {node: '>=14'}
+  js-cookie@3.0.7:
+    resolution: {integrity: sha512-z/wZZgDrkNV1eA0ULjM/F9/50Ya8fbzgKneSpoPsXSGd0KnpdtHfOZWK+GcwLk+EZbS4F9RBhU+K2RgzuDaItw==}
+    engines: {node: '>=20'}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -3028,11 +3028,6 @@ packages:
   mute-stream@4.0.0:
     resolution: {integrity: sha512-gSrprq0fJ3EiOErzjdIZrjysVVmJ4uu1QWfCDss5LypA5OXvrMje5Ym5z6V6RLyJ2eF87lasX7t6a0AnFvZblg==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
-
-  nanoid@3.3.11:
-    resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
-    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
-    hasBin: true
 
   nanoid@3.3.12:
     resolution: {integrity: sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ==}
@@ -4794,12 +4789,12 @@ snapshots:
 
   '@navikt/ds-tokens@8.11.0': {}
 
-  '@navikt/nav-dekoratoren-moduler@4.1.1(html-react-parser@6.1.2(@types/react@19.2.15)(react@19.2.6))(react@19.2.6)':
+  '@navikt/nav-dekoratoren-moduler@4.2.0(html-react-parser@6.1.2(@types/react@19.2.15)(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@navikt/analytics-types': 0.0.9
       csp-header: 6.3.1
       html-react-parser: 6.1.2(@types/react@19.2.15)(react@19.2.6)
-      js-cookie: 3.0.5
+      js-cookie: 3.0.7
       react: 19.2.6
 
   '@navikt/oasis@4.1.4':
@@ -5211,11 +5206,11 @@ snapshots:
       - scheduler
       - use-sync-external-store
 
-  '@sanity/client@7.22.0':
+  '@sanity/client@7.22.1':
     dependencies:
       '@sanity/eventsource': 5.0.2
-      get-it: 8.7.2
-      nanoid: 3.3.11
+      get-it: 8.7.3
+      nanoid: 3.3.12
       rxjs: 7.8.2
 
   '@sanity/eventsource@5.0.2':
@@ -6477,7 +6472,7 @@ snapshots:
       hasown: 2.0.2
       math-intrinsics: 1.1.0
 
-  get-it@8.7.2:
+  get-it@8.7.3:
     dependencies:
       decompress-response: 7.0.0
       is-retry-allowed: 2.2.0
@@ -6790,7 +6785,7 @@ snapshots:
 
   jose@6.1.3: {}
 
-  js-cookie@3.0.5: {}
+  js-cookie@3.0.7: {}
 
   js-tokens@4.0.0: {}
 
@@ -7075,8 +7070,6 @@ snapshots:
 
   mute-stream@4.0.0: {}
 
-  nanoid@3.3.11: {}
-
   nanoid@3.3.12: {}
 
   natural-compare@1.4.0: {}
@@ -7261,7 +7254,7 @@ snapshots:
 
   postcss@8.5.6:
     dependencies:
-      nanoid: 3.3.11
+      nanoid: 3.3.12
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
