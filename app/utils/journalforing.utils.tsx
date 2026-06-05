@@ -597,7 +597,7 @@ export function samleHtmlForPeriode(
       fns.push(htmlForTom);
     }
 
-    if (skalHaArbeidssokerSporsmal(periode)) {
+    if (skalHaArbeidssokerSporsmal(periode) && periode.registrertArbeidssoker !== null) {
       fns.push(htmlForArbeidssoker);
     }
 

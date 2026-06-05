@@ -175,9 +175,9 @@ export async function sendInnPeriode(
       rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
       rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
         ? true
-        : !erRegistrertArbeidssoker
-          ? null
-          : rapporteringsperiode.registrertArbeidssoker,
+        : erRegistrertArbeidssoker
+          ? rapporteringsperiode.registrertArbeidssoker
+          : null,
   };
 
   const standardHeaders = await getHeaders(request);
