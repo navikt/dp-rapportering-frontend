@@ -74,11 +74,6 @@ describe("RapporteringstypeSide", () => {
       bekreftAktivitet("rapportering-syk", /0 rapportering-dag/);
       bekreftAktivitet("rapportering-fraevaer", /0 rapportering-dag/);
       bekreftAktivitet("rapportering-utdanning", /0 rapportering-dag/);
-
-      // Arbeidssøkerregister
-      expect(
-        screen.getByText(/rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2/),
-      ).toBeInTheDocument();
     });
 
     test("Med aktiviteter", async () => {
@@ -117,10 +112,6 @@ describe("RapporteringstypeSide", () => {
       bekreftAktivitet("rapportering-syk", /1 rapportering-dag/);
       bekreftAktivitet("rapportering-fraevaer", /1 rapportering-dag/);
       bekreftAktivitet("rapportering-utdanning", /1 rapportering-dag/);
-
-      expect(
-        screen.getByText(/rapportering-arbeidssokerregister-alert-innhold-registrert-v2/),
-      ).toBeInTheDocument();
     });
   });
 });

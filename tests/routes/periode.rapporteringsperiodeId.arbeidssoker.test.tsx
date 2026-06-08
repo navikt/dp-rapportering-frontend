@@ -97,7 +97,6 @@ describe("ArbeidssøkerRegisterSide", () => {
     });
 
     await waitFor(() => expect(radioJa).toBeChecked());
-    expect(await screen.findByText(/alert-innhold-registrert-v2/)).toBeInTheDocument();
   });
 
   test("Skal svare med 'Nei'", async () => {
@@ -113,7 +112,6 @@ describe("ArbeidssøkerRegisterSide", () => {
     });
 
     await waitFor(() => expect(radioNei).toBeChecked());
-    expect(await screen.findByText(/alert-innhold-avregistrert-v2/)).toBeInTheDocument();
   });
 
   test("Skal være allerede besvart med 'Ja'", async () => {
@@ -127,8 +125,6 @@ describe("ArbeidssøkerRegisterSide", () => {
 
     const radioJa = await screen.findByRole("radio", { name: /svar-ja/ });
     expect(radioJa).toBeChecked();
-
-    expect(await screen.findByText(/alert-innhold-registrert-v2/)).toBeInTheDocument();
   });
 
   test("Skal være allerede besvart med 'Nei'", async () => {
@@ -142,7 +138,6 @@ describe("ArbeidssøkerRegisterSide", () => {
 
     const radioNei = await screen.findByRole("radio", { name: /svar-nei/ });
     expect(radioNei).toBeChecked();
-    expect(await screen.findByText(/alert-innhold-avregistrert-v2/)).toBeInTheDocument();
   });
 
   test("Spørsmål skal være disabled når bruker ikke er registrert arbeidssøker", async () => {

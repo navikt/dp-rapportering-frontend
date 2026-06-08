@@ -13,7 +13,6 @@ import { useUXSignals } from "~/hooks/useUXSignals";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 import styles from "../styles/kvittering.module.css";
-import { ArbeidssokerAlert } from "./arbeidssokerregister/ArbeidssokerRegister";
 import { NavigasjonContainer } from "./navigasjon-container/NavigasjonContainer";
 
 interface Ikvittering {
@@ -55,11 +54,6 @@ export function Kvittering({
               <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
               <AktivitetOppsummering periode={periode} />
             </div>
-
-            <ArbeidssokerAlert
-              periode={periode}
-              erRegistrertArbeidssoker={erRegistrertArbeidssoker}
-            />
 
             <div className={styles.skrivUtKnappen}>
               <Button
