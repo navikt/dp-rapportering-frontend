@@ -172,12 +172,11 @@ export async function sendInnPeriode(
     ...rapporteringsperiode,
     html: html.toString().trim(),
     registrertArbeidssoker:
-      rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
       rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
         ? true
-        : erRegistrertArbeidssoker
-          ? rapporteringsperiode.registrertArbeidssoker
-          : null,
+        : rapporteringsperiode.type === KortType.ETTERREGISTRERT || !erRegistrertArbeidssoker
+          ? null
+          : rapporteringsperiode.registrertArbeidssoker,
   };
 
   const standardHeaders = await getHeaders(request);

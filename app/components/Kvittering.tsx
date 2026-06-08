@@ -22,12 +22,7 @@ interface Ikvittering {
   erRegistrertArbeidssoker?: boolean;
 }
 
-export function Kvittering({
-  tittel,
-  periode,
-  harNestePeriode,
-  erRegistrertArbeidssoker,
-}: Ikvittering) {
+export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink, getRichText } = useSanity();
   const { locale } = useLocale();
   const { trackNavigere } = useAnalytics();

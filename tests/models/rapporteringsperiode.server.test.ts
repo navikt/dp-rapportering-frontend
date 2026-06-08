@@ -68,7 +68,7 @@ describe("rapporteringsperiode.server", () => {
   describe("sendInnPeriode", () => {
     const sendInnUrl = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`;
 
-    test("skal sende registrertArbeidssoker som true når perioden er etterregistrert", async () => {
+    test("skal sende registrertArbeidssoker som null når perioden er etterregistrert", async () => {
       const periode = lagRapporteringsperiode({
         type: KortType.ETTERREGISTRERT,
         registrertArbeidssoker: null,
@@ -93,7 +93,7 @@ describe("rapporteringsperiode.server", () => {
       await sendInnPeriode(request, periode, true);
 
       expect(capturedBody).toBeDefined();
-      expect(capturedBody!.registrertArbeidssoker).toBe(true);
+      expect(capturedBody!.registrertArbeidssoker).toBe(null);
     });
 
     test("skal sende registrertArbeidssoker som true når perioden er opprettet av Arena", async () => {

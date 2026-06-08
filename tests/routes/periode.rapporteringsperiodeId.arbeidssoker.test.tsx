@@ -159,11 +159,6 @@ describe("ArbeidssøkerRegisterSide", () => {
     expect(radioNei).toHaveAttribute("disabled");
     expect(radioNei).not.toBeChecked();
 
-    // Skal vise alert for ikke registrert arbeidssøker
-    expect(
-      await screen.findByText(/rapportering-ikke-registrert-arbeidssoker-alert-tittel/),
-    ).toBeInTheDocument();
-
     // Neste-knappen skal være aktiv (bruker kan gå videre uten å svare)
     const nesteKnapp = await screen.findByRole("button", { name: /rapportering-knapp-neste/ });
     expect(nesteKnapp).not.toHaveAttribute("disabled");
