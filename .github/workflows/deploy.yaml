@@ -41,7 +41,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-       - uses: actions/checkout@v6.0.2
+       - uses: actions/checkout@v6.0.3
        - name: Build static files
          uses: docker/build-push-action@v7.2.0
          with:
@@ -64,7 +64,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - uses: nais/deploy/actions/deploy@v2
         env:
           VAR: image=${{ needs.build-demo.outputs.image }},githubSha=${{ github.sha }}
@@ -80,7 +80,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - uses: nais/deploy/actions/deploy@v2
         env:
           VAR: image=${{ needs.build.outputs.image }},githubSha=${{ github.sha }}
@@ -97,7 +97,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - uses: nais/deploy/actions/deploy@v2
         env:
           VAR: image=${{ needs.build.outputs.image }},githubSha=${{ github.sha }}
