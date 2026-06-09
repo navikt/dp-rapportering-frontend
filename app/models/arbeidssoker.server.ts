@@ -8,7 +8,7 @@ export interface IArbeidssokerSvar {
 }
 
 export async function hentErRegistrertArbeidssoker(request: Request): Promise<boolean> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/erregistrertarbeidssoker`;
+  const url = `${getEnv("DP_RAPPORTERING_URL")}/er-registrert-arbeidssoker`;
 
   const response = await fetch(url, {
     method: "GET",

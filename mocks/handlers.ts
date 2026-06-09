@@ -132,7 +132,7 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
     },
   ),
 
-  http.get(`${DP_RAPPORTERING_URL}/erregistrertarbeidssoker`, async ({ cookies }) => {
+  http.get(`${DP_RAPPORTERING_URL}/er-registrert-arbeidssoker`, async ({ cookies }) => {
     const db = database || (await getDatabase(cookies));
     const erRegistrertArbeidssoker = db.getErRegistrertArbeidssoker();
 

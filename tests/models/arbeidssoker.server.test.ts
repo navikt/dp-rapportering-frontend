@@ -6,7 +6,7 @@ import { hentErRegistrertArbeidssoker, lagreArbeidssokerSvar } from "~/models/ar
 import { server } from "../../mocks/server";
 
 const lagreUrl = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode/:id/arbeidssoker`;
-const hentUrl = `${process.env.DP_RAPPORTERING_URL}/erregistrertarbeidssoker`;
+const hentUrl = `${process.env.DP_RAPPORTERING_URL}/er-registrert-arbeidssoker`;
 
 vi.mock("~/utils/fetch.utils", () => ({
   getHeaders: vi.fn(() => ({
