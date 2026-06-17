@@ -1,11 +1,12 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Radio, RadioGroup } from "@navikt/ds-react";
 import { useEffect, useMemo } from "react";
-import type { ActionFunctionArgs } from "react-router";
-import { useFetcher, useNavigate } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { useFetcher, useLoaderData, useNavigate } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
+import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
@@ -13,13 +14,18 @@ import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContai
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
-import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
+import { hentErRegistrertArbeidssoker, lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { formaterDato } from "~/utils/dato.utils";
 import { kanSendes, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import { Error } from "../components/error/Error";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const erRegistrertArbeidssoker = await hentErRegistrertArbeidssoker(request);
+  return { erRegistrertArbeidssoker };
+}
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -37,6 +43,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ArbeidssøkerRegisterSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const { erRegistrertArbeidssoker } = useLoaderData<typeof loader>();
   const { getAppText } = useSanity();
   const navigate = useNavigate();
   const fetcher = useFetcher<INetworkResponse>();
@@ -124,6 +131,8 @@ export default function ArbeidssøkerRegisterSide() {
       {fetcher.data?.status === "error" && (
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
+
+      <ArbeidssokerAlert periode={periode} erRegistrertArbeidssoker={erRegistrertArbeidssoker} />
 
       <NavigasjonContainer>
         <Button

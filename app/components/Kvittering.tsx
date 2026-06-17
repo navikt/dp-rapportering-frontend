@@ -13,15 +13,22 @@ import { useUXSignals } from "~/hooks/useUXSignals";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
 import styles from "../styles/kvittering.module.css";
+import { ArbeidssokerAlert } from "./arbeidssokerregister/ArbeidssokerRegister";
 import { NavigasjonContainer } from "./navigasjon-container/NavigasjonContainer";
 
 interface Ikvittering {
   tittel: string;
   periode: IRapporteringsperiode;
   harNestePeriode: boolean;
+  erRegistrertArbeidssoker?: boolean;
 }
 
-export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
+export function Kvittering({
+  tittel,
+  periode,
+  harNestePeriode,
+  erRegistrertArbeidssoker,
+}: Ikvittering) {
   const { getAppText, getLink, getRichText } = useSanity();
   const { locale } = useLocale();
   const { trackNavigere } = useAnalytics();
@@ -48,6 +55,11 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
               <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
               <AktivitetOppsummering periode={periode} />
             </div>
+
+            <ArbeidssokerAlert
+              periode={periode}
+              erRegistrertArbeidssoker={erRegistrertArbeidssoker}
+            />
 
             <div className={styles.skrivUtKnappen}>
               <Button
