@@ -4,8 +4,9 @@ metadata:
   name: dp-rapportering-frontend
   namespace: teamdagpenger
   labels:
-    team: teamdagpenger
-    app: dp-rapportering-frontend
+    team: "teamdagpenger"
+    app: "dp-rapportering-frontend"
+    subteam: "ramp"
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "64M"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
