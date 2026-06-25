@@ -7,24 +7,6 @@ export interface IArbeidssokerSvar {
   registrertArbeidssoker: boolean;
 }
 
-export async function hentErRegistrertArbeidssoker(request: Request): Promise<boolean> {
-  const url = `${getEnv("DP_RAPPORTERING_URL")}/erregistrertarbeidssoker`;
-
-  const response = await fetch(url, {
-    method: "GET",
-    headers: await getHeaders(request),
-  });
-
-  if (!response.ok) {
-    await logErrorResponseAsError(response, `Feil ved henting av arbeidssøker-status`);
-    throw new Response(`rapportering-feilmelding-hent-arbeidssoker-status`, {
-      status: response.status,
-    });
-  }
-
-  return response.json();
-}
-
 export async function lagreArbeidssokerSvar(
   request: Request,
   rapporteringsperiodeId: string,
