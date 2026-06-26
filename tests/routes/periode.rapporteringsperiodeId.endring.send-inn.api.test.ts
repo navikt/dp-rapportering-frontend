@@ -75,7 +75,7 @@ describe("Send inn rapporteringsperiode", () => {
         const response = await action({
           request,
           params: testParams,
-          context: {},
+          context: new Map(),
           pattern: "",
           url: new URL("https://test.nav.no"),
         });
@@ -124,7 +124,7 @@ describe("Send inn rapporteringsperiode", () => {
         const response = (await action({
           request,
           params: testParams,
-          context: {},
+          context: new Map(),
           pattern: "",
           url: new URL("https://test.nav.no"),
         })) as UNSAFE_DataWithResponseInit<{ error: string }>;

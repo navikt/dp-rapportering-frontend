@@ -48,7 +48,7 @@ describe("Start endring", () => {
       const response = await loader({
         request: new Request("http://localhost:3000"),
         params: testParams,
-        context: {},
+        context: new Map(),
         pattern: "",
         url: new URL("https://test.nav.no"),
       });
@@ -73,7 +73,7 @@ describe("Start endring", () => {
         loader({
           request: new Request("http://localhost:3000"),
           params: testParams,
-          context: {},
+          context: new Map(),
           pattern: "",
           url: new URL("https://test.nav.no"),
         }),

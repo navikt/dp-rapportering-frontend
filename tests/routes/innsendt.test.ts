@@ -26,7 +26,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
         loader({
           request: new Request("http://localhost:3000"),
           params: testParams,
-          context: {},
+          context: new Map(),
           pattern: "",
           url: new URL("https://test.nav.no"),
         }),
@@ -54,7 +54,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
         loader({
           request: new Request("http://localhost:3000"),
           params: testParams,
-          context: {},
+          context: new Map(),
           pattern: "",
           url: new URL("https://test.nav.no"),
         }),
@@ -86,7 +86,7 @@ describe("Liste ut alle rapporteringsperioder", () => {
       const response = await loader({
         request: new Request("http://localhost:3000"),
         params: {},
-        context: {},
+        context: new Map(),
         pattern: "",
         url: new URL("https://test.nav.no"),
       });
