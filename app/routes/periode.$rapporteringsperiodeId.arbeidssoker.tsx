@@ -6,6 +6,7 @@ import { useFetcher, useNavigate } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
+import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
@@ -124,6 +125,8 @@ export default function ArbeidssøkerRegisterSide() {
       {fetcher.data?.status === "error" && (
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
+
+      <ArbeidssokerAlert periode={periode} />
 
       <NavigasjonContainer>
         <Button
