@@ -66,7 +66,7 @@ describe("Fyll ut rapporteringsperiode", () => {
         const response = await action({
           request,
           params: testParams,
-          context: {},
+          context: new Map(),
           pattern: "",
           url: new URL("https://test.nav.no"),
         });
@@ -99,7 +99,7 @@ describe("Fyll ut rapporteringsperiode", () => {
         const response = await action({
           request,
           params: testParams,
-          context: {},
+          context: new Map(),
           pattern: "",
           url: new URL("https://test.nav.no"),
         });
@@ -143,7 +143,7 @@ describe("Fyll ut rapporteringsperiode", () => {
         const response = await slettAction({
           request,
           params: testParams,
-          context: {},
+          context: new Map(),
           pattern: "",
           url: new URL("https://test.nav.no"),
         });
