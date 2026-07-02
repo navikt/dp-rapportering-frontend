@@ -3,9 +3,9 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } fr
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import { loader as rapporteringsperiodeLoader } from "~/routes/periode.$rapporteringsperiodeId";
 import ArbeidssøkerRegisterSide, {
   action as arbeidssokerregisterAction,
+  loader as arbeidssokerLoader,
 } from "~/routes/periode.$rapporteringsperiodeId.arbeidssoker";
 import { KortType } from "~/utils/types";
 
@@ -29,12 +29,13 @@ const render = () => {
     path: "/periode/:rapporteringsperiodeId/arbeidssoker",
     Component: ArbeidssøkerRegisterSide,
     action: arbeidssokerregisterAction,
-    loader: rapporteringsperiodeLoader,
+    loader: arbeidssokerLoader,
     initialEntry: `/periode/${rapporteringsperiode.id}/arbeidssoker`,
   });
 };
 
 beforeEach(() => {
+  server.resetHandlers();
   testDb.clear();
   mockSession();
   mockResponse();
@@ -44,6 +45,7 @@ describe("ArbeidssøkerRegisterSide", () => {
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
   afterAll(() => server.close());
   afterEach(() => {
+    testDb.setErRegistrertArbeidssoker(true);
     server.resetHandlers();
     endSessionMock();
   });
@@ -136,5 +138,29 @@ describe("ArbeidssøkerRegisterSide", () => {
 
     const radioNei = await screen.findByRole("radio", { name: /svar-nei/ });
     expect(radioNei).toBeChecked();
+  });
+
+  test("Spørsmål skal være disabled når bruker ikke er registrert arbeidssøker", async () => {
+    // Sett erRegistrertArbeidssoker til false i testDb
+    testDb.setErRegistrertArbeidssoker(false);
+
+    await testDb.addRapporteringsperioder(rapporteringsperiode);
+    await act(async () => {
+      render();
+    });
+
+    expect(await screen.findByText(/rapportering-arbeidssokerregister-tittel/)).toBeInTheDocument();
+
+    const radioJa = await screen.findByRole("radio", { name: /svar-ja/i });
+    expect(radioJa).toHaveAttribute("disabled");
+    expect(radioJa).not.toBeChecked();
+
+    const radioNei = await screen.findByRole("radio", { name: /svar-nei/i });
+    expect(radioNei).toHaveAttribute("disabled");
+    expect(radioNei).not.toBeChecked();
+
+    // Neste-knappen skal være aktiv (bruker kan gå videre uten å svare)
+    const nesteKnapp = await screen.findByRole("button", { name: /rapportering-knapp-neste/ });
+    expect(nesteKnapp).not.toHaveAttribute("disabled");
   });
 });

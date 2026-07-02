@@ -20,6 +20,7 @@ interface Ikvittering {
   tittel: string;
   periode: IRapporteringsperiode;
   harNestePeriode: boolean;
+  erRegistrertArbeidssoker?: boolean;
 }
 
 export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {

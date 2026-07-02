@@ -26,6 +26,7 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+import { hentErRegistrertArbeidssoker } from "~/models/arbeidssoker.server";
 import { logErrorResponseAsError, logg } from "~/models/logger.server";
 import {
   hentPeriode,
@@ -73,7 +74,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       return data({ error: "rapportering-feilmelding-kan-ikke-sendes" }, { status: 400 });
     }
-    const response = await sendInnPeriode(request, periode);
+    const erRegistrertArbeidssoker = await hentErRegistrertArbeidssoker(request);
+    const response = await sendInnPeriode(request, periode, erRegistrertArbeidssoker);
     const { id } = response;
     return redirect(`/periode/${id}/endring/bekreftelse`);
   } catch (error: unknown) {
