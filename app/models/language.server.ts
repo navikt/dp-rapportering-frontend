@@ -1,4 +1,4 @@
-import { parse, serialize } from "cookie";
+import { parseCookie, stringifySetCookie } from "cookie";
 
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 
@@ -7,7 +7,7 @@ const cookieName = "decorator-language";
 export async function getLanguage(request: Request): Promise<DecoratorLocale> {
   const cookieHeader = request.headers.get("Cookie") || "";
 
-  const cookie = parse(cookieHeader);
+  const cookie = parseCookie(cookieHeader);
   return cookie[cookieName] as DecoratorLocale;
 }
 
@@ -15,8 +15,11 @@ export async function setLanguage(
   cookieHeader: string,
   language: DecoratorLocale,
 ): Promise<string> {
-  const cookie = parse(cookieHeader) || {};
+  const cookie = parseCookie(cookieHeader) || {};
   cookie[cookieName] = language;
 
-  return serialize(cookieName, language);
+  return stringifySetCookie({
+    name: cookieName,
+    value: language,
+  });
 }
