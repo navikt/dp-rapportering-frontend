@@ -626,4 +626,29 @@ describe("Etterregistrert meldekort", () => {
     expect(html).not.toContain("rapportering-arbeidssokerregister-svar-ja");
     expect(html).not.toContain("rapportering-arbeidssokerregister-alert-tittel");
   });
+
+  it("viser ikke arbeidssokerstatus når registrertArbeidssoker er null", () => {
+    const props = {
+      rapporteringsperioder: [],
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        type: KortType.ORDINAERT,
+        registrertArbeidssoker: null,
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      locale,
+    };
+
+    const html = samleHtmlForPeriode(
+      props.rapporteringsperioder,
+      props.periode,
+      mockGetAppText,
+      mockGetRichText,
+      locale,
+    );
+
+    expect(html).not.toContain("rapportering-arbeidssokerregister-svar-ja");
+    expect(html).not.toContain("rapportering-arbeidssokerregister-alert-tittel");
+  });
 });

@@ -9,9 +9,10 @@ import { KortType, OPPRETTET_AV } from "~/utils/types";
 
 interface IProps {
   periode: IRapporteringsperiode;
+  erRegistrertArbeidssoker?: boolean;
 }
 
-export function ArbeidssokerAlert({ periode }: IProps) {
+export function ArbeidssokerAlert({ periode, erRegistrertArbeidssoker }: IProps) {
   if (periode.opprettetAv === OPPRETTET_AV.Arena) {
     return <ArenaMeldekortAlert />;
   }
@@ -22,6 +23,10 @@ export function ArbeidssokerAlert({ periode }: IProps) {
 
   if (!skalHaArbeidssokerSporsmal(periode)) {
     return null;
+  }
+
+  if (erRegistrertArbeidssoker !== undefined && !erRegistrertArbeidssoker) {
+    return <IkkeRegistrertArbeidssokerAlert />;
   }
 
   if (periode.registrertArbeidssoker === true) {
@@ -72,6 +77,21 @@ export function ArenaMeldekortAlert() {
         {getAppText("rapportering-arena-meldekort-info-tittel")}
       </Heading>
       <PortableText value={getRichText("rapportering-arena-meldekort-info-innhold")} />
+    </Alert>
+  );
+}
+
+export function IkkeRegistrertArbeidssokerAlert() {
+  const { getAppText, getRichText } = useSanity();
+
+  return (
+    <Alert variant="warning" className="my-6 alert-with-rich-text">
+      <Heading spacing size="xsmall">
+        {getAppText("rapportering-ikke-registrert-arbeidssoker-alert-tittel")}
+      </Heading>
+      <PortableText
+        value={getRichText("rapportering-ikke-registrert-arbeidssoker-alert-innhold")}
+      />
     </Alert>
   );
 }
