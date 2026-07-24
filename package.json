@@ -43,7 +43,7 @@
     "date-fns": "4.4.0",
     "express": "5.2.1",
     "groq": "6.5.0",
-    "html-react-parser": "6.1.4",
+    "html-react-parser": "6.1.5",
     "isbot": "5.2.1",
     "morgan": "1.11.0",
     "msw": "2.15.0",
