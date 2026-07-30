@@ -2,7 +2,8 @@ import { http, HttpResponse } from "msw";
 import { afterAll, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
-import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
+import { hentRapporteringsperioder, sendInnPeriode } from "~/models/rapporteringsperiode.server";
+import { KortType, OPPRETTET_AV } from "~/utils/types";
 
 import { server } from "../../mocks/server";
 
@@ -62,5 +63,119 @@ describe("rapporteringsperiode.server", () => {
       expect((error as Response).status).toBe(500);
       expect(await (error as Response).text()).toBe("rapportering-feilmelding-hent-perioder");
     }
+  });
+
+  describe("sendInnPeriode", () => {
+    const sendInnUrl = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperiode`;
+
+    test("skal sende registrertArbeidssoker som null når perioden er etterregistrert", async () => {
+      const periode = lagRapporteringsperiode({
+        type: KortType.ETTERREGISTRERT,
+        registrertArbeidssoker: null,
+      });
+
+      let capturedBody: { registrertArbeidssoker: boolean | null } | null = null;
+
+      server.use(
+        http.post(sendInnUrl, async ({ request }) => {
+          capturedBody = (await request.json()) as { registrertArbeidssoker: boolean | null };
+          return HttpResponse.json({ id: "123", status: "OK" }, { status: 200 });
+        }),
+      );
+
+      const formData = new FormData();
+      formData.append("_html", "<html>Test</html>");
+      const request = new Request(sendInnUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      await sendInnPeriode(request, periode, true);
+
+      expect(capturedBody).toBeDefined();
+      expect(capturedBody!.registrertArbeidssoker).toBe(null);
+    });
+
+    test("skal sende registrertArbeidssoker som true når perioden er opprettet av Arena", async () => {
+      const periode = lagRapporteringsperiode({
+        opprettetAv: OPPRETTET_AV.Arena,
+        registrertArbeidssoker: null,
+      });
+
+      let capturedBody: { registrertArbeidssoker: boolean | null } | null = null;
+
+      server.use(
+        http.post(sendInnUrl, async ({ request }) => {
+          capturedBody = (await request.json()) as { registrertArbeidssoker: boolean | null };
+          return HttpResponse.json({ id: "123", status: "OK" }, { status: 200 });
+        }),
+      );
+
+      const formData = new FormData();
+      formData.append("_html", "<html>Test</html>");
+      const request = new Request(sendInnUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      await sendInnPeriode(request, periode, true);
+
+      expect(capturedBody).toBeDefined();
+      expect(capturedBody!.registrertArbeidssoker).toBe(true);
+    });
+
+    test("skal beholde eksisterende registrertArbeidssoker verdi når ingen spesielle regler gjelder", async () => {
+      const periode = lagRapporteringsperiode({
+        registrertArbeidssoker: false,
+      });
+
+      let capturedBody: { registrertArbeidssoker: boolean | null } | null = null;
+
+      server.use(
+        http.post(sendInnUrl, async ({ request }) => {
+          capturedBody = (await request.json()) as { registrertArbeidssoker: boolean | null };
+          return HttpResponse.json({ id: "123", status: "OK" }, { status: 200 });
+        }),
+      );
+
+      const formData = new FormData();
+      formData.append("_html", "<html>Test</html>");
+      const request = new Request(sendInnUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      await sendInnPeriode(request, periode, true);
+
+      expect(capturedBody).toBeDefined();
+      expect(capturedBody!.registrertArbeidssoker).toBe(false);
+    });
+
+    test("skal sende registrertArbeidssoker som null når bruker ikke er registrert arbeidssøker", async () => {
+      const periode = lagRapporteringsperiode({
+        registrertArbeidssoker: true, // Bruker hadde svart "Ja", men er nå avregistrert
+      });
+
+      let capturedBody: { registrertArbeidssoker: boolean | null } | null = null;
+
+      server.use(
+        http.post(sendInnUrl, async ({ request }) => {
+          capturedBody = (await request.json()) as { registrertArbeidssoker: boolean | null };
+          return HttpResponse.json({ id: "123", status: "OK" }, { status: 200 });
+        }),
+      );
+
+      const formData = new FormData();
+      formData.append("_html", "<html>Test</html>");
+      const request = new Request(sendInnUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      await sendInnPeriode(request, periode, false);
+
+      expect(capturedBody).toBeDefined();
+      expect(capturedBody!.registrertArbeidssoker).toBe(null);
+    });
   });
 });

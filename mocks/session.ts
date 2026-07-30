@@ -29,6 +29,7 @@ class SessionRecord {
 
   private createDatabase() {
     return {
+      erRegistrertArbeidssoker: true, // Default: brukeren er registrert arbeidssøker
       rapporteringsperioder: new Collection({
         schema: z.object({
           id: z.uuid(),

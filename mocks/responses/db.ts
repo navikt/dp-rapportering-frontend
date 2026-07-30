@@ -151,6 +151,9 @@ const deleteAllInnsendteperioder = (db: Database) => {
 };
 
 export function updateRapporteringsperioder(db: Database, scenario: ScenarioType) {
+  // Sett arbeidssøker-status basert på scenario
+  db.erRegistrertArbeidssoker = scenario !== ScenarioType.ikkeRegistrertArbeidssoker;
+
   switch (scenario) {
     case ScenarioType.ingen: {
       deleteAllRapporteringsperioder(db);
@@ -467,6 +470,24 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       );
       break;
     }
+
+    case ScenarioType.ikkeRegistrertArbeidssoker: {
+      deleteAllRapporteringsperioder(db);
+
+      const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
+
+      // Meldekort hvor bruker ikke er registrert som arbeidssøker
+      db.rapporteringsperioder.create(
+        lagRapporteringsperiode({
+          periode: {
+            fraOgMed,
+            tilOgMed,
+          },
+          registrertArbeidssoker: null,
+        }),
+      );
+      break;
+    }
   }
 }
 
@@ -476,6 +497,10 @@ function deleteRapporteringsperiode(db: Database, id: string) {
 
 export const withDb = (db: Database) => {
   return {
+    getErRegistrertArbeidssoker: () => db.erRegistrertArbeidssoker,
+    setErRegistrertArbeidssoker: (value: boolean) => {
+      db.erRegistrertArbeidssoker = value;
+    },
     seedRapporteringsperioder: () => seedRapporteringsperioder(db),
     addRapporteringsperioder: (rapporteringsperiode: IRapporteringsperiode) =>
       addRapporteringsperioder(db, rapporteringsperiode),
