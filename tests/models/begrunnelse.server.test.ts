@@ -13,7 +13,6 @@ vi.mock("~/utils/fetch.utils", () => ({
     Accept: "application",
     Authorization: "Bearer token",
   })),
-  getCorrelationId: vi.fn(() => "123"),
 }));
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
@@ -39,7 +38,7 @@ describe("lagreBegrunnelse", () => {
   it("lagring av begrunnelse feiler", async () => {
     server.use(
       http.post(url, () => {
-        return HttpResponse.json({}, { status: 500 });
+        return HttpResponse.json({ correlationId: "123" }, { status: 500 });
       }),
     );
 

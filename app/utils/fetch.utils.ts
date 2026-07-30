@@ -1,7 +1,6 @@
 import { uuidv7 } from "uuidv7";
 
 import { getSessionId } from "~/../mocks/session";
-import { IHttpProblem } from "~/utils/types";
 
 import { getRapporteringOboToken } from "./auth.utils.server";
 import { isLocalOrDemo } from "./env.utils";
@@ -34,15 +33,4 @@ export async function getHeaders(request: Request, customHeaders = {}) {
   }
 
   return headers;
-}
-
-export async function getCorrelationId(errorResponse: Response) {
-  try {
-    const errorBody: IHttpProblem = await errorResponse.json();
-    if (errorBody && errorBody.correlationId) {
-      return errorBody.correlationId;
-    }
-  } catch {
-    return "";
-  }
 }

@@ -2,6 +2,12 @@ import winston from "winston";
 
 import { IHttpProblem } from "~/utils/types";
 
+export interface IErrorResponse {
+  status: number;
+  body: IHttpProblem | null;
+  correlationId: string | undefined;
+}
+
 export const logger = winston.createLogger({
   format: process.env.NODE_ENV === "development" ? winston.format.simple() : winston.format.json(),
   transports: new winston.transports.Console(),
@@ -28,24 +34,35 @@ export const sikkerLogger = winston.createLogger({
         ],
 });
 
-export async function logErrorResponseAsError(errorResponse: Response, message?: string) {
-  const body = await getHttpProblem(errorResponse);
+export async function getErrorResponse(response: Response): Promise<IErrorResponse> {
+  const body = await getHttpProblem(response);
+  return {
+    status: response.status,
+    body,
+    correlationId: getCorrelationId(response, body) ?? undefined,
+  };
+}
+
+export function logErrorResponse(
+  errorResponse: IErrorResponse,
+  message: string,
+  level: "error" | "warn" = "error",
+): void {
   logg({
-    type: "error",
+    type: level,
     message: `Feil i response fra backend. ${message}. Status: ${errorResponse.status}.`,
-    correlationId: body?.correlationId || null,
-    body: body,
+    correlationId: errorResponse.correlationId ?? null,
+    body: errorResponse.body,
   });
 }
 
-export async function logErrorResponseAsWarn(errorResponse: Response, message?: string) {
-  const body = await getHttpProblem(errorResponse);
-  logg({
-    type: "warn",
-    message: `Feil i response fra backend. ${message}. Status: ${errorResponse.status}.`,
-    correlationId: body?.correlationId || null,
-    body: body,
-  });
+function getCorrelationId(response: Response, body: IHttpProblem | null): string | null {
+  return (
+    body?.correlationId ??
+    response.headers.get("x-request-id") ??
+    response.headers.get("x_correlation-id") ??
+    null
+  );
 }
 
 async function getHttpProblem(response: Response): Promise<IHttpProblem | null> {
