@@ -1,6 +1,6 @@
-import { logErrorResponseAsError } from "~/models/logger.server";
+import { getErrorResponse, logErrorResponse } from "~/models/logger.server";
 import { getEnv } from "~/utils/env.utils";
-import { getCorrelationId, getHeaders } from "~/utils/fetch.utils";
+import { getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
 
 import { IRapporteringsperiodeDag } from "./rapporteringsperiode.server";
@@ -21,15 +21,15 @@ export async function lagreAktivitet(
   });
 
   if (!response.ok) {
-    const id = await getCorrelationId(response);
-    await logErrorResponseAsError(response, `Feil ved lagring av aktivitet`);
+    const errorResponse = await getErrorResponse(response);
+    logErrorResponse(errorResponse, `Feil ved lagring av aktivitet`);
     return {
       status: "error",
       error: {
         statusCode: response.status,
         statusText: `rapportering-feilmelding-lagre-aktivitet`,
       },
-      id,
+      id: errorResponse.correlationId,
     };
   }
 
@@ -50,15 +50,15 @@ export async function slettAlleAktiviteterForRapporteringsperioden(
   });
 
   if (!response.ok) {
-    const id = await getCorrelationId(response);
-    await logErrorResponseAsError(response, `Feil ved sletting av aktiviter`);
+    const errorResponse = await getErrorResponse(response);
+    logErrorResponse(errorResponse, `Feil ved sletting av aktiviteter`);
     return {
       status: "error",
       error: {
         statusCode: response.status,
         statusText: `rapportering-feilmelding-lagre-aktivitet`,
       },
-      id,
+      id: errorResponse.correlationId,
     };
   }
 
