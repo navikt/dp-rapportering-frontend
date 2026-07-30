@@ -80,9 +80,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
     if (error instanceof Error) {
       logg({
         type: "error",
-        message: `Feil i innsending av endring: ${error.message}, ID: ${periodeId}`,
+        message: `Feil i innsending av endring, ID: ${periodeId}`,
         correlationId: null,
-        body: null,
+        body: {
+          message: error.message,
+          cause: error.cause,
+          stack: error.stack,
+        },
       });
     } else if (error instanceof Response) {
       const errorResponse = await getErrorResponse(error);
