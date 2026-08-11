@@ -19,5 +19,6 @@ jobs:
           persist-credentials: false
       - uses: navikt/digestabot@v1.2
         with:
+          branch-for-pr: 'ramp-bau/update-digests'
           token: ${{ secrets.GITHUB_TOKEN }}
           team: teamdagpenger
