@@ -35,7 +35,7 @@
     "@react-router/serve": "8.3.0",
     "@rvf/react-router": "8.2.0",
     "@rvf/zod": "7.0.5",
-    "@sanity/client": "8.0.0",
+    "@sanity/client": "8.2.0",
     "classnames": "2.5.1",
     "compression": "1.8.1",
     "cookie": "^2.0.1",
@@ -61,13 +61,13 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@inquirer/prompts": "8.5.2",
+    "@inquirer/prompts": "8.6.0",
     "@react-router/dev": "8.3.0",
     "@react-router/fs-routes": "8.3.0",
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.2",
-    "@testing-library/user-event": "14.6.4",
+    "@testing-library/user-event": "14.6.5",
     "@types/compression": "1.8.1",
     "@types/express": "5.0.6",
     "@types/morgan": "1.9.10",
@@ -91,7 +91,7 @@
     "prettier": "3.9.6",
     "typescript": "6.0.3",
     "typescript-eslint": "8.67.0",
-    "vite": "8.2.1",
+    "vite": "8.2.2",
     "vitest": "4.1.11"
   },
   "engines": {

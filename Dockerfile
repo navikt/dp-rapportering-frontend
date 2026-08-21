@@ -1,4 +1,4 @@
-FROM node:24-alpine AS node
+FROM node:24-alpine@sha256:d32cdf619f63fe0471182d08996dd516c6275bb5fd31ae06e55a570bd9e1ad43 AS node
 RUN corepack enable
 RUN corepack prepare pnpm@11.1.2 --activate
 RUN pnpm config set @navikt:registry=https://npm.pkg.github.com
@@ -43,7 +43,7 @@ COPY --from=app-build /app/build /
 
 
 # runtime
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26@sha256:144674f2684217f7540ca3ab4523bafbaf7d62559d9d0a65a839a7d960083123 AS runtime
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26@sha256:4e2d81ec527f42c123574c1c4f4d1f064283d733c28719bf057a77878801d662 AS runtime
 WORKDIR /app
 
 ARG NODE_ENV=production
