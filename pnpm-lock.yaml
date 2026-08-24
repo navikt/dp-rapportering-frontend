@@ -108,8 +108,8 @@ importers:
         specifier: 8.3.0
         version: 8.3.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       remeda:
-        specifier: 2.40.0
-        version: 2.40.0
+        specifier: 2.41.0
+        version: 2.41.0
       tiny-invariant:
         specifier: 1.3.3
         version: 1.3.3
@@ -2877,8 +2877,8 @@ packages:
     resolution: {integrity: sha512-dYqgNSZbDwkaJ2ceRd9ojCGjBq+mOm9LmtXnAnEGyHhN/5R7iDW2TRw3h+o/jCFxus3P2LfWIIiwowAjANm7IA==}
     engines: {node: '>= 0.4'}
 
-  remeda@2.40.0:
-    resolution: {integrity: sha512-Y8yxrbK8SbTao2+mTqJcjre3/eBH641nr88aAgYfOdbW5p4FH+1Jk3mMypnA+SoktEXBVA8id0o3XPbgHYvQ9Q==}
+  remeda@2.41.0:
+    resolution: {integrity: sha512-qKVEwoiLGReKPhK2WD3W8+EgYJlkJIMfbcVF7bLStKEcOhX36ZNqQm0Hw1+WDxDWVFMB9mwK4VAJeOm3x2a64g==}
     engines: {node: '>=18.0.0'}
 
   require-directory@2.1.1:
@@ -6459,7 +6459,7 @@ snapshots:
       gopd: 1.2.0
       set-function-name: 2.0.2
 
-  remeda@2.40.0: {}
+  remeda@2.41.0: {}
 
   require-directory@2.1.1: {}
 
