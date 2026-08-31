@@ -39,8 +39,8 @@ importers:
         specifier: 4.1.4
         version: 4.1.4
       '@portabletext/react':
-        specifier: 8.0.0
-        version: 8.0.0(react@19.2.8)
+        specifier: 8.0.1
+        version: 8.0.1(react@19.2.8)
       '@portabletext/types':
         specifier: 4.0.2
         version: 4.0.2
@@ -911,8 +911,8 @@ packages:
   '@oxc-project/types@0.144.0':
     resolution: {integrity: sha512-nuhZIOLuI6TFQ32I/WnUx+SCPY7SdSKwgnFHydAuoS1+Z4BRcaP+RRJmGzl9lw+0OFF7UmaESf7KQRXaNLHypg==}
 
-  '@portabletext/react@8.0.0':
-    resolution: {integrity: sha512-xXWm0LvJrWPqv1BI2wR95q/+YNQW2hFl0wG26hoF0YUoQFhXz5jWZHlsvTtLx/IkFcPd+LCsfoYRgEHnLJslIQ==}
+  '@portabletext/react@8.0.1':
+    resolution: {integrity: sha512-Fy9UxVhppgEckEvczZytg4bBxiPcZIM49NrJ3sizEoz19aNzJWEYoUj7f3TI94907psEk0yfR145eoOgkedM2A==}
     engines: {node: '>=22.12'}
     peerDependencies:
       react: ^19
@@ -4321,7 +4321,7 @@ snapshots:
 
   '@oxc-project/types@0.144.0': {}
 
-  '@portabletext/react@8.0.0(react@19.2.8)':
+  '@portabletext/react@8.0.1(react@19.2.8)':
     dependencies:
       '@portabletext/toolkit': 6.0.0
       '@portabletext/types': 4.0.2
