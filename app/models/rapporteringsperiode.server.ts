@@ -78,6 +78,10 @@ export async function startUtfylling(request: Request, periodeId: string): Promi
 
     return response;
   } catch (error) {
+    if (error instanceof Response) {
+      throw error;
+    }
+
     logg({
       type: "error",
       message: "Feil ved start av utfylling",
