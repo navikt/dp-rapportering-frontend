@@ -1,4 +1,4 @@
-import { getErrorResponse, logErrorResponse } from "~/models/logger.server";
+import { getErrorResponse, logErrorResponse, logg } from "~/models/logger.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
@@ -78,7 +78,12 @@ export async function startUtfylling(request: Request, periodeId: string): Promi
 
     return response;
   } catch (error) {
-    console.error("Feil ved start av utfylling", error);
+    logg({
+      type: "error",
+      message: "Feil ved start av utfylling",
+      correlationId: null,
+      body: error,
+    });
     throw new Response(`rapportering-feilmelding-start-utfylling`, {
       status: 500,
     });
