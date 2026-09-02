@@ -1,4 +1,4 @@
-import { getErrorResponse, logErrorResponse } from "~/models/logger.server";
+import { getErrorResponse, logErrorResponse, logg } from "~/models/logger.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
@@ -62,20 +62,39 @@ export enum InnsendtRapporteringsperiodeStatus {
 export async function startUtfylling(request: Request, periodeId: string): Promise<Response> {
   const url = `${DP_RAPPORTERING_URL}/rapporteringsperiode/${periodeId}/start`;
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: await getHeaders(request),
-  });
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: await getHeaders(request),
+    });
 
-  if (!response.ok) {
-    const errorResponse = await getErrorResponse(response);
-    logErrorResponse(errorResponse, `Klarte ikke å starte utfylling`);
+    if (!response.ok) {
+      const errorResponse = await getErrorResponse(response);
+      logErrorResponse(errorResponse, `Klarte ikke å starte utfylling`);
+      throw new Response(`rapportering-feilmelding-start-utfylling`, {
+        status: response.status,
+      });
+    }
+
+    return response;
+  } catch (error: unknown) {
+    if (error instanceof Response) {
+      throw error;
+    }
+
+    logg({
+      type: "error",
+      message: "Feil ved start av utfylling",
+      correlationId: null,
+      body: error instanceof Error ? error.message : error,
+    });
+    
     throw new Response(`rapportering-feilmelding-start-utfylling`, {
-      status: response.status,
+      status: 500,
     });
   }
 
-  return response;
+
 }
 
 export async function hentRapporteringsperioder(
