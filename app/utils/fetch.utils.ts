@@ -4,7 +4,6 @@ import { getSessionId } from "~/../mocks/session";
 
 import { getRapporteringOboToken } from "./auth.utils.server";
 import { isLocalOrDemo } from "./env.utils";
-import { logger } from "~/models/logger.server";
 
 export function getCorralationId(headers: Headers) {
   return headers.get("X-Request-ID") ?? "";
@@ -17,13 +16,7 @@ function generateCorralationId() {
 }
 
 export async function getHeaders(request: Request, customHeaders = {}) {
-  let onBehalfOfToken = "";
-
-  try {
-    onBehalfOfToken = await getRapporteringOboToken(request);
-  } catch(error) {
-    logger.error("Feil ved henting av OBO-token", error);
-  }
+  const onBehalfOfToken = await getRapporteringOboToken(request);
 
   const headers = {
     "Content-Type": "application/json",
