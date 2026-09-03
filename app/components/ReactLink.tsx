@@ -76,6 +76,7 @@ function ReactLinkComponent(
         icon={icon}
         iconPosition={iconPosition}
         as="a"
+        data-discover="true"
         disabled={disabled}
         className={className}
       >
@@ -94,6 +95,7 @@ function ReactLinkComponent(
         }
       }}
       ref={ref}
+      data-discover="true"
       className={className}
     >
       {icon && iconPosition === "left" && icon}
