@@ -19,6 +19,7 @@ import {
   ScrollRestoration,
   useFetcher,
   useRouteError,
+  useRouteLoaderData,
 } from "react-router";
 import { uuidv7 } from "uuidv7";
 
@@ -31,7 +32,7 @@ import { getDecoratorHTML } from "./dekorator/dekorator.server";
 import { DevTools } from "./devTools";
 import { useAnalytics } from "./hooks/useAnalytics";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
-import { useSanity } from "./hooks/useSanity";
+import { getAppText, useSanity } from "./hooks/useSanity";
 import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
 import { getLanguage, setLanguage } from "./models/language.server";
 import { sanityConfig } from "./sanity/sanity.config";
@@ -248,14 +249,18 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  const { getAppText } = useSanity();
+  // Root loader kan mangle data her (f.eks. ved ikke-matchende rute), så vi kan ikke bruke useSanity/getAppText
+  const rootData = useRouteLoaderData<typeof loader>("root");
+  const tittel = rootData
+    ? getAppText(rootData.sanityTexts, "rapportering-tittel")
+    : "Meldekort for dagpenger";
 
   return (
     <main id="maincontent" role="main" tabIndex={-1}>
       <div className={styles.rapporteringHeader}>
         <div className={styles.rapporteringHeaderInnhold}>
           <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
-            {getAppText("rapportering-tittel")}
+            {tittel}
           </Heading>
           {isLocalOrDemo && <DevTools />}
         </div>
