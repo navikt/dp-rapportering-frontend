@@ -32,8 +32,7 @@ import { getDecoratorHTML } from "./dekorator/dekorator.server";
 import { DevTools } from "./devTools";
 import { useAnalytics } from "./hooks/useAnalytics";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
-import { getAppText, useSanity } from "./hooks/useSanity";
-import { useTypedRouteLoaderData } from "./hooks/useTypedRouteLoaderData";
+import { getAppText, getMessages, useSanity } from "./hooks/useSanity";
 import { getLanguage, setLanguage } from "./models/language.server";
 import { sanityConfig } from "./sanity/sanity.config";
 import { allTextsQuery } from "./sanity/sanity.query";
@@ -144,12 +143,31 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { fragments, env } = useTypedRouteLoaderData("root");
-  const { getMessages } = useSanity();
+  // Root loader kan mangle data her (f.eks. ved ikke-matchende rute), så Layout må tåle det siden den alltid rendres
+  const rootData = useRouteLoaderData<typeof loader>("root");
+  const serviceMessages = rootData ? getMessages(rootData.sanityTexts) : [];
 
-  const serviceMessages = getMessages();
+  useInjectDecoratorScript(rootData?.fragments.DECORATOR_SCRIPTS);
 
-  useInjectDecoratorScript(fragments.DECORATOR_SCRIPTS);
+  if (!rootData) {
+    return (
+      <html lang="nb">
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          {children}
+          <ScrollRestoration />
+          <Scripts />
+        </body>
+      </html>
+    );
+  }
+
+  const { fragments, env } = rootData;
 
   return (
     <html lang="nb">
