@@ -1,13 +1,15 @@
 import { Button, Heading } from "@navikt/ds-react";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 import { useEffect } from "react";
-import { ErrorResponse, isRouteErrorResponse } from "react-router";
+import { ErrorResponse, isRouteErrorResponse, useRouteLoaderData } from "react-router";
 
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { useAnalytics } from "~/hooks/useAnalytics";
-import { foundAppText, foundRichText, useSanity } from "~/hooks/useSanity";
+import { foundAppText, foundRichText, getAppText, getLink, getRichText } from "~/hooks/useSanity";
+import type { ISanity } from "~/sanity/sanity.types";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 
+import type { loader as RootLoader } from "../../root";
 import { NavigasjonContainer } from "../navigasjon-container/NavigasjonContainer";
 
 export interface IError {
@@ -44,29 +46,30 @@ export function getErrorDescriptionTextId(error: unknown | IError): string {
   return defaultDescription;
 }
 
-export function useGetErrorText(error: unknown | IError): {
+export function useGetErrorText(
+  error: unknown | IError,
+  sanityTexts: ISanity | undefined,
+): {
   titleId: string;
   descriptionId: string;
   title: string;
   description: PortableTextBlock[];
 } {
-  const { getRichText, getAppText } = useSanity();
-
   const titleId = getErrorTitleTextId(error);
   const descriptionId = getErrorDescriptionTextId(error);
 
-  const title = getAppText(titleId);
-  const description = getRichText(descriptionId);
+  const title = getAppText(sanityTexts, titleId);
+  const description = getRichText(sanityTexts, descriptionId);
 
   const texts = { titleId, descriptionId, title, description };
 
   if (!foundAppText(title, titleId)) {
-    texts.title = getAppText(defaultTitle);
+    texts.title = getAppText(sanityTexts, defaultTitle);
     console.warn("Fant ikke tittel for feilmelding", titleId);
   }
 
   if (!foundRichText(description, descriptionId)) {
-    texts.description = getRichText(defaultDescription);
+    texts.description = getRichText(sanityTexts, defaultDescription);
     console.warn("Fant ikke beskrivelse for feilmelding", descriptionId);
   }
 
@@ -74,13 +77,15 @@ export function useGetErrorText(error: unknown | IError): {
 }
 
 export function GeneralErrorBoundary({ error }: IProps) {
-  const { getAppText, getLink } = useSanity();
-  const { titleId, descriptionId, title, description } = useGetErrorText(error);
+  // Root loader kan mangle data her (f.eks. hvis root sin egen loader feilet), så vi kan ikke bruke useSanity
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
+  const sanityTexts = rootData?.sanityTexts;
+  const { titleId, descriptionId, title, description } = useGetErrorText(error, sanityTexts);
   const { trackFeilmelding } = useAnalytics();
 
   useEffect(() => {
-    setBreadcrumbs([], getAppText);
-  }, [getAppText]);
+    setBreadcrumbs([], (textId) => getAppText(sanityTexts, textId));
+  }, [sanityTexts]);
 
   useEffect(() => {
     // Logg besøk, titleId og descriptionId
@@ -100,9 +105,9 @@ export function GeneralErrorBoundary({ error }: IProps) {
         <Button
           as="a"
           className={navigasjonStyles.knapp}
-          href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
+          href={getLink(sanityTexts, "rapportering-ga-til-mine-dagpenger").linkUrl}
         >
-          {getLink("rapportering-ga-til-mine-dagpenger").linkText}
+          {getLink(sanityTexts, "rapportering-ga-til-mine-dagpenger").linkText}
         </Button>
       </NavigasjonContainer>
     </>

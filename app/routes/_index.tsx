@@ -10,6 +10,7 @@ import {
   useLoaderData,
   useNavigation,
   useRouteError,
+  useRouteLoaderData,
 } from "react-router";
 
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
@@ -19,7 +20,6 @@ import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContai
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
-import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
 import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
@@ -27,6 +27,7 @@ import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 import { TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
+import type { loader as RootLoader } from "../root";
 import type { action as StartAction } from "./api.start";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -142,10 +143,11 @@ export default function Landingsside() {
 export function ErrorBoundary() {
   const error = useRouteError();
 
-  const { env } = useTypedRouteLoaderData("root");
+  // Root loader kan mangle data her (f.eks. ved ikke-matchende rute), så vi kan ikke bruke useTypedRouteLoaderData
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
 
   if (isRouteErrorResponse(error)) {
-    if (env.IS_LOCALHOST && error.status === 440) {
+    if (rootData?.env.IS_LOCALHOST && error.status === 440) {
       return (
         <DevelopmentContainer>
           <>
@@ -164,4 +166,6 @@ export function ErrorBoundary() {
 
     return <GeneralErrorBoundary error={error} />;
   }
+
+  return <GeneralErrorBoundary error={error} />;
 }

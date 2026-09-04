@@ -28,8 +28,7 @@ jobs:
       NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
   cdn-upload:
-    name: Upload static files (demo only)
-    if: inputs.environment == 'demo'
+    name: Upload static files
     needs: build
     runs-on: ubuntu-latest
     permissions:

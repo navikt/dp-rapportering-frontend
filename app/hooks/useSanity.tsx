@@ -60,7 +60,7 @@ export function foundAppText(text: string, textId: string) {
 }
 
 export function getAppText(
-  sanityTexts: ISanity,
+  sanityTexts: ISanity | undefined,
   textId: string,
   replaceTexts?: ReplaceTexts,
 ): string {
@@ -68,7 +68,7 @@ export function getAppText(
     sanityTexts?.appTexts.find((appText: ISanityAppText) => appText.textId === textId)?.valueText ||
     textId;
 
-  if (!foundAppText(text, textId)) {
+  if (sanityTexts && !foundAppText(text, textId)) {
     console.warn(`Fant ikke appText med ID: ${textId}`);
   }
 
@@ -103,7 +103,7 @@ export function replaceKeys(text: string, replaceTexts: ReplaceTexts) {
 }
 
 export function getRichText(
-  sanityTexts: ISanity,
+  sanityTexts: ISanity | undefined,
   textId: string,
   replaceTexts?: ReplaceTexts,
 ): PortableTextBlock[] {
@@ -111,7 +111,7 @@ export function getRichText(
     return richText.textId === textId;
   });
 
-  if (!foundRichText(richText?.body, textId)) {
+  if (sanityTexts && !foundRichText(richText?.body, textId)) {
     console.warn(`Fant ikke richText med ID: ${textId}`);
   }
 
@@ -138,20 +138,20 @@ export function foundMessage(message: ISanityMessage, textId: string) {
   return message.title !== textId;
 }
 
-export function getMessage(sanityTexts: ISanity, textId: string): ISanityMessage {
+export function getMessage(sanityTexts: ISanity | undefined, textId: string): ISanityMessage {
   const message =
     sanityTexts?.messages?.find((m: ISanityMessage) => {
       return m.textId === textId;
     }) || createSanityMessageObject(textId);
 
-  if (!foundMessage(message, textId)) {
+  if (sanityTexts && !foundMessage(message, textId)) {
     console.warn(`Fant ikke message med ID: ${textId}`);
   }
 
   return message;
 }
 
-export function getMessages(sanityTexts: ISanity): ISanityMessage[] {
+export function getMessages(sanityTexts: ISanity | undefined): ISanityMessage[] {
   return sanityTexts?.messages ?? [];
 }
 
@@ -161,11 +161,11 @@ export function foundLink(link: ISanityLink, linkId: string) {
   return link.linkText !== linkId;
 }
 
-export function getLink(sanityTexts: ISanity, linkId: string): ISanityLink {
+export function getLink(sanityTexts: ISanity | undefined, linkId: string): ISanityLink {
   const link =
     sanityTexts?.links?.find((link) => link.linkId === linkId) || createLinkObject(linkId);
 
-  if (!foundLink(link, linkId)) {
+  if (sanityTexts && !foundLink(link, linkId)) {
     console.warn(`Fant ikke link med ID: ${linkId}`);
   }
 
