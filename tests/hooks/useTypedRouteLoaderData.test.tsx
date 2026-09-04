@@ -21,7 +21,14 @@ function KomponentSomManglerRuteData() {
 
 function RuteFeilgrense() {
   const error = useRouteError();
-  return <GeneralErrorBoundary error={error} />;
+  return (
+    <>
+      <span data-testid="route-error-name">
+        {error instanceof Error ? error.name : "unknown"}
+      </span>
+      <GeneralErrorBoundary error={error} />
+    </>
+  );
 }
 
 describe("useTypedRouteLoaderData", () => {
