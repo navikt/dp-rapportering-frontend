@@ -68,7 +68,7 @@ export function getAppText(
     sanityTexts?.appTexts.find((appText: ISanityAppText) => appText.textId === textId)?.valueText ||
     textId;
 
-  if (!foundAppText(text, textId)) {
+  if (sanityTexts && !foundAppText(text, textId)) {
     console.warn(`Fant ikke appText med ID: ${textId}`);
   }
 
@@ -111,7 +111,7 @@ export function getRichText(
     return richText.textId === textId;
   });
 
-  if (!foundRichText(richText?.body, textId)) {
+  if (sanityTexts && !foundRichText(richText?.body, textId)) {
     console.warn(`Fant ikke richText med ID: ${textId}`);
   }
 
@@ -144,7 +144,7 @@ export function getMessage(sanityTexts: ISanity | undefined, textId: string): IS
       return m.textId === textId;
     }) || createSanityMessageObject(textId);
 
-  if (!foundMessage(message, textId)) {
+  if (sanityTexts && !foundMessage(message, textId)) {
     console.warn(`Fant ikke message med ID: ${textId}`);
   }
 
@@ -165,7 +165,7 @@ export function getLink(sanityTexts: ISanity | undefined, linkId: string): ISani
   const link =
     sanityTexts?.links?.find((link) => link.linkId === linkId) || createLinkObject(linkId);
 
-  if (!foundLink(link, linkId)) {
+  if (sanityTexts && !foundLink(link, linkId)) {
     console.warn(`Fant ikke link med ID: ${linkId}`);
   }
 

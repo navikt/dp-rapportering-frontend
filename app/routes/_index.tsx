@@ -166,4 +166,6 @@ export function ErrorBoundary() {
 
     return <GeneralErrorBoundary error={error} />;
   }
+
+  return <GeneralErrorBoundary error={error} />;
 }
