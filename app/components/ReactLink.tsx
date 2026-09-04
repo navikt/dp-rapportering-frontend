@@ -23,6 +23,8 @@ interface IProps extends LinkProps {
   iconPosition?: "left" | "right";
   disabled?: boolean;
   className?: string;
+  // Tvinger en vanlig sideinnlasting i stedet for client-side navigasjon (unngår react-router sin .data-fetch, som feiler i prod for "/", se ingress-oppsett)
+  reloadDocument?: boolean;
 }
 
 export const ReactLink = forwardRef(ReactLinkComponent);
@@ -45,6 +47,7 @@ function ReactLinkComponent(
     icon,
     disabled = false,
     className,
+    reloadDocument = false,
   } = props;
   const href = useHref(to);
 
@@ -67,7 +70,7 @@ function ReactLinkComponent(
           bakover i designsystemet gjenspeiler ikke dette. */
           // @ts-expect-error ts klager over feil event-type
           onClick?.(event);
-          if (!event.defaultPrevented && !disabled) {
+          if (!event.defaultPrevented && !disabled && !reloadDocument) {
             // @ts-expect-error ts klager over feil event-type
             handleClick(event);
           }
@@ -89,7 +92,7 @@ function ReactLinkComponent(
       href={href}
       onClick={(event) => {
         onClick?.(event);
-        if (!event.defaultPrevented) {
+        if (!event.defaultPrevented && !reloadDocument) {
           handleClick(event);
         }
       }}

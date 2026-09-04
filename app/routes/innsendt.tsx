@@ -183,7 +183,7 @@ export default function InnsendteRapporteringsPerioderSide() {
 
       <NavigasjonContainer>
         {harFlerePerioder ? (
-          <ReactLink as="Button" to="/home" className={navigasjonStyles.knapp}>
+          <ReactLink as="Button" to="/" reloadDocument className={navigasjonStyles.knapp}>
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </ReactLink>
         ) : (

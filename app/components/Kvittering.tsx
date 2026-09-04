@@ -76,7 +76,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
 
       <NavigasjonContainer>
         {harNestePeriode ? (
-          <ReactLink as="Button" to="/home" className={navigasjonStyles.knapp}>
+          <ReactLink as="Button" to="/" reloadDocument className={navigasjonStyles.knapp}>
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </ReactLink>
         ) : (
