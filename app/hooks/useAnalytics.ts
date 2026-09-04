@@ -61,7 +61,6 @@ const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
   const logger = getAnalyticsInstance(skjemanavn);
-
   const { locale: språk } = useLocale();
 
   const trackEvent = useCallback(

@@ -10,11 +10,18 @@ type Loaders = {
   "routes/periode.$rapporteringsperiodeId": typeof RouteRapporteringPeriodeRapporteringsId;
 };
 
+export class MissingRouteLoaderDataError extends Error {
+  constructor(public readonly routeId: keyof Loaders) {
+    super("rapportering-feilmelding-rutedata-mangler");
+    this.name = "MissingRouteLoaderDataError";
+  }
+}
+
 export function useTypedRouteLoaderData<T extends keyof Loaders>(route: T) {
   const routeData = useRouteLoaderData<Loaders[T]>(route);
 
   if (!routeData) {
-    throw new Error("rapportering-feilmelding-rutedata-mangler");
+    throw new MissingRouteLoaderDataError(route);
   }
 
   return routeData;
