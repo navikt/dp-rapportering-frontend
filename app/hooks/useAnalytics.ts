@@ -61,7 +61,6 @@ const skjemanavn = "dagpenger-rapportering";
 
 export function useAnalytics() {
   const logger = getAnalyticsInstance(skjemanavn);
-
   const { locale: språk } = useLocale();
 
   const trackEvent = useCallback(
@@ -71,6 +70,7 @@ export function useAnalytics() {
       custom: boolean = false,
     ) => {
       if (typeof window === "undefined") return;
+      if (!språk) return;
 
       await awaitDecoratorData();
       const { consent } = getCurrentConsent();
