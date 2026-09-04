@@ -60,7 +60,7 @@ export function foundAppText(text: string, textId: string) {
 }
 
 export function getAppText(
-  sanityTexts: ISanity,
+  sanityTexts: ISanity | undefined,
   textId: string,
   replaceTexts?: ReplaceTexts,
 ): string {
@@ -103,7 +103,7 @@ export function replaceKeys(text: string, replaceTexts: ReplaceTexts) {
 }
 
 export function getRichText(
-  sanityTexts: ISanity,
+  sanityTexts: ISanity | undefined,
   textId: string,
   replaceTexts?: ReplaceTexts,
 ): PortableTextBlock[] {
@@ -138,7 +138,7 @@ export function foundMessage(message: ISanityMessage, textId: string) {
   return message.title !== textId;
 }
 
-export function getMessage(sanityTexts: ISanity, textId: string): ISanityMessage {
+export function getMessage(sanityTexts: ISanity | undefined, textId: string): ISanityMessage {
   const message =
     sanityTexts?.messages?.find((m: ISanityMessage) => {
       return m.textId === textId;
@@ -151,7 +151,7 @@ export function getMessage(sanityTexts: ISanity, textId: string): ISanityMessage
   return message;
 }
 
-export function getMessages(sanityTexts: ISanity): ISanityMessage[] {
+export function getMessages(sanityTexts: ISanity | undefined): ISanityMessage[] {
   return sanityTexts?.messages ?? [];
 }
 
@@ -161,7 +161,7 @@ export function foundLink(link: ISanityLink, linkId: string) {
   return link.linkText !== linkId;
 }
 
-export function getLink(sanityTexts: ISanity, linkId: string): ISanityLink {
+export function getLink(sanityTexts: ISanity | undefined, linkId: string): ISanityLink {
   const link =
     sanityTexts?.links?.find((link) => link.linkId === linkId) || createLinkObject(linkId);
 
