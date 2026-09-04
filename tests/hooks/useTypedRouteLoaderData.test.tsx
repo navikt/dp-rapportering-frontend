@@ -28,6 +28,7 @@ describe("useTypedRouteLoaderData", () => {
   test("kaster MissingRouteLoaderDataError når ruten mangler loader-data, og GeneralErrorBoundary viser generisk fallback-tekst", async () => {
     const RoutesStub = createRoutesStub([
       {
+        id: "routes/_index",
         path: "/",
         Component: KomponentSomManglerRuteData,
         ErrorBoundary: RuteFeilgrense,
