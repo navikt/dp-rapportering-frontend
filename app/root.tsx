@@ -17,7 +17,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useFetcher,
   useRouteError,
   useRouteLoaderData,
 } from "react-router";
@@ -218,8 +217,6 @@ export default function App() {
 
   initInstrumentation();
 
-  const fetcher = useFetcher();
-
   useEffect(() => {
     setAvailableLanguages(availableLanguages);
     trackForetrukketSprak(navigator.language);
@@ -228,7 +225,13 @@ export default function App() {
       onLanguageSelect((language) => {
         trackSprakEndret(language.locale as DecoratorLocale);
         document.documentElement.setAttribute("lang", language.locale);
-        fetcher.submit({ locale: language.locale }, { method: "post" });
+
+        // Bruker vanlig fetch mot rot-dokumentet (ikke fetcher.submit) for å unngå React Routers .data-endepunkt
+        const formData = new FormData();
+        formData.set("locale", language.locale);
+        fetch(`${getEnv("BASE_PATH")}/`, { method: "POST", body: formData }).then(() => {
+          window.location.reload();
+        });
       });
     }
   }, []);
