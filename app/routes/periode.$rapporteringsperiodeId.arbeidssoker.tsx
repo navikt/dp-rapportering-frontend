@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Radio, RadioGroup } from "@navikt/ds-react";
 import { useEffect, useMemo } from "react";
 import type { ActionFunctionArgs } from "react-router";
-import { useFetcher, useNavigate } from "react-router";
+import { useFetcher, useLoaderData, useNavigate } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
@@ -18,9 +18,16 @@ import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { formaterDato } from "~/utils/dato.utils";
 import { kanSendes, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
+import { FEATURE_TOGGLES, isFeatureEnabled } from "~/utils/unleash.server";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import { Error } from "../components/error/Error";
+
+export async function loader() {
+  return {
+    disableSpm5: await isFeatureEnabled(FEATURE_TOGGLES.disableSpm5),
+  };
+}
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -38,6 +45,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ArbeidssøkerRegisterSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const { disableSpm5 } = useLoaderData<typeof loader>();
   const { getAppText } = useSanity();
   const navigate = useNavigate();
   const fetcher = useFetcher<INetworkResponse>();
@@ -93,40 +101,42 @@ export default function ArbeidssøkerRegisterSide() {
     <>
       <KanIkkeSendes periode={periode} />
 
-      <fetcher.Form method="post">
-        <RadioGroup
-          disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
-          legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
-            fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
-            tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
-          })}
-          description={getAppText("rapportering-arbeidssokerregister-subtittel")}
-          onChange={handleChange}
-          name="_action"
-          value={periode.registrertArbeidssoker}
-        >
-          <Radio
-            name="erRegistrertSomArbeidssoker"
-            value={true}
-            checked={periode.registrertArbeidssoker === true}
+      {!disableSpm5 && (
+        <fetcher.Form method="post">
+          <RadioGroup
+            disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
+            legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
+              fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
+              tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
+            })}
+            description={getAppText("rapportering-arbeidssokerregister-subtittel")}
+            onChange={handleChange}
+            name="_action"
+            value={periode.registrertArbeidssoker}
           >
-            {getAppText("rapportering-arbeidssokerregister-svar-ja")}
-          </Radio>
-          <Radio
-            name="erRegistrertSomArbeidssoker"
-            value={false}
-            checked={periode.registrertArbeidssoker === false}
-          >
-            {getAppText("rapportering-arbeidssokerregister-svar-nei")}
-          </Radio>
-        </RadioGroup>
-      </fetcher.Form>
+            <Radio
+              name="erRegistrertSomArbeidssoker"
+              value={true}
+              checked={periode.registrertArbeidssoker === true}
+            >
+              {getAppText("rapportering-arbeidssokerregister-svar-ja")}
+            </Radio>
+            <Radio
+              name="erRegistrertSomArbeidssoker"
+              value={false}
+              checked={periode.registrertArbeidssoker === false}
+            >
+              {getAppText("rapportering-arbeidssokerregister-svar-nei")}
+            </Radio>
+          </RadioGroup>
+        </fetcher.Form>
+      )}
 
       {fetcher.data?.status === "error" && (
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
 
-      <ArbeidssokerAlert periode={periode} />
+      {!disableSpm5 && <ArbeidssokerAlert periode={periode} />}
 
       <NavigasjonContainer>
         <Button
@@ -145,7 +155,7 @@ export default function ArbeidssøkerRegisterSide() {
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
           className={navigasjonStyles.knapp}
-          disabled={periode.registrertArbeidssoker === null || isSubmitting}
+          disabled={(!disableSpm5 && periode.registrertArbeidssoker === null) || isSubmitting}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
