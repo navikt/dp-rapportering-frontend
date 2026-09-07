@@ -70,7 +70,6 @@ export function useAnalytics() {
       custom: boolean = false,
     ) => {
       if (typeof window === "undefined") return;
-      if (!språk) return;
 
       await awaitDecoratorData();
       const { consent } = getCurrentConsent();
