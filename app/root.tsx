@@ -228,10 +228,18 @@ export default function App() {
       onLanguageSelect((language) => {
         trackSprakEndret(language.locale as DecoratorLocale);
         document.documentElement.setAttribute("lang", language.locale);
-        fetcher.submit({ locale: language.locale }, { method: "post" });
+        // Uten action="/" vil fetcher poste til gjeldende (leaf) rute, som ikke har en action
+        fetcher.submit({ locale: language.locale }, { method: "post", action: "/" });
       });
     }
   }, []);
+
+  useEffect(() => {
+    // Språk-cookien settes i action, så vi laster siden på nytt for å hente tekster på nytt språk
+    if (fetcher.state === "idle" && fetcher.data) {
+      window.location.reload();
+    }
+  }, [fetcher.state, fetcher.data]);
 
   useEffect(() => {
     if (typeof document !== "undefined" && mainContent.current) {
