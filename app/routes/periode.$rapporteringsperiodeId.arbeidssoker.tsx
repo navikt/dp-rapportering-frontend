@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Radio, RadioGroup } from "@navikt/ds-react";
 import { useEffect, useMemo } from "react";
 import type { ActionFunctionArgs } from "react-router";
-import { useFetcher, useLoaderData, useNavigate } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
@@ -45,7 +45,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ArbeidssøkerRegisterSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
-  const { disableSpm5 } = useLoaderData<typeof loader>();
   const { getAppText } = useSanity();
   const navigate = useNavigate();
   const fetcher = useFetcher<INetworkResponse>();
@@ -101,42 +100,39 @@ export default function ArbeidssøkerRegisterSide() {
     <>
       <KanIkkeSendes periode={periode} />
 
-      {!disableSpm5 && (
-        <fetcher.Form method="post">
-          <RadioGroup
-            disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
-            legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
-              fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
-              tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
-            })}
-            description={getAppText("rapportering-arbeidssokerregister-subtittel")}
-            onChange={handleChange}
-            name="_action"
-            value={periode.registrertArbeidssoker}
+      <fetcher.Form method="post">
+        <RadioGroup
+          disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
+          legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
+            fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
+            tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
+          })}
+          description={getAppText("rapportering-arbeidssokerregister-subtittel")}
+          onChange={handleChange}
+          name="_action"
+          value={periode.registrertArbeidssoker}
+        >
+          <Radio
+            name="erRegistrertSomArbeidssoker"
+            value={true}
+            checked={periode.registrertArbeidssoker === true}
           >
-            <Radio
-              name="erRegistrertSomArbeidssoker"
-              value={true}
-              checked={periode.registrertArbeidssoker === true}
-            >
-              {getAppText("rapportering-arbeidssokerregister-svar-ja")}
-            </Radio>
-            <Radio
-              name="erRegistrertSomArbeidssoker"
-              value={false}
-              checked={periode.registrertArbeidssoker === false}
-            >
-              {getAppText("rapportering-arbeidssokerregister-svar-nei")}
-            </Radio>
-          </RadioGroup>
-        </fetcher.Form>
-      )}
+            {getAppText("rapportering-arbeidssokerregister-svar-ja")}
+          </Radio>
+          <Radio
+            name="erRegistrertSomArbeidssoker"
+            value={false}
+            checked={periode.registrertArbeidssoker === false}
+          >
+            {getAppText("rapportering-arbeidssokerregister-svar-nei")}
+          </Radio>
+        </RadioGroup>
+      </fetcher.Form>
 
       {fetcher.data?.status === "error" && (
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
-
-      {!disableSpm5 && <ArbeidssokerAlert periode={periode} />}
+      <ArbeidssokerAlert periode={periode} />
 
       <NavigasjonContainer>
         <Button
@@ -155,7 +151,7 @@ export default function ArbeidssøkerRegisterSide() {
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
           className={navigasjonStyles.knapp}
-          disabled={(!disableSpm5 && periode.registrertArbeidssoker === null) || isSubmitting}
+          disabled={periode.registrertArbeidssoker === null || isSubmitting}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
