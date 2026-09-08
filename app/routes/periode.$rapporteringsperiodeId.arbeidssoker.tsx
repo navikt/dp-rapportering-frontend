@@ -18,9 +18,16 @@ import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import { formaterDato } from "~/utils/dato.utils";
 import { kanSendes, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
+import { FEATURE_TOGGLES, isFeatureEnabled } from "~/utils/unleash.server";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import { Error } from "../components/error/Error";
+
+export async function loader() {
+  return {
+    disableSpm5: await isFeatureEnabled(FEATURE_TOGGLES.disableSpm5),
+  };
+}
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -125,7 +132,6 @@ export default function ArbeidssøkerRegisterSide() {
       {fetcher.data?.status === "error" && (
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
-
       <ArbeidssokerAlert periode={periode} />
 
       <NavigasjonContainer>
