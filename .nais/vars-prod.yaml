@@ -10,6 +10,7 @@ dekorator:
 runtime_environment: "production"
 faro_url: "https://telemetry.nav.no/collect"
 sanity_datasett: "production"
+name: "dp-rapportering-frontend"
 unleash:
   url: https://teamdagpenger-unleash-api.nav.cloud.nais.io/api
   environment: production
