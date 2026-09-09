@@ -70,7 +70,7 @@ jobs:
         env:
           VAR: image=${{ needs.build-demo.outputs.image }},githubSha=${{ github.sha }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/nais.demo.yaml
+          RESOURCE: .nais/nais.demo.yaml,.nais/unleash-apitoken.yaml
           VARS: .nais/vars-demo.yaml
           PRINT_PAYLOAD: true
 
@@ -87,7 +87,7 @@ jobs:
         env:
           VAR: image=${{ needs.build.outputs.image }},githubSha=${{ github.sha }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/nais.yaml
+          RESOURCE: .nais/nais.yaml,.nais/unleash-apitoken.yaml
           VARS: .nais/vars-dev.yaml
           PRINT_PAYLOAD: true
 
@@ -105,7 +105,7 @@ jobs:
         env:
           VAR: image=${{ needs.build.outputs.image }},githubSha=${{ github.sha }}
           CLUSTER: prod-gcp
-          RESOURCE: .nais/nais.yaml
+          RESOURCE: .nais/nais.yaml,.nais/unleash-apitoken.yaml
           VARS: .nais/vars-prod.yaml
           PRINT_PAYLOAD: true
 
