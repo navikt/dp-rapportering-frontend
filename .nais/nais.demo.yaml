@@ -58,7 +58,7 @@ spec:
     - name: UNLEASH_SERVER_API_ENV
       value: "{{unleash.environment}}"
   envFrom:
-    - secret: "{{unleash.name}}-unleash-api-token"
+    - secret: "{{name}}-unleash-api-token"
   accessPolicy:
     outbound:
       external:
