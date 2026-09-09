@@ -53,12 +53,19 @@ spec:
       value: {{runtime_environment}}
     - name: SANITY_DATASETT
       value: {{sanity_datasett}}
+    - name: UNLEASH_SERVER_API_URL
+      value: "{{unleash.server_api_url}}"
+    - name: UNLEASH_SERVER_API_ENV
+      value: "{{unleash.environment}}"
+  envFrom:
+    - secret: "{{unleash.name}}-unleash-api-token"
   accessPolicy:
     outbound:
       external:
         - host: rt6o382n.apicdn.sanity.io
         - host: www.nav.no
         - host: dekoratoren.dev.nav.no
+        - host: "{{unleash.host}}"
       rules:
         - application: logging
           namespace: nais-system

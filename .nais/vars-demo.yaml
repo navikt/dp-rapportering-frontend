@@ -8,3 +8,8 @@ dekorator:
 faro_url: "https://telemetry.ekstern.dev.nav.no/collect"
 runtime_environment: "demo"
 sanity_datasett: "production"
+unleash:
+  name: "dp-rapportering-frontend-demo"
+  host: "teamdagpenger-unleash-api.nav.cloud.nais.io"
+  server_api_url: "https://teamdagpenger-unleash-api.nav.cloud.nais.io/api"
+  environment: "development"
