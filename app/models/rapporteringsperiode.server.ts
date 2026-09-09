@@ -41,6 +41,7 @@ export interface IRapporteringsperiode {
   html: string | null;
   rapporteringstype: Rapporteringstype | null;
   opprettetAv: TOpprettetAv | null;
+  innsendtTil?: TOpprettetAv | null;
 }
 
 export interface IInnsendtRapporteringsperiodeResponse {

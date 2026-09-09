@@ -17,7 +17,7 @@ import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
@@ -201,7 +201,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         <AktivitetOppsummering periode={periode} />
       </div>
 
-      <ArbeidssokerAlert periode={periode} />
+      <ArbeidssokerstatusBeskjed periode={periode} side="bekreftelse" />
 
       <Checkbox
         disabled={!kanSendes(periode)}
