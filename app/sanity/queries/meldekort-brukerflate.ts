@@ -126,7 +126,7 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
       ].join(",\n")}\n}`,
       `"arbeidssokerstatusSporsmaal": {\n${[
         fields(["tittel", "beskrivelse"], "arbeidssokerstatusSporsmaal"),
-        `"alternativer": {\n${fields(["tittel", "ja", "nei"], "arbeidssokerstatusSporsmaal.alternativer")}\n}`,
+        `"alternativer": {\n${fields(["ja", "nei"], "arbeidssokerstatusSporsmaal.alternativer")}\n}`,
       ].join(",\n")}\n}`,
       `"manglendeAktivitet": {\n${fields(["tittel", "beskrivelse"], "manglendeAktivitet")}\n}`,
       `"begrunnelseForEndring": {\n${fields(["tittel", "beskrivelse", "alternativer"], "begrunnelseForEndring")}\n}`,
