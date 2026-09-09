@@ -24,7 +24,7 @@
     "@grafana/faro-web-tracing": "^2.11.0",
     "@msw/data": "1.1.8",
     "@navikt/aksel-icons": "8.16.2",
-    "@navikt/ds-css": "8.16.1",
+    "@navikt/ds-css": "8.16.2",
     "@navikt/ds-react": "8.16.2",
     "@navikt/nav-dekoratoren-moduler": "4.3.0",
     "@navikt/oasis": "4.1.4",
