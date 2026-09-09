@@ -41,6 +41,7 @@ export interface IRapporteringsperiode {
   html: string | null;
   rapporteringstype: Rapporteringstype | null;
   opprettetAv: TOpprettetAv | null;
+  // TODO: rydd opp etter spm5 toggle er fjernet
   innsendtTil?: TOpprettetAv | null;
 }
 
