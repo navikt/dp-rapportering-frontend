@@ -72,7 +72,7 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
   )},
   "aktiviteter": ${document(
     MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.aktiviteter,
-    ["jobb", "syk", "ferie", "kurs"]
+    ["jobb", "syk", "ferie", "utdanning"]
       .map((activity) => objectFields(activity, ["lang", "kort"]))
       .join(",\n"),
   )},
@@ -195,7 +195,7 @@ export type MeldekortBrukerflateApiResponse = {
     jobb: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
     syk: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
     ferie: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
-    kurs: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
+    utdanning: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
   }>;
   veileder: MeldekortBrukerflateDocument<{
     tittel: MeldekortBrukerflateText;
