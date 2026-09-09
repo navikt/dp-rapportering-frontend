@@ -11,10 +11,8 @@ runtime_environment: "development"
 faro_url: "https://telemetry.ekstern.dev.nav.no/collect"
 sanity_datasett: "development"
 unleash:
-  name: "dp-rapportering-frontend"
-  host: "teamdagpenger-unleash-api.nav.cloud.nais.io"
-  server_api_url: "https://teamdagpenger-unleash-api.nav.cloud.nais.io/api"
-  environment: "development"
+  url: https://teamdagpenger-unleash-api.nav.cloud.nais.io/api
+  environment: development
 replicas:
   min: 2
   max: 2
