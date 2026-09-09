@@ -68,7 +68,7 @@ jobs:
         env:
           VAR: image=${{ needs.build.outputs.image }},githubSha=${{ github.sha }}
           CLUSTER: ${{ inputs.environment == 'prod' && 'prod-gcp' || 'dev-gcp' }}
-          RESOURCE: ${{ inputs.environment == 'demo' && '.nais/nais.demo.yaml' || '.nais/nais.yaml' }}
+          RESOURCE: ${{ inputs.environment == 'demo' && '.nais/nais.demo.yaml,.nais/unleash-apitoken.yaml' || '.nais/nais.yaml,.nais/unleash-apitoken.yaml' }}
           VARS: .nais/vars-${{ inputs.environment }}.yaml
           PRINT_PAYLOAD: true
 
