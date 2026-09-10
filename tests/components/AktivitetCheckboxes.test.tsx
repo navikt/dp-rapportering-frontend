@@ -1,14 +1,14 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AktivitetCheckboxes } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 
-vi.mock("@rvf/react-router", () => {
-  return {
-    useField: () => ({ error: () => null, getInputProps: () => {} }),
-  };
-});
+const { useFieldMock } = vi.hoisted(() => ({ useFieldMock: vi.fn() }));
+
+vi.mock("@rvf/react-router", () => ({
+  useField: useFieldMock,
+}));
 
 describe("AktivitetCheckboxes", () => {
   const defaultProps = {
@@ -20,6 +20,10 @@ describe("AktivitetCheckboxes", () => {
     onChange: vi.fn(),
     periodeId: "1",
   };
+
+  beforeEach(() => {
+    useFieldMock.mockReturnValue({ error: () => null, getInputProps: () => ({}) });
+  });
 
   it.skip("rendrer chekboxes med riktige label og beskrivelser", () => {
     render(<AktivitetCheckboxes {...defaultProps} />);
@@ -65,11 +69,7 @@ describe("AktivitetCheckboxes", () => {
   });
 
   it("viser feilmelding", () => {
-    vi.mock("@rvf/react-router", () => {
-      return {
-        useField: () => ({ error: () => "Feilmelding", getInputProps: () => {} }),
-      };
-    });
+    useFieldMock.mockReturnValue({ error: () => "Feilmelding", getInputProps: () => ({}) });
 
     render(<AktivitetCheckboxes {...defaultProps} />);
 
