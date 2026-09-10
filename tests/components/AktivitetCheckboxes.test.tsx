@@ -22,6 +22,7 @@ describe("AktivitetCheckboxes", () => {
   };
 
   beforeEach(() => {
+    useFieldMock.mockReset();
     useFieldMock.mockReturnValue({ error: () => null, getInputProps: () => ({}) });
   });
 
