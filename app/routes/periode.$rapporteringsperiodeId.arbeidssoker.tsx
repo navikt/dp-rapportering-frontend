@@ -2,11 +2,11 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Radio, RadioGroup } from "@navikt/ds-react";
 import { useEffect, useMemo } from "react";
 import type { ActionFunctionArgs } from "react-router";
-import { useFetcher, useNavigate } from "react-router";
+import { useFetcher, useNavigate, useRouteLoaderData } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
-import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
@@ -15,6 +15,7 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
+import type { loader as RootLoader } from "~/root";
 import { formaterDato } from "~/utils/dato.utils";
 import { kanSendes, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
@@ -46,6 +47,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function ArbeidssøkerRegisterSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText } = useSanity();
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
+  const sanityTekst = rootData?.sanityTekst;
   const navigate = useNavigate();
   const fetcher = useFetcher<INetworkResponse>();
   const isSubmitting = useIsSubmitting(fetcher);
@@ -55,14 +58,20 @@ export default function ArbeidssøkerRegisterSide() {
   const stegnavn = "arbeidssoker";
   const steg = 4;
   const nesteMeldeperiode = nestePeriode(periode.periode);
-
-  // Fra-dato skal vise årstall hvis det er ulikt til-datoens årstall, eller hvis det er ulikt dagens årstall.
-  // Til-datoen viser alltid årstall
   const dateFormat =
     nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
     nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
       ? "d. MMMM yyyy"
       : "d. MMMM";
+  const arbeidssokerstatusSporsmaal = sanityTekst?.utfylling?.arbeidssokerstatusSporsmaal;
+  const fom = formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat });
+  const tom = formaterDato({
+    dato: nesteMeldeperiode.tilOgMed,
+    dateFormat: "d. MMMM yyyy",
+  });
+  const arbeidssokerTittel = arbeidssokerstatusSporsmaal?.tittel
+    ?.replaceAll("{{fom}}", fom)
+    .replaceAll("{{tom}}", tom);
 
   function neste() {
     trackSkjemaStegFullført({
@@ -103,11 +112,11 @@ export default function ArbeidssøkerRegisterSide() {
       <fetcher.Form method="post">
         <RadioGroup
           disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
-          legend={getAppText("rapportering-arbeidssokerregister-tittel-v2", {
-            fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
-            tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
-          })}
-          description={getAppText("rapportering-arbeidssokerregister-subtittel")}
+          legend={
+            arbeidssokerTittel ??
+            getAppText("rapportering-arbeidssokerregister-tittel-v2", { fom, tom })
+          }
+          description={arbeidssokerstatusSporsmaal?.beskrivelse}
           onChange={handleChange}
           name="_action"
           value={periode.registrertArbeidssoker}
@@ -117,14 +126,16 @@ export default function ArbeidssøkerRegisterSide() {
             value={true}
             checked={periode.registrertArbeidssoker === true}
           >
-            {getAppText("rapportering-arbeidssokerregister-svar-ja")}
+            {arbeidssokerstatusSporsmaal?.alternativer.ja ??
+              getAppText("rapportering-arbeidssokerregister-svar-ja")}
           </Radio>
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={false}
             checked={periode.registrertArbeidssoker === false}
           >
-            {getAppText("rapportering-arbeidssokerregister-svar-nei")}
+            {arbeidssokerstatusSporsmaal?.alternativer.nei ??
+              getAppText("rapportering-arbeidssokerregister-svar-nei")}
           </Radio>
         </RadioGroup>
       </fetcher.Form>
@@ -132,7 +143,8 @@ export default function ArbeidssøkerRegisterSide() {
       {fetcher.data?.status === "error" && (
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
-      <ArbeidssokerAlert periode={periode} />
+
+      <ArbeidssokerstatusBeskjed periode={periode} side="utfylling" />
 
       <NavigasjonContainer>
         <Button
@@ -142,7 +154,7 @@ export default function ArbeidssøkerRegisterSide() {
           icon={<ArrowLeftIcon aria-hidden />}
           className={navigasjonStyles.knapp}
         >
-          {getAppText("rapportering-knapp-tilbake")}
+          {sanityTekst?.knapper?.tilbake ?? getAppText("rapportering-knapp-tilbake")}
         </Button>
 
         <Button
@@ -154,7 +166,7 @@ export default function ArbeidssøkerRegisterSide() {
           disabled={periode.registrertArbeidssoker === null || isSubmitting}
           onClick={neste}
         >
-          {getAppText("rapportering-knapp-neste")}
+          {sanityTekst?.knapper?.neste ?? getAppText("rapportering-knapp-neste")}
         </Button>
       </NavigasjonContainer>
       <LagretAutomatisk />

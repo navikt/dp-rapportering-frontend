@@ -7,7 +7,7 @@ import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { ArbeidssokerAlert } from "~/components/arbeidssokerregister/ArbeidssokerRegister";
+import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 import { Kalender } from "~/components/kalender/Kalender";
 import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
 import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
@@ -170,7 +170,7 @@ export default function InnsendteRapporteringsPerioderSide() {
                           visDato={false}
                         />
                         <AktivitetOppsummering periode={periode} />
-                        <ArbeidssokerAlert periode={periode} />
+                        <ArbeidssokerstatusBeskjed periode={periode} side="oversikt" />
                       </div>
                     );
                   })}

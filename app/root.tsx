@@ -33,6 +33,10 @@ import { useAnalytics } from "./hooks/useAnalytics";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { getAppText, getMessages, useSanity } from "./hooks/useSanity";
 import { getLanguage, setLanguage } from "./models/language.server";
+import {
+  MELDEKORT_BRUKERFLATE_QUERY,
+  type MeldekortBrukerflateApiResponse,
+} from "./sanity/queries/meldekort-brukerflate";
 import { sanityConfig } from "./sanity/sanity.config";
 import { allTextsQuery } from "./sanity/sanity.query";
 import type { ISanity } from "./sanity/sanity.types";
@@ -40,6 +44,7 @@ import styles from "./styles/root.module.css";
 import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekoratoren.utils";
 import { getEnv, isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "./utils/faro";
+import { FEATURE_TOGGLES, isFeatureEnabled } from "./utils/unleash.server";
 
 export const sanityClient = createClient(sanityConfig);
 
@@ -96,10 +101,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Response("rapportering-feilmelding-kunne-ikke-hente-dekoratoren", { status: 500 });
   }
 
-  const sanityTexts = await sanityClient.fetch<ISanity>(allTextsQuery, {
-    baseLang: DecoratorLocale.NB,
-    lang: getLocale(locale),
-  });
+  const [sanityTexts, sanityTekstResult, disableSpm5] = await Promise.all([
+    sanityClient.fetch<ISanity>(allTextsQuery, {
+      baseLang: DecoratorLocale.NB,
+      lang: getLocale(locale),
+    }),
+    sanityClient
+      .fetch<MeldekortBrukerflateApiResponse>(MELDEKORT_BRUKERFLATE_QUERY, {
+        language: getLocale(locale),
+        fallbackLanguage: DecoratorLocale.NB,
+      })
+      .then((data) => ({ data, hasError: false }))
+      .catch((error: unknown) => {
+        console.error("Kunne ikke hente meldekort-brukerflate fra Sanity", error);
+        return { data: null, hasError: true };
+      }),
+    isFeatureEnabled(FEATURE_TOGGLES.disableSpm5),
+  ]);
 
   if (isLocalOrDemo && !hasSession(request)) {
     return redirect("/", {
@@ -111,6 +129,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return {
     sanityTexts,
+    sanityTekst: sanityTekstResult.data,
+    sanityTekstHasError: sanityTekstResult.hasError,
+    disableSpm5,
     locale: getLocale(locale),
     env: {
       BASE_PATH: process.env.BASE_PATH,
