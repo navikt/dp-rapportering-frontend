@@ -136,8 +136,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.9.1(supports-color@7.2.0))
       '@inquirer/prompts':
-        specifier: 8.7.0
-        version: 8.7.0(@types/node@26.4.0)
+        specifier: 8.7.1
+        version: 8.7.1(@types/node@26.4.0)
       '@react-router/dev':
         specifier: 8.3.0
         version: 8.3.0(@react-router/serve@8.3.0(react-router@8.3.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(supports-color@7.2.0)(typescript@6.0.3))(react-router@8.3.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(supports-color@7.2.0)(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.0)(yaml@2.9.0))
@@ -641,8 +641,8 @@ packages:
       '@types/node':
         optional: true
 
-  '@inquirer/prompts@8.7.0':
-    resolution: {integrity: sha512-yQwBMYvpJ6jqrXtKiOwRD5XezjJoyt3VQvIyjsr5Arqb519nfIohOQymWVJ8/vEgg8xtZerrCsqlSaqt/LPC9A==}
+  '@inquirer/prompts@8.7.1':
+    resolution: {integrity: sha512-xJIKWyrFNUKj3R5VEub/iKodG9Sh/MbCeApZUbATJgHTw8YoAJ2gOT78HlvO6NMFiRvjm6ySM7aiAew/zVY0Sw==}
     engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
     peerDependencies:
       '@types/node': '>=18'
@@ -4059,7 +4059,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.4.0
 
-  '@inquirer/prompts@8.7.0(@types/node@26.4.0)':
+  '@inquirer/prompts@8.7.1(@types/node@26.4.0)':
     dependencies:
       '@inquirer/checkbox': 5.2.5(@types/node@26.4.0)
       '@inquirer/confirm': 6.3.2(@types/node@26.4.0)
