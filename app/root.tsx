@@ -1,7 +1,6 @@
 import navStyles from "@navikt/ds-css?url";
-import { Alert, Heading } from "@navikt/ds-react";
+import { Heading, InlineMessage } from "@navikt/ds-react";
 import { onLanguageSelect, setAvailableLanguages } from "@navikt/nav-dekoratoren-moduler";
-import { createClient } from "@sanity/client";
 import parse from "html-react-parser";
 import { useEffect, useRef } from "react";
 import type {
@@ -33,20 +32,12 @@ import { useAnalytics } from "./hooks/useAnalytics";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { getAppText, getMessages, useSanity } from "./hooks/useSanity";
 import { getLanguage, setLanguage } from "./models/language.server";
-import {
-  MELDEKORT_BRUKERFLATE_QUERY,
-  type MeldekortBrukerflateApiResponse,
-} from "./sanity/queries/meldekort-brukerflate";
-import { sanityConfig } from "./sanity/sanity.config";
-import { allTextsQuery } from "./sanity/sanity.query";
-import type { ISanity } from "./sanity/sanity.types";
+import { hentSanityTekster } from "./sanity/sanity.server";
 import styles from "./styles/root.module.css";
 import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekoratoren.utils";
 import { getEnv, isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "./utils/faro";
 import { FEATURE_TOGGLES, isFeatureEnabled } from "./utils/unleash.server";
-
-export const sanityClient = createClient(sanityConfig);
 
 export const meta: MetaFunction = () => {
   return [
@@ -95,27 +86,15 @@ export const links: LinksFunction = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const locale: DecoratorLocale = (await getLanguage(request)) as DecoratorLocale;
-  const fragments = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
+  const dekorator = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
 
-  if (!fragments) {
+  if (!dekorator) {
     throw new Response("rapportering-feilmelding-kunne-ikke-hente-dekoratoren", { status: 500 });
   }
 
-  const [sanityTexts, sanityTekstResult, disableSpm5] = await Promise.all([
-    sanityClient.fetch<ISanity>(allTextsQuery, {
-      baseLang: DecoratorLocale.NB,
-      lang: getLocale(locale),
-    }),
-    sanityClient
-      .fetch<MeldekortBrukerflateApiResponse>(MELDEKORT_BRUKERFLATE_QUERY, {
-        language: getLocale(locale),
-        fallbackLanguage: DecoratorLocale.NB,
-      })
-      .then((data) => ({ data, hasError: false }))
-      .catch((error: unknown) => {
-        console.error("Kunne ikke hente meldekort-brukerflate fra Sanity", error);
-        return { data: null, hasError: true };
-      }),
+  const language = getLocale(locale);
+  const [sanityData, disableSpm5] = await Promise.all([
+    hentSanityTekster(language),
     isFeatureEnabled(FEATURE_TOGGLES.disableSpm5),
   ]);
 
@@ -128,11 +107,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   return {
-    sanityTexts,
-    sanityTekst: sanityTekstResult.data,
-    sanityTekstHasError: sanityTekstResult.hasError,
+    ...sanityData,
     disableSpm5,
-    locale: getLocale(locale),
+    locale: language,
     env: {
       BASE_PATH: process.env.BASE_PATH,
       IS_LOCALHOST: process.env.IS_LOCALHOST,
@@ -142,7 +119,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       SANITY_DATASETT: process.env.SANITY_DATASETT,
       GITHUB_SHA: process.env.GITHUB_SHA,
     },
-    fragments,
+    dekorator,
   };
 }
 
@@ -163,56 +140,46 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  // Root loader kan mangle data her (f.eks. ved ikke-matchende rute), så Layout må tåle det siden den alltid rendres
   const rootData = useRouteLoaderData<typeof loader>("root");
   const serviceMessages = rootData ? getMessages(rootData.sanityTexts) : [];
+  const mainContent = useRef<HTMLElement>(null);
+  const dekorator = rootData?.dekorator;
 
-  useInjectDecoratorScript(rootData?.fragments.DECORATOR_SCRIPTS);
+  useInjectDecoratorScript(dekorator?.DECORATOR_SCRIPTS);
 
-  if (!rootData) {
-    return (
-      <html lang="nb">
-        <head>
-          <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <Meta />
-          <Links />
-        </head>
-        <body>
-          {children}
-          <ScrollRestoration />
-          <Scripts />
-        </body>
-      </html>
-    );
-  }
+  useEffect(() => {
+    if (typeof document !== "undefined" && mainContent.current) {
+      mainContent.current.querySelectorAll("a").forEach((a) => {
+        if (!a.getAttribute("data-umami-event")) {
+          const dataUmamiEvent = a.pathname.includes(getEnv("BASE_PATH"))
+            ? "intern-lenke"
+            : "ekstern-lenke";
 
-  const { fragments, env } = rootData;
+          a.setAttribute("data-umami-event", dataUmamiEvent);
+          a.setAttribute("data-umami-event-url", a.href);
+        }
+      });
+    }
+  }, [children]);
 
   return (
     <html lang="nb">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {parse(fragments.DECORATOR_HEAD_ASSETS, { trim: true })}
+        {dekorator && parse(dekorator.DECORATOR_HEAD_ASSETS, { trim: true })}
         <Meta />
         <Links />
       </head>
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.env = ${JSON.stringify(env)}`,
-          }}
-        />
-        {parse(fragments.DECORATOR_HEADER, { trim: true })}
-
-        {isLocalOrDemo && (
-          <div className={styles.serviceMessages}>
-            <Alert variant="warning">
-              Dette er en demoside og inneholder ikke dine personlige data.
-            </Alert>
-          </div>
+        {rootData && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.env = ${JSON.stringify(rootData.env)}`,
+            }}
+          />
         )}
+        {dekorator && parse(dekorator.DECORATOR_HEADER, { trim: true })}
 
         {serviceMessages.length > 0 && (
           <div className={styles.serviceMessages}>
@@ -222,9 +189,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        {children}
+        <main ref={mainContent} id="maincontent" role="main" tabIndex={-1}>
+          {children}
+        </main>
         <ScrollRestoration />
-        {parse(fragments.DECORATOR_FOOTER, { trim: true })}
+        {dekorator && parse(dekorator.DECORATOR_FOOTER, { trim: true })}
         <Scripts />
       </body>
     </html>
@@ -233,8 +202,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { getAppText } = useSanity();
+  const rootData = useRouteLoaderData<typeof loader>("root");
   const { trackSprakEndret, trackForetrukketSprak } = useAnalytics();
-  const mainContent = useRef<HTMLDivElement>(null);
 
   initInstrumentation();
 
@@ -257,35 +226,29 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => {
-    if (typeof document !== "undefined" && mainContent.current) {
-      mainContent.current.querySelectorAll("a").forEach((a) => {
-        if (!a.getAttribute("data-umami-event")) {
-          const dataUmamiEvent = a.pathname.includes(getEnv("BASE_PATH"))
-            ? "intern-lenke"
-            : "ekstern-lenke";
-
-          a.setAttribute("data-umami-event", dataUmamiEvent);
-          a.setAttribute("data-umami-event-url", a.href);
-        }
-      });
-    }
-  }, [mainContent]);
-
   return (
-    <main ref={mainContent} id="maincontent" role="main" tabIndex={-1}>
+    <>
       <div className={styles.rapporteringHeader}>
         <div className={styles.rapporteringHeaderInnhold}>
           <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
-            {getAppText("rapportering-tittel")}
+            {rootData?.sanityTekst?.grunntekster?.sidetittel ?? getAppText("rapportering-tittel")}
           </Heading>
-          {isLocalOrDemo && <DevTools />}
+          {isLocalOrDemo && (
+            <div className={styles.demoInfo}>
+              <InlineMessage status="warning">
+                Dette er en demoside og inneholder ikke dine personlige data.
+              </InlineMessage>
+              <DevTools />
+            </div>
+          )}
         </div>
       </div>
-      <div className={styles.rapporteringContainer}>
-        <Outlet />
+      <div className={styles.pageContainer}>
+        <div className={styles.pageContent}>
+          <Outlet />
+        </div>
       </div>
-    </main>
+    </>
   );
 }
 
@@ -298,7 +261,7 @@ export function ErrorBoundary() {
     : "Meldekort for dagpenger";
 
   return (
-    <main id="maincontent" role="main" tabIndex={-1}>
+    <>
       <div className={styles.rapporteringHeader}>
         <div className={styles.rapporteringHeaderInnhold}>
           <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
@@ -307,9 +270,11 @@ export function ErrorBoundary() {
           {isLocalOrDemo && <DevTools />}
         </div>
       </div>
-      <div className={styles.rapporteringContainer}>
-        <GeneralErrorBoundary error={error} />
+      <div className={styles.pageContainer}>
+        <div className={styles.pageContent}>
+          <GeneralErrorBoundary error={error} />
+        </div>
       </div>
-    </main>
+    </>
   );
 }

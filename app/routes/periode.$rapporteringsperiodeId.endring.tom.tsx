@@ -4,11 +4,11 @@ import { PortableText } from "@portabletext/react";
 import { useNavigate } from "react-router";
 
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { ReactLink } from "~/components/ReactLink";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
+
+import rootStyles from "../styles/root.module.css";
 
 export default function TomRapporteringsPeriodeSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
@@ -31,13 +31,12 @@ export default function TomRapporteringsPeriodeSide() {
         <PortableText value={getRichText("rapportering-endre-tom-ingen-å-rapportere")} />
       </div>
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </Button>
@@ -48,14 +47,13 @@ export default function TomRapporteringsPeriodeSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
           disabled={true}
         >
           {getAppText("rapportering-knapp-neste")}
         </ReactLink>
-      </NavigasjonContainer>
+      </div>
 
-      <NavigasjonContainer>
+      <>
         <ReactLink
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
@@ -64,7 +62,7 @@ export default function TomRapporteringsPeriodeSide() {
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </ReactLink>
-      </NavigasjonContainer>
+      </>
     </>
   );
 }

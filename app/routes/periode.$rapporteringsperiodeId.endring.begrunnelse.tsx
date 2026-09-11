@@ -8,8 +8,6 @@ import { uuidv7 } from "uuidv7";
 import { Error } from "~/components/error/Error";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
@@ -18,6 +16,8 @@ import { lagreBegrunnelse } from "~/models/begrunnelse.server";
 import { kanSendes } from "~/utils/periode.utils";
 import { INetworkResponse } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
+
+import rootStyles from "../styles/root.module.css";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -105,13 +105,12 @@ export default function BegrunnelseSide() {
         <Error title={getAppText(fetcher.data.error.statusText)} />
       )}
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </Button>
@@ -121,23 +120,17 @@ export default function BegrunnelseSide() {
           variant="primary"
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
-          className={navigasjonStyles.knapp}
           disabled={!periode.begrunnelseEndring || isSubmitting}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
-      </NavigasjonContainer>
-      <NavigasjonContainer>
-        <ReactLink
-          as="Button"
-          to={getLink("rapportering-endre-avbryt").linkUrl}
-          variant="tertiary"
-          className={navigasjonStyles.knapp}
-        >
+      </div>
+      <>
+        <ReactLink as="Button" to={getLink("rapportering-endre-avbryt").linkUrl} variant="tertiary">
           {getLink("rapportering-endre-avbryt").linkText}
         </ReactLink>
-      </NavigasjonContainer>
+      </>
 
       <LagretAutomatisk />
     </>

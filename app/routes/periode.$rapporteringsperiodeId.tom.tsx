@@ -6,14 +6,14 @@ import { useNavigate } from "react-router";
 import { uuidv7 } from "uuidv7";
 
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+
+import rootStyles from "../styles/root.module.css";
 
 function nesteSide(periode: IRapporteringsperiode) {
   if (!skalHaArbeidssokerSporsmal(periode)) {
@@ -68,7 +68,7 @@ export default function TomRapporteringsPeriodeSide() {
         <PortableText value={getRichText("rapportering-tom-ingen-å-rapportere")} />
       </div>
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         <ReactLink
           as="Button"
           to=""
@@ -76,7 +76,6 @@ export default function TomRapporteringsPeriodeSide() {
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </ReactLink>
@@ -86,12 +85,11 @@ export default function TomRapporteringsPeriodeSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
           onClick={neste}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
-      </NavigasjonContainer>
+      </div>
     </>
   );
 }

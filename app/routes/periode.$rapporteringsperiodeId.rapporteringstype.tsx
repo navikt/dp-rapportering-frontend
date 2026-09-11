@@ -1,6 +1,7 @@
 import { TZDate } from "@date-fns/tz";
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { InformationSquareIcon } from "@navikt/aksel-icons";
+import { BodyShort, Button, Heading, InfoCard, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { addDays } from "date-fns";
 import { useCallback, useEffect, useMemo } from "react";
@@ -11,10 +12,9 @@ import { uuidv7 } from "uuidv7";
 import { Error } from "~/components/error/Error";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LesMer } from "~/components/LesMer";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
+import { usePreventDoubleClick } from "~/hooks/usePreventDoubleClick";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import {
@@ -32,6 +32,9 @@ import {
 } from "~/utils/periode.utils";
 import { Rapporteringstype, TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
+
+import styles from "../styles/rapporteringstype.module.css";
+import rootStyles from "../styles/root.module.css";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -84,6 +87,7 @@ export default function RapporteringstypeSide() {
   const rapporteringstypeFetcher = useFetcher<typeof action>();
   const slettAlleAktiviteterFetcher = useFetcher();
   const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
+  const [harTrykketNeste, trySetHarTrykketNeste] = usePreventDoubleClick();
 
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
@@ -118,6 +122,8 @@ export default function RapporteringstypeSide() {
   });
 
   const neste = async () => {
+    if (!trySetHarTrykketNeste()) return;
+
     if (
       periode.rapporteringstype === Rapporteringstype.harIngenAktivitet &&
       harAktiviteter(periode)
@@ -150,66 +156,67 @@ export default function RapporteringstypeSide() {
 
   return (
     <>
-      <KanIkkeSendes periode={periode} />
+      <div className={rootStyles.pageContent}>
+        <KanIkkeSendes periode={periode} />
 
-      {harFlerePerioder && (
-        <>
-          <Alert variant="info" className="my-8">
-            <Heading spacing size="small" level="2">
-              {getAppText("rapportering-flere-perioder-tittel", { antall: antallPerioder })}
-            </Heading>
-            {getAppText("rapportering-flere-perioder-innledning")}
-          </Alert>
-        </>
-      )}
+        {harFlerePerioder && (
+          <InfoCard data-color="info" className="my-8">
+            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+              <strong>
+                {getAppText("rapportering-flere-perioder-tittel", { antall: antallPerioder })}
+              </strong>
+              <br />
+              {getAppText("rapportering-flere-perioder-innledning")}
+            </InfoCard.Message>
+          </InfoCard>
+        )}
 
-      <Heading size="medium" level="2">
-        {rapporteringsperioder.length > 1
-          ? getAppText("rapportering-foerste-periode")
-          : getAppText("rapportering-naavaerende-periode")}
-      </Heading>
+        <div className={styles.textWrapper}>
+          <Heading size="medium" level="2">
+            {rapporteringsperioder.length > 1
+              ? getAppText("rapportering-foerste-periode")
+              : getAppText("rapportering-naavaerende-periode")}
+          </Heading>
+          <BodyShort size="small">{hentPeriodeTekst(periode, getAppText, locale)}</BodyShort>
 
-      <p>{hentPeriodeTekst(periode, getAppText, locale)}</p>
+          <PortableText
+            value={getRichText("rapportering-fyll-ut-frister", {
+              "fra-dato": tidligstInnsendingDato,
+              "til-dato": senestInnsendingDato,
+            })}
+          />
+        </div>
+        <LesMer periodeId={periode.id} />
 
-      <PortableText
-        value={getRichText("rapportering-fyll-ut-frister", {
-          "fra-dato": tidligstInnsendingDato,
-          "til-dato": senestInnsendingDato,
-        })}
-      />
-
-      <LesMer periodeId={periode.id} />
-
-      <RadioGroup
-        disabled={!kanSendes(periode)}
-        legend={rapporteringstypeFormLabel}
-        description={hentPeriodeTekst(periode, getAppText, locale)}
-        onChange={endreRapporteringstype}
-        value={type}
-      >
-        <Radio value={Rapporteringstype.harAktivitet}>
-          {getAppText("rapportering-noe-å-rapportere")}
-        </Radio>
-        <Radio
-          data-testid="rapportering-ingen-å-rapportere"
-          className="rapportering-ingen-å-rapportere"
-          value={Rapporteringstype.harIngenAktivitet}
+        <RadioGroup
+          disabled={!kanSendes(periode)}
+          legend={rapporteringstypeFormLabel}
+          description={hentPeriodeTekst(periode, getAppText, locale)}
+          onChange={endreRapporteringstype}
+          value={type}
         >
-          <PortableText value={getRichText("rapportering-ingen-å-rapportere")} />
-        </Radio>
-      </RadioGroup>
+          <Radio value={Rapporteringstype.harAktivitet}>
+            {getAppText("rapportering-noe-å-rapportere")}
+          </Radio>
+          <Radio
+            data-testid="rapportering-ingen-å-rapportere"
+            className="rapportering-ingen-å-rapportere"
+            value={Rapporteringstype.harIngenAktivitet}
+          >
+            <PortableText value={getRichText("rapportering-ingen-å-rapportere")} />
+          </Radio>
+        </RadioGroup>
 
-      {rapporteringstypeFetcher.data?.status === "error" && (
-        <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
-      )}
-
-      <NavigasjonContainer>
+        {rapporteringstypeFetcher.data?.status === "error" && (
+          <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
+        )}
+      </div>
+      <div className={rootStyles.buttonsContainerRow}>
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </Button>
@@ -218,13 +225,12 @@ export default function RapporteringstypeSide() {
           onClick={neste}
           variant="primary"
           iconPosition="right"
-          className={navigasjonStyles.knapp}
           icon={<ArrowRightIcon aria-hidden />}
-          disabled={type === null || isSubmitting}
+          disabled={type === null || isSubmitting || harTrykketNeste}
         >
           {nesteKnappTekst}
         </Button>
-      </NavigasjonContainer>
+      </div>
     </>
   );
 }
