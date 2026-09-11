@@ -14,6 +14,7 @@ import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LesMer } from "~/components/LesMer";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
+import { usePreventDoubleClick } from "~/hooks/usePreventDoubleClick";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import {
@@ -86,6 +87,7 @@ export default function RapporteringstypeSide() {
   const rapporteringstypeFetcher = useFetcher<typeof action>();
   const slettAlleAktiviteterFetcher = useFetcher();
   const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
+  const [harTrykketNeste, trySetHarTrykketNeste] = usePreventDoubleClick();
 
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
@@ -120,6 +122,8 @@ export default function RapporteringstypeSide() {
   });
 
   const neste = async () => {
+    if (!trySetHarTrykketNeste()) return;
+
     if (
       periode.rapporteringstype === Rapporteringstype.harIngenAktivitet &&
       harAktiviteter(periode)
@@ -222,7 +226,7 @@ export default function RapporteringstypeSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          disabled={type === null || isSubmitting}
+          disabled={type === null || isSubmitting || harTrykketNeste}
         >
           {nesteKnappTekst}
         </Button>
