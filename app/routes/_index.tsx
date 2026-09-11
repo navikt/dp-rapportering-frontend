@@ -96,11 +96,7 @@ export default function Landingsside() {
   return (
     <>
       <div className={styles.pageContent}>
-        {velkomstside?.velkomstTekst && (
-          <div>
-            <PortableText value={velkomstside.velkomstTekst} />
-          </div>
-        )}
+        {velkomstside?.velkomstTekst && <PortableText value={velkomstside.velkomstTekst} />}
 
         {velkomstside?.harDuFaattDegJobb.tittel && velkomstside.harDuFaattDegJobb.tekst && (
           <ReadMore header={velkomstside.harDuFaattDegJobb.tittel}>

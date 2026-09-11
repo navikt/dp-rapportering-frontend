@@ -261,7 +261,7 @@ export function ErrorBoundary() {
     : "Meldekort for dagpenger";
 
   return (
-    <main id="maincontent" role="main" tabIndex={-1}>
+    <>
       <div className={styles.rapporteringHeader}>
         <div className={styles.rapporteringHeaderInnhold}>
           <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
@@ -275,6 +275,6 @@ export function ErrorBoundary() {
           <GeneralErrorBoundary error={error} />
         </div>
       </div>
-    </main>
+    </>
   );
 }

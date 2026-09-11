@@ -135,7 +135,11 @@ export default function InnsendteRapporteringsPerioderSide() {
                           ? (oversikt?.meldekortStatus.ferdigBehandlet ?? "Ferdig behandlet")
                           : nyestePeriode.status === "Feilet"
                             ? (oversikt?.meldekortStatus.feilVedBehandling ?? "Feil ved behandling")
-                            : nyestePeriode.status}
+                            : nyestePeriode.status === "Endret"
+                              ? (meldekortdetaljer?.endret ?? "Endret")
+                              : nyestePeriode.status === "TilUtfylling"
+                                ? "Til utfylling"
+                                : nyestePeriode.status}
                     </Tag>
                   </Accordion.Header>
                   <Accordion.Content>
@@ -198,12 +202,12 @@ export default function InnsendteRapporteringsPerioderSide() {
 
       <div className={rootStyles.buttonsContainerColumn}>
         {harFlerePerioder ? (
-          <ReactLink as="Button" to={`${baseUrl}/`}>
-            {knapper?.gaaTilNesteMeldekort}
+          <ReactLink as="Button" to="/">
+            {knapper?.gaaTilNesteMeldekort ?? "Gå til neste meldekort"}
           </ReactLink>
         ) : (
           <Button as="a" href="https://www.nav.no/minside">
-            {knapper?.gaaTilMinSide}
+            {knapper?.gaaTilMinSide ?? "Gå til Min side"}
           </Button>
         )}
       </div>
