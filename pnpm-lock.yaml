@@ -36,8 +36,8 @@ importers:
         specifier: 4.3.0
         version: 4.3.0(html-react-parser@6.1.7(@types/react@19.2.18)(react@19.2.8))(react@19.2.8)
       '@navikt/oasis':
-        specifier: 4.2.0
-        version: 4.2.0
+        specifier: 4.2.2
+        version: 4.2.2
       '@portabletext/react':
         specifier: 8.0.1
         version: 8.0.1(react@19.2.8)
@@ -797,8 +797,8 @@ packages:
       html-react-parser: '>=5.x'
       react: '>=17.x'
 
-  '@navikt/oasis@4.2.0':
-    resolution: {integrity: sha512-WeqVPdJJBNSZcoYlyd5yHhfozcbVjxedrzv29h1ZcCgAgbgg/NKX3+MwJGxaawIOHpV/pLmL3d8Iw66TjVbkIQ==, tarball: https://npm.pkg.github.com/download/@navikt/oasis/4.2.0/b12e5ab20d3bce926871d205fafd1620da001942}
+  '@navikt/oasis@4.2.2':
+    resolution: {integrity: sha512-EVMsF8uKbLPNRWuPfH1IKVJhqtibFzSTSyNkzj5mTCVMZV2QPS5W3uYMD4r0rXsmLx7nv0HnLovDphb3AFEjvw==, tarball: https://npm.pkg.github.com/download/@navikt/oasis/4.2.2/3c43e1e89bb2d46646a9a2aaf27972a024377a6f}
     engines: {node: ^20.19.0 || >= 22.12.0 || 24.x || 25.x}
 
   '@navikt/texas@4.2.2':
@@ -4313,7 +4313,7 @@ snapshots:
       js-cookie: 3.0.8
       react: 19.2.8
 
-  '@navikt/oasis@4.2.0':
+  '@navikt/oasis@4.2.2':
     dependencies:
       '@navikt/texas': 4.2.2
       '@opentelemetry/api': 1.9.1
