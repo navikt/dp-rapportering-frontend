@@ -21,6 +21,14 @@ vi.mock("@rvf/react-router", () => ({
   useField: () => ({ error: null, getInputProps: () => {} }),
 }));
 
+// Mock actionData to return an error status
+vi.mock("react-router", () => ({
+  useActionData: () => ({
+    status: "error",
+    error: { statusText: "Feilmelding" },
+  }),
+}));
+
 const mockPeriode: IPeriode = {
   fraOgMed: "2024-01-01",
   tilOgMed: "2024-01-31",
@@ -97,14 +105,6 @@ describe.skip("AktivitetModal", () => {
   });
 
   it("viser feilmelding når actionData returnerer feilmelding", () => {
-    // Mock actionData to return an error status
-    vi.mock("react-router", () => ({
-      useActionData: () => ({
-        status: "error",
-        error: { statusText: "Feilmelding" },
-      }),
-    }));
-
     render(<AktivitetModal {...defaultProps} />);
 
     expect(screen.getByText("Feilmelding")).toBeInTheDocument();
