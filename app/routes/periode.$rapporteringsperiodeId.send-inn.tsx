@@ -32,7 +32,7 @@ import {
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { getCorralationId } from "~/utils/fetch.utils";
+import { getCorrelationId } from "~/utils/fetch.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
 import { kanSendes } from "~/utils/periode.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
@@ -58,7 +58,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       logg({
         type: "warn",
         message: `Feil i innsending av periode: perioden er allerede innsendt, ID: ${periodeId}`,
-        correlationId: getCorralationId(response.headers),
+        correlationId: getCorrelationId(response.headers),
         body: periode,
       });
 
@@ -67,7 +67,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       logg({
         type: "error",
         message: `Feil i innsending av periode: perioden kan ikke sendes inn, ID: ${periodeId}`,
-        correlationId: getCorralationId(response.headers),
+        correlationId: getCorrelationId(response.headers),
         body: periode,
       });
 

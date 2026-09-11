@@ -1,12 +1,21 @@
 import { uuidv7 } from "uuidv7";
 
 import { getSessionId } from "~/../mocks/session";
+import { IHttpProblem } from "~/utils/types";
 
 import { getRapporteringOboToken } from "./auth.utils.server";
 import { isLocalOrDemo } from "./env.utils";
 
-export function getCorralationId(headers: Headers) {
-  return headers.get("X-Request-ID") ?? "";
+export function getCorrelationId(
+  headers: Headers,
+  body: IHttpProblem | null = null,
+): string | undefined {
+  return (
+    body?.correlationId ??
+    headers.get("x-request-id") ??
+    headers.get("x_correlation-id") ??
+    undefined
+  );
 }
 
 function generateCorralationId() {
