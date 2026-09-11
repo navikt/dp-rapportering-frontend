@@ -14,6 +14,7 @@ vi.mock("~/utils/fetch.utils", () => ({
     Accept: "application",
     Authorization: "Bearer token",
   })),
+  getCorrelationId: vi.fn(() => "123"),
 }));
 
 beforeEach(() => server.resetHandlers());
