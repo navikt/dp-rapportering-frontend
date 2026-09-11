@@ -4,15 +4,13 @@ import { PortableText } from "@portabletext/react";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useUXSignals } from "~/hooks/useUXSignals";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
-import styles from "~/styles/kvittering.module.css";
+import rootStyles from "~/styles/root.module.css";
 
 import { ArbeidssokerstatusBeskjed } from "./arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 
@@ -39,18 +37,18 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
 
       <Accordion data-color="neutral">
         <Accordion.Item>
-          <Accordion.Header className={styles.kvitteringTittel}>
+          <Accordion.Header>
             <Heading level="3" size="medium">
               {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
             </Heading>
           </Accordion.Header>
-          <Accordion.Content className={styles.kvitteringInnhold}>
+          <Accordion.Content>
             <div className="oppsummering">
               <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
               <AktivitetOppsummering periode={periode} />
             </div>
             <ArbeidssokerstatusBeskjed periode={periode} side="bekreftelse" />
-            <div className={styles.skrivUtKnappen}>
+            <div>
               <Button
                 variant="tertiary"
                 icon={<PrinterSmallFillIcon aria-hidden />}
@@ -74,27 +72,19 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
       </Accordion>
       <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--ax-space-32) auto" }} />
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         {harNestePeriode ? (
-          <ReactLink
-            as="Button"
-            to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
-            className={navigasjonStyles.knapp}
-          >
+          <ReactLink as="Button" to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}>
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </ReactLink>
         ) : (
-          <Button
-            as="a"
-            className={navigasjonStyles.knapp}
-            href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
-          >
+          <Button as="a" href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}>
             {getLink("rapportering-ga-til-mine-dagpenger").linkText}
           </Button>
         )}
-      </NavigasjonContainer>
+      </div>
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         <ReactLink
           as="Link"
           to={getLink("rapportering-se-og-endre").linkUrl}
@@ -109,7 +99,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         >
           {getLink("rapportering-se-og-endre").linkText}
         </ReactLink>
-      </NavigasjonContainer>
+      </div>
     </>
   );
 }

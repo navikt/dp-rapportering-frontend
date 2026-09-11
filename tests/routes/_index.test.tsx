@@ -1,5 +1,5 @@
 import { act, render, screen } from "@testing-library/react";
-import { createRoutesStub } from "react-router";
+import { createRoutesStub, Outlet } from "react-router";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
@@ -23,19 +23,40 @@ describe("Hovedside rapportering", async () => {
     const RoutesStub = createRoutesStub([
       {
         path: "/",
-        Component: Landingsside,
-        loader,
-      },
-      {
-        path: "/api/start",
-        action() {
-          return new Response(null, {
-            status: 303,
-            headers: {
-              Location: `/`,
+        id: "root",
+        Component: Outlet,
+        loader: () => ({
+          sanityTekst: {
+            velkomstside: {
+              velkomstTekst: [],
+              harDuFaattDegJobb: { tittel: "", tekst: [] },
+              innsendingsmulighet: {
+                klarTilInnsending: { tittel: "", tekst: [] },
+                ingenMeldekort: "Ingen meldekort",
+                forTidlig: "Meldekortet kan ikke sendes inn ennå",
+              },
             },
-          });
-        },
+            knapper: { neste: "Neste", seOgEndreInnsendteMeldekort: "Se og endre" },
+          },
+        }),
+        children: [
+          {
+            index: true,
+            Component: Landingsside,
+            loader,
+          },
+          {
+            path: "api/start",
+            action() {
+              return new Response(null, {
+                status: 303,
+                headers: {
+                  Location: `/`,
+                },
+              });
+            },
+          },
+        ],
       },
     ]);
     render(<RoutesStub />);
@@ -57,7 +78,7 @@ describe("Hovedside rapportering", async () => {
         renderLandingsside();
       });
 
-      expect(await screen.findByText(/rapportering-ingen-meldekort/)).toBeInTheDocument();
+      expect(await screen.findByText("Ingen meldekort")).toBeInTheDocument();
     });
 
     test("Skal vise at bruker har en fremtidig rapporteringsperiode", async () => {
@@ -71,9 +92,7 @@ describe("Hovedside rapportering", async () => {
         renderLandingsside();
       });
 
-      expect(
-        await screen.findByText("rapportering-for-tidlig-a-sende-meldekort"),
-      ).toBeInTheDocument();
+      expect(await screen.findByText("Meldekortet kan ikke sendes inn ennå")).toBeInTheDocument();
     });
   });
 });

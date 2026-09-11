@@ -42,9 +42,18 @@ export type MeldekortBrukerflateQueryParams = {
 export const MELDEKORT_BRUKERFLATE_QUERY = `{
   "grunntekster": ${document(
     MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.grunntekster,
-    [fields(["sidetittel", "uke", "timer", "dager"]), objectFields("dag", ["lang", "kort"])].join(
-      ",\n",
-    ),
+    [
+      fields(["minSide", "meldekort", "sidetittel", "uke", "timer", "dager"]),
+      `"innsendteMeldekort": ${localized("innsendteMeldekort")}`,
+      `"dag": {
+        ${["mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag", "søndag"]
+          .map(
+            (day) =>
+              `"${day}": {\n"lang": ${localized(`dag["${day}"].lang`)},\n"kort": ${localized(`dag["${day}"].kort`)}\n}`,
+          )
+          .join(",\n")}
+      }`,
+    ].join(",\n"),
   )},
   "knapper": ${document(
     MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.knapper,
@@ -99,12 +108,11 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
     [
       `"velkomstTekst": ${localized("velkomstTekst")}`,
       `"harDuFaattDegJobb": {\n${fields(["tittel", "tekst"], "harDuFaattDegJobb")}\n}`,
-      `"innsendingsmulighet": {\n${["klarTilInnsending", "ingenMeldekort", "forTidlig"]
-        .map(
-          (message) =>
-            `"${message}": {\n${fields(["tittel", "tekst"], `innsendingsmulighet.${message}`)}\n}`,
-        )
-        .join(",\n")}\n}`,
+      `"innsendingsmulighet": {\n${[
+        `"klarTilInnsending": {\n${fields(["tittel", "tekst"], "innsendingsmulighet.klarTilInnsending")}\n}`,
+        `"ingenMeldekort": ${localized("innsendingsmulighet.ingenMeldekort")}`,
+        `"forTidlig": ${localized("innsendingsmulighet.forTidlig")}`,
+      ].join(",\n")}\n}`,
     ].join(",\n"),
   )},
   "utfylling": ${document(
@@ -145,9 +153,10 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
     MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.oversikt,
     [
       fields(["tittel", "tekst"]),
-      `"meldekortstatus": {\n${fields(
+      `"ingenInnsendteMeldekort": ${localized("ingenInnsendteMeldekort")}`,
+      `"meldekortStatus": {\n${fields(
         ["innsendt", "ferdigBehandlet", "feilVedBehandling"],
-        "meldekortstatus",
+        "meldekortStatus",
       )}\n}`,
     ].join(",\n"),
   )}
@@ -161,13 +170,21 @@ type MeldekortBrukerflateRichText = MeldekortBrukerflatePortableText | null;
 
 export type MeldekortBrukerflateApiResponse = {
   grunntekster: MeldekortBrukerflateDocument<{
+    minSide: MeldekortBrukerflateText;
+    meldekort: MeldekortBrukerflateText;
+    innsendteMeldekort: MeldekortBrukerflateText;
     sidetittel: MeldekortBrukerflateText;
     uke: MeldekortBrukerflateText;
     timer: MeldekortBrukerflateText;
     dager: MeldekortBrukerflateText;
     dag: {
-      lang: MeldekortBrukerflateText;
-      kort: MeldekortBrukerflateText;
+      mandag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
+      tirsdag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
+      onsdag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
+      torsdag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
+      fredag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
+      lørdag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
+      søndag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
     };
   }>;
   knapper: MeldekortBrukerflateDocument<{
@@ -225,8 +242,8 @@ export type MeldekortBrukerflateApiResponse = {
     harDuFaattDegJobb: { tittel: MeldekortBrukerflateText; tekst: MeldekortBrukerflateRichText };
     innsendingsmulighet: {
       klarTilInnsending: { tittel: MeldekortBrukerflateText; tekst: MeldekortBrukerflateRichText };
-      ingenMeldekort: { tittel: MeldekortBrukerflateText; tekst: MeldekortBrukerflateRichText };
-      forTidlig: { tittel: MeldekortBrukerflateText; tekst: MeldekortBrukerflateRichText };
+      ingenMeldekort: MeldekortBrukerflateText;
+      forTidlig: MeldekortBrukerflateText;
     };
   }>;
   utfylling: MeldekortBrukerflateDocument<{
@@ -286,7 +303,8 @@ export type MeldekortBrukerflateApiResponse = {
   oversikt: MeldekortBrukerflateDocument<{
     tittel: MeldekortBrukerflateText;
     tekst: MeldekortBrukerflateRichText;
-    meldekortstatus: {
+    ingenInnsendteMeldekort: MeldekortBrukerflateText;
+    meldekortStatus: {
       innsendt: MeldekortBrukerflateText;
       ferdigBehandlet: MeldekortBrukerflateText;
       feilVedBehandling: MeldekortBrukerflateText;

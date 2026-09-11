@@ -1,78 +1,22 @@
-.innsendtPerioder {
-  margin-top: var(--ax-space-32);
-}
 
-.innsendtAccordionHeader {
-  background-color: var(--ax-bg-neutral-soft);
-  border-radius: 0;
-}
-
-.innsendtAccordionHeader :global(.aksel-accordion__icon-wrapper) {
-  align-self: start;
-}
-
-.innsendtAccordionHeader span:global(.aksel-heading) {
-  display: block;
-  width: 100%;
+.innsendtAccordionHeader :global(.aksel-heading) {
+  flex: 1;
+  display: flex;
+justify-content: space-between;
+align-items: flex-start;
+flex: 1 0 0;
 }
 
 .innsendtPeriodeHeader {
+  flex: 1;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--ax-space-0);
 }
 
-.innsendtAccordionContent {
-  background-color: var(--ax-bg-neutral-soft);
-  padding-left: 0;
-  padding-right: 0;
-  box-shadow: none;
-  margin: 0;
-}
 
-.innsendtAccordionContent :global(.aksel-accordion__content-inner) {
-  padding: 0;
-}
-
-.innsendtPeriodeHeaderDato {
-  font-size: var(--ax-font-size-medium);
-  font-weight: var(--ax-font-weight-regular);
-  line-height: var(--ax-space-24);
-}
-
-.innsendtOppsummering {
-  margin: 0 var(--ax-space-16);
-  padding-top: 0;
-  padding-bottom: var(--ax-space-20);
-}
-
-.innsendtOppsummering:nth-child(n + 2) {
-  border-top: 2px solid var(--ax-border-neutral-subtle);
-  border-radius: 0;
-  margin-top: var(--ax-space-20);
-}
-
-.innsendtPeriodeHeaderStatus {
-  font-weight: normal;
-  border: 1px solid var(--ax-neutral-1000);
-  border-radius: var(--ax-radius-4);
-  padding: 0 var(--ax-space-8);
-  height: fit-content;
-  font-size: var(--ax-font-size-medium);
-}
-
-.tilutfylling,
-.innsendt,
-.endret {
-  background-color: var(--ax-bg-brand-blue-moderateA);
-  border-color: var(--ax-border-info-strong);
-}
-
-.feilet {
-  background-color: var(--ax-danger-200);
-  border-color: var(--ax-border-danger-strong);
-}
-
-.ferdig {
-  background-color: var(--ax-success-200);
-  border-color: var(--ax-success-600);
+.innsendtPeriodeDato {
+color: var(--ax-text-neutral);
 }

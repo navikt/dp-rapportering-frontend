@@ -1,7 +1,9 @@
 import { TZDate } from "@date-fns/tz";
-import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, Button, Heading, ReadMore } from "@navikt/ds-react";
+import { ArrowRightIcon, InformationSquareIcon } from "@navikt/aksel-icons";
+import { Button, Heading, InfoCard, ReadMore } from "@navikt/ds-react";
+import { setBreadcrumbs as setDekoratorenBreadcrumbs } from "@navikt/nav-dekoratoren-moduler";
 import { PortableText } from "@portabletext/react";
+import { getISOWeek } from "date-fns";
 import { useEffect } from "react";
 import { LoaderFunctionArgs } from "react-router";
 import {
@@ -15,19 +17,17 @@ import {
 
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
-import { useSanity } from "~/hooks/useSanity";
 import { getSession } from "~/models/getSession.server";
 import { hentRapporteringsperioder } from "~/models/rapporteringsperiode.server";
-import { formaterDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
-import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
+import { formaterDato } from "~/utils/dato.utils";
+import { baseUrl } from "~/utils/dekoratoren.utils";
 import { TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import type { loader as RootLoader } from "../root";
+import styles from "../styles/root.module.css";
 import type { action as StartAction } from "./api.start";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -48,18 +48,42 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Landingsside() {
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
 
-  const { getAppText, getLink, getRichText } = useSanity();
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const startFetcher = useFetcher<typeof StartAction>();
   const { trackSkjemaStartet, trackNavigere } = useAnalytics();
 
   const forstePeriode = rapporteringsperioder[0];
+  const grunntekster = rootData?.sanityTekst?.grunntekster;
+  const velkomstside = rootData?.sanityTekst?.velkomstside;
+  const knapper = rootData?.sanityTekst?.knapper;
+  const forTidligTekst =
+    forstePeriode && velkomstside?.innsendingsmulighet.forTidlig
+      ? velkomstside.innsendingsmulighet.forTidlig
+          .replaceAll(
+            "{{ukeFom}}",
+            getISOWeek(new TZDate(forstePeriode.periode.fraOgMed, TIDSSONER.OSLO)).toString(),
+          )
+          .replaceAll(
+            "{{weekTom}}",
+            getISOWeek(new TZDate(forstePeriode.periode.tilOgMed, TIDSSONER.OSLO)).toString(),
+          )
+          .replaceAll(
+            "{{fom}}",
+            formaterDato({ dato: new TZDate(forstePeriode.kanSendesFra, TIDSSONER.OSLO) }),
+          )
+      : undefined;
 
   const navigation = useNavigation();
   const isSubmitting = useIsSubmitting(navigation);
 
   useEffect(() => {
-    setBreadcrumbs([], getAppText);
-  }, [getAppText]);
+    if (grunntekster?.minSide && grunntekster.meldekort) {
+      setDekoratorenBreadcrumbs([
+        { title: grunntekster.minSide, url: "https://www.nav.no/minside" },
+        { title: grunntekster.meldekort, url: `${baseUrl}/` },
+      ]);
+    }
+  }, [grunntekster]);
 
   function startUtfylling() {
     trackSkjemaStartet(forstePeriode.id);
@@ -71,71 +95,76 @@ export default function Landingsside() {
 
   return (
     <>
-      {rapporteringsperioder.length === 0 && (
-        <Alert variant="info" className="my-4 alert-with-rich-text">
-          <PortableText value={getRichText("rapportering-ingen-meldekort")} />
-        </Alert>
-      )}
+      <div className={styles.pageContent}>
+        {velkomstside?.velkomstTekst && (
+          <div>
+            <PortableText value={velkomstside.velkomstTekst} />
+          </div>
+        )}
 
-      {forstePeriode?.kanSendes === false && (
-        <Alert variant="info" className="my-4 alert-with-rich-text">
-          <PortableText
-            value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
-              dato: formaterDato({ dato: new TZDate(forstePeriode.kanSendesFra, TIDSSONER.OSLO) }),
-              "fra-og-til-uke": formaterPeriodeTilUkenummer(
-                forstePeriode.periode.fraOgMed,
-                forstePeriode.periode.tilOgMed,
-              ),
-            })}
-          />
-        </Alert>
-      )}
+        {velkomstside?.harDuFaattDegJobb.tittel && velkomstside.harDuFaattDegJobb.tekst && (
+          <ReadMore header={velkomstside.harDuFaattDegJobb.tittel}>
+            <div>
+              <PortableText value={velkomstside.harDuFaattDegJobb.tekst} />
+            </div>
+          </ReadMore>
+        )}
 
-      <PortableText value={getRichText("rapportering-innledning")} />
+        {rapporteringsperioder.length === 0 && velkomstside?.innsendingsmulighet.ingenMeldekort && (
+          <InfoCard data-color="info">
+            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+              {velkomstside.innsendingsmulighet.ingenMeldekort}
+            </InfoCard.Message>
+          </InfoCard>
+        )}
 
-      <ReadMore header={getAppText("rapportering-arbeidstid-ikke-redusert-tittel")}>
-        <PortableText value={getRichText("rapportering-arbeidstid-ikke-redusert")} />
-      </ReadMore>
+        {forstePeriode && !forstePeriode.kanSendes && forTidligTekst && (
+          <InfoCard data-color="info">
+            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+              {forTidligTekst}
+            </InfoCard.Message>
+          </InfoCard>
+        )}
 
-      {forstePeriode?.kanSendes === true && (
-        <>
-          <Heading size="small" level="2" className="mt-8">
-            {getAppText("rapportering-samtykke-tittel")}
-          </Heading>
+        {forstePeriode?.kanSendes === true &&
+          velkomstside?.innsendingsmulighet.klarTilInnsending && (
+            <>
+              <Heading size="small" level="2">
+                {velkomstside.innsendingsmulighet.klarTilInnsending.tittel}
+              </Heading>
 
-          <PortableText value={getRichText("rapportering-samtykke-beskrivelse")} />
+              <PortableText value={velkomstside.innsendingsmulighet.klarTilInnsending.tekst} />
+            </>
+          )}
+      </div>
+      <div className={styles.buttonsContainerColumn}>
+        {forstePeriode?.kanSendes === true && knapper?.neste && (
+          <Button
+            variant="primary"
+            icon={<ArrowRightIcon aria-hidden />}
+            iconPosition="right"
+            onClick={startUtfylling}
+            disabled={isSubmitting}
+          >
+            {knapper.neste}
+          </Button>
+        )}
 
-          <NavigasjonContainer>
-            <Button
-              size="medium"
-              className={navigasjonStyles.knapp}
-              icon={<ArrowRightIcon aria-hidden />}
-              iconPosition="right"
-              onClick={startUtfylling}
-              disabled={isSubmitting}
-            >
-              {getAppText("rapportering-knapp-neste")}
-            </Button>
-          </NavigasjonContainer>
-        </>
-      )}
-
-      <NavigasjonContainer>
         <ReactLink
           as="Link"
-          to={getLink("rapportering-se-og-endre").linkUrl}
+          to="/innsendt"
           onClick={() => {
-            const linkId = "rapportering-se-og-endre";
+            const linkId = "se-og-endre-innsendte-meldekort";
             trackNavigere({
-              lenketekst: getLink(linkId).linkText,
-              destinasjon: getLink(linkId).linkUrl,
+              lenketekst: knapper?.seOgEndreInnsendteMeldekort ?? "",
+              destinasjon: "/innsendt",
               linkId,
             });
           }}
         >
-          {getLink("rapportering-se-og-endre").linkText}
+          {knapper?.seOgEndreInnsendteMeldekort}
         </ReactLink>
-      </NavigasjonContainer>
+      </div>
     </>
   );
 }

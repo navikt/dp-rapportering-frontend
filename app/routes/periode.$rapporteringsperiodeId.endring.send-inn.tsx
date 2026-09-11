@@ -19,8 +19,6 @@ import { uuidv7 } from "uuidv7";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
@@ -38,6 +36,7 @@ import { kanSendes } from "~/utils/periode.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
+import rootStyles from "../styles/root.module.css";
 import styles from "../styles/send-inn.module.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -247,32 +246,32 @@ export default function RapporteringsPeriodeSendInnSide() {
         </Alert>
       )}
 
-      <Form method="post" onSubmit={onSubmit} className={navigasjonStyles.container}>
-        <Button
-          onClick={() => navigate(-1)}
-          variant="secondary"
-          iconPosition="left"
-          icon={<ArrowLeftIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
-        >
-          {getAppText("rapportering-knapp-tilbake")}
-        </Button>
+      <Form method="post" onSubmit={onSubmit}>
+        <div className={rootStyles.buttonsContainerRow}>
+          <Button
+            onClick={() => navigate(-1)}
+            variant="secondary"
+            iconPosition="left"
+            icon={<ArrowLeftIcon aria-hidden />}
+          >
+            {getAppText("rapportering-knapp-tilbake")}
+          </Button>
 
-        <Button
-          type="submit"
-          variant="primary"
-          iconPosition="right"
-          disabled={!periode.kanSendes || !confirmed || isSubmitting}
-          className={navigasjonStyles.knapp}
-          name="_action"
-          value="send-inn"
-        >
-          {isSubmitting
-            ? getAppText("rapportering-periode-send-inn-bekreft-loading")
-            : getAppText("rapportering-endring-send-inn")}
-        </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            iconPosition="right"
+            disabled={!periode.kanSendes || !confirmed || isSubmitting}
+            name="_action"
+            value="send-inn"
+          >
+            {isSubmitting
+              ? getAppText("rapportering-periode-send-inn-bekreft-loading")
+              : getAppText("rapportering-endring-send-inn")}
+          </Button>
+        </div>
       </Form>
-      <NavigasjonContainer>
+      <>
         <ReactLink
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
@@ -281,7 +280,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </ReactLink>
-      </NavigasjonContainer>
+      </>
     </>
   );
 }
