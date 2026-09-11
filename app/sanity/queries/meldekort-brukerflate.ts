@@ -43,16 +43,8 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
   "grunntekster": ${document(
     MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.grunntekster,
     [
-      fields(["minSide", "meldekort", "sidetittel", "uke", "timer", "dager"]),
-      `"innsendteMeldekort": ${localized("innsendteMeldekort")}`,
-      `"dag": {
-        ${["mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag", "søndag"]
-          .map(
-            (day) =>
-              `"${day}": {\n"lang": ${localized(`dag["${day}"].lang`)},\n"kort": ${localized(`dag["${day}"].kort`)}\n}`,
-          )
-          .join(",\n")}
-      }`,
+      fields(["minSide", "meldekort", "innsendteMeldekort", "sidetittel", "uke", "timer", "dager"]),
+      objectFields("dag", ["lang", "kort"]),
     ].join(",\n"),
   )},
   "knapper": ${document(
@@ -155,7 +147,7 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
       fields(["tittel", "tekst"]),
       `"ingenInnsendteMeldekort": ${localized("ingenInnsendteMeldekort")}`,
       `"meldekortStatus": {\n${fields(
-        ["innsendt", "ferdigBehandlet", "feilVedBehandling"],
+        ["innsendt", "ferdigBehandlet", "feilVedBehandling", "endret", "tilUtfylling"],
         "meldekortStatus",
       )}\n}`,
     ].join(",\n"),
@@ -178,13 +170,8 @@ export type MeldekortBrukerflateApiResponse = {
     timer: MeldekortBrukerflateText;
     dager: MeldekortBrukerflateText;
     dag: {
-      mandag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
-      tirsdag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
-      onsdag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
-      torsdag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
-      fredag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
-      lørdag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
-      søndag: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };
+      lang: MeldekortBrukerflateText;
+      kort: MeldekortBrukerflateText;
     };
   }>;
   knapper: MeldekortBrukerflateDocument<{
@@ -308,6 +295,8 @@ export type MeldekortBrukerflateApiResponse = {
       innsendt: MeldekortBrukerflateText;
       ferdigBehandlet: MeldekortBrukerflateText;
       feilVedBehandling: MeldekortBrukerflateText;
+      endret: MeldekortBrukerflateText;
+      tilUtfylling: MeldekortBrukerflateText;
     };
   }>;
 };

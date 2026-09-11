@@ -2,8 +2,6 @@ import { TZDate } from "@date-fns/tz";
 import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { Accordion, BodyShort, Button, Detail, Heading, InfoCard, Tag } from "@navikt/ds-react";
 import { setBreadcrumbs as setDekoratorenBreadcrumbs } from "@navikt/nav-dekoratoren-moduler";
-import { PortableText } from "@portabletext/react";
-import classNames from "classnames";
 import { useEffect } from "react";
 import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useRouteLoaderData } from "react-router";
@@ -11,6 +9,7 @@ import { useLoaderData, useRouteLoaderData } from "react-router";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 import { Kalender } from "~/components/kalender/Kalender";
+import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { ReactLink } from "~/components/ReactLink";
 import { useLocale } from "~/hooks/useLocale";
 import {
@@ -23,7 +22,7 @@ import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.u
 import { baseUrl } from "~/utils/dekoratoren.utils";
 import { sorterGrupper } from "~/utils/innsendt.utils";
 import { perioderSomKanSendes } from "~/utils/periode.utils";
-import { TIDSSONER } from "~/utils/types";
+import { IRapporteringsperiodeStatus, TIDSSONER } from "~/utils/types";
 
 import innsendtStyles from "../styles/innsendt.module.css";
 import rootStyles from "../styles/root.module.css";
@@ -50,18 +49,60 @@ function grupperPerioder(
   return perioder;
 }
 
+type StatusColor = "info" | "success" | "danger" | "neutral";
+
+function getStatusColor(status: IRapporteringsperiodeStatus): StatusColor {
+  switch (status) {
+    case IRapporteringsperiodeStatus.Innsendt:
+      return "info";
+    case IRapporteringsperiodeStatus.Ferdig:
+      return "success";
+    case IRapporteringsperiodeStatus.Feilet:
+      return "danger";
+    default:
+      return "neutral";
+  }
+}
+
+function getStatusLabel(
+  status: IRapporteringsperiodeStatus,
+  statusTexts:
+    | {
+        innsendt: string | null;
+        ferdigBehandlet: string | null;
+        feilVedBehandling: string | null;
+        endret: string | null;
+        tilUtfylling: string | null;
+      }
+    | undefined,
+) {
+  if (!statusTexts) return undefined;
+
+  switch (status) {
+    case IRapporteringsperiodeStatus.Innsendt:
+      return statusTexts.innsendt;
+    case IRapporteringsperiodeStatus.Ferdig:
+      return statusTexts.ferdigBehandlet;
+    case IRapporteringsperiodeStatus.Feilet:
+      return statusTexts.feilVedBehandling;
+    case IRapporteringsperiodeStatus.Endret:
+      return statusTexts.endret;
+    case IRapporteringsperiodeStatus.TilUtfylling:
+      return statusTexts.tilUtfylling;
+  }
+}
+
 export default function InnsendteRapporteringsPerioderSide() {
   const { innsendtPerioder, rapporteringsperioder } = useLoaderData<typeof loader>();
   const { locale } = useLocale();
-
-  const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
-  const harFlerePerioder = antallPerioder >= 1;
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const grunntekster = rootData?.sanityTekst?.grunntekster;
   const oversikt = rootData?.sanityTekst?.oversikt;
   const knapper = rootData?.sanityTekst?.knapper;
   const meldekortdetaljer = rootData?.sanityTekst?.meldekortdetaljer;
 
+  const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
+  const harFlerePerioder = antallPerioder >= 1;
   const gruppertePerioder = innsendtPerioder.reduce(grupperPerioder, {});
   const sortertePeriodeNokler = Object.keys(gruppertePerioder).sort((a, b) => b.localeCompare(a));
   const sortertePerioder = sortertePeriodeNokler
@@ -77,18 +118,13 @@ export default function InnsendteRapporteringsPerioderSide() {
     }
   }, [grunntekster]);
 
-  // Det er et problem med "Intl.NumberFormat" og SSR, vi får feilmeldingen:
-  // > Text content did not match. Server: "kr 8 632,00" Client: "8 632,00 kr"
-  // Det er mest sannsynlig pga. forskjeller i JS-motor i nettleser og på serveren
-  // ref. https://github.com/nodejs/node/issues/39056
-
   return (
     <>
       <div className={rootStyles.pageContent}>
         <Heading size="medium" level="2">
           {oversikt?.tittel}
         </Heading>
-        {oversikt?.tekst && <PortableText value={oversikt.tekst} />}
+        {oversikt?.tekst && <PortableTextRenderer value={oversikt.tekst} />}
         {innsendtPerioder.length === 0 && (
           <InfoCard data-color="info">
             <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
@@ -96,20 +132,13 @@ export default function InnsendteRapporteringsPerioderSide() {
             </InfoCard.Message>
           </InfoCard>
         )}
-        <div>
+        <div className={innsendtStyles.innsendtPerioder}>
           {sortertePerioder.map((perioder) => {
             const nyestePeriode = perioder[0];
-            const statusColor =
-              nyestePeriode.status === "Innsendt"
-                ? "info"
-                : nyestePeriode.status === "Ferdig"
-                  ? "success"
-                  : nyestePeriode.status === "Feilet"
-                    ? "danger"
-                    : "neutral";
+            const statusColor = getStatusColor(nyestePeriode.status);
 
             return (
-              <Accordion key={nyestePeriode.periode.fraOgMed}>
+              <Accordion key={nyestePeriode.periode.fraOgMed} data-color="neutral">
                 <Accordion.Item>
                   <Accordion.Header className={innsendtStyles.innsendtAccordionHeader}>
                     <div className={innsendtStyles.innsendtPeriodeHeader}>
@@ -129,69 +158,50 @@ export default function InnsendteRapporteringsPerioderSide() {
                       </Detail>
                     </div>
                     <Tag variant="moderate" data-color={statusColor} size="xsmall">
-                      {nyestePeriode.status === "Innsendt"
-                        ? (oversikt?.meldekortStatus.innsendt ?? "Innsendt")
-                        : nyestePeriode.status === "Ferdig"
-                          ? (oversikt?.meldekortStatus.ferdigBehandlet ?? "Ferdig behandlet")
-                          : nyestePeriode.status === "Feilet"
-                            ? (oversikt?.meldekortStatus.feilVedBehandling ?? "Feil ved behandling")
-                            : nyestePeriode.status === "Endret"
-                              ? (meldekortdetaljer?.endret ?? "Endret")
-                              : nyestePeriode.status === "TilUtfylling"
-                                ? "Til utfylling"
-                                : nyestePeriode.status}
+                      {getStatusLabel(nyestePeriode.status, oversikt?.meldekortStatus)}
                     </Tag>
                   </Accordion.Header>
                   <Accordion.Content>
-                    {perioder.map((periode) => {
-                      return (
-                        <div
-                          key={periode.id}
-                          className={classNames(
-                            "oppsummering",
-                            innsendtStyles.innsendtOppsummering,
-                          )}
-                        >
-                          {(periode.mottattDato || periode.bruttoBelop) && (
-                            <div className="my-4">
-                              {periode.mottattDato && (
-                                <div>
-                                  <strong>
-                                    {periode.originalId
-                                      ? meldekortdetaljer?.endret
-                                      : meldekortdetaljer?.sendt}
-                                    :{" "}
-                                  </strong>
-                                  {new Intl.DateTimeFormat(locale).format(
-                                    new TZDate(periode.mottattDato, TIDSSONER.OSLO),
-                                  )}
-                                </div>
-                              )}
-                              {periode.bruttoBelop !== null && (
-                                <div>
-                                  <strong>{meldekortdetaljer?.belopUtbetalt}: </strong>
-                                  {new Intl.NumberFormat(locale, {
-                                    style: "currency",
-                                    currency: "NOK",
-                                  }).format(periode.bruttoBelop)}
-                                </div>
-                              )}
-                            </div>
-                          )}
-                          <Kalender
-                            key={periode.id}
-                            periode={periode}
-                            visEndringslenke={periode.kanEndres}
-                            aapneModal={() => {}}
-                            locale={locale}
-                            readonly
-                            visDato={false}
-                          />
-                          <AktivitetOppsummering periode={periode} />
-                          <ArbeidssokerstatusBeskjed periode={periode} side="oversikt" />
-                        </div>
-                      );
-                    })}
+                    {perioder.map((periode) => (
+                      <div key={periode.id} className={innsendtStyles.innsendtOppsummering}>
+                        {(periode.mottattDato || periode.bruttoBelop) && (
+                          <div className="my-4">
+                            {periode.mottattDato && (
+                              <div>
+                                <strong>
+                                  {periode.originalId
+                                    ? meldekortdetaljer?.endret
+                                    : meldekortdetaljer?.sendt}
+                                  :{" "}
+                                </strong>
+                                {new Intl.DateTimeFormat(locale).format(
+                                  new TZDate(periode.mottattDato, TIDSSONER.OSLO),
+                                )}
+                              </div>
+                            )}
+                            {periode.bruttoBelop !== null && (
+                              <div>
+                                <strong>{meldekortdetaljer?.belopUtbetalt}: </strong>
+                                {new Intl.NumberFormat(locale, {
+                                  style: "currency",
+                                  currency: "NOK",
+                                }).format(periode.bruttoBelop)}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        <Kalender
+                          periode={periode}
+                          visEndringslenke={periode.kanEndres}
+                          aapneModal={() => {}}
+                          locale={locale}
+                          readonly
+                          visDato={false}
+                        />
+                        <AktivitetOppsummering periode={periode} />
+                        <ArbeidssokerstatusBeskjed periode={periode} side="oversikt" />
+                      </div>
+                    ))}
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>
@@ -199,15 +209,14 @@ export default function InnsendteRapporteringsPerioderSide() {
           })}
         </div>
       </div>
-
       <div className={rootStyles.buttonsContainerColumn}>
         {harFlerePerioder ? (
           <ReactLink as="Button" to="/">
-            {knapper?.gaaTilNesteMeldekort ?? "Gå til neste meldekort"}
+            {knapper?.gaaTilNesteMeldekort}
           </ReactLink>
         ) : (
           <Button as="a" href="https://www.nav.no/minside">
-            {knapper?.gaaTilMinSide ?? "Gå til Min side"}
+            {knapper?.gaaTilMinSide}
           </Button>
         )}
       </div>

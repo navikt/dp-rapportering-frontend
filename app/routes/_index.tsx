@@ -2,7 +2,6 @@ import { TZDate } from "@date-fns/tz";
 import { ArrowRightIcon, InformationSquareIcon } from "@navikt/aksel-icons";
 import { Button, Heading, InfoCard, ReadMore } from "@navikt/ds-react";
 import { setBreadcrumbs as setDekoratorenBreadcrumbs } from "@navikt/nav-dekoratoren-moduler";
-import { PortableText } from "@portabletext/react";
 import { getISOWeek } from "date-fns";
 import { useEffect } from "react";
 import { LoaderFunctionArgs } from "react-router";
@@ -17,6 +16,7 @@ import {
 
 import { DevelopmentContainer } from "~/components/development-container/DevelopmentContainer";
 import { GeneralErrorBoundary } from "~/components/error-boundary/GeneralErrorBoundary";
+import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { getSession } from "~/models/getSession.server";
@@ -47,7 +47,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Landingsside() {
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
-
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const startFetcher = useFetcher<typeof StartAction>();
   const { trackSkjemaStartet, trackNavigere } = useAnalytics();
@@ -56,6 +55,7 @@ export default function Landingsside() {
   const grunntekster = rootData?.sanityTekst?.grunntekster;
   const velkomstside = rootData?.sanityTekst?.velkomstside;
   const knapper = rootData?.sanityTekst?.knapper;
+  const seOgEndreTekst = knapper?.seOgEndreInnsendteMeldekort;
   const forTidligTekst =
     forstePeriode && velkomstside?.innsendingsmulighet.forTidlig
       ? velkomstside.innsendingsmulighet.forTidlig
@@ -96,13 +96,11 @@ export default function Landingsside() {
   return (
     <>
       <div className={styles.pageContent}>
-        {velkomstside?.velkomstTekst && <PortableText value={velkomstside.velkomstTekst} />}
+        {velkomstside?.velkomstTekst && <PortableTextRenderer value={velkomstside.velkomstTekst} />}
 
         {velkomstside?.harDuFaattDegJobb.tittel && velkomstside.harDuFaattDegJobb.tekst && (
           <ReadMore header={velkomstside.harDuFaattDegJobb.tittel}>
-            <div>
-              <PortableText value={velkomstside.harDuFaattDegJobb.tekst} />
-            </div>
+            <PortableTextRenderer value={velkomstside.harDuFaattDegJobb.tekst} />
           </ReadMore>
         )}
 
@@ -128,11 +126,13 @@ export default function Landingsside() {
               <Heading size="small" level="2">
                 {velkomstside.innsendingsmulighet.klarTilInnsending.tittel}
               </Heading>
-
-              <PortableText value={velkomstside.innsendingsmulighet.klarTilInnsending.tekst} />
+              <PortableTextRenderer
+                value={velkomstside.innsendingsmulighet.klarTilInnsending.tekst}
+              />
             </>
           )}
       </div>
+
       <div className={styles.buttonsContainerColumn}>
         {forstePeriode?.kanSendes === true && knapper?.neste && (
           <Button
@@ -146,20 +146,22 @@ export default function Landingsside() {
           </Button>
         )}
 
-        <ReactLink
-          as="Link"
-          to="/innsendt"
-          onClick={() => {
-            const linkId = "se-og-endre-innsendte-meldekort";
-            trackNavigere({
-              lenketekst: knapper?.seOgEndreInnsendteMeldekort ?? "",
-              destinasjon: "/innsendt",
-              linkId,
-            });
-          }}
-        >
-          {knapper?.seOgEndreInnsendteMeldekort}
-        </ReactLink>
+        {seOgEndreTekst && (
+          <ReactLink
+            as="Link"
+            to="/innsendt"
+            onClick={() => {
+              const linkId = "se-og-endre-innsendte-meldekort";
+              trackNavigere({
+                lenketekst: seOgEndreTekst,
+                destinasjon: "/innsendt",
+                linkId,
+              });
+            }}
+          >
+            {seOgEndreTekst}
+          </ReactLink>
+        )}
       </div>
     </>
   );
@@ -167,29 +169,23 @@ export default function Landingsside() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-
-  // Root loader kan mangle data her (f.eks. ved ikke-matchende rute), så vi kan ikke bruke useTypedRouteLoaderData
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
 
-  if (isRouteErrorResponse(error)) {
-    if (rootData?.env.IS_LOCALHOST && error.status === 440) {
-      return (
-        <DevelopmentContainer>
-          <>
-            Sesjonen er utløpt! &nbsp;
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href="https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering"
-            >
-              Klikk på lenken for å hente ny token
-            </a>
-          </>
-        </DevelopmentContainer>
-      );
-    }
-
-    return <GeneralErrorBoundary error={error} />;
+  if (isRouteErrorResponse(error) && rootData?.env.IS_LOCALHOST && error.status === 440) {
+    return (
+      <DevelopmentContainer>
+        <>
+          Sesjonen er utløpt! &nbsp;
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-rapportering"
+          >
+            Klikk på lenken for å hente ny token
+          </a>
+        </>
+      </DevelopmentContainer>
+    );
   }
 
   return <GeneralErrorBoundary error={error} />;
