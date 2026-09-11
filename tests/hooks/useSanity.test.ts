@@ -32,14 +32,14 @@ const sanityTexts = {
   links: [{ ...createLinkObject("lenke-tekstnøkkel"), linkText: "Lenke fra Sanity" }],
 };
 
-describe("useSanity", () => {
-  vi.mock(import("~/hooks/useSanity"), async (importOriginal) => {
-    const actual = await importOriginal();
-    return {
-      ...actual,
-    };
-  });
+vi.mock(import("~/hooks/useSanity"), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+  };
+});
 
+describe("useSanity", () => {
   test("foundAppText finner ikke tekst og returnerer false", () => {
     expect(foundAppText("rapportering-tekst", "rapportering-tekst")).toBe(false);
   });
