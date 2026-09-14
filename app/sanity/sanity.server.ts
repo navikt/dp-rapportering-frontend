@@ -1,5 +1,6 @@
 import { createClient } from "@sanity/client";
 
+import { logger } from "~/models/logger.server";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 
 import {
@@ -12,27 +13,47 @@ import type { ISanity } from "./sanity.types";
 
 const sanityClient = createClient(sanityConfig);
 
+async function fetchSanity<T>(
+  query: string,
+  params: Record<string, string>,
+  contentName: string,
+): Promise<T | undefined> {
+  try {
+    return await sanityClient.fetch<T>(query, params);
+  } catch (error: unknown) {
+    logger.error("Kunne ikke hente innhold fra Sanity", {
+      contentName,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    return undefined;
+  }
+}
+
 export async function hentSanityTekster(language: DecoratorLocale) {
   const [sanityTexts, sanityTekstResult] = await Promise.all([
-    sanityClient.fetch<ISanity>(allTextsQuery, {
-      baseLang: DecoratorLocale.NB,
-      lang: language,
-    }),
-    sanityClient
-      .fetch<MeldekortBrukerflateApiResponse>(MELDEKORT_BRUKERFLATE_QUERY, {
+    fetchSanity<ISanity>(
+      allTextsQuery,
+      {
+        baseLang: DecoratorLocale.NB,
+        lang: language,
+      },
+      "legacy-tekster",
+    ),
+    fetchSanity<MeldekortBrukerflateApiResponse>(
+      MELDEKORT_BRUKERFLATE_QUERY,
+      {
         language,
         fallbackLanguage: DecoratorLocale.NB,
-      })
-      .then((data) => ({ data, hasError: false }))
-      .catch((error: unknown) => {
-        console.error("Kunne ikke hente meldekort-brukerflate fra Sanity", error);
-        return { data: null, hasError: true };
-      }),
+      },
+      "meldekort-brukerflate",
+    ),
   ]);
 
   return {
     sanityTexts,
-    sanityTekst: sanityTekstResult.data,
-    sanityTekstHasError: sanityTekstResult.hasError,
+    sanityTextsHasError: sanityTexts === undefined,
+    sanityTekst: sanityTekstResult,
+    sanityTekstHasError: sanityTekstResult === undefined,
   };
 }
