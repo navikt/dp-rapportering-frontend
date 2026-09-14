@@ -2,6 +2,7 @@ import { redirect } from "react-router";
 
 import { logg } from "~/models/logger.server";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import { getCorrelationId } from "~/utils/fetch.utils";
 
 import { IRapporteringsperiodeStatus } from "./types";
 
@@ -34,7 +35,7 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
       logg({
         type: "warn",
         message: `Bruker prøvde å starte endring på periode som ikke kan endres, ID: ${periode.id}`,
-        correlationId: null,
+        correlationId: getCorrelationId(request.headers),
         body: { periodeId: periode.id, kanEndres: periode.kanEndres, url: path },
       });
       throw redirect("/");
@@ -51,7 +52,7 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
       logg({
         type: "warn",
         message: `Bruker prøvde å endre periode som ikke er i redigeringsmodus, ID: ${periode.id}`,
-        correlationId: null,
+        correlationId: getCorrelationId(request.headers),
         body: { periodeId: periode.id, status: periode.status, url: path },
       });
       throw redirect("/");
@@ -66,7 +67,7 @@ export function redirectTilForsideHvisMeldekortIkkeKanFyllesUt(
       logg({
         type: "warn",
         message: `Bruker prøvde å fylle ut periode som ikke er TilUtfylling, ID: ${periode.id}`,
-        correlationId: null,
+        correlationId: getCorrelationId(request.headers),
         body: { periodeId: periode.id, status: periode.status, url: path },
       });
       throw redirect("/");
