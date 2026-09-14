@@ -33,6 +33,7 @@ import {
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
+import { getCorrelationId } from "~/utils/fetch.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
 import { kanSendes } from "~/utils/periode.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
@@ -58,7 +59,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       logg({
         type: "warn",
         message: `Feil i innsending av endring: endringen er allerede innsendt, ID: ${periodeId}`,
-        correlationId: null,
+        correlationId: getCorrelationId(request.headers),
         body: periode,
       });
 
@@ -67,7 +68,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       logg({
         type: "error",
         message: `Feil i innsending av endring: endringen kan ikke sendes inn, ID: ${periodeId}`,
-        correlationId: null,
+        correlationId: getCorrelationId(request.headers),
         body: periode,
       });
 
@@ -81,7 +82,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       logg({
         type: "error",
         message: `Feil i innsending av endring, ID: ${periodeId}`,
-        correlationId: null,
+        correlationId: getCorrelationId(request.headers),
         body: {
           message: error.message,
           cause: error.cause,
@@ -95,7 +96,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       logg({
         type: "error",
         message: `Ukjent feil i innsending av endring, ID: ${periodeId}`,
-        correlationId: null,
+        correlationId: getCorrelationId(request.headers),
         body: error,
       });
     }

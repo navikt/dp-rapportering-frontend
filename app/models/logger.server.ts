@@ -1,5 +1,6 @@
 import winston from "winston";
 
+import { getCorrelationId } from "~/utils/fetch.utils";
 import { IHttpProblem } from "~/utils/types";
 
 export interface IErrorResponse {
@@ -39,7 +40,7 @@ export async function getErrorResponse(response: Response): Promise<IErrorRespon
   return {
     status: response.status,
     body,
-    correlationId: getCorrelationId(response, body) ?? undefined,
+    correlationId: getCorrelationId(response.headers, body),
   };
 }
 
@@ -56,20 +57,17 @@ export function logErrorResponse(
   });
 }
 
-function getCorrelationId(response: Response, body: IHttpProblem | null): string | null {
-  return (
-    body?.correlationId ??
-    response.headers.get("x-request-id") ??
-    response.headers.get("x_correlation-id") ??
-    null
-  );
-}
-
 async function getHttpProblem(response: Response): Promise<IHttpProblem | null> {
   try {
     return await response.json();
   } catch (e: unknown) {
-    logger.error(`Klarte ikke å lese body ${e}`);
+    logg({
+      type: "error",
+      message: `Klarte ikke å lese body ${e}`,
+      correlationId: getCorrelationId(response.headers),
+      body: null,
+    });
+
     return null;
   }
 }
@@ -82,7 +80,7 @@ export async function logg({
 }: {
   type: "error" | "warn" | "info" | "debug";
   message: string;
-  correlationId: string | null;
+  correlationId: string | null | undefined;
   body: unknown;
 }) {
   sikkerLogger[type](`${message}, body: ${JSON.stringify(body)}`, {
