@@ -148,7 +148,7 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
       `"ingenInnsendteMeldekort": ${localized("ingenInnsendteMeldekort")}`,
       `"meldekortStatus": {\n${fields(
         ["innsendt", "ferdigBehandlet", "feilVedBehandling", "endret", "tilUtfylling"],
-        "meldekortStatus",
+        "meldekortstatus",
       )}\n}`,
     ].join(",\n"),
   )}

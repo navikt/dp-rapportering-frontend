@@ -55,6 +55,8 @@ function getStatusColor(status: IRapporteringsperiodeStatus): StatusColor {
   switch (status) {
     case IRapporteringsperiodeStatus.Innsendt:
       return "info";
+    case IRapporteringsperiodeStatus.Endret:
+      return "info";
     case IRapporteringsperiodeStatus.Ferdig:
       return "success";
     case IRapporteringsperiodeStatus.Feilet:
