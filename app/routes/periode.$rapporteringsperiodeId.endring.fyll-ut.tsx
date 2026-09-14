@@ -13,8 +13,6 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
@@ -25,6 +23,8 @@ import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { erPeriodeneLike } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { valider } from "~/utils/validering.util";
+
+import rootStyles from "../styles/root.module.css";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -181,13 +181,12 @@ export default function RapporteringsPeriodeFyllUtSide() {
         </Alert>
       )}
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </Button>
@@ -197,14 +196,13 @@ export default function RapporteringsPeriodeFyllUtSide() {
           variant="primary"
           icon={<ArrowRightIcon aria-hidden />}
           iconPosition="right"
-          className={navigasjonStyles.knapp}
           onClick={neste}
           disabled={isSubmitting || harTrykketNeste}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
-      </NavigasjonContainer>
-      <NavigasjonContainer>
+      </div>
+      <>
         <ReactLink
           as="Button"
           to={getLink("rapportering-endre-avbryt").linkUrl}
@@ -213,7 +211,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
         >
           {getLink("rapportering-endre-avbryt").linkText}
         </ReactLink>
-      </NavigasjonContainer>
+      </>
 
       <LagretAutomatisk />
     </>

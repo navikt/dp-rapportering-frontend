@@ -9,8 +9,6 @@ import { uuidv7 } from "uuidv7";
 import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -23,6 +21,7 @@ import { FEATURE_TOGGLES, isFeatureEnabled } from "~/utils/unleash.server";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import { Error } from "../components/error/Error";
+import rootStyles from "../styles/root.module.css";
 
 export async function loader() {
   return {
@@ -146,13 +145,12 @@ export default function ArbeidssøkerRegisterSide() {
 
       <ArbeidssokerstatusBeskjed periode={periode} side="utfylling" />
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
         >
           {sanityTekst?.knapper?.tilbake ?? getAppText("rapportering-knapp-tilbake")}
         </Button>
@@ -162,13 +160,12 @@ export default function ArbeidssøkerRegisterSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
           disabled={periode.registrertArbeidssoker === null || isSubmitting}
           onClick={neste}
         >
           {sanityTekst?.knapper?.neste ?? getAppText("rapportering-knapp-neste")}
         </Button>
-      </NavigasjonContainer>
+      </div>
       <LagretAutomatisk />
     </>
   );

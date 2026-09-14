@@ -8,7 +8,7 @@ export default defineConfig({
   base:
     process.env.NODE_ENV === "production"
       ? "https://cdn.nav.no/teamdagpenger/dp-rapportering-frontend/client/"
-      : "/arbeid/dagpenger/meldekort",
+      : "/arbeid/dagpenger/meldekort/",
   plugins: [reactRouter()],
   server: {
     port: 3000,

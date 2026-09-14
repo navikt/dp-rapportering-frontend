@@ -1,11 +1,9 @@
 import { PrinterSmallFillIcon } from "@navikt/aksel-icons";
 import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
-import { PortableText } from "@portabletext/react";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
+import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
@@ -13,6 +11,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { useUXSignals } from "~/hooks/useUXSignals";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import styles from "~/styles/kvittering.module.css";
+import rootStyles from "~/styles/root.module.css";
 
 import { ArbeidssokerstatusBeskjed } from "./arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 
@@ -68,33 +67,25 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
             </Heading>
           </Accordion.Header>
           <Accordion.Content className="alert-with-rich-text">
-            <PortableText value={getRichText("rapportering-periode-kvittering-info")} />
+            <PortableTextRenderer value={getRichText("rapportering-periode-kvittering-info")} />
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
       <div data-uxsignals-embed="panel-ppugndwzu6" style={{ margin: "var(--ax-space-32) auto" }} />
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         {harNestePeriode ? (
-          <ReactLink
-            as="Button"
-            to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}
-            className={navigasjonStyles.knapp}
-          >
+          <ReactLink as="Button" to={getLink("rapportering-ga-til-neste-meldekort").linkUrl}>
             {getLink("rapportering-ga-til-neste-meldekort").linkText}
           </ReactLink>
         ) : (
-          <Button
-            as="a"
-            className={navigasjonStyles.knapp}
-            href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}
-          >
+          <Button as="a" href={getLink("rapportering-ga-til-mine-dagpenger").linkUrl}>
             {getLink("rapportering-ga-til-mine-dagpenger").linkText}
           </Button>
         )}
-      </NavigasjonContainer>
+      </div>
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         <ReactLink
           as="Link"
           to={getLink("rapportering-se-og-endre").linkUrl}
@@ -109,7 +100,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
         >
           {getLink("rapportering-se-og-endre").linkText}
         </ReactLink>
-      </NavigasjonContainer>
+      </div>
     </>
   );
 }

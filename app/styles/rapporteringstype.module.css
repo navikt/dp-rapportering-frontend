@@ -1,0 +1,7 @@
+.textWrapper{
+    display: flex;
+flex-direction: column;
+align-items: flex-start;
+gap: var(--ax-space-12);
+align-self: stretch;
+}

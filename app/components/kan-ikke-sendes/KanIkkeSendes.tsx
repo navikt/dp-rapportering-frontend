@@ -1,4 +1,5 @@
-import { Alert } from "@navikt/ds-react";
+import { ExclamationmarkTriangleIcon } from "@navikt/aksel-icons";
+import { InfoCard } from "@navikt/ds-react";
 import { JSX } from "react";
 
 import { useSanity } from "~/hooks/useSanity";
@@ -14,9 +15,11 @@ export function KanIkkeSendes(props: IProps): JSX.Element | undefined {
 
   if (!kanSendes(props.periode)) {
     return (
-      <Alert role="alert" variant="error" className="my-4">
-        {getAppText("rapportering-periode-kan-ikke-sendes")}
-      </Alert>
+      <InfoCard data-color="danger" role="alert" className="my-4">
+        <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+          {getAppText("rapportering-periode-kan-ikke-sendes")}
+        </InfoCard.Message>
+      </InfoCard>
     );
   }
 
