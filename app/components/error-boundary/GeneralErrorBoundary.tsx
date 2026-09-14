@@ -3,14 +3,12 @@ import { PortableText, PortableTextBlock } from "@portabletext/react";
 import { useEffect } from "react";
 import { ErrorResponse, isRouteErrorResponse, useRouteLoaderData } from "react-router";
 
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { foundAppText, foundRichText, getAppText, getLink, getRichText } from "~/hooks/useSanity";
 import type { ISanity } from "~/sanity/sanity.types";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 
 import type { loader as RootLoader } from "../../root";
-import { NavigasjonContainer } from "../navigasjon-container/NavigasjonContainer";
 
 export interface IError {
   statusText: string;
@@ -101,15 +99,9 @@ export function GeneralErrorBoundary({ error }: IProps) {
 
       <PortableText value={description} />
 
-      <NavigasjonContainer>
-        <Button
-          as="a"
-          className={navigasjonStyles.knapp}
-          href={getLink(sanityTexts, "rapportering-ga-til-mine-dagpenger").linkUrl}
-        >
-          {getLink(sanityTexts, "rapportering-ga-til-mine-dagpenger").linkText}
-        </Button>
-      </NavigasjonContainer>
+      <Button as="a" href={getLink(sanityTexts, "rapportering-ga-til-mine-dagpenger").linkUrl}>
+        {getLink(sanityTexts, "rapportering-ga-til-mine-dagpenger").linkText}
+      </Button>
     </>
   );
 }

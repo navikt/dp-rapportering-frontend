@@ -89,7 +89,7 @@ function handleBrowserRequest(
     const { pipe, abort } = renderToPipeableStream(
       <ServerRouter context={reactRouterContext} url={request.url} />,
       {
-        onShellReady() {
+        onAllReady() {
           shellRendered = true;
           const body = new PassThrough();
           const stream = createReadableStreamFromReadable(body);

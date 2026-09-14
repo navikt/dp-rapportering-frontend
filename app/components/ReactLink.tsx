@@ -27,6 +27,10 @@ interface IProps extends LinkProps {
   reloadDocument?: boolean;
 }
 
+/**
+ * Brukes for interne lenker som skal rendres med Aksels Link eller Button og navigere med React Router.
+ * Sett `reloadDocument` når lenken må gjøre en full sideinnlasting.
+ */
 export const ReactLink = forwardRef(ReactLinkComponent);
 
 function ReactLinkComponent(

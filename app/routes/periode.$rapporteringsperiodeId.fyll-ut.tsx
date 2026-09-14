@@ -14,8 +14,6 @@ import { Kalender } from "~/components/kalender/Kalender";
 import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { LesMer } from "~/components/LesMer";
-import { NavigasjonContainer } from "~/components/navigasjon-container/NavigasjonContainer";
-import navigasjonStyles from "~/components/navigasjon-container/NavigasjonContainer.module.css";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { usePreventDoubleClick } from "~/hooks/usePreventDoubleClick";
@@ -28,6 +26,7 @@ import { useIsSubmitting } from "~/utils/useIsSubmitting";
 import { valider } from "~/utils/validering.util";
 
 import styles from "../styles/fyll-ut.module.css";
+import rootStyles from "../styles/root.module.css";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -180,13 +179,12 @@ export default function RapporteringsPeriodeFyllUtSide() {
         </Alert>
       )}
 
-      <NavigasjonContainer>
+      <div className={rootStyles.buttonsContainerRow}>
         <Button
           onClick={() => navigate(-1)}
           variant="secondary"
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
         >
           {getAppText("rapportering-knapp-tilbake")}
         </Button>
@@ -196,13 +194,12 @@ export default function RapporteringsPeriodeFyllUtSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          className={navigasjonStyles.knapp}
           onClick={neste}
           disabled={isSubmitting || harTrykketNeste}
         >
           {getAppText("rapportering-knapp-neste")}
         </Button>
-      </NavigasjonContainer>
+      </div>
 
       <LagretAutomatisk />
     </>
