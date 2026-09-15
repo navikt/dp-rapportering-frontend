@@ -69,7 +69,12 @@ class SessionRecord {
   }
 }
 
-export const sessionRecord = new SessionRecord();
+const globalWithSessionRecord = globalThis as typeof globalThis & {
+  __dpRapporteringSessionRecord?: SessionRecord;
+};
+
+export const sessionRecord = (globalWithSessionRecord.__dpRapporteringSessionRecord ??=
+  new SessionRecord());
 
 export function getSessionId(request: Request) {
   const cookieString = request.headers.get("Cookie") || "";
