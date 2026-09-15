@@ -30,10 +30,9 @@ import { getDecoratorHTML } from "./dekorator/dekorator.server";
 import { DevTools } from "./devTools";
 import { useAnalytics } from "./hooks/useAnalytics";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
-import { getAppText, getMessages, useSanity } from "./hooks/useSanity";
+import { getMessages } from "./hooks/useSanity";
 import { getLanguage, setLanguage } from "./models/language.server";
 import { hentSanityTekster } from "./sanity/sanity.server";
-import styles from "./styles/root.module.css";
 import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekoratoren.utils";
 import { getEnv, isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "./utils/faro";
@@ -88,10 +87,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const locale: DecoratorLocale = (await getLanguage(request)) as DecoratorLocale;
   const dekorator = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
 
-  if (!dekorator) {
-    throw new Response("rapportering-feilmelding-kunne-ikke-hente-dekoratoren", { status: 500 });
-  }
-
   const language = getLocale(locale);
   const [sanityData, disableSpm5] = await Promise.all([
     hentSanityTekster(language),
@@ -141,9 +136,11 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const rootData = useRouteLoaderData<typeof loader>("root");
-  const serviceMessages = rootData ? getMessages(rootData.sanityTexts) : [];
+  const sanityData = rootData;
+  const serviceMessages = sanityData ? getMessages(sanityData.sanityTexts) : [];
   const mainContent = useRef<HTMLElement>(null);
   const dekorator = rootData?.dekorator;
+  const appTitle = sanityData?.sanityTekst?.grunntekster?.sidetittel;
 
   useInjectDecoratorScript(dekorator?.DECORATOR_SCRIPTS);
 
@@ -172,25 +169,46 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {rootData && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.env = ${JSON.stringify(rootData.env)}`,
-            }}
-          />
-        )}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.env = ${JSON.stringify(
+              rootData?.env ?? {
+                USE_MSW: getEnv("USE_MSW"),
+                RUNTIME_ENVIRONMENT: getEnv("RUNTIME_ENVIRONMENT"),
+              },
+            )}`,
+          }}
+        />
         {dekorator && parse(dekorator.DECORATOR_HEADER, { trim: true })}
 
         {serviceMessages.length > 0 && (
-          <div className={styles.serviceMessages}>
+          <div className="serviceMessages">
             {serviceMessages.map((message) => (
               <ServiceMessage key={message.textId} message={message} />
             ))}
           </div>
         )}
 
+        <div className="rapporteringHeader">
+          <div className="rapporteringHeaderInnhold">
+            <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
+              {appTitle}
+            </Heading>
+            {isLocalOrDemo && (
+              <div className="demoInfo">
+                <InlineMessage status="warning">
+                  Dette er en demoside og inneholder ikke dine personlige data.
+                </InlineMessage>
+                <DevTools />
+              </div>
+            )}
+          </div>
+        </div>
+
         <main ref={mainContent} id="maincontent" role="main" tabIndex={-1}>
-          {children}
+          <div className="pageContainer">
+            <div className="pageContent">{children}</div>
+          </div>
         </main>
         <ScrollRestoration />
         {dekorator && parse(dekorator.DECORATOR_FOOTER, { trim: true })}
@@ -201,8 +219,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const { getAppText } = useSanity();
-  const rootData = useRouteLoaderData<typeof loader>("root");
   const { trackSprakEndret, trackForetrukketSprak } = useAnalytics();
 
   initInstrumentation();
@@ -226,55 +242,11 @@ export default function App() {
     }
   }, []);
 
-  return (
-    <>
-      <div className={styles.rapporteringHeader}>
-        <div className={styles.rapporteringHeaderInnhold}>
-          <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
-            {rootData?.sanityTekst?.grunntekster?.sidetittel ?? getAppText("rapportering-tittel")}
-          </Heading>
-          {isLocalOrDemo && (
-            <div className={styles.demoInfo}>
-              <InlineMessage status="warning">
-                Dette er en demoside og inneholder ikke dine personlige data.
-              </InlineMessage>
-              <DevTools />
-            </div>
-          )}
-        </div>
-      </div>
-      <div className={styles.pageContainer}>
-        <div className={styles.pageContent}>
-          <Outlet />
-        </div>
-      </div>
-    </>
-  );
+  return <Outlet />;
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  // Root loader kan mangle data her (f.eks. ved ikke-matchende rute), så vi kan ikke bruke useSanity/getAppText
-  const rootData = useRouteLoaderData<typeof loader>("root");
-  const tittel = rootData
-    ? getAppText(rootData.sanityTexts, "rapportering-tittel")
-    : "Meldekort for dagpenger";
 
-  return (
-    <>
-      <div className={styles.rapporteringHeader}>
-        <div className={styles.rapporteringHeaderInnhold}>
-          <Heading tabIndex={-1} level="1" size="xlarge" className="vo-fokus">
-            {tittel}
-          </Heading>
-          {isLocalOrDemo && <DevTools />}
-        </div>
-      </div>
-      <div className={styles.pageContainer}>
-        <div className={styles.pageContent}>
-          <GeneralErrorBoundary error={error} />
-        </div>
-      </div>
-    </>
-  );
+  return <GeneralErrorBoundary error={error} />;
 }
