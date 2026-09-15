@@ -34,7 +34,7 @@ vi.mock("@navikt/nav-dekoratoren-moduler", async () => {
 });
 
 vi.mock("~/hooks/useLocale", () => ({
-  locale: DecoratorLocale.NB,
+  useLocale: () => ({ locale: DecoratorLocale.NB }),
 }));
 
 vi.mock("~/hooks/useAnalytics", () => ({
