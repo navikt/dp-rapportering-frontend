@@ -2,6 +2,7 @@ import { TypedObject } from "@portabletext/types";
 import { describe, expect, it, vi } from "vitest";
 
 import { createSanityRichTextObject } from "~/hooks/useSanity";
+import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 // import { aktivitetType } from "~/utils/aktivitettype.utils";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
@@ -42,21 +43,46 @@ function mockGetRichText(textId: string): TypedObject | TypedObject[] {
 
 const locale = DecoratorLocale.NB;
 
+const mockSanityTekst: MeldekortBrukerflateApiResponse = {
+  arbeidssokerstatusBeskjeder: {
+    duVilVaereRegistrert: createSanityRichTextObject("du-vil-vaere-registrert"),
+    duVilBliAvregistrert: {
+      lang: createSanityRichTextObject("du-vil-bli-avregistrert-lang"),
+      kort: createSanityRichTextObject("du-vil-bli-avregistrert-kort"),
+    },
+    duSkalIkkeSvarePaSporsmaal: createSanityRichTextObject("du-skal-ikke-svare"),
+    fraArena: createSanityRichTextObject("fra-arena"),
+    utenArbeidssokerSporsmaal: createSanityRichTextObject("uten-arbeidssoker-sporsmaal"),
+    etterregistrert: createSanityRichTextObject("etterregistrert"),
+  },
+} as MeldekortBrukerflateApiResponse;
+
 describe("getArbeidssokerAlert", () => {
   const periode = innsendtRapporteringsperioderResponse[0];
 
   it("viser alert for arbeidssøker", () => {
-    const alert = getArbeidssokerAlert(periode, mockGetAppText, mockGetRichText);
-    expect(alert).toContain("rapportering-arbeidssokerregister-alert-innhold-registrert-v2");
+    const alert = getArbeidssokerAlert(periode, "utfylling", mockSanityTekst, locale);
+    expect(alert).toContain("du-vil-vaere-registrert");
   });
 
-  it("viser alert for avregistrering av arbeidssøker", () => {
+  it("viser alert for avregistrering av arbeidssøker på utfylling", () => {
     const alert = getArbeidssokerAlert(
       { ...periode, registrertArbeidssoker: false },
-      mockGetAppText,
-      mockGetRichText,
+      "utfylling",
+      mockSanityTekst,
+      locale,
     );
-    expect(alert).toContain("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2");
+    expect(alert).toContain("du-vil-bli-avregistrert-lang");
+  });
+
+  it("viser alert for avregistrering av arbeidssøker på bekreftelse", () => {
+    const alert = getArbeidssokerAlert(
+      { ...periode, registrertArbeidssoker: false },
+      "bekreftelse",
+      mockSanityTekst,
+      locale,
+    );
+    expect(alert).toContain("du-vil-bli-avregistrert-kort");
   });
 });
 
@@ -419,6 +445,7 @@ describe("htmlForOppsummering", () => {
     periode: innsendtRapporteringsperioderResponse[0],
     getAppText: mockGetAppText,
     getRichText: mockGetRichText,
+    nySanityTexts: mockSanityTekst,
     locale,
   });
 
@@ -429,10 +456,12 @@ describe("htmlForOppsummering", () => {
   it("viser oppsummering for nytt meldekort", () => {
     const alert = getArbeidssokerAlert(
       innsendtRapporteringsperioderResponse[0],
-      mockGetAppText,
-      mockGetRichText,
+      "bekreftelse",
+      mockSanityTekst,
+      locale,
     );
 
+    expect(alert).toContain("du-vil-vaere-registrert");
     expect(nyttMeldekort).toContain(alert);
   });
 
