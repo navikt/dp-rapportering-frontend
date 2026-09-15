@@ -11,6 +11,7 @@ import {
   useNavigate,
   useNavigation,
   useRevalidator,
+  useRouteLoaderData,
   useSubmit,
 } from "react-router";
 import invariant from "tiny-invariant";
@@ -30,6 +31,7 @@ import {
   hentRapporteringsperioder,
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
+import type { loader as RootLoader } from "~/root";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { getCorrelationId } from "~/utils/fetch.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
@@ -123,6 +125,7 @@ export default function RapporteringsPeriodeSendInnSide() {
   const { locale } = useLocale();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
 
   const revalidator = useRevalidator();
 
@@ -140,6 +143,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     periode,
     getAppText,
     getRichText,
+    nySanityTexts: rootData?.sanityTekst,
     submit,
     locale,
   });

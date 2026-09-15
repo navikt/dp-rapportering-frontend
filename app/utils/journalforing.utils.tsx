@@ -5,10 +5,15 @@ import { renderToString } from "react-dom/server";
 import type { SubmitFunction } from "react-router";
 
 import { hentAktivitetBeskrivelse } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
+import {
+  type ArbeidssokerstatusSide,
+  hentArbeidssokerstatusInnhold,
+} from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 import { lesMerInnhold } from "~/components/LesMer";
 import { type GetAppText, type GetRichText } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
 import {
   AktivitetType,
   aktivitetType,
@@ -41,6 +46,7 @@ interface IProps {
   getRichText: GetRichText;
   periode: IRapporteringsperiode | null;
   rapporteringsperioder: IRapporteringsperiode[];
+  nySanityTexts?: MeldekortBrukerflateApiResponse;
 }
 
 interface IUseAddHtml extends IProps {
@@ -53,6 +59,7 @@ export function useAddHtml({
   periode,
   getAppText,
   getRichText,
+  nySanityTexts,
   submit,
   locale,
 }: IUseAddHtml) {
@@ -67,6 +74,7 @@ export function useAddHtml({
       getAppText,
       getRichText,
       locale,
+      nySanityTexts,
     );
     formData.set("_html", html);
     formData.set("_action", "send-inn");
@@ -77,30 +85,30 @@ export function useAddHtml({
 
 export function getArbeidssokerAlert(
   periode: IRapporteringsperiode,
-  getAppText: GetAppText,
-  getRichText: GetRichText,
+  side: ArbeidssokerstatusSide,
+  nySanityTexts: MeldekortBrukerflateApiResponse | undefined,
 ): string {
-  if (periode.registrertArbeidssoker === true) {
-    return renderToString(
-      <PortableText
-        value={getRichText("rapportering-arbeidssokerregister-alert-innhold-registrert-v2")}
-      />,
-    );
+  const { tekst } = hentArbeidssokerstatusInnhold(
+    periode,
+    side,
+    nySanityTexts?.arbeidssokerstatusBeskjeder,
+  );
+
+  if (!tekst) {
+    return "";
   }
 
-  if (periode.registrertArbeidssoker === false) {
-    const nesteMeldeperiode = nestePeriode(periode.periode);
+  const nesteMeldeperiode = nestePeriode(periode.periode);
+  const dato = formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "d. MMMM yyyy" });
+  const tekstMedDato = tekst.map((block) => ({
+    ...block,
+    children: block.children.map((child) => ({
+      ...child,
+      text: child.text?.replaceAll("{{nestePeriodeDato}}", dato),
+    })),
+  }));
 
-    return renderToString(
-      <PortableText
-        value={getRichText("rapportering-arbeidssokerregister-alert-innhold-avregistrert-v2", {
-          dato: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "d. MMMM yyyy" }),
-        })}
-      />,
-    );
-  }
-
-  return "";
+  return renderToString(<PortableText value={tekstMedDato} />);
 }
 
 export function getHeader({
@@ -459,7 +467,7 @@ export function htmlForTom(props: IProps): string {
 }
 
 export function htmlForArbeidssoker(props: IProps): string {
-  const { getAppText, getRichText, periode } = props;
+  const { getAppText, periode, nySanityTexts } = props;
 
   if (!periode) {
     return "";
@@ -474,20 +482,35 @@ export function htmlForArbeidssoker(props: IProps): string {
 
   const seksjoner: string[] = [];
 
-  const legend = getAppText("rapportering-arbeidssokerregister-tittel-v2", {
-    fom: formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }),
-    tom: formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat }),
-  });
-  const description = getAppText("rapportering-arbeidssokerregister-subtittel");
+  const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
+  const fom = formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat });
+  const tom = formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat });
+
+  const legend =
+    arbeidssokerstatusSporsmaal?.tittel?.replaceAll("{{fom}}", fom).replaceAll("{{tom}}", tom) ??
+    getAppText("rapportering-arbeidssokerregister-tittel-v2", { fom, tom });
+  const description =
+    arbeidssokerstatusSporsmaal?.beskrivelse ??
+    getAppText("rapportering-arbeidssokerregister-subtittel");
   const options = [
-    { value: true, label: "rapportering-arbeidssokerregister-svar-ja" },
-    { value: false, label: "rapportering-arbeidssokerregister-svar-nei" },
+    {
+      value: true,
+      label:
+        arbeidssokerstatusSporsmaal?.alternativer.ja ??
+        getAppText("rapportering-arbeidssokerregister-svar-ja"),
+    },
+    {
+      value: false,
+      label:
+        arbeidssokerstatusSporsmaal?.alternativer.nei ??
+        getAppText("rapportering-arbeidssokerregister-svar-nei"),
+    },
   ]
     .map((option) => {
       return getInput({
         type: "radio",
         checked: option.value === periode.registrertArbeidssoker,
-        label: getAppText(option.label),
+        label: option.label,
         name: option.label,
       });
     })
@@ -499,13 +522,13 @@ export function htmlForArbeidssoker(props: IProps): string {
     </form>
   `;
   seksjoner.push(radioGroup);
-  seksjoner.push(getArbeidssokerAlert(periode, getAppText, getRichText));
+  seksjoner.push(getArbeidssokerAlert(periode, "utfylling", nySanityTexts));
 
   return seksjoner.join("");
 }
 
 export function htmlForOppsummering(props: IProps): string {
-  const { getAppText, getRichText, periode } = props;
+  const { getAppText, getRichText, periode, nySanityTexts } = props;
 
   if (!periode) {
     return "";
@@ -544,10 +567,10 @@ export function htmlForOppsummering(props: IProps): string {
     seksjoner.push(
       getHeader({ text: getAppText("rapportering-endring-begrunnelse-tittel"), level: "3" }),
     );
-    seksjoner.push(getArbeidssokerAlert(periode, getAppText, getRichText));
+    seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts));
     seksjoner.push(`<p>${periode.begrunnelseEndring}</p>`);
   } else {
-    seksjoner.push(getArbeidssokerAlert(periode, getAppText, getRichText));
+    seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts));
   }
 
   if (periode.originalId) {
@@ -575,6 +598,7 @@ export function samleHtmlForPeriode(
   getAppText: GetAppText,
   getRichText: GetRichText,
   locale: DecoratorLocale,
+  nySanityTexts?: MeldekortBrukerflateApiResponse,
 ): string {
   const pages: string[] = [];
 
@@ -582,7 +606,9 @@ export function samleHtmlForPeriode(
     const fns = [htmlForFyllUt, htmlForEndringBegrunnelse, htmlForOppsummering];
 
     fns.forEach((fn) =>
-      pages.push(fn({ periode, getAppText, getRichText, locale, rapporteringsperioder })),
+      pages.push(
+        fn({ periode, getAppText, getRichText, locale, rapporteringsperioder, nySanityTexts }),
+      ),
     );
   } else {
     const fns = [htmlForLandingsside, htmlForRapporteringstype];
@@ -604,7 +630,9 @@ export function samleHtmlForPeriode(
     fns.push(htmlForOppsummering);
 
     fns.forEach((fn) =>
-      pages.push(fn({ periode, getAppText, getRichText, locale, rapporteringsperioder })),
+      pages.push(
+        fn({ periode, getAppText, getRichText, locale, rapporteringsperioder, nySanityTexts }),
+      ),
     );
   }
 
