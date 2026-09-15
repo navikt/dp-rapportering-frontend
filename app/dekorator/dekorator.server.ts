@@ -6,10 +6,13 @@ import {
   fetchDecoratorHtml,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 
+import { logger } from "~/models/logger.server";
 import { DecoratorLocale } from "~/utils/dekoratoren.utils";
 import { getEnv } from "~/utils/env.utils";
 
-export async function getDecoratorHTML(params: DecoratorParams): Promise<DecoratorElements> {
+export async function getDecoratorHTML(
+  params: DecoratorParams,
+): Promise<DecoratorElements | undefined> {
   const config: DecoratorFetchProps = {
     env: (getEnv("DEKORATOR_ENV") || "localhost") as DecoratorEnvProps["env"],
     localUrl: "https://dekoratoren.ekstern.dev.nav.no",
@@ -24,5 +27,13 @@ export async function getDecoratorHTML(params: DecoratorParams): Promise<Decorat
     },
   };
 
-  return await fetchDecoratorHtml(config);
+  try {
+    return await fetchDecoratorHtml(config);
+  } catch (error: unknown) {
+    logger.error("Kunne ikke hente dekoratøren", {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    return undefined;
+  }
 }

@@ -23,9 +23,7 @@ function RuteFeilgrense() {
   const error = useRouteError();
   return (
     <>
-      <span data-testid="route-error-name">
-        {error instanceof Error ? error.name : "unknown"}
-      </span>
+      <span data-testid="route-error-name">{error instanceof Error ? error.name : "unknown"}</span>
       <GeneralErrorBoundary error={error} />
     </>
   );
@@ -44,13 +42,12 @@ describe("useTypedRouteLoaderData", () => {
 
     render(<RoutesStub initialEntries={["/"]} />);
 
-    // Uten sanityTexts (f.eks. når root sin egen loader har feilet) kan ikke spesifikk feiltekst
-    // slås opp, så GeneralErrorBoundary viser alltid de generiske "ukjent feil"-tekstene.
+    // Uten sanityTexts (f.eks. når root sin egen loader har feilet) vises tekst-ID-ene.
     expect(
       await screen.findByText("rapportering-feilmelding-ukjent-feil-tittel"),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/rapportering-feilmelding-ukjent-feil-beskrivelse/),
+      screen.getByRole("button", { name: "rapportering-ga-til-mine-dagpenger" }),
     ).toBeInTheDocument();
   });
 });

@@ -78,8 +78,8 @@ export default function RapporteringstypeSide() {
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { getAppText, getRichText } = useSanity();
-
   const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
+
   const sesjonId = useMemo(uuidv7, [periode.id]);
   const stegnavn = "rapporteringstype";
   const steg = 1;
@@ -156,61 +156,59 @@ export default function RapporteringstypeSide() {
 
   return (
     <>
-      <div className={rootStyles.pageContent}>
-        <KanIkkeSendes periode={periode} />
+      <KanIkkeSendes periode={periode} />
 
-        {harFlerePerioder && (
-          <InfoCard data-color="info" className="my-8">
-            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-              <strong>
-                {getAppText("rapportering-flere-perioder-tittel", { antall: antallPerioder })}
-              </strong>
-              <br />
-              {getAppText("rapportering-flere-perioder-innledning")}
-            </InfoCard.Message>
-          </InfoCard>
-        )}
+      {harFlerePerioder && (
+        <InfoCard data-color="info" className="my-8">
+          <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+            <strong>
+              {getAppText("rapportering-flere-perioder-tittel", { antall: antallPerioder })}
+            </strong>
+            <br />
+            {getAppText("rapportering-flere-perioder-innledning")}
+          </InfoCard.Message>
+        </InfoCard>
+      )}
 
-        <div className={styles.textWrapper}>
-          <Heading size="medium" level="2">
-            {rapporteringsperioder.length > 1
-              ? getAppText("rapportering-foerste-periode")
-              : getAppText("rapportering-naavaerende-periode")}
-          </Heading>
-          <BodyShort size="small">{hentPeriodeTekst(periode, getAppText, locale)}</BodyShort>
+      <div className={styles.textWrapper}>
+        <Heading size="medium" level="2">
+          {rapporteringsperioder.length > 1
+            ? getAppText("rapportering-foerste-periode")
+            : getAppText("rapportering-naavaerende-periode")}
+        </Heading>
+        <BodyShort size="small">{hentPeriodeTekst(periode, getAppText, locale)}</BodyShort>
 
-          <PortableText
-            value={getRichText("rapportering-fyll-ut-frister", {
-              "fra-dato": tidligstInnsendingDato,
-              "til-dato": senestInnsendingDato,
-            })}
-          />
-        </div>
-        <LesMer periodeId={periode.id} />
-
-        <RadioGroup
-          disabled={!kanSendes(periode)}
-          legend={rapporteringstypeFormLabel}
-          description={hentPeriodeTekst(periode, getAppText, locale)}
-          onChange={endreRapporteringstype}
-          value={type}
-        >
-          <Radio value={Rapporteringstype.harAktivitet}>
-            {getAppText("rapportering-noe-å-rapportere")}
-          </Radio>
-          <Radio
-            data-testid="rapportering-ingen-å-rapportere"
-            className="rapportering-ingen-å-rapportere"
-            value={Rapporteringstype.harIngenAktivitet}
-          >
-            <PortableText value={getRichText("rapportering-ingen-å-rapportere")} />
-          </Radio>
-        </RadioGroup>
-
-        {rapporteringstypeFetcher.data?.status === "error" && (
-          <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
-        )}
+        <PortableText
+          value={getRichText("rapportering-fyll-ut-frister", {
+            "fra-dato": tidligstInnsendingDato,
+            "til-dato": senestInnsendingDato,
+          })}
+        />
       </div>
+      <LesMer periodeId={periode.id} />
+
+      <RadioGroup
+        disabled={!kanSendes(periode)}
+        legend={rapporteringstypeFormLabel}
+        description={hentPeriodeTekst(periode, getAppText, locale)}
+        onChange={endreRapporteringstype}
+        value={type}
+      >
+        <Radio value={Rapporteringstype.harAktivitet}>
+          {getAppText("rapportering-noe-å-rapportere")}
+        </Radio>
+        <Radio
+          data-testid="rapportering-ingen-å-rapportere"
+          className="rapportering-ingen-å-rapportere"
+          value={Rapporteringstype.harIngenAktivitet}
+        >
+          <PortableText value={getRichText("rapportering-ingen-å-rapportere")} />
+        </Radio>
+      </RadioGroup>
+
+      {rapporteringstypeFetcher.data?.status === "error" && (
+        <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
+      )}
       <div className={rootStyles.buttonsContainerRow}>
         <Button
           onClick={() => navigate(-1)}

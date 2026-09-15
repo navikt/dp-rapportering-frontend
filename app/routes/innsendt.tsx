@@ -122,94 +122,92 @@ export default function InnsendteRapporteringsPerioderSide() {
 
   return (
     <>
-      <div className={rootStyles.pageContent}>
-        <Heading size="medium" level="2">
-          {oversikt?.tittel}
-        </Heading>
-        {oversikt?.tekst && <PortableTextRenderer value={oversikt.tekst} />}
-        {innsendtPerioder.length === 0 && (
-          <InfoCard data-color="info">
-            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-              {oversikt?.ingenInnsendteMeldekort}
-            </InfoCard.Message>
-          </InfoCard>
-        )}
-        <div className={innsendtStyles.innsendtPerioder}>
-          {sortertePerioder.map((perioder) => {
-            const nyestePeriode = perioder[0];
-            const statusColor = getStatusColor(nyestePeriode.status);
+      <Heading size="medium" level="2">
+        {oversikt?.tittel}
+      </Heading>
+      {oversikt?.tekst && <PortableTextRenderer value={oversikt.tekst} />}
+      {innsendtPerioder.length === 0 && (
+        <InfoCard data-color="info">
+          <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+            {oversikt?.ingenInnsendteMeldekort}
+          </InfoCard.Message>
+        </InfoCard>
+      )}
+      <div className={innsendtStyles.innsendtPerioder}>
+        {sortertePerioder.map((perioder) => {
+          const nyestePeriode = perioder[0];
+          const statusColor = getStatusColor(nyestePeriode.status);
 
-            return (
-              <Accordion key={nyestePeriode.periode.fraOgMed} data-color="neutral">
-                <Accordion.Item>
-                  <Accordion.Header className={innsendtStyles.innsendtAccordionHeader}>
-                    <div className={innsendtStyles.innsendtPeriodeHeader}>
-                      <BodyShort weight="semibold">
-                        {grunntekster?.uke}{" "}
-                        {formaterPeriodeTilUkenummer(
-                          nyestePeriode.periode.fraOgMed,
-                          nyestePeriode.periode.tilOgMed,
-                        )}
-                      </BodyShort>
-                      <Detail className={innsendtStyles.innsendtPeriodeDato}>
-                        {formaterPeriodeDato(
-                          nyestePeriode.periode.fraOgMed,
-                          nyestePeriode.periode.tilOgMed,
-                          locale,
-                        )}
-                      </Detail>
+          return (
+            <Accordion key={nyestePeriode.periode.fraOgMed} data-color="neutral">
+              <Accordion.Item>
+                <Accordion.Header className={innsendtStyles.innsendtAccordionHeader}>
+                  <div className={innsendtStyles.innsendtPeriodeHeader}>
+                    <BodyShort weight="semibold">
+                      {grunntekster?.uke}{" "}
+                      {formaterPeriodeTilUkenummer(
+                        nyestePeriode.periode.fraOgMed,
+                        nyestePeriode.periode.tilOgMed,
+                      )}
+                    </BodyShort>
+                    <Detail className={innsendtStyles.innsendtPeriodeDato}>
+                      {formaterPeriodeDato(
+                        nyestePeriode.periode.fraOgMed,
+                        nyestePeriode.periode.tilOgMed,
+                        locale,
+                      )}
+                    </Detail>
+                  </div>
+                  <Tag variant="moderate" data-color={statusColor} size="xsmall">
+                    {getStatusLabel(nyestePeriode.status, oversikt?.meldekortStatus)}
+                  </Tag>
+                </Accordion.Header>
+                <Accordion.Content>
+                  {perioder.map((periode) => (
+                    <div key={periode.id} className={innsendtStyles.innsendtOppsummering}>
+                      {(periode.mottattDato || periode.bruttoBelop) && (
+                        <div className="my-4">
+                          {periode.mottattDato && (
+                            <div>
+                              <strong>
+                                {periode.originalId
+                                  ? meldekortdetaljer?.endret
+                                  : meldekortdetaljer?.sendt}
+                                :{" "}
+                              </strong>
+                              {new Intl.DateTimeFormat(locale).format(
+                                new TZDate(periode.mottattDato, TIDSSONER.OSLO),
+                              )}
+                            </div>
+                          )}
+                          {periode.bruttoBelop !== null && (
+                            <div>
+                              <strong>{meldekortdetaljer?.belopUtbetalt}: </strong>
+                              {new Intl.NumberFormat(locale, {
+                                style: "currency",
+                                currency: "NOK",
+                              }).format(periode.bruttoBelop)}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <Kalender
+                        periode={periode}
+                        visEndringslenke={periode.kanEndres}
+                        aapneModal={() => {}}
+                        locale={locale}
+                        readonly
+                        visDato={false}
+                      />
+                      <AktivitetOppsummering periode={periode} />
+                      <ArbeidssokerstatusBeskjed periode={periode} side="oversikt" />
                     </div>
-                    <Tag variant="moderate" data-color={statusColor} size="xsmall">
-                      {getStatusLabel(nyestePeriode.status, oversikt?.meldekortStatus)}
-                    </Tag>
-                  </Accordion.Header>
-                  <Accordion.Content>
-                    {perioder.map((periode) => (
-                      <div key={periode.id} className={innsendtStyles.innsendtOppsummering}>
-                        {(periode.mottattDato || periode.bruttoBelop) && (
-                          <div className="my-4">
-                            {periode.mottattDato && (
-                              <div>
-                                <strong>
-                                  {periode.originalId
-                                    ? meldekortdetaljer?.endret
-                                    : meldekortdetaljer?.sendt}
-                                  :{" "}
-                                </strong>
-                                {new Intl.DateTimeFormat(locale).format(
-                                  new TZDate(periode.mottattDato, TIDSSONER.OSLO),
-                                )}
-                              </div>
-                            )}
-                            {periode.bruttoBelop !== null && (
-                              <div>
-                                <strong>{meldekortdetaljer?.belopUtbetalt}: </strong>
-                                {new Intl.NumberFormat(locale, {
-                                  style: "currency",
-                                  currency: "NOK",
-                                }).format(periode.bruttoBelop)}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                        <Kalender
-                          periode={periode}
-                          visEndringslenke={periode.kanEndres}
-                          aapneModal={() => {}}
-                          locale={locale}
-                          readonly
-                          visDato={false}
-                        />
-                        <AktivitetOppsummering periode={periode} />
-                        <ArbeidssokerstatusBeskjed periode={periode} side="oversikt" />
-                      </div>
-                    ))}
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-            );
-          })}
-        </div>
+                  ))}
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          );
+        })}
       </div>
       <div className={rootStyles.buttonsContainerColumn}>
         {harFlerePerioder ? (

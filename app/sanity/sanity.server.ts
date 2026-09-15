@@ -13,6 +13,13 @@ import type { ISanity } from "./sanity.types";
 
 const sanityClient = createClient(sanityConfig);
 
+export type SanityData = {
+  sanityTexts: ISanity | undefined;
+  sanityTextsHasError: boolean;
+  sanityTekst: MeldekortBrukerflateApiResponse | undefined;
+  sanityTekstHasError: boolean;
+};
+
 async function fetchSanity<T>(
   query: string,
   params: Record<string, string>,
@@ -30,7 +37,7 @@ async function fetchSanity<T>(
   }
 }
 
-export async function hentSanityTekster(language: DecoratorLocale) {
+export async function hentSanityTekster(language: DecoratorLocale): Promise<SanityData> {
   const [sanityTexts, sanityTekstResult] = await Promise.all([
     fetchSanity<ISanity>(
       allTextsQuery,
@@ -50,10 +57,12 @@ export async function hentSanityTekster(language: DecoratorLocale) {
     ),
   ]);
 
-  return {
+  const sanityData = {
     sanityTexts,
     sanityTextsHasError: sanityTexts === undefined,
     sanityTekst: sanityTekstResult,
     sanityTekstHasError: sanityTekstResult === undefined,
   };
+
+  return sanityData;
 }

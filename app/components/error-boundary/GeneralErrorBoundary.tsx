@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { ErrorResponse, isRouteErrorResponse, useRouteLoaderData } from "react-router";
 
 import { useAnalytics } from "~/hooks/useAnalytics";
-import { foundAppText, foundRichText, getAppText, getLink, getRichText } from "~/hooks/useSanity";
+import { getAppText, getRichText } from "~/hooks/useSanity";
+import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
 import type { ISanity } from "~/sanity/sanity.types";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 
@@ -23,7 +24,6 @@ interface IProps {
 
 const defaultTitle = "rapportering-feilmelding-ukjent-feil-tittel";
 const defaultDescription = "rapportering-feilmelding-ukjent-feil-beskrivelse";
-
 export function getErrorTitleTextId(error: unknown | IError): string {
   if (isRouteErrorResponse(error)) {
     return `${error.data}-tittel`;
@@ -47,6 +47,7 @@ export function getErrorDescriptionTextId(error: unknown | IError): string {
 export function useGetErrorText(
   error: unknown | IError,
   sanityTexts: ISanity | undefined,
+  sanityTekst?: MeldekortBrukerflateApiResponse,
 ): {
   titleId: string;
   descriptionId: string;
@@ -56,34 +57,40 @@ export function useGetErrorText(
   const titleId = getErrorTitleTextId(error);
   const descriptionId = getErrorDescriptionTextId(error);
 
-  const title = getAppText(sanityTexts, titleId);
-  const description = getRichText(sanityTexts, descriptionId);
+  const sanityTitle = sanityTekst?.feilmeldinger?.generellFeil?.tittel;
+  const sanityDescription = sanityTekst?.feilmeldinger?.generellFeil?.tekst;
+  const title = sanityTitle ?? getAppText(sanityTexts, titleId);
+  const description = sanityDescription ?? getRichText(sanityTexts, descriptionId);
 
   const texts = { titleId, descriptionId, title, description };
-
-  if (!foundAppText(title, titleId)) {
-    texts.title = getAppText(sanityTexts, defaultTitle);
-    console.warn("Fant ikke tittel for feilmelding", titleId);
-  }
-
-  if (!foundRichText(description, descriptionId)) {
-    texts.description = getRichText(sanityTexts, defaultDescription);
-    console.warn("Fant ikke beskrivelse for feilmelding", descriptionId);
-  }
 
   return texts;
 }
 
 export function GeneralErrorBoundary({ error }: IProps) {
-  // Root loader kan mangle data her (f.eks. hvis root sin egen loader feilet), så vi kan ikke bruke useSanity
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const sanityTexts = rootData?.sanityTexts;
-  const { titleId, descriptionId, title, description } = useGetErrorText(error, sanityTexts);
+  const sanityTekst = rootData?.sanityTekst;
+  const { titleId, descriptionId, title, description } = useGetErrorText(
+    error,
+    sanityTexts,
+    sanityTekst,
+  );
   const { trackFeilmelding } = useAnalytics();
 
   useEffect(() => {
-    setBreadcrumbs([], (textId) => getAppText(sanityTexts, textId));
-  }, [sanityTexts]);
+    setBreadcrumbs([], (textId) => {
+      if (textId === "rapportering-brodsmule-min-side") {
+        return sanityTekst?.grunntekster?.minSide ?? getAppText(sanityTexts, textId);
+      }
+
+      if (textId === "rapportering-brodsmule-meldekort") {
+        return sanityTekst?.grunntekster?.meldekort ?? getAppText(sanityTexts, textId);
+      }
+
+      return getAppText(sanityTexts, textId);
+    });
+  }, [sanityTekst, sanityTexts]);
 
   useEffect(() => {
     // Logg besøk, titleId og descriptionId
@@ -99,8 +106,9 @@ export function GeneralErrorBoundary({ error }: IProps) {
 
       <PortableText value={description} />
 
-      <Button as="a" href={getLink(sanityTexts, "rapportering-ga-til-mine-dagpenger").linkUrl}>
-        {getLink(sanityTexts, "rapportering-ga-til-mine-dagpenger").linkText}
+      <Button as="a" href="https://www.nav.no/minside">
+        {sanityTekst?.knapper?.gaaTilMinSide ??
+          getAppText(sanityTexts, "rapportering-ga-til-mine-dagpenger")}
       </Button>
     </>
   );
