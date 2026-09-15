@@ -4,9 +4,7 @@ import { useEffect } from "react";
 import { ErrorResponse, isRouteErrorResponse, useRouteLoaderData } from "react-router";
 
 import { useAnalytics } from "~/hooks/useAnalytics";
-import { getAppText, getRichText } from "~/hooks/useSanity";
 import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
-import type { ISanity } from "~/sanity/sanity.types";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
 
 import type { loader as RootLoader } from "../../root";
@@ -46,8 +44,7 @@ export function getErrorDescriptionTextId(error: unknown | IError): string {
 
 export function useGetErrorText(
   error: unknown | IError,
-  sanityTexts: ISanity | undefined,
-  sanityTekst?: MeldekortBrukerflateApiResponse,
+  sanityTekst: MeldekortBrukerflateApiResponse | undefined,
 ): {
   titleId: string;
   descriptionId: string;
@@ -59,8 +56,8 @@ export function useGetErrorText(
 
   const sanityTitle = sanityTekst?.feilmeldinger?.generellFeil?.tittel;
   const sanityDescription = sanityTekst?.feilmeldinger?.generellFeil?.tekst;
-  const title = sanityTitle ?? getAppText(sanityTexts, titleId);
-  const description = sanityDescription ?? getRichText(sanityTexts, descriptionId);
+  const title = sanityTitle ?? titleId;
+  const description = sanityDescription ?? [];
 
   const texts = { titleId, descriptionId, title, description };
 
@@ -69,28 +66,23 @@ export function useGetErrorText(
 
 export function GeneralErrorBoundary({ error }: IProps) {
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
-  const sanityTexts = rootData?.sanityTexts;
   const sanityTekst = rootData?.sanityTekst;
-  const { titleId, descriptionId, title, description } = useGetErrorText(
-    error,
-    sanityTexts,
-    sanityTekst,
-  );
+  const { titleId, descriptionId, title, description } = useGetErrorText(error, sanityTekst);
   const { trackFeilmelding } = useAnalytics();
 
   useEffect(() => {
     setBreadcrumbs([], (textId) => {
       if (textId === "rapportering-brodsmule-min-side") {
-        return sanityTekst?.grunntekster?.minSide ?? getAppText(sanityTexts, textId);
+        return sanityTekst?.grunntekster?.minSide ?? textId;
       }
 
       if (textId === "rapportering-brodsmule-meldekort") {
-        return sanityTekst?.grunntekster?.meldekort ?? getAppText(sanityTexts, textId);
+        return sanityTekst?.grunntekster?.meldekort ?? textId;
       }
 
-      return getAppText(sanityTexts, textId);
+      return textId;
     });
-  }, [sanityTekst, sanityTexts]);
+  }, [sanityTekst]);
 
   useEffect(() => {
     // Logg besøk, titleId og descriptionId
@@ -107,8 +99,7 @@ export function GeneralErrorBoundary({ error }: IProps) {
       <PortableText value={description} />
 
       <Button as="a" href="https://www.nav.no/minside">
-        {sanityTekst?.knapper?.gaaTilMinSide ??
-          getAppText(sanityTexts, "rapportering-ga-til-mine-dagpenger")}
+        {sanityTekst?.knapper?.gaaTilMinSide}
       </Button>
     </>
   );

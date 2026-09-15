@@ -30,7 +30,7 @@ import { getDecoratorHTML } from "./dekorator/dekorator.server";
 import { DevTools } from "./devTools";
 import { useAnalytics } from "./hooks/useAnalytics";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
-import { getAppText, getMessages } from "./hooks/useSanity";
+import { getMessages } from "./hooks/useSanity";
 import { getLanguage, setLanguage } from "./models/language.server";
 import { hentSanityTekster } from "./sanity/sanity.server";
 import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekoratoren.utils";
@@ -140,9 +140,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const serviceMessages = sanityData ? getMessages(sanityData.sanityTexts) : [];
   const mainContent = useRef<HTMLElement>(null);
   const dekorator = rootData?.dekorator;
-  const appTitle =
-    sanityData?.sanityTekst?.grunntekster?.sidetittel ??
-    getAppText(sanityData?.sanityTexts, "rapportering-tittel");
+  const appTitle = sanityData?.sanityTekst?.grunntekster?.sidetittel;
 
   useInjectDecoratorScript(dekorator?.DECORATOR_SCRIPTS);
 

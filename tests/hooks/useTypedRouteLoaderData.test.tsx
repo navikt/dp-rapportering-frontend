@@ -46,8 +46,6 @@ describe("useTypedRouteLoaderData", () => {
     expect(
       await screen.findByText("rapportering-feilmelding-ukjent-feil-tittel"),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "rapportering-ga-til-mine-dagpenger" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button")).toBeInTheDocument();
   });
 });
