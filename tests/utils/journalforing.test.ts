@@ -61,7 +61,7 @@ describe("getArbeidssokerAlert", () => {
   const periode = innsendtRapporteringsperioderResponse[0];
 
   it("viser alert for arbeidssøker", () => {
-    const alert = getArbeidssokerAlert(periode, "utfylling", mockSanityTekst);
+    const alert = getArbeidssokerAlert(periode, "utfylling", mockSanityTekst, locale);
     expect(alert).toContain("du-vil-vaere-registrert");
   });
 
@@ -70,6 +70,7 @@ describe("getArbeidssokerAlert", () => {
       { ...periode, registrertArbeidssoker: false },
       "utfylling",
       mockSanityTekst,
+      locale,
     );
     expect(alert).toContain("du-vil-bli-avregistrert-lang");
   });
@@ -79,6 +80,7 @@ describe("getArbeidssokerAlert", () => {
       { ...periode, registrertArbeidssoker: false },
       "bekreftelse",
       mockSanityTekst,
+      locale,
     );
     expect(alert).toContain("du-vil-bli-avregistrert-kort");
   });
@@ -443,6 +445,7 @@ describe("htmlForOppsummering", () => {
     periode: innsendtRapporteringsperioderResponse[0],
     getAppText: mockGetAppText,
     getRichText: mockGetRichText,
+    nySanityTexts: mockSanityTekst,
     locale,
   });
 
@@ -454,9 +457,11 @@ describe("htmlForOppsummering", () => {
     const alert = getArbeidssokerAlert(
       innsendtRapporteringsperioderResponse[0],
       "bekreftelse",
-      undefined,
+      mockSanityTekst,
+      locale,
     );
 
+    expect(alert).toContain("du-vil-vaere-registrert");
     expect(nyttMeldekort).toContain(alert);
   });
 

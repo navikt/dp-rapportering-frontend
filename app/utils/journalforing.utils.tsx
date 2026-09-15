@@ -87,6 +87,7 @@ export function getArbeidssokerAlert(
   periode: IRapporteringsperiode,
   side: ArbeidssokerstatusSide,
   nySanityTexts: MeldekortBrukerflateApiResponse | undefined,
+  locale: DecoratorLocale,
 ): string {
   const { tekst } = hentArbeidssokerstatusInnhold(
     periode,
@@ -99,7 +100,11 @@ export function getArbeidssokerAlert(
   }
 
   const nesteMeldeperiode = nestePeriode(periode.periode);
-  const dato = formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat: "d. MMMM yyyy" });
+  const dato = formaterDato({
+    dato: nesteMeldeperiode.fraOgMed,
+    dateFormat: "d. MMMM yyyy",
+    locale,
+  });
   const tekstMedDato = tekst.map((block) => ({
     ...block,
     children: block.children.map((child) => ({
@@ -467,7 +472,7 @@ export function htmlForTom(props: IProps): string {
 }
 
 export function htmlForArbeidssoker(props: IProps): string {
-  const { getAppText, periode, nySanityTexts } = props;
+  const { getAppText, periode, nySanityTexts, locale } = props;
 
   if (!periode) {
     return "";
@@ -483,8 +488,8 @@ export function htmlForArbeidssoker(props: IProps): string {
   const seksjoner: string[] = [];
 
   const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
-  const fom = formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat });
-  const tom = formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat });
+  const fom = formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat, locale });
+  const tom = formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat, locale });
 
   const legend =
     arbeidssokerstatusSporsmaal?.tittel?.replaceAll("{{fom}}", fom).replaceAll("{{tom}}", tom) ??
@@ -522,13 +527,13 @@ export function htmlForArbeidssoker(props: IProps): string {
     </form>
   `;
   seksjoner.push(radioGroup);
-  seksjoner.push(getArbeidssokerAlert(periode, "utfylling", nySanityTexts));
+  seksjoner.push(getArbeidssokerAlert(periode, "utfylling", nySanityTexts, locale));
 
   return seksjoner.join("");
 }
 
 export function htmlForOppsummering(props: IProps): string {
-  const { getAppText, getRichText, periode, nySanityTexts } = props;
+  const { getAppText, getRichText, periode, nySanityTexts, locale } = props;
 
   if (!periode) {
     return "";
@@ -567,10 +572,10 @@ export function htmlForOppsummering(props: IProps): string {
     seksjoner.push(
       getHeader({ text: getAppText("rapportering-endring-begrunnelse-tittel"), level: "3" }),
     );
-    seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts));
+    seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
     seksjoner.push(`<p>${periode.begrunnelseEndring}</p>`);
   } else {
-    seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts));
+    seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
   }
 
   if (periode.originalId) {
