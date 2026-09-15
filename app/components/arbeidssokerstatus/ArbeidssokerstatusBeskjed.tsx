@@ -4,9 +4,11 @@ import { PortableText } from "@portabletext/react";
 import type { PortableTextBlock } from "@portabletext/types";
 import { useRouteLoaderData } from "react-router";
 
+import { useLocale } from "~/hooks/useLocale";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
-import { skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import { formaterDato } from "~/utils/dato.utils";
+import { nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { KortType, OPPRETTET_AV } from "~/utils/types";
 
 interface IProps {
@@ -15,6 +17,7 @@ interface IProps {
 }
 
 export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
+  const { locale } = useLocale();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const beskjeder = rootData?.sanityTekst?.arbeidssokerstatusBeskjeder;
   let tekst: PortableTextBlock[] | null | undefined;
@@ -42,6 +45,19 @@ export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
 
   if (!tekst) return null;
 
+  const dato = formaterDato({
+    dato: nestePeriode(periode.periode).fraOgMed,
+    dateFormat: "d. MMMM yyyy",
+    locale,
+  });
+  const tekstMedDato = tekst.map((block) => ({
+    ...block,
+    children: block.children.map((child) => ({
+      ...child,
+      text: child.text?.replaceAll("{{nestePeriodeDato}}", dato),
+    })),
+  }));
+
   const variantIcon =
     variant === "warning" ? (
       <ExclamationmarkTriangleIcon aria-hidden />
@@ -52,7 +68,7 @@ export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
   return (
     <InfoCard data-color={variant} className="my-6 alert-with-rich-text">
       <InfoCard.Message icon={variantIcon}>
-        <PortableText value={tekst} />
+        <PortableText value={tekstMedDato} />
       </InfoCard.Message>
     </InfoCard>
   );
