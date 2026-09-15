@@ -8,5 +8,5 @@ For bugfixer, beskriv gjerne:
 Lenke til oppgave/issue: [TRELLO-KORT]
 
 Sjekkliste:
-- [] har deployet og testet i demo
-- [] har deployet og testet i dev
+- [ ] har deployet og testet i demo
+- [ ] har deployet og testet i dev
