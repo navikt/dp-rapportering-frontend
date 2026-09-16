@@ -1,6 +1,6 @@
 import { render as TLRender } from "@testing-library/react";
 import { ActionFunction, LoaderFunction } from "react-router";
-import { createRoutesStub } from "react-router";
+import { createRoutesStub, Outlet } from "react-router";
 
 import RapporteringsPeriodeSide, {
   loader as rapporteringsperiodeLoader,
@@ -23,17 +23,33 @@ export const withNestedRapporteringsperiode = ({
 }: IRoutesStub) => {
   const RoutesStub = createRoutesStub([
     {
-      path: "/periode/:rapporteringsperiodeId",
-      Component: RapporteringsPeriodeSide,
-      loader: rapporteringsperiodeLoader,
-
-      id: "routes/periode.$rapporteringsperiodeId",
+      id: "root",
+      Component: Outlet,
+      loader: () => ({
+        sanityTekst: {
+          utfylling: {
+            arbeidssokerstatusSporsmaal: {
+              tittel: "rapportering-arbeidssokerregister-tittel-v2",
+              beskrivelse: "rapportering-arbeidssokerregister-subtittel",
+              alternativer: {
+                ja: "rapportering-arbeidssokerregister-svar-ja",
+                nei: "rapportering-arbeidssokerregister-svar-nei",
+              },
+            },
+          },
+          knapper: {
+            tilbake: "rapportering-knapp-tilbake",
+            neste: "rapportering-knapp-neste",
+          },
+        },
+      }),
       children: [
         {
-          path,
-          Component,
-          loader,
-          action,
+          path: "/periode/:rapporteringsperiodeId",
+          Component: RapporteringsPeriodeSide,
+          loader: rapporteringsperiodeLoader,
+          id: "routes/periode.$rapporteringsperiodeId",
+          children: [{ path, Component, loader, action }],
         },
       ],
     },

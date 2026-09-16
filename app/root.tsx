@@ -32,6 +32,7 @@ import { useAnalytics } from "./hooks/useAnalytics";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { getMessages } from "./hooks/useSanity";
 import { getLanguage, setLanguage } from "./models/language.server";
+import type { MeldekortBrukerflateApiResponse } from "./sanity/queries/meldekort-brukerflate";
 import { hentSanityTekster } from "./sanity/sanity.server";
 import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekoratoren.utils";
 import { getEnv, isLocalOrDemo } from "./utils/env.utils";
@@ -134,13 +135,20 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 }
 
+// Delt med journalforing.utils.tsx for å sikre at journalført tittel gjenspeiler det brukeren faktisk ser
+export function hentSidetittel(
+  sanityTekst: MeldekortBrukerflateApiResponse | undefined,
+): string | null | undefined {
+  return sanityTekst?.grunntekster?.sidetittel;
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const rootData = useRouteLoaderData<typeof loader>("root");
   const sanityData = rootData;
   const serviceMessages = sanityData ? getMessages(sanityData.sanityTexts) : [];
   const mainContent = useRef<HTMLElement>(null);
   const dekorator = rootData?.dekorator;
-  const appTitle = sanityData?.sanityTekst?.grunntekster?.sidetittel;
+  const appTitle = hentSidetittel(sanityData?.sanityTekst);
 
   useInjectDecoratorScript(dekorator?.DECORATOR_SCRIPTS);
 

@@ -111,10 +111,7 @@ export default function ArbeidssøkerRegisterSide() {
       <fetcher.Form method="post">
         <RadioGroup
           disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
-          legend={
-            arbeidssokerTittel ??
-            getAppText("rapportering-arbeidssokerregister-tittel-v2", { fom, tom })
-          }
+          legend={arbeidssokerTittel}
           description={arbeidssokerstatusSporsmaal?.beskrivelse}
           onChange={handleChange}
           name="_action"
@@ -125,16 +122,14 @@ export default function ArbeidssøkerRegisterSide() {
             value={true}
             checked={periode.registrertArbeidssoker === true}
           >
-            {arbeidssokerstatusSporsmaal?.alternativer.ja ??
-              getAppText("rapportering-arbeidssokerregister-svar-ja")}
+            {arbeidssokerstatusSporsmaal?.alternativer.ja}
           </Radio>
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={false}
             checked={periode.registrertArbeidssoker === false}
           >
-            {arbeidssokerstatusSporsmaal?.alternativer.nei ??
-              getAppText("rapportering-arbeidssokerregister-svar-nei")}
+            {arbeidssokerstatusSporsmaal?.alternativer.nei}
           </Radio>
         </RadioGroup>
       </fetcher.Form>
@@ -152,7 +147,7 @@ export default function ArbeidssøkerRegisterSide() {
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
         >
-          {sanityTekst?.knapper?.tilbake ?? getAppText("rapportering-knapp-tilbake")}
+          {sanityTekst?.knapper?.tilbake}
         </Button>
 
         <Button
@@ -163,7 +158,7 @@ export default function ArbeidssøkerRegisterSide() {
           disabled={periode.registrertArbeidssoker === null || isSubmitting}
           onClick={neste}
         >
-          {sanityTekst?.knapper?.neste ?? getAppText("rapportering-knapp-neste")}
+          {sanityTekst?.knapper?.neste}
         </Button>
       </div>
       <LagretAutomatisk />
