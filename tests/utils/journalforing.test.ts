@@ -55,6 +55,31 @@ const mockSanityTekst: MeldekortBrukerflateApiResponse = {
     utenArbeidssokerSporsmaal: createSanityRichTextObject("uten-arbeidssoker-sporsmaal"),
     etterregistrert: createSanityRichTextObject("etterregistrert"),
   },
+  velkomstside: {
+    velkomstTekst: createSanityRichTextObject("velkomst-tekst"),
+    harDuFaattDegJobb: {
+      tittel: "har-du-faatt-deg-jobb-tittel",
+      tekst: createSanityRichTextObject("har-du-faatt-deg-jobb-tekst"),
+    },
+    innsendingsmulighet: {
+      klarTilInnsending: {
+        tittel: "samtykke-tittel",
+        tekst: createSanityRichTextObject("samtykke-beskrivelse"),
+      },
+      ingenMeldekort: "ingen-meldekort",
+      forTidlig: "for-tidlig",
+    },
+  },
+  utfylling: {
+    arbeidssokerstatusSporsmaal: {
+      tittel: "arbeidssokerregister-tittel {{fom}} {{tom}}",
+      beskrivelse: "arbeidssokerregister-subtittel",
+      alternativer: {
+        ja: "arbeidssokerregister-svar-ja",
+        nei: "arbeidssokerregister-svar-nei",
+      },
+    },
+  },
 } as MeldekortBrukerflateApiResponse;
 
 describe("getArbeidssokerAlert", () => {
@@ -285,18 +310,19 @@ describe("getInput", () => {
 });
 
 describe("htmlForLandingsside", () => {
-  it("viser checkbox hvis det er en periode å fylle ut", () => {
+  it("viser samtykke-tittel og -beskrivelse hvis det er en periode å fylle ut", () => {
     const html = htmlForLandingsside({
       rapporteringsperioder: innsendtRapporteringsperioderResponse,
       periode: innsendtRapporteringsperioderResponse[0],
       getAppText: mockGetAppText,
       getRichText: mockGetRichText,
+      nySanityTexts: mockSanityTekst,
       locale,
     });
 
-    expect(html).toContain(
-      '<form><input type="checkbox" name="rapportering-samtykke-checkbox" checked/><label>rapportering-samtykke-checkbox</label></form>',
-    );
+    expect(html).toContain("samtykke-tittel");
+    expect(html).toContain("samtykke-beskrivelse");
+    expect(html).not.toContain("rapportering-samtykke-checkbox");
   });
 
   it("viser alert hvis det ikke er noen rapporteringsperioder", () => {
@@ -305,10 +331,11 @@ describe("htmlForLandingsside", () => {
       periode: null,
       getAppText: mockGetAppText,
       getRichText: mockGetRichText,
+      nySanityTexts: mockSanityTekst,
       locale,
     });
 
-    expect(html).toContain("rapportering-ingen-meldekort");
+    expect(html).toContain("ingen-meldekort");
   });
 
   it("viser alert hvis det er for tidlig å sende inn rapporteringsperioden", () => {
@@ -320,10 +347,56 @@ describe("htmlForLandingsside", () => {
       },
       getAppText: mockGetAppText,
       getRichText: mockGetRichText,
+      nySanityTexts: mockSanityTekst,
       locale,
     });
 
-    expect(html).toContain("rapportering-for-tidlig-a-sende-meldekort");
+    expect(html).toContain("for-tidlig");
+  });
+
+  it("journalfører ikke manglende landingssidetekst", () => {
+    const html = htmlForLandingsside({
+      rapporteringsperioder: [],
+      periode: null,
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: {
+        ...mockSanityTekst,
+        velkomstside: {
+          ...mockSanityTekst.velkomstside!,
+          innsendingsmulighet: {
+            ...mockSanityTekst.velkomstside!.innsendingsmulighet,
+            ingenMeldekort: null,
+          },
+        },
+      },
+      locale,
+    });
+
+    expect(html).not.toContain("Mangler Sanity");
+  });
+
+  it("viser ikke jobbseksjonen hvis rich text mangler", () => {
+    const html = htmlForLandingsside({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: innsendtRapporteringsperioderResponse[0],
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: {
+        ...mockSanityTekst,
+        velkomstside: {
+          velkomstTekst: mockSanityTekst.velkomstside!.velkomstTekst,
+          harDuFaattDegJobb: {
+            ...mockSanityTekst.velkomstside!.harDuFaattDegJobb,
+            tekst: null,
+          },
+          innsendingsmulighet: mockSanityTekst.velkomstside!.innsendingsmulighet,
+        },
+      },
+      locale,
+    });
+
+    expect(html).not.toContain("har-du-faatt-deg-jobb-tittel");
   });
 });
 
@@ -389,6 +462,7 @@ describe("htmlForArbeidssoker", () => {
     periode: innsendtRapporteringsperioderResponse[0],
     getAppText: mockGetAppText,
     getRichText: mockGetRichText,
+    nySanityTexts: mockSanityTekst,
     locale,
   });
 
@@ -397,7 +471,7 @@ describe("htmlForArbeidssoker", () => {
   });
 
   it("viser at bruker skal forbli arbeidssøker", () => {
-    expect(html).toContain("checked /><label>rapportering-arbeidssokerregister-svar-ja");
+    expect(html).toContain("checked /><label>arbeidssokerregister-svar-ja");
   });
 
   const html2 = htmlForArbeidssoker({
@@ -405,11 +479,12 @@ describe("htmlForArbeidssoker", () => {
     periode: { ...innsendtRapporteringsperioderResponse[0], registrertArbeidssoker: false },
     getAppText: mockGetAppText,
     getRichText: mockGetRichText,
+    nySanityTexts: mockSanityTekst,
     locale,
   });
 
   it("viser at bruker skal avregistreres som arbeidssøker", () => {
-    expect(html2).toContain("checked /><label>rapportering-arbeidssokerregister-svar-nei");
+    expect(html2).toContain("checked /><label>arbeidssokerregister-svar-nei");
   });
 });
 

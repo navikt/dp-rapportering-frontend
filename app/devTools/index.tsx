@@ -1,6 +1,6 @@
 import { ArrowsCirclepathIcon, SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Modal, Tooltip } from "@navikt/ds-react";
-import { useRef } from "react";
+import { useState } from "react";
 import { useFetcher } from "react-router";
 
 import { INetworkResponse } from "~/utils/types";
@@ -65,11 +65,11 @@ const scenarios: IScenario[] = [
 
 export function DevTools() {
   const fetcher = useFetcher<INetworkResponse>();
-  const ref = useRef<HTMLDialogElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const changeHandler = (type: ScenarioType) => {
-    fetcher.submit({ type }, { method: "post", action: "demo/scenario" });
-    ref.current?.close();
+    fetcher.submit({ type }, { method: "post", action: "/demo/scenario" });
+    setIsOpen(false);
   };
 
   return (
@@ -78,7 +78,8 @@ export function DevTools() {
         <Tooltip content="Scenario-velger">
           <Button
             data-color="neutral"
-            onClick={() => ref.current?.showModal()}
+            type="button"
+            onClick={() => setIsOpen(true)}
             icon={<SandboxIcon title="Åpne scenarioer-velgeren" />}
             variant="tertiary"
           />
@@ -86,7 +87,8 @@ export function DevTools() {
       </div>
       <div>
         <Modal
-          ref={ref}
+          open={isOpen}
+          onClose={() => setIsOpen(false)}
           header={{ heading: "Scenarioer" }}
           style={{
             height: "100%",

@@ -13,6 +13,7 @@ import { lesMerInnhold } from "~/components/LesMer";
 import { type GetAppText, type GetRichText } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import { IRapporteringsperiodeDag } from "~/models/rapporteringsperiode.server";
+import { hentSidetittel } from "~/root";
 import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
 import {
   AktivitetType,
@@ -20,6 +21,7 @@ import {
   aktivitetTypeMap,
   IAktivitet,
 } from "~/utils/aktivitettype.utils";
+import { sanityRichText, sanityTekst } from "~/utils/sanity.utils";
 
 import {
   formaterDato,
@@ -89,13 +91,13 @@ export function getArbeidssokerAlert(
   nySanityTexts: MeldekortBrukerflateApiResponse | undefined,
   locale: DecoratorLocale,
 ): string {
-  const { tekst } = hentArbeidssokerstatusInnhold(
+  const { tekst, felt } = hentArbeidssokerstatusInnhold(
     periode,
     side,
     nySanityTexts?.arbeidssokerstatusBeskjeder,
   );
 
-  if (!tekst) {
+  if (!felt) {
     return "";
   }
 
@@ -105,7 +107,7 @@ export function getArbeidssokerAlert(
     dateFormat: "d. MMMM yyyy",
     locale,
   });
-  const tekstMedDato = tekst.map((block) => ({
+  const tekstMedDato = sanityRichText(tekst, felt).map((block) => ({
     ...block,
     children: block.children.map((child) => ({
       ...child,
@@ -113,7 +115,7 @@ export function getArbeidssokerAlert(
     })),
   }));
 
-  return renderToString(<PortableText value={tekstMedDato} />);
+  return tekstMedDato.length > 0 ? renderToString(<PortableText value={tekstMedDato} />) : "";
 }
 
 export function getHeader({
@@ -313,36 +315,46 @@ export function htmlForEndringBegrunnelse(props: IProps): string {
 }
 
 export function htmlForLandingsside(props: IProps): string {
-  const { getAppText, getRichText, rapporteringsperioder, periode } = props;
+  const { rapporteringsperioder, periode, nySanityTexts } = props;
+  const velkomstside = nySanityTexts?.velkomstside;
 
   const seksjoner: string[] = [];
 
-  if (rapporteringsperioder.length === 0) {
-    seksjoner.push(`<p>${getAppText("rapportering-ingen-meldekort")}</p>`);
+  const ingenMeldekort = velkomstside?.innsendingsmulighet.ingenMeldekort;
+  if (rapporteringsperioder.length === 0 && ingenMeldekort) {
+    seksjoner.push(`<p>${ingenMeldekort}</p>`);
   }
 
-  if (periode && !periode.kanSendes) {
-    seksjoner.push(
-      renderToString(
-        <PortableText
-          value={getRichText("rapportering-for-tidlig-a-sende-meldekort", {
-            dato: formaterDato({ dato: new TZDate(periode.kanSendesFra, TIDSSONER.OSLO) }),
-          })}
-        />,
-      ),
-    );
+  const forTidligTekst = velkomstside?.innsendingsmulighet.forTidlig;
+  if (periode && !periode.kanSendes && forTidligTekst) {
+    const [ukeFom, weekTom] = formaterPeriodeTilUkenummer(
+      periode.periode.fraOgMed,
+      periode.periode.tilOgMed,
+    ).split(" - ");
+    const forTidlig = forTidligTekst
+      .replaceAll("{{ukeFom}}", ukeFom)
+      .replaceAll("{{weekTom}}", weekTom)
+      .replaceAll(
+        "{{fom}}",
+        formaterDato({ dato: new TZDate(periode.kanSendesFra, TIDSSONER.OSLO) }),
+      );
+
+    seksjoner.push(`<p>${forTidlig}</p>`);
   }
 
-  seksjoner.push(renderToString(<PortableText value={getRichText("rapportering-innledning")} />));
+  if (velkomstside?.velkomstTekst) {
+    seksjoner.push(renderToString(<PortableText value={velkomstside.velkomstTekst} />));
+  }
 
-  if (periode?.kanSendes) {
-    seksjoner.push(getHeader({ text: getAppText("rapportering-samtykke-tittel"), level: "2" }));
-    seksjoner.push(
-      renderToString(<PortableText value={getRichText("rapportering-samtykke-beskrivelse")} />),
-    );
-    seksjoner.push(
-      `<form><input type="checkbox" name="rapportering-samtykke-checkbox" checked/><label>${getAppText("rapportering-samtykke-checkbox")}</label></form>`,
-    );
+  if (velkomstside?.harDuFaattDegJobb?.tittel && velkomstside.harDuFaattDegJobb.tekst) {
+    seksjoner.push(getHeader({ text: velkomstside.harDuFaattDegJobb.tittel, level: "3" }));
+    seksjoner.push(renderToString(<PortableText value={velkomstside.harDuFaattDegJobb.tekst} />));
+  }
+
+  const klarTilInnsending = velkomstside?.innsendingsmulighet.klarTilInnsending;
+  if (periode?.kanSendes && klarTilInnsending?.tittel && klarTilInnsending.tekst) {
+    seksjoner.push(getHeader({ text: klarTilInnsending.tittel, level: "2" }));
+    seksjoner.push(renderToString(<PortableText value={klarTilInnsending.tekst} />));
   }
 
   return seksjoner.join("");
@@ -472,7 +484,7 @@ export function htmlForTom(props: IProps): string {
 }
 
 export function htmlForArbeidssoker(props: IProps): string {
-  const { getAppText, periode, nySanityTexts, locale } = props;
+  const { periode, nySanityTexts, locale } = props;
 
   if (!periode) {
     return "";
@@ -491,24 +503,28 @@ export function htmlForArbeidssoker(props: IProps): string {
   const fom = formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat, locale });
   const tom = formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat, locale });
 
-  const legend =
-    arbeidssokerstatusSporsmaal?.tittel?.replaceAll("{{fom}}", fom).replaceAll("{{tom}}", tom) ??
-    getAppText("rapportering-arbeidssokerregister-tittel-v2", { fom, tom });
-  const description =
-    arbeidssokerstatusSporsmaal?.beskrivelse ??
-    getAppText("rapportering-arbeidssokerregister-subtittel");
+  const legend = sanityTekst(
+    arbeidssokerstatusSporsmaal?.tittel?.replaceAll("{{fom}}", fom).replaceAll("{{tom}}", tom),
+    "utfylling.arbeidssokerstatusSporsmaal.tittel",
+  );
+  const description = sanityTekst(
+    arbeidssokerstatusSporsmaal?.beskrivelse,
+    "utfylling.arbeidssokerstatusSporsmaal.beskrivelse",
+  );
   const options = [
     {
       value: true,
-      label:
-        arbeidssokerstatusSporsmaal?.alternativer.ja ??
-        getAppText("rapportering-arbeidssokerregister-svar-ja"),
+      label: sanityTekst(
+        arbeidssokerstatusSporsmaal?.alternativer.ja,
+        "utfylling.arbeidssokerstatusSporsmaal.alternativer.ja",
+      ),
     },
     {
       value: false,
-      label:
-        arbeidssokerstatusSporsmaal?.alternativer.nei ??
-        getAppText("rapportering-arbeidssokerregister-svar-nei"),
+      label: sanityTekst(
+        arbeidssokerstatusSporsmaal?.alternativer.nei,
+        "utfylling.arbeidssokerstatusSporsmaal.alternativer.nei",
+      ),
     },
   ]
     .map((option) => {
@@ -641,6 +657,7 @@ export function samleHtmlForPeriode(
     );
   }
 
-  const html = `<div class="melding-om-vedtak">${getHeader({ text: getAppText("rapportering-tittel"), level: "1" })}${pages.join('</div><div class="melding-om-vedtak">')}</div>`;
+  const tittel = sanityTekst(hentSidetittel(nySanityTexts), "grunntekster.sidetittel");
+  const html = `<div class="melding-om-vedtak">${getHeader({ text: tittel, level: "1" })}${pages.join('</div><div class="melding-om-vedtak">')}</div>`;
   return html;
 }

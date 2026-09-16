@@ -10,6 +10,7 @@ import type { loader as RootLoader } from "~/root";
 import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
 import { formaterDato } from "~/utils/dato.utils";
 import { nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import { sanityRichText } from "~/utils/sanity.utils";
 import { KortType, OPPRETTET_AV } from "~/utils/types";
 
 export type ArbeidssokerstatusSide = "utfylling" | "bekreftelse" | "oversikt";
@@ -24,53 +25,69 @@ export function hentArbeidssokerstatusInnhold(
   periode: IRapporteringsperiode,
   side: ArbeidssokerstatusSide,
   beskjeder: MeldekortBrukerflateApiResponse["arbeidssokerstatusBeskjeder"] | undefined,
-): { tekst: PortableTextBlock[] | null | undefined; variant: "info" | "warning" } {
+): {
+  tekst: PortableTextBlock[] | null | undefined;
+  variant: "info" | "warning";
+  felt: string | undefined;
+} {
   let tekst: PortableTextBlock[] | null | undefined;
   let variant: "info" | "warning" = "info";
+  let felt: string | undefined;
 
   if (side === "oversikt") {
     if (periode.innsendtTil === OPPRETTET_AV.Arena) {
       tekst = beskjeder?.fraArena;
+      felt = "arbeidssokerstatusBeskjeder.fraArena";
     } else if (periode.type === KortType.ETTERREGISTRERT) {
       tekst = beskjeder?.etterregistrert;
+      felt = "arbeidssokerstatusBeskjeder.etterregistrert";
     } else if (!skalHaArbeidssokerSporsmal(periode)) {
       tekst = beskjeder?.utenArbeidssokerSporsmaal;
+      felt = "arbeidssokerstatusBeskjeder.utenArbeidssokerSporsmaal";
     }
   } else if (!skalHaArbeidssokerSporsmal(periode)) {
     tekst = beskjeder?.duSkalIkkeSvarePaSporsmaal;
+    felt = "arbeidssokerstatusBeskjeder.duSkalIkkeSvarePaSporsmaal";
   } else if (periode.registrertArbeidssoker === true) {
     tekst = beskjeder?.duVilVaereRegistrert;
+    felt = "arbeidssokerstatusBeskjeder.duVilVaereRegistrert";
   } else if (periode.registrertArbeidssoker === false) {
     variant = "warning";
+    felt =
+      side === "utfylling"
+        ? "arbeidssokerstatusBeskjeder.duVilBliAvregistrert.lang"
+        : "arbeidssokerstatusBeskjeder.duVilBliAvregistrert.kort";
     tekst =
       side === "utfylling"
         ? beskjeder?.duVilBliAvregistrert.lang
         : beskjeder?.duVilBliAvregistrert.kort;
   }
 
-  return { tekst, variant };
+  return { tekst, variant, felt };
 }
 
 export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
   const { locale } = useLocale();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const beskjeder = rootData?.sanityTekst?.arbeidssokerstatusBeskjeder;
-  const { tekst, variant } = hentArbeidssokerstatusInnhold(periode, side, beskjeder);
+  const { tekst, variant, felt } = hentArbeidssokerstatusInnhold(periode, side, beskjeder);
 
-  if (!tekst) return null;
+  if (!felt) return null;
 
   const dato = formaterDato({
     dato: nestePeriode(periode.periode).fraOgMed,
     dateFormat: "d. MMMM yyyy",
     locale,
   });
-  const tekstMedDato = tekst.map((block) => ({
+  const tekstMedDato = sanityRichText(tekst, felt).map((block) => ({
     ...block,
     children: block.children.map((child) => ({
       ...child,
       text: child.text?.replaceAll("{{nestePeriodeDato}}", dato),
     })),
   }));
+
+  if (tekstMedDato.length === 0) return null;
 
   const variantIcon =
     variant === "warning" ? (

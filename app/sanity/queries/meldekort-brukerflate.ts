@@ -30,6 +30,7 @@ export const MELDEKORT_BRUKERFLATE_DOCUMENT_IDS = {
   utfylling: "meldekortBrukerflateUtfylling",
   kvittering: "meldekortBrukerflateKvittering",
   oversikt: "meldekortBrukerflateOversikt",
+  feilmeldinger: "meldekortBrukerflateFeilmeldinger",
 } as const;
 
 export type MeldekortBrukerflateLanguage = "nb" | "en";
@@ -151,6 +152,10 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
         "meldekortstatus",
       )}\n}`,
     ].join(",\n"),
+  )},
+  "feilmeldinger": ${document(
+    MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.feilmeldinger,
+    `"generellFeil": {\n${fields(["tittel", "tekst"], "generellFeil")}\n}`,
   )}
 }`;
 
@@ -297,6 +302,12 @@ export type MeldekortBrukerflateApiResponse = {
       feilVedBehandling: MeldekortBrukerflateText;
       endret: MeldekortBrukerflateText;
       tilUtfylling: MeldekortBrukerflateText;
+    };
+  }>;
+  feilmeldinger: MeldekortBrukerflateDocument<{
+    generellFeil: {
+      tittel: MeldekortBrukerflateText;
+      tekst: MeldekortBrukerflateRichText;
     };
   }>;
 };
