@@ -54,12 +54,10 @@ describe("ArbeidssøkerRegisterSide", () => {
       render();
     });
 
-    expect(await screen.findByText(/rapportering-arbeidssokerregister-tittel/)).toBeInTheDocument();
-    expect(await screen.findByRole("radio", { name: /svar-ja/ })).toBeInTheDocument();
-    expect(await screen.findByRole("radio", { name: /svar-nei/ })).toBeInTheDocument();
-    expect(await screen.findByRole("button", { name: /rapportering-knapp-neste/ })).toHaveAttribute(
-      "disabled",
-    );
+    expect(await screen.findByText(/Ønsker du fortsatt å være registrert/)).toBeInTheDocument();
+    expect(await screen.findByRole("radio", { name: "Ja" })).toBeInTheDocument();
+    expect(await screen.findByRole("radio", { name: "Nei" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Neste" })).toHaveAttribute("disabled");
   });
 
   test("Spørsmål om arbeidssøker skal være true og disabled når etterregistrering", async () => {
@@ -73,11 +71,11 @@ describe("ArbeidssøkerRegisterSide", () => {
       render();
     });
 
-    const radioJa = await screen.findByRole("radio", { name: /svar-ja/i });
+    const radioJa = await screen.findByRole("radio", { name: "Ja" });
     await waitFor(() => expect(radioJa).toBeChecked());
     expect(radioJa).toHaveAttribute("disabled");
 
-    const radioNei = await screen.findByRole("radio", { name: /svar-nei/i });
+    const radioNei = await screen.findByRole("radio", { name: "Nei" });
     await waitFor(() => expect(radioNei).not.toBeChecked());
     expect(radioNei).toHaveAttribute("disabled");
   });
@@ -88,7 +86,7 @@ describe("ArbeidssøkerRegisterSide", () => {
       render();
     });
 
-    const radioJa = await screen.findByRole("radio", { name: /svar-ja/i });
+    const radioJa = await screen.findByRole("radio", { name: "Ja" });
 
     await act(async () => {
       radioJa.click();
@@ -103,7 +101,7 @@ describe("ArbeidssøkerRegisterSide", () => {
       render();
     });
 
-    const radioNei = await screen.findByRole("radio", { name: /svar-nei/i });
+    const radioNei = await screen.findByRole("radio", { name: "Nei" });
 
     await act(async () => {
       radioNei.click();
@@ -121,7 +119,7 @@ describe("ArbeidssøkerRegisterSide", () => {
       render();
     });
 
-    const radioJa = await screen.findByRole("radio", { name: /svar-ja/ });
+    const radioJa = await screen.findByRole("radio", { name: "Ja" });
     expect(radioJa).toBeChecked();
   });
 
@@ -134,7 +132,7 @@ describe("ArbeidssøkerRegisterSide", () => {
       render();
     });
 
-    const radioNei = await screen.findByRole("radio", { name: /svar-nei/ });
+    const radioNei = await screen.findByRole("radio", { name: "Nei" });
     expect(radioNei).toBeChecked();
   });
 });

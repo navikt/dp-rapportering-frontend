@@ -29,17 +29,18 @@ export const withNestedRapporteringsperiode = ({
         sanityTekst: {
           utfylling: {
             arbeidssokerstatusSporsmaal: {
-              tittel: "rapportering-arbeidssokerregister-tittel-v2",
-              beskrivelse: "rapportering-arbeidssokerregister-subtittel",
+              tittel:
+                "Ønsker du fortsatt å være registrert som arbeidssøker fra {{fom}} til {{tom}}?",
+              beskrivelse: "Du må være registrert for å få utbetalinger og oppfølging fra Nav.",
               alternativer: {
-                ja: "rapportering-arbeidssokerregister-svar-ja",
-                nei: "rapportering-arbeidssokerregister-svar-nei",
+                ja: "Ja",
+                nei: "Nei",
               },
             },
           },
           knapper: {
-            tilbake: "rapportering-knapp-tilbake",
-            neste: "rapportering-knapp-neste",
+            tilbake: "Tilbake",
+            neste: "Neste",
           },
         },
       }),
