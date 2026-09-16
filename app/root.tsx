@@ -8,6 +8,7 @@ import type {
   LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
+  ShouldRevalidateFunctionArgs,
 } from "react-router";
 import { data, redirect } from "react-router";
 import {
@@ -32,6 +33,7 @@ import { useAnalytics } from "./hooks/useAnalytics";
 import { useInjectDecoratorScript } from "./hooks/useInjectDecoratorScript";
 import { getAppText, getMessages, useSanity } from "./hooks/useSanity";
 import { getLanguage, setLanguage } from "./models/language.server";
+import type { MeldekortBrukerflateApiResponse } from "./sanity/queries/meldekort-brukerflate";
 import { hentSanityTekster } from "./sanity/sanity.server";
 import styles from "./styles/root.module.css";
 import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekoratoren.utils";
@@ -137,6 +139,20 @@ export async function action({ request }: ActionFunctionArgs) {
       },
     },
   );
+}
+
+export function shouldRevalidate({
+  formAction,
+  defaultShouldRevalidate,
+}: ShouldRevalidateFunctionArgs) {
+  return formAction === "/demo/scenario" ? false : defaultShouldRevalidate;
+}
+
+// Delt med journalforing.utils.tsx for å sikre at journalført tittel gjenspeiler det brukeren faktisk ser
+export function hentSidetittel(
+  sanityTekst: MeldekortBrukerflateApiResponse | undefined,
+): string | null | undefined {
+  return sanityTekst?.grunntekster?.sidetittel;
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {

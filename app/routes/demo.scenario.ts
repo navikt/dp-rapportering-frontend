@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, redirect } from "react-router";
+import { ActionFunctionArgs } from "react-router";
 
 import { ScenarioType } from "~/devTools";
 import { isLocalOrDemo } from "~/utils/env.utils";
@@ -18,7 +18,7 @@ export async function action({ request }: ActionFunctionArgs) {
         scenario as ScenarioType,
       );
 
-      return redirect("/");
+      return { status: "success" };
     }
   }
 
