@@ -6,6 +6,23 @@ import RapporteringsPeriodeSide, {
   loader as rapporteringsperiodeLoader,
 } from "~/routes/periode.$rapporteringsperiodeId";
 
+const arbeidssokerstatusBeskjed = [
+  {
+    _key: "test-beskjed",
+    _type: "block",
+    children: [
+      {
+        _key: "test-beskjed-text",
+        _type: "span",
+        marks: [],
+        text: "Arbeidssøkerstatus",
+      },
+    ],
+    markDefs: [],
+    style: "normal",
+  },
+];
+
 interface IRoutesStub {
   path: string;
   Component: React.ComponentType;
@@ -27,6 +44,17 @@ export const withNestedRapporteringsperiode = ({
       Component: Outlet,
       loader: () => ({
         sanityTekst: {
+          arbeidssokerstatusBeskjeder: {
+            duVilVaereRegistrert: arbeidssokerstatusBeskjed,
+            duVilBliAvregistrert: {
+              lang: arbeidssokerstatusBeskjed,
+              kort: arbeidssokerstatusBeskjed,
+            },
+            duSkalIkkeSvarePaSporsmaal: arbeidssokerstatusBeskjed,
+            fraArena: arbeidssokerstatusBeskjed,
+            utenArbeidssokerSporsmaal: arbeidssokerstatusBeskjed,
+            etterregistrert: arbeidssokerstatusBeskjed,
+          },
           utfylling: {
             arbeidssokerstatusSporsmaal: {
               tittel:

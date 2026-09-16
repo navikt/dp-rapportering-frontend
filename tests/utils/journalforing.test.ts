@@ -353,6 +353,51 @@ describe("htmlForLandingsside", () => {
 
     expect(html).toContain("for-tidlig");
   });
+
+  it("journalfører ikke manglende landingssidetekst", () => {
+    const html = htmlForLandingsside({
+      rapporteringsperioder: [],
+      periode: null,
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: {
+        ...mockSanityTekst,
+        velkomstside: {
+          ...mockSanityTekst.velkomstside!,
+          innsendingsmulighet: {
+            ...mockSanityTekst.velkomstside!.innsendingsmulighet,
+            ingenMeldekort: null,
+          },
+        },
+      },
+      locale,
+    });
+
+    expect(html).not.toContain("Mangler Sanity");
+  });
+
+  it("viser ikke jobbseksjonen hvis rich text mangler", () => {
+    const html = htmlForLandingsside({
+      rapporteringsperioder: innsendtRapporteringsperioderResponse,
+      periode: innsendtRapporteringsperioderResponse[0],
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: {
+        ...mockSanityTekst,
+        velkomstside: {
+          velkomstTekst: mockSanityTekst.velkomstside!.velkomstTekst,
+          harDuFaattDegJobb: {
+            ...mockSanityTekst.velkomstside!.harDuFaattDegJobb,
+            tekst: null,
+          },
+          innsendingsmulighet: mockSanityTekst.velkomstside!.innsendingsmulighet,
+        },
+      },
+      locale,
+    });
+
+    expect(html).not.toContain("har-du-faatt-deg-jobb-tittel");
+  });
 });
 
 describe("htmlForRapporteringstype", () => {

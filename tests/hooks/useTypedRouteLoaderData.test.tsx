@@ -42,9 +42,9 @@ describe("useTypedRouteLoaderData", () => {
 
     render(<RoutesStub initialEntries={["/"]} />);
 
-    // Uten sanityTexts (f.eks. når root sin egen loader har feilet) vises tekst-ID-ene.
+    // Uten nye Sanity-tekster vises en diagnostisk markør i test/dev.
     expect(
-      await screen.findByText("rapportering-feilmelding-ukjent-feil-tittel"),
+      await screen.findByText("[Mangler Sanity: feilmeldinger.generellFeil.tittel]"),
     ).toBeInTheDocument();
     expect(screen.getByRole("button")).toBeInTheDocument();
   });

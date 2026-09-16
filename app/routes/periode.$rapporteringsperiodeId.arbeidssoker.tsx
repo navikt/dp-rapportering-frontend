@@ -16,6 +16,7 @@ import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import type { loader as RootLoader } from "~/root";
 import { formaterDato } from "~/utils/dato.utils";
 import { kanSendes, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import { sanityTekst as visSanityTekst } from "~/utils/sanity.utils";
 import { INetworkResponse } from "~/utils/types";
 import { FEATURE_TOGGLES, isFeatureEnabled } from "~/utils/unleash.server";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
@@ -111,8 +112,14 @@ export default function ArbeidssøkerRegisterSide() {
       <fetcher.Form method="post">
         <RadioGroup
           disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
-          legend={arbeidssokerTittel}
-          description={arbeidssokerstatusSporsmaal?.beskrivelse}
+          legend={visSanityTekst(
+            arbeidssokerTittel,
+            "utfylling.arbeidssokerstatusSporsmaal.tittel",
+          )}
+          description={visSanityTekst(
+            arbeidssokerstatusSporsmaal?.beskrivelse,
+            "utfylling.arbeidssokerstatusSporsmaal.beskrivelse",
+          )}
           onChange={handleChange}
           name="_action"
           value={periode.registrertArbeidssoker}
@@ -122,14 +129,20 @@ export default function ArbeidssøkerRegisterSide() {
             value={true}
             checked={periode.registrertArbeidssoker === true}
           >
-            {arbeidssokerstatusSporsmaal?.alternativer.ja}
+            {visSanityTekst(
+              arbeidssokerstatusSporsmaal?.alternativer.ja,
+              "utfylling.arbeidssokerstatusSporsmaal.alternativer.ja",
+            )}
           </Radio>
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={false}
             checked={periode.registrertArbeidssoker === false}
           >
-            {arbeidssokerstatusSporsmaal?.alternativer.nei}
+            {visSanityTekst(
+              arbeidssokerstatusSporsmaal?.alternativer.nei,
+              "utfylling.arbeidssokerstatusSporsmaal.alternativer.nei",
+            )}
           </Radio>
         </RadioGroup>
       </fetcher.Form>
@@ -147,7 +160,7 @@ export default function ArbeidssøkerRegisterSide() {
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
         >
-          {sanityTekst?.knapper?.tilbake}
+          {visSanityTekst(sanityTekst?.knapper?.tilbake, "knapper.tilbake")}
         </Button>
 
         <Button
@@ -158,7 +171,7 @@ export default function ArbeidssøkerRegisterSide() {
           disabled={periode.registrertArbeidssoker === null || isSubmitting}
           onClick={neste}
         >
-          {sanityTekst?.knapper?.neste}
+          {visSanityTekst(sanityTekst?.knapper?.neste, "knapper.neste")}
         </Button>
       </div>
       <LagretAutomatisk />

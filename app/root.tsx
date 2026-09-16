@@ -37,6 +37,7 @@ import { hentSanityTekster } from "./sanity/sanity.server";
 import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekoratoren.utils";
 import { getEnv, isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "./utils/faro";
+import { sanityTekst } from "./utils/sanity.utils";
 import { FEATURE_TOGGLES, isFeatureEnabled } from "./utils/unleash.server";
 
 export const meta: MetaFunction = () => {
@@ -148,7 +149,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const serviceMessages = sanityData ? getMessages(sanityData.sanityTexts) : [];
   const mainContent = useRef<HTMLElement>(null);
   const dekorator = rootData?.dekorator;
-  const appTitle = hentSidetittel(sanityData?.sanityTekst);
+  const appTitle = sanityTekst(hentSidetittel(sanityData?.sanityTekst), "grunntekster.sidetittel");
 
   useInjectDecoratorScript(dekorator?.DECORATOR_SCRIPTS);
 

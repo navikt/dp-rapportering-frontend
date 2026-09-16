@@ -6,6 +6,7 @@ import { ErrorResponse, isRouteErrorResponse, useRouteLoaderData } from "react-r
 import { useAnalytics } from "~/hooks/useAnalytics";
 import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
 import { setBreadcrumbs } from "~/utils/dekoratoren.utils";
+import { sanityRichText, sanityTekst as visSanityTekst } from "~/utils/sanity.utils";
 
 import type { loader as RootLoader } from "../../root";
 
@@ -56,8 +57,8 @@ export function useGetErrorText(
 
   const sanityTitle = sanityTekst?.feilmeldinger?.generellFeil?.tittel;
   const sanityDescription = sanityTekst?.feilmeldinger?.generellFeil?.tekst;
-  const title = sanityTitle ?? titleId;
-  const description = sanityDescription ?? [];
+  const title = visSanityTekst(sanityTitle, "feilmeldinger.generellFeil.tittel");
+  const description = sanityRichText(sanityDescription, "feilmeldinger.generellFeil.tekst");
 
   const texts = { titleId, descriptionId, title, description };
 
@@ -99,7 +100,7 @@ export function GeneralErrorBoundary({ error }: IProps) {
       <PortableText value={description} />
 
       <Button as="a" href="https://www.nav.no/minside">
-        {sanityTekst?.knapper?.gaaTilMinSide}
+        {visSanityTekst(sanityTekst?.knapper?.gaaTilMinSide, "knapper.gaaTilMinSide")}
       </Button>
     </>
   );
