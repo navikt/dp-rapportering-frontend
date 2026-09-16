@@ -7,19 +7,24 @@ import { useRouteLoaderData } from "react-router";
 import { useLocale } from "~/hooks/useLocale";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
+import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
 import { formaterDato } from "~/utils/dato.utils";
 import { nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { KortType, OPPRETTET_AV } from "~/utils/types";
 
+export type ArbeidssokerstatusSide = "utfylling" | "bekreftelse" | "oversikt";
+
 interface IProps {
   periode: IRapporteringsperiode;
-  side: "utfylling" | "bekreftelse" | "oversikt";
+  side: ArbeidssokerstatusSide;
 }
 
-export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
-  const { locale } = useLocale();
-  const rootData = useRouteLoaderData<typeof RootLoader>("root");
-  const beskjeder = rootData?.sanityTekst?.arbeidssokerstatusBeskjeder;
+// Delt med journalforing.utils.tsx for å sikre at arkivert HTML gjenspeiler det brukeren faktisk ser
+export function hentArbeidssokerstatusInnhold(
+  periode: IRapporteringsperiode,
+  side: ArbeidssokerstatusSide,
+  beskjeder: MeldekortBrukerflateApiResponse["arbeidssokerstatusBeskjeder"] | undefined,
+): { tekst: PortableTextBlock[] | null | undefined; variant: "info" | "warning" } {
   let tekst: PortableTextBlock[] | null | undefined;
   let variant: "info" | "warning" = "info";
 
@@ -42,6 +47,15 @@ export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
         ? beskjeder?.duVilBliAvregistrert.lang
         : beskjeder?.duVilBliAvregistrert.kort;
   }
+
+  return { tekst, variant };
+}
+
+export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
+  const { locale } = useLocale();
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
+  const beskjeder = rootData?.sanityTekst?.arbeidssokerstatusBeskjeder;
+  const { tekst, variant } = hentArbeidssokerstatusInnhold(periode, side, beskjeder);
 
   if (!tekst) return null;
 

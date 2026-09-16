@@ -1,4 +1,4 @@
-import { ExclamationmarkTriangleIcon } from "@navikt/aksel-icons";
+import { XMarkOctagonIcon } from "@navikt/aksel-icons";
 import { InfoCard } from "@navikt/ds-react";
 import { JSX } from "react";
 
@@ -16,7 +16,7 @@ export function KanIkkeSendes(props: IProps): JSX.Element | undefined {
   if (!kanSendes(props.periode)) {
     return (
       <InfoCard data-color="danger" role="alert" className="my-4">
-        <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+        <InfoCard.Message icon={<XMarkOctagonIcon aria-hidden />}>
           {getAppText("rapportering-periode-kan-ikke-sendes")}
         </InfoCard.Message>
       </InfoCard>
