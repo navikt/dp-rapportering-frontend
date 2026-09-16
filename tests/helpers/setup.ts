@@ -66,5 +66,6 @@ vi.mock("~/hooks/useSanity", () => ({
 }));
 
 vi.mock("@portabletext/react", () => ({
-  PortableText: ({ value }: { value: string }) => value,
+  PortableText: ({ value }: { value: unknown }) =>
+    typeof value === "string" ? value : JSON.stringify(value),
 }));

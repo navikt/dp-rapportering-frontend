@@ -95,44 +95,38 @@ export default function Landingsside() {
 
   return (
     <>
-      <div className={styles.pageContent}>
-        {velkomstside?.velkomstTekst && <PortableTextRenderer value={velkomstside.velkomstTekst} />}
+      {velkomstside?.velkomstTekst && <PortableTextRenderer value={velkomstside.velkomstTekst} />}
 
-        {velkomstside?.harDuFaattDegJobb.tittel && velkomstside.harDuFaattDegJobb.tekst && (
-          <ReadMore header={velkomstside.harDuFaattDegJobb.tittel}>
-            <PortableTextRenderer value={velkomstside.harDuFaattDegJobb.tekst} />
-          </ReadMore>
-        )}
+      {velkomstside?.harDuFaattDegJobb.tittel && velkomstside.harDuFaattDegJobb.tekst && (
+        <ReadMore header={velkomstside.harDuFaattDegJobb.tittel}>
+          <PortableTextRenderer value={velkomstside.harDuFaattDegJobb.tekst} />
+        </ReadMore>
+      )}
 
-        {rapporteringsperioder.length === 0 && velkomstside?.innsendingsmulighet.ingenMeldekort && (
-          <InfoCard data-color="info">
-            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-              {velkomstside.innsendingsmulighet.ingenMeldekort}
-            </InfoCard.Message>
-          </InfoCard>
-        )}
+      {rapporteringsperioder.length === 0 && velkomstside?.innsendingsmulighet.ingenMeldekort && (
+        <InfoCard data-color="info">
+          <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+            {velkomstside.innsendingsmulighet.ingenMeldekort}
+          </InfoCard.Message>
+        </InfoCard>
+      )}
 
-        {forstePeriode && !forstePeriode.kanSendes && forTidligTekst && (
-          <InfoCard data-color="info">
-            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-              {forTidligTekst}
-            </InfoCard.Message>
-          </InfoCard>
-        )}
+      {forstePeriode && !forstePeriode.kanSendes && forTidligTekst && (
+        <InfoCard data-color="info">
+          <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+            {forTidligTekst}
+          </InfoCard.Message>
+        </InfoCard>
+      )}
 
-        {forstePeriode?.kanSendes === true &&
-          velkomstside?.innsendingsmulighet.klarTilInnsending && (
-            <>
-              <Heading size="small" level="2">
-                {velkomstside.innsendingsmulighet.klarTilInnsending.tittel}
-              </Heading>
-              <PortableTextRenderer
-                value={velkomstside.innsendingsmulighet.klarTilInnsending.tekst}
-              />
-            </>
-          )}
-      </div>
-
+      {forstePeriode?.kanSendes === true && velkomstside?.innsendingsmulighet.klarTilInnsending && (
+        <>
+          <Heading size="small" level="2">
+            {velkomstside.innsendingsmulighet.klarTilInnsending.tittel}
+          </Heading>
+          <PortableTextRenderer value={velkomstside.innsendingsmulighet.klarTilInnsending.tekst} />
+        </>
+      )}
       <div className={styles.buttonsContainerColumn}>
         {forstePeriode?.kanSendes === true && knapper?.neste && (
           <Button
