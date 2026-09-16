@@ -10,3 +10,4 @@ Lenke til oppgave/issue: [TRELLO-KORT]
 Sjekkliste:
 - [ ] har deployet og testet i demo
 - [ ] har deployet og testet i dev
+- [ ] har oppdatert journalføring hvis nødvendig
