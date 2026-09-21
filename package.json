@@ -57,7 +57,7 @@
     "unleash-client": "^6.12.1",
     "uuidv7": "1.2.1",
     "winston": "3.19.0",
-    "zod": "4.5.4",
+    "zod": "4.6.5",
     "zod-form-data": "3.0.3"
   },
   "devDependencies": {
