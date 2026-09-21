@@ -37,7 +37,7 @@
     "@rvf/zod": "7.0.5",
     "@sanity/client": "8.6.1",
     "classnames": "2.5.1",
-    "compression": "1.8.1",
+    "compression": "1.8.2",
     "cookie": "^2.0.1",
     "cross-env": "10.1.0",
     "date-fns": "4.4.0",
