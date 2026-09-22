@@ -17,7 +17,7 @@ export function SendestatusBeskjed({ periode, textKey }: IProps): JSX.Element {
 
   if (kanSendes(periode)) {
     return (
-      <InfoCard data-color="warning" className="my-4">
+      <InfoCard data-color="warning">
         <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
           <InfoCard.Title>
             <PortableTextRenderer
@@ -30,7 +30,7 @@ export function SendestatusBeskjed({ periode, textKey }: IProps): JSX.Element {
   }
 
   return (
-    <InfoCard data-color="danger" role="alert" className="my-4">
+    <InfoCard data-color="danger" role="alert">
       <InfoCard.Message icon={<XMarkOctagonIcon aria-hidden />}>
         {getAppText("rapportering-periode-kan-ikke-sendes")}
       </InfoCard.Message>

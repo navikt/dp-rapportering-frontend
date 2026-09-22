@@ -16,7 +16,7 @@ import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
 import { SendestatusBeskjed } from "~/components/beskjeder/SendestatusBeskjed";
-import { MeltekortDetaljer } from "~/components/meldekort-detaljert/MeldekortDetaljer";
+import { MeldekortDetaljer } from "~/components/meldekort-detaljert/MeldekortDetaljer";
 import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
@@ -170,13 +170,13 @@ export default function RapporteringsPeriodeSendInnSide() {
       <SendestatusBeskjed periode={periode} />
 
       <div className={rootStyles.textWrapper}>
-        <Heading tabIndex={-1} size="medium" className="vo-fokus">
+        <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
           {getAppText("rapportering-send-inn-tittel")}
         </Heading>
         <PortableTextRenderer value={getRichText("rapportering-send-inn-innhold")} />
       </div>
 
-      <MeltekortDetaljer periode={periode} visArbeidssokerSvar />
+      <MeldekortDetaljer periode={periode} visArbeidssokerSvar />
 
       <Checkbox
         disabled={!kanSendes(periode)}

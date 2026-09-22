@@ -16,7 +16,7 @@ import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
 import { SendestatusBeskjed } from "~/components/beskjeder/SendestatusBeskjed";
-import { MeltekortDetaljer } from "~/components/meldekort-detaljert/MeldekortDetaljer";
+import { MeldekortDetaljer } from "~/components/meldekort-detaljert/MeldekortDetaljer";
 import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
@@ -189,13 +189,13 @@ export default function RapporteringsPeriodeSendInnSide() {
       <SendestatusBeskjed periode={periode} textKey="rapportering-endring-ikke-sendt-enda" />
 
       <div className={rootStyles.textWrapper}>
-        <Heading tabIndex={-1} size="medium" className="vo-fokus">
+        <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
           {getAppText("rapportering-endring-send-inn-tittel")}
         </Heading>
         <PortableTextRenderer value={getRichText("rapportering-endring-send-inn-innhold")} />
       </div>
 
-      <MeltekortDetaljer periode={periode} />
+      <MeldekortDetaljer periode={periode} />
 
       <Checkbox onChange={() => setConfirmed((prev) => !prev)}>
         {getAppText("rapportering-endring-send-inn-bekreft-opplysning")}

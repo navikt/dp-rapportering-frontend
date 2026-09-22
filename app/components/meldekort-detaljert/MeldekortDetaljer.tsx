@@ -20,7 +20,7 @@ interface ReviewDetaljerProps {
   visArbeidssokerSvar?: boolean;
 }
 
-export function MeltekortDetaljer({ periode, visArbeidssokerSvar = false }: ReviewDetaljerProps) {
+export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: ReviewDetaljerProps) {
   const { locale } = useLocale();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const { getAppText } = useSanity();
