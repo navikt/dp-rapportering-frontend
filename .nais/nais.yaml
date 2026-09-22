@@ -43,7 +43,7 @@ spec:
     - name: BASE_PATH
       value: "{{base_path}}"
     - name: DP_RAPPORTERING_URL
-      value: http://dp-rapportering
+      value: "http://dp-rapportering"
     - name: DEKORATOR_URL
       value: "{{dekorator.url}}"
     - name: DEKORATOR_ENV
@@ -51,7 +51,7 @@ spec:
     - name: GITHUB_SHA
       value: "{{githubSha}}"
     - name: RUNTIME_ENVIRONMENT
-      value: {{runtime_environment}}
+      value: "{{runtime_environment}}"
     - name: FARO_URL
       value: "{{faro_url}}"
     - name: SANITY_DATASETT
