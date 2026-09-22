@@ -44,6 +44,44 @@ export const withNestedRapporteringsperiode = ({
       Component: Outlet,
       loader: () => ({
         sanityTekst: {
+          meldekortdetaljer: {
+            tittel: "Meldekort",
+            periode: "rapportering-uke {{fomUke}} - {{tomUke}} ({{fomDate}} - {{tomDate}})",
+            sendt: "Sendt",
+            endret: "Endret",
+            belopUtbetalt: "Beløp utbetalt",
+            oppsummering: "rapportering-oppsummering-tittel",
+            status: {
+              tilUtfylling: "Til utfylling",
+              innsendt: "Innsendt",
+              ferdig: "Ferdig",
+              endret: "Endret",
+              feilet: "Feilet",
+            },
+            ukedager: {
+              mandag: { kort: "man", lang: "mandag" },
+              tirsdag: { kort: "tir", lang: "tirsdag" },
+              onsdag: { kort: "ons", lang: "onsdag" },
+              torsdag: { kort: "tor", lang: "torsdag" },
+              fredag: { kort: "fre", lang: "fredag" },
+              lordag: { kort: "lør", lang: "lørdag" },
+              sondag: { kort: "søn", lang: "søndag" },
+            },
+            aktiviteter: {
+              jobb: { kort: "jobb", lang: "rapportering-arbeid" },
+              syk: { kort: "syk", lang: "rapportering-syk" },
+              ferie: { kort: "ferie", lang: "rapportering-fraevaer" },
+              utdanning: { kort: "utdanning", lang: "rapportering-utdanning" },
+            },
+            tidsverdi: { timer: "rapportering-time", dager: "rapportering-dag" },
+          },
+          meldekortInnsendingsstatusBeskjed: {
+            ikkeSendtInnEnda: "Meldekortet er ikke sendt inn enda",
+            endringerIkkeSendtInnEnda: "Endringene er ikke sendt inn enda",
+            kanIkkeSendesInn: "Meldekortet kan ikke sendes inn",
+            sendtInn: "Meldekortet er sendt inn",
+            sendtInnEndringer: "Endringene er sendt inn",
+          },
           arbeidssokerstatusBeskjeder: {
             duVilVaereRegistrert: arbeidssokerstatusBeskjed,
             duVilBliAvregistrert: {
@@ -56,6 +94,11 @@ export const withNestedRapporteringsperiode = ({
             etterregistrert: arbeidssokerstatusBeskjed,
           },
           utfylling: {
+            seOver: {
+              sidetittel: "Se over meldekortet",
+              beskrivelse: arbeidssokerstatusBeskjed,
+              jegHarSettOverBeskjed: "Jeg har sett over opplysningene.",
+            },
             arbeidssokerstatusSporsmaal: {
               tittel:
                 "Ønsker du fortsatt å være registrert som arbeidssøker fra {{fom}} til {{tom}}?",

@@ -1,5 +1,5 @@
 import { PrinterSmallFillIcon } from "@navikt/aksel-icons";
-import { Accordion, Alert, Button, Heading } from "@navikt/ds-react";
+import { Accordion, Button, Heading } from "@navikt/ds-react";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import { Kalender } from "~/components/kalender/Kalender";
@@ -14,14 +14,14 @@ import styles from "~/styles/kvittering.module.css";
 import rootStyles from "~/styles/root.module.css";
 
 import { ArbeidssokerstatusBeskjed } from "./arbeidssokerstatus/ArbeidssokerstatusBeskjed";
+import { InnsendingsStatusBeskjed } from "./beskjeder/InnsendingsStatusBeskjed";
 
 interface Ikvittering {
-  tittel: string;
   periode: IRapporteringsperiode;
   harNestePeriode: boolean;
 }
 
-export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
+export function Kvittering({ periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink, getRichText } = useSanity();
   const { locale } = useLocale();
   const { trackNavigere } = useAnalytics();
@@ -30,11 +30,7 @@ export function Kvittering({ tittel, periode, harNestePeriode }: Ikvittering) {
 
   return (
     <>
-      <Alert variant="success" role="status" className="my-4">
-        <Heading spacing size="small" level="3">
-          {tittel}
-        </Heading>
-      </Alert>
+      <InnsendingsStatusBeskjed periode={periode} visSendtInnBeskjed />
 
       <Accordion data-color="neutral">
         <Accordion.Item>

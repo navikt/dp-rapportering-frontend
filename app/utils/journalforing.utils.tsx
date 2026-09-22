@@ -9,6 +9,7 @@ import {
   type ArbeidssokerstatusSide,
   hentArbeidssokerstatusInnhold,
 } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
+import { hentInnsendingsStatusInnhold } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { lesMerInnhold } from "~/components/LesMer";
 import { type GetAppText, type GetRichText } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -286,7 +287,7 @@ export function getInput({
 }
 
 export function htmlForEndringBegrunnelse(props: IProps): string {
-  const { getAppText, periode } = props;
+  const { getAppText, periode, nySanityTexts } = props;
 
   if (!periode) {
     return "";
@@ -304,10 +305,16 @@ export function htmlForEndringBegrunnelse(props: IProps): string {
 
   const seksjoner = [
     getHeader({
-      text: getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-label"),
+      text: sanityTekst(
+        nySanityTexts?.utfylling?.begrunnelseForEndring?.tittel,
+        "utfylling.begrunnelseForEndring.tittel",
+      ),
       level: "3",
     }),
-    `<p>${getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-description")}</p>`,
+    `<p>${sanityTekst(
+      nySanityTexts?.utfylling?.begrunnelseForEndring?.beskrivelse,
+      "utfylling.begrunnelseForEndring.beskrivelse",
+    )}</p>`,
     `<ul>${options.map((option) => (periode.begrunnelseEndring === option ? `<li><strong>${getAppText(option)}</strong></li>` : `<li>${getAppText(option)}</li>`)).join("")}</ul>`,
   ];
 
@@ -549,7 +556,7 @@ export function htmlForArbeidssoker(props: IProps): string {
 }
 
 export function htmlForOppsummering(props: IProps): string {
-  const { getAppText, getRichText, periode, nySanityTexts, locale } = props;
+  const { getAppText, periode, nySanityTexts, locale } = props;
 
   if (!periode) {
     return "";
@@ -564,20 +571,23 @@ export function htmlForOppsummering(props: IProps): string {
 
   const invaerendePeriodeTekst = `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
 
-  const tittel = periode.originalId
-    ? "rapportering-endring-send-inn-tittel"
-    : "rapportering-send-inn-tittel";
-  const beskrivelse = periode.originalId
-    ? "rapportering-endring-send-inn-innhold"
-    : "rapportering-send-inn-innhold";
-  const alert = periode.originalId
-    ? "rapportering-endring-ikke-sendt-enda"
-    : "rapportering-meldekort-ikke-sendt-enda";
+  const seOver = nySanityTexts?.utfylling?.seOver;
+  const sendestatus = nySanityTexts?.meldekortInnsendingsstatusBeskjed;
+  const statusFelt = periode.originalId ? "endringerIkkeSendtInnEnda" : "ikkeSendtInnEnda";
+  const { tekst: statusTekst, felt: statusFeltsti } = hentInnsendingsStatusInnhold(
+    statusFelt,
+    sendestatus,
+  );
 
   const seksjoner: string[] = [
-    getHeader({ text: getAppText(tittel), level: "2" }),
-    renderToString(<PortableText value={getRichText(beskrivelse)} />),
-    renderToString(<PortableText value={getRichText(alert)} />),
+    getHeader({
+      text: sanityTekst(seOver?.sidetittel, "utfylling.seOver.sidetittel"),
+      level: "2",
+    }),
+    renderToString(
+      <PortableText value={sanityRichText(seOver?.beskrivelse, "utfylling.seOver.beskrivelse")} />,
+    ),
+    `<p>${sanityTekst(statusTekst, statusFeltsti)}</p>`,
     getHeader({ text: getAppText("rapportering-send-inn-periode-tittel"), level: "3" }),
     `<p>${invaerendePeriodeTekst}</p>`,
     getKalender(props, false),
@@ -586,11 +596,49 @@ export function htmlForOppsummering(props: IProps): string {
 
   if (periode.originalId) {
     seksjoner.push(
-      getHeader({ text: getAppText("rapportering-endring-begrunnelse-tittel"), level: "3" }),
+      getHeader({
+        text: sanityTekst(
+          nySanityTexts?.utfylling?.begrunnelseForEndring?.tittel,
+          "utfylling.begrunnelseForEndring.tittel",
+        ),
+        level: "3",
+      }),
     );
     seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
     seksjoner.push(`<p>${periode.begrunnelseEndring}</p>`);
   } else {
+    const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
+    const nesteMeldeperiode = nestePeriode(periode.periode);
+    const dateFormat =
+      nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
+      nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
+        ? "d. MMMM yyyy"
+        : "d. MMMM";
+    const arbeidssokerSporsmal = sanityTekst(
+      arbeidssokerstatusSporsmaal?.tittel,
+      "utfylling.arbeidssokerstatusSporsmaal.tittel",
+    )
+      .replaceAll("{{fom}}", formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }))
+      .replaceAll(
+        "{{tom}}",
+        formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
+      );
+    const arbeidssokerSvar =
+      periode.registrertArbeidssoker === null
+        ? "—"
+        : sanityTekst(
+            periode.registrertArbeidssoker
+              ? arbeidssokerstatusSporsmaal?.alternativer.ja
+              : arbeidssokerstatusSporsmaal?.alternativer.nei,
+            `utfylling.arbeidssokerstatusSporsmaal.alternativer.${periode.registrertArbeidssoker ? "ja" : "nei"}`,
+          );
+
+    seksjoner.push(
+      `<h3>${arbeidssokerSporsmal}</h3><p>${sanityTekst(
+        arbeidssokerstatusSporsmaal?.svarPrefiks,
+        "utfylling.arbeidssokerstatusSporsmaal.svarPrefiks",
+      )} ${arbeidssokerSvar}</p>`,
+    );
     seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
   }
 
@@ -598,14 +646,20 @@ export function htmlForOppsummering(props: IProps): string {
     seksjoner.push(
       `<form>
         <input type="checkbox" name="rapportering-send-inn-bekreft-opplysning" checked/>
-        <label>${getAppText("rapportering-endring-send-inn-bekreft-opplysning")}</label>
+        <label>${sanityTekst(
+          seOver?.jegHarSettOverBeskjed,
+          "utfylling.seOver.jegHarSettOverBeskjed",
+        )}</label>
       </form>`,
     );
   } else {
     seksjoner.push(
       `<form>
         <input type="checkbox" name="rapportering-send-inn-bekreft-opplysning" checked/>
-        <label>${getAppText("rapportering-send-inn-bekreft-opplysning")}</label>
+        <label>${sanityTekst(
+          seOver?.jegHarSettOverBeskjed,
+          "utfylling.seOver.jegHarSettOverBeskjed",
+        )}</label>
       </form>`,
     );
   }

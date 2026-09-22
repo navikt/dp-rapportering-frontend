@@ -9,7 +9,7 @@ import { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { useFetcher, useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { uuidv7 } from "uuidv7";
 
-import { MeldekortKanIkkeSendesBeskjed } from "~/components/beskjeder/MeldekortKanIkkeSendesBeskjed";
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { Error } from "~/components/error/Error";
 import { LesMer } from "~/components/LesMer";
 import { useAnalytics } from "~/hooks/useAnalytics";
@@ -184,7 +184,7 @@ export default function RapporteringstypeSide() {
 
   return (
     <>
-      <MeldekortKanIkkeSendesBeskjed periode={periode} />
+      <InnsendingsStatusBeskjed periode={periode} />
 
       {harFlerePerioder && (
         <InfoCard data-color="info" className="my-8">

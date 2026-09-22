@@ -31,6 +31,7 @@ export const MELDEKORT_BRUKERFLATE_DOCUMENT_IDS = {
   kvittering: "meldekortBrukerflateKvittering",
   oversikt: "meldekortBrukerflateOversikt",
   feilmeldinger: "meldekortBrukerflateFeilmeldinger",
+  meldekortInnsendingsstatusBeskjed: "meldekortInnsendingsstatusBeskjed",
 } as const;
 
 export type MeldekortBrukerflateLanguage = "nb" | "en";
@@ -94,7 +95,23 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
   )},
   "meldekortdetaljer": ${document(
     MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.meldekortdetaljer,
-    fields(["tittel", "sendt", "endret", "belopUtbetalt", "oppsummering"]),
+    [
+      fields(["tittel", "periode", "sendt", "endret", "belopUtbetalt", "oppsummering"]),
+      `"status": {\n${fields(
+        ["tilUtfylling", "innsendt", "ferdig", "endret", "feilet"],
+        "status",
+      )}\n}`,
+      `"ukedager": {\n${["mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lordag", "sondag"]
+        .map((day) => `"${day}": {\n${fields(["kort", "lang"], `ukedager.${day}`)}\n}`)
+        .join(",\n")}\n}`,
+      `"aktiviteter": {\n${["jobb", "syk", "ferie", "utdanning"]
+        .map(
+          (activity) =>
+            `"${activity}": {\n${fields(["kort", "lang"], `aktiviteter.${activity}`)}\n}`,
+        )
+        .join(",\n")}\n}`,
+      `"tidsverdi": {\n${fields(["timer", "dager"], "tidsverdi")}\n}`,
+    ].join(",\n"),
   )},
   "velkomstside": ${document(
     MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.velkomstside,
@@ -126,12 +143,12 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
         `"aktivitetErstattet": {\n${fields(["tittel", "tekst"], "registrerAktiviteter.aktivitetErstattet")}\n}`,
       ].join(",\n")}\n}`,
       `"arbeidssokerstatusSporsmaal": {\n${[
-        fields(["tittel", "beskrivelse"], "arbeidssokerstatusSporsmaal"),
+        fields(["tittel", "beskrivelse", "svarPrefiks"], "arbeidssokerstatusSporsmaal"),
         `"alternativer": {\n${fields(["ja", "nei"], "arbeidssokerstatusSporsmaal.alternativer")}\n}`,
       ].join(",\n")}\n}`,
       `"manglendeAktivitet": {\n${fields(["tittel", "beskrivelse"], "manglendeAktivitet")}\n}`,
       `"begrunnelseForEndring": {\n${fields(["tittel", "beskrivelse", "alternativer"], "begrunnelseForEndring")}\n}`,
-      `"seOver": {\n${fields(["ikkeSendtInnBeskjed", "jegHarSettOverBeskjed"], "seOver")}\n}`,
+      `"seOver": {\n${fields(["sidetittel", "beskrivelse", "jegHarSettOverBeskjed"], "seOver")}\n}`,
     ].join(",\n"),
   )},
   "kvittering": ${document(
@@ -156,6 +173,16 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
   "feilmeldinger": ${document(
     MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.feilmeldinger,
     `"generellFeil": {\n${fields(["tittel", "tekst"], "generellFeil")}\n}`,
+  )}
+  ,"meldekortInnsendingsstatusBeskjed": ${document(
+    MELDEKORT_BRUKERFLATE_DOCUMENT_IDS.meldekortInnsendingsstatusBeskjed,
+    fields([
+      "ikkeSendtInnEnda",
+      "endringerIkkeSendtInnEnda",
+      "kanIkkeSendesInn",
+      "sendtInn",
+      "sendtInnEndringer",
+    ]),
   )}
 }`;
 
@@ -224,10 +251,24 @@ export type MeldekortBrukerflateApiResponse = {
   }>;
   meldekortdetaljer: MeldekortBrukerflateDocument<{
     tittel: MeldekortBrukerflateText;
+    periode: MeldekortBrukerflateText;
     sendt: MeldekortBrukerflateText;
     endret: MeldekortBrukerflateText;
     belopUtbetalt: MeldekortBrukerflateText;
     oppsummering: MeldekortBrukerflateText;
+    status: {
+      tilUtfylling: MeldekortBrukerflateText;
+      innsendt: MeldekortBrukerflateText;
+      ferdig: MeldekortBrukerflateText;
+      endret: MeldekortBrukerflateText;
+      feilet: MeldekortBrukerflateText;
+    };
+    ukedager: Record<string, { kort: MeldekortBrukerflateText; lang: MeldekortBrukerflateText }>;
+    aktiviteter: Record<string, { kort: MeldekortBrukerflateText; lang: MeldekortBrukerflateText }>;
+    tidsverdi: {
+      timer: MeldekortBrukerflateText;
+      dager: MeldekortBrukerflateText;
+    };
   }>;
   velkomstside: MeldekortBrukerflateDocument<{
     velkomstTekst: MeldekortBrukerflateRichText;
@@ -265,6 +306,7 @@ export type MeldekortBrukerflateApiResponse = {
     arbeidssokerstatusSporsmaal: {
       tittel: MeldekortBrukerflateText;
       beskrivelse: MeldekortBrukerflateText;
+      svarPrefiks: MeldekortBrukerflateText;
       alternativer: {
         ja: MeldekortBrukerflateText;
         nei: MeldekortBrukerflateText;
@@ -280,7 +322,8 @@ export type MeldekortBrukerflateApiResponse = {
       alternativer: MeldekortBrukerflateText;
     };
     seOver: {
-      ikkeSendtInnBeskjed: MeldekortBrukerflateText;
+      sidetittel: MeldekortBrukerflateText;
+      beskrivelse: MeldekortBrukerflateRichText;
       jegHarSettOverBeskjed: MeldekortBrukerflateText;
     };
   }>;
@@ -309,5 +352,12 @@ export type MeldekortBrukerflateApiResponse = {
       tittel: MeldekortBrukerflateText;
       tekst: MeldekortBrukerflateRichText;
     };
+  }>;
+  meldekortInnsendingsstatusBeskjed: MeldekortBrukerflateDocument<{
+    ikkeSendtInnEnda: MeldekortBrukerflateText;
+    endringerIkkeSendtInnEnda: MeldekortBrukerflateText;
+    kanIkkeSendesInn: MeldekortBrukerflateText;
+    sendtInn: MeldekortBrukerflateText;
+    sendtInnEndringer: MeldekortBrukerflateText;
   }>;
 };

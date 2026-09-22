@@ -7,7 +7,7 @@ import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
 import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
-import { MeldekortKanIkkeSendesBeskjed } from "~/components/beskjeder/MeldekortKanIkkeSendesBeskjed";
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
@@ -107,7 +107,7 @@ export default function ArbeidssøkerRegisterSide() {
 
   return (
     <>
-      <MeldekortKanIkkeSendesBeskjed periode={periode} />
+      <InnsendingsStatusBeskjed periode={periode} />
 
       <fetcher.Form method="post">
         <RadioGroup

@@ -5,7 +5,6 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 import { Kalender } from "~/components/kalender/Kalender";
 import { useLocale } from "~/hooks/useLocale";
-import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
 import { formaterDato } from "~/utils/dato.utils";
@@ -23,20 +22,18 @@ interface ReviewDetaljerProps {
 export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: ReviewDetaljerProps) {
   const { locale } = useLocale();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
-  const { getAppText } = useSanity();
+  const utfylling = rootData?.sanityTekst?.utfylling;
+  const arbeidssokerstatusSporsmaal = utfylling?.arbeidssokerstatusSporsmaal;
 
   const arbeidssokerStatusSvarTekst =
     periode.registrertArbeidssoker === null
       ? "—"
-      : periode.registrertArbeidssoker
-        ? sanityTekst(
-            rootData?.sanityTekst?.utfylling?.arbeidssokerstatusSporsmaal?.alternativer?.ja,
-            "utfylling.arbeidssokerstatusSporsmaal.alternativer.ja",
-          )
-        : sanityTekst(
-            rootData?.sanityTekst?.utfylling?.arbeidssokerstatusSporsmaal?.alternativer?.nei,
-            "utfylling.arbeidssokerstatusSporsmaal.alternativer.nei",
-          );
+      : sanityTekst(
+          periode.registrertArbeidssoker
+            ? arbeidssokerstatusSporsmaal?.alternativer?.ja
+            : arbeidssokerstatusSporsmaal?.alternativer?.nei,
+          `utfylling.arbeidssokerstatusSporsmaal.alternativer.${periode.registrertArbeidssoker ? "ja" : "nei"}`,
+        );
 
   const nesteMeldeperiode = nestePeriode(periode.periode);
   const dateFormat =
@@ -44,9 +41,9 @@ export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: Revi
     nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
       ? "d. MMMM yyyy"
       : "d. MMMM";
-  const arbeidssokerSporsmal = (
-    rootData?.sanityTekst?.utfylling?.arbeidssokerstatusSporsmaal?.tittel ??
-    getAppText("utfylling.arbeidssokerstatusSporsmaal.tittel")
+  const arbeidssokerSporsmal = sanityTekst(
+    arbeidssokerstatusSporsmaal?.tittel,
+    "utfylling.arbeidssokerstatusSporsmaal.tittel",
   )
     .replaceAll("{{fom}}", formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }))
     .replaceAll(
@@ -56,6 +53,14 @@ export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: Revi
 
   const visArbeidssokerStatus = visArbeidssokerSvar && !!arbeidssokerStatusSvarTekst;
   const begrunnelse = periode.begrunnelseEndring;
+  const svarPrefiks = sanityTekst(
+    arbeidssokerstatusSporsmaal?.svarPrefiks,
+    "utfylling.arbeidssokerstatusSporsmaal.svarPrefiks",
+  );
+  const begrunnelseTittel = sanityTekst(
+    utfylling?.begrunnelseForEndring?.tittel,
+    "utfylling.begrunnelseForEndring.tittel",
+  );
 
   return (
     <div className={styles.meldekortWrapper}>
@@ -70,7 +75,9 @@ export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: Revi
             <Heading size="xsmall" level="3">
               {arbeidssokerSporsmal}
             </Heading>
-            <BodyShort>Du svarte: {arbeidssokerStatusSvarTekst}</BodyShort>
+            <BodyShort>
+              {svarPrefiks} {arbeidssokerStatusSvarTekst}
+            </BodyShort>
           </div>
 
           <ArbeidssokerstatusBeskjed periode={periode} side="bekreftelse" />
@@ -80,7 +87,7 @@ export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: Revi
       {begrunnelse && (
         <div className={rootStyles.textWrapper}>
           <Heading size="xsmall" level="3">
-            Begrunnelse
+            {begrunnelseTittel}
           </Heading>
           <BodyShort>{begrunnelse}</BodyShort>
         </div>

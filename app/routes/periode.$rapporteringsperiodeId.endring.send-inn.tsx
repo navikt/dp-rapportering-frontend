@@ -15,7 +15,7 @@ import {
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
-import { SendestatusBeskjed } from "~/components/beskjeder/SendestatusBeskjed";
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { MeldekortDetaljer } from "~/components/meldekort-detaljert/MeldekortDetaljer";
 import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { ReactLink } from "~/components/ReactLink";
@@ -32,6 +32,7 @@ import {
 import type { loader as RootLoader } from "~/root";
 import { getCorrelationId } from "~/utils/fetch.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
+import { sanityRichText, sanityTekst } from "~/utils/sanity.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
@@ -122,9 +123,11 @@ export default function RapporteringsPeriodeSendInnSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
+  const seOver = rootData?.sanityTekst?.utfylling?.seOver;
+  const knapper = rootData?.sanityTekst?.knapper;
 
   const actionData = useActionData<typeof action>();
-  const { getAppText, getRichText, getLink } = useSanity();
+  const { getAppText, getRichText } = useSanity();
 
   const { trackSkjemaStegStartet, trackSkjemaStegFullført, trackSkjemaInnsendingFeilet } =
     useAnalytics();
@@ -186,19 +189,21 @@ export default function RapporteringsPeriodeSendInnSide() {
 
   return (
     <Form method="post" onSubmit={onSubmit} className={styles.formContentWrapper}>
-      <SendestatusBeskjed periode={periode} textKey="rapportering-endring-ikke-sendt-enda" />
+      <InnsendingsStatusBeskjed periode={periode} endring visMeldekortetErIkkeSendtInnBeskjed />
 
       <div className={rootStyles.textWrapper}>
         <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
-          {getAppText("rapportering-endring-send-inn-tittel")}
+          {sanityTekst(seOver?.sidetittel, "utfylling.seOver.sidetittel")}
         </Heading>
-        <PortableTextRenderer value={getRichText("rapportering-endring-send-inn-innhold")} />
+        <PortableTextRenderer
+          value={sanityRichText(seOver?.beskrivelse, "utfylling.seOver.beskrivelse")}
+        />
       </div>
 
       <MeldekortDetaljer periode={periode} />
 
       <Checkbox onChange={() => setConfirmed((prev) => !prev)}>
-        {getAppText("rapportering-endring-send-inn-bekreft-opplysning")}
+        {sanityTekst(seOver?.jegHarSettOverBeskjed, "utfylling.seOver.jegHarSettOverBeskjed")}
       </Checkbox>
 
       {errorMessage && (
@@ -215,7 +220,7 @@ export default function RapporteringsPeriodeSendInnSide() {
           iconPosition="left"
           icon={<ArrowLeftIcon aria-hidden />}
         >
-          {getAppText("rapportering-knapp-tilbake")}
+          {knapper?.tilbake}
         </Button>
 
         <Button
@@ -227,17 +232,12 @@ export default function RapporteringsPeriodeSendInnSide() {
           name="_action"
           value="send-inn"
         >
-          {getAppText("rapportering-endring-send-inn")}
+          {knapper?.sendEndring}
         </Button>
       </div>
 
-      <ReactLink
-        as="Button"
-        to={getLink("rapportering-endre-avbryt").linkUrl}
-        variant="tertiary"
-        className="px-8"
-      >
-        {getLink("rapportering-endre-avbryt").linkText}
+      <ReactLink as="Button" to="/innsendt" variant="tertiary" className="px-8">
+        {knapper?.avbryt}
       </ReactLink>
     </Form>
   );

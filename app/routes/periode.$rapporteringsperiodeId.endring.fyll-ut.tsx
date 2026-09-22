@@ -10,7 +10,7 @@ import { uuidv7 } from "uuidv7";
 import { validerOgLagreAktivitet } from "~/actions/aktivitet.action.server";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { MeldekortKanIkkeSendesBeskjed } from "~/components/beskjeder/MeldekortKanIkkeSendesBeskjed";
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { Kalender } from "~/components/kalender/Kalender";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { ReactLink } from "~/components/ReactLink";
@@ -151,7 +151,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   return (
     <>
-      <MeldekortKanIkkeSendesBeskjed periode={periode} />
+      <InnsendingsStatusBeskjed periode={periode} />
 
       <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
         {getAppText("rapportering-periode-endre-tittel")}

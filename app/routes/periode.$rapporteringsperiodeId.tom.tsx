@@ -5,7 +5,7 @@ import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { uuidv7 } from "uuidv7";
 
-import { MeldekortKanIkkeSendesBeskjed } from "~/components/beskjeder/MeldekortKanIkkeSendesBeskjed";
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
@@ -55,7 +55,7 @@ export default function TomRapporteringsPeriodeSide() {
 
   return (
     <>
-      <MeldekortKanIkkeSendesBeskjed periode={periode} />
+      <InnsendingsStatusBeskjed periode={periode} />
 
       <Alert variant="info" className="alert-with-rich-text">
         <Heading spacing size="small" level="3">
