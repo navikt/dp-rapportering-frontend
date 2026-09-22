@@ -13,7 +13,6 @@ import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import styles from "~/styles/kvittering.module.css";
 import rootStyles from "~/styles/root.module.css";
 
-import { ArbeidssokerstatusBeskjed } from "./arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 import { InnsendingsStatusBeskjed } from "./beskjeder/InnsendingsStatusBeskjed";
 
 interface Ikvittering {
@@ -48,7 +47,6 @@ export function Kvittering({ periode, harNestePeriode }: Ikvittering) {
               <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
               <AktivitetOppsummering periode={periode} />
             </div>
-            <ArbeidssokerstatusBeskjed periode={periode} side="bekreftelse" />
             <div className={styles.skrivUtKnappen}>
               <Button
                 variant="tertiary"
