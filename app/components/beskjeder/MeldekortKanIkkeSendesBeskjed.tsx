@@ -10,7 +10,7 @@ interface IProps {
   periode: IRapporteringsperiode;
 }
 
-export function KanIkkeSendes(props: IProps): JSX.Element | undefined {
+export function MeldekortKanIkkeSendesBeskjed(props: IProps): JSX.Element | undefined {
   const { getAppText } = useSanity();
 
   if (!kanSendes(props.periode)) {

@@ -1,6 +1,5 @@
 import { ExclamationmarkTriangleIcon, InformationSquareIcon } from "@navikt/aksel-icons";
 import { InfoCard } from "@navikt/ds-react";
-import { PortableText } from "@portabletext/react";
 import type { PortableTextBlock } from "@portabletext/types";
 import { useRouteLoaderData } from "react-router";
 
@@ -12,6 +11,8 @@ import { formaterDato } from "~/utils/dato.utils";
 import { nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { sanityRichText } from "~/utils/sanity.utils";
 import { KortType, OPPRETTET_AV } from "~/utils/types";
+
+import { PortableTextRenderer } from "../portable-text/PortableTextRenderer";
 
 export type ArbeidssokerstatusSide = "utfylling" | "bekreftelse" | "oversikt";
 
@@ -97,9 +98,9 @@ export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
     );
 
   return (
-    <InfoCard data-color={variant} className="my-6 alert-with-rich-text">
+    <InfoCard data-color={variant}>
       <InfoCard.Message icon={variantIcon}>
-        <PortableText value={tekstMedDato} />
+        <PortableTextRenderer value={tekstMedDato} />
       </InfoCard.Message>
     </InfoCard>
   );

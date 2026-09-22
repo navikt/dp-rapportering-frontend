@@ -1,6 +1,5 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
-import { PortableText } from "@portabletext/react";
+import { Alert, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { useEffect, useMemo, useState } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { data, redirect } from "react-router";
@@ -10,16 +9,15 @@ import {
   useLoaderData,
   useNavigate,
   useNavigation,
-  useRevalidator,
   useRouteLoaderData,
   useSubmit,
 } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { Kalender } from "~/components/kalender/Kalender";
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { SendestatusBeskjed } from "~/components/beskjeder/SendestatusBeskjed";
+import { MeltekortDetaljer } from "~/components/meldekort-detaljert/MeldekortDetaljer";
+import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
@@ -32,10 +30,8 @@ import {
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { getCorrelationId } from "~/utils/fetch.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
-import { kanSendes } from "~/utils/periode.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
@@ -127,8 +123,6 @@ export default function RapporteringsPeriodeSendInnSide() {
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
 
-  const revalidator = useRevalidator();
-
   const actionData = useActionData<typeof action>();
   const { getAppText, getRichText, getLink } = useSanity();
 
@@ -148,17 +142,8 @@ export default function RapporteringsPeriodeSendInnSide() {
     locale,
   });
 
-  let invaerendePeriodeTekst;
-
-  if (periode) {
-    const ukenummer = formaterPeriodeTilUkenummer(
-      periode.periode.fraOgMed,
-      periode.periode.tilOgMed,
-    );
-    const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed, locale);
-
-    invaerendePeriodeTekst = `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
-  }
+  const isSubmitDisabled = !periode.kanSendes || !confirmed || isSubmitting;
+  const errorMessage = actionData?.error ? getAppText(actionData.error) : null;
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     trackSkjemaStegFullført({
@@ -199,93 +184,61 @@ export default function RapporteringsPeriodeSendInnSide() {
     }
   }, [actionData]);
 
-  useEffect(() => {
-    revalidator.revalidate();
-  }, []);
-
   return (
-    <>
-      <Heading tabIndex={-1} level="2" size="large" spacing className="vo-fokus">
-        {getAppText("rapportering-endring-send-inn-tittel")}
-      </Heading>
+    <Form method="post" onSubmit={onSubmit} className={styles.formContentWrapper}>
+      <SendestatusBeskjed periode={periode} textKey="rapportering-endring-ikke-sendt-enda" />
 
-      {kanSendes(periode) ? (
-        <Alert role="status" variant="warning" className="my-4 alert-with-rich-text">
-          <PortableText value={getRichText("rapportering-endring-ikke-sendt-enda")} />
-        </Alert>
-      ) : (
-        <KanIkkeSendes periode={periode} />
-      )}
-
-      <PortableText value={getRichText("rapportering-endring-send-inn-innhold")} />
-
-      <div className="my-4">
-        <Heading size="xsmall" level="3">
-          {getAppText("rapportering-send-inn-periode-tittel")}
+      <div className={rootStyles.textWrapper}>
+        <Heading tabIndex={-1} size="medium" className="vo-fokus">
+          {getAppText("rapportering-endring-send-inn-tittel")}
         </Heading>
-        <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
+        <PortableTextRenderer value={getRichText("rapportering-endring-send-inn-innhold")} />
       </div>
 
-      <div className="oppsummering">
-        <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
-        <AktivitetOppsummering periode={periode} />
-      </div>
-
-      {periode.begrunnelseEndring && (
-        <div>
-          <Heading size="small" className="my-4" level="3">
-            {getAppText("rapportering-endring-begrunnelse-tittel")}
-          </Heading>
-
-          <p>{periode.begrunnelseEndring}</p>
-        </div>
-      )}
+      <MeltekortDetaljer periode={periode} />
 
       <Checkbox onChange={() => setConfirmed((prev) => !prev)}>
         {getAppText("rapportering-endring-send-inn-bekreft-opplysning")}
       </Checkbox>
 
-      {actionData?.error && (
-        <Alert role="alert" variant="error" className={styles.feilmelding}>
-          {getAppText(actionData.error)}
+      {errorMessage && (
+        <Alert role="alert" variant="error">
+          {errorMessage}
         </Alert>
       )}
 
-      <Form method="post" onSubmit={onSubmit}>
-        <div className={rootStyles.buttonsContainerRow}>
-          <Button
-            onClick={() => navigate(-1)}
-            variant="secondary"
-            iconPosition="left"
-            icon={<ArrowLeftIcon aria-hidden />}
-          >
-            {getAppText("rapportering-knapp-tilbake")}
-          </Button>
-
-          <Button
-            type="submit"
-            variant="primary"
-            iconPosition="right"
-            disabled={!periode.kanSendes || !confirmed || isSubmitting}
-            name="_action"
-            value="send-inn"
-          >
-            {isSubmitting
-              ? getAppText("rapportering-periode-send-inn-bekreft-loading")
-              : getAppText("rapportering-endring-send-inn")}
-          </Button>
-        </div>
-      </Form>
-      <>
-        <ReactLink
-          as="Button"
-          to={getLink("rapportering-endre-avbryt").linkUrl}
-          variant="tertiary"
-          className="px-8"
+      <div className={rootStyles.buttonsContainerRow}>
+        <Button
+          type="button"
+          onClick={() => navigate(-1)}
+          variant="secondary"
+          iconPosition="left"
+          icon={<ArrowLeftIcon aria-hidden />}
         >
-          {getLink("rapportering-endre-avbryt").linkText}
-        </ReactLink>
-      </>
-    </>
+          {getAppText("rapportering-knapp-tilbake")}
+        </Button>
+
+        <Button
+          type="submit"
+          variant="primary"
+          iconPosition="right"
+          loading={isSubmitting}
+          disabled={isSubmitDisabled}
+          name="_action"
+          value="send-inn"
+        >
+          {getAppText("rapportering-endring-send-inn")}
+        </Button>
+      </div>
+
+      <ReactLink
+        as="Button"
+        to={getLink("rapportering-endre-avbryt").linkUrl}
+        variant="tertiary"
+        className="px-8"
+      >
+        {getLink("rapportering-endre-avbryt").linkText}
+      </ReactLink>
+    </Form>
   );
 }
