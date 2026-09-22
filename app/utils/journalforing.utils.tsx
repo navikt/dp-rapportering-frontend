@@ -607,38 +607,40 @@ export function htmlForOppsummering(props: IProps): string {
     seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
     seksjoner.push(`<p>${periode.begrunnelseEndring}</p>`);
   } else {
-    const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
-    const nesteMeldeperiode = nestePeriode(periode.periode);
-    const dateFormat =
-      nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
-      nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
-        ? "d. MMMM yyyy"
-        : "d. MMMM";
-    const arbeidssokerSporsmal = sanityTekst(
-      arbeidssokerstatusSporsmaal?.tittel,
-      "utfylling.arbeidssokerstatusSporsmaal.tittel",
-    )
-      .replaceAll("{{fom}}", formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }))
-      .replaceAll(
-        "{{tom}}",
-        formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
-      );
-    const arbeidssokerSvar =
-      periode.registrertArbeidssoker === null
-        ? "—"
-        : sanityTekst(
-            periode.registrertArbeidssoker
-              ? arbeidssokerstatusSporsmaal?.alternativer.ja
-              : arbeidssokerstatusSporsmaal?.alternativer.nei,
-            `utfylling.arbeidssokerstatusSporsmaal.alternativer.${periode.registrertArbeidssoker ? "ja" : "nei"}`,
-          );
+    if (skalHaArbeidssokerSporsmal(periode)) {
+      const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
+      const nesteMeldeperiode = nestePeriode(periode.periode);
+      const dateFormat =
+        nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
+        nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
+          ? "d. MMMM yyyy"
+          : "d. MMMM";
+      const arbeidssokerSporsmal = sanityTekst(
+        arbeidssokerstatusSporsmaal?.tittel,
+        "utfylling.arbeidssokerstatusSporsmaal.tittel",
+      )
+        .replaceAll("{{fom}}", formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }))
+        .replaceAll(
+          "{{tom}}",
+          formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
+        );
+      const arbeidssokerSvar =
+        periode.registrertArbeidssoker === null
+          ? "—"
+          : sanityTekst(
+              periode.registrertArbeidssoker
+                ? arbeidssokerstatusSporsmaal?.alternativer.ja
+                : arbeidssokerstatusSporsmaal?.alternativer.nei,
+              `utfylling.arbeidssokerstatusSporsmaal.alternativer.${periode.registrertArbeidssoker ? "ja" : "nei"}`,
+            );
 
-    seksjoner.push(
-      `<h3>${arbeidssokerSporsmal}</h3><p>${sanityTekst(
-        arbeidssokerstatusSporsmaal?.svarPrefiks,
-        "utfylling.arbeidssokerstatusSporsmaal.svarPrefiks",
-      )} ${arbeidssokerSvar}</p>`,
-    );
+      seksjoner.push(
+        `<h3>${arbeidssokerSporsmal}</h3><p>${sanityTekst(
+          arbeidssokerstatusSporsmaal?.svarPrefiks,
+          "utfylling.arbeidssokerstatusSporsmaal.svarPrefiks",
+        )} ${arbeidssokerSvar}</p>`,
+      );
+    }
     seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
   }
 

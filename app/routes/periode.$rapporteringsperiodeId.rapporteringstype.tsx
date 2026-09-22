@@ -30,7 +30,7 @@ import {
   perioderSomKanSendes,
   skalHaArbeidssokerSporsmal,
 } from "~/utils/periode.utils";
-import { Rapporteringstype, TIDSSONER } from "~/utils/types";
+import { INetworkResponse, Rapporteringstype, TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import styles from "../styles/rapporteringstype.module.css";
@@ -85,10 +85,10 @@ export default function RapporteringstypeSide() {
   const steg = 1;
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
-  const slettAlleAktiviteterFetcher = useFetcher<{ status: "success" | "error" }>();
+  const slettAlleAktiviteterFetcher = useFetcher<INetworkResponse>();
   const { revalidate } = useRevalidator();
   const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
-  const [harTrykketNeste, trySetHarTrykketNeste] = usePreventDoubleClick();
+  const [harTrykketNeste, trySetHarTrykketNeste, resetHarTrykketNeste] = usePreventDoubleClick();
 
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
@@ -149,6 +149,11 @@ export default function RapporteringstypeSide() {
   };
 
   useEffect(() => {
+    if (slettAlleAktiviteterFetcher.data?.status === "error") {
+      resetHarTrykketNeste();
+      return;
+    }
+
     if (slettAlleAktiviteterFetcher.data?.status !== "success") {
       return;
     }
@@ -167,6 +172,7 @@ export default function RapporteringstypeSide() {
     navigate,
     periode,
     revalidate,
+    resetHarTrykketNeste,
     sesjonId,
     slettAlleAktiviteterFetcher.data?.status,
     stegnavn,
@@ -236,6 +242,9 @@ export default function RapporteringstypeSide() {
 
       {rapporteringstypeFetcher.data?.status === "error" && (
         <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
+      )}
+      {slettAlleAktiviteterFetcher.data?.status === "error" && (
+        <Error title={getAppText(slettAlleAktiviteterFetcher.data.error.statusText)} />
       )}
       <div className={rootStyles.buttonsContainerRow}>
         <Button

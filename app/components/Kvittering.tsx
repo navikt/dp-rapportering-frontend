@@ -30,7 +30,11 @@ export function Kvittering({ periode, harNestePeriode }: Ikvittering) {
 
   return (
     <>
-      <InnsendingsStatusBeskjed periode={periode} visSendtInnBeskjed />
+      <InnsendingsStatusBeskjed
+        periode={periode}
+        endring={Boolean(periode.originalId)}
+        visSendtInnBeskjed
+      />
 
       <Accordion data-color="neutral">
         <Accordion.Item>
