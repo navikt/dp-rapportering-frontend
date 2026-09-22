@@ -1,45 +1,59 @@
 .aktivitetOppsummeringKontainer {
-  max-width: var(--app-max-width);
-}
-
-.aktivitetOppsummeringData {
-  padding: var(--ax-space-8) var(--ax-space-16);
-  margin: 0 calc(var(--ax-space-4) * -1) var(--ax-space-8);
-  background-color: var(--aktivitetFargeArbeid);
-  border: 1px solid var(--aktivitetFargeArbeid);
-  border-radius: var(--ax-space-24);
-}
-
-.aktivitetOppsummeringData p {
   display: flex;
-  justify-content: space-between;
-  font-size: var(--ax-font-size-medium);
+  flex-direction: column;
+  row-gap: var(--ax-space-8);
+}
+
+.aktivitetOppsummeringListe {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  row-gap: var(--ax-space-8);
   margin: 0;
 }
 
-.arbeid {
-  background-color: var(--aktivitetFargeArbeid);
-  border-color: var(--aktivitetFargeArbeid);
+.aktivitetOppsummeringListe dt,
+.aktivitetOppsummeringListe dd {
+  align-self: stretch;
+  margin: 0;
+  padding: var(--ax-space-8) var(--ax-space-16);
+  border-radius: 0.25rem;
 }
 
-.sykdom {
-  background-color: var(--aktivitetFargeSykdom);
-  border-color: var(--aktivitetFargeSykdom);
+.aktivitetOppsummeringListe dd {
+  text-align: right;
 }
 
-.ferie,
-.fravaer {
-  background-color: var(--aktivitetFargeFravaer);
-  border-color: var(--aktivitetFargeFravaer);
+.aktivitetOppsummeringListe dt:nth-of-type(1),
+.aktivitetOppsummeringListe dd:nth-of-type(1) {
+  background: var(--ax-bg-accent-moderate-pressed);
 }
 
-.utdanning {
-  background-color: var(--aktivitetFargeUtdanning);
-  border-color: var(--aktivitetFargeUtdanning);
+.aktivitetOppsummeringListe dt:nth-of-type(2),
+.aktivitetOppsummeringListe dd:nth-of-type(2) {
+  background: var(--ax-bg-warning-moderate-hover);
 }
 
-@media screen and (min-width: 768px) {
-  .aktivitetOppsummeringData p {
-    font-size: var(--ax-font-size-large);
-  }
+.aktivitetOppsummeringListe dt:nth-of-type(3),
+.aktivitetOppsummeringListe dd:nth-of-type(3) {
+  background: var(--ax-bg-success-moderate-pressed);
+}
+
+.aktivitetOppsummeringListe dt:nth-of-type(4),
+.aktivitetOppsummeringListe dd:nth-of-type(4) {
+  background: var(--ax-bg-meta-purple-moderate-pressed);
+}
+
+.aktivitetOppsummeringListe dt:nth-of-type(1),
+.aktivitetOppsummeringListe dt:nth-of-type(2),
+.aktivitetOppsummeringListe dt:nth-of-type(3),
+.aktivitetOppsummeringListe dt:nth-of-type(4) {
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.aktivitetOppsummeringListe dd:nth-of-type(1),
+.aktivitetOppsummeringListe dd:nth-of-type(2),
+.aktivitetOppsummeringListe dd:nth-of-type(3),
+.aktivitetOppsummeringListe dd:nth-of-type(4) {
+  border-radius: 0 0.25rem 0.25rem 0;
 }

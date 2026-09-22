@@ -1,9 +1,13 @@
-import classNames from "classnames";
+import { Heading } from "@navikt/ds-react";
+import { Fragment } from "react";
+import { useRouteLoaderData } from "react-router";
 
-import { useSanity } from "~/hooks/useSanity";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { loader as RootLoader } from "~/root";
+import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
-import { hentTotaltArbeidstimerTekst, hentTotaltFravaerTekstMedType } from "~/utils/periode.utils";
+import { hentTotaltArbeidstimer, hentTotaltDagerMedAktivitetstype } from "~/utils/periode.utils";
+import { sanityTekst } from "~/utils/sanity.utils";
 
 import styles from "./AktivitetOppsummering.module.css";
 
@@ -11,36 +15,71 @@ interface IProps {
   periode: IRapporteringsperiode;
 }
 
+type MeldekortdetaljerTekster = Pick<
+  NonNullable<MeldekortBrukerflateApiResponse["meldekortdetaljer"]>,
+  "oppsummering" | "aktiviteter" | "tidsverdi"
+>;
+
+export interface AktivitetOppsummeringTekst {
+  tittel: string;
+  rader: { label: string; verdi: string }[];
+}
+
+export function hentAktivitetOppsummeringTekst(
+  periode: IRapporteringsperiode,
+  meldekortdetaljer: MeldekortdetaljerTekster | undefined,
+): AktivitetOppsummeringTekst {
+  const antallTimer = hentTotaltArbeidstimer(periode).toString().replace(".", ",");
+  const aktiviteter = [
+    { type: AktivitetType.Arbeid, feltnavn: "jobb" },
+    { type: AktivitetType.Syk, feltnavn: "syk" },
+    { type: AktivitetType.Fravaer, feltnavn: "ferie" },
+    { type: AktivitetType.Utdanning, feltnavn: "utdanning" },
+  ] as const;
+
+  return {
+    tittel: sanityTekst(meldekortdetaljer?.oppsummering, "meldekortdetaljer.oppsummering"),
+    rader: aktiviteter.map(({ type, feltnavn }) => {
+      const antall =
+        type === AktivitetType.Arbeid
+          ? antallTimer
+          : hentTotaltDagerMedAktivitetstype(periode, type).toString();
+      const enhetsfelt = type === AktivitetType.Arbeid ? "timer" : "dager";
+
+      return {
+        label: sanityTekst(
+          meldekortdetaljer?.aktiviteter?.[feltnavn]?.lang,
+          `meldekortdetaljer.aktiviteter.${feltnavn}.lang`,
+        ),
+        verdi: `${antall} ${sanityTekst(
+          meldekortdetaljer?.tidsverdi?.[enhetsfelt],
+          `meldekortdetaljer.tidsverdi.${enhetsfelt}`,
+        )}`,
+      };
+    }),
+  };
+}
+
 export function AktivitetOppsummering({ periode }: IProps) {
-  const { getAppText } = useSanity();
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
+  const oppsummering = hentAktivitetOppsummeringTekst(
+    periode,
+    rootData?.sanityTekst?.meldekortdetaljer ?? undefined,
+  );
 
   return (
     <div className={styles.aktivitetOppsummeringKontainer}>
-      <h4>{getAppText("rapportering-oppsummering-tittel")}</h4>
-      <div className={classNames(styles.aktivitetOppsummeringData, styles.arbeid)}>
-        <p>
-          {getAppText("rapportering-arbeid")}
-          <span>{hentTotaltArbeidstimerTekst(periode, getAppText)}</span>
-        </p>
-      </div>
-      <div className={classNames(styles.aktivitetOppsummeringData, styles.sykdom)}>
-        <p>
-          {getAppText("rapportering-syk")}
-          <span>{hentTotaltFravaerTekstMedType(periode, AktivitetType.Syk, getAppText)}</span>
-        </p>
-      </div>
-      <div className={classNames(styles.aktivitetOppsummeringData, styles.ferie)}>
-        <p>
-          {getAppText("rapportering-fraevaer")}
-          <span>{hentTotaltFravaerTekstMedType(periode, AktivitetType.Fravaer, getAppText)}</span>
-        </p>
-      </div>
-      <div className={classNames(styles.aktivitetOppsummeringData, styles.utdanning)}>
-        <p>
-          {getAppText("rapportering-utdanning")}
-          <span>{hentTotaltFravaerTekstMedType(periode, AktivitetType.Utdanning, getAppText)}</span>
-        </p>
-      </div>
+      <Heading size="xsmall" level="4">
+        {oppsummering.tittel}
+      </Heading>
+      <dl className={styles.aktivitetOppsummeringListe}>
+        {oppsummering.rader.map((rad) => (
+          <Fragment key={rad.label}>
+            <dt>{rad.label}</dt>
+            <dd>{rad.verdi}</dd>
+          </Fragment>
+        ))}
+      </dl>
     </div>
   );
 }

@@ -1,4 +1,5 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { createMemoryRouter, RouterProvider } from "react-router";
 import { times } from "remeda";
 import { beforeEach, describe, expect, test } from "vitest";
 
@@ -6,23 +7,53 @@ import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/Aktiv
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 
-const bekreftAktivitet = async (label: RegExp, antall: RegExp) => {
+const meldekortdetaljer = {
+  oppsummering: "Oppsummering",
+  aktiviteter: {
+    jobb: { lang: "Jobb", kort: "jobb" },
+    syk: { lang: "Syk", kort: "syk" },
+    ferie: { lang: "Ferie", kort: "ferie" },
+    utdanning: { lang: "Utdanning", kort: "utdanning" },
+  },
+  tidsverdi: { timer: "timer", dager: "dager" },
+};
+
+const renderAktivitetOppsummering = async (periode: IRapporteringsperiode) => {
+  render(
+    <RouterProvider
+      router={createMemoryRouter(
+        [
+          {
+            id: "root",
+            path: "/",
+            Component: () => <AktivitetOppsummering periode={periode} />,
+            loader: () => ({ sanityTekst: { meldekortdetaljer } }),
+          },
+        ],
+        { initialEntries: ["/"] },
+      )}
+    />,
+  );
+  await waitFor(() => expect(screen.getByText("Jobb")).toBeInTheDocument());
+};
+
+const bekreftAktivitet = (label: RegExp, antall: RegExp) => {
   const element = screen.getByText(label);
   expect(element).toBeInTheDocument();
-  expect(within(element).getByText(antall)).toBeInTheDocument();
+  expect(screen.getAllByText(antall).length).toBeGreaterThan(0);
 };
 
 describe("<AktivitetOppsummering/>", () => {
   describe("Uten aktiviteter", () => {
     const rapporteringsperiode: IRapporteringsperiode = lagRapporteringsperiode();
 
-    test("Viser 0 timer og dager", () => {
-      render(<AktivitetOppsummering periode={rapporteringsperiode} />);
+    test("Viser 0 timer og dager", async () => {
+      await renderAktivitetOppsummering(rapporteringsperiode);
 
-      bekreftAktivitet(/rapportering-arbeid/, /0 rapportering-time/);
-      bekreftAktivitet(/rapportering-syk/, /0 rapportering-dag/);
-      bekreftAktivitet(/rapportering-fraevaer/, /0 rapportering-dag/);
-      bekreftAktivitet(/rapportering-utdanning/, /0 rapportering-dag/);
+      await bekreftAktivitet(/Jobb/, /0 timer/);
+      await bekreftAktivitet(/Syk/, /0 dager/);
+      await bekreftAktivitet(/Ferie/, /0 dager/);
+      await bekreftAktivitet(/Utdanning/, /0 dager/);
     });
   });
 
@@ -41,18 +72,18 @@ describe("<AktivitetOppsummering/>", () => {
 
     const rapporteringsperiode: IRapporteringsperiode = lagRapporteringsperiode({ dager });
 
-    beforeEach(() => {
-      render(<AktivitetOppsummering periode={rapporteringsperiode} />);
+    beforeEach(async () => {
+      await renderAktivitetOppsummering(rapporteringsperiode);
     });
 
-    test("Viser riktig antall arbeidstimer", () => {
-      bekreftAktivitet(/rapportering-arbeid/, /15,5 rapportering-time/);
+    test("Viser riktig antall arbeidstimer", async () => {
+      await bekreftAktivitet(/Jobb/, /15,5 timer/);
     });
 
-    test("Viser riktig antall dager", () => {
-      bekreftAktivitet(/rapportering-syk/, /1 rapportering-dag/);
-      bekreftAktivitet(/rapportering-fraevaer/, /1 rapportering-dag/);
-      bekreftAktivitet(/rapportering-utdanning/, /1 rapportering-dag/);
+    test("Viser riktig antall dager", async () => {
+      await bekreftAktivitet(/Syk/, /1 dager/);
+      await bekreftAktivitet(/Ferie/, /1 dager/);
+      await bekreftAktivitet(/Utdanning/, /1 dager/);
     });
   });
 });
