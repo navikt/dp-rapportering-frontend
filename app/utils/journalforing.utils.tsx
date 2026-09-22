@@ -5,6 +5,7 @@ import { renderToString } from "react-dom/server";
 import type { SubmitFunction } from "react-router";
 
 import { hentAktivitetBeskrivelse } from "~/components/aktivitet-checkbox/AktivitetCheckboxes";
+import { hentAktivitetOppsummeringTekst } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
 import {
   type ArbeidssokerstatusSide,
   hentArbeidssokerstatusInnhold,
@@ -33,8 +34,6 @@ import {
 import { DecoratorLocale } from "./dekoratoren.utils";
 import {
   hentPeriodeTekst,
-  hentTotaltArbeidstimerTekst,
-  hentTotaltFravaerTekstMedType,
   hentUkeTekst,
   nestePeriode,
   perioderSomKanSendes,
@@ -244,30 +243,22 @@ export function getKalender(props: IProps, showModal: boolean = true): string {
 }
 
 export function getOppsummering({
-  getAppText,
   periode,
+  nySanityTexts,
 }: {
-  getAppText: GetAppText;
+  getAppText?: GetAppText;
   periode: IRapporteringsperiode;
+  nySanityTexts?: MeldekortBrukerflateApiResponse;
 }): string {
-  const oppsummering = aktivitetType
-    .map((aktivitet) => {
-      let tekst = `${aktivitetTypeMap(aktivitet, getAppText)}: `;
-
-      if (aktivitet === "Arbeid") {
-        tekst += hentTotaltArbeidstimerTekst(periode, getAppText);
-      } else {
-        tekst += hentTotaltFravaerTekstMedType(periode, aktivitet, getAppText);
-      }
-
-      return `<p>${tekst}</p>`;
-    })
-    .join("");
+  const oppsummering = hentAktivitetOppsummeringTekst(
+    periode,
+    nySanityTexts?.meldekortdetaljer ?? undefined,
+  );
 
   return [
     "<div>",
-    getHeader({ text: getAppText("rapportering-oppsummering-tittel"), level: "4" }),
-    oppsummering,
+    getHeader({ text: oppsummering.tittel, level: "4" }),
+    oppsummering.rader.map((rad) => `<p>${rad.label}: ${rad.verdi}</p>`).join(""),
     "</div>",
   ].join("");
 }
@@ -468,7 +459,7 @@ export function htmlForFyllUt(props: IProps): string {
     getHeader({ text: getAppText(tittel), level: "2" }),
     renderToString(<PortableText value={getRichText(beskrivelse)} />),
     getKalender(props),
-    getOppsummering({ getAppText, periode }),
+    getOppsummering({ getAppText, periode, nySanityTexts: props.nySanityTexts }),
   ];
 
   if (periode.originalId) {
@@ -591,7 +582,7 @@ export function htmlForOppsummering(props: IProps): string {
     getHeader({ text: getAppText("rapportering-send-inn-periode-tittel"), level: "3" }),
     `<p>${invaerendePeriodeTekst}</p>`,
     getKalender(props, false),
-    getOppsummering({ getAppText, periode }),
+    getOppsummering({ getAppText, periode, nySanityTexts }),
   ];
 
   if (periode.originalId) {

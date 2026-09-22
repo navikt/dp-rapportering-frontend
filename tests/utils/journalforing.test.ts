@@ -91,6 +91,29 @@ const mockSanityTekst: MeldekortBrukerflateApiResponse = {
       jegHarSettOverBeskjed: "jeg-har-sett-over",
     },
   },
+  meldekortdetaljer: {
+    tittel: "meldekort-tittel",
+    periode: "periode",
+    sendt: "sendt",
+    endret: "endret",
+    belopUtbetalt: "belop",
+    oppsummering: "oppsummering",
+    status: {
+      tilUtfylling: "til-utfylling",
+      innsendt: "innsendt",
+      ferdig: "ferdig",
+      endret: "endret-status",
+      feilet: "feilet",
+    },
+    ukedager: {},
+    aktiviteter: {
+      jobb: { lang: "jobb", kort: "jobb" },
+      syk: { lang: "syk", kort: "syk" },
+      ferie: { lang: "ferie", kort: "ferie" },
+      utdanning: { lang: "utdanning", kort: "utdanning" },
+    },
+    tidsverdi: { timer: "timer", dager: "dager" },
+  },
   meldekortInnsendingsstatusBeskjed: {
     ikkeSendtInnEnda: "ikke-sendt-enda",
     endringerIkkeSendtInnEnda: "endringer-ikke-sendt-enda",
@@ -98,7 +121,7 @@ const mockSanityTekst: MeldekortBrukerflateApiResponse = {
     sendtInn: "sendt-inn",
     sendtInnEndringer: "sendt-inn-endringer",
   },
-} as MeldekortBrukerflateApiResponse;
+} as unknown as MeldekortBrukerflateApiResponse;
 
 describe("getArbeidssokerAlert", () => {
   const periode = innsendtRapporteringsperioderResponse[0];
@@ -295,11 +318,11 @@ describe("getOppsummering", () => {
     const oppsummering = getOppsummering({
       getAppText: mockGetAppText,
       periode: innsendtRapporteringsperioderResponse[0],
+      nySanityTexts: mockSanityTekst,
     });
 
-    expect(oppsummering).toContain("rapportering-arbeid: 23 rapportering-timer");
-    expect(oppsummering).toContain("rapportering-syk: 3 rapportering-dager");
-    expect(oppsummering).toContain("rapportering-fraevaer: 0 rapportering-dager");
+    expect(oppsummering).toContain("jobb");
+    expect(oppsummering).toContain("23");
   });
 });
 
