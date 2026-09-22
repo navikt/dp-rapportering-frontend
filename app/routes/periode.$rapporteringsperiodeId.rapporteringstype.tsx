@@ -6,7 +6,7 @@ import { PortableText } from "@portabletext/react";
 import { addDays } from "date-fns";
 import { useCallback, useEffect, useMemo } from "react";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { useFetcher, useLoaderData, useNavigate } from "react-router";
+import { useFetcher, useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { uuidv7 } from "uuidv7";
 
 import { MeldekortKanIkkeSendesBeskjed } from "~/components/beskjeder/MeldekortKanIkkeSendesBeskjed";
@@ -85,7 +85,8 @@ export default function RapporteringstypeSide() {
   const steg = 1;
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
-  const slettAlleAktiviteterFetcher = useFetcher();
+  const slettAlleAktiviteterFetcher = useFetcher<{ status: "success" | "error" }>();
+  const { revalidate } = useRevalidator();
   const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
   const [harTrykketNeste, trySetHarTrykketNeste] = usePreventDoubleClick();
 
@@ -124,17 +125,19 @@ export default function RapporteringstypeSide() {
   const neste = async () => {
     if (!trySetHarTrykketNeste()) return;
 
-    if (
-      periode.rapporteringstype === Rapporteringstype.harIngenAktivitet &&
-      harAktiviteter(periode)
-    ) {
+    const skalSletteAktiviteter =
+      periode.rapporteringstype === Rapporteringstype.harIngenAktivitet && harAktiviteter(periode);
+
+    if (skalSletteAktiviteter) {
       slettAlleAktiviteterFetcher.submit(
         {
           rapporteringsperiodeId: periode.id,
         },
         { method: "delete", action: "/api/slett-alle-aktiviteter" },
       );
+      return;
     }
+
     trackSkjemaStegFullført({
       periode,
       stegnavn,
@@ -144,6 +147,31 @@ export default function RapporteringstypeSide() {
 
     navigate(nesteSide(periode));
   };
+
+  useEffect(() => {
+    if (slettAlleAktiviteterFetcher.data?.status !== "success") {
+      return;
+    }
+
+    void revalidate().then(() => {
+      trackSkjemaStegFullført({
+        periode,
+        stegnavn,
+        steg,
+        sesjonId,
+      });
+
+      navigate(nesteSide(periode));
+    });
+  }, [
+    navigate,
+    periode,
+    revalidate,
+    sesjonId,
+    slettAlleAktiviteterFetcher.data?.status,
+    stegnavn,
+    steg,
+  ]);
 
   useEffect(() => {
     trackSkjemaStegStartet({
