@@ -16,10 +16,13 @@ import styles from "./meldekortDetaljer.module.css";
 
 interface ReviewDetaljerProps {
   periode: IRapporteringsperiode;
-  visArbeidssokerSvar?: boolean;
+  inkluderArbeidssokerstatusSvar?: boolean;
 }
 
-export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: ReviewDetaljerProps) {
+export function MeldekortDetaljer({
+  periode,
+  inkluderArbeidssokerstatusSvar = false,
+}: ReviewDetaljerProps) {
   const { locale } = useLocale();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const utfylling = rootData?.sanityTekst?.utfylling;
@@ -51,7 +54,10 @@ export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: Revi
       formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
     );
 
-  const visArbeidssokerStatus = visArbeidssokerSvar && !!arbeidssokerStatusSvarTekst;
+  const skalViseArbeidssokerstatusSvar =
+    inkluderArbeidssokerstatusSvar &&
+    !rootData?.disableSpm5 &&
+    periode.registrertArbeidssoker !== null;
   const begrunnelse = periode.begrunnelseEndring;
   const svarPrefiks = sanityTekst(
     arbeidssokerstatusSporsmaal?.svarPrefiks,
@@ -69,7 +75,7 @@ export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: Revi
         <AktivitetOppsummering periode={periode} />
       </div>
 
-      {visArbeidssokerStatus && (
+      {skalViseArbeidssokerstatusSvar && (
         <>
           <div className={rootStyles.textWrapper}>
             <Heading size="xsmall" level="3">

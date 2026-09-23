@@ -181,7 +181,7 @@ export default function RapporteringsPeriodeSendInnSide() {
         />
       </div>
 
-      <MeldekortDetaljer periode={periode} visArbeidssokerSvar />
+      <MeldekortDetaljer periode={periode} inkluderArbeidssokerstatusSvar />
 
       <Checkbox
         disabled={!kanSendes(periode)}
