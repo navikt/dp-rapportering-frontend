@@ -119,5 +119,5 @@ describe("RapporteringstypeSide", () => {
 const bekreftAktivitet = (label: string, antall: RegExp) => {
   const element = screen.getByText(label, { exact: true });
   expect(element).toBeInTheDocument();
-  expect(screen.getAllByText(antall).length).toBeGreaterThan(0);
+  expect(element.nextElementSibling).toHaveTextContent(antall);
 };

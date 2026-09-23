@@ -8,7 +8,7 @@ import { useLocale } from "~/hooks/useLocale";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
 import { formaterDato } from "~/utils/dato.utils";
-import { nestePeriode } from "~/utils/periode.utils";
+import { nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { sanityTekst } from "~/utils/sanity.utils";
 
 import rootStyles from "../../styles/root.module.css";
@@ -45,13 +45,18 @@ export function MeldekortDetaljer({ periode, visArbeidssokerSvar = false }: Revi
     arbeidssokerstatusSporsmaal?.tittel,
     "utfylling.arbeidssokerstatusSporsmaal.tittel",
   )
-    .replaceAll("{{fom}}", formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }))
+    .replaceAll("{{fom}}", formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat, locale }))
     .replaceAll(
       "{{tom}}",
-      formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
+      formaterDato({
+        dato: nesteMeldeperiode.tilOgMed,
+        dateFormat: "d. MMMM yyyy",
+        locale,
+      }),
     );
 
-  const visArbeidssokerStatus = visArbeidssokerSvar && !!arbeidssokerStatusSvarTekst;
+  const visArbeidssokerStatus =
+    visArbeidssokerSvar && skalHaArbeidssokerSporsmal(periode) && !!arbeidssokerStatusSvarTekst;
   const begrunnelse = periode.begrunnelseEndring;
   const svarPrefiks = sanityTekst(
     arbeidssokerstatusSporsmaal?.svarPrefiks,

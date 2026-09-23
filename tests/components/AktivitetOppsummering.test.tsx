@@ -40,7 +40,7 @@ const renderAktivitetOppsummering = async (periode: IRapporteringsperiode) => {
 const bekreftAktivitet = (label: RegExp, antall: RegExp) => {
   const element = screen.getByText(label);
   expect(element).toBeInTheDocument();
-  expect(screen.getAllByText(antall).length).toBeGreaterThan(0);
+  expect(element.nextElementSibling).toHaveTextContent(antall);
 };
 
 describe("<AktivitetOppsummering/>", () => {

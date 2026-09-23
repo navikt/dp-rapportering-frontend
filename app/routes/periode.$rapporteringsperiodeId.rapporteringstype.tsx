@@ -4,7 +4,7 @@ import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyShort, Button, Heading, InfoCard, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { addDays } from "date-fns";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { useFetcher, useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { uuidv7 } from "uuidv7";
@@ -89,6 +89,7 @@ export default function RapporteringstypeSide() {
   const { revalidate } = useRevalidator();
   const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
   const [harTrykketNeste, trySetHarTrykketNeste, resetHarTrykketNeste] = usePreventDoubleClick();
+  const slettingBehandlet = useRef(false);
 
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
@@ -150,13 +151,21 @@ export default function RapporteringstypeSide() {
 
   useEffect(() => {
     if (slettAlleAktiviteterFetcher.data?.status === "error") {
+      slettingBehandlet.current = false;
       resetHarTrykketNeste();
       return;
     }
 
     if (slettAlleAktiviteterFetcher.data?.status !== "success") {
+      slettingBehandlet.current = false;
       return;
     }
+
+    if (slettingBehandlet.current) {
+      return;
+    }
+
+    slettingBehandlet.current = true;
 
     void revalidate().then(() => {
       trackSkjemaStegFullført({

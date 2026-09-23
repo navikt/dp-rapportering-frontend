@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigation } from "react-router";
 
 /**
@@ -23,5 +23,7 @@ export function usePreventDoubleClick(): [boolean, () => boolean, () => void] {
     return true;
   }
 
-  return [harTrykket, trySetHarTrykket, () => setHarTrykket(false)];
+  const resetHarTrykket = useCallback(() => setHarTrykket(false), []);
+
+  return [harTrykket, trySetHarTrykket, resetHarTrykket];
 }

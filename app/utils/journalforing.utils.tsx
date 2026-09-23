@@ -610,10 +610,17 @@ export function htmlForOppsummering(props: IProps): string {
         arbeidssokerstatusSporsmaal?.tittel,
         "utfylling.arbeidssokerstatusSporsmaal.tittel",
       )
-        .replaceAll("{{fom}}", formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }))
+        .replaceAll(
+          "{{fom}}",
+          formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat, locale }),
+        )
         .replaceAll(
           "{{tom}}",
-          formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
+          formaterDato({
+            dato: nesteMeldeperiode.tilOgMed,
+            dateFormat: "d. MMMM yyyy",
+            locale,
+          }),
         );
       const arbeidssokerSvar =
         periode.registrertArbeidssoker === null
