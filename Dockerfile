@@ -1,6 +1,6 @@
 FROM node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1 AS node
 RUN corepack enable
-RUN corepack prepare pnpm@12.4.1 --activate
+RUN corepack prepare pnpm@12.5.1 --activate
 RUN pnpm config set @navikt:registry=https://npm.pkg.github.com
 
 
