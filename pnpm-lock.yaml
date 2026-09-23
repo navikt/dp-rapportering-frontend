@@ -239,8 +239,8 @@ importers:
         specifier: 5.2.1
         version: 5.2.1(supports-color@5.5.0)
       groq:
-        specifier: 6.13.2
-        version: 6.13.2
+        specifier: 6.14.0
+        version: 6.14.0
       html-react-parser:
         specifier: 6.1.7
         version: 6.1.7(@types/react@19.3.0)(react@19.3.0)
@@ -2315,8 +2315,8 @@ packages:
     resolution: {integrity: sha512-Chq1s4CY7jmh8gO2qvLIJyfCDIN+EHLFW/9iShnp1z8FjBQMoodWP1kDC36VAMXXIvAjj4ARa7ntfAV2BrjsbA==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
-  groq@6.13.2:
-    resolution: {integrity: sha512-Lf30nxKFCt6bfpQYLQQxn3OJVWRbKTuyIElskHiw/c9G44oX0rimGjh4EbDuodVplXwWDy2aPSmZCvRs6aZvlQ==}
+  groq@6.14.0:
+    resolution: {integrity: sha512-Z4a/umlSgYkbwInKhBwzry2M9H8aGeo5LXDkiHwBPwdQyzICrK+ILbz+8vaaPxJnKEi8dpJY6ZMbkWljBZmrZw==}
     engines: {node: '>=22.12'}
 
   has-bigints@1.1.0:
@@ -6075,7 +6075,7 @@ snapshots:
 
   graphql@16.14.2: {}
 
-  groq@6.13.2: {}
+  groq@6.14.0: {}
 
   has-bigints@1.1.0: {}
 
