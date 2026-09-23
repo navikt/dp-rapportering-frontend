@@ -86,14 +86,6 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const basePath = process.env.BASE_PATH;
-  const requestUrl = new URL(request.url);
-
-  if (basePath && requestUrl.pathname === basePath) {
-    requestUrl.pathname = `${basePath}/`;
-    throw redirect(requestUrl.toString());
-  }
-
   const locale: DecoratorLocale = (await getLanguage(request)) as DecoratorLocale;
   const dekorator = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
 
