@@ -46,6 +46,7 @@ export function InnsendingsStatusBeskjed({
 }: IProps): JSX.Element | undefined {
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const sendestatusBeskjed = rootData?.sanityTekst?.meldekortInnsendingsstatusBeskjed;
+  const meldekortKanSendes = kanSendes(periode);
 
   if (visSendtInnBeskjed) {
     const status = endring ? "sendtInnEndringer" : "sendtInn";
@@ -60,11 +61,11 @@ export function InnsendingsStatusBeskjed({
     );
   }
 
-  if (kanSendes(periode)) {
-    if (!visMeldekortetErIkkeSendtInnBeskjed) {
-      return undefined;
-    }
+  if (meldekortKanSendes && !visMeldekortetErIkkeSendtInnBeskjed) {
+    return undefined;
+  }
 
+  if (meldekortKanSendes) {
     const status = endring ? "endringerIkkeSendtInnEnda" : "ikkeSendtInnEnda";
     const { tekst, felt } = hentInnsendingsStatusInnhold(status, sendestatusBeskjed);
 
