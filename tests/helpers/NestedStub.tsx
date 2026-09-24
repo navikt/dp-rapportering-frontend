@@ -50,7 +50,7 @@ export const withNestedRapporteringsperiode = ({
             sendt: "Sendt",
             endret: "Endret",
             belopUtbetalt: "Beløp utbetalt",
-            oppsummering: "rapportering-oppsummering-tittel",
+            oppsummering: "Oppsummering",
             status: {
               tilUtfylling: "Til utfylling",
               innsendt: "Innsendt",
@@ -68,12 +68,12 @@ export const withNestedRapporteringsperiode = ({
               sondag: { kort: "søn", lang: "søndag" },
             },
             aktiviteter: {
-              jobb: { kort: "jobb", lang: "rapportering-arbeid" },
-              syk: { kort: "syk", lang: "rapportering-syk" },
-              ferie: { kort: "ferie", lang: "rapportering-fraevaer" },
-              utdanning: { kort: "utdanning", lang: "rapportering-utdanning" },
+              jobb: { kort: "jobb", lang: "Jobb" },
+              syk: { kort: "syk", lang: "Syk" },
+              ferie: { kort: "ferie", lang: "Ferie" },
+              utdanning: { kort: "utdanning", lang: "Utdanning" },
             },
-            tidsverdi: { timer: "rapportering-time", dager: "rapportering-dag" },
+            tidsverdi: { timer: "timer", dager: "dager" },
           },
           meldekortInnsendingsstatusBeskjed: {
             ikkeSendtInnEnda: "Meldekortet er ikke sendt inn enda",

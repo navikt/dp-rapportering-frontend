@@ -50,6 +50,7 @@ interface IProps {
   periode: IRapporteringsperiode | null;
   rapporteringsperioder: IRapporteringsperiode[];
   nySanityTexts?: MeldekortBrukerflateApiResponse;
+  disableSpm5?: boolean;
 }
 
 interface IUseAddHtml extends IProps {
@@ -63,6 +64,7 @@ export function useAddHtml({
   getAppText,
   getRichText,
   nySanityTexts,
+  disableSpm5,
   submit,
   locale,
 }: IUseAddHtml) {
@@ -78,6 +80,7 @@ export function useAddHtml({
       getRichText,
       locale,
       nySanityTexts,
+      disableSpm5,
     );
     formData.set("_html", html);
     formData.set("_action", "send-inn");
@@ -607,7 +610,7 @@ export function htmlForOppsummering(props: IProps): string {
     seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
     seksjoner.push(`<p>${periode.begrunnelseEndring}</p>`);
   } else {
-    if (skalHaArbeidssokerSporsmal(periode)) {
+    if (!props.disableSpm5 && skalHaArbeidssokerSporsmal(periode)) {
       const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
       const nesteMeldeperiode = nestePeriode(periode.periode);
       const dateFormat =
@@ -676,6 +679,7 @@ export function samleHtmlForPeriode(
   getRichText: GetRichText,
   locale: DecoratorLocale,
   nySanityTexts?: MeldekortBrukerflateApiResponse,
+  disableSpm5?: boolean,
 ): string {
   const pages: string[] = [];
 
@@ -684,7 +688,15 @@ export function samleHtmlForPeriode(
 
     fns.forEach((fn) =>
       pages.push(
-        fn({ periode, getAppText, getRichText, locale, rapporteringsperioder, nySanityTexts }),
+        fn({
+          periode,
+          getAppText,
+          getRichText,
+          locale,
+          rapporteringsperioder,
+          nySanityTexts,
+          disableSpm5,
+        }),
       ),
     );
   } else {
@@ -700,7 +712,7 @@ export function samleHtmlForPeriode(
       fns.push(htmlForTom);
     }
 
-    if (skalHaArbeidssokerSporsmal(periode)) {
+    if (!disableSpm5 && skalHaArbeidssokerSporsmal(periode)) {
       fns.push(htmlForArbeidssoker);
     }
 
@@ -708,7 +720,15 @@ export function samleHtmlForPeriode(
 
     fns.forEach((fn) =>
       pages.push(
-        fn({ periode, getAppText, getRichText, locale, rapporteringsperioder, nySanityTexts }),
+        fn({
+          periode,
+          getAppText,
+          getRichText,
+          locale,
+          rapporteringsperioder,
+          nySanityTexts,
+          disableSpm5,
+        }),
       ),
     );
   }
