@@ -644,7 +644,9 @@ export function htmlForOppsummering(props: IProps): string {
         )} ${arbeidssokerSvar}</p>`,
       );
     }
-    seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
+    if (!props.disableSpm5 && skalHaArbeidssokerSporsmal(periode)) {
+      seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
+    }
   }
 
   if (periode.originalId) {
