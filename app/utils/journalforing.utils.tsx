@@ -261,7 +261,7 @@ export function getOppsummering({
   return [
     "<div>",
     getHeader({ text: oppsummering.tittel, level: "4" }),
-    oppsummering.rader.map((rad) => `<p>${rad.label}: ${rad.verdi}</p>`).join(""),
+    `<dl>${oppsummering.rader.map((rad) => `<dt>${rad.label}</dt><dd>${rad.verdi}</dd>`).join("")}</dl>`,
     "</div>",
   ].join("");
 }
