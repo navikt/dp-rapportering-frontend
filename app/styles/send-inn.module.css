@@ -1,3 +1,9 @@
 .feilmelding {
   margin-top: var(--ax-space-40);
 }
+
+.formContentWrapper{
+  display: flex;
+  flex-direction: column;
+  gap: var(--ax-space-16);
+}

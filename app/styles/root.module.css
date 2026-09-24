@@ -9,12 +9,25 @@
 .buttonsContainerRow {
   display: flex;
   gap: var(--ax-space-12);
+  width: 100%;
   align-self: stretch;
   justify-content: center;
 }
+
+
 
 @media screen and (max-width: 767px) {
   .buttonsContainerRow {
     justify-content: space-between;
   }
+
+  .buttonsContainerRow > button {
+  flex: 1 1 0;
+}
+}
+
+.textWrapper {
+  gap: var(--ax-space-8);
+  display: flex;
+  flex-direction: column;
 }

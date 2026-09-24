@@ -3,7 +3,7 @@ import { Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useNavigate } from "react-router";
 
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { ReactLink } from "~/components/ReactLink";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
@@ -18,7 +18,7 @@ export default function TomRapporteringsPeriodeSide() {
 
   return (
     <>
-      <KanIkkeSendes periode={periode} />
+      <InnsendingsStatusBeskjed periode={periode} />
 
       <Alert variant="info" className="alert-with-rich-text">
         <Heading spacing size="small" level="3">

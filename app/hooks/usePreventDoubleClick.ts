@@ -5,7 +5,7 @@ import { useNavigation } from "react-router";
  * En hook som beskytter mot dobbeltklikk på knapper,
  * og resetter automatisk når navigering er ferdig.
  */
-export function usePreventDoubleClick(): [boolean, () => boolean] {
+export function usePreventDoubleClick(): [boolean, () => boolean, () => void] {
   const [harTrykket, setHarTrykket] = useState(false);
   const navigation = useNavigation();
 
@@ -23,5 +23,5 @@ export function usePreventDoubleClick(): [boolean, () => boolean] {
     return true;
   }
 
-  return [harTrykket, trySetHarTrykket];
+  return [harTrykket, trySetHarTrykket, () => setHarTrykket(false)];
 }

@@ -6,11 +6,11 @@ import { PortableText } from "@portabletext/react";
 import { addDays } from "date-fns";
 import { useCallback, useEffect, useMemo } from "react";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { useFetcher, useLoaderData, useNavigate } from "react-router";
+import { useFetcher, useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { uuidv7 } from "uuidv7";
 
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { Error } from "~/components/error/Error";
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LesMer } from "~/components/LesMer";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
@@ -30,7 +30,7 @@ import {
   perioderSomKanSendes,
   skalHaArbeidssokerSporsmal,
 } from "~/utils/periode.utils";
-import { Rapporteringstype, TIDSSONER } from "~/utils/types";
+import { INetworkResponse, Rapporteringstype, TIDSSONER } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import styles from "../styles/rapporteringstype.module.css";
@@ -85,9 +85,10 @@ export default function RapporteringstypeSide() {
   const steg = 1;
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
-  const slettAlleAktiviteterFetcher = useFetcher();
+  const slettAlleAktiviteterFetcher = useFetcher<INetworkResponse>();
+  const { revalidate } = useRevalidator();
   const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
-  const [harTrykketNeste, trySetHarTrykketNeste] = usePreventDoubleClick();
+  const [harTrykketNeste, trySetHarTrykketNeste, resetHarTrykketNeste] = usePreventDoubleClick();
 
   const antallPerioder = perioderSomKanSendes(rapporteringsperioder).length;
   const harFlerePerioder = antallPerioder > 1;
@@ -124,17 +125,19 @@ export default function RapporteringstypeSide() {
   const neste = async () => {
     if (!trySetHarTrykketNeste()) return;
 
-    if (
-      periode.rapporteringstype === Rapporteringstype.harIngenAktivitet &&
-      harAktiviteter(periode)
-    ) {
+    const skalSletteAktiviteter =
+      periode.rapporteringstype === Rapporteringstype.harIngenAktivitet && harAktiviteter(periode);
+
+    if (skalSletteAktiviteter) {
       slettAlleAktiviteterFetcher.submit(
         {
           rapporteringsperiodeId: periode.id,
         },
         { method: "delete", action: "/api/slett-alle-aktiviteter" },
       );
+      return;
     }
+
     trackSkjemaStegFullført({
       periode,
       stegnavn,
@@ -144,6 +147,37 @@ export default function RapporteringstypeSide() {
 
     navigate(nesteSide(periode));
   };
+
+  useEffect(() => {
+    if (slettAlleAktiviteterFetcher.data?.status === "error") {
+      resetHarTrykketNeste();
+      return;
+    }
+
+    if (slettAlleAktiviteterFetcher.data?.status !== "success") {
+      return;
+    }
+
+    void revalidate().then(() => {
+      trackSkjemaStegFullført({
+        periode,
+        stegnavn,
+        steg,
+        sesjonId,
+      });
+
+      navigate(nesteSide(periode));
+    });
+  }, [
+    navigate,
+    periode,
+    revalidate,
+    resetHarTrykketNeste,
+    sesjonId,
+    slettAlleAktiviteterFetcher.data?.status,
+    stegnavn,
+    steg,
+  ]);
 
   useEffect(() => {
     trackSkjemaStegStartet({
@@ -156,7 +190,7 @@ export default function RapporteringstypeSide() {
 
   return (
     <>
-      <KanIkkeSendes periode={periode} />
+      <InnsendingsStatusBeskjed periode={periode} />
 
       {harFlerePerioder && (
         <InfoCard data-color="info" className="my-8">
@@ -208,6 +242,9 @@ export default function RapporteringstypeSide() {
 
       {rapporteringstypeFetcher.data?.status === "error" && (
         <Error title={getAppText(rapporteringstypeFetcher.data.error.statusText)} />
+      )}
+      {slettAlleAktiviteterFetcher.data?.status === "error" && (
+        <Error title={getAppText(slettAlleAktiviteterFetcher.data.error.statusText)} />
       )}
       <div className={rootStyles.buttonsContainerRow}>
         <Button

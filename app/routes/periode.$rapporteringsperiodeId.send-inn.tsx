@@ -1,6 +1,5 @@
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Alert, BodyShort, Button, Checkbox, Heading } from "@navikt/ds-react";
-import { PortableText } from "@portabletext/react";
+import { Alert, Button, Checkbox, Heading } from "@navikt/ds-react";
 import { useEffect, useMemo, useState } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { data, redirect } from "react-router";
@@ -10,17 +9,15 @@ import {
   useLoaderData,
   useNavigate,
   useNavigation,
-  useRevalidator,
   useRouteLoaderData,
   useSubmit,
 } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
-import { Kalender } from "~/components/kalender/Kalender";
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
+import { MeldekortDetaljer } from "~/components/meldekort-detaljert/MeldekortDetaljer";
+import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { useAnalytics } from "~/hooks/useAnalytics";
 import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
@@ -32,10 +29,10 @@ import {
   sendInnPeriode,
 } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
-import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "~/utils/dato.utils";
 import { getCorrelationId } from "~/utils/fetch.utils";
 import { useAddHtml } from "~/utils/journalforing.utils";
 import { kanSendes } from "~/utils/periode.utils";
+import { sanityRichText, sanityTekst } from "~/utils/sanity.utils";
 import { IRapporteringsperiodeStatus } from "~/utils/types";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
@@ -100,8 +97,8 @@ export default function RapporteringsPeriodeSendInnSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
-
-  const revalidator = useRevalidator();
+  const seOver = rootData?.sanityTekst?.utfylling?.seOver;
+  const knapper = rootData?.sanityTekst?.knapper;
 
   const { trackSkjemaStegStartet, trackSkjemaStegFullført, trackSkjemaInnsendingFeilet } =
     useAnalytics();
@@ -124,21 +121,12 @@ export default function RapporteringsPeriodeSendInnSide() {
     getAppText,
     getRichText,
     nySanityTexts: rootData?.sanityTekst,
+    disableSpm5: rootData?.disableSpm5,
     submit,
     locale,
   });
 
-  let invaerendePeriodeTekst = "";
-
-  if (periode) {
-    const ukenummer = formaterPeriodeTilUkenummer(
-      periode.periode.fraOgMed,
-      periode.periode.tilOgMed,
-    );
-    const dato = formaterPeriodeDato(periode.periode.fraOgMed, periode.periode.tilOgMed, locale);
-
-    invaerendePeriodeTekst = `${getAppText("rapportering-uke")} ${ukenummer} (${dato})`;
-  }
+  const isSubmitDisabled = !periode.kanSendes || !confirmed || isSubmitting;
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     trackSkjemaStegFullført({
@@ -179,71 +167,60 @@ export default function RapporteringsPeriodeSendInnSide() {
     });
   }, []);
 
-  useEffect(() => {
-    revalidator.revalidate();
-  }, []);
+  const errorMessage = actionData?.error ? getAppText(actionData.error) : null;
 
   return (
-    <>
-      <Heading tabIndex={-1} level="2" size="medium" spacing className="vo-fokus">
-        {getAppText("rapportering-send-inn-tittel")}
-      </Heading>
-      {kanSendes(periode) ? (
-        <Alert role="status" variant="warning" className="my-4 alert-with-rich-text">
-          <PortableText value={getRichText("rapportering-meldekort-ikke-sendt-enda")} />
-        </Alert>
-      ) : (
-        <KanIkkeSendes periode={periode} />
-      )}
-      <PortableText value={getRichText("rapportering-send-inn-innhold")} />
-      <div className="my-4">
-        <Heading size="xsmall">{getAppText("rapportering-send-inn-periode-tittel")}</Heading>
-        <BodyShort size="small">{invaerendePeriodeTekst}</BodyShort>
-      </div>
-      <div className="oppsummering">
-        <Kalender periode={periode} readonly={true} locale={locale} aapneModal={() => {}} />
-        <AktivitetOppsummering periode={periode} />
+    <Form method="post" onSubmit={onSubmit} className={styles.formContentWrapper}>
+      <InnsendingsStatusBeskjed periode={periode} visMeldekortetErIkkeSendtInnBeskjed />
+
+      <div className={rootStyles.textWrapper}>
+        <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
+          {sanityTekst(seOver?.sidetittel, "utfylling.seOver.sidetittel")}
+        </Heading>
+        <PortableTextRenderer
+          value={sanityRichText(seOver?.beskrivelse, "utfylling.seOver.beskrivelse")}
+        />
       </div>
 
-      <ArbeidssokerstatusBeskjed periode={periode} side="bekreftelse" />
+      <MeldekortDetaljer periode={periode} inkluderArbeidssokerstatusSvar />
 
       <Checkbox
         disabled={!kanSendes(periode)}
         checked={confirmed}
         onChange={() => setConfirmed((prev) => !prev)}
       >
-        {getAppText("rapportering-send-inn-bekreft-opplysning")}
+        {sanityTekst(seOver?.jegHarSettOverBeskjed, "utfylling.seOver.jegHarSettOverBeskjed")}
       </Checkbox>
-      {actionData?.error && (
+
+      {errorMessage && (
         <Alert role="alert" variant="error" className={styles.feilmelding}>
-          {actionData.error}
+          {errorMessage}
         </Alert>
       )}
-      <Form method="post" onSubmit={onSubmit}>
-        <div className={rootStyles.buttonsContainerRow}>
-          <Button
-            onClick={() => navigate(-1)}
-            variant="secondary"
-            iconPosition="left"
-            icon={<ArrowLeftIcon aria-hidden />}
-          >
-            {getAppText("rapportering-knapp-tilbake")}
-          </Button>
 
-          <Button
-            type="submit"
-            variant="primary"
-            iconPosition="right"
-            disabled={!periode.kanSendes || !confirmed || isSubmitting}
-            name="_action"
-            value="send-inn"
-          >
-            {isSubmitting
-              ? getAppText("rapportering-periode-send-inn-bekreft-loading")
-              : getAppText("rapportering-periode-send-inn")}
-          </Button>
-        </div>
-      </Form>
-    </>
+      <div className={rootStyles.buttonsContainerRow}>
+        <Button
+          type="button"
+          onClick={() => navigate(-1)}
+          variant="secondary"
+          iconPosition="left"
+          icon={<ArrowLeftIcon aria-hidden />}
+        >
+          {knapper?.tilbake}
+        </Button>
+
+        <Button
+          type="submit"
+          variant="primary"
+          iconPosition="right"
+          loading={isSubmitting}
+          disabled={isSubmitDisabled}
+          name="_action"
+          value="send-inn"
+        >
+          {knapper?.sendInn}
+        </Button>
+      </div>
+    </Form>
   );
 }
