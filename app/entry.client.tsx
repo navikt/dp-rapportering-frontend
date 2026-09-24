@@ -33,9 +33,7 @@ function patchSingleFetchRootDataUrl() {
     const fixedUrl = new URL(url);
     fixedUrl.pathname = fixedPathname;
 
-    if (input instanceof Request) {
-      return originalFetch(new Request(fixedUrl, input));
-    }
+    return originalFetch(new Request(fixedUrl, new Request(input, init)));
 
     return originalFetch(fixedUrl, init);
   };
