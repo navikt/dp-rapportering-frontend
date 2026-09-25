@@ -20,6 +20,20 @@ type MeldekortdetaljerTekster = Pick<
   "oppsummering" | "aktiviteter" | "tidsverdi"
 >;
 
+const tidsverdiFelter = {
+  timer: {
+    singular: "timerSingular",
+    plural: "timerPlural",
+  },
+  dager: {
+    singular: "dagerSingular",
+    plural: "dagerPlural",
+  },
+} as const satisfies Record<
+  "timer" | "dager",
+  Record<"singular" | "plural", keyof NonNullable<MeldekortdetaljerTekster["tidsverdi"]>>
+>;
+
 export interface AktivitetOppsummeringTekst {
   tittel: string;
   rader: { label: string; verdi: string }[];
@@ -44,14 +58,9 @@ export function hentAktivitetOppsummeringTekst(
         type === AktivitetType.Arbeid
           ? antallTimer
           : hentTotaltDagerMedAktivitetstype(periode, type).toString();
-      const enhetsfelt =
-        type === AktivitetType.Arbeid
-          ? antall === "1"
-            ? "timerSingular"
-            : "timerPlural"
-          : antall === "1"
-            ? "dagerSingular"
-            : "dagerPlural";
+      const enhet = type === AktivitetType.Arbeid ? "timer" : "dager";
+      const antallsform = antall === "1" ? "singular" : "plural";
+      const enhetsfelt = tidsverdiFelter[enhet][antallsform];
 
       return {
         label: sanityTekst(
