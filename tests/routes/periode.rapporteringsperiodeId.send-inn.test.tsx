@@ -1,4 +1,4 @@
-import { act, screen, within } from "@testing-library/react";
+import { act, screen } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
@@ -70,10 +70,10 @@ describe("RapporteringstypeSide", () => {
       testKalender(rapporteringsperiode);
 
       // AktivitetOppsummering
-      bekreftAktivitet("rapportering-arbeid", /0 rapportering-time/);
-      bekreftAktivitet("rapportering-syk", /0 rapportering-dag/);
-      bekreftAktivitet("rapportering-fraevaer", /0 rapportering-dag/);
-      bekreftAktivitet("rapportering-utdanning", /0 rapportering-dag/);
+      bekreftAktivitet("Jobb", /0 timer/);
+      bekreftAktivitet("Syk", /0 dager/);
+      bekreftAktivitet("Ferie", /0 dager/);
+      bekreftAktivitet("Utdanning", /0 dager/);
     });
 
     test("Med aktiviteter", async () => {
@@ -108,10 +108,10 @@ describe("RapporteringstypeSide", () => {
 
       expect(await screen.findByText("Meldekortet er ikke sendt inn enda")).toBeInTheDocument();
 
-      bekreftAktivitet("rapportering-arbeid", /15.5 rapportering-time/);
-      bekreftAktivitet("rapportering-syk", /1 rapportering-dag/);
-      bekreftAktivitet("rapportering-fraevaer", /1 rapportering-dag/);
-      bekreftAktivitet("rapportering-utdanning", /1 rapportering-dag/);
+      bekreftAktivitet("Jobb", /15,5 timer/);
+      bekreftAktivitet("Syk", /1 dag/);
+      bekreftAktivitet("Ferie", /1 dag/);
+      bekreftAktivitet("Utdanning", /1 dag/);
     });
   });
 });
@@ -119,5 +119,5 @@ describe("RapporteringstypeSide", () => {
 const bekreftAktivitet = (label: string, antall: RegExp) => {
   const element = screen.getByText(label, { exact: true });
   expect(element).toBeInTheDocument();
-  expect(within(element).getByText(antall)).toBeInTheDocument();
+  expect(element.nextElementSibling).toHaveTextContent(antall);
 };
