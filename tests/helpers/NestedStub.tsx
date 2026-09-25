@@ -73,7 +73,12 @@ export const withNestedRapporteringsperiode = ({
               ferie: { kort: "ferie", lang: "Ferie" },
               utdanning: { kort: "utdanning", lang: "Utdanning" },
             },
-            tidsverdi: { timer: "timer", dager: "dager" },
+            tidsverdi: {
+              timerSingular: "time",
+              timerPlural: "timer",
+              dagerSingular: "dag",
+              dagerPlural: "dager",
+            },
           },
           meldekortInnsendingsstatusBeskjed: {
             ikkeSendtInnEnda: "Meldekortet er ikke sendt inn enda",

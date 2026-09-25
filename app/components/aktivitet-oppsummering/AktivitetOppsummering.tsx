@@ -44,7 +44,14 @@ export function hentAktivitetOppsummeringTekst(
         type === AktivitetType.Arbeid
           ? antallTimer
           : hentTotaltDagerMedAktivitetstype(periode, type).toString();
-      const enhetsfelt = type === AktivitetType.Arbeid ? "timer" : "dager";
+      const enhetsfelt =
+        type === AktivitetType.Arbeid
+          ? antall === "1"
+            ? "timerSingular"
+            : "timerPlural"
+          : antall === "1"
+            ? "dagerSingular"
+            : "dagerPlural";
 
       return {
         label: sanityTekst(

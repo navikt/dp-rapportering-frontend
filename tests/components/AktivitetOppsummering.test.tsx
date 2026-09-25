@@ -15,7 +15,12 @@ const meldekortdetaljer = {
     ferie: { lang: "Ferie", kort: "ferie" },
     utdanning: { lang: "Utdanning", kort: "utdanning" },
   },
-  tidsverdi: { timer: "timer", dager: "dager" },
+  tidsverdi: {
+    timerSingular: "time",
+    timerPlural: "timer",
+    dagerSingular: "dag",
+    dagerPlural: "dager",
+  },
 };
 
 const renderAktivitetOppsummering = async (periode: IRapporteringsperiode) => {
@@ -40,7 +45,7 @@ const renderAktivitetOppsummering = async (periode: IRapporteringsperiode) => {
 const bekreftAktivitet = (label: RegExp, antall: RegExp) => {
   const element = screen.getByText(label);
   expect(element).toBeInTheDocument();
-  expect(screen.getAllByText(antall).length).toBeGreaterThan(0);
+  expect(element.nextElementSibling).toHaveTextContent(antall);
 };
 
 describe("<AktivitetOppsummering/>", () => {
@@ -81,9 +86,9 @@ describe("<AktivitetOppsummering/>", () => {
     });
 
     test("Viser riktig antall dager", async () => {
-      await bekreftAktivitet(/Syk/, /1 dager/);
-      await bekreftAktivitet(/Ferie/, /1 dager/);
-      await bekreftAktivitet(/Utdanning/, /1 dager/);
+      await bekreftAktivitet(/Syk/, /1 dag/);
+      await bekreftAktivitet(/Ferie/, /1 dag/);
+      await bekreftAktivitet(/Utdanning/, /1 dag/);
     });
   });
 });

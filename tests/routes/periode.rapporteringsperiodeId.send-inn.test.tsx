@@ -109,9 +109,9 @@ describe("RapporteringstypeSide", () => {
       expect(await screen.findByText("Meldekortet er ikke sendt inn enda")).toBeInTheDocument();
 
       bekreftAktivitet("Jobb", /15,5 timer/);
-      bekreftAktivitet("Syk", /1 dager/);
-      bekreftAktivitet("Ferie", /1 dager/);
-      bekreftAktivitet("Utdanning", /1 dager/);
+      bekreftAktivitet("Syk", /1 dag/);
+      bekreftAktivitet("Ferie", /1 dag/);
+      bekreftAktivitet("Utdanning", /1 dag/);
     });
   });
 });
@@ -119,5 +119,5 @@ describe("RapporteringstypeSide", () => {
 const bekreftAktivitet = (label: string, antall: RegExp) => {
   const element = screen.getByText(label, { exact: true });
   expect(element).toBeInTheDocument();
-  expect(screen.getAllByText(antall).length).toBeGreaterThan(0);
+  expect(element.nextElementSibling).toHaveTextContent(antall);
 };

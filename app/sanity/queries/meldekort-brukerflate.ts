@@ -110,7 +110,10 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
             `"${activity}": {\n${fields(["kort", "lang"], `aktiviteter.${activity}`)}\n}`,
         )
         .join(",\n")}\n}`,
-      `"tidsverdi": {\n${fields(["timer", "dager"], "tidsverdi")}\n}`,
+      `"tidsverdi": {\n${fields(
+        ["timerSingular", "timerPlural", "dagerSingular", "dagerPlural"],
+        "tidsverdi",
+      )}\n}`,
     ].join(",\n"),
   )},
   "velkomstside": ${document(
@@ -266,8 +269,10 @@ export type MeldekortBrukerflateApiResponse = {
     ukedager: Record<string, { kort: MeldekortBrukerflateText; lang: MeldekortBrukerflateText }>;
     aktiviteter: Record<string, { kort: MeldekortBrukerflateText; lang: MeldekortBrukerflateText }>;
     tidsverdi: {
-      timer: MeldekortBrukerflateText;
-      dager: MeldekortBrukerflateText;
+      timerSingular: MeldekortBrukerflateText;
+      timerPlural: MeldekortBrukerflateText;
+      dagerSingular: MeldekortBrukerflateText;
+      dagerPlural: MeldekortBrukerflateText;
     };
   }>;
   velkomstside: MeldekortBrukerflateDocument<{
