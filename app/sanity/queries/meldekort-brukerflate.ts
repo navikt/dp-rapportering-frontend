@@ -19,6 +19,19 @@ const objectFields = (fieldName: string, fieldNames: string[]) =>
     .map((nestedField) => `"${nestedField}": ${localized(`${fieldName}.${nestedField}`)}`)
     .join(",\n")}\n}`;
 
+export const TIDSVERDI_FELTER = {
+  timer: {
+    singular: "timerSingular",
+    plural: "timerPlural",
+  },
+  dager: {
+    singular: "dagerSingular",
+    plural: "dagerPlural",
+  },
+} as const;
+
+const tidsverdiFeltnavn = Object.values(TIDSVERDI_FELTER).flatMap((enhet) => Object.values(enhet));
+
 export const MELDEKORT_BRUKERFLATE_DOCUMENT_IDS = {
   grunntekster: "meldekortBrukerflateGrunntekster",
   knapper: "meldekortBrukerflateKnapper",
@@ -110,10 +123,7 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
             `"${activity}": {\n${fields(["kort", "lang"], `aktiviteter.${activity}`)}\n}`,
         )
         .join(",\n")}\n}`,
-      `"tidsverdi": {\n${fields(
-        ["timerSingular", "timerPlural", "dagerSingular", "dagerPlural"],
-        "tidsverdi",
-      )}\n}`,
+      `"tidsverdi": {\n${fields(tidsverdiFeltnavn, "tidsverdi")}\n}`,
     ].join(",\n"),
   )},
   "velkomstside": ${document(

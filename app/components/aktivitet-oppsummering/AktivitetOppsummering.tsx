@@ -4,7 +4,10 @@ import { useRouteLoaderData } from "react-router";
 
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
-import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
+import {
+  type MeldekortBrukerflateApiResponse,
+  TIDSVERDI_FELTER,
+} from "~/sanity/queries/meldekort-brukerflate";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { hentTotaltArbeidstimer, hentTotaltDagerMedAktivitetstype } from "~/utils/periode.utils";
 import { sanityTekst } from "~/utils/sanity.utils";
@@ -18,20 +21,6 @@ interface IProps {
 type MeldekortdetaljerTekster = Pick<
   NonNullable<MeldekortBrukerflateApiResponse["meldekortdetaljer"]>,
   "oppsummering" | "aktiviteter" | "tidsverdi"
->;
-
-const tidsverdiFelter = {
-  timer: {
-    singular: "timerSingular",
-    plural: "timerPlural",
-  },
-  dager: {
-    singular: "dagerSingular",
-    plural: "dagerPlural",
-  },
-} as const satisfies Record<
-  "timer" | "dager",
-  Record<"singular" | "plural", keyof NonNullable<MeldekortdetaljerTekster["tidsverdi"]>>
 >;
 
 export interface AktivitetOppsummeringTekst {
@@ -60,7 +49,7 @@ export function hentAktivitetOppsummeringTekst(
           : hentTotaltDagerMedAktivitetstype(periode, type).toString();
       const enhet = type === AktivitetType.Arbeid ? "timer" : "dager";
       const antallsform = antall === "1" ? "singular" : "plural";
-      const enhetsfelt = tidsverdiFelter[enhet][antallsform];
+      const enhetsfelt = TIDSVERDI_FELTER[enhet][antallsform];
 
       return {
         label: sanityTekst(
