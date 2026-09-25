@@ -5,8 +5,8 @@ import { ActionFunctionArgs } from "react-router";
 import { useFetcher, useNavigate } from "react-router";
 import { uuidv7 } from "uuidv7";
 
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { Error } from "~/components/error/Error";
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
@@ -84,7 +84,7 @@ export default function BegrunnelseSide() {
 
   return (
     <>
-      <KanIkkeSendes periode={periode} />
+      <InnsendingsStatusBeskjed periode={periode} />
 
       <Select
         label={getAppText("rapportering-endring-begrunnelse-nedtrekksmeny-label")}

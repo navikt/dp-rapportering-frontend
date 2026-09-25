@@ -10,8 +10,8 @@ import { uuidv7 } from "uuidv7";
 import { validerOgLagreAktivitet } from "~/actions/aktivitet.action.server";
 import { AktivitetModal } from "~/components/aktivitet-modal/AktivitetModal";
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
+import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
 import { Kalender } from "~/components/kalender/Kalender";
-import { KanIkkeSendes } from "~/components/kan-ikke-sendes/KanIkkeSendes";
 import { LagretAutomatisk } from "~/components/LagretAutomatisk";
 import { LesMer } from "~/components/LesMer";
 import { useAnalytics } from "~/hooks/useAnalytics";
@@ -146,7 +146,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
 
   return (
     <>
-      <KanIkkeSendes periode={periode} />
+      <InnsendingsStatusBeskjed periode={periode} />
 
       <Heading tabIndex={-1} size="medium" level="2" className="vo-fokus">
         {getAppText("rapportering-periode-fyll-ut-tittel")}

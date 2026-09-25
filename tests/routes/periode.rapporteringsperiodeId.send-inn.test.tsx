@@ -63,10 +63,10 @@ describe("RapporteringstypeSide", () => {
         render();
       });
 
-      expect(await screen.findByText(/rapportering-meldekort-ikke-sendt-enda/)).toBeInTheDocument();
+      expect(await screen.findByText("Meldekortet er ikke sendt inn enda")).toBeInTheDocument();
 
-      expect(screen.getAllByText(/rapportering-uke 1 - 2/i)).toHaveLength(2);
-      expect(screen.getAllByText(/1. januar 2024 - 14. januar 2024/i)).toHaveLength(2);
+      expect(screen.getByText(/rapportering-uke 1 - 2/i)).toBeInTheDocument();
+      expect(screen.getByText(/1. januar 2024 - 14. januar 2024/i)).toBeInTheDocument();
       testKalender(rapporteringsperiode);
 
       // AktivitetOppsummering
@@ -106,7 +106,7 @@ describe("RapporteringstypeSide", () => {
         render();
       });
 
-      expect(await screen.findByText(/rapportering-meldekort-ikke-sendt-enda/)).toBeInTheDocument();
+      expect(await screen.findByText("Meldekortet er ikke sendt inn enda")).toBeInTheDocument();
 
       bekreftAktivitet("rapportering-arbeid", /15.5 rapportering-time/);
       bekreftAktivitet("rapportering-syk", /1 rapportering-dag/);

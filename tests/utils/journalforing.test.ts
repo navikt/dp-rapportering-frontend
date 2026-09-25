@@ -74,11 +74,29 @@ const mockSanityTekst: MeldekortBrukerflateApiResponse = {
     arbeidssokerstatusSporsmaal: {
       tittel: "arbeidssokerregister-tittel {{fom}} {{tom}}",
       beskrivelse: "arbeidssokerregister-subtittel",
+      svarPrefiks: "svar-prefiks",
       alternativer: {
         ja: "arbeidssokerregister-svar-ja",
         nei: "arbeidssokerregister-svar-nei",
       },
     },
+    begrunnelseForEndring: {
+      tittel: "begrunnelse-tittel",
+      beskrivelse: "begrunnelse-beskrivelse",
+      alternativer: "begrunnelse-alternativer",
+    },
+    seOver: {
+      sidetittel: "se-over-tittel",
+      beskrivelse: createSanityRichTextObject("se-over-beskrivelse"),
+      jegHarSettOverBeskjed: "jeg-har-sett-over",
+    },
+  },
+  meldekortInnsendingsstatusBeskjed: {
+    ikkeSendtInnEnda: "ikke-sendt-enda",
+    endringerIkkeSendtInnEnda: "endringer-ikke-sendt-enda",
+    kanIkkeSendesInn: "kan-ikke-sendes-inn",
+    sendtInn: "sendt-inn",
+    sendtInnEndringer: "sendt-inn-endringer",
   },
 } as MeldekortBrukerflateApiResponse;
 
@@ -499,20 +517,21 @@ describe("htmlForOppsummering", () => {
     },
     getAppText: mockGetAppText,
     getRichText: mockGetRichText,
+    nySanityTexts: mockSanityTekst,
     locale,
   });
 
   it("viser alert for endret meldekort", () => {
-    expect(endretMeldekort).toContain("rapportering-endring-ikke-sendt-enda");
+    expect(endretMeldekort).toContain("endringer-ikke-sendt-enda");
   });
 
   it("viser oppsummering for endret meldekort", () => {
-    expect(endretMeldekort).toContain("<h3>rapportering-endring-begrunnelse-tittel</h3>");
+    expect(endretMeldekort).toContain("<h3>begrunnelse-tittel</h3>");
     expect(endretMeldekort).toContain(`<p>${begrunnelseEndring}</p>`);
   });
 
   it("viser checkbox for å godta endret meldekort", () => {
-    expect(endretMeldekort).toContain("rapportering-endring-send-inn-bekreft-opplysning");
+    expect(endretMeldekort).toContain("jeg-har-sett-over");
   });
 
   const nyttMeldekort = htmlForOppsummering({
@@ -525,7 +544,7 @@ describe("htmlForOppsummering", () => {
   });
 
   it("viser alert for nytt meldekort", () => {
-    expect(nyttMeldekort).toContain("rapportering-meldekort-ikke-sendt-enda");
+    expect(nyttMeldekort).toContain("ikke-sendt-enda");
   });
 
   it("viser oppsummering for nytt meldekort", () => {

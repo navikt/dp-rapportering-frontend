@@ -16,6 +16,7 @@ const block: PortableTextComponents["block"] = {
       {children}
     </Heading>
   ),
+  p: ({ children }) => <BodyShort className={styles.paragraph}>{children}</BodyShort>,
   blockquote: ({ children }) => <blockquote>{children}</blockquote>,
 };
 

@@ -1,6 +1,6 @@
 import { Accordion } from "@navikt/ds-react";
 import { useEffect } from "react";
-import type { LoaderFunctionArgs } from "react-router";
+import type { LoaderFunctionArgs, ShouldRevalidateFunctionArgs } from "react-router";
 import { Outlet, useLoaderData, useLocation, useRouteError } from "react-router";
 import invariant from "tiny-invariant";
 
@@ -24,6 +24,23 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   redirectTilForsideHvisMeldekortIkkeKanFyllesUt(request, periode);
 
   return { periode };
+}
+
+export function shouldRevalidate({
+  currentParams,
+  formAction,
+  nextParams,
+  nextUrl,
+}: ShouldRevalidateFunctionArgs) {
+  const sammePeriode = currentParams.rapporteringsperiodeId === nextParams.rapporteringsperiodeId;
+  const erBekreftelseEtterInnsending =
+    formAction?.endsWith("/send-inn") && nextUrl.pathname.endsWith("/bekreftelse");
+
+  if (sammePeriode && erBekreftelseEtterInnsending) {
+    return false;
+  }
+
+  return true;
 }
 
 export default function RapporteringsPeriodeSide() {
