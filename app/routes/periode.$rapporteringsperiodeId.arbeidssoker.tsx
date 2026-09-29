@@ -15,20 +15,19 @@ import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import type { loader as RootLoader } from "~/root";
 import { formaterDato } from "~/utils/dato.utils";
-import { kanSendes, nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import {
+  kanSendes,
+  nestePeriode,
+  normaliserArbeidssokerSvar,
+  skalDeaktivereArbeidssokerstatusSporsmal,
+  skalHaArbeidssokerSporsmal,
+} from "~/utils/periode.utils";
 import { sanityTekst as visSanityTekst } from "~/utils/sanity.utils";
 import { INetworkResponse } from "~/utils/types";
-import { FEATURE_TOGGLES, isFeatureEnabled } from "~/utils/unleash.server";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import { Error } from "../components/error/Error";
 import rootStyles from "../styles/root.module.css";
-
-export async function loader() {
-  return {
-    disableSpm5: await isFeatureEnabled(FEATURE_TOGGLES.disableSpm5),
-  };
-}
 
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.rapporteringsperiodeId, "rapportering-feilmelding-periode-id-mangler-i-url");
@@ -37,10 +36,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const svar = formData.get("registrertArbeidssoker");
 
-  const registrertArbeidssoker = svar === "true";
+  if (svar !== "true" && svar !== "false") {
+    return lagreArbeidssokerSvar(request, rapporteringsperiodeId, {});
+  }
 
   return lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
-    registrertArbeidssoker,
+    registrertArbeidssoker: svar === "true",
   });
 }
 
@@ -49,6 +50,11 @@ export default function ArbeidssøkerRegisterSide() {
   const { getAppText } = useSanity();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const sanityTekst = rootData?.sanityTekst;
+  const arbeidssokerSvar = normaliserArbeidssokerSvar(periode);
+  const deaktivertPaaGrunnAvAarsak = skalDeaktivereArbeidssokerstatusSporsmal(
+    periode,
+    rootData?.disableSpm5,
+  );
   const navigate = useNavigate();
   const fetcher = useFetcher<INetworkResponse>();
   const isSubmitting = useIsSubmitting(fetcher);
@@ -64,10 +70,15 @@ export default function ArbeidssøkerRegisterSide() {
       ? "d. MMMM yyyy"
       : "d. MMMM";
   const arbeidssokerstatusSporsmaal = sanityTekst?.utfylling?.arbeidssokerstatusSporsmaal;
-  const fom = formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat });
+  const fom = formaterDato({
+    dato: nesteMeldeperiode.fraOgMed,
+    dateFormat,
+    locale: rootData?.locale,
+  });
   const tom = formaterDato({
     dato: nesteMeldeperiode.tilOgMed,
     dateFormat: "d. MMMM yyyy",
+    locale: rootData?.locale,
   });
   const arbeidssokerTittel = arbeidssokerstatusSporsmaal?.tittel
     ?.replaceAll("{{fom}}", fom)
@@ -111,7 +122,12 @@ export default function ArbeidssøkerRegisterSide() {
 
       <fetcher.Form method="post">
         <RadioGroup
-          disabled={!kanSendes(periode) || !skalHaArbeidssokerSporsmal(periode) || isSubmitting}
+          disabled={
+            !kanSendes(periode) ||
+            !skalHaArbeidssokerSporsmal(periode, rootData?.disableSpm5) ||
+            deaktivertPaaGrunnAvAarsak ||
+            isSubmitting
+          }
           legend={visSanityTekst(
             arbeidssokerTittel,
             "utfylling.arbeidssokerstatusSporsmaal.tittel",
@@ -122,12 +138,12 @@ export default function ArbeidssøkerRegisterSide() {
           )}
           onChange={handleChange}
           name="_action"
-          value={periode.registrertArbeidssoker}
+          value={arbeidssokerSvar}
         >
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={true}
-            checked={periode.registrertArbeidssoker === true}
+            checked={arbeidssokerSvar === true}
           >
             {visSanityTekst(
               arbeidssokerstatusSporsmaal?.alternativer.ja,
@@ -137,7 +153,7 @@ export default function ArbeidssøkerRegisterSide() {
           <Radio
             name="erRegistrertSomArbeidssoker"
             value={false}
-            checked={periode.registrertArbeidssoker === false}
+            checked={arbeidssokerSvar === false}
           >
             {visSanityTekst(
               arbeidssokerstatusSporsmaal?.alternativer.nei,
@@ -168,7 +184,7 @@ export default function ArbeidssøkerRegisterSide() {
           variant="primary"
           iconPosition="right"
           icon={<ArrowRightIcon aria-hidden />}
-          disabled={periode.registrertArbeidssoker === null || isSubmitting}
+          disabled={(arbeidssokerSvar === null && !deaktivertPaaGrunnAvAarsak) || isSubmitting}
           onClick={neste}
         >
           {visSanityTekst(sanityTekst?.knapper?.neste, "knapper.neste")}

@@ -26,7 +26,7 @@ import {
   htmlForTom,
   samleHtmlForPeriode,
 } from "~/utils/journalforing.utils";
-import { KortType, Rapporteringstype } from "~/utils/types";
+import { ARBEIDSSOKERSTATUS_AARSAK, KortType, Rapporteringstype } from "~/utils/types";
 
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 
@@ -50,10 +50,8 @@ const mockSanityTekst: MeldekortBrukerflateApiResponse = {
       lang: createSanityRichTextObject("du-vil-bli-avregistrert-lang"),
       kort: createSanityRichTextObject("du-vil-bli-avregistrert-kort"),
     },
-    duSkalIkkeSvarePaSporsmaal: createSanityRichTextObject("du-skal-ikke-svare"),
-    fraArena: createSanityRichTextObject("fra-arena"),
-    utenArbeidssokerSporsmaal: createSanityRichTextObject("uten-arbeidssoker-sporsmaal"),
-    etterregistrert: createSanityRichTextObject("etterregistrert"),
+    viHarIkkeAnsvar: createSanityRichTextObject("vi-har-ikke-ansvar"),
+    periodenErGammel: createSanityRichTextObject("perioden-er-gammel"),
   },
   velkomstside: {
     velkomstTekst: createSanityRichTextObject("velkomst-tekst"),
@@ -527,6 +525,46 @@ describe("htmlForArbeidssoker", () => {
   it("viser at bruker skal avregistreres som arbeidssøker", () => {
     expect(html2).toContain("checked /><label>arbeidssokerregister-svar-nei");
   });
+
+  it("journalfører nytt payloadsvar som valgt radio", () => {
+    const html = htmlForArbeidssoker({
+      rapporteringsperioder: [],
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        registrertArbeidssoker: { svar: false, aarsak: null },
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: mockSanityTekst,
+      locale,
+      skalAktivereSpm5Feature: true,
+    });
+
+    expect(html).toContain("checked /><label>arbeidssokerregister-svar-nei");
+  });
+
+  it("journalfører låst spørsmål som deaktivert", () => {
+    const html = htmlForArbeidssoker({
+      rapporteringsperioder: [],
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        registrertArbeidssoker: {
+          svar: null,
+          aarsak:
+            ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
+        },
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: mockSanityTekst,
+      locale,
+      skalAktivereSpm5Feature: true,
+    });
+
+    expect(html).toContain('type="radio"');
+    expect(html).toContain(" disabled />");
+    expect(html).toContain("vi-har-ikke-ansvar");
+  });
 });
 
 describe("htmlForOppsummering", () => {
@@ -580,6 +618,59 @@ describe("htmlForOppsummering", () => {
 
     expect(alert).toContain("du-vil-vaere-registrert");
     expect(nyttMeldekort).toContain(alert);
+  });
+
+  it("viser årsaksbeskjed og tomt svar for låst spørsmål med nytt flagg", () => {
+    const html = htmlForOppsummering({
+      rapporteringsperioder: [],
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        registrertArbeidssoker: {
+          svar: null,
+          aarsak:
+            ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
+        },
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: mockSanityTekst,
+      locale,
+      skalAktivereSpm5Feature: true,
+    });
+
+    expect(html).toContain("svar-prefiks —");
+    expect(html).toContain("vi-har-ikke-ansvar");
+  });
+
+  it("viser avgitt nei-svar i oppsummering med nytt flagg", () => {
+    const html = htmlForOppsummering({
+      rapporteringsperioder: [],
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        registrertArbeidssoker: { svar: false, aarsak: null },
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: mockSanityTekst,
+      locale,
+      skalAktivereSpm5Feature: true,
+    });
+
+    expect(html).toContain("svar-prefiks arbeidssokerregister-svar-nei");
+  });
+
+  it("formaterer spørsmålsdato med valgt språk i journalført HTML", () => {
+    const html = htmlForOppsummering({
+      rapporteringsperioder: [],
+      periode: innsendtRapporteringsperioderResponse[0],
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: mockSanityTekst,
+      locale: DecoratorLocale.EN,
+      skalAktivereSpm5Feature: true,
+    });
+
+    expect(html).toContain("arbeidssokerregister-tittel 15. May 2023 28. May 2023");
   });
 
   it("viser checkbox for å godta opplysninger", () => {

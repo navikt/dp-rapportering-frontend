@@ -1,4 +1,5 @@
 import { act, screen, waitFor } from "@testing-library/react";
+import type { ActionFunctionArgs } from "react-router";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
@@ -7,7 +8,7 @@ import { loader as rapporteringsperiodeLoader } from "~/routes/periode.$rapporte
 import ArbeidssøkerRegisterSide, {
   action as arbeidssokerregisterAction,
 } from "~/routes/periode.$rapporteringsperiodeId.arbeidssoker";
-import { KortType } from "~/utils/types";
+import { ARBEIDSSOKERSTATUS_AARSAK, KortType } from "~/utils/types";
 
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
@@ -134,5 +135,52 @@ describe("ArbeidssøkerRegisterSide", () => {
 
     const radioNei = await screen.findByRole("radio", { name: "Nei" });
     expect(radioNei).toBeChecked();
+  });
+
+  test("sender ikke arbeidssøkersvar når det mangler i formdata", async () => {
+    const registrertArbeidssoker = {
+      svar: null,
+      aarsak:
+        ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
+    } as const;
+    const periode = {
+      ...rapporteringsperiode,
+      registrertArbeidssoker,
+    };
+    await testDb.addRapporteringsperioder(periode);
+
+    const request = new Request("http://localhost", {
+      method: "POST",
+      body: new FormData(),
+    });
+    await arbeidssokerregisterAction({
+      request,
+      url: new URL(request.url),
+      pattern: "/periode/:rapporteringsperiodeId/arbeidssoker",
+      context: {} as ActionFunctionArgs["context"],
+      params: { rapporteringsperiodeId: periode.id },
+    });
+
+    expect(testDb.findRapporteringsperiodeById(periode.id).registrertArbeidssoker).toEqual(
+      registrertArbeidssoker,
+    );
+  });
+
+  test("sender eksplisitt nei som boolean", async () => {
+    const periode = { ...rapporteringsperiode, registrertArbeidssoker: null };
+    await testDb.addRapporteringsperioder(periode);
+
+    const formData = new FormData();
+    formData.set("registrertArbeidssoker", "false");
+    const request = new Request("http://localhost", { method: "POST", body: formData });
+    await arbeidssokerregisterAction({
+      request,
+      url: new URL(request.url),
+      pattern: "/periode/:rapporteringsperiodeId/arbeidssoker",
+      context: {} as ActionFunctionArgs["context"],
+      params: { rapporteringsperiodeId: periode.id },
+    });
+
+    expect(testDb.findRapporteringsperiodeById(periode.id).registrertArbeidssoker).toBe(false);
   });
 });

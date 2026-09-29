@@ -23,6 +23,10 @@ import {
   aktivitetTypeMap,
   IAktivitet,
 } from "~/utils/aktivitettype.utils";
+import {
+  erArbeidssokerstatusSvarLaast,
+  erKorrigertMeldekort,
+} from "~/utils/arbeidssokerstatus.utils";
 import { sanityRichText, sanityTekst } from "~/utils/sanity.utils";
 
 import {
@@ -33,9 +37,11 @@ import {
 } from "./dato.utils";
 import { DecoratorLocale } from "./dekoratoren.utils";
 import {
+  hentArbeidssokerstatusAarsakskategori,
   hentPeriodeTekst,
   hentUkeTekst,
   nestePeriode,
+  normaliserArbeidssokerSvar,
   perioderSomKanSendes,
   periodeSomTimer,
   skalHaArbeidssokerSporsmal,
@@ -49,7 +55,7 @@ interface IProps {
   periode: IRapporteringsperiode | null;
   rapporteringsperioder: IRapporteringsperiode[];
   nySanityTexts?: MeldekortBrukerflateApiResponse;
-  disableSpm5?: boolean;
+  skalAktivereSpm5Feature?: boolean;
 }
 
 interface IUseAddHtml extends IProps {
@@ -63,7 +69,7 @@ export function useAddHtml({
   getAppText,
   getRichText,
   nySanityTexts,
-  disableSpm5,
+  skalAktivereSpm5Feature,
   submit,
   locale,
 }: IUseAddHtml) {
@@ -79,7 +85,7 @@ export function useAddHtml({
       getRichText,
       locale,
       nySanityTexts,
-      disableSpm5,
+      skalAktivereSpm5Feature,
     );
     formData.set("_html", html);
     formData.set("_action", "send-inn");
@@ -93,11 +99,13 @@ export function getArbeidssokerAlert(
   side: ArbeidssokerstatusSide,
   nySanityTexts: MeldekortBrukerflateApiResponse | undefined,
   locale: DecoratorLocale,
+  skalAktivereSpm5Feature = false,
 ): string {
   const { tekst, felt } = hentArbeidssokerstatusInnhold(
     periode,
     side,
     nySanityTexts?.arbeidssokerstatusBeskjeder,
+    skalAktivereSpm5Feature,
   );
 
   if (!felt) {
@@ -271,13 +279,18 @@ export function getInput({
   checked,
   label,
   name,
+  disabled = false,
 }: {
   type: string;
   checked: boolean;
   label: string;
   name: string;
+  disabled?: boolean;
 }): string {
-  return `<input type="${type}" name="${name}" ${checked ? "checked" : ""} /><label>${label}</label>`;
+  const checkedAttribute = checked ? "checked" : "";
+  const disabledAttribute = disabled ? `${checked ? " " : ""}disabled` : "";
+
+  return `<input type="${type}" name="${name}" ${checkedAttribute}${disabledAttribute} /><label>${label}</label>`;
 }
 
 export function htmlForEndringBegrunnelse(props: IProps): string {
@@ -485,7 +498,7 @@ export function htmlForTom(props: IProps): string {
 }
 
 export function htmlForArbeidssoker(props: IProps): string {
-  const { periode, nySanityTexts, locale } = props;
+  const { periode, nySanityTexts, locale, skalAktivereSpm5Feature } = props;
 
   if (!periode) {
     return "";
@@ -531,9 +544,17 @@ export function htmlForArbeidssoker(props: IProps): string {
     .map((option) => {
       return getInput({
         type: "radio",
-        checked: option.value === periode.registrertArbeidssoker,
+        checked: option.value === normaliserArbeidssokerSvar(periode),
         label: option.label,
         name: option.label,
+        disabled:
+          Boolean(skalAktivereSpm5Feature) &&
+          erArbeidssokerstatusSvarLaast(
+            typeof periode.registrertArbeidssoker === "object" &&
+              periode.registrertArbeidssoker !== null
+              ? periode.registrertArbeidssoker.aarsak
+              : null,
+          ),
       });
     })
     .join("</div><div>");
@@ -544,7 +565,9 @@ export function htmlForArbeidssoker(props: IProps): string {
     </form>
   `;
   seksjoner.push(radioGroup);
-  seksjoner.push(getArbeidssokerAlert(periode, "utfylling", nySanityTexts, locale));
+  seksjoner.push(
+    getArbeidssokerAlert(periode, "utfylling", nySanityTexts, locale, skalAktivereSpm5Feature),
+  );
 
   return seksjoner.join("");
 }
@@ -598,11 +621,18 @@ export function htmlForOppsummering(props: IProps): string {
         level: "3",
       }),
     );
-    seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
     seksjoner.push(`<p>${periode.begrunnelseEndring}</p>`);
   } else {
-    if (!props.disableSpm5 && skalHaArbeidssokerSporsmal(periode)) {
+    const skalViseSpm5 =
+      (props.skalAktivereSpm5Feature || skalHaArbeidssokerSporsmal(periode)) &&
+      !erKorrigertMeldekort(periode);
+
+    if (skalViseSpm5) {
       const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
+      const { viHarIkkeAnsvar, periodenHarVaert } = hentArbeidssokerstatusAarsakskategori(periode);
+      const arbeidssokerSvar = normaliserArbeidssokerSvar(periode);
+      const aarsakLaaeserSvar =
+        props.skalAktivereSpm5Feature && (viHarIkkeAnsvar || periodenHarVaert);
       const nesteMeldeperiode = nestePeriode(periode.periode);
       const dateFormat =
         nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
@@ -613,30 +643,44 @@ export function htmlForOppsummering(props: IProps): string {
         arbeidssokerstatusSporsmaal?.tittel,
         "utfylling.arbeidssokerstatusSporsmaal.tittel",
       )
-        .replaceAll("{{fom}}", formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }))
+        .replaceAll(
+          "{{fom}}",
+          formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat, locale }),
+        )
         .replaceAll(
           "{{tom}}",
-          formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
+          formaterDato({
+            dato: nesteMeldeperiode.tilOgMed,
+            dateFormat: "d. MMMM yyyy",
+            locale,
+          }),
         );
-      const arbeidssokerSvar =
-        periode.registrertArbeidssoker === null
+      const arbeidssokerSvarTekst =
+        aarsakLaaeserSvar || arbeidssokerSvar === null
           ? "—"
           : sanityTekst(
-              periode.registrertArbeidssoker
+              arbeidssokerSvar
                 ? arbeidssokerstatusSporsmaal?.alternativer.ja
                 : arbeidssokerstatusSporsmaal?.alternativer.nei,
-              `utfylling.arbeidssokerstatusSporsmaal.alternativer.${periode.registrertArbeidssoker ? "ja" : "nei"}`,
+              `utfylling.arbeidssokerstatusSporsmaal.alternativer.${arbeidssokerSvar ? "ja" : "nei"}`,
             );
 
       seksjoner.push(
         `<h3>${arbeidssokerSporsmal}</h3><p>${sanityTekst(
           arbeidssokerstatusSporsmaal?.svarPrefiks,
           "utfylling.arbeidssokerstatusSporsmaal.svarPrefiks",
-        )} ${arbeidssokerSvar}</p>`,
+        )} ${arbeidssokerSvarTekst}</p>`,
       );
-    }
-    if (!props.disableSpm5 && skalHaArbeidssokerSporsmal(periode)) {
-      seksjoner.push(getArbeidssokerAlert(periode, "bekreftelse", nySanityTexts, locale));
+
+      seksjoner.push(
+        getArbeidssokerAlert(
+          periode,
+          "bekreftelse",
+          nySanityTexts,
+          locale,
+          props.skalAktivereSpm5Feature,
+        ),
+      );
     }
   }
 
@@ -672,7 +716,7 @@ export function samleHtmlForPeriode(
   getRichText: GetRichText,
   locale: DecoratorLocale,
   nySanityTexts?: MeldekortBrukerflateApiResponse,
-  disableSpm5?: boolean,
+  skalAktivereSpm5Feature?: boolean,
 ): string {
   const pages: string[] = [];
 
@@ -688,7 +732,7 @@ export function samleHtmlForPeriode(
           locale,
           rapporteringsperioder,
           nySanityTexts,
-          disableSpm5,
+          skalAktivereSpm5Feature,
         }),
       ),
     );
@@ -705,7 +749,10 @@ export function samleHtmlForPeriode(
       fns.push(htmlForTom);
     }
 
-    if (!disableSpm5 && skalHaArbeidssokerSporsmal(periode)) {
+    if (
+      (skalAktivereSpm5Feature || skalHaArbeidssokerSporsmal(periode)) &&
+      !erKorrigertMeldekort(periode)
+    ) {
       fns.push(htmlForArbeidssoker);
     }
 
@@ -720,7 +767,7 @@ export function samleHtmlForPeriode(
           locale,
           rapporteringsperioder,
           nySanityTexts,
-          disableSpm5,
+          skalAktivereSpm5Feature,
         }),
       ),
     );

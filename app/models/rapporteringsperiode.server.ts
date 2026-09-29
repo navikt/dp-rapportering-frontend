@@ -1,18 +1,26 @@
 import { getErrorResponse, logErrorResponse } from "~/models/logger.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
+import { erArbeidssokerstatusSvarLaast } from "~/utils/arbeidssokerstatus.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import {
+  ArbeidssokerstatusAarsak,
   IRapporteringsperiodeStatus,
   KortType,
   OPPRETTET_AV,
   Rapporteringstype,
   TOpprettetAv,
 } from "~/utils/types";
+import { skalAktivereSpm5Feature } from "~/utils/unleash.server";
 
 export interface IPeriode {
   fraOgMed: string;
   tilOgMed: string;
+}
+
+export interface IRegistrertArbeidssoker {
+  svar: boolean | null;
+  aarsak: ArbeidssokerstatusAarsak | null;
 }
 
 export interface IRapporteringsperiodeDag {
@@ -36,7 +44,7 @@ export interface IRapporteringsperiode {
   begrunnelseEndring: string | null;
   status: IRapporteringsperiodeStatus;
   mottattDato: string | null;
-  registrertArbeidssoker: boolean | null;
+  registrertArbeidssoker: boolean | IRegistrertArbeidssoker | null;
   originalId: string | null;
   html: string | null;
   rapporteringstype: Rapporteringstype | null;
@@ -174,14 +182,30 @@ export async function sendInnPeriode(
     throw new Error("Kunne ikke finne HTML med tekstene");
   }
 
+  const skalAktivereSpm5 = await skalAktivereSpm5Feature();
+  const arbeidssokerstatus = rapporteringsperiode.registrertArbeidssoker;
+  const aarsak =
+    typeof arbeidssokerstatus === "object" && arbeidssokerstatus !== null
+      ? arbeidssokerstatus.aarsak
+      : null;
+  const svar =
+    typeof arbeidssokerstatus === "object" && arbeidssokerstatus !== null
+      ? arbeidssokerstatus.svar
+      : arbeidssokerstatus;
+  const registrertArbeidssoker = skalAktivereSpm5
+    ? {
+        svar: erArbeidssokerstatusSvarLaast(aarsak) ? null : svar,
+        aarsak,
+      }
+    : rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
+        rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
+      ? true
+      : svar;
+
   const rapporteringsperiodeWithHtml = {
     ...rapporteringsperiode,
     html: html.toString().trim(),
-    registrertArbeidssoker:
-      rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
-      rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
-        ? true
-        : rapporteringsperiode.registrertArbeidssoker,
+    registrertArbeidssoker,
   };
 
   const standardHeaders = await getHeaders(request);

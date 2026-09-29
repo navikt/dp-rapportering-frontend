@@ -8,13 +8,16 @@ import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
 import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
 import { formaterDato } from "~/utils/dato.utils";
-import { nestePeriode, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
+import {
+  hentArbeidssokerstatusAarsakskategori,
+  nestePeriode,
+  normaliserArbeidssokerSvar,
+} from "~/utils/periode.utils";
 import { sanityRichText } from "~/utils/sanity.utils";
-import { KortType, OPPRETTET_AV } from "~/utils/types";
 
 import { PortableTextRenderer } from "../portable-text/PortableTextRenderer";
 
-export type ArbeidssokerstatusSide = "utfylling" | "bekreftelse" | "oversikt";
+export type ArbeidssokerstatusSide = "utfylling" | "bekreftelse";
 
 interface IProps {
   periode: IRapporteringsperiode;
@@ -26,52 +29,70 @@ export function hentArbeidssokerstatusInnhold(
   periode: IRapporteringsperiode,
   side: ArbeidssokerstatusSide,
   beskjeder: MeldekortBrukerflateApiResponse["arbeidssokerstatusBeskjeder"] | undefined,
+  skalAktivereSpm5Feature = false,
 ): {
   tekst: PortableTextBlock[] | null | undefined;
   variant: "info" | "warning";
   felt: string | undefined;
 } {
-  let tekst: PortableTextBlock[] | null | undefined;
-  let variant: "info" | "warning" = "info";
-  let felt: string | undefined;
+  const { viHarIkkeAnsvar, periodenHarVaert } = hentArbeidssokerstatusAarsakskategori(periode);
+  const arbeidssokerSvar = normaliserArbeidssokerSvar(periode);
+  const utenBeskjed = {
+    tekst: undefined,
+    variant: "info" as const,
+    felt: undefined,
+  };
 
-  if (side === "oversikt") {
-    if (periode.innsendtTil === OPPRETTET_AV.Arena) {
-      tekst = beskjeder?.fraArena;
-      felt = "arbeidssokerstatusBeskjeder.fraArena";
-    } else if (periode.type === KortType.ETTERREGISTRERT) {
-      tekst = beskjeder?.etterregistrert;
-      felt = "arbeidssokerstatusBeskjeder.etterregistrert";
-    } else if (!skalHaArbeidssokerSporsmal(periode)) {
-      tekst = beskjeder?.utenArbeidssokerSporsmaal;
-      felt = "arbeidssokerstatusBeskjeder.utenArbeidssokerSporsmaal";
-    }
-  } else if (!skalHaArbeidssokerSporsmal(periode)) {
-    tekst = beskjeder?.duSkalIkkeSvarePaSporsmaal;
-    felt = "arbeidssokerstatusBeskjeder.duSkalIkkeSvarePaSporsmaal";
-  } else if (periode.registrertArbeidssoker === true) {
-    tekst = beskjeder?.duVilVaereRegistrert;
-    felt = "arbeidssokerstatusBeskjeder.duVilVaereRegistrert";
-  } else if (periode.registrertArbeidssoker === false) {
-    variant = "warning";
-    felt =
-      side === "utfylling"
-        ? "arbeidssokerstatusBeskjeder.duVilBliAvregistrert.lang"
-        : "arbeidssokerstatusBeskjeder.duVilBliAvregistrert.kort";
-    tekst =
-      side === "utfylling"
-        ? beskjeder?.duVilBliAvregistrert.lang
-        : beskjeder?.duVilBliAvregistrert.kort;
+  if (skalAktivereSpm5Feature && viHarIkkeAnsvar) {
+    return {
+      ...utenBeskjed,
+      tekst: beskjeder?.viHarIkkeAnsvar,
+      felt: "arbeidssokerstatusBeskjeder.viHarIkkeAnsvar",
+    };
   }
 
-  return { tekst, variant, felt };
+  if (skalAktivereSpm5Feature && periodenHarVaert) {
+    return {
+      ...utenBeskjed,
+      tekst: beskjeder?.periodenErGammel,
+      felt: "arbeidssokerstatusBeskjeder.periodenErGammel",
+    };
+  }
+
+  if (arbeidssokerSvar === null) return utenBeskjed;
+
+  if (arbeidssokerSvar) {
+    return {
+      ...utenBeskjed,
+      tekst: beskjeder?.duVilVaereRegistrert,
+      felt: "arbeidssokerstatusBeskjeder.duVilVaereRegistrert",
+    };
+  }
+
+  return {
+    ...utenBeskjed,
+    tekst:
+      side === "utfylling"
+        ? beskjeder?.duVilBliAvregistrert.lang
+        : beskjeder?.duVilBliAvregistrert.kort,
+    variant: "warning",
+    felt:
+      side === "utfylling"
+        ? "arbeidssokerstatusBeskjeder.duVilBliAvregistrert.lang"
+        : "arbeidssokerstatusBeskjeder.duVilBliAvregistrert.kort",
+  };
 }
 
 export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
   const { locale } = useLocale();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const beskjeder = rootData?.sanityTekst?.arbeidssokerstatusBeskjeder;
-  const { tekst, variant, felt } = hentArbeidssokerstatusInnhold(periode, side, beskjeder);
+  const { tekst, variant, felt } = hentArbeidssokerstatusInnhold(
+    periode,
+    side,
+    beskjeder,
+    rootData?.disableSpm5,
+  );
 
   if (!felt) return null;
 

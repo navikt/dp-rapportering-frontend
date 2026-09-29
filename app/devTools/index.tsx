@@ -16,6 +16,7 @@ export enum ScenarioType {
   innsendte = "innsendte",
   manuelt = "manuelt",
   etterregistrert = "etterregistrert",
+  ikkeAnsvar = "ikkeAnsvar",
   bokmerket = "bokmerket",
   arena = "arena",
 }
@@ -52,6 +53,10 @@ const scenarios: IScenario[] = [
   {
     type: ScenarioType.etterregistrert,
     tittel: "Etterregistrert meldekort",
+  },
+  {
+    type: ScenarioType.ikkeAnsvar,
+    tittel: "Meldekort – vi har ikke ansvar for bruker",
   },
   {
     type: ScenarioType.bokmerket,

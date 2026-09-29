@@ -2,19 +2,93 @@
 import { describe, expect, test } from "vitest";
 
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
+import { erKorrigertMeldekort } from "~/utils/arbeidssokerstatus.utils";
 import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.server.utils";
-import { IRapporteringsperiodeStatus } from "~/utils/types";
+import { ARBEIDSSOKERSTATUS_AARSAK, IRapporteringsperiodeStatus, KortType } from "~/utils/types";
 
 import {
   erAktiviteteneLike,
   erAktivitetenLik,
   erPeriodeneLike,
+  hentArbeidssokerstatusAarsakskategori,
   nestePeriode,
   periodeSomTimer,
+  skalDeaktivereArbeidssokerstatusSporsmal,
+  skalHaArbeidssokerSporsmal,
   sorterAktiviteter,
 } from "../../app/utils/periode.utils";
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
+
+describe("skalHaArbeidssokerSporsmal", () => {
+  const etterregistrertPeriode = {
+    ...rapporteringsperioderResponse[0],
+    type: KortType.ETTERREGISTRERT,
+  };
+
+  test("etterregistrerte meldekort får ikke spørsmålet når flagget er av", () => {
+    expect(skalHaArbeidssokerSporsmal(etterregistrertPeriode)).toBe(false);
+  });
+
+  test("alle meldekort får spørsmålet når disableSpm5-flagget er på", () => {
+    expect(skalHaArbeidssokerSporsmal(etterregistrertPeriode, true)).toBe(true);
+  });
+});
+
+describe("arbeidssøkerstatus-årsak", () => {
+  const lagPeriodeMedAarsak = (aarsak: keyof typeof ARBEIDSSOKERSTATUS_AARSAK) => ({
+    ...rapporteringsperioderResponse[0],
+    registrertArbeidssoker: {
+      svar: null,
+      aarsak: ARBEIDSSOKERSTATUS_AARSAK[aarsak],
+    },
+  });
+
+  test("klassifiserer manglende ansvar", () => {
+    const kategori = hentArbeidssokerstatusAarsakskategori(
+      lagPeriodeMedAarsak("DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS"),
+    );
+
+    expect(kategori).toEqual({ viHarIkkeAnsvar: true, periodenHarVaert: false });
+  });
+
+  test.each(["ETTERREGISTRERT_MELDEKORT", "ARBEIDSSOKERPERIODEN_ER_I_FORTID"] as const)(
+    "deaktiverer spørsmålet for årsaken %s når flagget er på",
+    (aarsak) => {
+      const periode = lagPeriodeMedAarsak(aarsak);
+
+      expect(hentArbeidssokerstatusAarsakskategori(periode).periodenHarVaert).toBe(true);
+      expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(true);
+      expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, false)).toBe(false);
+    },
+  );
+
+  test("deaktiverer ikke for andre årsaker", () => {
+    const periode = lagPeriodeMedAarsak("KORRIGERT_MELDEKORT");
+
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(false);
+  });
+});
+
+describe("erKorrigertMeldekort", () => {
+  test.each([
+    {
+      ...rapporteringsperioderResponse[0],
+      registrertArbeidssoker: {
+        svar: null,
+        aarsak: ARBEIDSSOKERSTATUS_AARSAK.KORRIGERT_MELDEKORT,
+      },
+    },
+    { ...rapporteringsperioderResponse[0], type: KortType.KORRIGERT },
+    { ...rapporteringsperioderResponse[0], originalId: "opprinnelig-periode" },
+  ])("gjenkjenner korrigert meldekort uansett signal", (periode) => {
+    expect(erKorrigertMeldekort(periode)).toBe(true);
+  });
+
+  test("gjenkjenner ikke ordinært meldekort som korrigert", () => {
+    expect(erKorrigertMeldekort(rapporteringsperioderResponse[0])).toBe(false);
+  });
+});
 
 describe("periodeSomTimer", () => {
   test("skal returnere riktig antall timer for en gyldig periode-streng", () => {

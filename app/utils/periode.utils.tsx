@@ -7,6 +7,7 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
+import { hentArbeidssokerstatusAarsakskategori as hentAarsakskategori } from "~/utils/arbeidssokerstatus.utils";
 
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
@@ -188,10 +189,50 @@ export function erPeriodeneLike(
   return true;
 }
 
-export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
+export function skalHaArbeidssokerSporsmal(
+  periode: IRapporteringsperiode,
+  skalAktivereSpm5Feature = false,
+): boolean {
+  if (skalAktivereSpm5Feature) {
+    return true;
+  }
+
   const erIkkeEtterregistrert = periode.type !== KortType.ETTERREGISTRERT;
 
   return erIkkeEtterregistrert;
+}
+
+export function hentArbeidssokerstatusAarsakskategori(periode: IRapporteringsperiode) {
+  const registrertArbeidssoker = periode.registrertArbeidssoker;
+  const aarsak =
+    typeof registrertArbeidssoker === "object" && registrertArbeidssoker !== null
+      ? registrertArbeidssoker.aarsak
+      : null;
+
+  return hentAarsakskategori(aarsak);
+}
+
+export function skalDeaktivereArbeidssokerstatusSporsmal(
+  periode: IRapporteringsperiode,
+  skalAktivereSpm5Feature = false,
+): boolean {
+  if (!skalAktivereSpm5Feature) {
+    return false;
+  }
+
+  const { viHarIkkeAnsvar, periodenHarVaert } = hentArbeidssokerstatusAarsakskategori(periode);
+
+  return viHarIkkeAnsvar || periodenHarVaert;
+}
+
+export function normaliserArbeidssokerSvar(periode: IRapporteringsperiode): boolean | null {
+  const registrertArbeidssoker = periode.registrertArbeidssoker;
+
+  if (typeof registrertArbeidssoker !== "object" || registrertArbeidssoker === null) {
+    return registrertArbeidssoker;
+  }
+
+  return registrertArbeidssoker.svar;
 }
 
 interface IPeriodeDate {

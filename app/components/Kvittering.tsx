@@ -1,12 +1,9 @@
 import { PrinterSmallFillIcon } from "@navikt/aksel-icons";
 import { Accordion, Button, Heading } from "@navikt/ds-react";
 
-import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { Kalender } from "~/components/kalender/Kalender";
 import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { ReactLink } from "~/components/ReactLink";
 import { useAnalytics } from "~/hooks/useAnalytics";
-import { useLocale } from "~/hooks/useLocale";
 import { useSanity } from "~/hooks/useSanity";
 import { useUXSignals } from "~/hooks/useUXSignals";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
@@ -14,6 +11,7 @@ import styles from "~/styles/kvittering.module.css";
 import rootStyles from "~/styles/root.module.css";
 
 import { InnsendingsStatusBeskjed } from "./beskjeder/InnsendingsStatusBeskjed";
+import { MeldekortDetaljer } from "./meldekort-detaljert/MeldekortDetaljer";
 
 interface Ikvittering {
   periode: IRapporteringsperiode;
@@ -22,7 +20,6 @@ interface Ikvittering {
 
 export function Kvittering({ periode, harNestePeriode }: Ikvittering) {
   const { getAppText, getLink, getRichText } = useSanity();
-  const { locale } = useLocale();
   const { trackNavigere } = useAnalytics();
 
   useUXSignals(true);
@@ -34,7 +31,6 @@ export function Kvittering({ periode, harNestePeriode }: Ikvittering) {
         endring={Boolean(periode.originalId)}
         visSendtInnBeskjed
       />
-
       <Accordion data-color="neutral">
         <Accordion.Item>
           <Accordion.Header className={styles.kvitteringTittel}>
@@ -42,11 +38,8 @@ export function Kvittering({ periode, harNestePeriode }: Ikvittering) {
               {getAppText("rapportering-periode-bekreftelse-oppsummering-tittel")}
             </Heading>
           </Accordion.Header>
-          <Accordion.Content className={styles.kvitteringInnhold}>
-            <div className="oppsummering">
-              <Kalender periode={periode} aapneModal={() => {}} locale={locale} readonly />
-              <AktivitetOppsummering periode={periode} />
-            </div>
+          <Accordion.Content>
+            <MeldekortDetaljer periode={periode} inkluderArbeidssokerstatusSvar />
             <div className={styles.skrivUtKnappen}>
               <Button
                 variant="tertiary"

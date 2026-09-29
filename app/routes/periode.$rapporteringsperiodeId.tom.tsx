@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useEffect, useMemo } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useRouteLoaderData } from "react-router";
 import { uuidv7 } from "uuidv7";
 
 import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
@@ -11,12 +11,13 @@ import { useAnalytics } from "~/hooks/useAnalytics";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { loader as RootLoader } from "~/root";
 import { skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 
 import rootStyles from "../styles/root.module.css";
 
-function nesteSide(periode: IRapporteringsperiode) {
-  if (!skalHaArbeidssokerSporsmal(periode)) {
+function nesteSide(periode: IRapporteringsperiode, skalAktivereSpm5Feature: boolean | undefined) {
+  if (!skalHaArbeidssokerSporsmal(periode, skalAktivereSpm5Feature)) {
     return `/periode/${periode.id}/send-inn`;
   }
 
@@ -25,6 +26,7 @@ function nesteSide(periode: IRapporteringsperiode) {
 
 export default function TomRapporteringsPeriodeSide() {
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const { getAppText, getRichText } = useSanity();
 
   const navigate = useNavigate();
@@ -41,7 +43,7 @@ export default function TomRapporteringsPeriodeSide() {
       sesjonId,
     });
 
-    navigate(nesteSide(periode));
+    navigate(nesteSide(periode, rootData?.disableSpm5));
   };
 
   useEffect(() => {

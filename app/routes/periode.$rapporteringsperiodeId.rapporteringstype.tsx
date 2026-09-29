@@ -6,7 +6,13 @@ import { PortableText } from "@portabletext/react";
 import { addDays } from "date-fns";
 import { useCallback, useEffect, useMemo } from "react";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { useFetcher, useLoaderData, useNavigate, useRevalidator } from "react-router";
+import {
+  useFetcher,
+  useLoaderData,
+  useNavigate,
+  useRevalidator,
+  useRouteLoaderData,
+} from "react-router";
 import { uuidv7 } from "uuidv7";
 
 import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
@@ -22,6 +28,7 @@ import {
   IRapporteringsperiode,
 } from "~/models/rapporteringsperiode.server";
 import { lagreRapporteringstype } from "~/models/rapporteringstype.server";
+import type { loader as RootLoader } from "~/root";
 import { formaterDato } from "~/utils/dato.utils";
 import {
   harAktiviteter,
@@ -61,10 +68,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 }
 
-function nesteSide(periode: IRapporteringsperiode) {
+function nesteSide(periode: IRapporteringsperiode, skalAktivereSpm5Feature: boolean | undefined) {
   const skalIkkeFylleUt = periode.rapporteringstype === Rapporteringstype.harIngenAktivitet;
 
-  if (skalIkkeFylleUt && !skalHaArbeidssokerSporsmal(periode)) {
+  if (skalIkkeFylleUt && !skalHaArbeidssokerSporsmal(periode, skalAktivereSpm5Feature)) {
     return `/periode/${periode.id}/send-inn`;
   } else if (skalIkkeFylleUt) {
     return `/periode/${periode.id}/arbeidssoker`;
@@ -77,6 +84,7 @@ export default function RapporteringstypeSide() {
   const navigate = useNavigate();
   const { rapporteringsperioder } = useLoaderData<typeof loader>();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const { getAppText, getRichText } = useSanity();
   const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
 
@@ -145,7 +153,7 @@ export default function RapporteringstypeSide() {
       sesjonId,
     });
 
-    navigate(nesteSide(periode));
+    navigate(nesteSide(periode, rootData?.disableSpm5));
   };
 
   useEffect(() => {
@@ -166,7 +174,7 @@ export default function RapporteringstypeSide() {
         sesjonId,
       });
 
-      navigate(nesteSide(periode));
+      navigate(nesteSide(periode, rootData?.disableSpm5));
     });
   }, [
     navigate,
