@@ -36,11 +36,23 @@ describe("ArbeidssokerstatusBeskjed", () => {
     expect(hentArbeidssokerstatusInnhold(periode, side, undefined, true).felt).toBe(felt);
   });
 
-  test("viser ikke beskjed om at etterregistrerte ikke skal svare når flagget er på", () => {
+  test("viser fortidsbeskjed for etterregistrert legacy-svar når flagget er på", () => {
     const periode = {
       ...innsendtRapporteringsperioderResponse[0],
       type: KortType.ETTERREGISTRERT,
       registrertArbeidssoker: true,
+    };
+
+    const innhold = hentArbeidssokerstatusInnhold(periode, "utfylling", undefined, true);
+
+    expect(innhold.felt).toBe("arbeidssokerstatusBeskjeder.periodenErGammel");
+  });
+
+  test("viser faktisk ja-svar for ny etterregistrert payload uten årsak", () => {
+    const periode = {
+      ...innsendtRapporteringsperioderResponse[0],
+      type: KortType.ETTERREGISTRERT,
+      registrertArbeidssoker: { svar: true, aarsak: null },
     };
 
     const innhold = hentArbeidssokerstatusInnhold(periode, "utfylling", undefined, true);

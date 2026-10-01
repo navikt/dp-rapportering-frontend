@@ -111,6 +111,21 @@ describe("rapporteringsperiode.server", () => {
       expect(payload?.registrertArbeidssoker).toEqual({ svar: false, aarsak: null });
     });
 
+    test("sender ikke gammelt etterregistrert ja som nytt svar", async () => {
+      vi.mocked(skalAktivereSpm5Feature).mockResolvedValue(true);
+      const periode = lagRapporteringsperiode({
+        type: KortType.ETTERREGISTRERT,
+        registrertArbeidssoker: true,
+      });
+
+      const payload = await sendInn(periode);
+
+      expect(payload?.registrertArbeidssoker).toEqual({
+        svar: null,
+        aarsak: ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT,
+      });
+    });
+
     test("sender null svar for årsaker der bruker ikke kan svare", async () => {
       vi.mocked(skalAktivereSpm5Feature).mockResolvedValue(true);
       const aarsak = ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT;

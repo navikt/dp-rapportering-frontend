@@ -1,6 +1,9 @@
 import { getErrorResponse, logErrorResponse } from "~/models/logger.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
-import { erArbeidssokerstatusSvarLaast } from "~/utils/arbeidssokerstatus.utils";
+import {
+  erArbeidssokerstatusSvarLaast,
+  finnArbeidssokerstatusAarsak,
+} from "~/utils/arbeidssokerstatus.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import {
@@ -184,10 +187,7 @@ export async function sendInnPeriode(
 
   const skalAktivereSpm5 = await skalAktivereSpm5Feature();
   const arbeidssokerstatus = rapporteringsperiode.registrertArbeidssoker;
-  const aarsak =
-    typeof arbeidssokerstatus === "object" && arbeidssokerstatus !== null
-      ? arbeidssokerstatus.aarsak
-      : null;
+  const aarsak = skalAktivereSpm5 ? finnArbeidssokerstatusAarsak(rapporteringsperiode) : null;
   const svar =
     typeof arbeidssokerstatus === "object" && arbeidssokerstatus !== null
       ? arbeidssokerstatus.svar

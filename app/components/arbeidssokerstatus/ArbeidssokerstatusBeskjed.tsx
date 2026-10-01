@@ -7,7 +7,7 @@ import { useLocale } from "~/hooks/useLocale";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
 import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
-import { formaterDato } from "~/utils/dato.utils";
+import { DATOFORMAT_MED_AAR, formaterDato } from "~/utils/dato.utils";
 import {
   hentArbeidssokerstatusAarsakskategori,
   nestePeriode,
@@ -35,8 +35,9 @@ export function hentArbeidssokerstatusInnhold(
   variant: "info" | "warning";
   felt: string | undefined;
 } {
-  const { viHarIkkeAnsvar, periodenHarVaert } = hentArbeidssokerstatusAarsakskategori(periode);
-  const arbeidssokerSvar = normaliserArbeidssokerSvar(periode);
+  const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } =
+    hentArbeidssokerstatusAarsakskategori(periode);
+  const arbeidssokerSvar = normaliserArbeidssokerSvar(periode, skalAktivereSpm5Feature);
   const utenBeskjed = {
     tekst: undefined,
     variant: "info" as const,
@@ -51,7 +52,7 @@ export function hentArbeidssokerstatusInnhold(
     };
   }
 
-  if (skalAktivereSpm5Feature && periodenHarVaert) {
+  if (skalAktivereSpm5Feature && arbeidssokerperiodenErIFortid) {
     return {
       ...utenBeskjed,
       tekst: beskjeder?.periodenErGammel,
@@ -98,7 +99,7 @@ export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
 
   const dato = formaterDato({
     dato: nestePeriode(periode.periode).fraOgMed,
-    dateFormat: "d. MMMM yyyy",
+    dateFormat: DATOFORMAT_MED_AAR,
     locale,
   });
   const tekstMedDato = sanityRichText(tekst, felt).map((block) => ({

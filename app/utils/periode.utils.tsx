@@ -7,7 +7,11 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
-import { hentArbeidssokerstatusAarsakskategori as hentAarsakskategori } from "~/utils/arbeidssokerstatus.utils";
+import {
+  erArbeidssokerstatusSvarLaast,
+  finnArbeidssokerstatusAarsak,
+  hentArbeidssokerstatusAarsakskategori as hentAarsakskategori,
+} from "~/utils/arbeidssokerstatus.utils";
 
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
@@ -203,13 +207,7 @@ export function skalHaArbeidssokerSporsmal(
 }
 
 export function hentArbeidssokerstatusAarsakskategori(periode: IRapporteringsperiode) {
-  const registrertArbeidssoker = periode.registrertArbeidssoker;
-  const aarsak =
-    typeof registrertArbeidssoker === "object" && registrertArbeidssoker !== null
-      ? registrertArbeidssoker.aarsak
-      : null;
-
-  return hentAarsakskategori(aarsak);
+  return hentAarsakskategori(finnArbeidssokerstatusAarsak(periode));
 }
 
 export function skalDeaktivereArbeidssokerstatusSporsmal(
@@ -220,13 +218,24 @@ export function skalDeaktivereArbeidssokerstatusSporsmal(
     return false;
   }
 
-  const { viHarIkkeAnsvar, periodenHarVaert } = hentArbeidssokerstatusAarsakskategori(periode);
+  const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } =
+    hentArbeidssokerstatusAarsakskategori(periode);
 
-  return viHarIkkeAnsvar || periodenHarVaert;
+  return viHarIkkeAnsvar || arbeidssokerperiodenErIFortid;
 }
 
-export function normaliserArbeidssokerSvar(periode: IRapporteringsperiode): boolean | null {
+export function normaliserArbeidssokerSvar(
+  periode: IRapporteringsperiode,
+  skalAktivereSpm5Feature = false,
+): boolean | null {
   const registrertArbeidssoker = periode.registrertArbeidssoker;
+
+  if (
+    skalAktivereSpm5Feature &&
+    erArbeidssokerstatusSvarLaast(finnArbeidssokerstatusAarsak(periode))
+  ) {
+    return null;
+  }
 
   if (typeof registrertArbeidssoker !== "object" || registrertArbeidssoker === null) {
     return registrertArbeidssoker;

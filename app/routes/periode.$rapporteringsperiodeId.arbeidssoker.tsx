@@ -14,7 +14,7 @@ import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { lagreArbeidssokerSvar } from "~/models/arbeidssoker.server";
 import type { loader as RootLoader } from "~/root";
-import { formaterDato } from "~/utils/dato.utils";
+import { formaterArbeidssokerperiode } from "~/utils/dato.utils";
 import {
   kanSendes,
   nestePeriode,
@@ -35,14 +35,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const rapporteringsperiodeId = params.rapporteringsperiodeId;
   const formData = await request.formData();
   const svar = formData.get("registrertArbeidssoker");
+  const arbeidssokerSvar =
+    svar === "true" || svar === "false" ? { registrertArbeidssoker: svar === "true" } : {};
 
-  if (svar !== "true" && svar !== "false") {
-    return lagreArbeidssokerSvar(request, rapporteringsperiodeId, {});
-  }
-
-  return lagreArbeidssokerSvar(request, rapporteringsperiodeId, {
-    registrertArbeidssoker: svar === "true",
-  });
+  return lagreArbeidssokerSvar(request, rapporteringsperiodeId, arbeidssokerSvar);
 }
 
 export default function ArbeidssøkerRegisterSide() {
@@ -50,7 +46,7 @@ export default function ArbeidssøkerRegisterSide() {
   const { getAppText } = useSanity();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const sanityTekst = rootData?.sanityTekst;
-  const arbeidssokerSvar = normaliserArbeidssokerSvar(periode);
+  const arbeidssokerSvar = normaliserArbeidssokerSvar(periode, rootData?.disableSpm5);
   const deaktivertPaaGrunnAvAarsak = skalDeaktivereArbeidssokerstatusSporsmal(
     periode,
     rootData?.disableSpm5,
@@ -64,22 +60,8 @@ export default function ArbeidssøkerRegisterSide() {
   const stegnavn = "arbeidssoker";
   const steg = 4;
   const nesteMeldeperiode = nestePeriode(periode.periode);
-  const dateFormat =
-    nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
-    nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
-      ? "d. MMMM yyyy"
-      : "d. MMMM";
   const arbeidssokerstatusSporsmaal = sanityTekst?.utfylling?.arbeidssokerstatusSporsmaal;
-  const fom = formaterDato({
-    dato: nesteMeldeperiode.fraOgMed,
-    dateFormat,
-    locale: rootData?.locale,
-  });
-  const tom = formaterDato({
-    dato: nesteMeldeperiode.tilOgMed,
-    dateFormat: "d. MMMM yyyy",
-    locale: rootData?.locale,
-  });
+  const { fom, tom } = formaterArbeidssokerperiode(nesteMeldeperiode, rootData?.locale);
   const arbeidssokerTittel = arbeidssokerstatusSporsmaal?.tittel
     ?.replaceAll("{{fom}}", fom)
     .replaceAll("{{tom}}", tom);

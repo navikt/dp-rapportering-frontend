@@ -26,10 +26,13 @@ import {
 import {
   erArbeidssokerstatusSvarLaast,
   erKorrigertMeldekort,
+  finnArbeidssokerstatusAarsak,
 } from "~/utils/arbeidssokerstatus.utils";
 import { sanityRichText, sanityTekst } from "~/utils/sanity.utils";
 
 import {
+  DATOFORMAT_MED_AAR,
+  formaterArbeidssokerperiode,
   formaterDato,
   formaterPeriodeDato,
   formaterPeriodeTilUkenummer,
@@ -115,7 +118,7 @@ export function getArbeidssokerAlert(
   const nesteMeldeperiode = nestePeriode(periode.periode);
   const dato = formaterDato({
     dato: nesteMeldeperiode.fraOgMed,
-    dateFormat: "d. MMMM yyyy",
+    dateFormat: DATOFORMAT_MED_AAR,
     locale,
   });
   const tekstMedDato = sanityRichText(tekst, felt).map((block) => ({
@@ -505,17 +508,10 @@ export function htmlForArbeidssoker(props: IProps): string {
   }
 
   const nesteMeldeperiode = nestePeriode(periode.periode);
-  const dateFormat =
-    nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
-    nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
-      ? "d. MMMM yyyy"
-      : "d. MMMM";
-
   const seksjoner: string[] = [];
 
   const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
-  const fom = formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat, locale });
-  const tom = formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat, locale });
+  const { fom, tom } = formaterArbeidssokerperiode(nesteMeldeperiode, locale);
 
   const legend = sanityTekst(
     arbeidssokerstatusSporsmaal?.tittel?.replaceAll("{{fom}}", fom).replaceAll("{{tom}}", tom),
@@ -525,6 +521,10 @@ export function htmlForArbeidssoker(props: IProps): string {
     arbeidssokerstatusSporsmaal?.beskrivelse,
     "utfylling.arbeidssokerstatusSporsmaal.beskrivelse",
   );
+  const svar = normaliserArbeidssokerSvar(periode, skalAktivereSpm5Feature);
+  const deaktivert =
+    Boolean(skalAktivereSpm5Feature) &&
+    erArbeidssokerstatusSvarLaast(finnArbeidssokerstatusAarsak(periode));
   const options = [
     {
       value: true,
@@ -544,17 +544,10 @@ export function htmlForArbeidssoker(props: IProps): string {
     .map((option) => {
       return getInput({
         type: "radio",
-        checked: option.value === normaliserArbeidssokerSvar(periode),
+        checked: option.value === svar,
         label: option.label,
         name: option.label,
-        disabled:
-          Boolean(skalAktivereSpm5Feature) &&
-          erArbeidssokerstatusSvarLaast(
-            typeof periode.registrertArbeidssoker === "object" &&
-              periode.registrertArbeidssoker !== null
-              ? periode.registrertArbeidssoker.aarsak
-              : null,
-          ),
+        disabled: deaktivert,
       });
     })
     .join("</div><div>");
@@ -629,32 +622,19 @@ export function htmlForOppsummering(props: IProps): string {
 
     if (skalViseSpm5) {
       const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
-      const { viHarIkkeAnsvar, periodenHarVaert } = hentArbeidssokerstatusAarsakskategori(periode);
-      const arbeidssokerSvar = normaliserArbeidssokerSvar(periode);
+      const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } =
+        hentArbeidssokerstatusAarsakskategori(periode);
+      const arbeidssokerSvar = normaliserArbeidssokerSvar(periode, props.skalAktivereSpm5Feature);
       const aarsakLaaeserSvar =
-        props.skalAktivereSpm5Feature && (viHarIkkeAnsvar || periodenHarVaert);
+        props.skalAktivereSpm5Feature && (viHarIkkeAnsvar || arbeidssokerperiodenErIFortid);
       const nesteMeldeperiode = nestePeriode(periode.periode);
-      const dateFormat =
-        nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
-        nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
-          ? "d. MMMM yyyy"
-          : "d. MMMM";
+      const { fom, tom } = formaterArbeidssokerperiode(nesteMeldeperiode, locale);
       const arbeidssokerSporsmal = sanityTekst(
         arbeidssokerstatusSporsmaal?.tittel,
         "utfylling.arbeidssokerstatusSporsmaal.tittel",
       )
-        .replaceAll(
-          "{{fom}}",
-          formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat, locale }),
-        )
-        .replaceAll(
-          "{{tom}}",
-          formaterDato({
-            dato: nesteMeldeperiode.tilOgMed,
-            dateFormat: "d. MMMM yyyy",
-            locale,
-          }),
-        );
+        .replaceAll("{{fom}}", fom)
+        .replaceAll("{{tom}}", tom);
       const arbeidssokerSvarTekst =
         aarsakLaaeserSvar || arbeidssokerSvar === null
           ? "—"

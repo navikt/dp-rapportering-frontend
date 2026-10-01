@@ -2,7 +2,6 @@
 import { describe, expect, test } from "vitest";
 
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
-import { erKorrigertMeldekort } from "~/utils/arbeidssokerstatus.utils";
 import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.server.utils";
 import { ARBEIDSSOKERSTATUS_AARSAK, IRapporteringsperiodeStatus, KortType } from "~/utils/types";
 
@@ -10,8 +9,8 @@ import {
   erAktiviteteneLike,
   erAktivitetenLik,
   erPeriodeneLike,
-  hentArbeidssokerstatusAarsakskategori,
   nestePeriode,
+  normaliserArbeidssokerSvar,
   periodeSomTimer,
   skalDeaktivereArbeidssokerstatusSporsmal,
   skalHaArbeidssokerSporsmal,
@@ -44,20 +43,11 @@ describe("arbeidssøkerstatus-årsak", () => {
     },
   });
 
-  test("klassifiserer manglende ansvar", () => {
-    const kategori = hentArbeidssokerstatusAarsakskategori(
-      lagPeriodeMedAarsak("DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS"),
-    );
-
-    expect(kategori).toEqual({ viHarIkkeAnsvar: true, periodenHarVaert: false });
-  });
-
   test.each(["ETTERREGISTRERT_MELDEKORT", "ARBEIDSSOKERPERIODEN_ER_I_FORTID"] as const)(
     "deaktiverer spørsmålet for årsaken %s når flagget er på",
     (aarsak) => {
       const periode = lagPeriodeMedAarsak(aarsak);
 
-      expect(hentArbeidssokerstatusAarsakskategori(periode).periodenHarVaert).toBe(true);
       expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(true);
       expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, false)).toBe(false);
     },
@@ -68,25 +58,29 @@ describe("arbeidssøkerstatus-årsak", () => {
 
     expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(false);
   });
-});
 
-describe("erKorrigertMeldekort", () => {
-  test.each([
-    {
+  test("låser gammel etterregistrert true kun når ny flyt er aktiv", () => {
+    const periode = {
       ...rapporteringsperioderResponse[0],
-      registrertArbeidssoker: {
-        svar: null,
-        aarsak: ARBEIDSSOKERSTATUS_AARSAK.KORRIGERT_MELDEKORT,
-      },
-    },
-    { ...rapporteringsperioderResponse[0], type: KortType.KORRIGERT },
-    { ...rapporteringsperioderResponse[0], originalId: "opprinnelig-periode" },
-  ])("gjenkjenner korrigert meldekort uansett signal", (periode) => {
-    expect(erKorrigertMeldekort(periode)).toBe(true);
+      type: KortType.ETTERREGISTRERT,
+      registrertArbeidssoker: true,
+    };
+
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(true);
+    expect(normaliserArbeidssokerSvar(periode, true)).toBeNull();
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, false)).toBe(false);
+    expect(normaliserArbeidssokerSvar(periode, false)).toBe(true);
   });
 
-  test("gjenkjenner ikke ordinært meldekort som korrigert", () => {
-    expect(erKorrigertMeldekort(rapporteringsperioderResponse[0])).toBe(false);
+  test("lar etterregistrert ny payload uten årsak beholde avgitt svar", () => {
+    const periode = {
+      ...rapporteringsperioderResponse[0],
+      type: KortType.ETTERREGISTRERT,
+      registrertArbeidssoker: { svar: false, aarsak: null },
+    };
+
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(false);
+    expect(normaliserArbeidssokerSvar(periode, true)).toBe(false);
   });
 });
 

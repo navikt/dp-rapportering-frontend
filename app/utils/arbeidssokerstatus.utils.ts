@@ -6,16 +6,31 @@ export function hentArbeidssokerstatusAarsakskategori(aarsak: Arbeidssokerstatus
     viHarIkkeAnsvar:
       aarsak ===
       ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
-    periodenHarVaert:
+    arbeidssokerperiodenErIFortid:
       aarsak === ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT ||
       aarsak === ARBEIDSSOKERSTATUS_AARSAK.ARBEIDSSOKERPERIODEN_ER_I_FORTID,
   };
 }
 
 export function erArbeidssokerstatusSvarLaast(aarsak: ArbeidssokerstatusAarsak | null): boolean {
-  const { viHarIkkeAnsvar, periodenHarVaert } = hentArbeidssokerstatusAarsakskategori(aarsak);
+  const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } =
+    hentArbeidssokerstatusAarsakskategori(aarsak);
 
-  return viHarIkkeAnsvar || periodenHarVaert;
+  return viHarIkkeAnsvar || arbeidssokerperiodenErIFortid;
+}
+
+export function finnArbeidssokerstatusAarsak(
+  periode: IRapporteringsperiode,
+): ArbeidssokerstatusAarsak | null {
+  const status = periode.registrertArbeidssoker;
+
+  if (typeof status === "object" && status !== null) {
+    return status.aarsak;
+  }
+
+  return periode.type === KortType.ETTERREGISTRERT
+    ? ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT
+    : null;
 }
 
 export function erKorrigertMeldekort(periode: IRapporteringsperiode): boolean {

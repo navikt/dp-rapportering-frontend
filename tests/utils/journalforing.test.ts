@@ -565,6 +565,27 @@ describe("htmlForArbeidssoker", () => {
     expect(html).toContain(" disabled />");
     expect(html).toContain("vi-har-ikke-ansvar");
   });
+
+  it("journalfører etterregistrert legacy-ja som ubesvart når ny flyt er på", () => {
+    const html = htmlForArbeidssoker({
+      rapporteringsperioder: [],
+      periode: {
+        ...innsendtRapporteringsperioderResponse[0],
+        type: KortType.ETTERREGISTRERT,
+        registrertArbeidssoker: true,
+      },
+      getAppText: mockGetAppText,
+      getRichText: mockGetRichText,
+      nySanityTexts: mockSanityTekst,
+      locale,
+      skalAktivereSpm5Feature: true,
+    });
+
+    expect(html).toContain('type="radio"');
+    expect(html).toContain(" disabled />");
+    expect(html).not.toContain("checked />");
+    expect(html).toContain("perioden-er-gammel");
+  });
 });
 
 describe("htmlForOppsummering", () => {
