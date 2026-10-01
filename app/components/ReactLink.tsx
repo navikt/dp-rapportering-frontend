@@ -53,7 +53,6 @@ function ReactLinkComponent(
     className,
     reloadDocument = false,
   } = props;
-  const reload = to === "/" || reloadDocument;
   const href = useHref(to);
 
   const handleClick = useLinkClickHandler(to, {
@@ -75,7 +74,7 @@ function ReactLinkComponent(
           bakover i designsystemet gjenspeiler ikke dette. */
           // @ts-expect-error ts klager over feil event-type
           onClick?.(event);
-          if (!event.defaultPrevented && !disabled && !reload) {
+          if (!event.defaultPrevented && !disabled && !reloadDocument) {
             // @ts-expect-error ts klager over feil event-type
             handleClick(event);
           }
@@ -97,7 +96,7 @@ function ReactLinkComponent(
       href={href}
       onClick={(event) => {
         onClick?.(event);
-        if (!event.defaultPrevented && !reload) {
+        if (!event.defaultPrevented && !reloadDocument) {
           handleClick(event);
         }
       }}
