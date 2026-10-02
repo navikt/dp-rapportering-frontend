@@ -102,13 +102,21 @@ describe("rapporteringsperiode.server", () => {
     test("bevarer svar når nytt payloadformat er aktivt", async () => {
       vi.mocked(skalAktivereSpm5Feature).mockResolvedValue(true);
       const periode = lagRapporteringsperiode({
-        type: KortType.ETTERREGISTRERT,
-        registrertArbeidssoker: { svar: false, aarsak: null },
+        type: KortType.ORDINAERT,
+        registrertArbeidssoker: false,
+        sporsmalOmRegistrertArbeidssoker: {
+          svarFraBruker: false,
+          arsakBrukerHarIkkeSvart: null,
+        },
       });
 
       const payload = await sendInn(periode);
 
-      expect(payload?.registrertArbeidssoker).toEqual({ svar: false, aarsak: null });
+      expect(payload?.registrertArbeidssoker).toEqual(false);
+      expect(payload?.sporsmalOmRegistrertArbeidssoker).toEqual({
+        svarFraBruker: false,
+        arsakBrukerHarIkkeSvart: null,
+      });
     });
 
     test("sender ikke gammelt etterregistrert ja som nytt svar", async () => {
@@ -120,9 +128,10 @@ describe("rapporteringsperiode.server", () => {
 
       const payload = await sendInn(periode);
 
-      expect(payload?.registrertArbeidssoker).toEqual({
-        svar: null,
-        aarsak: ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT,
+      expect(payload?.registrertArbeidssoker).toEqual(null);
+      expect(payload?.sporsmalOmRegistrertArbeidssoker).toEqual({
+        svarFraBruker: null,
+        arsakBrukerHarIkkeSvart: ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT,
       });
     });
 
@@ -131,12 +140,17 @@ describe("rapporteringsperiode.server", () => {
       const aarsak = ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT;
       const periode = lagRapporteringsperiode({
         type: KortType.ETTERREGISTRERT,
-        registrertArbeidssoker: { svar: true, aarsak },
+        registrertArbeidssoker: true,
+        sporsmalOmRegistrertArbeidssoker: { svarFraBruker: true, arsakBrukerHarIkkeSvart: aarsak },
       });
 
       const payload = await sendInn(periode);
 
-      expect(payload?.registrertArbeidssoker).toEqual({ svar: null, aarsak });
+      expect(payload?.registrertArbeidssoker).toEqual(null);
+      expect(payload?.sporsmalOmRegistrertArbeidssoker).toEqual({
+        svarFraBruker: null,
+        arsakBrukerHarIkkeSvart: aarsak,
+      });
     });
 
     test("beholder legacy-overstyring når nytt payloadformat er deaktivert", async () => {
@@ -152,19 +166,24 @@ describe("rapporteringsperiode.server", () => {
 
     test("konverterer ny payload til legacy boolean når flagget slås av", async () => {
       const periode = lagRapporteringsperiode({
-        registrertArbeidssoker: { svar: false, aarsak: null },
+        sporsmalOmRegistrertArbeidssoker: {
+          svarFraBruker: false,
+          arsakBrukerHarIkkeSvart: null,
+        },
       });
 
       const payload = await sendInn(periode);
 
       expect(payload?.registrertArbeidssoker).toBe(false);
+      expect(payload?.sporsmalOmRegistrertArbeidssoker).toEqual(undefined);
     });
 
     test("bevarer legacy-svar uavhengig av årsak når flagget er av", async () => {
       const periode = lagRapporteringsperiode({
-        registrertArbeidssoker: {
-          svar: true,
-          aarsak:
+        registrertArbeidssoker: true,
+        sporsmalOmRegistrertArbeidssoker: {
+          svarFraBruker: true,
+          arsakBrukerHarIkkeSvart:
             ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
         },
       });

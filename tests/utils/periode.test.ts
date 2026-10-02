@@ -3,8 +3,6 @@ import { describe, expect, test } from "vitest";
 
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
 import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.server.utils";
-import { ARBEIDSSOKERSTATUS_AARSAK, IRapporteringsperiodeStatus, KortType } from "~/utils/types";
-
 import {
   erAktiviteteneLike,
   erAktivitetenLik,
@@ -15,7 +13,9 @@ import {
   skalDeaktivereArbeidssokerstatusSporsmal,
   skalHaArbeidssokerSporsmal,
   sorterAktiviteter,
-} from "../../app/utils/periode.utils";
+} from "~/utils/periode.utils";
+import { ARBEIDSSOKERSTATUS_AARSAK, IRapporteringsperiodeStatus, KortType } from "~/utils/types";
+
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
 
@@ -37,9 +37,10 @@ describe("skalHaArbeidssokerSporsmal", () => {
 describe("arbeidssøkerstatus-årsak", () => {
   const lagPeriodeMedAarsak = (aarsak: keyof typeof ARBEIDSSOKERSTATUS_AARSAK) => ({
     ...rapporteringsperioderResponse[0],
-    registrertArbeidssoker: {
-      svar: null,
-      aarsak: ARBEIDSSOKERSTATUS_AARSAK[aarsak],
+    registrertArbeidssoker: null,
+    sporsmalOmRegistrertArbeidssoker: {
+      svarFraBruker: null,
+      arsakBrukerHarIkkeSvart: ARBEIDSSOKERSTATUS_AARSAK[aarsak],
     },
   });
 
@@ -76,11 +77,12 @@ describe("arbeidssøkerstatus-årsak", () => {
     const periode = {
       ...rapporteringsperioderResponse[0],
       type: KortType.ETTERREGISTRERT,
-      registrertArbeidssoker: { svar: false, aarsak: null },
+      registrertArbeidssoker: false,
+      sporsmalOmRegistrertArbeidssoker: { svarFraBruker: false, arsakBrukerHarIkkeSvart: null },
     };
 
-    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(false);
-    expect(normaliserArbeidssokerSvar(periode, true)).toBe(false);
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(true);
+    expect(normaliserArbeidssokerSvar(periode, true)).toBe(null);
   });
 });
 

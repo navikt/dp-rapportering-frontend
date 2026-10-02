@@ -22,10 +22,10 @@ export function erArbeidssokerstatusSvarLaast(aarsak: ArbeidssokerstatusAarsak |
 export function finnArbeidssokerstatusAarsak(
   periode: IRapporteringsperiode,
 ): ArbeidssokerstatusAarsak | null {
-  const status = periode.registrertArbeidssoker;
+  const status = periode.sporsmalOmRegistrertArbeidssoker;
 
-  if (typeof status === "object" && status !== null) {
-    return status.aarsak;
+  if (typeof status === "object" && status !== null && status.arsakBrukerHarIkkeSvart !== null) {
+    return status.arsakBrukerHarIkkeSvart;
   }
 
   return periode.type === KortType.ETTERREGISTRERT
@@ -35,8 +35,9 @@ export function finnArbeidssokerstatusAarsak(
 
 export function erKorrigertMeldekort(periode: IRapporteringsperiode): boolean {
   const aarsak =
-    typeof periode.registrertArbeidssoker === "object" && periode.registrertArbeidssoker !== null
-      ? periode.registrertArbeidssoker.aarsak
+    typeof periode.sporsmalOmRegistrertArbeidssoker === "object" &&
+    periode.sporsmalOmRegistrertArbeidssoker !== null
+      ? periode.sporsmalOmRegistrertArbeidssoker.arsakBrukerHarIkkeSvart
       : null;
 
   return (

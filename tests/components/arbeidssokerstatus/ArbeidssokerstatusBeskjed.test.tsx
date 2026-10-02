@@ -30,7 +30,8 @@ describe("ArbeidssokerstatusBeskjed", () => {
   ] as const)("velger Sanity-felt for årsak %s på %s", (aarsak, side, felt) => {
     const periode = {
       ...innsendtRapporteringsperioderResponse[0],
-      registrertArbeidssoker: { svar: null, aarsak },
+      registrertArbeidssoker: null,
+      sporsmalOmRegistrertArbeidssoker: { svarFraBruker: null, arsakBrukerHarIkkeSvart: aarsak },
     };
 
     expect(hentArbeidssokerstatusInnhold(periode, side, undefined, true).felt).toBe(felt);
@@ -52,12 +53,13 @@ describe("ArbeidssokerstatusBeskjed", () => {
     const periode = {
       ...innsendtRapporteringsperioderResponse[0],
       type: KortType.ETTERREGISTRERT,
-      registrertArbeidssoker: { svar: true, aarsak: null },
+      registrertArbeidssoker: true,
+      sporsmalOmRegistrertArbeidssoker: { svarFraBruker: true, arsakBrukerHarIkkeSvart: null },
     };
 
     const innhold = hentArbeidssokerstatusInnhold(periode, "utfylling", undefined, true);
 
-    expect(innhold.felt).toBe("arbeidssokerstatusBeskjeder.duVilVaereRegistrert");
+    expect(innhold.felt).toBe("arbeidssokerstatusBeskjeder.periodenErGammel");
   });
 
   test("viser diagnostisk tekst når Sanity rich text mangler", async () => {

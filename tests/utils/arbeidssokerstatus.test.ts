@@ -32,14 +32,15 @@ describe("arbeidssøkerstatus-årsaker", () => {
     },
   );
 
-  test("respekterer eksplisitt null-årsak i ny payload også for etterregistrert", () => {
+  test("respekterer ikke eksplisitt null-årsak i ny payload også for etterregistrert", () => {
     const periode = {
       ...rapporteringsperioderResponse[0],
       type: KortType.ETTERREGISTRERT,
-      registrertArbeidssoker: { svar: false, aarsak: null },
+      registrertArbeidssoker: false,
+      sporsmalOmRegistrertArbeidssoker: { svarFraBruker: false, arsakBrukerHarIkkeSvart: null },
     };
 
-    expect(finnArbeidssokerstatusAarsak(periode)).toBeNull();
+    expect(finnArbeidssokerstatusAarsak(periode)).toBe(ETTERREGISTRERT_MELDEKORT);
   });
 
   test("skiller manglende ansvar fra en arbeidssøkerperiode i fortid", () => {
@@ -80,7 +81,11 @@ describe("erKorrigertMeldekort", () => {
   test.each([
     {
       ...rapporteringsperioderResponse[0],
-      registrertArbeidssoker: { svar: null, aarsak: KORRIGERT_MELDEKORT },
+      registrertArbeidssoker: null,
+      sporsmalOmRegistrertArbeidssoker: {
+        svarFraBruker: null,
+        arsakBrukerHarIkkeSvart: KORRIGERT_MELDEKORT,
+      },
     },
     { ...rapporteringsperioderResponse[0], type: KortType.KORRIGERT },
     { ...rapporteringsperioderResponse[0], originalId: "opprinnelig-periode" },

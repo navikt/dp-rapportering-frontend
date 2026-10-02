@@ -21,11 +21,6 @@ export interface IPeriode {
   tilOgMed: string;
 }
 
-export interface IRegistrertArbeidssoker {
-  svar: boolean | null;
-  aarsak: ArbeidssokerstatusAarsak | null;
-}
-
 export interface IRapporteringsperiodeDag {
   dagIndex: number;
   dato: string;
@@ -47,13 +42,19 @@ export interface IRapporteringsperiode {
   begrunnelseEndring: string | null;
   status: IRapporteringsperiodeStatus;
   mottattDato: string | null;
-  registrertArbeidssoker: boolean | IRegistrertArbeidssoker | null;
+  registrertArbeidssoker: boolean | null;
+  sporsmalOmRegistrertArbeidssoker?: ISporsmalOmRegistrertArbeidssoker | null;
   originalId: string | null;
   html: string | null;
   rapporteringstype: Rapporteringstype | null;
   opprettetAv: TOpprettetAv | null;
   // TODO: rydd opp etter spm5 toggle er fjernet
   innsendtTil?: TOpprettetAv | null;
+}
+
+export interface ISporsmalOmRegistrertArbeidssoker {
+  svarFraBruker: boolean | null;
+  arsakBrukerHarIkkeSvart: ArbeidssokerstatusAarsak | null;
 }
 
 export interface IInnsendtRapporteringsperiodeResponse {
@@ -189,23 +190,29 @@ export async function sendInnPeriode(
   const arbeidssokerstatus = rapporteringsperiode.registrertArbeidssoker;
   const aarsak = skalAktivereSpm5 ? finnArbeidssokerstatusAarsak(rapporteringsperiode) : null;
   const svar =
-    typeof arbeidssokerstatus === "object" && arbeidssokerstatus !== null
-      ? arbeidssokerstatus.svar
+    typeof rapporteringsperiode.sporsmalOmRegistrertArbeidssoker === "object" &&
+    rapporteringsperiode.sporsmalOmRegistrertArbeidssoker !== null
+      ? rapporteringsperiode.sporsmalOmRegistrertArbeidssoker.svarFraBruker
       : arbeidssokerstatus;
+  const justertSvar = erArbeidssokerstatusSvarLaast(aarsak) ? null : svar;
   const registrertArbeidssoker = skalAktivereSpm5
-    ? {
-        svar: erArbeidssokerstatusSvarLaast(aarsak) ? null : svar,
-        aarsak,
-      }
+    ? justertSvar
     : rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
         rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
       ? true
-      : svar;
+      : (arbeidssokerstatus ?? svar);
+  const sporsmalOmRegistrertArbeidssoker = skalAktivereSpm5
+    ? {
+        svarFraBruker: justertSvar,
+        arsakBrukerHarIkkeSvart: aarsak,
+      }
+    : undefined;
 
   const rapporteringsperiodeWithHtml = {
     ...rapporteringsperiode,
     html: html.toString().trim(),
     registrertArbeidssoker,
+    sporsmalOmRegistrertArbeidssoker,
   };
 
   const standardHeaders = await getHeaders(request);

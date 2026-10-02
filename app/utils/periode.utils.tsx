@@ -228,7 +228,7 @@ export function normaliserArbeidssokerSvar(
   periode: IRapporteringsperiode,
   skalAktivereSpm5Feature = false,
 ): boolean | null {
-  const registrertArbeidssoker = periode.registrertArbeidssoker;
+  const sporsmalOmRegistrertArbeidssoker = periode.sporsmalOmRegistrertArbeidssoker;
 
   if (
     skalAktivereSpm5Feature &&
@@ -237,11 +237,15 @@ export function normaliserArbeidssokerSvar(
     return null;
   }
 
-  if (typeof registrertArbeidssoker !== "object" || registrertArbeidssoker === null) {
-    return registrertArbeidssoker;
+  if (
+    typeof sporsmalOmRegistrertArbeidssoker !== "object" ||
+    sporsmalOmRegistrertArbeidssoker === null ||
+    sporsmalOmRegistrertArbeidssoker.svarFraBruker === null
+  ) {
+    return periode.registrertArbeidssoker;
   }
 
-  return registrertArbeidssoker.svar;
+  return sporsmalOmRegistrertArbeidssoker.svarFraBruker;
 }
 
 interface IPeriodeDate {

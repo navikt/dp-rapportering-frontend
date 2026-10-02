@@ -8,7 +8,7 @@ import { loader as rapporteringsperiodeLoader } from "~/routes/periode.$rapporte
 import ArbeidssøkerRegisterSide, {
   action as arbeidssokerregisterAction,
 } from "~/routes/periode.$rapporteringsperiodeId.arbeidssoker";
-import { ARBEIDSSOKERSTATUS_AARSAK, KortType } from "~/utils/types";
+import { KortType } from "~/utils/types";
 
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
@@ -138,11 +138,7 @@ describe("ArbeidssøkerRegisterSide", () => {
   });
 
   test("sender ikke arbeidssøkersvar når det mangler i formdata", async () => {
-    const registrertArbeidssoker = {
-      svar: null,
-      aarsak:
-        ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
-    } as const;
+    const registrertArbeidssoker = null;
     const periode = {
       ...rapporteringsperiode,
       registrertArbeidssoker,

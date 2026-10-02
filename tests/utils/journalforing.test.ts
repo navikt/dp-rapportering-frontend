@@ -531,7 +531,8 @@ describe("htmlForArbeidssoker", () => {
       rapporteringsperioder: [],
       periode: {
         ...innsendtRapporteringsperioderResponse[0],
-        registrertArbeidssoker: { svar: false, aarsak: null },
+        registrertArbeidssoker: false,
+        sporsmalOmRegistrertArbeidssoker: { svarFraBruker: false, arsakBrukerHarIkkeSvart: null },
       },
       getAppText: mockGetAppText,
       getRichText: mockGetRichText,
@@ -548,9 +549,10 @@ describe("htmlForArbeidssoker", () => {
       rapporteringsperioder: [],
       periode: {
         ...innsendtRapporteringsperioderResponse[0],
-        registrertArbeidssoker: {
-          svar: null,
-          aarsak:
+        registrertArbeidssoker: null,
+        sporsmalOmRegistrertArbeidssoker: {
+          svarFraBruker: null,
+          arsakBrukerHarIkkeSvart:
             ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
         },
       },
@@ -646,9 +648,10 @@ describe("htmlForOppsummering", () => {
       rapporteringsperioder: [],
       periode: {
         ...innsendtRapporteringsperioderResponse[0],
-        registrertArbeidssoker: {
-          svar: null,
-          aarsak:
+        registrertArbeidssoker: null,
+        sporsmalOmRegistrertArbeidssoker: {
+          svarFraBruker: null,
+          arsakBrukerHarIkkeSvart:
             ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
         },
       },
@@ -668,7 +671,8 @@ describe("htmlForOppsummering", () => {
       rapporteringsperioder: [],
       periode: {
         ...innsendtRapporteringsperioderResponse[0],
-        registrertArbeidssoker: { svar: false, aarsak: null },
+        registrertArbeidssoker: false,
+        sporsmalOmRegistrertArbeidssoker: { svarFraBruker: false, arsakBrukerHarIkkeSvart: null },
       },
       getAppText: mockGetAppText,
       getRichText: mockGetRichText,

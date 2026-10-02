@@ -138,20 +138,13 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       const { registrertArbeidssoker } = (await request.json()) as IArbeidssokerSvar;
       const db = database || (await getDatabase(cookies));
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
-      const periode = db.findRapporteringsperiodeById(rapporteringsperiodeId);
 
       if (registrertArbeidssoker === undefined) {
         return HttpResponse.json(undefined, { status: 204 });
       }
 
-      const registrertArbeidssokerOppdatert =
-        typeof periode?.registrertArbeidssoker === "object" &&
-        periode.registrertArbeidssoker !== null
-          ? { ...periode.registrertArbeidssoker, svar: registrertArbeidssoker }
-          : registrertArbeidssoker;
-
       await db.updateRapporteringsperiode(rapporteringsperiodeId, {
-        registrertArbeidssoker: registrertArbeidssokerOppdatert,
+        registrertArbeidssoker,
       });
 
       return HttpResponse.json(undefined, { status: 204 });
