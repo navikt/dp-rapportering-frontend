@@ -139,7 +139,13 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       const db = database || (await getDatabase(cookies));
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
 
-      await db.updateRapporteringsperiode(rapporteringsperiodeId, { registrertArbeidssoker });
+      if (registrertArbeidssoker === undefined) {
+        return HttpResponse.json(undefined, { status: 204 });
+      }
+
+      await db.updateRapporteringsperiode(rapporteringsperiodeId, {
+        registrertArbeidssoker,
+      });
 
       return HttpResponse.json(undefined, { status: 204 });
     },

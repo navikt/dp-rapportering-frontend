@@ -7,6 +7,11 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
+import {
+  erArbeidssokerstatusSvarLaast,
+  finnArbeidssokerstatusAarsak,
+  hentArbeidssokerstatusAarsakskategori as hentAarsakskategori,
+} from "~/utils/arbeidssokerstatus.utils";
 
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
@@ -188,10 +193,59 @@ export function erPeriodeneLike(
   return true;
 }
 
-export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
+export function skalHaArbeidssokerSporsmal(
+  periode: IRapporteringsperiode,
+  skalAktivereSpm5Feature = false,
+): boolean {
+  if (skalAktivereSpm5Feature) {
+    return true;
+  }
+
   const erIkkeEtterregistrert = periode.type !== KortType.ETTERREGISTRERT;
 
   return erIkkeEtterregistrert;
+}
+
+export function hentArbeidssokerstatusAarsakskategori(periode: IRapporteringsperiode) {
+  return hentAarsakskategori(finnArbeidssokerstatusAarsak(periode));
+}
+
+export function skalDeaktivereArbeidssokerstatusSporsmal(
+  periode: IRapporteringsperiode,
+  skalAktivereSpm5Feature = false,
+): boolean {
+  if (!skalAktivereSpm5Feature) {
+    return false;
+  }
+
+  const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } =
+    hentArbeidssokerstatusAarsakskategori(periode);
+
+  return viHarIkkeAnsvar || arbeidssokerperiodenErIFortid;
+}
+
+export function normaliserArbeidssokerSvar(
+  periode: IRapporteringsperiode,
+  skalAktivereSpm5Feature = false,
+): boolean | null {
+  const sporsmalOmRegistrertArbeidssoker = periode.sporsmalOmRegistrertArbeidssoker;
+
+  if (
+    skalAktivereSpm5Feature &&
+    erArbeidssokerstatusSvarLaast(finnArbeidssokerstatusAarsak(periode))
+  ) {
+    return null;
+  }
+
+  if (
+    typeof sporsmalOmRegistrertArbeidssoker !== "object" ||
+    sporsmalOmRegistrertArbeidssoker === null ||
+    sporsmalOmRegistrertArbeidssoker.svarFraBruker === null
+  ) {
+    return periode.registrertArbeidssoker;
+  }
+
+  return sporsmalOmRegistrertArbeidssoker.svarFraBruker;
 }
 
 interface IPeriodeDate {

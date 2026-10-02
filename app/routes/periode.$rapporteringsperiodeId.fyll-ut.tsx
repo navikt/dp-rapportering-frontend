@@ -3,7 +3,7 @@ import { Alert, Button, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useEffect, useMemo, useState } from "react";
 import type { ActionFunctionArgs } from "react-router";
-import { useActionData, useNavigate, useNavigation } from "react-router";
+import { useActionData, useNavigate, useNavigation, useRouteLoaderData } from "react-router";
 import invariant from "tiny-invariant";
 import { uuidv7 } from "uuidv7";
 
@@ -20,6 +20,7 @@ import { usePreventDoubleClick } from "~/hooks/usePreventDoubleClick";
 import { useSanity } from "~/hooks/useSanity";
 import { useTypedRouteLoaderData } from "~/hooks/useTypedRouteLoaderData";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
+import type { loader as RootLoader } from "~/root";
 import { AktivitetType } from "~/utils/aktivitettype.utils";
 import { kanSendes, skalHaArbeidssokerSporsmal } from "~/utils/periode.utils";
 import { useIsSubmitting } from "~/utils/useIsSubmitting";
@@ -52,14 +53,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 }
 
-function nesteSide(periode: IRapporteringsperiode) {
+function nesteSide(periode: IRapporteringsperiode, skalAktivereSpm5Feature: boolean | undefined) {
   const harIngenAktiviteter = periode.dager.every((dag) => dag.aktiviteter.length === 0);
 
   if (harIngenAktiviteter) {
     return `/periode/${periode.id}/tom`;
   }
 
-  if (!skalHaArbeidssokerSporsmal(periode)) {
+  if (!skalHaArbeidssokerSporsmal(periode, skalAktivereSpm5Feature)) {
     return `/periode/${periode.id}/send-inn`;
   }
 
@@ -72,6 +73,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
   const isSubmitting = useIsSubmitting(navigation);
   const { locale } = useLocale();
   const { periode } = useTypedRouteLoaderData("routes/periode.$rapporteringsperiodeId");
+  const rootData = useRouteLoaderData<typeof RootLoader>("root");
 
   const { trackSkjemaStegStartet, trackSkjemaStegFullført } = useAnalytics();
   const sesjonId = useMemo(uuidv7, [periode.id]);
@@ -131,7 +133,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       sesjonId,
     });
 
-    const nextLink = nesteSide(periode);
+    const nextLink = nesteSide(periode, rootData?.disableSpm5);
     navigate(nextLink);
   };
 

@@ -38,7 +38,7 @@ import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekorato
 import { getEnv, isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "./utils/faro";
 import { sanityTekst } from "./utils/sanity.utils";
-import { FEATURE_TOGGLES, isFeatureEnabled } from "./utils/unleash.server";
+import { skalAktivereSpm5Feature } from "./utils/unleash.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -92,7 +92,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const language = getLocale(locale);
   const [sanityData, disableSpm5] = await Promise.all([
     hentSanityTekster(language),
-    isFeatureEnabled(FEATURE_TOGGLES.disableSpm5),
+    skalAktivereSpm5Feature(),
   ]);
 
   if (isLocalOrDemo && !hasSession(request)) {

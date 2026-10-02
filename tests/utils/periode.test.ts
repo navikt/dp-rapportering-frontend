@@ -3,18 +3,88 @@ import { describe, expect, test } from "vitest";
 
 import { AktivitetType, IAktivitet } from "~/utils/aktivitettype.utils";
 import { redirectTilForsideHvisMeldekortIkkeKanFyllesUt } from "~/utils/periode.server.utils";
-import { IRapporteringsperiodeStatus } from "~/utils/types";
-
 import {
   erAktiviteteneLike,
   erAktivitetenLik,
   erPeriodeneLike,
   nestePeriode,
+  normaliserArbeidssokerSvar,
   periodeSomTimer,
+  skalDeaktivereArbeidssokerstatusSporsmal,
+  skalHaArbeidssokerSporsmal,
   sorterAktiviteter,
-} from "../../app/utils/periode.utils";
+} from "~/utils/periode.utils";
+import { ARBEIDSSOKERSTATUS_AARSAK, IRapporteringsperiodeStatus, KortType } from "~/utils/types";
+
 import { innsendtRapporteringsperioderResponse } from "../../mocks/responses/innsendtRapporteringsperioderResponse";
 import { rapporteringsperioderResponse } from "../../mocks/responses/rapporteringsperioderResponse";
+
+describe("skalHaArbeidssokerSporsmal", () => {
+  const etterregistrertPeriode = {
+    ...rapporteringsperioderResponse[0],
+    type: KortType.ETTERREGISTRERT,
+  };
+
+  test("etterregistrerte meldekort får ikke spørsmålet når flagget er av", () => {
+    expect(skalHaArbeidssokerSporsmal(etterregistrertPeriode)).toBe(false);
+  });
+
+  test("alle meldekort får spørsmålet når disableSpm5-flagget er på", () => {
+    expect(skalHaArbeidssokerSporsmal(etterregistrertPeriode, true)).toBe(true);
+  });
+});
+
+describe("arbeidssøkerstatus-årsak", () => {
+  const lagPeriodeMedAarsak = (aarsak: keyof typeof ARBEIDSSOKERSTATUS_AARSAK) => ({
+    ...rapporteringsperioderResponse[0],
+    registrertArbeidssoker: null,
+    sporsmalOmRegistrertArbeidssoker: {
+      svarFraBruker: null,
+      arsakBrukerHarIkkeSvart: ARBEIDSSOKERSTATUS_AARSAK[aarsak],
+    },
+  });
+
+  test.each(["ETTERREGISTRERT_MELDEKORT", "ARBEIDSSOKERPERIODEN_ER_I_FORTID"] as const)(
+    "deaktiverer spørsmålet for årsaken %s når flagget er på",
+    (aarsak) => {
+      const periode = lagPeriodeMedAarsak(aarsak);
+
+      expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(true);
+      expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, false)).toBe(false);
+    },
+  );
+
+  test("deaktiverer ikke for andre årsaker", () => {
+    const periode = lagPeriodeMedAarsak("KORRIGERT_MELDEKORT");
+
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(false);
+  });
+
+  test("låser gammel etterregistrert true kun når ny flyt er aktiv", () => {
+    const periode = {
+      ...rapporteringsperioderResponse[0],
+      type: KortType.ETTERREGISTRERT,
+      registrertArbeidssoker: true,
+    };
+
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(true);
+    expect(normaliserArbeidssokerSvar(periode, true)).toBeNull();
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, false)).toBe(false);
+    expect(normaliserArbeidssokerSvar(periode, false)).toBe(true);
+  });
+
+  test("lar etterregistrert ny payload uten årsak beholde avgitt svar", () => {
+    const periode = {
+      ...rapporteringsperioderResponse[0],
+      type: KortType.ETTERREGISTRERT,
+      registrertArbeidssoker: false,
+      sporsmalOmRegistrertArbeidssoker: { svarFraBruker: false, arsakBrukerHarIkkeSvart: null },
+    };
+
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(true);
+    expect(normaliserArbeidssokerSvar(periode, true)).toBe(null);
+  });
+});
 
 describe("periodeSomTimer", () => {
   test("skal returnere riktig antall timer for en gyldig periode-streng", () => {

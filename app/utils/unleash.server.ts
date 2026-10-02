@@ -1,6 +1,7 @@
 import { startUnleash, type Unleash } from "unleash-client";
 
 import { logger } from "~/models/logger.server";
+import { isLocalhost } from "~/utils/env.utils";
 
 export const FEATURE_TOGGLES = {
   disableSpm5: "dp-rapportering-frontend-disableSpm5",
@@ -37,4 +38,8 @@ export async function isFeatureEnabled(feature: string, fallback = false): Promi
     unleashPromise = null;
     return fallback;
   }
+}
+
+export async function skalAktivereSpm5Feature(): Promise<boolean> {
+  return (await isFeatureEnabled(FEATURE_TOGGLES.disableSpm5)) || isLocalhost;
 }

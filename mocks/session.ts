@@ -58,7 +58,15 @@ class SessionRecord {
           begrunnelseEndring: z.string().nullable(),
           status: z.enum(["TilUtfylling", "Innsendt", "Endret", "Ferdig", "Feilet"]),
           mottattDato: z.string().nullable(),
-          registrertArbeidssoker: z.boolean().nullable(),
+          registrertArbeidssoker: z
+            .union([
+              z.boolean(),
+              z.object({
+                svar: z.boolean().nullable(),
+                aarsak: z.string().nullable(),
+              }),
+            ])
+            .nullable(),
           originalId: z.string().nullable(),
           html: z.string().nullable(),
           rapporteringstype: z.enum(["harAktivitet", "harIngenAktivitet"]).nullable(),

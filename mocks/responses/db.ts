@@ -14,6 +14,7 @@ import {
 import { formaterDato } from "~/utils/dato.utils";
 import { isLocalOrDemo } from "~/utils/env.utils";
 import {
+  ARBEIDSSOKERSTATUS_AARSAK,
   IRapporteringsperiodeStatus,
   KortType,
   OPPRETTET_AV,
@@ -321,6 +322,10 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
 
       const etterregistrertPeriode = lagRapporteringsperiode({
         type: KortType.ETTERREGISTRERT,
+        registrertArbeidssoker: {
+          svar: null,
+          aarsak: ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT,
+        },
         periode: {
           fraOgMed,
           tilOgMed,
@@ -328,6 +333,27 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       });
 
       db.rapporteringsperioder.create(etterregistrertPeriode);
+      break;
+    }
+
+    case ScenarioType.ikkeAnsvar: {
+      deleteAllRapporteringsperioder(db);
+
+      const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
+
+      const periodeMedManglendeAnsvar = lagRapporteringsperiode({
+        registrertArbeidssoker: {
+          svar: null,
+          aarsak:
+            ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
+        },
+        periode: {
+          fraOgMed,
+          tilOgMed,
+        },
+      });
+
+      db.rapporteringsperioder.create(periodeMedManglendeAnsvar);
       break;
     }
 
