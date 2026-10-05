@@ -29,7 +29,7 @@ describe("skalHaArbeidssokerSporsmal", () => {
     expect(skalHaArbeidssokerSporsmal(etterregistrertPeriode)).toBe(false);
   });
 
-  test("alle meldekort får spørsmålet når disableSpm5-flagget er på", () => {
+  test("alle meldekort får spørsmålet når den nye arbeidssøkerstatusflyten er aktiv", () => {
     expect(skalHaArbeidssokerSporsmal(etterregistrertPeriode, true)).toBe(true);
   });
 });
@@ -73,7 +73,7 @@ describe("arbeidssøkerstatus-årsak", () => {
     expect(normaliserArbeidssokerSvar(periode, false)).toBe(true);
   });
 
-  test("lar etterregistrert ny payload uten årsak beholde avgitt svar", () => {
+  test("låser etterregistrert svar når ny payload mangler årsak", () => {
     const periode = {
       ...rapporteringsperioderResponse[0],
       type: KortType.ETTERREGISTRERT,
@@ -83,6 +83,18 @@ describe("arbeidssøkerstatus-årsak", () => {
 
     expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(true);
     expect(normaliserArbeidssokerSvar(periode, true)).toBe(null);
+  });
+
+  test("beholder ordinært svar når ny payload mangler årsak", () => {
+    const periode = {
+      ...rapporteringsperioderResponse[0],
+      type: KortType.ORDINAERT,
+      registrertArbeidssoker: false,
+      sporsmalOmRegistrertArbeidssoker: { svarFraBruker: false, arsakBrukerHarIkkeSvart: null },
+    };
+
+    expect(skalDeaktivereArbeidssokerstatusSporsmal(periode, true)).toBe(false);
+    expect(normaliserArbeidssokerSvar(periode, true)).toBe(false);
   });
 });
 

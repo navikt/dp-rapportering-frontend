@@ -7,11 +7,7 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
-import {
-  erArbeidssokerstatusSvarLaast,
-  finnArbeidssokerstatusAarsak,
-  hentArbeidssokerstatusAarsakskategori as hentAarsakskategori,
-} from "~/utils/arbeidssokerstatus.utils";
+import { hentArbeidssokerstatusVisning } from "~/utils/arbeidssokerstatus.utils";
 
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
@@ -207,45 +203,22 @@ export function skalHaArbeidssokerSporsmal(
 }
 
 export function hentArbeidssokerstatusAarsakskategori(periode: IRapporteringsperiode) {
-  return hentAarsakskategori(finnArbeidssokerstatusAarsak(periode));
+  const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } = hentArbeidssokerstatusVisning(periode);
+  return { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid };
 }
 
 export function skalDeaktivereArbeidssokerstatusSporsmal(
   periode: IRapporteringsperiode,
   skalAktivereSpm5Feature = false,
 ): boolean {
-  if (!skalAktivereSpm5Feature) {
-    return false;
-  }
-
-  const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } =
-    hentArbeidssokerstatusAarsakskategori(periode);
-
-  return viHarIkkeAnsvar || arbeidssokerperiodenErIFortid;
+  return hentArbeidssokerstatusVisning(periode, skalAktivereSpm5Feature).svarLaast;
 }
 
 export function normaliserArbeidssokerSvar(
   periode: IRapporteringsperiode,
   skalAktivereSpm5Feature = false,
 ): boolean | null {
-  const sporsmalOmRegistrertArbeidssoker = periode.sporsmalOmRegistrertArbeidssoker;
-
-  if (
-    skalAktivereSpm5Feature &&
-    erArbeidssokerstatusSvarLaast(finnArbeidssokerstatusAarsak(periode))
-  ) {
-    return null;
-  }
-
-  if (
-    typeof sporsmalOmRegistrertArbeidssoker !== "object" ||
-    sporsmalOmRegistrertArbeidssoker === null ||
-    sporsmalOmRegistrertArbeidssoker.svarFraBruker === null
-  ) {
-    return periode.registrertArbeidssoker;
-  }
-
-  return sporsmalOmRegistrertArbeidssoker.svarFraBruker;
+  return hentArbeidssokerstatusVisning(periode, skalAktivereSpm5Feature).svar;
 }
 
 interface IPeriodeDate {

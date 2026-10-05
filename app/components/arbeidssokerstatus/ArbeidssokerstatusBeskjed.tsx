@@ -7,12 +7,9 @@ import { useLocale } from "~/hooks/useLocale";
 import { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
 import type { MeldekortBrukerflateApiResponse } from "~/sanity/queries/meldekort-brukerflate";
+import { hentArbeidssokerstatusVisning } from "~/utils/arbeidssokerstatus.utils";
 import { DATOFORMAT_MED_AAR, formaterDato } from "~/utils/dato.utils";
-import {
-  hentArbeidssokerstatusAarsakskategori,
-  nestePeriode,
-  normaliserArbeidssokerSvar,
-} from "~/utils/periode.utils";
+import { nestePeriode } from "~/utils/periode.utils";
 import { sanityRichText } from "~/utils/sanity.utils";
 
 import { PortableTextRenderer } from "../portable-text/PortableTextRenderer";
@@ -35,9 +32,11 @@ export function hentArbeidssokerstatusInnhold(
   variant: "info" | "warning";
   felt: string | undefined;
 } {
-  const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } =
-    hentArbeidssokerstatusAarsakskategori(periode);
-  const arbeidssokerSvar = normaliserArbeidssokerSvar(periode, skalAktivereSpm5Feature);
+  const {
+    viHarIkkeAnsvar,
+    arbeidssokerperiodenErIFortid,
+    svar: arbeidssokerSvar,
+  } = hentArbeidssokerstatusVisning(periode, skalAktivereSpm5Feature);
   const utenBeskjed = {
     tekst: undefined,
     variant: "info" as const,
@@ -92,7 +91,7 @@ export function ArbeidssokerstatusBeskjed({ periode, side }: IProps) {
     periode,
     side,
     beskjeder,
-    rootData?.disableSpm5,
+    rootData?.nyArbeidssokerstatusFlytAktiv,
   );
 
   if (!felt) return null;

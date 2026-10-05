@@ -14,7 +14,7 @@ import {
   Rapporteringstype,
   TOpprettetAv,
 } from "~/utils/types";
-import { skalAktivereSpm5Feature } from "~/utils/unleash.server";
+import { erNyArbeidssokerstatusFlytAktiv } from "~/utils/unleash.server";
 
 export interface IPeriode {
   fraOgMed: string;
@@ -174,6 +174,39 @@ export async function hentInnsendtePerioder(request: Request): Promise<IRapporte
   return await response.json();
 }
 
+function lagArbeidssokerstatusPayload(
+  periode: IRapporteringsperiode,
+  nyArbeidssokerstatusFlytAktiv: boolean,
+): Pick<IRapporteringsperiode, "registrertArbeidssoker" | "sporsmalOmRegistrertArbeidssoker"> {
+  const arbeidssokerstatus = periode.registrertArbeidssoker;
+  const sporsmal = periode.sporsmalOmRegistrertArbeidssoker;
+  const svar =
+    typeof sporsmal === "object" && sporsmal !== null ? sporsmal.svarFraBruker : arbeidssokerstatus;
+
+  if (!nyArbeidssokerstatusFlytAktiv) {
+    const registrertArbeidssoker =
+      periode.type === KortType.ETTERREGISTRERT || periode.opprettetAv === OPPRETTET_AV.Arena
+        ? true
+        : (arbeidssokerstatus ?? svar);
+
+    return {
+      registrertArbeidssoker,
+      sporsmalOmRegistrertArbeidssoker: undefined,
+    };
+  }
+
+  const aarsak = finnArbeidssokerstatusAarsak(periode);
+  const svarFraBruker = erArbeidssokerstatusSvarLaast(aarsak) ? null : svar;
+
+  return {
+    registrertArbeidssoker: svarFraBruker,
+    sporsmalOmRegistrertArbeidssoker: {
+      svarFraBruker,
+      arsakBrukerHarIkkeSvart: aarsak,
+    },
+  };
+}
+
 export async function sendInnPeriode(
   request: Request,
   rapporteringsperiode: IRapporteringsperiode,
@@ -186,33 +219,15 @@ export async function sendInnPeriode(
     throw new Error("Kunne ikke finne HTML med tekstene");
   }
 
-  const skalAktivereSpm5 = await skalAktivereSpm5Feature();
-  const arbeidssokerstatus = rapporteringsperiode.registrertArbeidssoker;
-  const aarsak = skalAktivereSpm5 ? finnArbeidssokerstatusAarsak(rapporteringsperiode) : null;
-  const svar =
-    typeof rapporteringsperiode.sporsmalOmRegistrertArbeidssoker === "object" &&
-    rapporteringsperiode.sporsmalOmRegistrertArbeidssoker !== null
-      ? rapporteringsperiode.sporsmalOmRegistrertArbeidssoker.svarFraBruker
-      : arbeidssokerstatus;
-  const justertSvar = erArbeidssokerstatusSvarLaast(aarsak) ? null : svar;
-  const registrertArbeidssoker = skalAktivereSpm5
-    ? justertSvar
-    : rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
-        rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
-      ? true
-      : (arbeidssokerstatus ?? svar);
-  const sporsmalOmRegistrertArbeidssoker = skalAktivereSpm5
-    ? {
-        svarFraBruker: justertSvar,
-        arsakBrukerHarIkkeSvart: aarsak,
-      }
-    : undefined;
+  const arbeidssokerstatusPayload = lagArbeidssokerstatusPayload(
+    rapporteringsperiode,
+    await erNyArbeidssokerstatusFlytAktiv(),
+  );
 
   const rapporteringsperiodeWithHtml = {
     ...rapporteringsperiode,
     html: html.toString().trim(),
-    registrertArbeidssoker,
-    sporsmalOmRegistrertArbeidssoker,
+    ...arbeidssokerstatusPayload,
   };
 
   const standardHeaders = await getHeaders(request);

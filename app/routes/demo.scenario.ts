@@ -14,7 +14,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const sessionId = getSessionId(request);
 
     if (sessionId) {
-      withDb(await sessionRecord.getDatabase(sessionId)).updateRapporteringsperioder(
+      await withDb(await sessionRecord.getDatabase(sessionId)).updateRapporteringsperioder(
         scenario as ScenarioType,
       );
 

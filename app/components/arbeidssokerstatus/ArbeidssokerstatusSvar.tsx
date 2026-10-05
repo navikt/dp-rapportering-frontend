@@ -5,8 +5,9 @@ import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/Arbei
 import { useLocale } from "~/hooks/useLocale";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
+import { hentArbeidssokerstatusVisning } from "~/utils/arbeidssokerstatus.utils";
 import { formaterArbeidssokerperiode } from "~/utils/dato.utils";
-import { nestePeriode, normaliserArbeidssokerSvar } from "~/utils/periode.utils";
+import { nestePeriode } from "~/utils/periode.utils";
 import { sanityTekst } from "~/utils/sanity.utils";
 
 import rootStyles from "../../styles/root.module.css";
@@ -21,7 +22,7 @@ export function ArbeidssokerstatusSvar({ periode, visBeskjed = false }: Props) {
   const { locale } = useLocale();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const arbeidssokerstatusSporsmaal = rootData?.sanityTekst?.utfylling?.arbeidssokerstatusSporsmaal;
-  const svar = normaliserArbeidssokerSvar(periode, rootData?.disableSpm5);
+  const { svar } = hentArbeidssokerstatusVisning(periode, rootData?.nyArbeidssokerstatusFlytAktiv);
   const nesteMeldeperiode = nestePeriode(periode.periode);
   const { fom, tom } = formaterArbeidssokerperiode(nesteMeldeperiode, locale);
   const sporsmaal = sanityTekst(

@@ -121,7 +121,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     getAppText,
     getRichText,
     nySanityTexts: rootData?.sanityTekst,
-    skalAktivereSpm5Feature: rootData?.disableSpm5,
+    skalAktivereSpm5Feature: rootData?.nyArbeidssokerstatusFlytAktiv,
     submit,
     locale,
   });

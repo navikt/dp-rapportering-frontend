@@ -31,7 +31,7 @@ export function MeldekortDetaljer({
   const skalViseArbeidssokerstatusSvar =
     inkluderArbeidssokerstatusSvar &&
     !erKorrigertMeldekort(periode) &&
-    (rootData?.disableSpm5 || normaliserArbeidssokerSvar(periode) !== null);
+    (rootData?.nyArbeidssokerstatusFlytAktiv || normaliserArbeidssokerSvar(periode) !== null);
   const begrunnelse = periode.begrunnelseEndring;
   const begrunnelseTittel = sanityTekst(
     utfylling?.begrunnelseForEndring?.tittel,

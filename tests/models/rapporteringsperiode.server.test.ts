@@ -6,12 +6,12 @@ import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server
 import { hentRapporteringsperioder, sendInnPeriode } from "~/models/rapporteringsperiode.server";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { ARBEIDSSOKERSTATUS_AARSAK, KortType } from "~/utils/types";
-import { skalAktivereSpm5Feature } from "~/utils/unleash.server";
+import { erNyArbeidssokerstatusFlytAktiv } from "~/utils/unleash.server";
 
 import { server } from "../../mocks/server";
 
 vi.mock("~/utils/unleash.server", () => ({
-  skalAktivereSpm5Feature: vi.fn(),
+  erNyArbeidssokerstatusFlytAktiv: vi.fn(),
 }));
 
 const url = `${process.env.DP_RAPPORTERING_URL}/rapporteringsperioder`;
@@ -27,7 +27,7 @@ vi.mock("~/utils/fetch.utils", () => ({
 
 beforeEach(() => {
   server.resetHandlers();
-  vi.mocked(skalAktivereSpm5Feature).mockResolvedValue(false);
+  vi.mocked(erNyArbeidssokerstatusFlytAktiv).mockResolvedValue(false);
 });
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterAll(() => server.close());
@@ -100,7 +100,7 @@ describe("rapporteringsperiode.server", () => {
     }
 
     test("bevarer svar når nytt payloadformat er aktivt", async () => {
-      vi.mocked(skalAktivereSpm5Feature).mockResolvedValue(true);
+      vi.mocked(erNyArbeidssokerstatusFlytAktiv).mockResolvedValue(true);
       const periode = lagRapporteringsperiode({
         type: KortType.ORDINAERT,
         registrertArbeidssoker: false,
@@ -120,7 +120,7 @@ describe("rapporteringsperiode.server", () => {
     });
 
     test("sender ikke gammelt etterregistrert ja som nytt svar", async () => {
-      vi.mocked(skalAktivereSpm5Feature).mockResolvedValue(true);
+      vi.mocked(erNyArbeidssokerstatusFlytAktiv).mockResolvedValue(true);
       const periode = lagRapporteringsperiode({
         type: KortType.ETTERREGISTRERT,
         registrertArbeidssoker: true,
@@ -136,7 +136,7 @@ describe("rapporteringsperiode.server", () => {
     });
 
     test("sender null svar for årsaker der bruker ikke kan svare", async () => {
-      vi.mocked(skalAktivereSpm5Feature).mockResolvedValue(true);
+      vi.mocked(erNyArbeidssokerstatusFlytAktiv).mockResolvedValue(true);
       const aarsak = ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT;
       const periode = lagRapporteringsperiode({
         type: KortType.ETTERREGISTRERT,

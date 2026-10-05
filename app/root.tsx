@@ -38,7 +38,7 @@ import { availableLanguages, DecoratorLocale, getLocale } from "./utils/dekorato
 import { getEnv, isLocalOrDemo } from "./utils/env.utils";
 import { initInstrumentation } from "./utils/faro";
 import { sanityTekst } from "./utils/sanity.utils";
-import { skalAktivereSpm5Feature } from "./utils/unleash.server";
+import { erNyArbeidssokerstatusFlytAktiv } from "./utils/unleash.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -90,9 +90,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const dekorator = await getDecoratorHTML({ language: locale ?? DecoratorLocale.NB });
 
   const language = getLocale(locale);
-  const [sanityData, disableSpm5] = await Promise.all([
+  const [sanityData, nyArbeidssokerstatusFlytAktiv] = await Promise.all([
     hentSanityTekster(language),
-    skalAktivereSpm5Feature(),
+    erNyArbeidssokerstatusFlytAktiv(),
   ]);
 
   if (isLocalOrDemo && !hasSession(request)) {
@@ -105,7 +105,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return {
     ...sanityData,
-    disableSpm5,
+    nyArbeidssokerstatusFlytAktiv,
     locale: language,
     env: {
       BASE_PATH: process.env.BASE_PATH,

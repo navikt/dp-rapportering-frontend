@@ -133,7 +133,7 @@ export default function RapporteringsPeriodeFyllUtSide() {
       sesjonId,
     });
 
-    const nextLink = nesteSide(periode, rootData?.disableSpm5);
+    const nextLink = nesteSide(periode, rootData?.nyArbeidssokerstatusFlytAktiv);
     navigate(nextLink);
   };
 

@@ -46,10 +46,13 @@ export default function ArbeidssøkerRegisterSide() {
   const { getAppText } = useSanity();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const sanityTekst = rootData?.sanityTekst;
-  const arbeidssokerSvar = normaliserArbeidssokerSvar(periode, rootData?.disableSpm5);
+  const arbeidssokerSvar = normaliserArbeidssokerSvar(
+    periode,
+    rootData?.nyArbeidssokerstatusFlytAktiv,
+  );
   const deaktivertPaaGrunnAvAarsak = skalDeaktivereArbeidssokerstatusSporsmal(
     periode,
-    rootData?.disableSpm5,
+    rootData?.nyArbeidssokerstatusFlytAktiv,
   );
   const navigate = useNavigate();
   const fetcher = useFetcher<INetworkResponse>();
@@ -106,7 +109,7 @@ export default function ArbeidssøkerRegisterSide() {
         <RadioGroup
           disabled={
             !kanSendes(periode) ||
-            !skalHaArbeidssokerSporsmal(periode, rootData?.disableSpm5) ||
+            !skalHaArbeidssokerSporsmal(periode, rootData?.nyArbeidssokerstatusFlytAktiv) ||
             deaktivertPaaGrunnAvAarsak ||
             isSubmitting
           }

@@ -4,7 +4,7 @@ import { logger } from "~/models/logger.server";
 import { isLocalhost } from "~/utils/env.utils";
 
 export const FEATURE_TOGGLES = {
-  disableSpm5: "dp-rapportering-frontend-disableSpm5",
+  arbeidssokerstatusNyFlyt: "dp-rapportering-frontend-disableSpm5",
 } as const;
 
 let unleashPromise: Promise<Unleash> | null = null;
@@ -40,6 +40,6 @@ export async function isFeatureEnabled(feature: string, fallback = false): Promi
   }
 }
 
-export async function skalAktivereSpm5Feature(): Promise<boolean> {
-  return (await isFeatureEnabled(FEATURE_TOGGLES.disableSpm5)) || isLocalhost;
+export async function erNyArbeidssokerstatusFlytAktiv(): Promise<boolean> {
+  return (await isFeatureEnabled(FEATURE_TOGGLES.arbeidssokerstatusNyFlyt)) || isLocalhost;
 }

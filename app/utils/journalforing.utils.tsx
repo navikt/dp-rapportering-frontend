@@ -24,9 +24,8 @@ import {
   IAktivitet,
 } from "~/utils/aktivitettype.utils";
 import {
-  erArbeidssokerstatusSvarLaast,
   erKorrigertMeldekort,
-  finnArbeidssokerstatusAarsak,
+  hentArbeidssokerstatusVisning,
 } from "~/utils/arbeidssokerstatus.utils";
 import { sanityRichText, sanityTekst } from "~/utils/sanity.utils";
 
@@ -40,11 +39,9 @@ import {
 } from "./dato.utils";
 import { DecoratorLocale } from "./dekoratoren.utils";
 import {
-  hentArbeidssokerstatusAarsakskategori,
   hentPeriodeTekst,
   hentUkeTekst,
   nestePeriode,
-  normaliserArbeidssokerSvar,
   perioderSomKanSendes,
   periodeSomTimer,
   skalHaArbeidssokerSporsmal,
@@ -521,10 +518,10 @@ export function htmlForArbeidssoker(props: IProps): string {
     arbeidssokerstatusSporsmaal?.beskrivelse,
     "utfylling.arbeidssokerstatusSporsmaal.beskrivelse",
   );
-  const svar = normaliserArbeidssokerSvar(periode, skalAktivereSpm5Feature);
-  const deaktivert =
-    Boolean(skalAktivereSpm5Feature) &&
-    erArbeidssokerstatusSvarLaast(finnArbeidssokerstatusAarsak(periode));
+  const { svar, svarLaast: deaktivert } = hentArbeidssokerstatusVisning(
+    periode,
+    skalAktivereSpm5Feature,
+  );
   const options = [
     {
       value: true,
@@ -622,11 +619,8 @@ export function htmlForOppsummering(props: IProps): string {
 
     if (skalViseSpm5) {
       const arbeidssokerstatusSporsmaal = nySanityTexts?.utfylling?.arbeidssokerstatusSporsmaal;
-      const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } =
-        hentArbeidssokerstatusAarsakskategori(periode);
-      const arbeidssokerSvar = normaliserArbeidssokerSvar(periode, props.skalAktivereSpm5Feature);
-      const aarsakLaaeserSvar =
-        props.skalAktivereSpm5Feature && (viHarIkkeAnsvar || arbeidssokerperiodenErIFortid);
+      const { svar: arbeidssokerSvar, svarLaast: aarsakLaaeserSvar } =
+        hentArbeidssokerstatusVisning(periode, props.skalAktivereSpm5Feature);
       const nesteMeldeperiode = nestePeriode(periode.periode);
       const { fom, tom } = formaterArbeidssokerperiode(nesteMeldeperiode, locale);
       const arbeidssokerSporsmal = sanityTekst(

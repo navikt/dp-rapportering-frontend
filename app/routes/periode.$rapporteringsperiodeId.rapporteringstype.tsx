@@ -153,7 +153,7 @@ export default function RapporteringstypeSide() {
       sesjonId,
     });
 
-    navigate(nesteSide(periode, rootData?.disableSpm5));
+    navigate(nesteSide(periode, rootData?.nyArbeidssokerstatusFlytAktiv));
   };
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export default function RapporteringstypeSide() {
         sesjonId,
       });
 
-      navigate(nesteSide(periode, rootData?.disableSpm5));
+      navigate(nesteSide(periode, rootData?.nyArbeidssokerstatusFlytAktiv));
     });
   }, [
     navigate,

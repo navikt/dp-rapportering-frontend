@@ -43,7 +43,7 @@ export default function TomRapporteringsPeriodeSide() {
       sesjonId,
     });
 
-    navigate(nesteSide(periode, rootData?.disableSpm5));
+    navigate(nesteSide(periode, rootData?.nyArbeidssokerstatusFlytAktiv));
   };
 
   useEffect(() => {

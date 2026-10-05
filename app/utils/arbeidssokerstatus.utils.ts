@@ -33,6 +33,24 @@ export function finnArbeidssokerstatusAarsak(
     : null;
 }
 
+export function hentArbeidssokerstatusVisning(
+  periode: IRapporteringsperiode,
+  nyArbeidssokerstatusFlytAktiv = false,
+) {
+  const aarsak = finnArbeidssokerstatusAarsak(periode);
+  const aarsakskategori = hentArbeidssokerstatusAarsakskategori(aarsak);
+  const svarLaast = nyArbeidssokerstatusFlytAktiv && erArbeidssokerstatusSvarLaast(aarsak);
+  const nyttSvar = periode.sporsmalOmRegistrertArbeidssoker?.svarFraBruker;
+  const svar = nyttSvar ?? periode.registrertArbeidssoker;
+
+  return {
+    svar: svarLaast ? null : svar,
+    svarLaast,
+    aarsak,
+    ...aarsakskategori,
+  };
+}
+
 export function erKorrigertMeldekort(periode: IRapporteringsperiode): boolean {
   const aarsak =
     typeof periode.sporsmalOmRegistrertArbeidssoker === "object" &&
