@@ -276,7 +276,7 @@ importers:
         version: 3.4.1
       unleash-client:
         specifier: ^6.12.1
-        version: 6.12.1
+        version: 6.12.2
       uuidv7:
         specifier: 1.2.1
         version: 1.2.1
@@ -3474,8 +3474,8 @@ packages:
     resolution: {integrity: sha512-u4UB2/IrKdU6lFxumHmmo1a3fCQO5tzQllRorfoRS63txhrB7xTpSn1PftwC4qEHkOaqP95fCWW4lJzwErwzhQ==}
     engines: {node: '>=22.19.0'}
 
-  unleash-client@6.12.1:
-    resolution: {integrity: sha512-xeojMfPZynteI2fqGW70po23Nd588MKSv9cv5dH3BOfQmsVE0jcvypLl7a4/NfrAgmMKOpZ48N4TtnGd7klJDQ==}
+  unleash-client@6.12.2:
+    resolution: {integrity: sha512-aId4dG9E8zEOlOYLVy7YTMHG/gMKQYKDldWvWGt+x1z32a9g+IjlYBsFbqwOpD6T6CvMpCHzX1aONTW5MLVcHA==}
     engines: {node: '>=20'}
 
   unpipe@1.0.0:
@@ -7159,7 +7159,7 @@ snapshots:
 
   undici@8.11.2: {}
 
-  unleash-client@6.12.1:
+  unleash-client@6.12.2:
     dependencies:
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6
