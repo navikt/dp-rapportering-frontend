@@ -41,5 +41,12 @@ export async function isFeatureEnabled(feature: string, fallback = false): Promi
 }
 
 export async function erNyArbeidssokerstatusFlytAktiv(): Promise<boolean> {
-  return (await isFeatureEnabled(FEATURE_TOGGLES.arbeidssokerstatusNyFlyt)) || isLocalhost;
+  const runtimeEnvironment = process.env.RUNTIME_ENVIRONMENT;
+  const skalBrukeUnleashFlagg =
+    !isLocalhost &&
+    (!runtimeEnvironment ||
+      runtimeEnvironment === "development" ||
+      runtimeEnvironment === "production");
+
+  return !skalBrukeUnleashFlagg || isFeatureEnabled(FEATURE_TOGGLES.arbeidssokerstatusNyFlyt);
 }
