@@ -1,9 +1,8 @@
 import { ArrowsCirclepathIcon, SandboxIcon } from "@navikt/aksel-icons";
 import { Button, Modal, Tooltip } from "@navikt/ds-react";
 import { useState } from "react";
-import { useFetcher } from "react-router";
 
-import { INetworkResponse } from "~/utils/types";
+import { getEnv } from "~/utils/env.utils";
 
 import { Scenario } from "./Scenario";
 
@@ -69,13 +68,7 @@ const scenarios: IScenario[] = [
 ];
 
 export function DevTools() {
-  const fetcher = useFetcher<INetworkResponse>();
   const [isOpen, setIsOpen] = useState(false);
-
-  const changeHandler = (type: ScenarioType) => {
-    fetcher.submit({ type }, { method: "post", action: "/demo/scenario" });
-    setIsOpen(false);
-  };
 
   return (
     <div>
@@ -103,14 +96,10 @@ export function DevTools() {
           width={400}
         >
           <Modal.Body>
-            <fetcher.Form method="post" onSubmit={(e) => e.preventDefault()}>
+            <form method="post" action={`${getEnv("BASE_PATH")}/demo/scenario`}>
               {scenarios.map((scenario) => {
                 return (
-                  <Scenario
-                    key={scenario.type}
-                    tittel={scenario.tittel}
-                    onClick={() => changeHandler(scenario.type)}
-                  />
+                  <Scenario key={scenario.type} tittel={scenario.tittel} type={scenario.type} />
                 );
               })}
               <div
@@ -121,15 +110,17 @@ export function DevTools() {
                 }}
               >
                 <Button
+                  type="submit"
+                  name="type"
+                  value={ScenarioType.reset}
                   size="medium"
                   variant="secondary"
-                  onClick={() => changeHandler(ScenarioType.reset)}
                   icon={<ArrowsCirclepathIcon aria-hidden />}
                 >
                   Tilbakestill testdata
                 </Button>
               </div>
-            </fetcher.Form>
+            </form>
           </Modal.Body>
         </Modal>
       </div>
