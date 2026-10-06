@@ -30,7 +30,7 @@ const rapporteringsperiode = lagRapporteringsperiode({
 
 const mockResponse = () => server.use(...createHandlers(testDb));
 
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
 afterAll(() => server.close());
 
 describe("RapporteringstypeSide", () => {

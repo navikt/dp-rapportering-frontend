@@ -11,7 +11,7 @@ import { endSessionMock, mockSession } from "../helpers/auth-helper";
 import { catchErrorResponse } from "../helpers/response-helper";
 
 describe("Liste ut alle rapporteringsperioder", () => {
-  beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+  beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
   afterAll(() => server.close());
   afterEach(() => {
     server.resetHandlers();
