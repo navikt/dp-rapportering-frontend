@@ -1,14 +1,20 @@
 import { getErrorResponse, logErrorResponse } from "~/models/logger.server";
 import { IAktivitet } from "~/utils/aktivitettype.utils";
+import {
+  erArbeidssokerstatusSvarLaast,
+  finnArbeidssokerstatusAarsak,
+} from "~/utils/arbeidssokerstatus.utils";
 import { DP_RAPPORTERING_URL } from "~/utils/env.utils";
 import { getHeaders } from "~/utils/fetch.utils";
 import {
+  ArbeidssokerstatusAarsak,
   IRapporteringsperiodeStatus,
   KortType,
   OPPRETTET_AV,
   Rapporteringstype,
   TOpprettetAv,
 } from "~/utils/types";
+import { erNyArbeidssokerstatusFlytAktiv } from "~/utils/unleash.server";
 
 export interface IPeriode {
   fraOgMed: string;
@@ -37,12 +43,18 @@ export interface IRapporteringsperiode {
   status: IRapporteringsperiodeStatus;
   mottattDato: string | null;
   registrertArbeidssoker: boolean | null;
+  sporsmalOmRegistrertArbeidssoker?: ISporsmalOmRegistrertArbeidssoker | null;
   originalId: string | null;
   html: string | null;
   rapporteringstype: Rapporteringstype | null;
   opprettetAv: TOpprettetAv | null;
   // TODO: rydd opp etter spm5 toggle er fjernet
   innsendtTil?: TOpprettetAv | null;
+}
+
+export interface ISporsmalOmRegistrertArbeidssoker {
+  svarFraBruker: boolean | null;
+  arsakBrukerHarIkkeSvart: ArbeidssokerstatusAarsak | null;
 }
 
 export interface IInnsendtRapporteringsperiodeResponse {
@@ -162,6 +174,39 @@ export async function hentInnsendtePerioder(request: Request): Promise<IRapporte
   return await response.json();
 }
 
+function lagArbeidssokerstatusPayload(
+  periode: IRapporteringsperiode,
+  nyArbeidssokerstatusFlytAktiv: boolean,
+): Pick<IRapporteringsperiode, "registrertArbeidssoker" | "sporsmalOmRegistrertArbeidssoker"> {
+  const arbeidssokerstatus = periode.registrertArbeidssoker;
+  const sporsmal = periode.sporsmalOmRegistrertArbeidssoker;
+  const svar =
+    typeof sporsmal === "object" && sporsmal !== null ? sporsmal.svarFraBruker : arbeidssokerstatus;
+
+  if (!nyArbeidssokerstatusFlytAktiv) {
+    const registrertArbeidssoker =
+      periode.type === KortType.ETTERREGISTRERT || periode.opprettetAv === OPPRETTET_AV.Arena
+        ? true
+        : (arbeidssokerstatus ?? svar);
+
+    return {
+      registrertArbeidssoker,
+      sporsmalOmRegistrertArbeidssoker: undefined,
+    };
+  }
+
+  const aarsak = finnArbeidssokerstatusAarsak(periode);
+  const svarFraBruker = erArbeidssokerstatusSvarLaast(aarsak) ? null : svar;
+
+  return {
+    registrertArbeidssoker: svarFraBruker,
+    sporsmalOmRegistrertArbeidssoker: {
+      svarFraBruker,
+      arsakBrukerHarIkkeSvart: aarsak,
+    },
+  };
+}
+
 export async function sendInnPeriode(
   request: Request,
   rapporteringsperiode: IRapporteringsperiode,
@@ -174,14 +219,15 @@ export async function sendInnPeriode(
     throw new Error("Kunne ikke finne HTML med tekstene");
   }
 
+  const arbeidssokerstatusPayload = lagArbeidssokerstatusPayload(
+    rapporteringsperiode,
+    await erNyArbeidssokerstatusFlytAktiv(),
+  );
+
   const rapporteringsperiodeWithHtml = {
     ...rapporteringsperiode,
     html: html.toString().trim(),
-    registrertArbeidssoker:
-      rapporteringsperiode.type === KortType.ETTERREGISTRERT ||
-      rapporteringsperiode.opprettetAv === OPPRETTET_AV.Arena
-        ? true
-        : rapporteringsperiode.registrertArbeidssoker,
+    ...arbeidssokerstatusPayload,
   };
 
   const standardHeaders = await getHeaders(request);

@@ -80,10 +80,8 @@ export const MELDEKORT_BRUKERFLATE_QUERY = `{
     [
       `"duVilVaereRegistrert": ${localized("duVilVaereRegistrert")}`,
       `"duVilBliAvregistrert": {\n${fields(["lang", "kort"], "duVilBliAvregistrert")}\n}`,
-      `"duSkalIkkeSvarePaSporsmaal": ${localized("duSkalIkkeSvarePaSporsmaal")}`,
-      `"fraArena": ${localized("fraArena")}`,
-      `"utenArbeidssokerSporsmaal": ${localized("utenArbeidssokerSporsmaal")}`,
-      `"etterregistrert": ${localized("etterregistrert")}`,
+      `"viHarIkkeAnsvar": ${localized("viHarIkkeAnsvar")}`,
+      `"periodenErGammel": ${localized("periodenErGammel")}`,
     ].join(",\n"),
   )},
   "aktiviteter": ${document(
@@ -235,10 +233,8 @@ export type MeldekortBrukerflateApiResponse = {
       kort: MeldekortBrukerflateRichText;
       lang: MeldekortBrukerflateRichText;
     };
-    duSkalIkkeSvarePaSporsmaal: MeldekortBrukerflateRichText;
-    fraArena: MeldekortBrukerflateRichText;
-    utenArbeidssokerSporsmaal: MeldekortBrukerflateRichText;
-    etterregistrert: MeldekortBrukerflateRichText;
+    viHarIkkeAnsvar: MeldekortBrukerflateRichText;
+    periodenErGammel: MeldekortBrukerflateRichText;
   }>;
   aktiviteter: MeldekortBrukerflateDocument<{
     jobb: { lang: MeldekortBrukerflateText; kort: MeldekortBrukerflateText };

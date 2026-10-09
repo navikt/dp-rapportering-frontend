@@ -50,8 +50,8 @@ describe("RapporteringstypeSide", () => {
   };
 
   describe("Oppsummeringsside", () => {
-    beforeEach(() => {
-      testDb.clear();
+    beforeEach(async () => {
+      await testDb.clear();
       mockSession();
       mockResponse();
     });

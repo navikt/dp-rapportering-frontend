@@ -14,6 +14,7 @@ import {
 import { formaterDato } from "~/utils/dato.utils";
 import { isLocalOrDemo } from "~/utils/env.utils";
 import {
+  ARBEIDSSOKERSTATUS_AARSAK,
   IRapporteringsperiodeStatus,
   KortType,
   OPPRETTET_AV,
@@ -84,8 +85,11 @@ async function updateRapporteringsperiode(
       if (oppdatertPeriode.status != undefined) periode.status = oppdatertPeriode.status;
       if (oppdatertPeriode.mottattDato != undefined)
         periode.mottattDato = oppdatertPeriode.mottattDato;
-      if (oppdatertPeriode.registrertArbeidssoker != undefined)
+      if (oppdatertPeriode.registrertArbeidssoker !== undefined)
         periode.registrertArbeidssoker = oppdatertPeriode.registrertArbeidssoker;
+      if (oppdatertPeriode.sporsmalOmRegistrertArbeidssoker !== undefined)
+        periode.sporsmalOmRegistrertArbeidssoker =
+          oppdatertPeriode.sporsmalOmRegistrertArbeidssoker;
       if (oppdatertPeriode.originalId != undefined)
         periode.originalId = oppdatertPeriode.originalId;
       if (oppdatertPeriode.html != undefined) periode.html = oppdatertPeriode.html;
@@ -134,38 +138,40 @@ async function deleteAllAktiviteter(db: Database, rapporteringsperiodeId: string
   }
 }
 
-function deleteAllRapporteringsperioder(db: Database) {
+async function deleteAllRapporteringsperioder(db: Database) {
   const perioder = db.rapporteringsperioder.findMany() as IRapporteringsperiode[];
 
-  perioder.forEach((periode) => {
-    db.rapporteringsperioder.delete((q) => q.where({ id: periode.id }));
-  });
+  await Promise.all(
+    perioder.map((periode) => db.rapporteringsperioder.delete((q) => q.where({ id: periode.id }))),
+  );
 }
 
-const deleteAllInnsendteperioder = (db: Database) => {
+async function deleteAllInnsendteperioder(db: Database) {
   const innsendteperioder = findAllInnsendtePerioder(db);
 
-  innsendteperioder.forEach((periode) => {
-    db.rapporteringsperioder.delete((q) => q.where({ id: periode.id }));
-  });
-};
+  await Promise.all(
+    innsendteperioder.map((periode) =>
+      db.rapporteringsperioder.delete((q) => q.where({ id: periode.id })),
+    ),
+  );
+}
 
-export function updateRapporteringsperioder(db: Database, scenario: ScenarioType) {
+export async function updateRapporteringsperioder(db: Database, scenario: ScenarioType) {
   switch (scenario) {
     case ScenarioType.ingen: {
-      deleteAllRapporteringsperioder(db);
+      await deleteAllRapporteringsperioder(db);
       break;
     }
 
     case ScenarioType.fremtidig: {
-      deleteAllRapporteringsperioder(db);
+      await deleteAllRapporteringsperioder(db);
 
       const uke = getWeek(new Date(), { weekStartsOn: 1 });
       const år = getYear(new Date());
 
       const periode = lagPeriodeDatoFor(uke, år);
 
-      db.rapporteringsperioder.create(
+      await db.rapporteringsperioder.create(
         lagRapporteringsperiode({
           kanSendes: false,
           periode,
@@ -177,22 +183,22 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
 
     case ScenarioType.reset:
     case ScenarioType.en: {
-      deleteAllRapporteringsperioder(db);
-      db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+      await deleteAllRapporteringsperioder(db);
+      await db.rapporteringsperioder.create(lagForstRapporteringsperiode());
       break;
     }
 
     case ScenarioType.to: {
-      deleteAllRapporteringsperioder(db);
-      db.rapporteringsperioder.create(lagForstRapporteringsperiode());
-      db.rapporteringsperioder.create(
+      await deleteAllRapporteringsperioder(db);
+      await db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+      await db.rapporteringsperioder.create(
         leggTilForrigeRapporteringsperiode(findAllRapporteringsperioder(db)[0].periode),
       );
       break;
     }
 
     case ScenarioType.innsendte: {
-      deleteAllRapporteringsperioder(db);
+      await deleteAllRapporteringsperioder(db);
 
       const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
 
@@ -236,10 +242,10 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
         kanSendesFra: periode1KanSendesFra,
         mottattDato: periode1KanSendesFra,
       });
-      db.rapporteringsperioder.create(endretPeriode);
+      await db.rapporteringsperioder.create(endretPeriode);
 
       // Innsendt (erstatter endret)
-      db.rapporteringsperioder.create(
+      await db.rapporteringsperioder.create(
         lagRapporteringsperiode({
           kanSendes: false,
           rapporteringstype: Rapporteringstype.harAktivitet,
@@ -254,7 +260,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       );
 
       // Ferdig
-      db.rapporteringsperioder.create(
+      await db.rapporteringsperioder.create(
         lagRapporteringsperiode({
           kanSendes: false,
           bruttoBelop: 8632,
@@ -267,7 +273,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       );
 
       // Feilet
-      db.rapporteringsperioder.create(
+      await db.rapporteringsperioder.create(
         lagRapporteringsperiode({
           kanSendes: false,
           status: IRapporteringsperiodeStatus.Feilet,
@@ -278,7 +284,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
         }),
       );
 
-      db.rapporteringsperioder.create(
+      await db.rapporteringsperioder.create(
         lagRapporteringsperiode({
           periode: {
             fraOgMed,
@@ -290,7 +296,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
     }
 
     case ScenarioType.manuelt: {
-      deleteAllRapporteringsperioder(db);
+      await deleteAllRapporteringsperioder(db);
 
       const { fraOgMed } = beregnNåværendePeriodeDato();
 
@@ -310,29 +316,56 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
         kanSendesFra: periodeKanSendesFra,
         mottattDato: periodeKanSendesFra,
       });
-      db.rapporteringsperioder.create(endretPeriode);
+      await db.rapporteringsperioder.create(endretPeriode);
       break;
     }
 
     case ScenarioType.etterregistrert: {
-      deleteAllRapporteringsperioder(db);
+      await deleteAllRapporteringsperioder(db);
 
       const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
 
       const etterregistrertPeriode = lagRapporteringsperiode({
         type: KortType.ETTERREGISTRERT,
+        registrertArbeidssoker: null,
+        sporsmalOmRegistrertArbeidssoker: {
+          svarFraBruker: null,
+          arsakBrukerHarIkkeSvart: ARBEIDSSOKERSTATUS_AARSAK.ETTERREGISTRERT_MELDEKORT,
+        },
         periode: {
           fraOgMed,
           tilOgMed,
         },
       });
 
-      db.rapporteringsperioder.create(etterregistrertPeriode);
+      await db.rapporteringsperioder.create(etterregistrertPeriode);
+      break;
+    }
+
+    case ScenarioType.ikkeAnsvar: {
+      await deleteAllRapporteringsperioder(db);
+
+      const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
+
+      const periodeMedManglendeAnsvar = lagRapporteringsperiode({
+        registrertArbeidssoker: null,
+        sporsmalOmRegistrertArbeidssoker: {
+          svarFraBruker: null,
+          arsakBrukerHarIkkeSvart:
+            ARBEIDSSOKERSTATUS_AARSAK.DAGPENGER_HAR_IKKE_ANSVAR_FOR_SPORSMAL_OM_ARBEIDSSOKERSTATUS,
+        },
+        periode: {
+          fraOgMed,
+          tilOgMed,
+        },
+      });
+
+      await db.rapporteringsperioder.create(periodeMedManglendeAnsvar);
       break;
     }
 
     case ScenarioType.bokmerket: {
-      deleteAllRapporteringsperioder(db);
+      await deleteAllRapporteringsperioder(db);
 
       const { fraOgMed } = beregnNåværendePeriodeDato();
 
@@ -364,7 +397,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
           dateFormat: "yyyy-MM-dd",
         }),
       });
-      db.rapporteringsperioder.create(innsendt);
+      await db.rapporteringsperioder.create(innsendt);
 
       // Opprett et innsendt meldekort som ikke kan endres (simulerer prod-casen med kanEndres=false)
       const forrigeforrigePeriodeFra = formaterDato({
@@ -396,10 +429,10 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
         begrunnelseEndring: "Annet",
         originalId: "123456789",
       });
-      db.rapporteringsperioder.create(ikkeKanEndres);
+      await db.rapporteringsperioder.create(ikkeKanEndres);
 
       // Opprett også ett meldekort som kan fylles ut (slik at forsiden viser noe)
-      db.rapporteringsperioder.create(lagForstRapporteringsperiode());
+      await db.rapporteringsperioder.create(lagForstRapporteringsperiode());
 
       // Logg ID-ene slik at det er enkelt å teste (kun i local/demo)
       if (isLocalOrDemo) {
@@ -418,7 +451,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
     }
 
     case ScenarioType.arena: {
-      deleteAllRapporteringsperioder(db);
+      await deleteAllRapporteringsperioder(db);
 
       const { fraOgMed, tilOgMed } = beregnNåværendePeriodeDato();
 
@@ -432,7 +465,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
         dateFormat: "yyyy-MM-dd",
       });
 
-      db.rapporteringsperioder.create(
+      await db.rapporteringsperioder.create(
         lagRapporteringsperiode({
           opprettetAv: OPPRETTET_AV.Arena,
           kanSendes: false,
@@ -455,7 +488,7 @@ export function updateRapporteringsperioder(db: Database, scenario: ScenarioType
       );
 
       // Aktivt Arena-meldekort for nåværende periode
-      db.rapporteringsperioder.create(
+      await db.rapporteringsperioder.create(
         lagRapporteringsperiode({
           opprettetAv: OPPRETTET_AV.Arena,
           periode: {
@@ -493,9 +526,9 @@ export const withDb = (db: Database) => {
     deleteAllRapporteringsperioder: () => deleteAllRapporteringsperioder(db),
     updateRapporteringsperioder: (scenario: ScenarioType) =>
       updateRapporteringsperioder(db, scenario),
-    clear: () => {
-      deleteAllRapporteringsperioder(db);
-      deleteAllInnsendteperioder(db);
+    clear: async () => {
+      await deleteAllRapporteringsperioder(db);
+      await deleteAllInnsendteperioder(db);
     },
   };
 };

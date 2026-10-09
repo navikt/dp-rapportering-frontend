@@ -65,8 +65,8 @@ describe("Hovedside rapportering", async () => {
   const testDb = withDb(await sessionRecord.getDatabase("123"));
   const mockResponse = () => server.use(...createHandlers(testDb));
 
-  beforeEach(() => {
-    testDb.clear();
+  beforeEach(async () => {
+    await testDb.clear();
   });
 
   describe("Landingsside", () => {

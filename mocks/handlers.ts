@@ -62,7 +62,9 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       status: IRapporteringsperiodeStatus.Innsendt,
       kanSendes: false,
       mottattDato,
-      registrertArbeidssoker: periode.registrertArbeidssoker ?? true,
+      registrertArbeidssoker:
+        periode.registrertArbeidssoker === undefined ? true : periode.registrertArbeidssoker,
+      sporsmalOmRegistrertArbeidssoker: periode.sporsmalOmRegistrertArbeidssoker ?? null,
     });
 
     return HttpResponse.json({ id: periode.id });
@@ -139,7 +141,13 @@ export const createHandlers = (database?: ReturnType<typeof withDb>) => [
       const db = database || (await getDatabase(cookies));
       const rapporteringsperiodeId = params.rapporteringsperiodeId as string;
 
-      await db.updateRapporteringsperiode(rapporteringsperiodeId, { registrertArbeidssoker });
+      if (registrertArbeidssoker === undefined) {
+        return HttpResponse.json(undefined, { status: 204 });
+      }
+
+      await db.updateRapporteringsperiode(rapporteringsperiodeId, {
+        registrertArbeidssoker,
+      });
 
       return HttpResponse.json(undefined, { status: 204 });
     },

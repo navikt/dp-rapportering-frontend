@@ -2,13 +2,13 @@ import { BodyShort, Heading } from "@navikt/ds-react";
 import { useRouteLoaderData } from "react-router";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
+import { ArbeidssokerstatusSvar } from "~/components/arbeidssokerstatus/ArbeidssokerstatusSvar";
 import { Kalender } from "~/components/kalender/Kalender";
 import { useLocale } from "~/hooks/useLocale";
 import type { IRapporteringsperiode } from "~/models/rapporteringsperiode.server";
 import type { loader as RootLoader } from "~/root";
-import { formaterDato } from "~/utils/dato.utils";
-import { nestePeriode } from "~/utils/periode.utils";
+import { erKorrigertMeldekort } from "~/utils/arbeidssokerstatus.utils";
+import { normaliserArbeidssokerSvar } from "~/utils/periode.utils";
 import { sanityTekst } from "~/utils/sanity.utils";
 
 import rootStyles from "../../styles/root.module.css";
@@ -17,52 +17,22 @@ import styles from "./meldekortDetaljer.module.css";
 interface ReviewDetaljerProps {
   periode: IRapporteringsperiode;
   inkluderArbeidssokerstatusSvar?: boolean;
+  visArbeidssokerstatusBeskjed?: boolean;
 }
 
 export function MeldekortDetaljer({
   periode,
   inkluderArbeidssokerstatusSvar = false,
+  visArbeidssokerstatusBeskjed = false,
 }: ReviewDetaljerProps) {
   const { locale } = useLocale();
   const rootData = useRouteLoaderData<typeof RootLoader>("root");
   const utfylling = rootData?.sanityTekst?.utfylling;
-  const arbeidssokerstatusSporsmaal = utfylling?.arbeidssokerstatusSporsmaal;
-
-  const arbeidssokerStatusSvarTekst =
-    periode.registrertArbeidssoker === null
-      ? "—"
-      : sanityTekst(
-          periode.registrertArbeidssoker
-            ? arbeidssokerstatusSporsmaal?.alternativer?.ja
-            : arbeidssokerstatusSporsmaal?.alternativer?.nei,
-          `utfylling.arbeidssokerstatusSporsmaal.alternativer.${periode.registrertArbeidssoker ? "ja" : "nei"}`,
-        );
-
-  const nesteMeldeperiode = nestePeriode(periode.periode);
-  const dateFormat =
-    nesteMeldeperiode.fraOgMed.getFullYear() !== nesteMeldeperiode.tilOgMed.getFullYear() ||
-    nesteMeldeperiode.fraOgMed.getFullYear() !== new Date().getFullYear()
-      ? "d. MMMM yyyy"
-      : "d. MMMM";
-  const arbeidssokerSporsmal = sanityTekst(
-    arbeidssokerstatusSporsmaal?.tittel,
-    "utfylling.arbeidssokerstatusSporsmaal.tittel",
-  )
-    .replaceAll("{{fom}}", formaterDato({ dato: nesteMeldeperiode.fraOgMed, dateFormat }))
-    .replaceAll(
-      "{{tom}}",
-      formaterDato({ dato: nesteMeldeperiode.tilOgMed, dateFormat: "d. MMMM yyyy" }),
-    );
-
   const skalViseArbeidssokerstatusSvar =
     inkluderArbeidssokerstatusSvar &&
-    !rootData?.disableSpm5 &&
-    periode.registrertArbeidssoker !== null;
+    !erKorrigertMeldekort(periode) &&
+    (rootData?.nyArbeidssokerstatusFlytAktiv || normaliserArbeidssokerSvar(periode) !== null);
   const begrunnelse = periode.begrunnelseEndring;
-  const svarPrefiks = sanityTekst(
-    arbeidssokerstatusSporsmaal?.svarPrefiks,
-    "utfylling.arbeidssokerstatusSporsmaal.svarPrefiks",
-  );
   const begrunnelseTittel = sanityTekst(
     utfylling?.begrunnelseForEndring?.tittel,
     "utfylling.begrunnelseForEndring.tittel",
@@ -76,18 +46,10 @@ export function MeldekortDetaljer({
       </div>
 
       {skalViseArbeidssokerstatusSvar && (
-        <>
-          <div className={rootStyles.textWrapper}>
-            <Heading size="xsmall" level="3">
-              {arbeidssokerSporsmal}
-            </Heading>
-            <BodyShort>
-              {svarPrefiks} {arbeidssokerStatusSvarTekst}
-            </BodyShort>
-          </div>
-
-          <ArbeidssokerstatusBeskjed periode={periode} side="bekreftelse" />
-        </>
+        <ArbeidssokerstatusSvar
+          periode={periode}
+          visBeskjed={visArbeidssokerstatusBeskjed && !periode.originalId}
+        />
       )}
 
       {begrunnelse && (

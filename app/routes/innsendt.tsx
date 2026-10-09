@@ -7,7 +7,6 @@ import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useRouteLoaderData } from "react-router";
 
 import { AktivitetOppsummering } from "~/components/aktivitet-oppsummering/AktivitetOppsummering";
-import { ArbeidssokerstatusBeskjed } from "~/components/arbeidssokerstatus/ArbeidssokerstatusBeskjed";
 import { Kalender } from "~/components/kalender/Kalender";
 import { PortableTextRenderer } from "~/components/portable-text/PortableTextRenderer";
 import { ReactLink } from "~/components/ReactLink";
@@ -200,7 +199,6 @@ export default function InnsendteRapporteringsPerioderSide() {
                         visDato={false}
                       />
                       <AktivitetOppsummering periode={periode} />
-                      <ArbeidssokerstatusBeskjed periode={periode} side="oversikt" />
                     </div>
                   ))}
                 </Accordion.Content>
