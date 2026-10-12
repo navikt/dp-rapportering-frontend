@@ -294,8 +294,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.12.0)
       '@inquirer/prompts':
-        specifier: 8.7.2
-        version: 8.7.2(@types/node@26.6.4)
+        specifier: 8.7.3
+        version: 8.7.3(@types/node@26.6.4)
       '@react-router/dev':
         specifier: 8.3.0
         version: 8.3.0(@react-router/serve@8.3.0(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@6.0.3))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@6.0.3)(vite@8.3.2(@types/node@26.6.4)(yaml@2.9.1))
@@ -862,8 +862,8 @@ packages:
       '@types/node':
         optional: true
 
-  '@inquirer/prompts@8.7.2':
-    resolution: {integrity: sha512-QoRB4wFIjgH5iOhSjoIKMkTvSHDuV+O3OITlIqAYO0oK5x364GJILXiMBvlPiE+klg7Xx9tq5XVqQHcGUDYYPA==}
+  '@inquirer/prompts@8.7.3':
+    resolution: {integrity: sha512-DHK20kO+H5k/XcJQpHQUpVQbMYHHhZchlGWhZVMUV4WIuRuBW5744hipOtriE1vMqPLgnIyXFMHWKkIbTepa4Q==}
     engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
     peerDependencies:
       '@types/node': '>=18'
@@ -4305,7 +4305,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.6.4
 
-  '@inquirer/prompts@8.7.2(@types/node@26.6.4)':
+  '@inquirer/prompts@8.7.3(@types/node@26.6.4)':
     dependencies:
       '@inquirer/checkbox': 5.2.6(@types/node@26.6.4)
       '@inquirer/confirm': 6.3.3(@types/node@26.6.4)
