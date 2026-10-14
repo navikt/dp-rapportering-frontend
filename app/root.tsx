@@ -8,6 +8,7 @@ import type {
   LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
+  ShouldRevalidateFunctionArgs,
 } from "react-router";
 import { data, redirect } from "react-router";
 import {
@@ -24,6 +25,7 @@ import { uuidv7 } from "uuidv7";
 import indexStyle from "~/index.css?url";
 
 import { hasSession } from "../mocks/session";
+import config from "../react-router.config";
 import { GeneralErrorBoundary } from "./components/error-boundary/GeneralErrorBoundary";
 import { ServiceMessage } from "./components/service-message/ServiceMessage";
 import { getDecoratorHTML } from "./dekorator/dekorator.server";
@@ -118,6 +120,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
     dekorator,
   };
+}
+
+// Root-loader kjøres ikke på nytt når rota er målet, for å unngå
+// feil ved at meldekort.data blir forsøkt hentet
+export function shouldRevalidate({
+  nextUrl,
+  defaultShouldRevalidate,
+}: ShouldRevalidateFunctionArgs) {
+  const tilRotsiden = nextUrl.pathname.replace(/\/$/, "") === config.basename;
+  if (tilRotsiden) return false;
+  return defaultShouldRevalidate;
 }
 
 export async function action({ request }: ActionFunctionArgs) {
