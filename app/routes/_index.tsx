@@ -4,7 +4,6 @@ import { Button, Heading, InfoCard, ReadMore } from "@navikt/ds-react";
 import { setBreadcrumbs as setDekoratorenBreadcrumbs } from "@navikt/nav-dekoratoren-moduler";
 import { getISOWeek } from "date-fns";
 import { useEffect } from "react";
-import { LoaderFunctionArgs } from "react-router";
 import {
   isRouteErrorResponse,
   useFetcher,
@@ -28,9 +27,10 @@ import { useIsSubmitting } from "~/utils/useIsSubmitting";
 
 import type { loader as RootLoader } from "../root";
 import styles from "../styles/root.module.css";
+import type { Route } from "./+types/_index";
 import type { action as StartAction } from "./api.start";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   try {
     const rapporteringsperioder = await hentRapporteringsperioder(request);
     const session = await getSession(request);
@@ -43,6 +43,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     throw new Response("rapportering-feilmelding-henting-av-perioder", { status: 500 });
   }
+}
+
+// Sørger for at navigering til root alltid henter siden fra serveren,
+// ikke klient-side navigering som gir feil ved at meldekort.data blir forsøkt hentet
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  window.location.assign(request.url); // Full sidelast
+  return new Promise<never>(() => {}); // Vi forventer at nettleseren navigerer bort
 }
 
 export default function Landingsside() {
