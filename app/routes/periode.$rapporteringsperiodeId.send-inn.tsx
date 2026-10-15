@@ -121,7 +121,7 @@ export default function RapporteringsPeriodeSendInnSide() {
     getAppText,
     getRichText,
     nySanityTexts: rootData?.sanityTekst,
-    disableSpm5: rootData?.disableSpm5,
+    skalAktivereSpm5Feature: rootData?.nyArbeidssokerstatusFlytAktiv,
     submit,
     locale,
   });
@@ -182,7 +182,11 @@ export default function RapporteringsPeriodeSendInnSide() {
         />
       </div>
 
-      <MeldekortDetaljer periode={periode} inkluderArbeidssokerstatusSvar />
+      <MeldekortDetaljer
+        periode={periode}
+        inkluderArbeidssokerstatusSvar
+        visArbeidssokerstatusBeskjed
+      />
 
       <Checkbox
         disabled={!kanSendes(periode)}

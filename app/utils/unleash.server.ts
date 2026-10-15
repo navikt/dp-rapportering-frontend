@@ -1,9 +1,10 @@
 import { startUnleash, type Unleash } from "unleash-client";
 
 import { logger } from "~/models/logger.server";
+import { isLocalhost } from "~/utils/env.utils";
 
 export const FEATURE_TOGGLES = {
-  disableSpm5: "dp-rapportering-frontend-disableSpm5",
+  arbeidssokerstatusNyFlyt: "dp-rapportering-frontend-disableSpm5",
 } as const;
 
 let unleashPromise: Promise<Unleash> | null = null;
@@ -37,4 +38,15 @@ export async function isFeatureEnabled(feature: string, fallback = false): Promi
     unleashPromise = null;
     return fallback;
   }
+}
+
+export async function erNyArbeidssokerstatusFlytAktiv(): Promise<boolean> {
+  const runtimeEnvironment = process.env.RUNTIME_ENVIRONMENT;
+  const skalBrukeUnleashFlagg =
+    !isLocalhost &&
+    (!runtimeEnvironment ||
+      runtimeEnvironment === "development" ||
+      runtimeEnvironment === "production");
+
+  return !skalBrukeUnleashFlagg || isFeatureEnabled(FEATURE_TOGGLES.arbeidssokerstatusNyFlyt);
 }

@@ -14,8 +14,8 @@ import { withNestedRapporteringsperiode } from "../helpers/NestedStub";
 const testDb = withDb(await sessionRecord.getDatabase("123"));
 const mockResponse = () => server.use(...createHandlers(testDb));
 
-beforeEach(() => {
-  testDb.clear();
+beforeEach(async () => {
+  await testDb.clear();
 });
 
 describe("TomRapporteringsPeriodeSide", () => {
