@@ -213,8 +213,8 @@ importers:
         specifier: 8.19.0
         version: 8.19.0
       '@navikt/ds-react':
-        specifier: 8.19.0
-        version: 8.19.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: 8.19.1
+        version: 8.19.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@navikt/nav-dekoratoren-moduler':
         specifier: 4.5.1
         version: 4.5.1(html-react-parser@6.1.8(@types/react@19.3.0)(react@19.3.0))(react@19.3.0)
@@ -984,8 +984,8 @@ packages:
   '@navikt/ds-css@8.19.0':
     resolution: {integrity: sha512-rqLecNlxMObVBb5b7VuO7BZB2N1y/y1CXPae9IXboq/S6d/Jy8dF1nRsAzB+C4cMC8U7BqAEs3O5TCZGqtmQbA==, tarball: https://npm.pkg.github.com/download/@navikt/ds-css/8.19.0/6945cd4c3798bbf95be9d9b01af1caeb57599174}
 
-  '@navikt/ds-react@8.19.0':
-    resolution: {integrity: sha512-Sw4DxCRk7jHolYBV+PjZL50dTIk0i6fM3B71ZGIDOQZLrdWewovvOkP5fEAbc1pcIFdo7DWM8pZRhWa+eu94YQ==, tarball: https://npm.pkg.github.com/download/@navikt/ds-react/8.19.0/5f68c9e4f71837ce7e1c361a5b25ba94a36fa637}
+  '@navikt/ds-react@8.19.1':
+    resolution: {integrity: sha512-o++sEaSHUALclUHTXujswglnxw1O5N6wGAGlt2P13R6Jfx5N0Rxxn5WWf0IK6DhL43uh3Aafy/7YyZnGQTT+LA==, tarball: https://npm.pkg.github.com/download/@navikt/ds-react/8.19.1/3a15fe1d08595bcdd0c87fbcdbc41acfd16a5e08}
     peerDependencies:
       '@types/react': ^17.0.30 || ^18 || ^19
       react: ^17 || ^18 || ^19
@@ -4435,7 +4435,7 @@ snapshots:
 
   '@navikt/ds-css@8.19.0': {}
 
-  '@navikt/ds-react@8.19.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@navikt/ds-react@8.19.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@floating-ui/react': 0.27.20(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@floating-ui/react-dom': 2.1.9(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
