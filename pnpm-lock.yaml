@@ -216,7 +216,7 @@ importers:
         version: 8.2.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(scheduler@0.28.0)
       '@rvf/zod':
         specifier: 7.0.5
-        version: 7.0.5(@types/react@19.3.0)(react@19.3.0)(scheduler@0.28.0)(zod@4.6.5)
+        version: 7.0.5(@types/react@19.3.0)(react@19.3.0)(scheduler@0.28.0)(zod@4.6.6)
       '@sanity/client':
         specifier: 8.9.0
         version: 8.9.0(vitest@5.0.3)
@@ -284,11 +284,11 @@ importers:
         specifier: 3.19.0
         version: 3.19.0
       zod:
-        specifier: 4.6.5
-        version: 4.6.5
+        specifier: 4.6.6
+        version: 4.6.6
       zod-form-data:
         specifier: 3.0.3
-        version: 3.0.3(zod@4.6.5)
+        version: 3.0.3(zod@4.6.6)
     devDependencies:
       '@eslint/js':
         specifier: 10.0.1
@@ -3750,8 +3750,8 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
-  zod@4.6.5:
-    resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
+  zod@4.6.6:
+    resolution: {integrity: sha512-4UmzQUF5fxvfcYHlbjBmejU+w+hbDnWFx4aS8kBx7nPBHcO2SqPbpAG8snbdg+Xse4pRefR98hgjFgIMCI/UhA==}
 
   zustand@5.0.15:
     resolution: {integrity: sha512-MpSEjRiBkA9crSYeOUH32rJC7SVqAbm0Fqcqge/bUi2PPoLcBWKOsG+C8mevmpr8TwXHBVkChbbJiyvkE+i/3A==}
@@ -4785,11 +4785,11 @@ snapshots:
 
   '@rvf/set-get@7.0.3': {}
 
-  '@rvf/zod@7.0.5(@types/react@19.3.0)(react@19.3.0)(scheduler@0.28.0)(zod@4.6.5)':
+  '@rvf/zod@7.0.5(@types/react@19.3.0)(react@19.3.0)(scheduler@0.28.0)(zod@4.6.6)':
     dependencies:
       '@rvf/core': 8.1.2(@types/react@19.3.0)(react@19.3.0)(scheduler@0.28.0)
       '@rvf/set-get': 7.0.3
-      zod: 4.6.5
+      zod: 4.6.6
     transitivePeerDependencies:
       - '@types/react'
       - react
@@ -5653,8 +5653,8 @@ snapshots:
       '@babel/parser': 7.29.9
       eslint: 10.12.0
       hermes-parser: 0.25.1
-      zod: 4.6.5
-      zod-validation-error: 4.0.2(zod@4.6.5)
+      zod: 4.6.6
+      zod-validation-error: 4.0.2(zod@4.6.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -7426,16 +7426,16 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod-form-data@3.0.3(zod@4.6.5):
+  zod-form-data@3.0.3(zod@4.6.6):
     dependencies:
       '@rvf/set-get': 7.0.3
-      zod: 4.6.5
+      zod: 4.6.6
 
-  zod-validation-error@4.0.2(zod@4.6.5):
+  zod-validation-error@4.0.2(zod@4.6.6):
     dependencies:
-      zod: 4.6.5
+      zod: 4.6.6
 
-  zod@4.6.5: {}
+  zod@4.6.6: {}
 
   zustand@5.0.15(@types/react@19.3.0)(immer@10.2.0)(react@19.3.0):
     optionalDependencies:
