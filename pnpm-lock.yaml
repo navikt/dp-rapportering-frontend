@@ -215,8 +215,8 @@ importers:
         specifier: 8.2.0
         version: 8.2.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react-router@8.3.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(scheduler@0.28.0)
       '@rvf/zod':
-        specifier: 7.0.5
-        version: 7.0.5(@types/react@19.3.0)(react@19.3.1)(scheduler@0.28.0)(zod@4.6.7)
+        specifier: 7.0.6
+        version: 7.0.6(@types/react@19.3.0)(react@19.3.1)(scheduler@0.28.0)(zod@4.6.7)
       '@sanity/client':
         specifier: 8.9.0
         version: 8.9.0(vitest@5.0.4)
@@ -1330,8 +1330,8 @@ packages:
   '@rvf/set-get@7.0.3':
     resolution: {integrity: sha512-Ky2uOJ5WpgqVev4W+dNlOIJ2R9b6heHD4PHx7NGI98XanfeH8Pl/m5wE0aZU3d/nD79iOUlZHBn0uxJU/DJF7g==}
 
-  '@rvf/zod@7.0.5':
-    resolution: {integrity: sha512-yESLeJ4uGRltzIWGa6H81DIYW3BoObq4VUh7VJHZxjIPWOrUSiJeTZ1AVLu/uokEL0EhHKwMCKGXA5ChszUFzw==}
+  '@rvf/zod@7.0.6':
+    resolution: {integrity: sha512-95AfcY7oH6tXuV4CEZdF/f/dPd7V41V6waSyDQAPLD9eyOry/Ou8VqNalTm4CVZdUeHc5VzeH5ZWPm6R3lxNkg==}
     peerDependencies:
       zod: '>= 3.11.0'
 
@@ -4780,7 +4780,7 @@ snapshots:
 
   '@rvf/set-get@7.0.3': {}
 
-  '@rvf/zod@7.0.5(@types/react@19.3.0)(react@19.3.1)(scheduler@0.28.0)(zod@4.6.7)':
+  '@rvf/zod@7.0.6(@types/react@19.3.0)(react@19.3.1)(scheduler@0.28.0)(zod@4.6.7)':
     dependencies:
       '@rvf/core': 8.1.2(@types/react@19.3.0)(react@19.3.1)(scheduler@0.28.0)
       '@rvf/set-get': 7.0.3
