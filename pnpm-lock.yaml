@@ -287,8 +287,8 @@ importers:
         specifier: 4.6.7
         version: 4.6.7
       zod-form-data:
-        specifier: 3.0.3
-        version: 3.0.3(zod@4.6.7)
+        specifier: 3.0.4
+        version: 3.0.4(zod@4.6.7)
     devDependencies:
       '@eslint/js':
         specifier: 10.0.1
@@ -1329,6 +1329,9 @@ packages:
 
   '@rvf/set-get@7.0.3':
     resolution: {integrity: sha512-Ky2uOJ5WpgqVev4W+dNlOIJ2R9b6heHD4PHx7NGI98XanfeH8Pl/m5wE0aZU3d/nD79iOUlZHBn0uxJU/DJF7g==}
+
+  '@rvf/set-get@7.0.4':
+    resolution: {integrity: sha512-1QZ3hRXB0ftyaszFwTgLYzW+Ydeffz5tPPqEYeX88okTBiZXXWmavNIL/jjXX/Q/s9oj1NAJ5veqNuPYzbg4mg==}
 
   '@rvf/zod@7.0.6':
     resolution: {integrity: sha512-95AfcY7oH6tXuV4CEZdF/f/dPd7V41V6waSyDQAPLD9eyOry/Ou8VqNalTm4CVZdUeHc5VzeH5ZWPm6R3lxNkg==}
@@ -3736,8 +3739,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  zod-form-data@3.0.3:
-    resolution: {integrity: sha512-1qXJ6hayyUr3TqxfXqmm5qwCa8f/mnG/o8Itcny03iFyrwX/dZkCwfCcYoJDyQP8RxEkycw0c/ldCJXBeaCstg==}
+  zod-form-data@3.0.4:
+    resolution: {integrity: sha512-3GGlbm9HdPwaUskkwu4ozubCD0sU8POnRMFuFl5BIJcSN4fm61Fn4zj7wIq6ufUFzP4hsdp4NvpeuovlXj5kkw==}
     peerDependencies:
       zod: '>= 3.25.0'
 
@@ -4779,6 +4782,8 @@ snapshots:
       - use-sync-external-store
 
   '@rvf/set-get@7.0.3': {}
+
+  '@rvf/set-get@7.0.4': {}
 
   '@rvf/zod@7.0.6(@types/react@19.3.0)(react@19.3.1)(scheduler@0.28.0)(zod@4.6.7)':
     dependencies:
@@ -7421,9 +7426,9 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod-form-data@3.0.3(zod@4.6.7):
+  zod-form-data@3.0.4(zod@4.6.7):
     dependencies:
-      '@rvf/set-get': 7.0.3
+      '@rvf/set-get': 7.0.4
       zod: 4.6.7
 
   zod-validation-error@4.0.2(zod@4.6.7):
