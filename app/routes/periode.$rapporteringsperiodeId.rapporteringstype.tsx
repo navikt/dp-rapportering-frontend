@@ -4,15 +4,9 @@ import { InformationSquareIcon } from "@navikt/aksel-icons";
 import { BodyShort, Button, Heading, InfoCard, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { addDays } from "date-fns";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import {
-  useFetcher,
-  useLoaderData,
-  useNavigate,
-  useRevalidator,
-  useRouteLoaderData,
-} from "react-router";
+import { useFetcher, useLoaderData, useNavigate, useRouteLoaderData } from "react-router";
 import { uuidv7 } from "uuidv7";
 
 import { InnsendingsStatusBeskjed } from "~/components/beskjeder/InnsendingsStatusBeskjed";
@@ -94,7 +88,7 @@ export default function RapporteringstypeSide() {
 
   const rapporteringstypeFetcher = useFetcher<typeof action>();
   const slettAlleAktiviteterFetcher = useFetcher<INetworkResponse>();
-  const { revalidate } = useRevalidator();
+  const ventendeSletting = useRef<{ forrigeResultat: INetworkResponse | undefined } | null>(null);
   const isSubmitting = useIsSubmitting(rapporteringstypeFetcher);
   const [harTrykketNeste, trySetHarTrykketNeste, resetHarTrykketNeste] = usePreventDoubleClick();
 
@@ -137,6 +131,7 @@ export default function RapporteringstypeSide() {
       periode.rapporteringstype === Rapporteringstype.harIngenAktivitet && harAktiviteter(periode);
 
     if (skalSletteAktiviteter) {
+      ventendeSletting.current = { forrigeResultat: slettAlleAktiviteterFetcher.data };
       slettAlleAktiviteterFetcher.submit(
         {
           rapporteringsperiodeId: periode.id,
@@ -157,34 +152,41 @@ export default function RapporteringstypeSide() {
   };
 
   useEffect(() => {
-    if (slettAlleAktiviteterFetcher.data?.status === "error") {
+    // Fetcheren er idle først etter at parent-loaderen er revalidert.
+    if (!ventendeSletting.current || slettAlleAktiviteterFetcher.state !== "idle") {
+      return;
+    }
+
+    const resultat = slettAlleAktiviteterFetcher.data;
+    if (!resultat || resultat === ventendeSletting.current.forrigeResultat) {
+      return;
+    }
+
+    ventendeSletting.current = null;
+
+    if (resultat.status === "error") {
       resetHarTrykketNeste();
       return;
     }
 
-    if (slettAlleAktiviteterFetcher.data?.status !== "success") {
-      return;
-    }
-
-    void revalidate().then(() => {
-      trackSkjemaStegFullført({
-        periode,
-        stegnavn,
-        steg,
-        sesjonId,
-      });
-
-      navigate(nesteSide(periode, rootData?.nyArbeidssokerstatusFlytAktiv));
+    trackSkjemaStegFullført({
+      periode,
+      stegnavn,
+      steg,
+      sesjonId,
     });
+
+    navigate(nesteSide(periode, rootData?.nyArbeidssokerstatusFlytAktiv));
   }, [
     navigate,
     periode,
-    revalidate,
     resetHarTrykketNeste,
     sesjonId,
-    slettAlleAktiviteterFetcher.data?.status,
+    slettAlleAktiviteterFetcher.data,
+    slettAlleAktiviteterFetcher.state,
     stegnavn,
     steg,
+    trackSkjemaStegFullført,
   ]);
 
   useEffect(() => {
