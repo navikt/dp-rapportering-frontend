@@ -163,10 +163,11 @@ describe("RapporteringstypeSide", () => {
         await act(async () => nesteKnapp.click());
 
         await waitFor(() => expect(parentLoader).toHaveBeenCalledTimes(2));
+        await waitFor(() => expect(nesteKnapp).toBeDisabled());
+        await act(async () => nesteKnapp.click());
         expect(slettAction).toHaveBeenCalledTimes(1);
         expect(nesteLoader).not.toHaveBeenCalled();
         expect(trackSkjemaStegFullført).not.toHaveBeenCalled();
-        expect(nesteKnapp).toBeDisabled();
 
         await act(async () => revalidering.resolve());
         await waitFor(() => expect(nesteLoader).toHaveBeenCalledTimes(1));

@@ -33,6 +33,10 @@ export function lagRapporteringsperiode(props = {}): IRapporteringsperiode {
     status: IRapporteringsperiodeStatus.TilUtfylling,
     mottattDato: null,
     registrertArbeidssoker: null,
+    sporsmalOmRegistrertArbeidssoker: {
+      svarFraBruker: null,
+      arsakBrukerHarIkkeSvart: null,
+    },
     originalId: null,
     html: null,
     rapporteringstype: null,
