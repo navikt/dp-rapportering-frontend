@@ -41,7 +41,7 @@ jobs:
           version: '12.16.1'
       - uses: actions/setup-node@v7.1.0
         with:
-          node-version: '24.x'
+          node-version: '26.x'
           cache: 'pnpm'
           registry-url: 'https://npm.pkg.github.com'
 
