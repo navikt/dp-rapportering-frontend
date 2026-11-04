@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "react-router";
 
 /**
@@ -8,12 +8,14 @@ import { useNavigation } from "react-router";
 export function usePreventDoubleClick(): [boolean, () => boolean, () => void] {
   const [harTrykket, setHarTrykket] = useState(false);
   const navigation = useNavigation();
+  const forrigeNavigationState = useRef(navigation.state);
 
   // Reset når navigasjonen er ferdig (tilstand "idle")
   useEffect(() => {
-    if (navigation.state === "idle") {
+    if (forrigeNavigationState.current !== "idle" && navigation.state === "idle") {
       setHarTrykket(false);
     }
+    forrigeNavigationState.current = navigation.state;
   }, [navigation.state]);
 
   // Kaller denne for å "låse" første klikk
