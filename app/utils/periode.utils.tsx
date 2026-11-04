@@ -7,6 +7,7 @@ import {
   IRapporteringsperiode,
   IRapporteringsperiodeDag,
 } from "~/models/rapporteringsperiode.server";
+import { hentArbeidssokerstatusVisning } from "~/utils/arbeidssokerstatus.utils";
 
 import { AktivitetType, IAktivitet } from "./aktivitettype.utils";
 import { formaterPeriodeDato, formaterPeriodeTilUkenummer } from "./dato.utils";
@@ -188,10 +189,36 @@ export function erPeriodeneLike(
   return true;
 }
 
-export function skalHaArbeidssokerSporsmal(periode: IRapporteringsperiode): boolean {
+export function skalHaArbeidssokerSporsmal(
+  periode: IRapporteringsperiode,
+  skalAktivereSpm5Feature = false,
+): boolean {
+  if (skalAktivereSpm5Feature) {
+    return true;
+  }
+
   const erIkkeEtterregistrert = periode.type !== KortType.ETTERREGISTRERT;
 
   return erIkkeEtterregistrert;
+}
+
+export function hentArbeidssokerstatusAarsakskategori(periode: IRapporteringsperiode) {
+  const { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid } = hentArbeidssokerstatusVisning(periode);
+  return { viHarIkkeAnsvar, arbeidssokerperiodenErIFortid };
+}
+
+export function skalDeaktivereArbeidssokerstatusSporsmal(
+  periode: IRapporteringsperiode,
+  skalAktivereSpm5Feature = false,
+): boolean {
+  return hentArbeidssokerstatusVisning(periode, skalAktivereSpm5Feature).svarLaast;
+}
+
+export function normaliserArbeidssokerSvar(
+  periode: IRapporteringsperiode,
+  skalAktivereSpm5Feature = false,
+): boolean | null {
+  return hentArbeidssokerstatusVisning(periode, skalAktivereSpm5Feature).svar;
 }
 
 interface IPeriodeDate {

@@ -5,6 +5,8 @@ import { enGB, nb } from "date-fns/locale";
 import { DecoratorLocale } from "./dekoratoren.utils";
 import { TIDSSONER } from "./types";
 
+export const DATOFORMAT_MED_AAR = "d. MMMM yyyy";
+
 interface IFormaterDatoProps {
   dato: Date | string;
   locale?: DecoratorLocale;
@@ -24,9 +26,27 @@ export function formaterDato({
   });
 }
 
+export function formaterArbeidssokerperiode(
+  nesteMeldeperiode: { fraOgMed: Date; tilOgMed: Date },
+  locale: DecoratorLocale = DecoratorLocale.NB,
+  dagensDato = new Date(),
+) {
+  const { fraOgMed, tilOgMed } = nesteMeldeperiode;
+  const datoformatFra =
+    fraOgMed.getFullYear() !== tilOgMed.getFullYear() ||
+    fraOgMed.getFullYear() !== dagensDato.getFullYear()
+      ? DATOFORMAT_MED_AAR
+      : "d. MMMM";
+
+  return {
+    fom: formaterDato({ dato: fraOgMed, dateFormat: datoformatFra, locale }),
+    tom: formaterDato({ dato: tilOgMed, dateFormat: DATOFORMAT_MED_AAR, locale }),
+  };
+}
+
 export function formaterPeriodeDato(fraOgMed: string, tilOgMed: string, language: DecoratorLocale) {
-  const fom = formaterDato({ dato: fraOgMed, dateFormat: "d. MMMM yyyy", locale: language });
-  const tom = formaterDato({ dato: tilOgMed, dateFormat: "d. MMMM yyyy", locale: language });
+  const fom = formaterDato({ dato: fraOgMed, dateFormat: DATOFORMAT_MED_AAR, locale: language });
+  const tom = formaterDato({ dato: tilOgMed, dateFormat: DATOFORMAT_MED_AAR, locale: language });
 
   return `${fom} - ${tom}`;
 }

@@ -59,6 +59,13 @@ class SessionRecord {
           status: z.enum(["TilUtfylling", "Innsendt", "Endret", "Ferdig", "Feilet"]),
           mottattDato: z.string().nullable(),
           registrertArbeidssoker: z.boolean().nullable(),
+          sporsmalOmRegistrertArbeidssoker: z
+            .object({
+              svarFraBruker: z.boolean().nullable(),
+              arsakBrukerHarIkkeSvart: z.string().nullable(),
+            })
+            .nullable()
+            .optional(),
           originalId: z.string().nullable(),
           html: z.string().nullable(),
           rapporteringstype: z.enum(["harAktivitet", "harIngenAktivitet"]).nullable(),

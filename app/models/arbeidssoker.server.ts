@@ -4,7 +4,7 @@ import { getHeaders } from "~/utils/fetch.utils";
 import type { INetworkResponse } from "~/utils/types";
 
 export interface IArbeidssokerSvar {
-  registrertArbeidssoker: boolean;
+  registrertArbeidssoker?: boolean;
 }
 
 export async function lagreArbeidssokerSvar(
