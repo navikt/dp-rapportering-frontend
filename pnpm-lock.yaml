@@ -239,8 +239,8 @@ importers:
         specifier: 5.3.0
         version: 5.3.0
       groq:
-        specifier: 6.21.0
-        version: 6.21.0
+        specifier: 6.22.0
+        version: 6.22.0
       html-react-parser:
         specifier: 6.1.9
         version: 6.1.9(@types/react@19.3.0)(react@19.3.1)
@@ -2196,8 +2196,8 @@ packages:
     resolution: {integrity: sha512-32kz9FecohDiC/tgcViwnRXM7HFBVTPiW7pHO+DikKOI5KjhU/jNULOReXsrFqt2WAYbE9xFXsTffJw6iTO8qw==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
-  groq@6.21.0:
-    resolution: {integrity: sha512-xxw5Fz/8xD0neK5PnfczzkFgPSz2FVAQMxuysZhCj9TnVpkR7yI83wrdQwzikZ/pGZElrVvfGeWrDsbPwYeOcw==}
+  groq@6.22.0:
+    resolution: {integrity: sha512-ZzyqGaWBl5lMfjCCdPdOXltTWlEI0fIUbPUNMxbwtMOulcGj01bHWoAOeofLP+ERh9fwLvTsmYqh4V0InNVZWg==}
     engines: {node: '>=22.12'}
 
   has-bigints@1.1.0:
@@ -5704,7 +5704,7 @@ snapshots:
 
   graphql@16.15.0: {}
 
-  groq@6.21.0: {}
+  groq@6.22.0: {}
 
   has-bigints@1.1.0: {}
 
