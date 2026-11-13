@@ -24,7 +24,7 @@ vi.mock("~/models/logger.server", () => ({
 }));
 
 beforeEach(() => server.resetHandlers());
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
 afterAll(() => server.close());
 
 describe("aktivitet", () => {

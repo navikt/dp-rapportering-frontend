@@ -1,16 +1,13 @@
-import type { SetupServerApi } from "msw/node";
 import { setupServer } from "msw/node";
 
 import { createHandlers } from "./handlers";
 
 export const server = setupServer(...createHandlers());
 
-export const setup = () => {
-  return setupServer(...createHandlers()) as SetupServerApi;
-};
+export const setup = () => setupServer(...createHandlers());
 
-export const start = (server: SetupServerApi) => {
-  server.listen({ onUnhandledRequest: "bypass" });
+export const start = (server: ReturnType<typeof setup>) => {
+  server.listen({ onUnhandledFrame: "bypass" });
 
   process.once("SIGINT", () => server.close());
   process.once("SIGTERM", () => server.close());

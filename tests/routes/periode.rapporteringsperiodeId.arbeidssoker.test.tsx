@@ -41,7 +41,7 @@ beforeEach(() => {
 });
 
 describe("ArbeidssøkerRegisterSide", () => {
-  beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+  beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
   afterAll(() => server.close());
   afterEach(() => {
     server.resetHandlers();

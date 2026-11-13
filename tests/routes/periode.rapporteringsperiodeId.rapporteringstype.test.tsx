@@ -35,7 +35,7 @@ vi.mock("~/hooks/useAnalytics", () => ({
 }));
 
 describe("RapporteringstypeSide", () => {
-  beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+  beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
   afterAll(() => server.close());
   afterEach(() => {
     server.resetHandlers();

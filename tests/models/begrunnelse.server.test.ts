@@ -16,7 +16,7 @@ vi.mock("~/utils/fetch.utils", () => ({
   getCorrelationId: vi.fn(() => "123"),
 }));
 
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
 afterAll(() => server.close());
 
 describe("lagreBegrunnelse", () => {
