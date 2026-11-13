@@ -1,9 +1,9 @@
 import { act, render, screen } from "@testing-library/react";
 import { createRoutesStub, Outlet } from "react-router";
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { lagRapporteringsperiode } from "~/devTools/rapporteringsperiode";
-import Landingsside, { loader } from "~/routes/_index";
+import Landingsside, { clientLoader, loader } from "~/routes/_index";
 
 import { createHandlers } from "../../mocks/handlers";
 import { withDb } from "../../mocks/responses/db";
@@ -70,6 +70,20 @@ describe("Hovedside rapportering", async () => {
   });
 
   describe("Landingsside", () => {
+    test("Skal laste startsiden som et fullt dokument ved klientnavigering", () => {
+      const assign = vi.fn();
+      const request = new Request("https://example.test/arbeid/dagpenger/meldekort/");
+      vi.stubGlobal("window", { location: { assign } });
+
+      try {
+        void clientLoader({ request } as Parameters<typeof clientLoader>[0]);
+
+        expect(assign).toHaveBeenCalledWith(request.url);
+      } finally {
+        vi.unstubAllGlobals();
+      }
+    });
+
     test("Skal vise at bruker har ingen rapporteringsperiode", async () => {
       mockSession();
       mockResponse();
