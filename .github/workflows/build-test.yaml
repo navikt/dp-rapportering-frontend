@@ -36,9 +36,12 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v7.0.1
+      - name: Read pnpm version from package.json
+        id: pnpm-version
+        run: echo "version=$(jq -r '.packageManager' package.json | cut -d'@' -f2)" >> "$GITHUB_OUTPUT"
       - uses: pnpm/action-setup@v6.1.1
         with:
-          version: '12.23.0'
+          version: ${{ steps.pnpm-version.outputs.version }}
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: '26.x'
